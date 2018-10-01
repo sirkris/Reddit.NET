@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Models.Converters;
 using System;
 using System.Collections.Generic;
@@ -199,7 +200,7 @@ namespace Reddit.NET.Models.Structures
         public bool ContestMode;
 
         [JsonProperty("selftext_html")]
-        public string SelftextHTML;
+        public string SelfTextHTML;
 
         [JsonProperty("likes")]
         public bool Likes;
@@ -361,5 +362,78 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("depth")]
         public int Depth;
+
+        public Listing(Post post)
+        {
+            ImportFromPost(post);
+        }
+
+        public Listing(SelfPost selfPost)
+        {
+            ImportFromSelfPost(selfPost);
+        }
+
+        public Listing(LinkPost linkPost)
+        {
+            ImportFromLinkPost(linkPost);
+        }
+
+        public Listing(Comment comment)
+        {
+            ImportFromComment(comment);
+        }
+
+        private void ImportFromPost(Post post)
+        {
+            this.Subreddit = post.Subreddit;
+            this.Title = post.Title;
+            this.Author = post.Author;
+            this.Id = post.Id;
+            this.Name = post.Name;
+            this.Permalink = post.Permalink;
+            this.Created = post.Created;
+            this.Edited = post.Edited;
+            this.Score = post.Score;
+            this.Ups = post.UpVotes;
+            this.Downs = post.DownVotes;
+            this.Removed = post.Removed;
+            this.Spam = post.Spam;
+        }
+
+        private void ImportFromSelfPost(SelfPost selfPost)
+        {
+            ImportFromPost(selfPost);
+
+            this.SelfText = selfPost.SelfText;
+            this.SelfTextHTML = selfPost.SelfTextHTML;
+        }
+
+        private void ImportFromLinkPost(LinkPost linkPost)
+        {
+            ImportFromPost(linkPost);
+
+            this.Preview = linkPost.Preview;
+            this.URL = linkPost.URL;
+            this.Thumbnail = linkPost.Thumbnail;
+            this.ThumbnailHeight = linkPost.ThumbnailHeight;
+            this.ThumbnailWidth = linkPost.ThumbnailWidth;
+        }
+
+        private void ImportFromComment(Comment comment)
+        {
+            ImportFromPost(comment);
+
+            this.Replies = comment.Replies;
+            this.Body = comment.Body;
+            this.BodyHTML = comment.BodyHTML;
+            this.ParentId = comment.ParentId;
+            this.CollapsedReason = comment.CollapsedReason;
+            this.Collapsed = comment.Collapsed;
+            this.IsSubmitter = comment.IsSubmitter;
+            this.ScoreHidden = comment.ScoreHidden;
+            this.Depth = comment.Depth;
+        }
+
+        public Listing() { }
     }
 }

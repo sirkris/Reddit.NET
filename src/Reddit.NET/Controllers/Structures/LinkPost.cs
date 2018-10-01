@@ -23,6 +23,23 @@ namespace Reddit.NET.Controllers.Structures
             this.ThumbnailWidth = listing.ThumbnailWidth;
         }
 
+        public LinkPost(string subreddit, string title, string author, string url, string thumbnail = null,
+            int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
+            string id = null, string name = null, string permalink = null, DateTime created = default(DateTime),
+            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
+            bool removed = false, bool spam = false)
+            : base(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
+                  removed, spam)
+        {
+            this.Preview = preview;
+            this.URL = url;
+            this.Thumbnail = thumbnail;
+            this.ThumbnailHeight = thumbnailHeight;
+            this.ThumbnailWidth = thumbnailWidth;
+
+            this.Listing = new Listing(this);
+        }
+
         public LinkPost() { }
     }
 }

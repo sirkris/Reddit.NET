@@ -30,6 +30,27 @@ namespace Reddit.NET.Controllers.Structures
             this.Depth = listing.Depth;
         }
 
+        public Comment(string subreddit, string title, string author, string body, string bodyHtml,
+            string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Listing> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+            : base(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
+                  removed, spam)
+        {
+            this.Replies = replies;
+            this.Body = body;
+            this.BodyHTML = bodyHtml;
+            this.ParentId = parentId;
+            this.CollapsedReason = collapsedReason;
+            this.Collapsed = collapsed;
+            this.IsSubmitter = isSubmitter;
+            this.ScoreHidden = scoreHidden;
+            this.Depth = depth;
+
+            this.Listing = new Listing(this);
+        }
+
         public Comment() { }
     }
 }

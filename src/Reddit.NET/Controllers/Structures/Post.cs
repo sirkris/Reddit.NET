@@ -48,6 +48,27 @@ namespace Reddit.NET.Controllers.Structures
             this.Listing = listing;
         }
 
+        public Post(string subreddit, string title, string author, string id = null, string name = null, string permalink = null,
+            DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
+            int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            this.Subreddit = subreddit;
+            this.Title = title;
+            this.Author = author;
+            this.Id = id;
+            this.Name = name;
+            this.Permalink = permalink;
+            this.Created = created;
+            this.Edited = edited;
+            this.Score = score;
+            this.UpVotes = upVotes;
+            this.DownVotes = downVotes;
+            this.Removed = removed;
+            this.Spam = spam;
+
+            this.Listing = new Listing(this);
+        }
+
         public Post() { }
     }
 }
