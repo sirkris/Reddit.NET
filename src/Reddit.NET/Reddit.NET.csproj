@@ -9,8 +9,4 @@
     <PackageReference Include="RestSharp" Version="106.4.2" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\Structures\" />
-  </ItemGroup>
-
 </Project>

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Reddit.NET.Models.Converters;
 using System;
 using System.Collections.Generic;
@@ -165,6 +166,9 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("gildings")]
         public Dictionary<string, int> Gildings;
 
+        [JsonProperty("post_hint")]
+        public string PostHint;
+
         [JsonProperty("content_categories")]
         public string ContentCategories;
 
@@ -227,6 +231,9 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("over_18")]
         public bool Over18;
+
+        [JsonProperty("preview")]
+        public JObject Preview;
 
         [JsonProperty("media_only")]
         public bool MediaOnly;
