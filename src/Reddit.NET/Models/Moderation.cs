@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Reddit.NET.Sections
+namespace Reddit.NET.Models
 {
-    class Listings
+    class Moderation
     {
 
     }
