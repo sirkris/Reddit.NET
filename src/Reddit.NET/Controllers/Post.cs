@@ -3,12 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Reddit.NET.Controllers.Structures
+namespace Reddit.NET.Controllers
 {
     /// <summary>
     /// Base class for posts and comments.
     /// </summary>
-    class Post
+    abstract class Post
     {
         public string Subreddit;
         public string Title;
@@ -70,5 +70,8 @@ namespace Reddit.NET.Controllers.Structures
         }
 
         public Post() { }
+
+        abstract public bool Submit();
+        abstract public bool Validate();
     }
 }

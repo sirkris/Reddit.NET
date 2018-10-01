@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Reddit.NET.Controllers.Structures
+namespace Reddit.NET.Controllers
 {
     class SelfPost : Post
     {
@@ -30,5 +30,32 @@ namespace Reddit.NET.Controllers.Structures
         }
 
         public SelfPost() { }
+
+        /// <summary>
+        /// Submit self post to Reddit.
+        /// </summary>
+        /// <returns>Whether submission was successful.</returns>
+        public override bool Submit()
+        {
+            if (!Validate())
+            {
+                return false;
+            }
+
+            // TODO - Submit to Reddit, populate listing, and update properties.  --Kris
+
+
+            return true;
+        }
+
+        /// <summary>
+        /// Check to see if all required properties are present for submission to Reddit.
+        /// </summary>
+        /// <returns>Whether this instance is ready to submit.</returns>
+        public override bool Validate()
+        {
+            return (!String.IsNullOrWhiteSpace(Subreddit)
+                && !String.IsNullOrWhiteSpace(Title));
+        }
     }
 }
