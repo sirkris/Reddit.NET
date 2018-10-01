@@ -29,6 +29,8 @@ namespace Reddit.NET.Controllers
         /// </summary>
         public Listing Listing;
 
+        public List<Comment> Comments;  // TODO - Populate.  --Kris
+
         public Post(Listing listing)
         {
             this.Subreddit = listing.Subreddit;

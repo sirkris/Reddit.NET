@@ -77,5 +77,14 @@ namespace Reddit.NET.Controllers
 
             return true;
         }
+
+        /// <summary>
+        /// Query the Reddit API and populate this instance with the result.
+        /// </summary>
+        /// <param name="commentId">The Reddit comment ID.</param>
+        private void GetByCommentId(string commentId)
+        {
+            // TODO
+        }
     }
 }
