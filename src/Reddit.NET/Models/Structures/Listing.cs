@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    class Listing
+    public class Listing
     {
         [JsonProperty("kind")]
         public string Kind;

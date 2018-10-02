@@ -9,7 +9,7 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    class UserFeatures
+    public class UserFeatures
     {
         [JsonProperty("search_subreddit_traffic")]
         public bool SearchSubredditTraffic;

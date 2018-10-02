@@ -9,7 +9,7 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    class User
+    public class User
     {
         [JsonProperty("loid")]
         public string Loid;

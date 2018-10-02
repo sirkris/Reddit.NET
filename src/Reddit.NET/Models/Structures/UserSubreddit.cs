@@ -9,7 +9,7 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    class UserSubreddit
+    public class UserSubreddit
     {
         [JsonProperty("default_set")]
         public bool DefaultSet;

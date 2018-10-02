@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Models;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -25,21 +26,21 @@ namespace Reddit.NET.Controllers
         /// Instantiate endpoint singletons.
         /// </summary>
         /// <param name="accessToken">The OAuth access token required to access the Reddit API.</param>
-        public Dispatch(string accessToken)
+        public Dispatch(string accessToken, RestClient restClient)
         {
-            this.Account = new Account(accessToken);
-            this.Apps = new Apps(Account);
-            this.Captcha = new Captcha(Account);
-            this.Flair = new Flair(Account);
-            this.LinksAndComments = new LinksAndComments(Account);
-            this.Listings = new Listings(Account);
-            this.Moderation = new Moderation(Account);
-            this.Multis = new Multis(Account);
-            this.PrivateMessages = new PrivateMessages(Account);
-            this.Search = new Search(Account);
-            this.Subreddits = new Subreddits(Account);
-            this.Users = new Users(Account);
-            this.Wiki = new Wiki(Account);
+            this.Account = new Account(accessToken, restClient);
+            this.Apps = new Apps(Account, restClient);
+            this.Captcha = new Captcha(Account, restClient);
+            this.Flair = new Flair(Account, restClient);
+            this.LinksAndComments = new LinksAndComments(Account, restClient);
+            this.Listings = new Listings(Account, restClient);
+            this.Moderation = new Moderation(Account, restClient);
+            this.Multis = new Multis(Account, restClient);
+            this.PrivateMessages = new PrivateMessages(Account, restClient);
+            this.Search = new Search(Account, restClient);
+            this.Subreddits = new Subreddits(Account, restClient);
+            this.Users = new Users(Account, restClient);
+            this.Wiki = new Wiki(Account, restClient);
         }
     }
 }

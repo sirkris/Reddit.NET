@@ -1,16 +1,16 @@
-﻿using System;
+﻿using Reddit.NET.Models.Structures;
+using RestSharp;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Reddit.NET.Models
 {
-    public class Listings
+    public class Listings : BaseModel
     {
         private readonly Account Account;
+        internal override RestClient RestClient { get; set; }
 
-        public Listings(Account account)
-        {
-            this.Account = account;
-        }
+        public Listings(Account account, RestClient restClient) : base(account, restClient) { }
     }
 }
