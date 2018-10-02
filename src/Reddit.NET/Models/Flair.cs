@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Reddit.NET.Models
 {
-    class Flair
+    public class Flair
     {
+        private readonly Account Account;
 
+        public Flair(Account account)
+        {
+            this.Account = account;
+        }
     }
 }

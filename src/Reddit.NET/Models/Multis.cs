@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Reddit.NET.Models
 {
-    class Multis
+    public class Multis
     {
+        private readonly Account Account;
 
+        public Multis(Account account)
+        {
+            this.Account = account;
+        }
     }
 }

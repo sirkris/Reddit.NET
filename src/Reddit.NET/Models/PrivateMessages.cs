@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Reddit.NET.Models
 {
-    class PrivateMessages
+    public class PrivateMessages
     {
+        private readonly Account Account;
 
+        public PrivateMessages(Account account)
+        {
+            this.Account = account;
+        }
     }
 }

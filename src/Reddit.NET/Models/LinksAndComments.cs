@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Reddit.NET.Models
 {
-    class LinksAndComments
+    public class LinksAndComments
     {
+        private readonly Account Account;
 
+        public LinksAndComments(Account account)
+        {
+            this.Account = account;
+        }
     }
 }

@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Reddit.NET.Models
 {
-    class Wiki
+    public class Wiki
     {
+        private readonly Account Account;
 
+        public Wiki(Account account)
+        {
+            this.Account = account;
+        }
     }
 }

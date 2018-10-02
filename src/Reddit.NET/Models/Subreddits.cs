@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Reddit.NET.Models
 {
-    class Subreddits
+    public class Subreddits
     {
+        private readonly Account Account;
 
+        public Subreddits(Account account)
+        {
+            this.Account = account;
+        }
     }
 }

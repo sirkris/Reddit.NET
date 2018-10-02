@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Reddit.NET.Models
 {
-    class Captcha
+    public class Captcha
     {
+        private readonly Account Account;
 
+        public Captcha(Account account)
+        {
+            this.Account = account;
+        }
     }
 }

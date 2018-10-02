@@ -4,8 +4,13 @@ using System.Text;
 
 namespace Reddit.NET.Models
 {
-    class Search
+    public class Search
     {
+        private readonly Account Account;
 
+        public Search(Account account)
+        {
+            this.Account = account;
+        }
     }
 }
