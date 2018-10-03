@@ -173,5 +173,32 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("has_subscribed")]
         public bool HasSubscribed;
+
+        public User(Controllers.User user)
+        {
+            this.IsFriend = user.IsFriend;
+            this.PrefNoProfanity = user.ProfanityFilter;
+            this.IsSuspended = user.IsSuspended;
+            this.HasGoldSubscription = user.HasGoldSubscription;
+            this.NumFriends = user.NumFriends;
+            this.Verified = user.IsVerified;
+            this.NewModmailExists = user.HasNewModmail;
+            this.Id = user.Id;
+            this.Over18 = user.Over18;
+            this.IsGold = user.IsGold;
+            this.IsMod = user.IsMod;
+            this.HasVerifiedEmail = user.HasVerifiedEmail;
+            this.IconImg = user.IconImg;
+            this.HasModMail = user.HasModmail;
+            this.LinkKarma = user.LinkKarma;
+            this.InboxCount = user.InboxCount;
+            this.HasMail = user.HasMail;
+            this.Name = user.Name;
+            this.Created = user.Created;
+            this.CommentKarma = user.CommentKarma;
+            this.HasSubscribed = user.HasSubscribed;
+        }
+
+        public User() { }
     }
 }

@@ -8,9 +8,8 @@ namespace Reddit.NET.Models
 {
     public class Subreddits : BaseModel
     {
-        private readonly Account Account;
         internal override RestClient RestClient { get; set; }
 
-        public Subreddits(Account account, RestClient restClient) : base(account, restClient) { }
+        public Subreddits(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
     }
 }

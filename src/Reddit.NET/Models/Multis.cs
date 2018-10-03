@@ -8,9 +8,8 @@ namespace Reddit.NET.Models
 {
     public class Multis : BaseModel
     {
-        private readonly Account Account;
         internal override RestClient RestClient { get; set; }
 
-        public Multis(Account account, RestClient restClient) : base(account, restClient) { }
+        public Multis(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
     }
 }

@@ -8,7 +8,7 @@ namespace Reddit.NET.Controllers
     /// <summary>
     /// Base class for posts and comments.
     /// </summary>
-    abstract class Post
+    public abstract class Post
     {
         public string Subreddit;
         public string Title;
@@ -31,7 +31,9 @@ namespace Reddit.NET.Controllers
 
         public List<Comment> Comments;  // TODO - Populate.  --Kris
 
-        public Post(Listing listing)
+        private readonly Dispatch Dispatch;
+
+        public Post(Dispatch dispatch, Listing listing)
         {
             this.Subreddit = listing.Subreddit;
             this.Title = listing.Title;
@@ -48,9 +50,11 @@ namespace Reddit.NET.Controllers
             this.Spam = listing.Spam;
 
             this.Listing = listing;
+
+            this.Dispatch = dispatch;
         }
 
-        public Post(string subreddit, string title, string author, string id = null, string name = null, string permalink = null,
+        public Post(Dispatch dispatch, string subreddit, string title, string author, string id = null, string name = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false)
         {
@@ -69,9 +73,14 @@ namespace Reddit.NET.Controllers
             this.Spam = spam;
 
             this.Listing = new Listing(this);
+
+            this.Dispatch = dispatch;
         }
 
-        public Post() { }
+        public Post(Dispatch dispatch)
+        {
+            this.Dispatch = dispatch;
+        }
 
         abstract public bool Submit();
         abstract public bool Validate();

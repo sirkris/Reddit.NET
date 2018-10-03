@@ -8,9 +8,8 @@ namespace Reddit.NET.Models
 {
     public class PrivateMessages : BaseModel
     {
-        private readonly Account Account;
         internal override RestClient RestClient { get; set; }
 
-        public PrivateMessages(Account account, RestClient restClient) : base(account, restClient) { }
+        public PrivateMessages(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
     }
 }

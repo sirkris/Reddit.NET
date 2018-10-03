@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Reddit.NET.Controllers
 {
-    class LinkPost : Post
+    public class LinkPost : Post
     {
         public JObject Preview;
         public string URL;
@@ -14,7 +14,7 @@ namespace Reddit.NET.Controllers
         public int? ThumbnailHeight;
         public int? ThumbnailWidth;
 
-        public LinkPost(Listing listing) : base(listing)
+        public LinkPost(Dispatch dispatch, Listing listing) : base(dispatch, listing)
         {
             this.Preview = listing.Preview;
             this.URL = listing.URL;
@@ -23,12 +23,12 @@ namespace Reddit.NET.Controllers
             this.ThumbnailWidth = listing.ThumbnailWidth;
         }
 
-        public LinkPost(string subreddit, string title, string author, string url, string thumbnail = null,
+        public LinkPost(Dispatch dispatch, string subreddit, string title, string author, string url, string thumbnail = null,
             int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
             string id = null, string name = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
-            : base(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
+            : base(dispatch, subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
                   removed, spam)
         {
             this.Preview = preview;
@@ -40,7 +40,7 @@ namespace Reddit.NET.Controllers
             this.Listing = new Listing(this);
         }
 
-        public LinkPost() { }
+        public LinkPost(Dispatch dispatch) : base(dispatch) { }
 
         public override bool Submit()
         {
@@ -69,9 +69,10 @@ namespace Reddit.NET.Controllers
 
         /// <summary>
         /// Query the Reddit API and populate this instance with the result.
+        /// <param name="subreddit">The subreddit where the post exists.</param>
         /// </summary>
         /// <param name="postId">The Reddit post ID.</param>
-        private void GetByPostId(string postId)
+        private void GetByPostId(string subreddit, string postId)
         {
             // TODO
         }

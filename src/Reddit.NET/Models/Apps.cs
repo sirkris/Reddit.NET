@@ -8,9 +8,8 @@ namespace Reddit.NET.Models
 {
     public class Apps : BaseModel
     {
-        private readonly Account Account;
         internal override RestClient RestClient { get; set; }
 
-        public Apps(Account account, RestClient restClient) : base(account, restClient) { }
+        public Apps(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
     }
 }

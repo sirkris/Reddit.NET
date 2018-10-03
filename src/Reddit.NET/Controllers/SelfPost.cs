@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Reddit.NET.Controllers
 {
-    class SelfPost : Post
+    public class SelfPost : Post
     {
         public string SelfText;
         public string SelfTextHTML;
@@ -14,7 +14,7 @@ namespace Reddit.NET.Controllers
         /// Create new Self Post instance from Reddit API listing.
         /// </summary>
         /// <param name="listing">Listing returned by Reddit API.</param>
-        public SelfPost(Listing listing) : base(listing)
+        public SelfPost(Dispatch dispatch, Listing listing) : base(dispatch, listing)
         {
             this.SelfText = listing.SelfText;
             this.SelfTextHTML = listing.SelfTextHTML;
@@ -38,11 +38,11 @@ namespace Reddit.NET.Controllers
         /// <param name="downVotes">Number of downvotes.</param>
         /// <param name="removed">Whether the post was removed.</param>
         /// <param name="spam">Whether the post was marked as spam.</param>
-        public SelfPost(string subreddit, string title, string author, string selfText, string selfTextHtml,
+        public SelfPost(Dispatch dispatch, string subreddit, string title, string author, string selfText, string selfTextHtml,
             string id = null, string name = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
-            : base(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
+            : base(dispatch, subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
                   removed, spam)
         {
             this.SelfText = selfText;
@@ -55,9 +55,9 @@ namespace Reddit.NET.Controllers
         /// Query the Reddit API and populate this new instance with the result.
         /// </summary>
         /// <param name="postId">The Reddit post ID.</param>
-        public SelfPost(string postId)
+        public SelfPost(Dispatch dispatch, string subreddit, string postId) : base(dispatch)
         {
-            GetByPostId(postId);
+            GetByPostId(subreddit, postId);
 
             this.Listing = new Listing(this);
         }
@@ -65,7 +65,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Create an empty SelfPost instance.
         /// </summary>
-        public SelfPost() { }
+        public SelfPost(Dispatch dispatch) : base(dispatch) { }
 
         /// <summary>
         /// Submit self post to Reddit.
@@ -97,8 +97,9 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Query the Reddit API and populate this instance with the result.
         /// </summary>
+        /// <param name="subreddit">The subreddit where the post exists.</param>
         /// <param name="postId">The Reddit post ID.</param>
-        private void GetByPostId(string postId)
+        private void GetByPostId(string subreddit, string postId)
         {
             // TODO
         }

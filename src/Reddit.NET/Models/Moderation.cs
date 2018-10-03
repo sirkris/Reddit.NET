@@ -8,9 +8,8 @@ namespace Reddit.NET.Models
 {
     public class Moderation : BaseModel
     {
-        private readonly Account Account;
         internal override RestClient RestClient { get; set; }
 
-        public Moderation(Account account, RestClient restClient) : base(account, restClient) { }
+        public Moderation(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
     }
 }

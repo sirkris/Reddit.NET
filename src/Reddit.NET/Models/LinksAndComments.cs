@@ -8,9 +8,8 @@ namespace Reddit.NET.Models
 {
     public class LinksAndComments : BaseModel
     {
-        private readonly Account Account;
         internal override RestClient RestClient { get; set; }
 
-        public LinksAndComments(Account account, RestClient restClient) : base(account, restClient) { }
+        public LinksAndComments(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
     }
 }

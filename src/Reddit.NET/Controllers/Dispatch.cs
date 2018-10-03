@@ -29,18 +29,18 @@ namespace Reddit.NET.Controllers
         public Dispatch(string accessToken, RestClient restClient)
         {
             this.Account = new Account(accessToken, restClient);
-            this.Apps = new Apps(Account, restClient);
-            this.Captcha = new Captcha(Account, restClient);
-            this.Flair = new Flair(Account, restClient);
-            this.LinksAndComments = new LinksAndComments(Account, restClient);
-            this.Listings = new Listings(Account, restClient);
-            this.Moderation = new Moderation(Account, restClient);
-            this.Multis = new Multis(Account, restClient);
-            this.PrivateMessages = new PrivateMessages(Account, restClient);
-            this.Search = new Search(Account, restClient);
-            this.Subreddits = new Subreddits(Account, restClient);
-            this.Users = new Users(Account, restClient);
-            this.Wiki = new Wiki(Account, restClient);
+            this.Apps = new Apps(accessToken, restClient);
+            this.Captcha = new Captcha(accessToken, restClient);
+            this.Flair = new Flair(accessToken, restClient);
+            this.LinksAndComments = new LinksAndComments(accessToken, restClient);
+            this.Listings = new Listings(accessToken, restClient);
+            this.Moderation = new Moderation(accessToken, restClient);
+            this.Multis = new Multis(accessToken, restClient);
+            this.PrivateMessages = new PrivateMessages(accessToken, restClient);
+            this.Search = new Search(accessToken, restClient);
+            this.Subreddits = new Subreddits(accessToken, restClient);
+            this.Users = new Users(accessToken, restClient);
+            this.Wiki = new Wiki(accessToken, restClient);
         }
     }
 }

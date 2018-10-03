@@ -9,7 +9,6 @@ namespace Reddit.NET.Models
     public abstract class BaseModel
     {
         private readonly string AccessToken;
-        private readonly Account Account;
         internal abstract RestClient RestClient { get; set; }
 
         public BaseModel(string accessToken, RestClient restClient)
@@ -18,16 +17,15 @@ namespace Reddit.NET.Models
             this.RestClient = restClient;
         }
 
-        public BaseModel(Account account, RestClient restClient)
-        {
-            this.Account = account;
-            this.AccessToken = account.AccessToken;
-            this.RestClient = restClient;
-        }
-
         public RestRequest PrepareRequest(string url, Method method)
         {
             RestRequest restRequest = new RestRequest(url, method);
+
+            return PrepareRequest(restRequest);
+        }
+
+        public RestRequest PrepareRequest(RestRequest restRequest)
+        {
             restRequest.AddHeader("Authorization", "bearer " + AccessToken);
 
             return restRequest;

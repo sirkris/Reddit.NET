@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Reddit.NET.Controllers
 {
-    class Comment : Post
+    public class Comment : Post
     {
         public List<Listing> Replies;
         public string Body;
@@ -17,7 +17,7 @@ namespace Reddit.NET.Controllers
         public bool ScoreHidden;
         public int Depth;
 
-        public Comment(Listing listing) : base(listing)
+        public Comment(Dispatch dispatch, Listing listing) : base(dispatch, listing)
         {
             this.Replies = listing.Replies;
             this.Body = listing.Body;
@@ -30,12 +30,12 @@ namespace Reddit.NET.Controllers
             this.Depth = listing.Depth;
         }
 
-        public Comment(string subreddit, string title, string author, string body, string bodyHtml,
+        public Comment(Dispatch dispatch, string subreddit, string title, string author, string body, string bodyHtml,
             string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Listing> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
-            : base(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
+            : base(dispatch, subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
                   removed, spam)
         {
             this.Replies = replies;
@@ -51,7 +51,7 @@ namespace Reddit.NET.Controllers
             this.Listing = new Listing(this);
         }
 
-        public Comment() { }
+        public Comment(Dispatch dispatch) : base(dispatch) { }
 
         public override bool Submit()
         {
