@@ -1,0 +1,119 @@
+﻿using Reddit.NET.Controllers;
+using ModelStructures = Reddit.NET.Models.Structures;
+using Newtonsoft.Json.Linq;
+using RestSharp;
+using System;
+using System.Collections.Generic;
+
+namespace Reddit.NET
+{
+    public class Reddit
+    {
+        public Dispatch Models
+        {
+            get;
+            private set;
+        }
+
+        public Reddit(string accessToken)
+        {
+            this.Models = new Dispatch(accessToken, new RestClient("https://oauth.reddit.com"));
+        }
+
+        public Comment Comment(ModelStructures.Listing listing)
+        {
+            return new Comment(Models, listing);
+        }
+
+        public Comment Comment(string subreddit, string title, string author, string body, string bodyHtml,
+            string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<ModelStructures.Listing> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            return new Comment(Models, subreddit, title, author, body, bodyHtml, parentId, collapsedReason, collapsed, isSubmitter,
+                replies, scoreHidden, depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        public Comment Comment()
+        {
+            return new Comment(Models);
+        }
+
+        public LinkPost LinkPost(ModelStructures.Listing listing)
+        {
+            return new LinkPost(Models, listing);
+        }
+
+        public LinkPost LinkPost(string subreddit, string title, string author, string url, string thumbnail = null,
+            int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
+            string id = null, string name = null, string permalink = null, DateTime created = default(DateTime),
+            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
+            bool removed = false, bool spam = false)
+        {
+            return new LinkPost(Models, subreddit, title, author, url, thumbnail, thumbnailHeight, thumbnailWidth, preview,
+                id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        public LinkPost LinkPost()
+        {
+            return new LinkPost(Models);
+        }
+
+        public SelfPost SelfPost(ModelStructures.Listing listing)
+        {
+            return new SelfPost(Models, listing);
+        }
+
+        /// <summary>
+        /// Create a new Self Post instance and populate manually.
+        /// </summary>
+        /// <param name="subreddit">The subreddit the post belongs to.</param>
+        /// <param name="title">Post title.</param>
+        /// <param name="author">Reddit user who authored the post.</param>
+        /// <param name="selfText">The post body.</param>
+        /// <param name="selfTextHtml">The HTML-formateed post body.</param>
+        /// <param name="id">Post ID.</param>
+        /// <param name="name">Post name.</param>
+        /// <param name="permalink">Permalink of post.</param>
+        /// <param name="created">When the post was created.</param>
+        /// <param name="edited">When the post was last edited.</param>
+        /// <param name="score">Net vote score.</param>
+        /// <param name="upVotes">Number of upvotes.</param>
+        /// <param name="downVotes">Number of downvotes.</param>
+        /// <param name="removed">Whether the post was removed.</param>
+        /// <param name="spam">Whether the post was marked as spam.</param>
+        public SelfPost SelfPost(string subreddit, string title, string author, string selfText, string selfTextHtml,
+            string id = null, string name = null, string permalink = null, DateTime created = default(DateTime),
+            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
+            bool removed = false, bool spam = false)
+        {
+            return new SelfPost(Models, subreddit, title, author, selfText, selfTextHtml, id, name, permalink, created,
+                edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        public SelfPost SelfPost()
+        {
+            return new SelfPost(Models);
+        }
+
+        public User User(ModelStructures.User user)
+        {
+            return new User(Models, user);
+        }
+
+        public User User(string id, string name, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
+            bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
+            bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
+            bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
+        {
+            return new User(Models, id, name, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
+                hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
+        }
+
+        public User User()
+        {
+            return new User(Models);
+        }
+    }
+}
