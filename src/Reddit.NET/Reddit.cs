@@ -20,6 +20,11 @@ namespace Reddit.NET
             this.Models = new Dispatch(accessToken, new RestClient("https://oauth.reddit.com"));
         }
 
+        public Reddit(string accessToken, string refreshToken)
+        {
+            // TODO - If refreshToken is supplied, lib will automatically request a new access token when the current one expires.  Otherwise it's left up to the calling app.  --Kris
+        }
+
         public Comment Comment(ModelStructures.Listing listing)
         {
             return new Comment(Models, listing);

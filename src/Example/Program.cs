@@ -22,6 +22,9 @@ namespace Example
 
                 Console.WriteLine("Username: " + me.Name);
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
+
+                var blah = reddit.Models.Account.Prefs("friends");
+                int i = 0;
             }
         }
     }
