@@ -1,4 +1,5 @@
-﻿using Reddit.NET.Models.Structures;
+﻿using Newtonsoft.Json;
+using Reddit.NET.Models.Structures;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,10 @@ namespace Reddit.NET.Models
 
         public User Me()
         {
-            return RestClient.Execute<User>(PrepareRequest("api/me.json", Method.GET)).Data;
+            return JsonConvert.DeserializeObject<User>(RestClient.Execute(PrepareRequest("api/v1/me.json", Method.GET)).Content);
+
+            // This won't work because RestSharp's deserializer sucks and replacing it with a custom one would be bulky.  --Kris
+            //return RestClient.Execute<User>(PrepareRequest("api/v1/me.json", Method.GET)).Data;
         }
     }
 }

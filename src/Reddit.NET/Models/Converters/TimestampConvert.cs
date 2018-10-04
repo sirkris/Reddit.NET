@@ -19,7 +19,7 @@ namespace Reddit.NET.Models.Converters
         {
             return (reader.Value != null
                 && !bool.TryParse(reader.Value.ToString(), out bool dump) // Edited returns long timestamp of last edit or bool false if there are no edits.  --Kris
-                && reader.Value.ToString().Length > 0 ? Epoch.AddSeconds((long)reader.Value) : default(DateTime));
+                && reader.Value.ToString().Length > 0 ? Epoch.AddSeconds((double)reader.Value) : default(DateTime));
         }
     }
 }
