@@ -1,4 +1,4 @@
-﻿using RedditAPI = Reddit.NET;
+﻿using Reddit.NET;
 using Reddit.NET.Controllers;
 using System;
 
@@ -10,18 +10,19 @@ namespace Example
         {
             if (args.Length == 0)
             {
-                Console.WriteLine("Usage: Example.exe <Reddit Access Token>");
+                Console.WriteLine("Usage: Example.exe <Reddit Refresh Token> [Reddit Access Token]");
             }
             else
             {
-                string accessToken = args[0];
+                string refreshToken = args[0];
+                string accessToken = (args.Length > 1 ? args[1] : null);
 
-                RedditAPI.Reddit reddit = new RedditAPI.Reddit(accessToken);
+                RedditAPI reddit = new RedditAPI(refreshToken, accessToken);
 
-                User me = reddit.User().Me();
+                //User me = reddit.User().Me();
 
-                Console.WriteLine("Username: " + me.Name);
-                Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
+                //Console.WriteLine("Username: " + me.Name);
+                //Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
 
                 var blah = reddit.Models.Account.Prefs("friends");
                 int i = 0;

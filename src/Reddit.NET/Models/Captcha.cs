@@ -10,6 +10,6 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Captcha(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
+        public Captcha(string refreshToken, string accessToken, RestClient restClient) : base(refreshToken, accessToken, restClient) { }
     }
 }

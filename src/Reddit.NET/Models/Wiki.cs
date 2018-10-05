@@ -10,6 +10,6 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Wiki(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
+        public Wiki(string refreshToken, string accessToken, RestClient restClient) : base(refreshToken, accessToken, restClient) { }
     }
 }

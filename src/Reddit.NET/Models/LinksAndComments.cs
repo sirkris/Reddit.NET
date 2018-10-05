@@ -10,6 +10,6 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public LinksAndComments(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
+        public LinksAndComments(string refreshToken, string accessToken, RestClient restClient) : base(refreshToken, accessToken, restClient) { }
     }
 }

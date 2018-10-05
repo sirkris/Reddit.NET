@@ -10,6 +10,6 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Moderation(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
+        public Moderation(string refreshToken, string accessToken, RestClient restClient) : base(refreshToken, accessToken, restClient) { }
     }
 }

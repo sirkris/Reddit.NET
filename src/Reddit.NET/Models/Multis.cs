@@ -10,6 +10,6 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Multis(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
+        public Multis(string refreshToken, string accessToken, RestClient restClient) : base(refreshToken, accessToken, restClient) { }
     }
 }
