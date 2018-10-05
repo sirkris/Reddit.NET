@@ -1,4 +1,5 @@
-﻿using Reddit.NET.Models.Structures;
+﻿using Newtonsoft.Json;
+using Reddit.NET.Models.Structures;
 using RestSharp;
 using System;
 using System.Collections.Generic;

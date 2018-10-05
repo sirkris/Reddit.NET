@@ -19,12 +19,12 @@ namespace Example
 
                 RedditAPI reddit = new RedditAPI(refreshToken, accessToken);
 
-                //User me = reddit.User().Me();
+                User me = reddit.User().Me();
 
-                //Console.WriteLine("Username: " + me.Name);
-                //Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
+                Console.WriteLine("Username: " + me.Name);
+                Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
 
-                var blah = reddit.Models.Account.Prefs("friends");
+                var blah = reddit.Models.Emoji.All("WayOfTheBern");
                 int i = 0;
             }
         }

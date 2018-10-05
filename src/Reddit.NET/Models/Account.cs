@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Reddit.NET.Models.Structures;
 using RestSharp;
 using System;
@@ -16,28 +15,28 @@ namespace Reddit.NET.Models
 
         public User Me()
         {
-            return JsonConvert.DeserializeObject<User>(ExecuteRequest("api/v1/me.json", Method.GET));
+            return JsonConvert.DeserializeObject<User>(ExecuteRequest("api/v1/me.json"));
         }
 
         public object Karma()
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/karma.json", Method.GET));
+            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/karma.json"));
         }
 
         public object Prefs()
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/prefs.json", Method.GET));
+            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/prefs.json"));
         }
 
         public object Trophies()
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/trophies.json", Method.GET));
+            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/trophies.json"));
         }
 
         public object Prefs(string where, string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
             bool srDetail = false, bool includeCategories = true)
         {
-            RestRequest restRequest = PrepareRequest("prefs/" + where, Method.GET);
+            RestRequest restRequest = PrepareRequest("prefs/" + where);
 
             restRequest.AddParameter("after", after);
             restRequest.AddParameter("before", before);

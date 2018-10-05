@@ -23,7 +23,7 @@ namespace Reddit.NET.Models
             this.RestClient = restClient;
         }
 
-        public RestRequest PrepareRequest(string url, Method method)
+        public RestRequest PrepareRequest(string url, Method method = Method.GET)
         {
             RestRequest restRequest = new RestRequest(url, method);
 
@@ -52,7 +52,7 @@ namespace Reddit.NET.Models
             return restRequest;
         }
 
-        public string ExecuteRequest(string url, Method method)
+        public string ExecuteRequest(string url, Method method = Method.GET)
         {
             return ExecuteRequest(PrepareRequest(url, method));
         }
@@ -73,8 +73,7 @@ namespace Reddit.NET.Models
                  */
                 if (RefreshToken != null
                     && (res.StatusCode == System.Net.HttpStatusCode.BadRequest
-                        || res.StatusCode == System.Net.HttpStatusCode.Unauthorized
-                        || res.StatusCode == System.Net.HttpStatusCode.Forbidden))
+                        || res.StatusCode == System.Net.HttpStatusCode.Unauthorized))
                 {
                     RestClient keyCli = new RestClient("https://www.reddit.com");
                     RestRequest keyReq = new RestRequest("/api/v1/access_token", Method.POST);
@@ -88,9 +87,7 @@ namespace Reddit.NET.Models
                     IRestResponse keyRes = keyCli.Execute(keyReq);
                     if (keyRes != null && keyRes.IsSuccessful)
                     {
-                        JObject tokenData = JsonConvert.DeserializeObject<JObject>(keyRes.Content);
-                        AccessToken = tokenData.GetValue("access_token").ToString();
-                        
+                        AccessToken = JsonConvert.DeserializeObject<JObject>(keyRes.Content).GetValue("access_token").ToString();
                         restRequest = PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters);
                     }
                 }

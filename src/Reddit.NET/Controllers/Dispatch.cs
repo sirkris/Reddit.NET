@@ -11,6 +11,7 @@ namespace Reddit.NET.Controllers
         public Account Account;
         public Apps Apps;
         public Captcha Captcha;
+        public Emoji Emoji;
         public Flair Flair;
         public LinksAndComments LinksAndComments;
         public Listings Listings;
@@ -32,6 +33,7 @@ namespace Reddit.NET.Controllers
             this.Account = new Account(refreshToken, accessToken, restClient);
             this.Apps = new Apps(refreshToken, accessToken, restClient);
             this.Captcha = new Captcha(refreshToken, accessToken, restClient);
+            this.Emoji = new Emoji(refreshToken, accessToken, restClient);
             this.Flair = new Flair(refreshToken, accessToken, restClient);
             this.LinksAndComments = new LinksAndComments(refreshToken, accessToken, restClient);
             this.Listings = new Listings(refreshToken, accessToken, restClient);
