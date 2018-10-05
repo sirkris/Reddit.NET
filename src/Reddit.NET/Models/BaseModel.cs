@@ -99,5 +99,10 @@ namespace Reddit.NET.Models
 
             return (res != null && res.IsSuccessful ? res.Content : null);
         }
+
+        public string Sr(string subreddit)
+        {
+            return (!string.IsNullOrWhiteSpace(subreddit) ? "/r/" + subreddit : "");
+        }
     }
 }
