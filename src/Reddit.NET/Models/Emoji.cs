@@ -11,7 +11,7 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Emoji(string refreshToken, string accessToken, RestClient restClient) : base(refreshToken, accessToken, restClient) { }
+        public Emoji(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
         public object Add(string subreddit, string name, string s3Key)
         {

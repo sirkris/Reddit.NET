@@ -15,7 +15,7 @@ namespace Reddit.NET
             private set;
         }
 
-        public RedditAPI(string refreshToken, string accessToken = null)
+        public RedditAPI(string appId, string refreshToken, string accessToken = null)
         {
             /*
              * If refreshToken is supplied, the lib will automatically request a new access token when the current one expires (or if none was passed).
@@ -27,7 +27,7 @@ namespace Reddit.NET
                 || !string.IsNullOrWhiteSpace(accessToken))
             {
                 // Passing "null" instead of null forces the Reddit API to return a non-200 status code on auth failure, freeing us from having to parse the content string.  --Kris
-                this.Models = new Dispatch(refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
+                this.Models = new Dispatch(appId, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
             }
             else
             {

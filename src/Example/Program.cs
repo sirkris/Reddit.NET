@@ -8,16 +8,17 @@ namespace Example
     {
         static void Main(string[] args)
         {
-            if (args.Length == 0)
+            if (args.Length < 2)
             {
-                Console.WriteLine("Usage: Example.exe <Reddit Refresh Token> [Reddit Access Token]");
+                Console.WriteLine("Usage: Example.exe <Reddit App ID> <Reddit Refresh Token> [Reddit Access Token]");
             }
             else
             {
-                string refreshToken = args[0];
-                string accessToken = (args.Length > 1 ? args[1] : null);
+                string appId = args[0];
+                string refreshToken = args[1];
+                string accessToken = (args.Length > 2 ? args[2] : null);
 
-                RedditAPI reddit = new RedditAPI(refreshToken, accessToken);
+                RedditAPI reddit = new RedditAPI(appId, refreshToken, accessToken);
 
                 User me = reddit.User().Me();
 

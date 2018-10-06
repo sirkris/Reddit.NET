@@ -11,6 +11,6 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Users(string refreshToken, string accessToken, RestClient restClient) : base(refreshToken, accessToken, restClient) { }
+        public Users(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
     }
 }

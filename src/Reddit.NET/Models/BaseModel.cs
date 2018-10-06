@@ -11,15 +11,17 @@ namespace Reddit.NET.Models
 {
     public abstract class BaseModel
     {
+        private readonly string AppId;
         internal string AccessToken;
         private readonly string RefreshToken;
 
         internal abstract RestClient RestClient { get; set; }
 
-        public BaseModel(string refreshToken, string accessToken, RestClient restClient)
+        public BaseModel(string appId, string refreshToken, string accessToken, RestClient restClient)
         {
-            this.RefreshToken = refreshToken;
+            this.AppId = appId;
             this.AccessToken = accessToken;
+            this.RefreshToken = refreshToken;
             this.RestClient = restClient;
         }
 
@@ -78,7 +80,7 @@ namespace Reddit.NET.Models
                     RestClient keyCli = new RestClient("https://www.reddit.com");
                     RestRequest keyReq = new RestRequest("/api/v1/access_token", Method.POST);
 
-                    keyReq.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes("g19SDjZfOCq6mg:")));
+                    keyReq.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(AppId + ":")));
                     keyReq.AddHeader("Content-Type", "application/x-www-form-urlencoded");
                     
                     keyReq.AddParameter("grant_type", "refresh_token");

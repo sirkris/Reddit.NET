@@ -28,22 +28,22 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="refreshToken">The OAuth refresh token required to obtain a Reddit API access token.</param>
         /// <param name="accessToken">The OAuth access token required to access the Reddit API.</param>
-        public Dispatch(string refreshToken, string accessToken, RestClient restClient)
+        public Dispatch(string appId, string refreshToken, string accessToken, RestClient restClient)
         {
-            this.Account = new Account(refreshToken, accessToken, restClient);
-            this.Apps = new Apps(refreshToken, accessToken, restClient);
-            this.Captcha = new Captcha(refreshToken, accessToken, restClient);
-            this.Emoji = new Emoji(refreshToken, accessToken, restClient);
-            this.Flair = new Flair(refreshToken, accessToken, restClient);
-            this.LinksAndComments = new LinksAndComments(refreshToken, accessToken, restClient);
-            this.Listings = new Listings(refreshToken, accessToken, restClient);
-            this.Moderation = new Moderation(refreshToken, accessToken, restClient);
-            this.Multis = new Multis(refreshToken, accessToken, restClient);
-            this.PrivateMessages = new PrivateMessages(refreshToken, accessToken, restClient);
-            this.Search = new Search(refreshToken, accessToken, restClient);
-            this.Subreddits = new Subreddits(refreshToken, accessToken, restClient);
-            this.Users = new Users(refreshToken, accessToken, restClient);
-            this.Wiki = new Wiki(refreshToken, accessToken, restClient);
+            this.Account = new Account(appId, refreshToken, accessToken, restClient);
+            this.Apps = new Apps(appId, refreshToken, accessToken, restClient);
+            this.Captcha = new Captcha(appId, refreshToken, accessToken, restClient);
+            this.Emoji = new Emoji(appId, refreshToken, accessToken, restClient);
+            this.Flair = new Flair(appId, refreshToken, accessToken, restClient);
+            this.LinksAndComments = new LinksAndComments(appId, refreshToken, accessToken, restClient);
+            this.Listings = new Listings(appId, refreshToken, accessToken, restClient);
+            this.Moderation = new Moderation(appId, refreshToken, accessToken, restClient);
+            this.Multis = new Multis(appId, refreshToken, accessToken, restClient);
+            this.PrivateMessages = new PrivateMessages(appId, refreshToken, accessToken, restClient);
+            this.Search = new Search(appId, refreshToken, accessToken, restClient);
+            this.Subreddits = new Subreddits(appId, refreshToken, accessToken, restClient);
+            this.Users = new Users(appId, refreshToken, accessToken, restClient);
+            this.Wiki = new Wiki(appId, refreshToken, accessToken, restClient);
         }
     }
 }

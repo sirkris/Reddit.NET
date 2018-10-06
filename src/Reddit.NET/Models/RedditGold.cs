@@ -11,7 +11,7 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public RedditGold(string refreshToken, string accessToken, RestClient restClient) : base(refreshToken, accessToken, restClient) { }
+        public RedditGold(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
         public object Gild(string fullname)
         {
