@@ -89,7 +89,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        public object FlairList(string after, string before, string name, string subreddit = null, int count = 0, int limit = 25, string show = "all", string srDetail = null)
+        public object FlairList(string after, string before, string name, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairlist");
 
