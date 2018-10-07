@@ -40,6 +40,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("subject", subject);
             restRequest.AddParameter("text", text);
             restRequest.AddParameter("to", to);
+            restRequest.AddParameter("api_type", "json");
 
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
