@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Reddit.NET
 {
-    public class Reddit
+    public class RedditAPI
     {
         public Dispatch Models
         {
@@ -15,9 +15,24 @@ namespace Reddit.NET
             private set;
         }
 
-        public Reddit(string accessToken)
+        public RedditAPI(string appId, string refreshToken, string accessToken = null)
         {
-            this.Models = new Dispatch(accessToken, new RestClient("https://oauth.reddit.com"));
+            /*
+             * If refreshToken is supplied, the lib will automatically request a new access token when the current one expires (or if none was passed).
+             * Otherwise it's left up to the calling app and the API calls will fail once the access token expires.
+             * 
+             * --Kris
+             */
+            if (!string.IsNullOrWhiteSpace(refreshToken)
+                || !string.IsNullOrWhiteSpace(accessToken))
+            {
+                // Passing "null" instead of null forces the Reddit API to return a non-200 status code on auth failure, freeing us from having to parse the content string.  --Kris
+                this.Models = new Dispatch(appId, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
+            }
+            else
+            {
+                throw new ArgumentException("Refresh token and access token can't both be empty.");
+            }
         }
 
         public Comment Comment(ModelStructures.Listing listing)

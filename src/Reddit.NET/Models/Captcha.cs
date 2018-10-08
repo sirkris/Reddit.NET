@@ -1,4 +1,5 @@
-﻿using Reddit.NET.Models.Structures;
+﻿using Newtonsoft.Json;
+using Reddit.NET.Models.Structures;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,12 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Captcha(string accessToken, RestClient restClient) : base(accessToken, restClient) { }
+        public Captcha(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
+
+        public object NeedsCaptcha()
+        {
+            throw new NotImplementedException("Reddit has deprecated this endpoint.");
+            //return JsonConvert.DeserializeObject(ExecuteRequest("api/needs_captcha"));
+        }
     }
 }
