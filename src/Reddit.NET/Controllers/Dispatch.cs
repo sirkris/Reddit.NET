@@ -15,12 +15,17 @@ namespace Reddit.NET.Controllers
         public Flair Flair;
         public LinksAndComments LinksAndComments;
         public Listings Listings;
+        public LiveThreads LiveThreads;
+        public Misc Misc;
         public Moderation Moderation;
+        public Modmail Modmail;
         public Multis Multis;
         public PrivateMessages PrivateMessages;
+        public RedditGold RedditGold;
         public Search Search;
         public Subreddits Subreddits;
         public Users Users;
+        public Widgets Widgets;
         public Wiki Wiki;
 
         /// <summary>
@@ -37,12 +42,17 @@ namespace Reddit.NET.Controllers
             this.Flair = new Flair(appId, refreshToken, accessToken, restClient);
             this.LinksAndComments = new LinksAndComments(appId, refreshToken, accessToken, restClient);
             this.Listings = new Listings(appId, refreshToken, accessToken, restClient);
+            this.LiveThreads = new LiveThreads(appId, refreshToken, accessToken, restClient);
+            this.Misc = new Misc(appId, refreshToken, accessToken, restClient);
             this.Moderation = new Moderation(appId, refreshToken, accessToken, restClient);
+            this.Modmail = new Modmail(appId, refreshToken, accessToken, restClient);
             this.Multis = new Multis(appId, refreshToken, accessToken, restClient);
             this.PrivateMessages = new PrivateMessages(appId, refreshToken, accessToken, restClient);
+            this.RedditGold = new RedditGold(appId, refreshToken, accessToken, restClient);
             this.Search = new Search(appId, refreshToken, accessToken, restClient);
             this.Subreddits = new Subreddits(appId, refreshToken, accessToken, restClient);
             this.Users = new Users(appId, refreshToken, accessToken, restClient);
+            this.Widgets = new Widgets(appId, refreshToken, accessToken, restClient);
             this.Wiki = new Wiki(appId, refreshToken, accessToken, restClient);
         }
     }
