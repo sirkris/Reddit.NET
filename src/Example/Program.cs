@@ -37,20 +37,20 @@ namespace Example
                 File.WriteAllText("Account.PrefsTrusted.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs("trusted")));
 
                 File.WriteAllText("Emoji.All.json", JsonConvert.SerializeObject(reddit.Models.Emoji.All("WayOfTheBern")));
-
-                //File.WriteAllText("Flair.UserFlair.json", JsonConvert.SerializeObject(reddit.Models.Flair.UserFlair("SandersForPresident")));
-                //File.WriteAllText("Flair.UserFlairV2.json", JsonConvert.SerializeObject(reddit.Models.Flair.UserFlairV2("SandersForPresident")));
-
+                
+                File.WriteAllText("Flair.UserFlair.json", JsonConvert.SerializeObject(reddit.Models.Flair.UserFlair("SandersForPresident")));
+                File.WriteAllText("Flair.UserFlairV2.json", JsonConvert.SerializeObject(reddit.Models.Flair.UserFlairV2("SandersForPresident")));
+                
                 File.WriteAllText("Listings.Best.json", JsonConvert.SerializeObject(reddit.Models.Listings.Best(null, null, true)));
                 File.WriteAllText("Listings.BestNoCats.json", JsonConvert.SerializeObject(reddit.Models.Listings.Best(null, null, false)));
                 File.WriteAllText("Listings.BestWithSrDetail.json", JsonConvert.SerializeObject(reddit.Models.Listings.Best(null, null, true, 0, 25, "all", true)));
-                //File.WriteAllText("Listings.GetByNames.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetByNames("StillSandersForPres,WayOfTheBern")));
+                File.WriteAllText("Listings.GetByNames.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetByNames("t3_9gaze5,t3_9mfizx")));
                 File.WriteAllText("Listings.GetComments.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetComments("9gaze5", 0, false, false, "top", true, 0)));
                 File.WriteAllText("Listings.GetCommentsWithEditsAndMoreAndTruncate.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetComments("8gmf99", 0, true, true, "top", true, 50)));
-                //File.WriteAllText("Listings.GetCommentsWithContext.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetComments("8gmf99", 8, true, true, "top", true, 0, 
-                //    "FloridaMan", "dyd2vtc")));
+                File.WriteAllText("Listings.GetCommentsWithContext.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetComments("8gmf99", 8, true, true, "top", true, 0, 
+                    "FloridaMan", "dyd2vtc")));
                 File.WriteAllText("Listings.Hot.json", JsonConvert.SerializeObject(reddit.Models.Listings.Hot("GLOBAL", null, null, true)));
-                //File.WriteAllText("Listings.New.json", JsonConvert.SerializeObject(reddit.Models.Listings.New(null, null, true, "StillSandersForPres")));
+                File.WriteAllText("Listings.New.json", JsonConvert.SerializeObject(reddit.Models.Listings.New(null, null, true, "StillSandersForPres")));
                 File.WriteAllText("Listings.Random.json", JsonConvert.SerializeObject(reddit.Models.Listings.Random("Facepalm")));
                 File.WriteAllText("Listings.RandomNoSub.json", JsonConvert.SerializeObject(reddit.Models.Listings.Random()));
                 File.WriteAllText("Listings.Rising.json", JsonConvert.SerializeObject(reddit.Models.Listings.Rising(null, null, true)));
@@ -59,14 +59,14 @@ namespace Example
                 File.WriteAllText("Listings.Controversial.json", JsonConvert.SerializeObject(reddit.Models.Listings.Controversial("all", null, null, true)));
 
                 File.WriteAllText("Misc.Scopes.json", JsonConvert.SerializeObject(reddit.Models.Misc.Scopes()));
-                */
+                
                 File.WriteAllText("Moderation.GetLog.json", JsonConvert.SerializeObject(reddit.Models.Moderation.GetLog(null, null, "StillSandersForPres")));
                 File.WriteAllText("Moderation.ModQueueReports.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("reports", null, null, "links", "StillSandersForPres")));
                 File.WriteAllText("Moderation.ModQueueSpam.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("spam", null, null, "comments", "StillSandersForPres")));
                 File.WriteAllText("Moderation.ModQueue.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("modqueue", null, null, "links", "StillSandersForPres")));
                 File.WriteAllText("Moderation.ModQueueUnmoderated.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("unmoderated", null, null, "links", "StillSandersForPres")));
                 File.WriteAllText("Moderation.ModQueueEdited.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("edited", null, null, "links", "StillSandersForPres")));
-                //File.WriteAllText("Moderation.Approve.json", JsonConvert.SerializeObject(reddit.Models.Moderation.Approve("9gaze5")));
+                File.WriteAllText("Moderation.Approve.json", JsonConvert.SerializeObject(reddit.Models.Moderation.Approve("t3_9gaze5")));*/
                 //File.WriteAllText("Moderation.Stylesheet.json", JsonConvert.SerializeObject(reddit.Models.Moderation.Stylesheet("StillSandersForPres")));
 
             }

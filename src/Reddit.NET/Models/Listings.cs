@@ -35,7 +35,7 @@ namespace Reddit.NET.Models
 
         public object GetByNames(string names)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/by_id/" + names));
+            return JsonConvert.DeserializeObject(ExecuteRequest("by_id/" + names));
         }
 
         public object GetComments(string article, int context, bool showEdits, bool showMore, string sort, bool threaded, int truncate,
