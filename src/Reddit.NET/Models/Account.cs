@@ -26,9 +26,9 @@ namespace Reddit.NET.Models
         /// Return a breakdown of subreddit karma.
         /// </summary>
         /// <returns>A breakdown of subreddit karma.</returns>
-        public object Karma()
+        public List<UserKarma> Karma()
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/karma.json"));
+            return JsonConvert.DeserializeObject<List<UserKarma>>(ExecuteRequest("api/v1/me/karma.json"));
         }
 
         /// <summary>
