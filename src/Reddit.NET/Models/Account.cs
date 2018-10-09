@@ -33,6 +33,15 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/trophies.json"));
         }
 
+        public object UpdatePrefs(string json)
+        {
+            RestRequest restRequest = PrepareRequest("api/v1/me/prefs", Method.PATCH);
+
+            restRequest.AddBody(json);
+
+            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+        }
+
         public object Prefs(string where, string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
             bool srDetail = false, bool includeCategories = true)
         {

@@ -1,6 +1,8 @@
-﻿using Reddit.NET;
+﻿using Newtonsoft.Json;
+using Reddit.NET;
 using Reddit.NET.Controllers;
 using System;
+using System.IO;
 
 namespace Example
 {
@@ -24,6 +26,10 @@ namespace Example
 
                 Console.WriteLine("Username: " + me.Name);
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
+
+                // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
+                File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));
+                File.WriteAllText("Account.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Account.Trophies()));
 
                 var blah = reddit.Models.Emoji.All("WayOfTheBern");
                 int i = 0;
