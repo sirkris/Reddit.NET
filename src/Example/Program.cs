@@ -28,6 +28,7 @@ namespace Example
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
 
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
+                /*
                 File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));
                 File.WriteAllText("Account.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Account.Trophies()));
                 File.WriteAllText("Account.PrefsFriends.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs("friends")));
@@ -46,8 +47,8 @@ namespace Example
                 //File.WriteAllText("Listings.GetByNames.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetByNames("StillSandersForPres,WayOfTheBern")));
                 File.WriteAllText("Listings.GetComments.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetComments("9gaze5", 0, false, false, "top", true, 0)));
                 File.WriteAllText("Listings.GetCommentsWithEditsAndMoreAndTruncate.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetComments("8gmf99", 0, true, true, "top", true, 50)));
-                /*File.WriteAllText("Listings.GetCommentsWithContext.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetComments("8gmf99", 8, true, true, "top", true, 0, 
-                    "FloridaMan", "dyd2vtc")));*/
+                //File.WriteAllText("Listings.GetCommentsWithContext.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetComments("8gmf99", 8, true, true, "top", true, 0, 
+                //    "FloridaMan", "dyd2vtc")));
                 File.WriteAllText("Listings.Hot.json", JsonConvert.SerializeObject(reddit.Models.Listings.Hot("GLOBAL", null, null, true)));
                 //File.WriteAllText("Listings.New.json", JsonConvert.SerializeObject(reddit.Models.Listings.New(null, null, true, "StillSandersForPres")));
                 File.WriteAllText("Listings.Random.json", JsonConvert.SerializeObject(reddit.Models.Listings.Random("Facepalm")));
@@ -56,6 +57,17 @@ namespace Example
                 File.WriteAllText("Listings.Top.json", JsonConvert.SerializeObject(reddit.Models.Listings.Top("all", null, null, true)));
                 File.WriteAllText("Listings.TopDay.json", JsonConvert.SerializeObject(reddit.Models.Listings.Top("day", null, null, true)));
                 File.WriteAllText("Listings.Controversial.json", JsonConvert.SerializeObject(reddit.Models.Listings.Controversial("all", null, null, true)));
+
+                File.WriteAllText("Misc.Scopes.json", JsonConvert.SerializeObject(reddit.Models.Misc.Scopes()));
+                */
+                File.WriteAllText("Moderation.GetLog.json", JsonConvert.SerializeObject(reddit.Models.Moderation.GetLog(null, null, "StillSandersForPres")));
+                File.WriteAllText("Moderation.ModQueueReports.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("reports", null, null, "links", "StillSandersForPres")));
+                File.WriteAllText("Moderation.ModQueueSpam.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("spam", null, null, "comments", "StillSandersForPres")));
+                File.WriteAllText("Moderation.ModQueue.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("modqueue", null, null, "links", "StillSandersForPres")));
+                File.WriteAllText("Moderation.ModQueueUnmoderated.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("unmoderated", null, null, "links", "StillSandersForPres")));
+                File.WriteAllText("Moderation.ModQueueEdited.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("edited", null, null, "links", "StillSandersForPres")));
+                //File.WriteAllText("Moderation.Approve.json", JsonConvert.SerializeObject(reddit.Models.Moderation.Approve("9gaze5")));
+                //File.WriteAllText("Moderation.Stylesheet.json", JsonConvert.SerializeObject(reddit.Models.Moderation.Stylesheet("StillSandersForPres")));
 
             }
         }
