@@ -79,7 +79,19 @@ namespace Reddit.NET.Models
 
         public object SearchRedditNames(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
         {
-            RestRequest restRequest = PrepareRequest("api/search_subreddit_names");
+            RestRequest restRequest = PrepareRequest("api/search_reddit_names");
+
+            restRequest.AddParameter("exact", exact);
+            restRequest.AddParameter("include_over_18", includeOver18);
+            restRequest.AddParameter("include_unadvertisable", includeUnadvertisable);
+            restRequest.AddParameter("query", query);
+
+            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+        }
+
+        public object SearchSubreddits(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
+        {
+            RestRequest restRequest = PrepareRequest("api/search_subreddits", Method.POST);
 
             restRequest.AddParameter("exact", exact);
             restRequest.AddParameter("include_over_18", includeOver18);
@@ -263,14 +275,21 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about/traffic"));
         }
 
+        // Note - The API docs show the wrong URL for this endpoint.  --Kris
         public object Sidebar(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "sidebar"));
+            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "about/sidebar"));
         }
 
+        /* Note - The API docs show the wrong URL for this endpoint (I think).
+         * This endpoint returns 403, with the content saying, "Request forbidden by administrative rules."
+         * The response object does contain the URL of the stickied post, though, interestingly enough.
+         * 
+         * --Kris
+         */
         public object Sticky(string subreddit = null, int num = 1)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "sticky");
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "about/sticky");
 
             restRequest.AddParameter("num", num);
 
