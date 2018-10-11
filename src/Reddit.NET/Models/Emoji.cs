@@ -48,6 +48,11 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// Get all emojis for a SR. The response includes reddit emojis as well as emojis for the SR specified in the request.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the emojis</param>
+        /// <returns>Emojis.</returns>
         public object All(string subreddit)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/" + subreddit + "/emojis/all"));

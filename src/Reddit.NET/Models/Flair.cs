@@ -180,11 +180,23 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// Return list of available user flair for the current subreddit.
+        /// Will not return flair if flair is disabled on the subreddit, the user cannot set their own flair, or they are not a moderator that can set flair.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>List of available user flairs.</returns>
         public object UserFlair(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/user_flair"));
         }
 
+        /// <summary>
+        /// Return list of available user flair for the current subreddit.
+        /// If user is not a mod of the subreddit, this endpoint filters out mod_only templates.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>List of available user flairs.</returns>
         public object UserFlairV2(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/user_flair_v2"));

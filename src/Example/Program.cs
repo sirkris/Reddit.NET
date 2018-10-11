@@ -28,7 +28,7 @@ namespace Example
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
 
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
-                /*
+                
                 File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));
                 File.WriteAllText("Account.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Account.Trophies()));
                 File.WriteAllText("Account.PrefsFriends.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs("friends")));
@@ -133,9 +133,16 @@ namespace Example
                 File.WriteAllText("Users.HistorySavedLinks.json", JsonConvert.SerializeObject(reddit.Models.Users.History("KrisCraig", "saved", 10, "given", "top", "all", "links", null, null, false)));
                 File.WriteAllText("Users.HistorySavedComments.json", JsonConvert.SerializeObject(reddit.Models.Users.History("KrisCraig", "saved", 10, "given", "top", "all", "comments", null, null, false)));
                 File.WriteAllText("Users.HistoryGildedLinks.json", JsonConvert.SerializeObject(reddit.Models.Users.History("KrisCraig", "gilded", 10, "given", "top", "all", "links", null, null, false)));
-                File.WriteAllText("Users.HistoryGildedComments.json", JsonConvert.SerializeObject(reddit.Models.Users.History("KrisCraig", "gilded", 10, "given", "top", "all", "comments", null, null, false)));*/
+                File.WriteAllText("Users.HistoryGildedComments.json", JsonConvert.SerializeObject(reddit.Models.Users.History("KrisCraig", "gilded", 10, "given", "top", "all", "comments", null, null, false)));
 
-
+                File.WriteAllText("Wiki.Pages.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Pages("ShittyEmails")));
+                File.WriteAllText("Wiki.Revisions.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Revisions(null, null, "ShittyEmails")));
+                File.WriteAllText("Wiki.PageRevisions.json", JsonConvert.SerializeObject(reddit.Models.Wiki.PageRevisions("index", null, null, "ShittyEmails")));
+                File.WriteAllText("Wiki.GetPermissions.json", JsonConvert.SerializeObject(reddit.Models.Wiki.GetPermissions("index", "ShittyEmails")));
+                File.WriteAllText("Wiki.Page.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Page("index", null, null, "ShittyEmails")));
+                File.WriteAllText("Wiki.PageWithV.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Page("index", "51c412fc-6b26-11e8-a963-0e7fba92da48", null, "ShittyEmails")));
+                File.WriteAllText("Wiki.PageWithV2.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Page("index", "51c412fc-6b26-11e8-a963-0e7fba92da48", 
+                    "483f05ca-6b26-11e8-b04f-0e02e061d980", "ShittyEmails")));
             }
         }
     }
