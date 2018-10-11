@@ -123,7 +123,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest("user/" + username + "/about"));
         }
 
-        public object History(string username, string where, int context, string show, string sort, string t, string type,
+        public ListingContainer History(string username, string where, int context, string show, string sort, string t, string type,
             string after, string before, bool includeCategories, int count = 0, int limit = 25, bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
@@ -139,8 +139,8 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("count", count);
             restRequest.AddParameter("limit", limit);
             restRequest.AddParameter("sr_detail", srDetail);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            
+            return JsonConvert.DeserializeObject<ListingContainer>(ExecuteRequest(restRequest));
         }
     }
 }

@@ -275,10 +275,16 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about/traffic"));
         }
 
-        // Note - The API docs show the wrong URL for this endpoint.  --Kris
+        /*
+         * Note - The API docs show the wrong URL for this endpoint.
+         * According to multiple sources, this endpoint is incompatible with OAuth.  It just returns empty JSON.
+         * 
+         * --Kris
+         */
         public object Sidebar(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "about/sidebar"));
+            throw new NotImplementedException("This endpoint does not work correctly with OAuth.");
+            //return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "about/sidebar"));
         }
 
         /* Note - The API docs show the wrong URL for this endpoint (I think).
