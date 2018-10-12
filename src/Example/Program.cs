@@ -28,7 +28,7 @@ namespace Example
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
 
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
-                
+                /*
                 File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));
                 File.WriteAllText("Account.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Account.Trophies()));
                 File.WriteAllText("Account.PrefsFriends.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs("friends")));
@@ -143,6 +143,18 @@ namespace Example
                 File.WriteAllText("Wiki.PageWithV.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Page("index", "51c412fc-6b26-11e8-a963-0e7fba92da48", null, "ShittyEmails")));
                 File.WriteAllText("Wiki.PageWithV2.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Page("index", "51c412fc-6b26-11e8-a963-0e7fba92da48", 
                     "483f05ca-6b26-11e8-b04f-0e02e061d980", "ShittyEmails")));
+
+                File.WriteAllText("Subreddits.SiteAdminCreate.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SiteAdmin(false, true, true, true, true, true, false, 
+                    "Proving ground for bots running Reddit.NET.  Please feel free to test your bots here.", false, true, null, "Reddit.NET Bot Testing", false, "#0000FF", "en-US", 
+                    "any", "RedditDotNETBot", true, false, "Proving ground for bots running Reddit.NET.  Please feel free to test your bots here.", true, true, "low", "high", "high", true, 
+                    null, "New Bot Link!", "Robots and humans are welcome to post here.  Please adhere to Reddit's rules.", "New Bot Post", "new", null, false, "Reddit.NET Bot Testing", 
+                    "public", "modonly")));
+                File.WriteAllText("Users.FriendInviteMod.json", JsonConvert.SerializeObject(reddit.Models.Users.Friend(null, null, null, null, 999, "RedditDotNetBot", "+all",
+                    "moderator_invite", "RedditDotNETBot")));
+                File.WriteAllText("LinksAndComments.SubmitLinkPost.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
+                    "link", false, true, null, true, false, "RedditDotNETBot", "", "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null)));
+                File.WriteAllText("LinksAndComments.Comment.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Comment(false, "", "This is a test comment.  So there.", "t3_9nhy54")));*/
+
             }
         }
     }

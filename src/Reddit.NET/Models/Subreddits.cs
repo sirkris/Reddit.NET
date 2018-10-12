@@ -104,7 +104,7 @@ namespace Reddit.NET.Models
         public object SiteAdmin(bool allOriginalContent, bool allowDiscovery, bool allowImages, bool allowPostCrossposts, bool allowTop,
             bool allowVideos, bool collapseDeletedComments, string description, bool excludeBannedModqueue, bool freeFormReports,
             string gRecaptchaResponse, string headerTitle, bool hideAds, string keyColor, string lang, string linkType, string name, bool originalContentTagEnabled,
-            bool over18, string publicDescription, bool showMedia, bool showMediaPreview, string spamComments, string spamLinks, bool spamSelfPosts,
+            bool over18, string publicDescription, bool showMedia, bool showMediaPreview, string spamComments, string spamLinks, string spamSelfPosts,
             bool spoilersEnabled, string sr, string submitLinkLabel, string submitText, string submitTextLabel, string suggestedCommentSort,
             string themeSr, bool themeSrUpdate, string title, string type, string wikiMode, int commentScoreHideMins = 0, int wikiEditAge = 0,
             int wikiEditKarma = 0)
