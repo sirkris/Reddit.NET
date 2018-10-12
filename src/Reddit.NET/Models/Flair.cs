@@ -280,8 +280,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Select flair.
         /// </summary>
-        /// <param name="backgroundColor">	
-        /// <param name="flairTemplateId">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="flairTemplateId"></param>
         /// <param name="link">a fullname of a link</param>
         /// <param name="name">a user by name</param>
         /// <param name="returnRtson">[all|only|none]: "all" saves attributes and returns rtjson, "only" only returns rtjson, and "none" only saves attributes</param>
