@@ -13,6 +13,13 @@ namespace Reddit.NET.Models
 
         public Flair(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flairType"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object ClearFlairTemplates(string flairType, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/clearflairtemplates", Method.POST);
@@ -23,6 +30,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object DeleteFlair(string name, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/deleteflair", Method.POST);
@@ -33,6 +47,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flairTemplateId"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object DeleteFlairTemplate(string flairTemplateId, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/deleteflairtemplate", Method.POST);
@@ -43,6 +64,16 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cssClass"></param>
+        /// <param name="link"></param>
+        /// <param name="name"></param>
+        /// <param name="text"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object Create(string cssClass, string link, string name, string text, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flair", Method.POST);
@@ -56,6 +87,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flairType"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object FlairTemplateOrder(string flairType, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flair_template_order", Method.PATCH);
@@ -65,6 +103,17 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flairEnabled"></param>
+        /// <param name="flairPosition"></param>
+        /// <param name="flairSelfAssignEnabled"></param>
+        /// <param name="linkFlairPosition"></param>
+        /// <param name="linkFlairSelfAssignEnabled"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object FlairConfig(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled,
             string subreddit = null)
         {
@@ -80,6 +129,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flairCsv"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object FlairCSV(string flairCsv, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flaircsv", Method.POST);
@@ -89,6 +145,19 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="name"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object FlairList(string after, string before, string name, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairlist");
@@ -104,6 +173,14 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="link"></param>
+        /// <returns></returns>
         public object FlairSelector(string name, string subreddit = null, string link = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairselector", Method.POST);
@@ -114,6 +191,17 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="cssClass"></param>
+        /// <param name="flairTemplateId"></param>
+        /// <param name="flairType"></param>
+        /// <param name="text"></param>
+        /// <param name="textEditable"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object FlairTemplate(string cssClass, string flairTemplateId, string flairType, string text, bool textEditable, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairtemplate", Method.POST);
@@ -128,6 +216,19 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="backgroundColor"></param>
+        /// <param name="flairTemplateId"></param>
+        /// <param name="flairType"></param>
+        /// <param name="modOnly"></param>
+        /// <param name="text"></param>
+        /// <param name="textColor"></param>
+        /// <param name="textEditable"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object FlairTemplateV2(string backgroundColor, string flairTemplateId, string flairType, bool modOnly, string text, string textColor,
             bool textEditable, string subreddit = null)
         {
@@ -144,16 +245,41 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object LinkFlair(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/link_flair"));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object LinkFlairV2(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/link_flair_v2"));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="backgroundColor"></param>
+        /// <param name="flairTemplateId"></param>
+        /// <param name="link"></param>
+        /// <param name="name"></param>
+        /// <param name="returnRtson"></param>
+        /// <param name="text"></param>
+        /// <param name="textColor"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object SelectFlair(string backgroundColor, string flairTemplateId, string link, string name, string returnRtson, string text,
             string textColor, string subreddit = null)
         {
@@ -170,6 +296,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="flairEnabled"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object SetFlairEnabled(bool flairEnabled, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/setflairenabled", Method.POST);

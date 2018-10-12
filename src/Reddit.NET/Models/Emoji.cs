@@ -13,6 +13,14 @@ namespace Reddit.NET.Models
 
         public Emoji(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <param name="name"></param>
+        /// <param name="s3Key"></param>
+        /// <returns></returns>
         public object Add(string subreddit, string name, string s3Key)
         {
             RestRequest restRequest = PrepareRequest("api/v1/" + subreddit + "/emoji.json", Method.POST);
@@ -23,11 +31,26 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <param name="emojiName"></param>
+        /// <returns></returns>
         public object Delete(string subreddit, string emojiName)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/" + subreddit + "/emoji/" + emojiName, Method.DELETE));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <param name="filePath"></param>
+        /// <param name="mimeType"></param>
+        /// <returns></returns>
         public object AcquireLease(string subreddit, string filePath, string mimeType)
         {
             RestRequest restRequest = PrepareRequest("api/v1/" + subreddit + "/emoji_asset_upload_s3.json", Method.POST);
@@ -38,6 +61,14 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <param name="height"></param>
+        /// <param name="width"></param>
+        /// <returns></returns>
         public object CustomSize(string subreddit, int height = 0, int width = 0)
         {
             RestRequest restRequest = PrepareRequest("api/v1/" + subreddit + "/emoji_custom_size", Method.POST);
