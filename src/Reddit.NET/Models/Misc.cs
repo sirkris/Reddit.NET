@@ -13,6 +13,13 @@ namespace Reddit.NET.Models
 
         public Misc(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object SavedMediaText(string url, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/saved_media_text");
@@ -22,6 +29,11 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="scopes"></param>
+        /// <returns></returns>
         public object Scopes(string scopes = null)
         {
             RestRequest restRequest = PrepareRequest("api/v1/scopes");

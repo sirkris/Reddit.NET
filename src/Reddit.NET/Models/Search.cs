@@ -13,6 +13,25 @@ namespace Reddit.NET.Models
 
         public Search(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="category"></param>
+        /// <param name="includeFacets"></param>
+        /// <param name="q"></param>
+        /// <param name="restrictSr"></param>
+        /// <param name="sort"></param>
+        /// <param name="t"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public object GetSearch(string after, string before, string category, bool includeFacets, string q, bool restrictSr, string sort, string t,
             string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false, string type = null)
         {

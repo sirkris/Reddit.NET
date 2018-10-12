@@ -13,11 +13,27 @@ namespace Reddit.NET.Models
 
         public Listings(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public object TrendingSubreddits()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/trending_subreddits"));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object Best(string after, string before, bool includeCategories, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("best");
@@ -33,11 +49,32 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="names"></param>
+        /// <returns></returns>
         public object GetByNames(string names)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("by_id/" + names));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="article"></param>
+        /// <param name="context"></param>
+        /// <param name="showEdits"></param>
+        /// <param name="showMore"></param>
+        /// <param name="sort"></param>
+        /// <param name="threaded"></param>
+        /// <param name="truncate"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="comment"></param>
+        /// <param name="depth"></param>
+        /// <param name="limit"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object GetComments(string article, int context, bool showEdits, bool showMore, string sort, bool threaded, int truncate,
             string subreddit = null, string comment = null, int? depth = null, int? limit = null, bool srDetail = false)
         {
@@ -63,6 +100,21 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="article"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="crosspostsOnly"></param>
+        /// <param name="sort"></param>
+        /// <param name="sr"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object GetDuplicates(string article, string after, string before, bool crosspostsOnly, string sort, string sr,
             int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
@@ -81,6 +133,19 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object Hot(string g, string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -98,6 +163,18 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object New(string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -114,11 +191,28 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object Random(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "/random"));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object Rising(string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -135,7 +229,19 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object Top(string t, string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -153,6 +259,19 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object Controversial(string t, string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {

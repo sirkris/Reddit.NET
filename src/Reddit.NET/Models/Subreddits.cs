@@ -13,6 +13,20 @@ namespace Reddit.NET.Models
 
         public Subreddits(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="user"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object About(string where, string after, string before, string user, bool includeCategories, string subreddit = null, int count = 0,
             int limit = 25, string show = "all", bool srDetail = false)
         {
@@ -30,6 +44,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object DeleteSrBanner(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_banner", Method.POST);
@@ -39,6 +59,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object DeleteSrHeader(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_header", Method.POST);
@@ -48,6 +74,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object DeleteSrIcon(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_icon", Method.POST);
@@ -57,6 +89,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="imgName"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object DeleteSrImg(string imgName, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_img", Method.POST);
@@ -67,6 +106,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="srNames"></param>
+        /// <param name="omit"></param>
+        /// <param name="over18"></param>
+        /// <returns></returns>
         public object Recommend(string srNames, string omit, bool over18)
         {
             RestRequest restRequest = PrepareRequest("api/recommend/sr/" + srNames);
@@ -77,6 +123,14 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exact"></param>
+        /// <param name="includeOver18"></param>
+        /// <param name="includeUnadvertisable"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public object SearchRedditNames(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
         {
             RestRequest restRequest = PrepareRequest("api/search_reddit_names");
@@ -89,6 +143,14 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="exact"></param>
+        /// <param name="includeOver18"></param>
+        /// <param name="includeUnadvertisable"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public object SearchSubreddits(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
         {
             RestRequest restRequest = PrepareRequest("api/search_subreddits", Method.POST);
@@ -101,6 +163,49 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="allOriginalContent"></param>
+        /// <param name="allowDiscovery"></param>
+        /// <param name="allowImages"></param>
+        /// <param name="allowPostCrossposts"></param>
+        /// <param name="allowTop"></param>
+        /// <param name="allowVideos"></param>
+        /// <param name="collapseDeletedComments"></param>
+        /// <param name="description"></param>
+        /// <param name="excludeBannedModqueue"></param>
+        /// <param name="freeFormReports"></param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle"></param>
+        /// <param name="hideAds"></param>
+        /// <param name="keyColor"></param>
+        /// <param name="lang"></param>
+        /// <param name="linkType"></param>
+        /// <param name="name"></param>
+        /// <param name="originalContentTagEnabled"></param>
+        /// <param name="over18"></param>
+        /// <param name="publicDescription"></param>
+        /// <param name="showMedia"></param>
+        /// <param name="showMediaPreview"></param>
+        /// <param name="spamComments"></param>
+        /// <param name="spamLinks"></param>
+        /// <param name="spamSelfPosts"></param>
+        /// <param name="spoilersEnabled"></param>
+        /// <param name="sr"></param>
+        /// <param name="submitLinkLabel"></param>
+        /// <param name="submitText"></param>
+        /// <param name="submitTextLabel"></param>
+        /// <param name="suggestedCommentSort"></param>
+        /// <param name="themeSr"></param>
+        /// <param name="themeSrUpdate"></param>
+        /// <param name="title"></param>
+        /// <param name="type"></param>
+        /// <param name="wikiMode"></param>
+        /// <param name="commentScoreHideMins"></param>
+        /// <param name="wikiEditAge"></param>
+        /// <param name="wikiEditKarma"></param>
+        /// <returns></returns>
         public object SiteAdmin(bool allOriginalContent, bool allowDiscovery, bool allowImages, bool allowPostCrossposts, bool allowTop,
             bool allowVideos, bool collapseDeletedComments, string description, bool excludeBannedModqueue, bool freeFormReports,
             string gRecaptchaResponse, string headerTitle, bool hideAds, string keyColor, string lang, string linkType, string name, bool originalContentTagEnabled,
@@ -155,11 +260,24 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object SubmitText(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/submit_text"));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="includeOver18"></param>
+        /// <param name="includeProfiles"></param>
+        /// <param name="query"></param>
+        /// <returns></returns>
         public object SubredditAutocomplete(bool includeOver18, bool includeProfiles, string query)
         {
             RestRequest restRequest = PrepareRequest("api/subreddit_autocomplete");
@@ -171,6 +289,16 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="includeCategories"></param>
+        /// <param name="includeOver18"></param>
+        /// <param name="includeProfiles"></param>
+        /// <param name="query"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
         public object SubredditAutocompleteV2(bool includeCategories, bool includeOver18, bool includeProfiles, string query, int limit = 5)
         {
             RestRequest restRequest = PrepareRequest("api/subreddit_autocomplete_v2");
@@ -184,6 +312,15 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="op"></param>
+        /// <param name="reason"></param>
+        /// <param name="stylesheetContents"></param>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object SubredditStylesheet(string op, string reason, string stylesheetContents, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/subreddit_stylesheet", Method.POST);
@@ -196,6 +333,14 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="skipInitialDefaults"></param>
+        /// <param name="sr"></param>
+        /// <returns></returns>
         public object SubscribeByFullname(string action, bool skipInitialDefaults, string sr)
         {
             RestRequest restRequest = PrepareRequest("api/subscribe", Method.POST);
@@ -207,6 +352,14 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="skipInitialDefaults"></param>
+        /// <param name="srName"></param>
+        /// <returns></returns>
         public object Subscribe(string action, bool skipInitialDefaults, string srName)
         {
             RestRequest restRequest = PrepareRequest("api/subscribe", Method.POST);
@@ -218,6 +371,18 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="file"></param>
+        /// <param name="header"></param>
+        /// <param name="name"></param>
+        /// <param name="uploadType"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="imgType"></param>
+        /// <param name="formId"></param>
+        /// <returns></returns>
         public object UploadSrImg(byte[] file, int header, string name, string uploadType, string subreddit = null, string imgType = "png",
             string formId = null)
         {
@@ -233,6 +398,19 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="q"></param>
+        /// <param name="sort"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object SearchProfiles(string after, string before, string q, string sort, int count = 0, int limit = 25, string show = "all",
             bool srDetail = false)
         {
@@ -250,11 +428,24 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object About(string subreddit)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about"));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <param name="created"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
         public object Edit(string subreddit, bool created, string location)
         {
             RestRequest restRequest = PrepareRequest("r/" + subreddit + "/about/edit");
@@ -265,11 +456,21 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object Rules(string subreddit)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about/rules"));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object Traffic(string subreddit)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about/traffic"));
@@ -302,6 +503,18 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object Mine(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -318,6 +531,19 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="q"></param>
+        /// <param name="showUsers"></param>
+        /// <param name="sort"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object Search(string after, string before, string q, bool showUsers, string sort, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -336,6 +562,18 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object Get(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -352,6 +590,18 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object GetUserSubreddits(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {

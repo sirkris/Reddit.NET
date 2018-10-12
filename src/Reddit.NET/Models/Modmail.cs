@@ -13,6 +13,13 @@ namespace Reddit.NET.Models
 
         public Modmail(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="entity"></param>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public object BulkRead(string entity, string state)
         {
             RestRequest restRequest = PrepareRequest("api/mod/bulk_read", Method.POST);
@@ -23,6 +30,16 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="entity"></param>
+        /// <param name="sort"></param>
+        /// <param name="state"></param>
+        /// <param name="limit"></param>
+        /// <returns></returns>
         public object GetConversations(string after, string entity, string sort, string state, int limit = 25)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations");
@@ -36,6 +53,16 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="body"></param>
+        /// <param name="isAuthorHidden"></param>
+        /// <param name="srName"></param>
+        /// <param name="subject"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
         public object NewConversation(string body, bool isAuthorHidden, string srName, string subject, string to)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations", Method.POST);
@@ -49,6 +76,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <param name="markRead"></param>
+        /// <returns></returns>
         public object GetConversation(string conversationId, bool markRead)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/" + conversationId);
@@ -58,6 +92,15 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <param name="body"></param>
+        /// <param name="isAuthorHidden"></param>
+        /// <param name="isInternal"></param>
+        /// <returns></returns>
         public object NewMessage(string conversationId, string body, bool isAuthorHidden, bool isInternal)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/" + conversationId, Method.POST);
@@ -69,41 +112,89 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public object ArchiveConversation(string conversationId)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/archive", Method.POST));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public object RemoveHighlight(string conversationId)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/highlight", Method.DELETE));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public object MarkHighlighted(string conversationId)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/highlight", Method.POST));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public object Mute(string conversationId)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/mute", Method.POST));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public object UnarchiveConversation(string conversationId)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/unarchive", Method.POST));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public object UnMute(string conversationId)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/unmute", Method.POST));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationId"></param>
+        /// <returns></returns>
         public object User(string conversationId)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/user"));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationIds"></param>
+        /// <returns></returns>
         public object MarkRead(string conversationIds)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/read", Method.POST);
@@ -113,11 +204,21 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public object Subreddits()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/subreddits"));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="conversationIds"></param>
+        /// <returns></returns>
         public object MarkUnread(string conversationIds)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/unread", Method.POST);
@@ -127,6 +228,10 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public object UnreadCount()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/unread/count"));

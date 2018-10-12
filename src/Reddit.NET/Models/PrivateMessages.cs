@@ -13,6 +13,12 @@ namespace Reddit.NET.Models
 
         public PrivateMessages(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object Block(string id)
         {
             RestRequest restRequest = PrepareRequest("api/block", Method.POST);
@@ -22,6 +28,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object CollapseMessage(string id)
         {
             RestRequest restRequest = PrepareRequest("api/collapse_message", Method.POST);
@@ -31,6 +43,16 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="fromSr"></param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="subject"></param>
+        /// <param name="text"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
         public object Compose(string fromSr, string gRecaptchaResponse, string subject, string text, string to)
         {
             RestRequest restRequest = PrepareRequest("api/compose", Method.POST);
@@ -45,6 +67,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object DelMsg(string id)
         {
             RestRequest restRequest = PrepareRequest("api/del_msg", Method.POST);
@@ -54,6 +82,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="filterTypes"></param>
+        /// <returns></returns>
         public object ReadAllMessages(string filterTypes)
         {
             RestRequest restRequest = PrepareRequest("api/read_all_messages", Method.POST);
@@ -63,6 +97,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object ReadMessage(string id)
         {
             RestRequest restRequest = PrepareRequest("api/read_message", Method.POST);
@@ -72,6 +112,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object UnblockSubreddit(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unblock_subreddit", Method.POST);
@@ -81,6 +127,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object UncollapseMessage(string id)
         {
             RestRequest restRequest = PrepareRequest("api/uncollapse_message", Method.POST);
@@ -90,6 +142,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object UnreadMessage(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unread_message", Method.POST);
@@ -99,6 +157,21 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="where"></param>
+        /// <param name="mark"></param>
+        /// <param name="mid"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="includeCategories"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object GetMessages(string where, bool mark, string mid, string after, string before, bool includeCategories, int count = 0,
             int limit = 25, string show = "all", bool srDetail = false)
         {

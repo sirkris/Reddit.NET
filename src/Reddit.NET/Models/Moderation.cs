@@ -13,6 +13,19 @@ namespace Reddit.NET.Models
 
         public Moderation(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="mod"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public object GetLog(string after, string before, string subreddit = null, int count = 0, int limit = 25, string mod = null, string show = "all",
             bool srDetail = false, string type = null)
         {
@@ -30,6 +43,19 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="location"></param>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="only"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="count"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <returns></returns>
         public object ModQueue(string location, string after, string before, string only, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -46,6 +72,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object AcceptModeratorInvite(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/accept_moderator_invite", Method.POST);
@@ -55,6 +87,11 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object Approve(string id)
         {
             RestRequest restRequest = PrepareRequest("api/approve", Method.POST);
@@ -64,6 +101,14 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="how"></param>
+        /// <param name="id"></param>
+        /// <param name="sticky"></param>
+        /// <returns></returns>
         public object Distinguish(string how, string id, bool sticky)
         {
             RestRequest restRequest = PrepareRequest("api/distinguish", Method.POST);
@@ -76,6 +121,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object IgnoreReports(string id)
         {
             RestRequest restRequest = PrepareRequest("api/ignore_reports", Method.POST);
@@ -85,6 +136,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object LeaveContributor(string id)
         {
             RestRequest restRequest = PrepareRequest("api/leavecontributor", Method.POST);
@@ -94,6 +151,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object LeaveModerator(string id)
         {
             RestRequest restRequest = PrepareRequest("api/leavemoderator", Method.POST);
@@ -103,6 +166,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object MuteMessageAuthor(string id)
         {
             RestRequest restRequest = PrepareRequest("api/mute_message_author", Method.POST);
@@ -112,6 +181,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="spam"></param>
+        /// <returns></returns>
         public object Remove(string id, bool spam)
         {
             RestRequest restRequest = PrepareRequest("api/remove", Method.POST);
@@ -122,6 +198,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object UnignoreReports(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unignore_reports", Method.POST);
@@ -131,6 +213,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public object UnmuteMessageAuthor(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unmute_message_author", Method.POST);
@@ -140,6 +228,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns></returns>
         public object Stylesheet(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/stylesheet"));
