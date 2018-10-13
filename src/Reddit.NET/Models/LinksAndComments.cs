@@ -23,10 +23,10 @@ namespace Reddit.NET.Models
         /// To start a new message thread, use /api/compose.
         /// </summary>
         /// <param name="returnRtjson">boolean value</param>
-        /// <param name="richtextJson"></param>
-        /// <param name="text"></param>
-        /// <param name="thingId"></param>
-        /// <returns></returns>
+        /// <param name="richtextJson">JSON data</param>
+        /// <param name="text">raw markdown text</param>
+        /// <param name="thingId">fullname of parent thing</param>
+        /// <returns>A Reddit comment.</returns>
         public object Comment(bool returnRtjson, string richtextJson, string text, string thingId)
         {
             RestRequest restRequest = PrepareRequest("api/comment", Method.POST);
@@ -42,7 +42,7 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Delete a Link or Comment.
         /// </summary>
         /// <param name="id">fullname of a thing created by the user</param>
         /// <returns>(TODO - Untested)</returns>
@@ -57,11 +57,11 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Edit the body text of a comment or self-post.
         /// </summary>
         /// <param name="returnRtjson">boolean value</param>
-        /// <param name="richtextJson"></param>
-        /// <param name="text"></param>
+        /// <param name="richtextJson">JSON data</param>
+        /// <param name="text">raw markdown text</param>
         /// <param name="thingId">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object EditUserText(bool returnRtjson, string richtextJson, string text, string thingId)
@@ -79,9 +79,11 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Hide a link.
+        /// This removes it from the user's default view of subreddit listings.
+        /// See also: /api/unhide.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">A comma-separated list of link fullnames</param>
         /// <returns>(TODO - Untested)</returns>
         public object Hide(string id)
         {
@@ -94,10 +96,11 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Return a listing of things specified by their fullnames.
+        /// Only Links, Comments, and Subreddits are allowed.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="subreddit"></param>
+        /// <param name="id">A comma-separated list of thing fullnames</param>
+        /// <param name="subreddit">The subreddit with the listing.</param>
         /// <returns>(TODO - Untested)</returns>
         public object Info(string id, string subreddit = null)
         {
@@ -110,9 +113,11 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Lock a link.
+        /// Prevents a post from receiving new comments.
+        /// See also: /api/unlock.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a link</param>
         /// <returns>(TODO - Untested)</returns>
         public object Lock(string id)
         {
@@ -125,7 +130,8 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Mark a link NSFW.
+        /// See also: /api/unmarknsfw.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
@@ -140,13 +146,19 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Retrieve additional comments omitted from a base comment tree.
+        /// When a comment tree is rendered, the most relevant comments are selected for display first.
+        /// Remaining comments are stubbed out with "MoreComments" links. This API call is used to retrieve the additional comments represented by those stubs, up to 100 at a time.
+        /// The two core parameters required are link and children. link is the fullname of the link whose comments are being fetched. children is a comma-delimited list of comment ID36s that need to be fetched.
+        /// If id is passed, it should be the ID of the MoreComments object this call is replacing. This is needed only for the HTML UI's purposes and is optional otherwise.
+        /// NOTE: you may only make one request at a time to this API endpoint. Higher concurrency will result in an error being returned.
+        /// If limit_children is True, only return the children requested.
         /// </summary>
-        /// <param name="children"></param>
+        /// <param name="children">a comma-delimited list of comment ID36s</param>
         /// <param name="limitChildren">boolean value</param>
-        /// <param name="linkId"></param>
-        /// <param name="sort"></param>
-        /// <param name="id"></param>
+        /// <param name="linkId">fullname of a link</param>
+        /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
+        /// <param name="id">(optional) id of the associated MoreChildren object</param>
         /// <returns>(TODO - Untested)</returns>
         public object MoreChildren(string children, bool limitChildren, string linkId, string sort, string id = null)
         {
@@ -164,17 +176,20 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Report a link, comment or message.
+        /// Reporting a thing brings it to the attention of the subreddit's moderators.
+        /// Reporting a message sends it to a system for admin review.
+        /// For links and comments, the thing is implicitly hidden as well (see /api/hide for details).
         /// </summary>
-        /// <param name="additionalInfo"></param>
-        /// <param name="banEvadingAccountsNames"></param>
-        /// <param name="customText"></param>
+        /// <param name="additionalInfo">a string no longer than 2000 characters</param>
+        /// <param name="banEvadingAccountsNames">a string no longer than 1000 characters</param>
+        /// <param name="customText">a string no longer than 250 characters</param>
         /// <param name="fromHelpCenter">boolean value</param>
-        /// <param name="otherReason"></param>
-        /// <param name="reason"></param>
-        /// <param name="ruleReason"></param>
-        /// <param name="siteReason"></param>
-        /// <param name="srName"></param>
+        /// <param name="otherReason">a string no longer than 100 characters</param>
+        /// <param name="reason">a string no longer than 100 characters</param>
+        /// <param name="ruleReason">a string no longer than 100 characters</param>
+        /// <param name="siteReason">a string no longer than 100 characters</param>
+        /// <param name="srName">a string no longer than 1000 characters</param>
         /// <param name="thingId">fullname of a thing</param>
         /// <param name="violatorUsername"></param>
         /// <returns>(TODO - Untested)</returns>
@@ -201,9 +216,11 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Save a link or comment.
+        /// Saved things are kept in the user's saved listing for later perusal.
+        /// See also: /api/unsave.
         /// </summary>
-        /// <param name="category"></param>
+        /// <param name="category">a category name</param>
         /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object Save(string category, string id)
@@ -218,7 +235,8 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Get a list of categories in which things are currently saved.
+        /// See also: /api/save.
         /// </summary>
         /// <returns>(TODO - Untested)</returns>
         public object SavedCategories()
@@ -228,7 +246,8 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Enable or disable inbox replies for a link or comment.
+        /// state is a boolean that indicates whether you are enabling or disabling inbox replies - true to enable, false to disable.
         /// </summary>
         /// <param name="id">fullname of a thing created by the user</param>
         /// <param name="state">boolean value</param>
@@ -245,7 +264,8 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Set or unset "contest mode" for a link's comments.
+        /// state is a boolean that indicates whether you are enabling or disabling contest mode - true to enable, false to disable.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="state">boolean value</param>
@@ -263,10 +283,14 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Set or unset a Link as the sticky in its subreddit.
+        /// state is a boolean that indicates whether to sticky or unsticky this post - true to sticky, false to unsticky.
+        /// The num argument is optional, and only used when stickying a post.
+        /// It allows specifying a particular "slot" to sticky the post into, and if there is already a post stickied in that slot it will be replaced.
+        /// If there is no post in the specified slot to replace, or num is None, the bottom-most slot will be used.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="num"></param>
+        /// <param name="num">an integer between 1 and 4</param>
         /// <param name="state">boolean value</param>
         /// <param name="toProfile">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
@@ -285,10 +309,12 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Set a suggested sort for a link.
+        /// Suggested sorts are useful to display comments in a certain preferred way for posts.
+        /// For example, casual conversation may be better sorted by new by default, or AMAs may be sorted by Q&A.A sort of an empty string clears the default sort.
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="sort"></param>
+        /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live, blank)</param>
         /// <returns>(TODO - Untested)</returns>
         public object SetSuggestedSort(string id, string sort)
         {
@@ -303,9 +329,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Spoiler.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a link</param>
         /// <returns>(TODO - Untested)</returns>
         public object Spoiler(string id)
         {
@@ -318,9 +344,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// *Requires a subscription to [reddit premium]
         /// </summary>
-        /// <param name="links"></param>
+        /// <param name="links">A comma-separated list of link fullnames</param>
         /// <returns>(TODO - Untested)</returns>
         public object StoreVisits(string links)
         {
@@ -332,26 +358,32 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Submit a link to a subreddit.
+        /// Submit will create a link or self-post in the subreddit sr with the title title.
+        /// If kind is "link", then url is expected to be a valid URL to link to.
+        /// Otherwise, text, if present, will be the body of the self-post unless richtext_json is present, in which case it will be converted into the body of the self-post.
+        /// An error is thrown if both text and richtext_json are present.
+        /// If a link with the same URL has already been submitted to the specified subreddit an error will be returned unless resubmit is true.
+        /// extension is used for determining which view-type (e.g.json, compact etc.) to use for the redirect that is generated if the resubmit error occurs.
         /// </summary>
         /// <param name="ad">boolean value</param>
         /// <param name="app"></param>
-        /// <param name="extension"></param>
-        /// <param name="flairId"></param>
-        /// <param name="flairText"></param>
+        /// <param name="extension">extension used for redirects</param>
+        /// <param name="flairId">a string no longer than 36 characters</param>
+        /// <param name="flairText">a string no longer than 64 characters</param>
         /// <param name="gRecaptchaResopnse"></param>
-        /// <param name="kind"></param>
+        /// <param name="kind">one of (link, self, image, video, videogif)</param>
         /// <param name="nsfw">boolean value</param>
         /// <param name="resubmit">boolean value</param>
-        /// <param name="richtextJson"></param>
+        /// <param name="richtextJson">JSON data</param>
         /// <param name="sendReplies">boolean value</param>
         /// <param name="spoiler">boolean value</param>
-        /// <param name="sr"></param>
-        /// <param name="text"></param>
-        /// <param name="title"></param>
-        /// <param name="url"></param>
-        /// <param name="videoPosterUrl"></param>
-        /// <returns></returns>
+        /// <param name="sr">name of a subreddit</param>
+        /// <param name="text">raw markdown text</param>
+        /// <param name="title">title of the submission. up to 300 characters long</param>
+        /// <param name="url">a valid URL</param>
+        /// <param name="videoPosterUrl">a valid URL</param>
+        /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
         public object Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResopnse,
             string kind, bool nsfw, bool resubmit, string richtextJson, bool sendReplies, bool spoiler, string sr, string text,
             string title, string url, string videoPosterUrl)
@@ -382,9 +414,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Unhide a link.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">A comma-separated list of link fullnames</param>
         /// <returns>(TODO - Untested)</returns>
         public object Unhide(string id)
         {
@@ -397,9 +429,11 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Unlock a link.
+        /// Allow a post to receive new comments.
+        /// See also: /api/lock.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a link</param>
         /// <returns>(TODO - Untested)</returns>
         public object Unlock(string id)
         {
@@ -412,7 +446,8 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Remove the NSFW marking from a link.
+        /// See also: /api/marknsfw.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
@@ -427,7 +462,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Unsave a link or comment.
+        /// This removes the thing from the user's saved listings as well.
+        /// See also: /api/save.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
@@ -442,9 +479,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Remove spoiler.
         /// </summary>
-        /// <param name="id">fullname of a thing</param>
+        /// <param name="id">fullname of a link</param>
         /// <returns>(TODO - Untested)</returns>
         public object Unspoiler(string id)
         {
@@ -458,11 +495,16 @@ namespace Reddit.NET.Models
         // WARNING:  Automated bot-voting violates Reddit's rules.  --Kris
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Cast a vote on a thing.
+        /// id should be the fullname of the Link or Comment to vote on.
+        /// dir indicates the direction of the vote. Voting 1 is an upvote, -1 is a downvote, and 0 is equivalent to "un-voting" by clicking again on a highlighted arrow.
+        /// Note: votes must be cast by humans.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the reddit rules for more details on what constitutes vote cheating.
         /// </summary>
-        /// <param name="dir"></param>
+        /// <param name="dir">vote direction. one of (1, 0, -1)</param>
         /// <param name="id">fullname of a thing</param>
-        /// <param name="rank"></param>
+        /// <param name="rank">an integer greater than 1</param>
         /// <returns>(TODO - Untested)</returns>
         public object Vote(int dir, string id, int rank)
         {
