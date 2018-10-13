@@ -204,7 +204,7 @@ namespace Reddit.NET.Models
         /// The Serendipity button
         /// </summary>
         /// <param name="subreddit">The subreddit from which to retrieve the random listing</param>
-        /// <returns></returns>
+        /// <returns>A random listing.</returns>
         public object Random(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "/random"));
