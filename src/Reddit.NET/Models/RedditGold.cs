@@ -26,10 +26,10 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Give Reddit gold to the specified user.
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="months"></param>
+        /// <param name="username">A valid, existing reddit username</param>
+        /// <param name="months">an integer between 1 and 36</param>
         /// <returns>(TODO - Untested)</returns>
         public object Give(string username, int months)
         {
