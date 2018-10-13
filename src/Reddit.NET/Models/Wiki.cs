@@ -116,8 +116,8 @@ namespace Reddit.NET.Models
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>(TODO - Untested)</returns>
         public object Discussions(string page, string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
@@ -151,8 +151,8 @@ namespace Reddit.NET.Models
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns></returns>
         public object Revisions(string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
@@ -177,8 +177,8 @@ namespace Reddit.NET.Models
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns></returns>
         public object PageRevisions(string page, string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {

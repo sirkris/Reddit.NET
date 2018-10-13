@@ -357,8 +357,8 @@ namespace Reddit.NET.Models
         /// <param name="before">fullname of a thing</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>(TODO - Untested)</returns>
         public object Discussions(string thread, string after, string before, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {

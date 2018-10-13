@@ -24,8 +24,8 @@ namespace Reddit.NET.Models
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns></returns>
         public object About(string where, string after, string before, string user, bool includeCategories, string subreddit = null, int count = 0,
             int limit = 25, string show = "all", bool srDetail = false)
@@ -408,8 +408,8 @@ namespace Reddit.NET.Models
         /// <param name="sort"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>(TODO - Untested)</returns>
         public object SearchProfiles(string after, string before, string q, string sort, int count = 0, int limit = 25, string show = "all",
             bool srDetail = false)
@@ -512,8 +512,8 @@ namespace Reddit.NET.Models
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns></returns>
         public object Mine(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
@@ -541,8 +541,8 @@ namespace Reddit.NET.Models
         /// <param name="sort"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns></returns>
         public object Search(string after, string before, string q, bool showUsers, string sort, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
@@ -571,8 +571,8 @@ namespace Reddit.NET.Models
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns></returns>
         public object Get(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
@@ -599,8 +599,8 @@ namespace Reddit.NET.Models
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns></returns>
         public object GetUserSubreddits(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)

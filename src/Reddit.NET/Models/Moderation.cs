@@ -22,8 +22,8 @@ namespace Reddit.NET.Models
         /// <param name="count"></param>
         /// <param name="limit"></param>
         /// <param name="mod"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="type"></param>
         /// <returns></returns>
         public object GetLog(string after, string before, string subreddit = null, int count = 0, int limit = 25, string mod = null, string show = "all",
@@ -53,8 +53,8 @@ namespace Reddit.NET.Models
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns></returns>
         public object ModQueue(string location, string after, string before, string only, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)

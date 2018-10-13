@@ -169,8 +169,8 @@ namespace Reddit.NET.Models
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>(TODO - Untested)</returns>
         public object GetMessages(string where, bool mark, string mid, string after, string before, bool includeCategories, int count = 0,
             int limit = 25, string show = "all", bool srDetail = false)

@@ -28,8 +28,8 @@ namespace Reddit.NET.Models
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="type"></param>
         /// <returns>(TODO - Untested)</returns>
         public object GetSearch(string after, string before, string category, bool includeFacets, string q, bool restrictSr, string sort, string t,

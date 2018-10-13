@@ -215,7 +215,7 @@ namespace Reddit.NET.Models
         /// <param name="username"></param>
         /// <param name="where"></param>
         /// <param name="context"></param>
-        /// <param name="show"></param>
+        /// <param name="show">(optional) the string all</param>
         /// <param name="sort"></param>
         /// <param name="t"></param>
         /// <param name="type"></param>
@@ -224,7 +224,7 @@ namespace Reddit.NET.Models
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <param name="srDetail"></param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns></returns>
         public ListingContainer History(string username, string where, int context, string show, string sort, string t, string type,
             string after, string before, bool includeCategories, int count = 0, int limit = 25, bool srDetail = false)
