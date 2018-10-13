@@ -17,12 +17,12 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="category"></param>
-        /// <param name="includeFacets"></param>
+        /// <param name="includeFacets">boolean value</param>
         /// <param name="q"></param>
-        /// <param name="restrictSr"></param>
+        /// <param name="restrictSr">boolean value</param>
         /// <param name="sort"></param>
         /// <param name="t"></param>
         /// <param name="subreddit"></param>

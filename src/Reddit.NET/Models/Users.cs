@@ -221,7 +221,7 @@ namespace Reddit.NET.Models
         /// <param name="type"></param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="includeCategories"></param>
+        /// <param name="includeCategories">boolean value</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
         /// <param name="srDetail"></param>

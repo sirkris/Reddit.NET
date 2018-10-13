@@ -34,7 +34,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="after"></param>
+        /// <param name="after">fullname of a thing</param>
         /// <param name="entity"></param>
         /// <param name="sort"></param>
         /// <param name="state"></param>
@@ -58,7 +58,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="body"></param>
-        /// <param name="isAuthorHidden"></param>
+        /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="srName"></param>
         /// <param name="subject"></param>
         /// <param name="to"></param>
@@ -81,7 +81,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="conversationId"></param>
-        /// <param name="markRead"></param>
+        /// <param name="markRead">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object GetConversation(string conversationId, bool markRead)
         {
@@ -98,8 +98,8 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="conversationId"></param>
         /// <param name="body"></param>
-        /// <param name="isAuthorHidden"></param>
-        /// <param name="isInternal"></param>
+        /// <param name="isAuthorHidden">boolean value</param>
+        /// <param name="isInternal">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object NewMessage(string conversationId, string body, bool isAuthorHidden, bool isInternal)
         {

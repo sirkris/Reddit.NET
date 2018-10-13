@@ -35,7 +35,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns></returns>
         public object Mine(bool expandSrs)
         {
@@ -69,7 +69,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="username"></param>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns></returns>
         public object User(string username, bool expandSrs)
         {
@@ -85,7 +85,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="multipath"></param>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object Delete(string multipath, bool expandSrs)
         {
@@ -101,7 +101,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="filterpath"></param>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object DeleteFilter(string filterpath, bool expandSrs)
         {
@@ -116,7 +116,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="multipath"></param>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns></returns>
         public object Get(string multipath, bool expandSrs)
         {
@@ -132,7 +132,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="filterpath"></param>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object GetFilter(string filterpath, bool expandSrs)
         {
@@ -149,7 +149,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="multipath"></param>
         /// <param name="model"></param>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object Create(string multipath, string model, bool expandSrs)
         {
@@ -166,7 +166,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="filterpath"></param>
         /// <param name="model"></param>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object CreateFilter(string filterpath, string model, bool expandSrs)
         {
@@ -183,7 +183,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="multipath"></param>
         /// <param name="model"></param>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object Update(string multipath, string model, bool expandSrs)
         {
@@ -200,7 +200,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="filterpath"></param>
         /// <param name="model"></param>
-        /// <param name="expandSrs"></param>
+        /// <param name="expandSrs">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object UpdateFilter(string filterpath, string model, bool expandSrs)
         {

@@ -92,7 +92,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="progressiveImages"></param>
+        /// <param name="progressiveImages">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object Get(bool progressiveImages)
         {

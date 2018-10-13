@@ -14,9 +14,15 @@ namespace Reddit.NET.Models
         public LinksAndComments(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
         /// <summary>
-        /// 
+        /// Submit a new comment or reply to a message.
+        /// parent is the fullname of the thing being replied to.Its value changes the kind of object created by this request:
+        /// the fullname of a Link: a top-level comment in that Link's thread. (requires submit scope)
+        /// the fullname of a Comment: a comment reply to that comment. (requires submit scope)
+        /// the fullname of a Message: a message reply to that message. (requires privatemessages scope)
+        /// text should be the raw markdown body of the comment or message.
+        /// To start a new message thread, use /api/compose.
         /// </summary>
-        /// <param name="returnRtjson"></param>
+        /// <param name="returnRtjson">boolean value</param>
         /// <param name="richtextJson"></param>
         /// <param name="text"></param>
         /// <param name="thingId"></param>
@@ -53,7 +59,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="returnRtjson"></param>
+        /// <param name="returnRtjson">boolean value</param>
         /// <param name="richtextJson"></param>
         /// <param name="text"></param>
         /// <param name="thingId">fullname of a thing</param>
@@ -137,7 +143,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="children"></param>
-        /// <param name="limitChildren"></param>
+        /// <param name="limitChildren">boolean value</param>
         /// <param name="linkId"></param>
         /// <param name="sort"></param>
         /// <param name="id"></param>
@@ -163,7 +169,7 @@ namespace Reddit.NET.Models
         /// <param name="additionalInfo"></param>
         /// <param name="banEvadingAccountsNames"></param>
         /// <param name="customText"></param>
-        /// <param name="fromHelpCenter"></param>
+        /// <param name="fromHelpCenter">boolean value</param>
         /// <param name="otherReason"></param>
         /// <param name="reason"></param>
         /// <param name="ruleReason"></param>
@@ -225,7 +231,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id">fullname of a thing created by the user</param>
-        /// <param name="state"></param>
+        /// <param name="state">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object SendReplies(string id, bool state)
         {
@@ -242,7 +248,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <param name="state"></param>
+        /// <param name="state">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object SetContestMode(string id, bool state)
         {
@@ -261,8 +267,8 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="id"></param>
         /// <param name="num"></param>
-        /// <param name="state"></param>
-        /// <param name="toProfile"></param>
+        /// <param name="state">boolean value</param>
+        /// <param name="toProfile">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object SetSubredditSticky(string id, int num, bool state, bool toProfile)
         {
@@ -328,18 +334,18 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="ad"></param>
+        /// <param name="ad">boolean value</param>
         /// <param name="app"></param>
         /// <param name="extension"></param>
         /// <param name="flairId"></param>
         /// <param name="flairText"></param>
         /// <param name="gRecaptchaResopnse"></param>
         /// <param name="kind"></param>
-        /// <param name="nsfw"></param>
-        /// <param name="resubmit"></param>
+        /// <param name="nsfw">boolean value</param>
+        /// <param name="resubmit">boolean value</param>
         /// <param name="richtextJson"></param>
-        /// <param name="sendReplies"></param>
-        /// <param name="spoiler"></param>
+        /// <param name="sendReplies">boolean value</param>
+        /// <param name="spoiler">boolean value</param>
         /// <param name="sr"></param>
         /// <param name="text"></param>
         /// <param name="title"></param>

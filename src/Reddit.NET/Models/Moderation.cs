@@ -107,7 +107,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="how"></param>
         /// <param name="id">fullname of a thing</param>
-        /// <param name="sticky"></param>
+        /// <param name="sticky">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object Distinguish(string how, string id, bool sticky)
         {
@@ -186,7 +186,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <param name="spam"></param>
+        /// <param name="spam">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object Remove(string id, bool spam)
         {

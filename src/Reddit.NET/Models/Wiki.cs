@@ -111,8 +111,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="page"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -146,8 +146,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -172,8 +172,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="page"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -210,7 +210,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="page"></param>
-        /// <param name="listed"></param>
+        /// <param name="listed">boolean value</param>
         /// <param name="permLevel"></param>
         /// <param name="subreddit"></param>
         /// <returns>(TODO - Untested)</returns>

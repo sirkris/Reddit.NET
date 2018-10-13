@@ -29,7 +29,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="description"></param>
-        /// <param name="nsfw"></param>
+        /// <param name="nsfw">boolean value</param>
         /// <param name="resources"></param>
         /// <param name="title"></param>
         /// <returns>(TODO - Untested)</returns>
@@ -109,7 +109,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="description"></param>
-        /// <param name="nsfw"></param>
+        /// <param name="nsfw">boolean value</param>
         /// <param name="resources"></param>
         /// <param name="title"></param>
         /// <returns>(TODO - Untested)</returns>

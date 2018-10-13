@@ -20,7 +20,7 @@ namespace Reddit.NET.Models
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="user"></param>
-        /// <param name="includeCategories"></param>
+        /// <param name="includeCategories">boolean value</param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -111,7 +111,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="srNames"></param>
         /// <param name="omit"></param>
-        /// <param name="over18"></param>
+        /// <param name="over18">boolean value</param>
         /// <returns></returns>
         public object Recommend(string srNames, string omit, bool over18)
         {
@@ -126,9 +126,9 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="exact"></param>
-        /// <param name="includeOver18"></param>
-        /// <param name="includeUnadvertisable"></param>
+        /// <param name="exact">boolean value</param>
+        /// <param name="includeOver18">boolean value</param>
+        /// <param name="includeUnadvertisable">boolean value</param>
         /// <param name="query"></param>
         /// <returns></returns>
         public object SearchRedditNames(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
@@ -146,9 +146,9 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="exact"></param>
-        /// <param name="includeOver18"></param>
-        /// <param name="includeUnadvertisable"></param>
+        /// <param name="exact">boolean value</param>
+        /// <param name="includeOver18">boolean value</param>
+        /// <param name="includeUnadvertisable">boolean value</param>
         /// <param name="query"></param>
         /// <returns></returns>
         public object SearchSubreddits(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
@@ -166,39 +166,39 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="allOriginalContent"></param>
-        /// <param name="allowDiscovery"></param>
-        /// <param name="allowImages"></param>
-        /// <param name="allowPostCrossposts"></param>
-        /// <param name="allowTop"></param>
-        /// <param name="allowVideos"></param>
-        /// <param name="collapseDeletedComments"></param>
+        /// <param name="allOriginalContent">boolean value</param>
+        /// <param name="allowDiscovery">boolean value</param>
+        /// <param name="allowImages">boolean value</param>
+        /// <param name="allowPostCrossposts">boolean value</param>
+        /// <param name="allowTop">boolean value</param>
+        /// <param name="allowVideos">boolean value</param>
+        /// <param name="collapseDeletedComments">boolean value</param>
         /// <param name="description"></param>
-        /// <param name="excludeBannedModqueue"></param>
-        /// <param name="freeFormReports"></param>
+        /// <param name="excludeBannedModqueue">boolean value</param>
+        /// <param name="freeFormReports">boolean value</param>
         /// <param name="gRecaptchaResponse"></param>
         /// <param name="headerTitle"></param>
-        /// <param name="hideAds"></param>
+        /// <param name="hideAds">boolean value</param>
         /// <param name="keyColor"></param>
         /// <param name="lang"></param>
         /// <param name="linkType"></param>
         /// <param name="name"></param>
-        /// <param name="originalContentTagEnabled"></param>
-        /// <param name="over18"></param>
+        /// <param name="originalContentTagEnabled">boolean value</param>
+        /// <param name="over18">boolean value</param>
         /// <param name="publicDescription"></param>
-        /// <param name="showMedia"></param>
-        /// <param name="showMediaPreview"></param>
+        /// <param name="showMedia">boolean value</param>
+        /// <param name="showMediaPreview">boolean value</param>
         /// <param name="spamComments"></param>
         /// <param name="spamLinks"></param>
         /// <param name="spamSelfPosts"></param>
-        /// <param name="spoilersEnabled"></param>
+        /// <param name="spoilersEnabled">boolean value</param>
         /// <param name="sr">fullname of a thing</param>
         /// <param name="submitLinkLabel"></param>
         /// <param name="submitText"></param>
         /// <param name="submitTextLabel"></param>
         /// <param name="suggestedCommentSort"></param>
         /// <param name="themeSr"></param>
-        /// <param name="themeSrUpdate"></param>
+        /// <param name="themeSrUpdate">boolean value</param>
         /// <param name="title"></param>
         /// <param name="type"></param>
         /// <param name="wikiMode"></param>
@@ -274,8 +274,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="includeOver18"></param>
-        /// <param name="includeProfiles"></param>
+        /// <param name="includeOver18">boolean value</param>
+        /// <param name="includeProfiles">boolean value</param>
         /// <param name="query"></param>
         /// <returns>(TODO - Untested)</returns>
         public object SubredditAutocomplete(bool includeOver18, bool includeProfiles, string query)
@@ -293,9 +293,9 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="includeCategories"></param>
-        /// <param name="includeOver18"></param>
-        /// <param name="includeProfiles"></param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="includeOver18">boolean value</param>
+        /// <param name="includeProfiles">boolean value</param>
         /// <param name="query"></param>
         /// <param name="limit"></param>
         /// <returns>(TODO - Untested)</returns>
@@ -338,7 +338,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="action"></param>
-        /// <param name="skipInitialDefaults"></param>
+        /// <param name="skipInitialDefaults">boolean value</param>
         /// <param name="sr"></param>
         /// <returns>(TODO - Untested)</returns>
         public object SubscribeByFullname(string action, bool skipInitialDefaults, string sr)
@@ -509,7 +509,7 @@ namespace Reddit.NET.Models
         /// <param name="where"></param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="includeCategories"></param>
+        /// <param name="includeCategories">boolean value</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
         /// <param name="show"></param>
@@ -537,7 +537,7 @@ namespace Reddit.NET.Models
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="q"></param>
-        /// <param name="showUsers"></param>
+        /// <param name="showUsers">boolean value</param>
         /// <param name="sort"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -568,7 +568,7 @@ namespace Reddit.NET.Models
         /// <param name="where"></param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="includeCategories"></param>
+        /// <param name="includeCategories">boolean value</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
         /// <param name="show"></param>
@@ -596,7 +596,7 @@ namespace Reddit.NET.Models
         /// <param name="where"></param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="includeCategories"></param>
+        /// <param name="includeCategories">boolean value</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
         /// <param name="show"></param>
