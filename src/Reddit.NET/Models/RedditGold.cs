@@ -15,9 +15,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Gild.
         /// </summary>
-        /// <param name="fullname"></param>
+        /// <param name="fullname">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object Gild(string fullname)
         {

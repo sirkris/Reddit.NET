@@ -17,8 +17,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="where"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="user"></param>
         /// <param name="includeCategories"></param>
         /// <param name="subreddit"></param>
@@ -192,7 +192,7 @@ namespace Reddit.NET.Models
         /// <param name="spamLinks"></param>
         /// <param name="spamSelfPosts"></param>
         /// <param name="spoilersEnabled"></param>
-        /// <param name="sr"></param>
+        /// <param name="sr">fullname of a thing</param>
         /// <param name="submitLinkLabel"></param>
         /// <param name="submitText"></param>
         /// <param name="submitTextLabel"></param>
@@ -402,8 +402,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="q"></param>
         /// <param name="sort"></param>
         /// <param name="count"></param>
@@ -507,8 +507,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="where"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -534,8 +534,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="q"></param>
         /// <param name="showUsers"></param>
         /// <param name="sort"></param>
@@ -566,8 +566,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="where"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -594,8 +594,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="where"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>

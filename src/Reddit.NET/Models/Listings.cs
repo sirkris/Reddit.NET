@@ -26,8 +26,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -105,8 +105,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="article"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="crosspostsOnly"></param>
         /// <param name="sort"></param>
         /// <param name="sr"></param>
@@ -137,8 +137,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="g"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
@@ -166,8 +166,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
@@ -204,8 +204,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
@@ -233,8 +233,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="t"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
@@ -263,8 +263,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="t"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>

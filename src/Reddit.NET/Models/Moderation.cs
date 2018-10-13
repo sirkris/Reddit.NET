@@ -16,8 +16,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -47,8 +47,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="location"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="only"></param>
         /// <param name="subreddit"></param>
         /// <param name="count"></param>
@@ -90,7 +90,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns></returns>
         public object Approve(string id)
         {
@@ -106,7 +106,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="how"></param>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <param name="sticky"></param>
         /// <returns>(TODO - Untested)</returns>
         public object Distinguish(string how, string id, bool sticky)
@@ -125,7 +125,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object IgnoreReports(string id)
         {
@@ -140,7 +140,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object LeaveContributor(string id)
         {
@@ -155,7 +155,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object LeaveModerator(string id)
         {
@@ -170,7 +170,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object MuteMessageAuthor(string id)
         {
@@ -185,7 +185,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <param name="spam"></param>
         /// <returns>(TODO - Untested)</returns>
         public object Remove(string id, bool spam)
@@ -202,7 +202,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object UnignoreReports(string id)
         {
@@ -217,7 +217,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object UnmuteMessageAuthor(string id)
         {

@@ -33,7 +33,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="banContext"></param>
+        /// <param name="banContext">fullname of a thing</param>
         /// <param name="banMessage"></param>
         /// <param name="banReason"></param>
         /// <param name="container"></param>
@@ -106,7 +106,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="container"></param>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <param name="name"></param>
         /// <param name="type"></param>
         /// <param name="subreddit"></param>
@@ -219,8 +219,8 @@ namespace Reddit.NET.Models
         /// <param name="sort"></param>
         /// <param name="t"></param>
         /// <param name="type"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>

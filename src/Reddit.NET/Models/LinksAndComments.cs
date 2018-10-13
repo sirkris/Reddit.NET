@@ -38,7 +38,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing created by the user</param>
         /// <returns>(TODO - Untested)</returns>
         public object Delete(string id)
         {
@@ -56,7 +56,7 @@ namespace Reddit.NET.Models
         /// <param name="returnRtjson"></param>
         /// <param name="richtextJson"></param>
         /// <param name="text"></param>
-        /// <param name="thingId"></param>
+        /// <param name="thingId">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object EditUserText(bool returnRtjson, string richtextJson, string text, string thingId)
         {
@@ -121,7 +121,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object MarkNSFW(string id)
         {
@@ -169,7 +169,7 @@ namespace Reddit.NET.Models
         /// <param name="ruleReason"></param>
         /// <param name="siteReason"></param>
         /// <param name="srName"></param>
-        /// <param name="thingId"></param>
+        /// <param name="thingId">fullname of a thing</param>
         /// <param name="violatorUsername"></param>
         /// <returns>(TODO - Untested)</returns>
         public object Report(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
@@ -198,7 +198,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="category"></param>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object Save(string category, string id)
         {
@@ -224,7 +224,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing created by the user</param>
         /// <param name="state"></param>
         /// <returns>(TODO - Untested)</returns>
         public object SendReplies(string id, bool state)
@@ -408,7 +408,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object UnmarkNSFW(string id)
         {
@@ -423,7 +423,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object Unsave(string id)
         {
@@ -438,7 +438,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object Unspoiler(string id)
         {
@@ -455,7 +455,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="dir"></param>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <param name="rank"></param>
         /// <returns>(TODO - Untested)</returns>
         public object Vote(int dir, string id, int rank)

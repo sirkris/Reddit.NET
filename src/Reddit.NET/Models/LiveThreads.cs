@@ -307,8 +307,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="thread"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="styleSr"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
@@ -353,8 +353,8 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="thread"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
         /// <param name="show"></param>

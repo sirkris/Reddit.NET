@@ -17,7 +17,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object Block(string id)
         {
@@ -71,7 +71,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object DelMsg(string id)
         {
@@ -116,7 +116,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a thing</param>
         /// <returns>(TODO - Untested)</returns>
         public object UnblockSubreddit(string id)
         {
@@ -164,8 +164,8 @@ namespace Reddit.NET.Models
         /// <param name="where"></param>
         /// <param name="mark"></param>
         /// <param name="mid"></param>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
