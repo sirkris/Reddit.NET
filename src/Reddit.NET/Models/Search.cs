@@ -31,7 +31,7 @@ namespace Reddit.NET.Models
         /// <param name="show"></param>
         /// <param name="srDetail"></param>
         /// <param name="type"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object GetSearch(string after, string before, string category, bool includeFacets, string q, bool restrictSr, string sort, string t,
             string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false, string type = null)
         {

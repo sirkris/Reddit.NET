@@ -39,7 +39,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Delete(string id)
         {
             RestRequest restRequest = PrepareRequest("api/del", Method.POST);
@@ -57,7 +57,7 @@ namespace Reddit.NET.Models
         /// <param name="richtextJson"></param>
         /// <param name="text"></param>
         /// <param name="thingId"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object EditUserText(bool returnRtjson, string richtextJson, string text, string thingId)
         {
             RestRequest restRequest = PrepareRequest("api/editusertext", Method.POST);
@@ -76,7 +76,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Hide(string id)
         {
             RestRequest restRequest = PrepareRequest("api/hide", Method.POST);
@@ -92,7 +92,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="id"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Info(string id, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/info");
@@ -107,7 +107,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Lock(string id)
         {
             RestRequest restRequest = PrepareRequest("api/lock", Method.POST);
@@ -122,7 +122,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object MarkNSFW(string id)
         {
             RestRequest restRequest = PrepareRequest("api/marknsfw", Method.POST);
@@ -141,7 +141,7 @@ namespace Reddit.NET.Models
         /// <param name="linkId"></param>
         /// <param name="sort"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object MoreChildren(string children, bool limitChildren, string linkId, string sort, string id = null)
         {
             RestRequest restRequest = PrepareRequest("api/morechildren");
@@ -171,7 +171,7 @@ namespace Reddit.NET.Models
         /// <param name="srName"></param>
         /// <param name="thingId"></param>
         /// <param name="violatorUsername"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Report(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string srName, string thingId,
             string violatorUsername)
@@ -199,7 +199,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="category"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Save(string category, string id)
         {
             RestRequest restRequest = PrepareRequest("api/store_visits", Method.POST);
@@ -214,7 +214,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SavedCategories()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/saved_categories"));
@@ -226,7 +226,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="id"></param>
         /// <param name="state"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SendReplies(string id, bool state)
         {
             RestRequest restRequest = PrepareRequest("api/sendreplies", Method.POST);
@@ -243,7 +243,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="id"></param>
         /// <param name="state"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SetContestMode(string id, bool state)
         {
             RestRequest restRequest = PrepareRequest("api/set_contest_mode", Method.POST);
@@ -263,7 +263,7 @@ namespace Reddit.NET.Models
         /// <param name="num"></param>
         /// <param name="state"></param>
         /// <param name="toProfile"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SetSubredditSticky(string id, int num, bool state, bool toProfile)
         {
             RestRequest restRequest = PrepareRequest("api/set_subreddit_sticky", Method.POST);
@@ -283,7 +283,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="id"></param>
         /// <param name="sort"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SetSuggestedSort(string id, string sort)
         {
             RestRequest restRequest = PrepareRequest("api/set_suggested_sort", Method.POST);
@@ -300,7 +300,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Spoiler(string id)
         {
             RestRequest restRequest = PrepareRequest("api/spoiler", Method.POST);
@@ -315,7 +315,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="links"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object StoreVisits(string links)
         {
             RestRequest restRequest = PrepareRequest("api/store_visits", Method.POST);
@@ -379,7 +379,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Unhide(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unhide", Method.POST);
@@ -394,7 +394,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Unlock(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unlock", Method.POST);
@@ -409,7 +409,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UnmarkNSFW(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unmarknsfw", Method.POST);
@@ -424,7 +424,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Unsave(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unsave", Method.POST);
@@ -439,7 +439,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Unspoiler(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unspoiler", Method.POST);
@@ -457,7 +457,7 @@ namespace Reddit.NET.Models
         /// <param name="dir"></param>
         /// <param name="id"></param>
         /// <param name="rank"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Vote(int dir, string id, int rank)
         {
             RestRequest restRequest = PrepareRequest("api/vote", Method.POST);

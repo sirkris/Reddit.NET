@@ -18,7 +18,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="names"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object GetById(string names)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/live/by_id/" + names));
@@ -32,7 +32,7 @@ namespace Reddit.NET.Models
         /// <param name="nsfw"></param>
         /// <param name="resources"></param>
         /// <param name="title"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Create(string description, bool nsfw, string resources, string title)
         {
             RestRequest restRequest = PrepareRequest("api/live/create", Method.POST);
@@ -50,7 +50,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object HappeningNow()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/live/happening_now"));
@@ -61,7 +61,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="thread"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object AcceptContributorInvite(string thread)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/accept_contributor_invite", Method.POST);
@@ -76,7 +76,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="thread"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object CloseThread(string thread)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/close_thread", Method.POST);
@@ -92,7 +92,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DeleteUpdate(string thread, string id)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/delete_update", Method.POST);
@@ -112,7 +112,7 @@ namespace Reddit.NET.Models
         /// <param name="nsfw"></param>
         /// <param name="resources"></param>
         /// <param name="title"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Edit(string thread, string description, bool nsfw, string resources, string title)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/edit", Method.POST);
@@ -132,7 +132,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="link"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object HideDiscussion(string thread, string link)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/hide_discussion", Method.POST);
@@ -151,7 +151,7 @@ namespace Reddit.NET.Models
         /// <param name="name"></param>
         /// <param name="permissions"></param>
         /// <param name="type"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object InviteContributor(string thread, string name, string permissions, string type)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/invite_contributor", Method.POST);
@@ -169,7 +169,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="thread"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object LeaveContributor(string thread)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/leave_contributor", Method.POST);
@@ -185,7 +185,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="type"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Report(string thread, string type)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/report", Method.POST);
@@ -202,7 +202,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object RemoveContributor(string thread, string id)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/rm_contributor", Method.POST);
@@ -219,7 +219,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object RemoveContributorInvite(string thread, string id)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/rm_contributor_invite", Method.POST);
@@ -238,7 +238,7 @@ namespace Reddit.NET.Models
         /// <param name="name"></param>
         /// <param name="permissions"></param>
         /// <param name="type"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SetContributorPermissions(string thread, string name, string permissions, string type)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/set_contributor_permissions", Method.POST);
@@ -257,7 +257,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object StrikeUpdate(string thread, string id)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/strike_update", Method.POST);
@@ -274,7 +274,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="link"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UnhideDiscussion(string thread, string link)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/unhide_discussion", Method.POST);
@@ -291,7 +291,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="body"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Update(string thread, string body)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/update", Method.POST);
@@ -312,7 +312,7 @@ namespace Reddit.NET.Models
         /// <param name="styleSr"></param>
         /// <param name="count"></param>
         /// <param name="limit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object GetUpdates(string thread, string after, string before, string styleSr, int count = 0, int limit = 25)
         {
             RestRequest restRequest = PrepareRequest("live/" + thread);
@@ -331,7 +331,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="thread"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object About(string thread)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("live/" + thread + "/about"));
@@ -342,7 +342,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="thread"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Contributors(string thread)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("live/" + thread + "/contributors"));
@@ -359,7 +359,7 @@ namespace Reddit.NET.Models
         /// <param name="limit"></param>
         /// <param name="show"></param>
         /// <param name="srDetail"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Discussions(string thread, string after, string before, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("live/" + thread + "/discussions");
@@ -380,7 +380,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="thread"></param>
         /// <param name="updateId"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object GetUpdate(string thread, string updateId)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("live/" + thread + "/updates/" + updateId));

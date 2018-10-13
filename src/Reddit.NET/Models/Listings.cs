@@ -17,7 +17,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// 
         /// </summary>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object TrendingSubreddits()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/trending_subreddits"));
@@ -114,7 +114,7 @@ namespace Reddit.NET.Models
         /// <param name="limit"></param>
         /// <param name="show"></param>
         /// <param name="srDetail"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object GetDuplicates(string article, string after, string before, bool crosspostsOnly, string sort, string sr,
             int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {

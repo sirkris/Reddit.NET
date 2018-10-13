@@ -20,7 +20,7 @@ namespace Reddit.NET.Models
         /// <param name="page"></param>
         /// <param name="username"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object AllowEditor(string page, string username, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/alloweditor/add", Method.POST);
@@ -38,7 +38,7 @@ namespace Reddit.NET.Models
         /// <param name="page"></param>
         /// <param name="username"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DenyEditor(string page, string username, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/alloweditor/del", Method.POST);
@@ -58,7 +58,7 @@ namespace Reddit.NET.Models
         /// <param name="previous"></param>
         /// <param name="reason"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Edit(string content, string page, string previous, string reason, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/edit", Method.POST);
@@ -77,7 +77,7 @@ namespace Reddit.NET.Models
         /// <param name="page"></param>
         /// <param name="revision"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Hide(string page, string revision, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/hide", Method.POST);
@@ -95,7 +95,7 @@ namespace Reddit.NET.Models
         /// <param name="page"></param>
         /// <param name="revision"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Revert(string page, string revision, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/revert", Method.POST);
@@ -118,7 +118,7 @@ namespace Reddit.NET.Models
         /// <param name="limit"></param>
         /// <param name="show"></param>
         /// <param name="srDetail"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Discussions(string page, string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/discussions/" + page);
@@ -213,7 +213,7 @@ namespace Reddit.NET.Models
         /// <param name="listed"></param>
         /// <param name="permLevel"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UpdatePermissions(string page, bool listed, int permLevel, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/settings/" + page, Method.POST);

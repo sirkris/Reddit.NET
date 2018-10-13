@@ -19,7 +19,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="url"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SavedMediaText(string url, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/saved_media_text");

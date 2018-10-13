@@ -20,7 +20,7 @@ namespace Reddit.NET.Models
         /// <param name="displayName"></param>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Copy(string displayName, string from, string to)
         {
             RestRequest restRequest = PrepareRequest("api/multi/copy", Method.POST);
@@ -53,7 +53,7 @@ namespace Reddit.NET.Models
         /// <param name="displayName"></param>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Rename(string displayName, string from, string to)
         {
             RestRequest restRequest = PrepareRequest("api/multi/rename", Method.POST);
@@ -86,7 +86,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="multipath"></param>
         /// <param name="expandSrs"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Delete(string multipath, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath, Method.DELETE);
@@ -102,7 +102,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="filterpath"></param>
         /// <param name="expandSrs"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DeleteFilter(string filterpath, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
@@ -133,7 +133,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="filterpath"></param>
         /// <param name="expandSrs"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object GetFilter(string filterpath, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
@@ -150,7 +150,7 @@ namespace Reddit.NET.Models
         /// <param name="multipath"></param>
         /// <param name="model"></param>
         /// <param name="expandSrs"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Create(string multipath, string model, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath, Method.POST);
@@ -167,7 +167,7 @@ namespace Reddit.NET.Models
         /// <param name="filterpath"></param>
         /// <param name="model"></param>
         /// <param name="expandSrs"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object CreateFilter(string filterpath, string model, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
@@ -184,7 +184,7 @@ namespace Reddit.NET.Models
         /// <param name="multipath"></param>
         /// <param name="model"></param>
         /// <param name="expandSrs"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Update(string multipath, string model, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath, Method.PUT);
@@ -201,7 +201,7 @@ namespace Reddit.NET.Models
         /// <param name="filterpath"></param>
         /// <param name="model"></param>
         /// <param name="expandSrs"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UpdateFilter(string filterpath, string model, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
@@ -227,7 +227,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="multipath"></param>
         /// <param name="model"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UpdateDescription(string multipath, string model)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath + "/description", Method.PUT);
@@ -243,7 +243,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="multipath"></param>
         /// <param name="srName"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DeleteMultiSub(string multipath, string srName)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/multi/" + multipath + "/r/" + srName, Method.DELETE));
@@ -255,7 +255,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="filterpath"></param>
         /// <param name="srName"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DeleteFilterSub(string filterpath, string srName)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/filter/" + filterpath + "/r/" + srName, Method.DELETE));
@@ -278,7 +278,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="filterpath"></param>
         /// <param name="srName"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object GetFilterSub(string filterpath, string srName)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/filter/" + filterpath + "/r/" + srName));
@@ -291,7 +291,7 @@ namespace Reddit.NET.Models
         /// <param name="multipath"></param>
         /// <param name="srName"></param>
         /// <param name="model"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object AddMultiSub(string multipath, string srName, string model)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/multi/" + multipath + "/r/" + srName, Method.PUT));
@@ -304,7 +304,7 @@ namespace Reddit.NET.Models
         /// <param name="filterpath"></param>
         /// <param name="srName"></param>
         /// <param name="model"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object AddFilterSub(string filterpath, string srName, string model)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/filter/" + filterpath + "/r/" + srName, Method.PUT));

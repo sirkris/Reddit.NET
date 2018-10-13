@@ -49,7 +49,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DeleteSrBanner(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_banner", Method.POST);
@@ -64,7 +64,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DeleteSrHeader(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_header", Method.POST);
@@ -79,7 +79,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DeleteSrIcon(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_icon", Method.POST);
@@ -95,7 +95,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="imgName"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DeleteSrImg(string imgName, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_img", Method.POST);
@@ -277,7 +277,7 @@ namespace Reddit.NET.Models
         /// <param name="includeOver18"></param>
         /// <param name="includeProfiles"></param>
         /// <param name="query"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SubredditAutocomplete(bool includeOver18, bool includeProfiles, string query)
         {
             RestRequest restRequest = PrepareRequest("api/subreddit_autocomplete");
@@ -298,7 +298,7 @@ namespace Reddit.NET.Models
         /// <param name="includeProfiles"></param>
         /// <param name="query"></param>
         /// <param name="limit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SubredditAutocompleteV2(bool includeCategories, bool includeOver18, bool includeProfiles, string query, int limit = 5)
         {
             RestRequest restRequest = PrepareRequest("api/subreddit_autocomplete_v2");
@@ -320,7 +320,7 @@ namespace Reddit.NET.Models
         /// <param name="reason"></param>
         /// <param name="stylesheetContents"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SubredditStylesheet(string op, string reason, string stylesheetContents, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/subreddit_stylesheet", Method.POST);
@@ -340,7 +340,7 @@ namespace Reddit.NET.Models
         /// <param name="action"></param>
         /// <param name="skipInitialDefaults"></param>
         /// <param name="sr"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SubscribeByFullname(string action, bool skipInitialDefaults, string sr)
         {
             RestRequest restRequest = PrepareRequest("api/subscribe", Method.POST);
@@ -359,7 +359,7 @@ namespace Reddit.NET.Models
         /// <param name="action"></param>
         /// <param name="skipInitialDefaults"></param>
         /// <param name="srName"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Subscribe(string action, bool skipInitialDefaults, string srName)
         {
             RestRequest restRequest = PrepareRequest("api/subscribe", Method.POST);
@@ -382,7 +382,7 @@ namespace Reddit.NET.Models
         /// <param name="subreddit"></param>
         /// <param name="imgType"></param>
         /// <param name="formId"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UploadSrImg(byte[] file, int header, string name, string uploadType, string subreddit = null, string imgType = "png",
             string formId = null)
         {
@@ -410,7 +410,7 @@ namespace Reddit.NET.Models
         /// <param name="limit"></param>
         /// <param name="show"></param>
         /// <param name="srDetail"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SearchProfiles(string after, string before, string q, string sort, int count = 0, int limit = 25, string show = "all",
             bool srDetail = false)
         {
@@ -445,7 +445,7 @@ namespace Reddit.NET.Models
         /// <param name="subreddit"></param>
         /// <param name="created"></param>
         /// <param name="location"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Edit(string subreddit, bool created, string location)
         {
             RestRequest restRequest = PrepareRequest("r/" + subreddit + "/about/edit");

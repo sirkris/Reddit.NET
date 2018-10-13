@@ -77,7 +77,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object AcceptModeratorInvite(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/accept_moderator_invite", Method.POST);
@@ -108,7 +108,7 @@ namespace Reddit.NET.Models
         /// <param name="how"></param>
         /// <param name="id"></param>
         /// <param name="sticky"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Distinguish(string how, string id, bool sticky)
         {
             RestRequest restRequest = PrepareRequest("api/distinguish", Method.POST);
@@ -126,7 +126,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object IgnoreReports(string id)
         {
             RestRequest restRequest = PrepareRequest("api/ignore_reports", Method.POST);
@@ -141,7 +141,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object LeaveContributor(string id)
         {
             RestRequest restRequest = PrepareRequest("api/leavecontributor", Method.POST);
@@ -156,7 +156,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object LeaveModerator(string id)
         {
             RestRequest restRequest = PrepareRequest("api/leavemoderator", Method.POST);
@@ -171,7 +171,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object MuteMessageAuthor(string id)
         {
             RestRequest restRequest = PrepareRequest("api/mute_message_author", Method.POST);
@@ -187,7 +187,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="id"></param>
         /// <param name="spam"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Remove(string id, bool spam)
         {
             RestRequest restRequest = PrepareRequest("api/remove", Method.POST);
@@ -203,7 +203,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UnignoreReports(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unignore_reports", Method.POST);
@@ -218,7 +218,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="id"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UnmuteMessageAuthor(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unmute_message_author", Method.POST);
@@ -233,7 +233,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Stylesheet(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/stylesheet"));

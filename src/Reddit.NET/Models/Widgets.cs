@@ -18,7 +18,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="json"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Add(string json)
         {
             RestRequest restRequest = PrepareRequest("api/widget", Method.POST);
@@ -33,7 +33,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="widgetId"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Delete(string widgetId)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/widget/" + widgetId, Method.DELETE));
@@ -45,7 +45,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="widgetId"></param>
         /// <param name="json"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Update(string widgetId, string json)
         {
             RestRequest restRequest = PrepareRequest("api/widget/" + widgetId, Method.PUT);
@@ -61,7 +61,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="filePath"></param>
         /// <param name="mimeType"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object WidgetImageUploadS3(string filePath, string mimeType)
         {
             RestRequest restRequest = PrepareRequest("api/widget_image_upload_s3", Method.POST);
@@ -78,7 +78,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="section"></param>
         /// <param name="json"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UpdateOrder(string section, string json)
         {
             RestRequest restRequest = PrepareRequest("api/widget_order/" + section, Method.PATCH);
@@ -93,7 +93,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="progressiveImages"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Get(bool progressiveImages)
         {
             RestRequest restRequest = PrepareRequest("api/widgets");

@@ -19,7 +19,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="accountId"></param>
         /// <param name="name"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object BlockUser(string accountId, string name)
         {
             RestRequest restRequest = PrepareRequest("api/block_user", Method.POST);
@@ -68,7 +68,7 @@ namespace Reddit.NET.Models
         /// <param name="details"></param>
         /// <param name="reason"></param>
         /// <param name="user"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object ReportUser(string details, string reason, string user)
         {
             RestRequest restRequest = PrepareRequest("api/report_user", Method.POST);
@@ -88,7 +88,7 @@ namespace Reddit.NET.Models
         /// <param name="permissions"></param>
         /// <param name="type"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object SetPermissions(string name, string permissions, string type, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/setpermissions", Method.POST);
@@ -110,7 +110,7 @@ namespace Reddit.NET.Models
         /// <param name="name"></param>
         /// <param name="type"></param>
         /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Unfriend(string container, string id, string name, string type, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/unfriend", Method.POST);
@@ -156,7 +156,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="username"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object DeleteFriend(string username)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/friends/" + username, Method.DELETE));
@@ -167,7 +167,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="username"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object GetFriend(string username)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/friends/" + username));
@@ -179,7 +179,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="username"></param>
         /// <param name="json"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object UpdateFriend(string username, string json)
         {
             RestRequest restRequest = PrepareRequest("api/v1/me/friends/" + username, Method.PUT);

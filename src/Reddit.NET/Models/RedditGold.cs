@@ -18,7 +18,7 @@ namespace Reddit.NET.Models
         /// 
         /// </summary>
         /// <param name="fullname"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Gild(string fullname)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/gold/gild/" + fullname, Method.POST));
@@ -30,7 +30,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="username"></param>
         /// <param name="months"></param>
-        /// <returns></returns>
+        /// <returns>(TODO - Untested)</returns>
         public object Give(string username, int months)
         {
             RestRequest restRequest = PrepareRequest("api/v1/gold/give/" + username, Method.POST);
