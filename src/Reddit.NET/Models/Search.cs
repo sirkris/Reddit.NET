@@ -13,6 +13,26 @@ namespace Reddit.NET.Models
 
         public Search(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Needs testing.
+        /// <summary>
+        /// Search links page.
+        /// This endpoint is a listing.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="category">a string no longer than 5 characters</param>
+        /// <param name="includeFacets">boolean value</param>
+        /// <param name="q">a string no longer than 512 characters</param>
+        /// <param name="restrictSr">boolean value</param>
+        /// <param name="sort">one of (relevance, hot, top, new, comments)</param>
+        /// <param name="t">one of (hour, day, week, month, year, all)</param>
+        /// <param name="subreddit">The subreddit being searched</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="type">(optional) comma-delimited list of result types (sr, link, user)</param>
+        /// <returns>(TODO - Untested)</returns>
         public object GetSearch(string after, string before, string category, bool includeFacets, string q, bool restrictSr, string sort, string t,
             string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false, string type = null)
         {

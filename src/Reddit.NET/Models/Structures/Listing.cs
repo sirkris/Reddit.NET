@@ -45,7 +45,7 @@ namespace Reddit.NET.Models.Structures
 
         // TODO - Only had an empty example so not sure if the structure is right.  --Kris
         [JsonProperty("link_flair_richtext")]
-        public List<string> PublicFlairRichtext;
+        public object PublicFlairRichtext;
 
         [JsonProperty("subreddit_name_prefixed")]
         public string SubredditNamePrefixed;
@@ -98,7 +98,7 @@ namespace Reddit.NET.Models.Structures
 
         // TODO - No idea what this does.  It's always empty when I see it.  --Kris
         [JsonProperty("media_embed")]
-        public string MediaEmbed;
+        public object MediaEmbed;
 
         [JsonProperty("thumbnail_width")]
         public int? ThumbnailWidth;
@@ -113,7 +113,7 @@ namespace Reddit.NET.Models.Structures
         public string AuthorFullname;
 
         [JsonProperty("secure_media")]
-        public string SecureMedia;
+        public object SecureMedia;
 
         [JsonProperty("is_reddit_media_domain")]
         public bool IsRedditMediaDomain;
@@ -129,7 +129,7 @@ namespace Reddit.NET.Models.Structures
 
         // TODO - Same as MediaEmbed.  Not sure what this is supposed to be.  --Kris
         [JsonProperty("secure_media_embed")]
-        public string SecureMediaEmbed;
+        public object SecureMediaEmbed;
 
         [JsonProperty("link_flair_text")]
         public string LinkFlairText;
@@ -157,12 +157,12 @@ namespace Reddit.NET.Models.Structures
         public string AuthorFlairCSSClass;
 
         [JsonProperty("previous_visits")]
-        [JsonConverter(typeof(List<TimestampConvert>))]
-        public List<DateTime> PreviousVisits;
+        //[JsonConverter(typeof(List<TimestampConvert>))]
+        public object PreviousVisits;
 
         // TODO - Is this a list or a string or what?  --Kris
         [JsonProperty("author_flair_richtext")]
-        public string AuthorFlairRichtext;
+        public List<object> AuthorFlairRichtext;
 
         [JsonProperty("gildings")]
         public Dictionary<string, int> Gildings;
@@ -203,7 +203,7 @@ namespace Reddit.NET.Models.Structures
         public string SelfTextHTML;
 
         [JsonProperty("likes")]
-        public bool Likes;
+        public bool? Likes;
 
         [JsonProperty("suggested_sort")]
         public string SuggestedSort;
@@ -264,7 +264,7 @@ namespace Reddit.NET.Models.Structures
         public bool Visited;
 
         [JsonProperty("num_reports")]
-        public int NumReports;
+        public int? NumReports;
 
         [JsonProperty("distinguished")]
         public string Distinguished;
@@ -294,7 +294,7 @@ namespace Reddit.NET.Models.Structures
         public int NumCrossposts;
 
         [JsonProperty("media")]
-        public string Media;
+        public object Media;
 
         [JsonProperty("send_replies")]
         public bool SendReplies;

@@ -9,7 +9,6 @@ namespace Reddit.NET.Controllers
     public class Dispatch
     {
         public Account Account;
-        public Apps Apps;
         public Captcha Captcha;
         public Emoji Emoji;
         public Flair Flair;
@@ -36,7 +35,6 @@ namespace Reddit.NET.Controllers
         public Dispatch(string appId, string refreshToken, string accessToken, RestClient restClient)
         {
             this.Account = new Account(appId, refreshToken, accessToken, restClient);
-            this.Apps = new Apps(appId, refreshToken, accessToken, restClient);
             this.Captcha = new Captcha(appId, refreshToken, accessToken, restClient);
             this.Emoji = new Emoji(appId, refreshToken, accessToken, restClient);
             this.Flair = new Flair(appId, refreshToken, accessToken, restClient);

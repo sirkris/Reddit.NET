@@ -5,6 +5,7 @@ using RestSharp;
 using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Text;
 
 namespace Reddit.NET.Models
@@ -43,13 +44,19 @@ namespace Reddit.NET.Models
                     restRequest.AddParameter(param);
                 }
             }
-
+            
             return restRequest;
         }
 
         public RestRequest PrepareRequest(RestRequest restRequest)
         {
             restRequest.AddHeader("Authorization", "bearer " + AccessToken);
+            restRequest.AddHeader("User-Agent", "Reddit.NET");
+
+            if (restRequest.Method == Method.POST || restRequest.Method == Method.PUT)
+            {
+                restRequest.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            }
 
             return restRequest;
         }
@@ -99,12 +106,29 @@ namespace Reddit.NET.Models
                 retry--;
             }
 
-            return (res != null && res.IsSuccessful ? res.Content : null);
+            if (res == null)
+            {
+                throw new WebException("Reddit API returned null response.");
+            }
+            else if (!res.IsSuccessful)
+            {
+                WebException ex = new WebException("Reddit API returned non-success response.");
+
+                ex.Data.Add("StatusCode", res.StatusCode);
+                ex.Data.Add("StatusDescription", res.StatusDescription);
+                ex.Data.Add("res", res);
+
+                throw ex;
+            }
+            else
+            {
+                return res.Content;
+            }
         }
 
         public string Sr(string subreddit)
         {
-            return (!string.IsNullOrWhiteSpace(subreddit) ? "/r/" + subreddit : "");
+            return (!string.IsNullOrWhiteSpace(subreddit) ? "/r/" + subreddit + "/" : "");
         }
     }
 }
