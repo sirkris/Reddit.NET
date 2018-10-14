@@ -15,10 +15,11 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Retrieve the advisory text about saving media for relevant media links.
+        /// This endpoint returns a notice for display during the post submission process that is pertinent to media links.
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="subreddit"></param>
+        /// <param name="url">a valid URL</param>
+        /// <param name="subreddit">A subreddit</param>
         /// <returns>(TODO - Untested)</returns>
         public object SavedMediaText(string url, string subreddit = null)
         {
@@ -30,10 +31,12 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Retrieve descriptions of reddit's OAuth2 scopes.
+        /// If no scopes are given, information on all scopes are returned.
+        /// Invalid scope(s) will result in a 400 error with body that indicates the invalid scope(s).
         /// </summary>
-        /// <param name="scopes"></param>
-        /// <returns></returns>
+        /// <param name="scopes">(optional) An OAuth2 scope string</param>
+        /// <returns>A list of scopes.</returns>
         public object Scopes(string scopes = null)
         {
             RestRequest restRequest = PrepareRequest("api/v1/scopes");
