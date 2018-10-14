@@ -15,10 +15,10 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Marks all conversations read for a particular conversation state within the passed list of subreddits.
         /// </summary>
-        /// <param name="entity"></param>
-        /// <param name="state"></param>
+        /// <param name="entity">comma-delimited list of subreddit names</param>
+        /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
         /// <returns>(TODO - Untested)</returns>
         public object BulkRead(string entity, string state)
         {
@@ -32,13 +32,13 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Get conversations for a logged in user or subreddits.
         /// </summary>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="entity"></param>
-        /// <param name="sort"></param>
-        /// <param name="state"></param>
-        /// <param name="limit"></param>
+        /// <param name="after">base36 modmail conversation id</param>
+        /// <param name="entity">comma-delimited list of subreddit names</param>
+        /// <param name="sort">one of (recent, mod, user, unread)</param>
+        /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
+        /// <param name="limit">an integer (default: 25)</param>
         /// <returns>(TODO - Untested)</returns>
         public object GetConversations(string after, string entity, string sort, string state, int limit = 25)
         {
@@ -55,13 +55,14 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Creates a new conversation for a particular SR.
+        /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
         /// </summary>
-        /// <param name="body"></param>
+        /// <param name="body">raw markdown text</param>
         /// <param name="isAuthorHidden">boolean value</param>
-        /// <param name="srName"></param>
-        /// <param name="subject"></param>
-        /// <param name="to"></param>
+        /// <param name="srName">subreddit name</param>
+        /// <param name="subject">a string no longer than 100 characters</param>
+        /// <param name="to">Modmail conversation recipient fullname</param>
         /// <returns>(TODO - Untested)</returns>
         public object NewConversation(string body, bool isAuthorHidden, string srName, string subject, string to)
         {
@@ -78,9 +79,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Returns all messages, mod actions and conversation metadata for a given conversation id.
         /// </summary>
-        /// <param name="conversationId"></param>
+        /// <param name="conversationId">base36 modmail conversation id</param>
         /// <param name="markRead">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
         public object GetConversation(string conversationId, bool markRead)
@@ -94,10 +95,10 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Creates a new message for a particular conversation.
         /// </summary>
-        /// <param name="conversationId"></param>
-        /// <param name="body"></param>
+        /// <param name="conversationId">base36 modmail conversation id</param>
+        /// <param name="body">raw markdown text</param>
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="isInternal">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
@@ -114,9 +115,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Marks a conversation as archived.
         /// </summary>
-        /// <param name="conversationId"></param>
+        /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>(TODO - Untested)</returns>
         public object ArchiveConversation(string conversationId)
         {
@@ -125,9 +126,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Removes a highlight from a conversation.
         /// </summary>
-        /// <param name="conversationId"></param>
+        /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>(TODO - Untested)</returns>
         public object RemoveHighlight(string conversationId)
         {
@@ -136,9 +137,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Marks a conversation as highlighted.
         /// </summary>
-        /// <param name="conversationId"></param>
+        /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>(TODO - Untested)</returns>
         public object MarkHighlighted(string conversationId)
         {
@@ -147,9 +148,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Mutes the non mod user associated with a particular conversation.
         /// </summary>
-        /// <param name="conversationId"></param>
+        /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>(TODO - Untested)</returns>
         public object Mute(string conversationId)
         {
@@ -158,9 +159,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Marks conversation as unarchived.
         /// </summary>
-        /// <param name="conversationId"></param>
+        /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>(TODO - Untested)</returns>
         public object UnarchiveConversation(string conversationId)
         {
@@ -169,9 +170,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Unmutes the non mod user associated with a particular conversation.
         /// </summary>
-        /// <param name="conversationId"></param>
+        /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>(TODO - Untested)</returns>
         public object UnMute(string conversationId)
         {
@@ -180,9 +181,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Returns recent posts, comments and modmail conversations for a given user.
         /// </summary>
-        /// <param name="conversationId"></param>
+        /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>(TODO - Untested)</returns>
         public object User(string conversationId)
         {
@@ -191,9 +192,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Marks a conversations as read for the user.
         /// </summary>
-        /// <param name="conversationIds"></param>
+        /// <param name="conversationIds">A comma-separated list of items</param>
         /// <returns>(TODO - Untested)</returns>
         public object MarkRead(string conversationIds)
         {
@@ -205,9 +206,9 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Returns a list of srs that the user moderates that are also enrolled in the new modmail.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of subreddits.</returns>
         public object Subreddits()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/subreddits"));
@@ -215,9 +216,9 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Marks conversations as unread for the user.
         /// </summary>
-        /// <param name="conversationIds"></param>
+        /// <param name="conversationIds">A comma-separated list of items</param>
         /// <returns>(TODO - Untested)</returns>
         public object MarkUnread(string conversationIds)
         {
@@ -229,9 +230,9 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Endpoint to retrieve the unread conversation count by conversation state.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>An object with the int properties: highlighted, notifications, archived, new, inprogress, and mod.</returns>
         public object UnreadCount()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/unread/count"));
