@@ -14,19 +14,19 @@ namespace Reddit.NET.Models
         public Subreddits(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
         /// <summary>
-        /// 
+        /// This endpoint is a listing.
         /// </summary>
-        /// <param name="where"></param>
+        /// <param name="where">One of (banned, muted, wikibanned, contributors, wikicontributors, moderators)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="user"></param>
+        /// <param name="user">A valid, existing reddit username</param>
         /// <param name="includeCategories">boolean value</param>
-        /// <param name="subreddit"></param>
-        /// <param name="count"></param>
-        /// <param name="limit"></param>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns></returns>
+        /// <returns>An object containing the requested data.</returns>
         public object About(string where, string after, string before, string user, bool includeCategories, string subreddit = null, int count = 0,
             int limit = 25, string show = "all", bool srDetail = false)
         {
@@ -44,11 +44,23 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// Return information about the subreddit.
+        /// Data includes the subscriber count, description, and header image.
+        /// </summary>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>A subreddit listing.</returns>
+        public object About(string subreddit)
+        {
+            return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about"));
+        }
+
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Remove the subreddit's custom mobile banner.
+        /// See also: /api/upload_sr_img.
         /// </summary>
-        /// <param name="subreddit"></param>
+        /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>(TODO - Untested)</returns>
         public object DeleteSrBanner(string subreddit = null)
         {
@@ -61,9 +73,11 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Remove the subreddit's custom header image.
+        /// The sitewide-default header image will be shown again after this call.
+        /// See also: /api/upload_sr_img.
         /// </summary>
-        /// <param name="subreddit"></param>
+        /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>(TODO - Untested)</returns>
         public object DeleteSrHeader(string subreddit = null)
         {
@@ -76,9 +90,10 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Remove the subreddit's custom mobile icon.
+        /// See also: /api/upload_sr_img.
         /// </summary>
-        /// <param name="subreddit"></param>
+        /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>(TODO - Untested)</returns>
         public object DeleteSrIcon(string subreddit = null)
         {
@@ -91,10 +106,13 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Remove an image from the subreddit's custom image set.
+        /// The image will no longer count against the subreddit's image limit. However, the actual image data may still be accessible for an unspecified amount of time. 
+        /// If the image is currently referenced by the subreddit's stylesheet, that stylesheet will no longer validate and won't be editable until the image reference is removed.
+        /// See also: /api/upload_sr_img.
         /// </summary>
-        /// <param name="imgName"></param>
-        /// <param name="subreddit"></param>
+        /// <param name="imgName">a valid subreddit image name</param>
+        /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>(TODO - Untested)</returns>
         public object DeleteSrImg(string imgName, string subreddit = null)
         {
@@ -107,12 +125,13 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Return subreddits recommended for the given subreddit(s).
+        /// Gets a list of subreddits recommended for srnames, filtering out any that appear in the optional omit param.
         /// </summary>
-        /// <param name="srNames"></param>
-        /// <param name="omit"></param>
+        /// <param name="srNames">comma-delimited list of subreddit names</param>
+        /// <param name="omit">comma-delimited list of subreddit names</param>
         /// <param name="over18">boolean value</param>
-        /// <returns></returns>
+        /// <returns>A list of subreddits.</returns>
         public object Recommend(string srNames, string omit, bool over18)
         {
             RestRequest restRequest = PrepareRequest("api/recommend/sr/" + srNames);
@@ -124,13 +143,17 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// List subreddit names that begin with a query string.
+        /// Subreddits whose names begin with query will be returned.
+        /// If include_over_18 is false, subreddits with over-18 content restrictions will be filtered from the results.
+        /// If include_unadvertisable is False, subreddits that have hide_ads set to True or are on the anti_ads_subreddits list will be filtered.
+        /// If exact is true, only an exact match will be returned.Exact matches are inclusive of over_18 subreddits, but not hide_ad subreddits when include_unadvertisable is False.
         /// </summary>
         /// <param name="exact">boolean value</param>
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeUnadvertisable">boolean value</param>
-        /// <param name="query"></param>
-        /// <returns></returns>
+        /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
+        /// <returns>A list of subreddit names.</returns>
         public object SearchRedditNames(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
         {
             RestRequest restRequest = PrepareRequest("api/search_reddit_names");
@@ -144,13 +167,17 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// List subreddits that begin with a query string.
+        /// Subreddits whose names begin with query will be returned.
+        /// If include_over_18 is false, subreddits with over-18 content restrictions will be filtered from the results.
+        /// If include_unadvertisable is False, subreddits that have hide_ads set to True or are on the anti_ads_subreddits list will be filtered.
+        /// If exact is true, only an exact match will be returned.Exact matches are inclusive of over_18 subreddits, but not hide_ad subreddits when include_unadvertisable is False.
         /// </summary>
         /// <param name="exact">boolean value</param>
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeUnadvertisable">boolean value</param>
-        /// <param name="query"></param>
-        /// <returns></returns>
+        /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
+        /// <returns>A list of subreddit listings.</returns>
         public object SearchSubreddits(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
         {
             RestRequest restRequest = PrepareRequest("api/search_subreddits", Method.POST);
@@ -164,7 +191,12 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Create or configure a subreddit.
+        /// If sr is specified, the request will attempt to modify the specified subreddit. If not, a subreddit with name name will be created.
+        /// This endpoint expects all values to be supplied on every request. If modifying a subset of options, it may be useful to get the current settings from /about/edit.json first.
+        /// For backwards compatibility, description is the sidebar text and public_description is the publicly visible subreddit description.
+        /// Most of the parameters for this endpoint are identical to options visible in the user interface and their meanings are best explained there.
+        /// See also: /about/edit.json.
         /// </summary>
         /// <param name="allOriginalContent">boolean value</param>
         /// <param name="allowDiscovery">boolean value</param>
@@ -173,39 +205,39 @@ namespace Reddit.NET.Models
         /// <param name="allowTop">boolean value</param>
         /// <param name="allowVideos">boolean value</param>
         /// <param name="collapseDeletedComments">boolean value</param>
-        /// <param name="description"></param>
+        /// <param name="description">raw markdown text</param>
         /// <param name="excludeBannedModqueue">boolean value</param>
         /// <param name="freeFormReports">boolean value</param>
         /// <param name="gRecaptchaResponse"></param>
-        /// <param name="headerTitle"></param>
+        /// <param name="headerTitle">a string no longer than 500 characters</param>
         /// <param name="hideAds">boolean value</param>
-        /// <param name="keyColor"></param>
-        /// <param name="lang"></param>
-        /// <param name="linkType"></param>
-        /// <param name="name"></param>
+        /// <param name="keyColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="lang">a valid IETF language tag (underscore separated)</param>
+        /// <param name="linkType">one of (any, link, self)</param>
+        /// <param name="name">subreddit name</param>
         /// <param name="originalContentTagEnabled">boolean value</param>
         /// <param name="over18">boolean value</param>
-        /// <param name="publicDescription"></param>
+        /// <param name="publicDescription">raw markdown text</param>
         /// <param name="showMedia">boolean value</param>
         /// <param name="showMediaPreview">boolean value</param>
-        /// <param name="spamComments"></param>
-        /// <param name="spamLinks"></param>
-        /// <param name="spamSelfPosts"></param>
+        /// <param name="spamComments">one of (low, high, all)</param>
+        /// <param name="spamLinks">one of (low, high, all)</param>
+        /// <param name="spamSelfPosts">one of (low, high, all)</param>
         /// <param name="spoilersEnabled">boolean value</param>
         /// <param name="sr">fullname of a thing</param>
-        /// <param name="submitLinkLabel"></param>
-        /// <param name="submitText"></param>
-        /// <param name="submitTextLabel"></param>
-        /// <param name="suggestedCommentSort"></param>
-        /// <param name="themeSr"></param>
+        /// <param name="submitLinkLabel">a string no longer than 60 characters</param>
+        /// <param name="submitText">raw markdown text</param>
+        /// <param name="submitTextLabel">a string no longer than 60 characters</param>
+        /// <param name="suggestedCommentSort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
+        /// <param name="themeSr">subreddit name</param>
         /// <param name="themeSrUpdate">boolean value</param>
-        /// <param name="title"></param>
-        /// <param name="type"></param>
-        /// <param name="wikiMode"></param>
-        /// <param name="commentScoreHideMins"></param>
-        /// <param name="wikiEditAge"></param>
-        /// <param name="wikiEditKarma"></param>
-        /// <returns></returns>
+        /// <param name="title">a string no longer than 100 characters</param>
+        /// <param name="type">one of (gold_restricted, archived, restricted, employees_only, gold_only, private, user, public)</param>
+        /// <param name="wikiMode">one of (disabled, modonly, anyone)</param>
+        /// <param name="commentScoreHideMins">an integer between 0 and 1440 (default: 0)</param>
+        /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
+        /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
+        /// <returns>An object indicating any errors.</returns>
         public object SiteAdmin(bool allOriginalContent, bool allowDiscovery, bool allowImages, bool allowPostCrossposts, bool allowTop,
             bool allowVideos, bool collapseDeletedComments, string description, bool excludeBannedModqueue, bool freeFormReports,
             string gRecaptchaResponse, string headerTitle, bool hideAds, string keyColor, string lang, string linkType, string name, bool originalContentTagEnabled,
@@ -261,10 +293,12 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Get the submission text for the subreddit.
+        /// This text is set by the subreddit moderators and intended to be displayed on the submission form.
+        /// See also: /api/site_admin.
         /// </summary>
-        /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>An object containing submission text.</returns>
         public object SubmitText(string subreddit = null)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/submit_text"));
@@ -272,11 +306,12 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Return a list of subreddits and data for subreddits whose names start with 'query'.
+        /// Uses typeahead endpoint to recieve the list of subreddits names. Typeahead provides exact matches, typo correction, fuzzy matching and boosts subreddits to the top that the user is subscribed to.
         /// </summary>
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeProfiles">boolean value</param>
-        /// <param name="query"></param>
+        /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
         /// <returns>(TODO - Untested)</returns>
         public object SubredditAutocomplete(bool includeOver18, bool includeProfiles, string query)
         {
@@ -291,13 +326,13 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Version 2 of SubredditAutocomplete.
         /// </summary>
         /// <param name="includeCategories">boolean value</param>
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeProfiles">boolean value</param>
-        /// <param name="query"></param>
-        /// <param name="limit"></param>
+        /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
+        /// <param name="limit">an integer between 1 and 10 (default: 5)</param>
         /// <returns>(TODO - Untested)</returns>
         public object SubredditAutocompleteV2(bool includeCategories, bool includeOver18, bool includeProfiles, string query, int limit = 5)
         {
@@ -314,12 +349,13 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Update a subreddit's stylesheet.
+        /// op should be save to update the contents of the stylesheet.
         /// </summary>
-        /// <param name="op"></param>
-        /// <param name="reason"></param>
-        /// <param name="stylesheetContents"></param>
-        /// <param name="subreddit"></param>
+        /// <param name="op">one of (save, preview)</param>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="stylesheetContents">the new stylesheet content</param>
+        /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>(TODO - Untested)</returns>
         public object SubredditStylesheet(string op, string reason, string stylesheetContents, string subreddit = null)
         {
@@ -335,11 +371,15 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Subscribe to or unsubscribe from a subreddit.
+        /// To subscribe, action should be sub.To unsubscribe, action should be unsub.The user must have access to the subreddit to be able to subscribe to it.
+        /// The skip_initial_defaults param can be set to True to prevent automatically subscribing the user to the current set of defaults when they take their first subscription action.
+        /// Attempting to set it for an unsubscribe action will result in an error.
+        /// See also: /subreddits/mine/.
         /// </summary>
-        /// <param name="action"></param>
+        /// <param name="action">one of (sub, unsub)</param>
         /// <param name="skipInitialDefaults">boolean value</param>
-        /// <param name="sr"></param>
+        /// <param name="sr">A comma-separated list of subreddit fullnames</param>
         /// <returns>(TODO - Untested)</returns>
         public object SubscribeByFullname(string action, bool skipInitialDefaults, string sr)
         {
@@ -354,11 +394,15 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Subscribe to or unsubscribe from a subreddit.
+        /// To subscribe, action should be sub.To unsubscribe, action should be unsub.The user must have access to the subreddit to be able to subscribe to it.
+        /// The skip_initial_defaults param can be set to True to prevent automatically subscribing the user to the current set of defaults when they take their first subscription action.
+        /// Attempting to set it for an unsubscribe action will result in an error.
+        /// See also: /subreddits/mine/.
         /// </summary>
-        /// <param name="action"></param>
-        /// <param name="skipInitialDefaults"></param>
-        /// <param name="srName"></param>
+        /// <param name="action">one of (sub, unsub)</param>
+        /// <param name="skipInitialDefaults">boolean value</param>
+        /// <param name="srName">A comma-separated list of subreddit names</param>
         /// <returns>(TODO - Untested)</returns>
         public object Subscribe(string action, bool skipInitialDefaults, string srName)
         {
@@ -373,15 +417,26 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Add or replace a subreddit image, custom header logo, custom mobile icon, or custom mobile banner.
+        /// If the upload_type value is img, an image for use in the subreddit stylesheet is uploaded with the name specified in name.
+        /// If the upload_type value is header then the image uploaded will be the subreddit's new logo and name will be ignored.
+        /// If the upload_type value is icon then the image uploaded will be the subreddit's new mobile icon and name will be ignored.
+        /// If the upload_type value is banner then the image uploaded will be the subreddit's new mobile banner and name will be ignored.
+        /// For backwards compatibility, if upload_type is not specified, the header field will be used instead:
+        /// If the header field has value 0, then upload_type is img.
+        /// If the header field has value 1, then upload_type is header.
+        /// The img_type field specifies whether to store the uploaded image as a PNG or JPEG.
+        /// Subreddits have a limited number of images that can be in use at any given time. If no image with the specified name already exists, one of the slots will be consumed
+        /// If an image with the specified name already exists, it will be replaced. This does not affect the stylesheet immediately, but will take effect the next time the stylesheet is saved.
+        /// See also: /api/delete_sr_img, /api/delete_sr_header, /api/delete_sr_icon, and /api/delete_sr_banner.
         /// </summary>
-        /// <param name="file"></param>
-        /// <param name="header"></param>
-        /// <param name="name"></param>
-        /// <param name="uploadType"></param>
-        /// <param name="subreddit"></param>
-        /// <param name="imgType"></param>
-        /// <param name="formId"></param>
+        /// <param name="file">file upload with maximum size of 500 KiB</param>
+        /// <param name="header">an integer between 0 and 1</param>
+        /// <param name="name">a valid subreddit image name</param>
+        /// <param name="uploadType"one of (img, header, icon, banner)></param>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <param name="imgType">one of png or jpg (default: png)</param>
+        /// <param name="formId">(optional) can be ignored</param>
         /// <returns>(TODO - Untested)</returns>
         public object UploadSrImg(byte[] file, int header, string name, string uploadType, string subreddit = null, string imgType = "png",
             string formId = null)
@@ -400,14 +455,15 @@ namespace Reddit.NET.Models
 
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Search user profiles by title and description.
+        /// This endpoint is a listing.
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="q"></param>
-        /// <param name="sort"></param>
-        /// <param name="count"></param>
-        /// <param name="limit"></param>
+        /// <param name="q">a search query</param>
+        /// <param name="sort">one of (relevance, activity)</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>(TODO - Untested)</returns>
@@ -428,22 +484,13 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="subreddit"></param>
-        /// <returns></returns>
-        public object About(string subreddit)
-        {
-            return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about"));
-        }
-
         // TODO - Needs testing.
         /// <summary>
-        /// 
+        /// Get the current settings of a subreddit.
+        /// This returns the current settings of the subreddit as used by /api/site_admin.
         /// </summary>
-        /// <param name="subreddit"></param>
-        /// <param name="created"></param>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <param name="created">one of (true, false)</param>
         /// <param name="location"></param>
         /// <returns>(TODO - Untested)</returns>
         public object Edit(string subreddit, bool created, string location)
@@ -457,20 +504,20 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Get the rules for the current subreddit.
         /// </summary>
-        /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>Subreddit rules.</returns>
         public object Rules(string subreddit)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about/rules"));
         }
 
         /// <summary>
-        /// 
+        /// Get subreddit traffic.
         /// </summary>
-        /// <param name="subreddit"></param>
-        /// <returns></returns>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>Subreddit traffic data.</returns>
         public object Traffic(string subreddit)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about/traffic"));
@@ -504,17 +551,24 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Get subreddits the user has a relationship with.
+        /// The where parameter chooses which subreddits are returned as follows:
+        /// subscriber - subreddits the user is subscribed to
+        /// contributor - subreddits the user is an approved submitter in
+        /// moderator - subreddits the user is a moderator of
+        /// streams - subscribed to subreddits that contain hosted video links
+        /// See also: /api/subscribe, /api/friend, and /api/accept_moderator_invite.
+        /// This endpoint is a listing.
         /// </summary>
-        /// <param name="where"></param>
+        /// <param name="where">One of (subscriber, contributor, moderator, streams)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories">boolean value</param>
-        /// <param name="count"></param>
-        /// <param name="limit"></param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns></returns>
+        /// <returns>List of subreddit objects.</returns>
         public object Mine(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -532,18 +586,19 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Search subreddits by title and description.
+        /// This endpoint is a listing.
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="q"></param>
+        /// <param name="q">a search query</param>
         /// <param name="showUsers">boolean value</param>
-        /// <param name="sort"></param>
-        /// <param name="count"></param>
-        /// <param name="limit"></param>
+        /// <param name="sort">one of (relevance, activity)</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns></returns>
+        /// <returns>List of subreddit objects.</returns>
         public object Search(string after, string before, string q, bool showUsers, string sort, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -563,17 +618,21 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Get all subreddits.
+        /// The where parameter chooses the order in which the subreddits are displayed.
+        /// popular sorts on the activity of the subreddit and the position of the subreddits can shift around.
+        /// new sorts the subreddits based on their creation date, newest first.
+        /// This endpoint is a listing.
         /// </summary>
-        /// <param name="where"></param>
+        /// <param name="where">One of (popular, new, gold, default)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories">boolean value</param>
-        /// <param name="count"></param>
-        /// <param name="limit"></param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns></returns>
+        /// <returns>List of subreddit objects.</returns>
         public object Get(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
@@ -591,17 +650,21 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// 
+        /// Get all user subreddits.
+        /// The where parameter chooses the order in which the subreddits are displayed.
+        /// popular sorts on the activity of the subreddit and the position of the subreddits can shift around.
+        /// new sorts the user subreddits based on their creation date, newest first.
+        /// This endpoint is a listing.
         /// </summary>
-        /// <param name="where"></param>
+        /// <param name="where">One of (popular, new)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories">boolean value</param>
-        /// <param name="count"></param>
-        /// <param name="limit"></param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns></returns>
+        /// <returns>List of subreddit objects.</returns>
         public object GetUserSubreddits(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
