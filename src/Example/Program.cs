@@ -96,7 +96,7 @@ namespace Example
                 File.WriteAllText("Subreddits.SearchRedditNames.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SearchRedditNames(false, true, true, "Shitty")));
                 File.WriteAllText("Subreddits.SubmitText.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubmitText("WayOfTheBern")));
                 File.WriteAllText("Subreddits.SearchSubreddits.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SearchSubreddits(false, true, true, "Shitty")));
-                File.WriteAllText("Subreddits.Rules.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Rules("WayOfTheBern")));
+                */File.WriteAllText("Subreddits.Rules.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Rules("WayOfTheBern")));/*
                 File.WriteAllText("Subreddits.Traffic.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Traffic("StillSandersForPres")));
                 //File.WriteAllText("Subreddits.Sidebar.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Sidebar("WayOfTheMueller")));
                 //File.WriteAllText("Subreddits.Sticky1.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Sticky("WayOfTheBern", 1)));
@@ -106,9 +106,9 @@ namespace Example
                 File.WriteAllText("Subreddits.MineModerator.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Mine("moderator", null, null, false)));
                 File.WriteAllText("Subreddits.Search.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Search(null, null, "Sanders", false, "relevance")));
                 File.WriteAllText("Subreddits.SearchWithShowUsers.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Search(null, null, "Sanders", true, "relevance")));
-                */File.WriteAllText("Subreddits.GetPopular.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("popular", null, null, false)));
+                File.WriteAllText("Subreddits.GetPopular.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("popular", null, null, false)));
                 File.WriteAllText("Subreddits.GetNew.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("new", null, null, false)));
-                File.WriteAllText("Subreddits.GetDefault.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("default", null, null, false)));/*
+                File.WriteAllText("Subreddits.GetDefault.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("default", null, null, false)));
                 File.WriteAllText("Subreddits.GetUserSubredditsPopular.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.GetUserSubreddits("popular", null, null, false)));
                 File.WriteAllText("Subreddits.GetUserSubredditsNew.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.GetUserSubreddits("new", null, null, false)));
 

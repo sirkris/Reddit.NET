@@ -178,7 +178,7 @@ namespace Reddit.NET.Models
         /// <param name="includeUnadvertisable">boolean value</param>
         /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
         /// <returns>A list of subreddit listings.</returns>
-        public object SearchSubreddits(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
+        public SubSearch SearchSubreddits(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
         {
             RestRequest restRequest = PrepareRequest("api/search_subreddits", Method.POST);
 
@@ -187,7 +187,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("include_unadvertisable", includeUnadvertisable);
             restRequest.AddParameter("query", query);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubSearch>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -508,9 +508,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>Subreddit rules.</returns>
-        public object Rules(string subreddit)
+        public RulesContainer Rules(string subreddit)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about/rules"));
+            return JsonConvert.DeserializeObject<RulesContainer>(ExecuteRequest("r/" + subreddit + "/about/rules"));
         }
 
         /// <summary>
@@ -665,7 +665,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>List of subreddit objects.</returns>
-        public object GetUserSubreddits(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
+        public SubredditContainer GetUserSubreddits(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("users/" + where);
@@ -678,7 +678,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
     }
 }
