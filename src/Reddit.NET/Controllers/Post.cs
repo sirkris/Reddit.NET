@@ -27,13 +27,13 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// The full Listing object returned by the Reddit API;
         /// </summary>
-        public Listing Listing;
+        public PostOrComment Listing;
 
         public List<Comment> Comments;  // TODO - Populate.  --Kris
 
         private readonly Dispatch Dispatch;
 
-        public Post(Dispatch dispatch, Listing listing)
+        public Post(Dispatch dispatch, PostOrComment listing)
         {
             this.Subreddit = listing.Subreddit;
             this.Title = listing.Title;
@@ -72,7 +72,7 @@ namespace Reddit.NET.Controllers
             this.Removed = removed;
             this.Spam = spam;
 
-            this.Listing = new Listing(this);
+            this.Listing = new PostOrComment(this);
 
             this.Dispatch = dispatch;
         }

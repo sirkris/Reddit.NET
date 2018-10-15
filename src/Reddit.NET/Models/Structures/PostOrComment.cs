@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class Listing
+    public class PostOrComment
     {
         [JsonProperty("kind")]
         public string Kind;
@@ -334,7 +334,7 @@ namespace Reddit.NET.Models.Structures
         // Below are comment-specific properties.  --Kris
 
         [JsonProperty("replies")]
-        public List<Listing> Replies;
+        public List<PostOrComment> Replies;
 
         [JsonProperty("body_html")]
         public string BodyHTML;
@@ -363,22 +363,22 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("depth")]
         public int Depth;
 
-        public Listing(Post post)
+        public PostOrComment(Post post)
         {
             ImportFromPost(post);
         }
 
-        public Listing(SelfPost selfPost)
+        public PostOrComment(SelfPost selfPost)
         {
             ImportFromSelfPost(selfPost);
         }
 
-        public Listing(LinkPost linkPost)
+        public PostOrComment(LinkPost linkPost)
         {
             ImportFromLinkPost(linkPost);
         }
 
-        public Listing(Comment comment)
+        public PostOrComment(Comment comment)
         {
             ImportFromComment(comment);
         }
@@ -434,6 +434,6 @@ namespace Reddit.NET.Models.Structures
             this.Depth = comment.Depth;
         }
 
-        public Listing() { }
+        public PostOrComment() { }
     }
 }

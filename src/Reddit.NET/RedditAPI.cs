@@ -35,14 +35,14 @@ namespace Reddit.NET
             }
         }
 
-        public Comment Comment(ModelStructures.Listing listing)
+        public Comment Comment(ModelStructures.PostOrComment listing)
         {
             return new Comment(Models, listing);
         }
 
         public Comment Comment(string subreddit, string title, string author, string body, string bodyHtml,
             string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<ModelStructures.Listing> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+            List<ModelStructures.PostOrComment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
@@ -55,7 +55,7 @@ namespace Reddit.NET
             return new Comment(Models);
         }
 
-        public LinkPost LinkPost(ModelStructures.Listing listing)
+        public LinkPost LinkPost(ModelStructures.PostOrComment listing)
         {
             return new LinkPost(Models, listing);
         }
@@ -75,7 +75,7 @@ namespace Reddit.NET
             return new LinkPost(Models);
         }
 
-        public SelfPost SelfPost(ModelStructures.Listing listing)
+        public SelfPost SelfPost(ModelStructures.PostOrComment listing)
         {
             return new SelfPost(Models, listing);
         }

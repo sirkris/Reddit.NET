@@ -254,7 +254,7 @@ namespace Reddit.NET.Models
         /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of objects containing the requested data.</returns>
-        public ListingContainer History(string username, string where, int context, string show, string sort, string t, string type,
+        public PostOrCommentContainer History(string username, string where, int context, string show, string sort, string t, string type,
             string after, string before, bool includeCategories, int count = 0, int limit = 25, bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
@@ -271,7 +271,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("limit", limit);
             restRequest.AddParameter("sr_detail", srDetail);
             
-            return JsonConvert.DeserializeObject<ListingContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
         }
     }
 }

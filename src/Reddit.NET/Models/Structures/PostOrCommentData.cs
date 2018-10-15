@@ -9,7 +9,7 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class ListingData
+    public class PostOrCommentData
     {
         [JsonProperty("modhash")]
         public string Modhash;
@@ -18,7 +18,7 @@ namespace Reddit.NET.Models.Structures
         public int Dist;
 
         [JsonProperty("children")]
-        public List<ListingChild> Children;
+        public List<PostOrCommentChild> Children;
 
         [JsonProperty("after")]
         public string after;

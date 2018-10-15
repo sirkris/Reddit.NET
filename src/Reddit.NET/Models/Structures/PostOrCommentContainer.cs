@@ -9,12 +9,12 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class ListingChild
+    public class PostOrCommentContainer
     {
         [JsonProperty("kind")]
         public string Kind;
 
         [JsonProperty("data")]
-        public Listing Data;
+        public PostOrCommentData Data;
     }
 }
