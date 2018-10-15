@@ -569,7 +569,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>List of subreddit objects.</returns>
-        public object Mine(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
+        public SubredditContainer Mine(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("subreddits/mine/" + where);
@@ -582,7 +582,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -599,7 +599,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>List of subreddit objects.</returns>
-        public object Search(string after, string before, string q, bool showUsers, string sort, int count = 0, int limit = 25,
+        public SubredditContainer Search(string after, string before, string q, bool showUsers, string sort, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("subreddits/search");
@@ -614,7 +614,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>

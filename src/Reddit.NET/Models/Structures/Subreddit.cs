@@ -11,14 +11,14 @@ namespace Reddit.NET.Models.Structures
     [Serializable]
     public class Subreddit
     {
-        [JsonProperty("notitication_level")]
+        [JsonProperty("notification_level")]
         public string NotificationLevel;
 
         [JsonProperty("user_flair_background_color")]
         public string UserFlairBackgroundColor;
 
         [JsonProperty("wls")]
-        public string Wls;
+        public int? Wls;
 
         [JsonProperty("banner_img")]
         public string BannerImg;
@@ -183,7 +183,7 @@ namespace Reddit.NET.Models.Structures
         public string LinkFlairPosition;
 
         [JsonProperty("user_flair_richtext")]
-        public List<string> UserFlairRichtext;
+        public object UserFlairRichtext;
 
         [JsonProperty("all_original_content")]
         public bool AllOriginalContent;

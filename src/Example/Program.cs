@@ -96,7 +96,7 @@ namespace Example
                 File.WriteAllText("Subreddits.SearchRedditNames.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SearchRedditNames(false, true, true, "Shitty")));
                 File.WriteAllText("Subreddits.SubmitText.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubmitText("WayOfTheBern")));
                 File.WriteAllText("Subreddits.SearchSubreddits.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SearchSubreddits(false, true, true, "Shitty")));
-                */File.WriteAllText("Subreddits.Rules.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Rules("WayOfTheBern")));/*
+                File.WriteAllText("Subreddits.Rules.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Rules("WayOfTheBern")));
                 File.WriteAllText("Subreddits.Traffic.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Traffic("StillSandersForPres")));
                 //File.WriteAllText("Subreddits.Sidebar.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Sidebar("WayOfTheMueller")));
                 //File.WriteAllText("Subreddits.Sticky1.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Sticky("WayOfTheBern", 1)));
