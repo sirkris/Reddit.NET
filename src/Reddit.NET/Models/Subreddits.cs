@@ -50,9 +50,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>A subreddit listing.</returns>
-        public object About(string subreddit)
+        public SubredditChild About(string subreddit)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about"));
+            return JsonConvert.DeserializeObject<SubredditChild>(ExecuteRequest("r/" + subreddit + "/about"));
         }
 
         // TODO - Needs testing.
@@ -633,7 +633,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>List of subreddit objects.</returns>
-        public object Get(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
+        public SubredditContainer Get(string where, string after, string before, bool includeCategories, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("subreddits/" + where);
@@ -646,7 +646,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>

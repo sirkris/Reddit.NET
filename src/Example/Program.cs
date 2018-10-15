@@ -28,7 +28,7 @@ namespace Example
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
 
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
-                
+                /*
                 File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));
                 File.WriteAllText("Account.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Account.Trophies()));
                 File.WriteAllText("Account.PrefsFriends.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs("friends")));
@@ -106,9 +106,9 @@ namespace Example
                 File.WriteAllText("Subreddits.MineModerator.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Mine("moderator", null, null, false)));
                 File.WriteAllText("Subreddits.Search.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Search(null, null, "Sanders", false, "relevance")));
                 File.WriteAllText("Subreddits.SearchWithShowUsers.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Search(null, null, "Sanders", true, "relevance")));
-                File.WriteAllText("Subreddits.GetPopular.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("popular", null, null, false)));
+                */File.WriteAllText("Subreddits.GetPopular.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("popular", null, null, false)));
                 File.WriteAllText("Subreddits.GetNew.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("new", null, null, false)));
-                File.WriteAllText("Subreddits.GetDefault.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("default", null, null, false)));
+                File.WriteAllText("Subreddits.GetDefault.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Get("default", null, null, false)));/*
                 File.WriteAllText("Subreddits.GetUserSubredditsPopular.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.GetUserSubreddits("popular", null, null, false)));
                 File.WriteAllText("Subreddits.GetUserSubredditsNew.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.GetUserSubreddits("new", null, null, false)));
 
@@ -154,7 +154,7 @@ namespace Example
                 File.WriteAllText("LinksAndComments.SubmitLinkPost.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
                     "link", false, true, null, true, false, "RedditDotNETBot", "", "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null)));
                 File.WriteAllText("LinksAndComments.Comment.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Comment(false, "", "This is a test comment.  So there.", "t3_9nhy54")));
-
+                */
             }
         }
     }

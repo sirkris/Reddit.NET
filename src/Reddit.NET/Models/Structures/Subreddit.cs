@@ -27,7 +27,7 @@ namespace Reddit.NET.Models.Structures
         public bool UserSrThemeEnabled;
 
         [JsonProperty("user_sr_flair_enabled")]
-        public bool UserSrFlairEnabled;
+        public bool? UserSrFlairEnabled;
 
         [JsonProperty("user_flair_text")]
         public string UserFlairText;
@@ -57,7 +57,7 @@ namespace Reddit.NET.Models.Structures
         public string HeaderTitle;
 
         [JsonProperty("wiki_enabled")]
-        public bool WikiEnabled;
+        public bool? WikiEnabled;
 
         [JsonProperty("over18")]
         public bool Over18;
@@ -78,7 +78,7 @@ namespace Reddit.NET.Models.Structures
         public string UserFlairType;
 
         [JsonProperty("user_can_flair_in_sr")]
-        public bool UserCanFlairInSr;
+        public bool? UserCanFlairInSr;
 
         [JsonProperty("display_name")]
         public string DisplayName;
@@ -99,7 +99,7 @@ namespace Reddit.NET.Models.Structures
         public bool UserHasFavorited;
 
         [JsonProperty("emojis_custom_size")]
-        public string EmojisCustomSize;
+        public object EmojisCustomSize;
 
         [JsonProperty("id")]
         public string Id;
@@ -120,7 +120,7 @@ namespace Reddit.NET.Models.Structures
         public bool SpoilersEnabled;
 
         [JsonProperty("icon_size")]
-        public string IconSize;
+        public List<int> IconSize;
 
         [JsonProperty("primary_color")]
         public string PrimaryColor;
@@ -135,7 +135,7 @@ namespace Reddit.NET.Models.Structures
         public string SuggestedCommentSort;
 
         [JsonProperty("active_user_count")]
-        public int ActiveUserCount;
+        public int? ActiveUserCount;
 
         [JsonProperty("icon_img")]
         public string IconImg;
@@ -159,13 +159,13 @@ namespace Reddit.NET.Models.Structures
         public string UserFlairTextColor;
 
         [JsonProperty("accounts_active")]
-        public int AccountsActive;
+        public int? AccountsActive;
 
         [JsonProperty("public_traffic")]
         public bool PublicTraffic;
 
         [JsonProperty("header_size")]
-        public string HeaderSize;
+        public List<int> HeaderSize;
 
         [JsonProperty("subscribers")]
         public int Subscribers;
@@ -195,7 +195,7 @@ namespace Reddit.NET.Models.Structures
         public bool HasMenuWidget;
 
         [JsonProperty("is_enrolled_in_new_modmail")]
-        public bool IsEnrolledInNewModmail;
+        public bool? IsEnrolledInNewModmail;
 
         [JsonProperty("whitelist_status")]
         public string WhitelistStatus;
