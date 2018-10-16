@@ -50,7 +50,11 @@ namespace Reddit.NET.Controllers
         public bool ShowMediaPreview;
         public string SubmissionType;
 
-        public ModelStructures.Subreddit SubredditData;
+        public ModelStructures.Subreddit SubredditData
+        {
+            get;
+            private set;
+        }
 
         private readonly Dispatch Dispatch;
 
@@ -81,7 +85,7 @@ namespace Reddit.NET.Controllers
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
 
-            this.SubredditData = new ModelStructures.Subreddit(this);
+            UpdateSubredditData();
             this.Dispatch = dispatch;
         }
 
@@ -89,7 +93,7 @@ namespace Reddit.NET.Controllers
         {
             SetValues(name, title, description, sidebar);
 
-            this.SubredditData = new ModelStructures.Subreddit(this);
+            UpdateSubredditData();
             this.Dispatch = dispatch;
         }
 
@@ -177,6 +181,17 @@ namespace Reddit.NET.Controllers
             this.KeyColor = keyColor;
         }
 
+        /// <summary>
+        /// Sync the subreddit model data to this and return the result.
+        /// </summary>
+        /// <returns>Updated subreddit model instance.</returns>
+        private ModelStructures.Subreddit UpdateSubredditData()
+        {
+            this.SubredditData = new ModelStructures.Subreddit(this);
+
+            return SubredditData;
+        }
+
         // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();
         // Equivalent to:  Subreddit sub = reddit.Models.Subreddits.About("facepalm");
         /// <summary>
@@ -219,7 +234,7 @@ namespace Reddit.NET.Controllers
             string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high", 
             string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
         {
-            object res = Dispatch.Subreddits.SiteAdmin(SubredditData, allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse,
+            object res = Dispatch.Subreddits.SiteAdmin(UpdateSubredditData(), allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse,
                 linkType, spamComments, spamLinks, spamSelfPosts, "", themeSr, themeSrUpdate, wikiMode, wikiEditAge, wikiEditKarma);
 
             // TODO - Check res for errors (or will API return non-200 on failure?).  --Kris
@@ -249,7 +264,7 @@ namespace Reddit.NET.Controllers
             string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
             string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
         {
-            object res = Dispatch.Subreddits.SiteAdmin(SubredditData, allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse,
+            object res = Dispatch.Subreddits.SiteAdmin(UpdateSubredditData(), allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse,
                 linkType, spamComments, spamLinks, spamSelfPosts, Fullname, themeSr, themeSrUpdate, wikiMode, wikiEditAge, wikiEditKarma);
 
             // TODO - Check res for errors (or will API return non-200 on failure?).  --Kris
