@@ -193,7 +193,7 @@ namespace Reddit.NET.Controllers
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();
-        // Equivalent to:  Subreddit sub = reddit.Models.Subreddits.About("facepalm");
+        // Equivalent to:  Subreddit sub = reddit.Subreddit(reddit.Models, reddit.Models.Subreddits.About("facepalm"));
         /// <summary>
         /// Return information about the current subreddit instance.
         /// </summary>
@@ -214,7 +214,7 @@ namespace Reddit.NET.Controllers
 
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit", "My New Subreddit", "Some description.", "This is my sidebar!").Create();
         // Equivalent to:  reddit.Models.Subreddits.SiteAdmin(name:"MyNewSubreddit", title:"My New Subreddit", publicDescription:"Some description", description:"This is my sidebar!", ...);
-        //                 Subreddit sub = reddit.Models.Subreddits.About("MyNewSubreddit");
+        //                 Subreddit sub = reddit.Subreddit(reddit.Models, reddit.Models.Subreddits.About("MyNewSubreddit"));
         /// <summary>
         /// Create a new subreddit and return the created result.
         /// </summary>
