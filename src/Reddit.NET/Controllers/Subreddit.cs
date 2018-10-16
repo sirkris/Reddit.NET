@@ -56,6 +56,50 @@ namespace Reddit.NET.Controllers
 
         public Subreddit(Dispatch dispatch, ModelStructures.Subreddit subreddit)
         {
+            ImportFromModel(subreddit);
+
+            this.SubredditData = subreddit;
+            this.Dispatch = dispatch;
+        }
+
+        public Subreddit(Dispatch dispatch, ModelStructures.SubredditChild subredditChild)
+        {
+            ImportFromModel(subredditChild.Data);
+
+            this.SubredditData = subredditChild.Data;
+            this.Dispatch = dispatch;
+        }
+
+        public Subreddit(Dispatch dispatch, string name, string title, string description, string sidebar,
+            string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
+            string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
+            bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
+            bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+        {
+            SetValues(name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
+                wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
+                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
+
+            this.SubredditData = new ModelStructures.Subreddit(this);
+            this.Dispatch = dispatch;
+        }
+
+        public Subreddit(Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "")
+        {
+            SetValues(name, title, description, sidebar);
+
+            this.SubredditData = new ModelStructures.Subreddit(this);
+            this.Dispatch = dispatch;
+        }
+
+        public Subreddit(Dispatch dispatch)
+        {
+            this.Dispatch = dispatch;
+        }
+
+        private void ImportFromModel(ModelStructures.Subreddit subreddit)
+        {
             this.BannerImg = subreddit.BannerImg;
             this.BannerBackgroundColor = subreddit.BannerBackgroundColor;
             this.BannerBackgroundImage = subreddit.BannerBackgroundImage;
@@ -97,13 +141,9 @@ namespace Reddit.NET.Controllers
             this.CommentScoreHideMins = subreddit.CommentScoreHideMins;
             this.ShowMediaPreview = subreddit.ShowMediaPreview;
             this.SubmissionType = subreddit.SubmissionType;
-            
-            this.SubredditData = subreddit;
-            
-            this.Dispatch = dispatch;
         }
 
-        public Subreddit(Dispatch dispatch, string name, string title, string description, string sidebar,
+        private void SetValues(string name, string title, string description, string sidebar,
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
@@ -135,17 +175,19 @@ namespace Reddit.NET.Controllers
             this.IconImg = iconImage;
             this.PrimaryColor = primaryColor;
             this.KeyColor = keyColor;
-
-            this.SubredditData = new ModelStructures.Subreddit(this);
-
-            this.Dispatch = dispatch;
         }
 
-        public Subreddit(Dispatch dispatch)
+        // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();
+        // Equivalent to:  Subreddit sub = reddit.Models.Subreddits.About("facepalm");
+        /// <summary>
+        /// Return information about the current subreddit instance.
+        /// </summary>
+        /// <returns>An instance of this class populated with the retrieved data.</returns>
+        public Subreddit About()
         {
-            this.Dispatch = dispatch;
+            return new Subreddit(Dispatch, Dispatch.Subreddits.About(Name));
         }
 
-        // TODO - Methods.  --Kris
+
     }
 }

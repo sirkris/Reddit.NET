@@ -130,5 +130,37 @@ namespace Reddit.NET
         {
             return new User(Models);
         }
+
+        public Subreddit Subreddit(ModelStructures.Subreddit subreddit)
+        {
+            return new Subreddit(Models, subreddit);
+        }
+
+        public Subreddit Subreddit(ModelStructures.SubredditChild subredditChild)
+        {
+            return new Subreddit(Models, subredditChild);
+        }
+
+        public Subreddit Subreddit(string name, string title, string description, string sidebar,
+            string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
+            string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
+            bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
+            bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+        {
+            return new Subreddit(Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
+                wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
+                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
+        }
+
+        public Subreddit Subreddit(string name, string title = "", string description = "", string sidebar = "")
+        {
+            return new Subreddit(Models, name, title, description, sidebar);
+        }
+
+        public Subreddit Subreddit()
+        {
+            return new Subreddit(Models);
+        }
     }
 }
