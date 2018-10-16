@@ -84,7 +84,7 @@ namespace Reddit.NET.Models.Structures
         public string DisplayName;
 
         [JsonProperty("header_img")]
-        public string HeaderImg;
+        public byte[] HeaderImg;
 
         [JsonProperty("description_html")]
         public string DescriptionHTML;
@@ -138,7 +138,7 @@ namespace Reddit.NET.Models.Structures
         public int? ActiveUserCount;
 
         [JsonProperty("icon_img")]
-        public string IconImg;
+        public byte[] IconImg;
 
         [JsonProperty("original_content_tag_enabled")]
         public bool OriginalContentTagEnabled;
@@ -264,5 +264,52 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("user_is_subscriber")]
         public bool UserIsSubscriber;
+
+        public Subreddit(Controllers.Subreddit subreddit)
+        {
+            this.BannerImg = subreddit.BannerImg;
+            this.BannerBackgroundColor = subreddit.BannerBackgroundColor;
+            this.BannerBackgroundImage = subreddit.BannerBackgroundImage;
+            this.SubredditType = subreddit.SubredditType;
+            this.CommunityIcon = subreddit.CommunityIcon;
+            this.HeaderTitle = subreddit.HeaderTitle;
+            this.WikiEnabled = subreddit.WikiEnabled;
+            this.Over18 = subreddit.Over18;
+            this.Description = subreddit.Sidebar;
+            this.DisplayName = subreddit.Name;
+            this.HeaderImg = subreddit.HeaderImg;
+            this.Title = subreddit.Title;
+            this.CollapseDeletedComments = subreddit.CollapseDeletedComments;
+            this.Id = subreddit.Id;
+            this.EmojisEnabled = subreddit.EmojisEnabled;
+            this.ShowMedia = subreddit.ShowMedia;
+            this.AllowVideos = subreddit.AllowVideos;
+            this.CanAssignUserFlair = subreddit.CanAssignUserFlair;
+            this.SpoilersEnabled = subreddit.SpoilersEnabled;
+            this.PrimaryColor = subreddit.PrimaryColor;
+            this.SuggestedCommentSort = subreddit.SuggestedCommentSort;
+            this.ActiveUserCount = subreddit.ActiveUserCount;
+            this.IconImg = subreddit.IconImg;
+            this.CanAssignLinkFlair = subreddit.CanAssignLinkFlair;
+            this.SubmitText = subreddit.SubmitText;
+            this.AllowVideoGifs = subreddit.AllowVideoGifs;
+            this.Subscribers = subreddit.Subscribers;
+            this.SubmitTextLabel = subreddit.SubmitTextLabel;
+            this.KeyColor = subreddit.KeyColor;
+            this.Lang = subreddit.Lang;
+            this.Name = subreddit.Fullname;
+            this.Created = subreddit.Created;
+            this.URL = subreddit.URL;
+            this.SubmitLinkLabel = subreddit.SubmitLinkLabel;
+            this.AllowDiscovery = subreddit.AllowDiscovery;
+            this.PublicDescription = subreddit.Description;
+            this.LinkFlairEnabled = subreddit.LinkFlairEnabled;
+            this.AllowImages = subreddit.AllowImages;
+            this.CommentScoreHideMins = subreddit.CommentScoreHideMins;
+            this.ShowMediaPreview = subreddit.ShowMediaPreview;
+            this.SubmissionType = subreddit.SubmissionType;
+        }
+
+        public Subreddit() { }
     }
 }

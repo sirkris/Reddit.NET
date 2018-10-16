@@ -90,6 +90,8 @@ namespace Reddit.NET.Controllers
             this.HasSubscribed = hasSubscribed;
 
             this.UserData = new ModelStructures.User(this);
+
+            this.Dispatch = dispatch;
         }
 
         public User(Dispatch dispatch)
@@ -98,11 +100,11 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
-        /// Populates the current User instance with the data returned from a call to the "me" endpoint.
+        /// Returns a User instance with the data returned from a call to the "me" endpoint.
         /// </summary>
         public User Me()
         {
-            // Recommended usage:  User Me = ((Reddit) reddit).User().Me();
+            // Recommended usage:  User me = ((Reddit) reddit).User().Me();
             return new User(Dispatch, Dispatch.Account.Me());
         }
     }
