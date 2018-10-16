@@ -248,6 +248,8 @@ namespace Reddit.NET.Controllers
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit").About();
         //           sub.Sidebar = "I've updated my sidebar and there's nothing you can do about it.";
         //           sub.Update();
+        // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit").About();
+        //           sub.Update(wikiMode:"anyone");
         /// <summary>
         /// Update an existing subreddit.
         /// </summary>
