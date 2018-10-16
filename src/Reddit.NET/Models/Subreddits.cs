@@ -293,6 +293,44 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
+        /// Create or configure a subreddit.
+        /// If sr is specified, the request will attempt to modify the specified subreddit. If not, a subreddit with name name will be created.
+        /// This endpoint expects all values to be supplied on every request. If modifying a subset of options, it may be useful to get the current settings from /about/edit.json first.
+        /// For backwards compatibility, description is the sidebar text and public_description is the publicly visible subreddit description.
+        /// Most of the parameters for this endpoint are identical to options visible in the user interface and their meanings are best explained there.
+        /// See also: /about/edit.json.
+        /// </summary>
+        /// <param name="subreddit">A valid subreddit object.</param>
+        /// <param name="allowPostCrossposts">boolean value</param>
+        /// <param name="allowTop">boolean value</param>
+        /// <param name="excludeBannedModqueue">boolean value</param>
+        /// <param name="freeFormReports">boolean value</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="linkType">one of (any, link, self)</param>
+        /// <param name="spamComments">one of (low, high, all)</param>
+        /// <param name="spamLinks">one of (low, high, all)</param>
+        /// <param name="spamSelfPosts">one of (low, high, all)</param>
+        /// <param name="sr">fullname of a thing</param>
+        /// <param name="themeSr">subreddit name</param>
+        /// <param name="themeSrUpdate">boolean value</param>
+        /// <param name="wikiMode">one of (disabled, modonly, anyone)</param>
+        /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
+        /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
+        /// <returns>An object indicating any errors.</returns>
+        public object SiteAdmin(Subreddit subreddit, bool allowPostCrossposts, bool allowTop, bool excludeBannedModqueue, bool freeFormReports,
+            string gRecaptchaResponse, string linkType, string spamComments, string spamLinks, string spamSelfPosts, string sr, string themeSr,
+            bool themeSrUpdate, string wikiMode, int wikiEditAge = 0, int wikiEditKarma = 0)
+        {
+            return SiteAdmin(subreddit.AllOriginalContent, subreddit.AllowDiscovery, subreddit.AllowImages, allowPostCrossposts,
+                allowTop, subreddit.AllowVideos, subreddit.CollapseDeletedComments, subreddit.Description, excludeBannedModqueue,
+                freeFormReports, gRecaptchaResponse, subreddit.HeaderTitle, subreddit.HideAds, subreddit.KeyColor, subreddit.Lang, linkType,
+                subreddit.Name, subreddit.OriginalContentTagEnabled, subreddit.Over18, subreddit.PublicDescription, subreddit.ShowMedia,
+                subreddit.ShowMediaPreview, spamComments, spamLinks, spamSelfPosts, subreddit.SpoilersEnabled, sr, subreddit.SubmitLinkLabel,
+                subreddit.SubmitText, subreddit.SubmitTextLabel, subreddit.SuggestedCommentSort, themeSr, themeSrUpdate, subreddit.Title,
+                subreddit.SubredditType, wikiMode, subreddit.CommentScoreHideMins, wikiEditAge, wikiEditKarma);
+        }
+
+        /// <summary>
         /// Get the submission text for the subreddit.
         /// This text is set by the subreddit moderators and intended to be displayed on the submission form.
         /// See also: /api/site_admin.
