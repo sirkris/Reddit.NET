@@ -33,7 +33,7 @@ namespace Reddit.NET.Models
         /// removewikicontributor, wikirevise, wikipermlevel, ignorereports, unignorereports, setpermissions, setsuggestedsort, sticky, unsticky, setcontestmode, unsetcontestmode, lock, unlock, 
         /// muteuser, unmuteuser, createrule, editrule, deleterule, spoiler, unspoiler, modmail_enrollment, community_styling, community_widgets, markoriginalcontent)</param>
         /// <returns>A listing of recent moderation actions.</returns>
-        public object GetLog(string after, string before, string subreddit = null, int count = 0, int limit = 25, string mod = null, string show = "all",
+        public ModActionContainer GetLog(string after, string before, string subreddit = null, int count = 0, int limit = 25, string mod = null, string show = "all",
             bool srDetail = false, string type = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "about/log");
@@ -47,7 +47,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("sr_detail", srDetail);
             restRequest.AddParameter("type", type);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<ModActionContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A listing of posts relevant to moderators.</returns>
-        public object ModQueue(string location, string after, string before, string only, string subreddit = null, int count = 0, int limit = 25,
+        public PostOrCommentContainer ModQueue(string location, string after, string before, string only, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "about/" + location);
@@ -83,7 +83,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.

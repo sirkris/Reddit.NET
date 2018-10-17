@@ -21,7 +21,7 @@ namespace Reddit.NET.Models.Structures
         public string SelfText;
 
         [JsonProperty("user_reports")]
-        public List<Dictionary<string, int>> UserReports;
+        public object UserReports;
 
         [JsonProperty("saved")]
         public bool Saved;
