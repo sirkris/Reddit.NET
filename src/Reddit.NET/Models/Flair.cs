@@ -328,9 +328,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit with the flairs</param>
         /// <returns>List of available user flairs.</returns>
-        public object UserFlair(string subreddit = null)
+        public List<Structures.Flair> UserFlair(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/user_flair"));
+            return JsonConvert.DeserializeObject<List<Structures.Flair>>(ExecuteRequest(Sr(subreddit) + "api/user_flair"));
         }
 
         /// <summary>
@@ -339,9 +339,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit with the flairs</param>
         /// <returns>List of available user flairs.</returns>
-        public object UserFlairV2(string subreddit = null)
+        public List<FlairV2> UserFlairV2(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/user_flair_v2"));
+            return JsonConvert.DeserializeObject<List<FlairV2>>(ExecuteRequest(Sr(subreddit) + "api/user_flair_v2"));
         }
     }
 }
