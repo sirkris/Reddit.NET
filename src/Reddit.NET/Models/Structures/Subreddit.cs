@@ -84,7 +84,7 @@ namespace Reddit.NET.Models.Structures
         public string DisplayName;
 
         [JsonProperty("header_img")]
-        public byte[] HeaderImg;
+        public object HeaderImg;
 
         [JsonProperty("description_html")]
         public string DescriptionHTML;
@@ -138,7 +138,7 @@ namespace Reddit.NET.Models.Structures
         public int? ActiveUserCount;
 
         [JsonProperty("icon_img")]
-        public byte[] IconImg;
+        public object IconImg;
 
         [JsonProperty("original_content_tag_enabled")]
         public bool OriginalContentTagEnabled;

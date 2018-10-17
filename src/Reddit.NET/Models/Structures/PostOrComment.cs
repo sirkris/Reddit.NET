@@ -10,9 +10,6 @@ namespace Reddit.NET.Models.Structures
     [Serializable]
     public class PostOrComment
     {
-        [JsonProperty("kind")]
-        public string Kind;
-
         [JsonProperty("approved_at_utc")]
         [JsonConverter(typeof(TimestampConvert))]
         public DateTime ApprovedAtUTC;
@@ -171,7 +168,7 @@ namespace Reddit.NET.Models.Structures
         public string PostHint;
 
         [JsonProperty("content_categories")]
-        public string ContentCategories;
+        public object ContentCategories;
 
         [JsonProperty("is_self")]
         public bool IsSelf;
@@ -362,6 +359,9 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("depth")]
         public int Depth;
+
+        [JsonProperty("sr_detail")]
+        public Subreddit SrDetail;
 
         public PostOrComment(Post post)
         {

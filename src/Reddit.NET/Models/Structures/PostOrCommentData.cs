@@ -15,7 +15,7 @@ namespace Reddit.NET.Models.Structures
         public string Modhash;
 
         [JsonProperty("dist")]
-        public int Dist;
+        public int? Dist;
 
         [JsonProperty("children")]
         public List<PostOrCommentChild> Children;

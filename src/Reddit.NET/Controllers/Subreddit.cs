@@ -18,7 +18,7 @@ namespace Reddit.NET.Controllers
         public bool Over18;
         public string Sidebar;
         public string Name;
-        public byte[] HeaderImg;
+        public object HeaderImg;
         public string Title;
         public bool CollapseDeletedComments;
         public string Id;
@@ -30,7 +30,7 @@ namespace Reddit.NET.Controllers
         public string PrimaryColor;
         public string SuggestedCommentSort;
         public int? ActiveUserCount;
-        public byte[] IconImg;
+        public object IconImg;
         public bool CanAssignLinkFlair;
         public string SubmitText;
         public bool AllowVideoGifs;
