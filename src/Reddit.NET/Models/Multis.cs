@@ -39,13 +39,13 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="expandSrs">boolean value</param>
         /// <returns>A list of multis.</returns>
-        public object Mine(bool expandSrs)
+        public List<LabeledMultiContainer> Mine(bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/mine");
 
             restRequest.AddParameter("expand_srs", expandSrs);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<List<LabeledMultiContainer>>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
@@ -73,13 +73,13 @@ namespace Reddit.NET.Models
         /// <param name="username">A valid, existing reddit username</param>
         /// <param name="expandSrs">boolean value</param>
         /// <returns>A list of multis.</returns>
-        public object User(string username, bool expandSrs)
+        public List<LabeledMultiContainer> User(string username, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/user/" + username);
 
             restRequest.AddParameter("expand_srs", expandSrs);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<List<LabeledMultiContainer>>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
@@ -120,13 +120,13 @@ namespace Reddit.NET.Models
         /// <param name="multipath">multireddit url path</param>
         /// <param name="expandSrs">boolean value</param>
         /// <returns></returns>
-        public object Get(string multipath, bool expandSrs)
+        public LabeledMultiContainer Get(string multipath, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath);
 
             restRequest.AddParameter("expand_srs", expandSrs);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
