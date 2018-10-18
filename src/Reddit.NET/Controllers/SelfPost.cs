@@ -14,7 +14,7 @@ namespace Reddit.NET.Controllers
         /// Create new Self Post instance from Reddit API listing.
         /// </summary>
         /// <param name="listing">Listing returned by Reddit API.</param>
-        public SelfPost(Dispatch dispatch, PostOrComment listing) : base(dispatch, listing)
+        public SelfPost(Dispatch dispatch, Models.Structures.Post listing) : base(dispatch, listing)
         {
             this.SelfText = listing.SelfText;
             this.SelfTextHTML = listing.SelfTextHTML;
@@ -48,7 +48,7 @@ namespace Reddit.NET.Controllers
             this.SelfText = selfText;
             this.SelfTextHTML = selfTextHtml;
 
-            this.Listing = new PostOrComment(this);
+            this.Listing = new Models.Structures.Post(this);
         }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Reddit.NET.Controllers
         {
             GetByPostId(subreddit, postId);
 
-            this.Listing = new PostOrComment(this);
+            this.Listing = new Models.Structures.Post(this);
         }
 
         /// <summary>

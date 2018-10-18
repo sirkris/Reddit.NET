@@ -1,14 +1,14 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Reddit.NET.Controllers;
 using Reddit.NET.Models.Converters;
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class PostOrComment
+    public class Comment
     {
         [JsonProperty("approved_at_utc")]
         [JsonConverter(typeof(TimestampConvert))]
@@ -16,9 +16,6 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("subreddit")]
         public string Subreddit;
-
-        [JsonProperty("selftext")]
-        public string SelfText;
 
         [JsonProperty("user_reports")]
         public object UserReports;
@@ -34,52 +31,14 @@ namespace Reddit.NET.Models.Structures
         [JsonConverter(typeof(IntBoolConvert))]
         public bool Gilded;
 
-        [JsonProperty("clicked")]
-        public bool Clicked;
-
-        [JsonProperty("title")]
-        public string Title;
-
-        // TODO - Only had an empty example so not sure if the structure is right.  --Kris
-        [JsonProperty("link_flair_richtext")]
-        public object PublicFlairRichtext;
-
         [JsonProperty("subreddit_name_prefixed")]
         public string SubredditNamePrefixed;
-
-        [JsonProperty("hidden")]
-        public bool Hidden;
-
-        // TODO - No idea what this is.  --Kris
-        [JsonProperty("pwls")]
-        public string Pwls;
-
-        [JsonProperty("link_flair_css_class")]
-        public string LinkFlairCSSClass;
 
         [JsonProperty("downs")]
         public int Downs;
 
-        [JsonProperty("thumbnail_height")]
-        public int? ThumbnailHeight;
-
-        [JsonProperty("parent_whitelist_status")]
-        public string ParentWhitelistStatus;
-
-        [JsonProperty("hide_score")]
-        public bool HideScore;
-
         [JsonProperty("name")]
         public string Name;
-
-        [JsonProperty("quarantine")]
-        public bool Quarantine;
-
-        [JsonProperty("link_flair_text_color")]
-        public string LinkFlairTextColor;
-
-        [JsonProperty("upvote_ratio")]
-        public double UpvoteRatio;
 
         [JsonProperty("author_flair_background_color")]
         public string AuthorFlairBackgroundColor;
@@ -90,46 +49,11 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("ups")]
         public int Ups;
 
-        [JsonProperty("domain")]
-        public string Domain;
-
-        // TODO - No idea what this does.  It's always empty when I see it.  --Kris
-        [JsonProperty("media_embed")]
-        public object MediaEmbed;
-
-        [JsonProperty("thumbnail_width")]
-        public int? ThumbnailWidth;
-
         [JsonProperty("author_flair_template_id")]
         public string AuthorFlairTemplateId;
 
-        [JsonProperty("is_original_content")]
-        public bool IsOriginalContent;
-
         [JsonProperty("author_fullname")]
         public string AuthorFullname;
-
-        [JsonProperty("secure_media")]
-        public object SecureMedia;
-
-        [JsonProperty("is_reddit_media_domain")]
-        public bool IsRedditMediaDomain;
-
-        [JsonProperty("is_meta")]
-        public bool IsMeta;
-
-        [JsonProperty("category")]
-        public string category;
-
-        [JsonProperty("num_comments")]
-        public int NumComments;
-
-        // TODO - Same as MediaEmbed.  Not sure what this is supposed to be.  --Kris
-        [JsonProperty("secure_media_embed")]
-        public object SecureMediaEmbed;
-
-        [JsonProperty("link_flair_text")]
-        public string LinkFlairText;
 
         [JsonProperty("can_mod_post")]
         public bool CanModPost;
@@ -142,9 +66,6 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("ignore_reports")]
         public bool IgnoreReports;
-
-        [JsonProperty("thumbnail")]
-        public string Thumbnail;
 
         [JsonProperty("edited")]
         [JsonConverter(typeof(TimestampConvert))]
@@ -164,15 +85,6 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("gildings")]
         public Dictionary<string, int> Gildings;
 
-        [JsonProperty("post_hint")]
-        public string PostHint;
-
-        [JsonProperty("content_categories")]
-        public object ContentCategories;
-
-        [JsonProperty("is_self")]
-        public bool IsSelf;
-
         [JsonProperty("mod_note")]
         public string ModNote;
 
@@ -180,37 +92,18 @@ namespace Reddit.NET.Models.Structures
         [JsonConverter(typeof(TimestampConvert))]
         public DateTime Created;
 
-        [JsonProperty("link_flair_type")]
-        public string LinkFlairType;
-
-        // TODO - No idea what this is.  --Kris
-        [JsonProperty("wls")]
-        public string Wls;
-
         [JsonProperty("banned_by")]
         public string BannedBy;
 
         [JsonProperty("author_flair_type")]
         public string AuthorFlairType;
 
-        [JsonProperty("contest_mode")]
-        public bool ContestMode;
-
-        [JsonProperty("selftext_html")]
-        public string SelfTextHTML;
-
         [JsonProperty("likes")]
         public bool? Likes;
-
-        [JsonProperty("suggested_sort")]
-        public string SuggestedSort;
 
         [JsonProperty("banned_at_utc")]
         [JsonConverter(typeof(TimestampConvert))]
         public DateTime BannedAtUTC;
-
-        [JsonProperty("view_count")]
-        public int? ViewCount;
 
         [JsonProperty("archived")]
         public bool Archived;
@@ -221,44 +114,17 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("spam")]
         public bool Spam;
 
-        [JsonProperty("is_crosspostable")]
-        public bool IsCrosspostable;
-
-        [JsonProperty("pinned")]
-        public bool Pinned;
-
-        [JsonProperty("over_18")]
-        public bool Over18;
-
-        [JsonProperty("preview")]
-        public JObject Preview;
-
-        [JsonProperty("media_only")]
-        public bool MediaOnly;
-
-        [JsonProperty("link_flair_template_id")]
-        public string LinkFlairTemplateId;
-
         [JsonProperty("can_gild")]
         public bool CanGild;
 
         [JsonProperty("removed")]
         public bool Removed;
 
-        [JsonProperty("spoiler")]
-        public bool Spoiler;
-
-        [JsonProperty("locked")]
-        public bool Locked;
-
         [JsonProperty("author_flair_text")]
         public string AuthorFlairText;
 
         [JsonProperty("rte_mode")]
         public string RteMode;
-
-        [JsonProperty("visited")]
-        public bool Visited;
 
         [JsonProperty("num_reports")]
         public int? NumReports;
@@ -275,9 +141,6 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("removal_reason")]
         public string RemovalReason;
 
-        [JsonProperty("link_flair_background_color")]
-        public string LinkFlairBackgroundColor;
-
         [JsonProperty("id")]
         public string Id;
 
@@ -286,12 +149,6 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("author")]
         public string Author;
-
-        [JsonProperty("num_crossposts")]
-        public int NumCrossposts;
-
-        [JsonProperty("media")]
-        public object Media;
 
         [JsonProperty("send_replies")]
         public bool SendReplies;
@@ -305,17 +162,8 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("permalink")]
         public string Permalink;
 
-        [JsonProperty("whitelist_status")]
-        public string WhitelistStatus;
-
         [JsonProperty("stickied")]
         public bool Stickied;
-
-        [JsonProperty("url")]
-        public string URL;
-
-        [JsonProperty("subreddit_subscribers")]
-        public int SubredditSubscribers;
 
         [JsonProperty("created_utc")]
         [JsonConverter(typeof(TimestampConvert))]
@@ -325,13 +173,8 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("mod_reports")]
         public List<string> ModReports;
 
-        [JsonProperty("is_video")]
-        public bool IsVideo;
-
-        // Below are comment-specific properties.  --Kris
-
         [JsonProperty("replies")]
-        public List<PostOrComment> Replies;
+        public List<Comment> Replies;
 
         [JsonProperty("body_html")]
         public string BodyHTML;
@@ -363,66 +206,30 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("sr_detail")]
         public Subreddit SrDetail;
 
-        public PostOrComment(Post post)
-        {
-            ImportFromPost(post);
-        }
+        [JsonProperty("link_id")]
+        public string LinkId;
 
-        public PostOrComment(SelfPost selfPost)
-        {
-            ImportFromSelfPost(selfPost);
-        }
-
-        public PostOrComment(LinkPost linkPost)
-        {
-            ImportFromLinkPost(linkPost);
-        }
-
-        public PostOrComment(Comment comment)
+        public Comment(Controllers.Comment comment)
         {
             ImportFromComment(comment);
         }
 
-        private void ImportFromPost(Post post)
+        public Comment() { }
+
+        private void ImportFromComment(Controllers.Comment comment)
         {
-            this.Subreddit = post.Subreddit;
-            this.Title = post.Title;
-            this.Author = post.Author;
-            this.Id = post.Id;
-            this.Name = post.Name;
-            this.Permalink = post.Permalink;
-            this.Created = post.Created;
-            this.Edited = post.Edited;
-            this.Score = post.Score;
-            this.Ups = post.UpVotes;
-            this.Downs = post.DownVotes;
-            this.Removed = post.Removed;
-            this.Spam = post.Spam;
-        }
-
-        private void ImportFromSelfPost(SelfPost selfPost)
-        {
-            ImportFromPost(selfPost);
-
-            this.SelfText = selfPost.SelfText;
-            this.SelfTextHTML = selfPost.SelfTextHTML;
-        }
-
-        private void ImportFromLinkPost(LinkPost linkPost)
-        {
-            ImportFromPost(linkPost);
-
-            this.Preview = linkPost.Preview;
-            this.URL = linkPost.URL;
-            this.Thumbnail = linkPost.Thumbnail;
-            this.ThumbnailHeight = linkPost.ThumbnailHeight;
-            this.ThumbnailWidth = linkPost.ThumbnailWidth;
-        }
-
-        private void ImportFromComment(Comment comment)
-        {
-            ImportFromPost(comment);
-
+            this.Subreddit = comment.Subreddit;
+            this.Author = comment.Author;
+            this.Id = comment.Id;
+            this.Name = comment.Name;
+            this.Permalink = comment.Permalink;
+            this.Created = comment.Created;
+            this.Edited = comment.Edited;
+            this.Score = comment.Score;
+            this.Ups = comment.UpVotes;
+            this.Downs = comment.DownVotes;
+            this.Removed = comment.Removed;
+            this.Spam = comment.Spam;
             this.Replies = comment.Replies;
             this.Body = comment.Body;
             this.BodyHTML = comment.BodyHTML;
@@ -434,6 +241,5 @@ namespace Reddit.NET.Models.Structures
             this.Depth = comment.Depth;
         }
 
-        public PostOrComment() { }
     }
 }

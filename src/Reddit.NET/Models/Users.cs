@@ -241,12 +241,11 @@ namespace Reddit.NET.Models
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
-        /// <param name="where">One of (overview, submitted, comments, upvotes, downvoted, hidden, saved, gilded)</param>
+        /// <param name="where">One of (overview, submitted, upvotes, downvoted, hidden, saved, gilded)</param>
         /// <param name="context">an integer between 2 and 10</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="sort">one of (hot, new, top, controversial)</param>
         /// <param name="t">one of (hour, day, week, month, year, all)</param>
-        /// <param name="type">one of (links, comments)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories">boolean value</param>
@@ -254,7 +253,7 @@ namespace Reddit.NET.Models
         /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of objects containing the requested data.</returns>
-        public PostOrCommentContainer History(string username, string where, int context, string show, string sort, string t, string type,
+        public PostContainer PostHistory(string username, string where, int context, string show, string sort, string t,
             string after, string before, bool includeCategories, int count = 0, int limit = 25, bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
@@ -263,15 +262,51 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sort", sort);
             restRequest.AddParameter("t", t);
-            restRequest.AddParameter("type", type);
+            restRequest.AddParameter("type", "links");
             restRequest.AddParameter("after", after);
             restRequest.AddParameter("before", before);
             restRequest.AddParameter("include_categories", includeCategories);
             restRequest.AddParameter("count", count);
             restRequest.AddParameter("limit", limit);
             restRequest.AddParameter("sr_detail", srDetail);
-            
-            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
+
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// This endpoint is a listing.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="where">One of (comments, saved, gilded)</param>
+        /// <param name="context">an integer between 2 and 10</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="sort">one of (hot, new, top, controversial)</param>
+        /// <param name="t">one of (hour, day, week, month, year, all)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of objects containing the requested data.</returns>
+        public CommentContainer CommentHistory(string username, string where, int context, string show, string sort, string t,
+            string after, string before, bool includeCategories, int count = 0, int limit = 25, bool srDetail = false)
+        {
+            RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
+
+            restRequest.AddParameter("context", context);
+            restRequest.AddParameter("show", show);
+            restRequest.AddParameter("sort", sort);
+            restRequest.AddParameter("t", t);
+            restRequest.AddParameter("type", "comments");
+            restRequest.AddParameter("after", after);
+            restRequest.AddParameter("before", before);
+            restRequest.AddParameter("include_categories", includeCategories);
+            restRequest.AddParameter("count", count);
+            restRequest.AddParameter("limit", limit);
+            restRequest.AddParameter("sr_detail", srDetail);
+
+            return JsonConvert.DeserializeObject<CommentContainer>(ExecuteRequest(restRequest));
         }
     }
 }

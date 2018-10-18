@@ -34,7 +34,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of Reddit posts.</returns>
-        public PostOrCommentContainer Best(string after, string before, bool includeCategories, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        public PostContainer Best(string after, string before, bool includeCategories, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("best");
 
@@ -46,7 +46,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of Reddit posts.</returns>
-        public PostOrCommentContainer Hot(string g, string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
+        public PostContainer Hot(string g, string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "hot");
@@ -169,7 +169,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of Reddit posts.</returns>
-        public PostOrCommentContainer New(string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
+        public PostContainer New(string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "new");
@@ -197,7 +197,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -205,9 +205,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit from which to retrieve the random listing</param>
         /// <returns>A random listing.</returns>
-        public List<PostOrCommentContainer> Random(string subreddit = null)
+        public List<PostContainer> Random(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject<List<PostOrCommentContainer>>(ExecuteRequest(Sr(subreddit) + "random"));
+            return JsonConvert.DeserializeObject<List<PostContainer>>(ExecuteRequest(Sr(subreddit) + "random"));
         }
 
         /// <summary>
@@ -222,7 +222,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of Reddit posts.</returns>
-        public PostOrCommentContainer Rising(string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
+        public PostContainer Rising(string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "rising");
@@ -235,7 +235,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -251,7 +251,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of Reddit posts.</returns>
-        public PostOrCommentContainer Top(string t, string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
+        public PostContainer Top(string t, string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "top");
@@ -265,7 +265,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -281,7 +281,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of Reddit posts.</returns>
-        public PostOrCommentContainer Controversial(string t, string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
+        public PostContainer Controversial(string t, string after, string before, bool includeCategories, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "controversial");
@@ -295,7 +295,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
         }
     }
 }

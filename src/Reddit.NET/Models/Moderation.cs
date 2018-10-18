@@ -70,7 +70,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A listing of posts relevant to moderators.</returns>
-        public PostOrCommentContainer ModQueue(string location, string after, string before, string only, string subreddit = null, int count = 0, int limit = 25,
+        public PostContainer ModQueue(string location, string after, string before, string only, string subreddit = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "about/" + location);
@@ -83,7 +83,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject<PostOrCommentContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
