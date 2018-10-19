@@ -113,9 +113,12 @@ namespace Example
                 File.WriteAllText("Subreddits.GetUserSubredditsNew.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.GetUserSubreddits("new", null, null, false)));
 
                 File.WriteAllText("Users.UserDataByAccountIds.json", JsonConvert.SerializeObject(reddit.Models.Users.UserDataByAccountIds("t2_6vsit,t2_2cclzaxt")));
-                File.WriteAllText("Users.UsernameAvailable.json", JsonConvert.SerializeObject(reddit.Models.Users.UsernameAvailable("KrisCraig")));
-                File.WriteAllText("Users.UsernameAvailable2.json", JsonConvert.SerializeObject(reddit.Models.Users.UsernameAvailable(DateTime.Now.ToString("ddd-dd-MMM-yyyy-ffff"))));
-                File.WriteAllText("Users.UsernameAvailable3.json", JsonConvert.SerializeObject(reddit.Models.Users.UsernameAvailable("ThisUserDoesNotExistAndIfHeDoesThenHeProbablyFucksChickensOrSomething")));
+                //File.WriteAllText("Users.UsernameAvailable.json", JsonConvert.SerializeObject(reddit.Models.Users.UsernameAvailable("KrisCraig")));
+                //File.WriteAllText("Users.UsernameAvailable2.json", JsonConvert.SerializeObject(reddit.Models.Users.UsernameAvailable(DateTime.Now.ToString("ddd-dd-MMM-yyyy-ffff"))));
+                //File.WriteAllText("Users.UsernameAvailable3.json", JsonConvert.SerializeObject(reddit.Models.Users.UsernameAvailable("ThisUserDoesNotExistAndIfHeDoesThenHeProbablyFucksChickensOrSomething")));
+                File.WriteAllText("Users.UsernameAvailable.json", reddit.Models.Users.UsernameAvailable("KrisCraig").ToString());
+                File.WriteAllText("Users.UsernameAvailable2.json", reddit.Models.Users.UsernameAvailable(DateTime.Now.ToString("ddd-dd-MMM-yyyy-ffff")).ToString());
+                File.WriteAllText("Users.UsernameAvailable3.json", reddit.Models.Users.UsernameAvailable("ThisUserDoesNotExistAndIfHeDoesThenHeProbablyFucksChickensOrSomething").ToString());
                 File.WriteAllText("Users.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Users.Trophies("KrisCraig")));
                 File.WriteAllText("Users.About.json", JsonConvert.SerializeObject(reddit.Models.Users.About("KrisCraig")));
                 //File.WriteAllText("Users.HistoryOverviewLinks.json", JsonConvert.SerializeObject(reddit.Models.Users.History("KrisCraig", "overview", 10, "given", "top", "all", "links", null, null, false)));
