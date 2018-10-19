@@ -80,7 +80,7 @@ namespace Reddit.NET.Models
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns>A comments tree. Possible for post data to also be included, depending on args.</returns>
+        /// <returns>A post and comments tree.</returns>
         public List<(PostContainer, CommentContainer)> GetComments(string article, int context, bool showEdits, bool showMore, string sort, bool threaded, int truncate,
             string subreddit = null, string comment = null, int? depth = null, int? limit = null, bool srDetail = false)
         {
@@ -103,6 +103,7 @@ namespace Reddit.NET.Models
             }
             restRequest.AddParameter("sr_detail", srDetail);
 
+            // Note - Deserializing directly to the tuple list resulted in null values.  --Kris
             JArray res = JsonConvert.DeserializeObject<JArray>(ExecuteRequest(restRequest));
 
             return new List<(PostContainer, CommentContainer)>

@@ -24,9 +24,16 @@ namespace Reddit.NET.Models.Converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            return (reader.Value != null
-                && !bool.TryParse(reader.Value.ToString(), out bool dump) // Edited returns long timestamp of last edit or bool false if there are no edits.  --Kris
-                && reader.Value.ToString().Length > 0 ? Epoch.AddSeconds(Convert.ToDouble(reader.Value)) : default(DateTime));
+            if (reader.Value != null && DateTime.TryParse(reader.Value.ToString(), out DateTime dump2))
+            {
+                return (DateTime)reader.Value;
+            }
+            else
+            {
+                return (reader.Value != null
+                    && !bool.TryParse(reader.Value.ToString(), out bool dump) // Edited returns long timestamp of last edit or bool false if there are no edits.  --Kris
+                    && reader.Value.ToString().Length > 0 ? Epoch.AddSeconds(Convert.ToDouble(reader.Value)) : default(DateTime));
+            }
         }
     }
 }

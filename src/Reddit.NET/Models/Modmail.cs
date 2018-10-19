@@ -209,9 +209,9 @@ namespace Reddit.NET.Models
         /// Returns a list of srs that the user moderates that are also enrolled in the new modmail.
         /// </summary>
         /// <returns>A list of subreddits.</returns>
-        public object Subreddits()
+        public ModmailSubredditContainer Subreddits()
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/subreddits"));
+            return JsonConvert.DeserializeObject<ModmailSubredditContainer>(ExecuteRequest("api/mod/conversations/subreddits"));
         }
 
         // TODO - Needs testing.
@@ -233,9 +233,9 @@ namespace Reddit.NET.Models
         /// Endpoint to retrieve the unread conversation count by conversation state.
         /// </summary>
         /// <returns>An object with the int properties: highlighted, notifications, archived, new, inprogress, and mod.</returns>
-        public object UnreadCount()
+        public ModmailUnreadCount UnreadCount()
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/unread/count"));
+            return JsonConvert.DeserializeObject<ModmailUnreadCount>(ExecuteRequest("api/mod/conversations/unread/count"));
         }
     }
 }
