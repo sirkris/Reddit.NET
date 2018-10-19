@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Reddit.NET.Models.Structures;
 using RestSharp;
 using System;
@@ -55,9 +56,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="names">A comma-separated list of link fullnames</param>
         /// <returns>A list of Reddit posts.</returns>
-        public object GetByNames(string names)
+        public PostContainer GetByNames(string names)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("by_id/" + names));
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest("by_id/" + names));
         }
 
         /// <summary>
@@ -79,8 +80,8 @@ namespace Reddit.NET.Models
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns>A comments tree.</returns>
-        public object GetComments(string article, int context, bool showEdits, bool showMore, string sort, bool threaded, int truncate,
+        /// <returns>A comments tree. Possible for post data to also be included, depending on args.</returns>
+        public List<(PostContainer, CommentContainer)> GetComments(string article, int context, bool showEdits, bool showMore, string sort, bool threaded, int truncate,
             string subreddit = null, string comment = null, int? depth = null, int? limit = null, bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "comments/" + article);
@@ -102,7 +103,13 @@ namespace Reddit.NET.Models
             }
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            JArray res = JsonConvert.DeserializeObject<JArray>(ExecuteRequest(restRequest));
+
+            return new List<(PostContainer, CommentContainer)>
+            {
+                (JsonConvert.DeserializeObject<PostContainer>(JsonConvert.SerializeObject(res[0])),
+                JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res[1])))
+            };
         }
 
         // TODO - Needs testing.

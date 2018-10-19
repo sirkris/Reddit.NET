@@ -174,7 +174,7 @@ namespace Reddit.NET.Models.Structures
         public List<string> ModReports;
 
         [JsonProperty("replies")]
-        public List<Comment> Replies;
+        public CommentContainer Replies;
 
         [JsonProperty("body_html")]
         public string BodyHTML;

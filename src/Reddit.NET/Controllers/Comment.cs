@@ -19,7 +19,7 @@ namespace Reddit.NET.Controllers
         public int DownVotes;
         public bool Removed;
         public bool Spam;
-        public List<ModelStructures.Comment> Replies;
+        public ModelStructures.CommentContainer Replies;
         public string Body;
         public string BodyHTML;
         public string ParentId;
@@ -46,7 +46,7 @@ namespace Reddit.NET.Controllers
 
         public Comment(Dispatch dispatch, string subreddit, string title, string author, string body, string bodyHtml,
             string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<ModelStructures.Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
+            ModelStructures.CommentContainer replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
