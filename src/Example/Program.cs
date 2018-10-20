@@ -172,7 +172,11 @@ namespace Example
 
                 File.WriteAllText("PrivateMessages.GetMessagesInbox.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.GetMessages("inbox", false, "", "", "", false)));
                 File.WriteAllText("PrivateMessages.GetMessagesUnread.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.GetMessages("unread", false, "", "", "", false)));
-                File.WriteAllText("PrivateMessages.GetMessagesSent.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.GetMessages("sent", false, "", "", "", false)));*/
+                File.WriteAllText("PrivateMessages.GetMessagesSent.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.GetMessages("sent", false, "", "", "", false)));
+                File.WriteAllText("PrivateMessages.Compose.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.Compose("", "", "Test Message", "This is a test.  So there.", "RedditDotNetBot")));
+                File.WriteAllText("PrivateMessages.ComposeWithSr.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.Compose("StillSandersForPres", "", "Test Message", "This is a test.  So there.", 
+                    "RedditDotNetBot")));*/
+                
             }
         }
     }
