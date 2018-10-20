@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8" ?> 
+<Rows>
+  <Row>
+    <AppId>Insert Reddit App ID here</AppId>
+    <RefreshToken>Insert Reddit Refresh Token here</RefreshToken>
+  </Row>
+</Rows>
