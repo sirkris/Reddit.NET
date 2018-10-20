@@ -27,7 +27,7 @@ namespace Reddit.NET.Models
         /// <param name="text">raw markdown text</param>
         /// <param name="thingId">fullname of parent thing</param>
         /// <returns>A Reddit comment.</returns>
-        public object Comment(bool returnRtjson, string richtextJson, string text, string thingId)
+        public GenericContainer Comment(bool returnRtjson, string richtextJson, string text, string thingId)
         {
             RestRequest restRequest = PrepareRequest("api/comment", Method.POST);
 
@@ -37,7 +37,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("thing_id", thingId);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
@@ -384,7 +384,7 @@ namespace Reddit.NET.Models
         /// <param name="url">a valid URL</param>
         /// <param name="videoPosterUrl">a valid URL</param>
         /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
-        public object Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResopnse,
+        public GenericContainer Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResopnse,
             string kind, bool nsfw, bool resubmit, string richtextJson, bool sendReplies, bool spoiler, string sr, string text,
             string title, string url, string videoPosterUrl)
         {
@@ -409,7 +409,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("video_poster_url", videoPosterUrl);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.

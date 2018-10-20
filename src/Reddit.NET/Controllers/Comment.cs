@@ -1,13 +1,25 @@
-﻿using Reddit.NET.Models.Structures;
+﻿using ModelStructures = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Reddit.NET.Controllers
 {
-    public class Comment : Post
+    public class Comment
     {
-        public List<Listing> Replies;
+        public string Subreddit;
+        public string Author;
+        public string Id;
+        public string Name;
+        public string Permalink;
+        public DateTime Created;
+        public DateTime Edited;
+        public int Score;
+        public int UpVotes;
+        public int DownVotes;
+        public bool Removed;
+        public bool Spam;
+        public ModelStructures.CommentContainer Replies;
         public string Body;
         public string BodyHTML;
         public string ParentId;
@@ -17,7 +29,9 @@ namespace Reddit.NET.Controllers
         public bool ScoreHidden;
         public int Depth;
 
-        public Comment(Dispatch dispatch, Listing listing) : base(dispatch, listing)
+        public ModelStructures.Comment Listing;
+
+        public Comment(Dispatch dispatch, ModelStructures.Comment listing)
         {
             this.Replies = listing.Replies;
             this.Body = listing.Body;
@@ -32,11 +46,9 @@ namespace Reddit.NET.Controllers
 
         public Comment(Dispatch dispatch, string subreddit, string title, string author, string body, string bodyHtml,
             string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Listing> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
+            ModelStructures.CommentContainer replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
-            : base(dispatch, subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
-                  removed, spam)
         {
             this.Replies = replies;
             this.Body = body;
@@ -48,18 +60,13 @@ namespace Reddit.NET.Controllers
             this.ScoreHidden = scoreHidden;
             this.Depth = depth;
 
-            this.Listing = new Listing(this);
+            this.Listing = new ModelStructures.Comment(this);
         }
 
-        public Comment(Dispatch dispatch) : base(dispatch) { }
+        public Comment(Dispatch dispatch) { }
 
-        public override bool Submit()
+        public bool Submit()
         {
-            if (!Validate())
-            {
-                return false;
-            }
-
             // TODO - Submit to Reddit, populate listing, and update properties.  --Kris
 
 
@@ -67,19 +74,7 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
-        /// Check to see if all required properties are present for submission to Reddit.
-        /// </summary>
-        /// <returns>Whether this instance is ready to submit.</returns>
-        public override bool Validate()
-        {
-            // TODO - Check required properties.  --Kris
-
-
-            return true;
-        }
-
-        /// <summary>
-        /// Query the Reddit API and populate this instance with the result.
+        /// Query the Reddit API and return an instance of this class with the result.
         /// </summary>
         /// <param name="commentId">The Reddit comment ID.</param>
         private void GetByCommentId(string commentId)

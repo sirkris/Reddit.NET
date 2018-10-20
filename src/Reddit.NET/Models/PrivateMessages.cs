@@ -44,7 +44,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Handles message composition under /message/compose.
         /// </summary>
@@ -53,8 +52,8 @@ namespace Reddit.NET.Models
         /// <param name="subject">a string no longer than 100 characters</param>
         /// <param name="text">raw markdown text</param>
         /// <param name="to">the name of an existing user</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Compose(string fromSr, string gRecaptchaResponse, string subject, string text, string to)
+        /// <returns>A generic response object containing any errors.</returns>
+        public GenericContainer Compose(string fromSr, string gRecaptchaResponse, string subject, string text, string to)
         {
             RestRequest restRequest = PrepareRequest("api/compose", Method.POST);
 
@@ -65,7 +64,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("to", to);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
@@ -159,7 +158,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// This endpoint is a listing.
         /// </summary>
@@ -173,8 +171,8 @@ namespace Reddit.NET.Models
         /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object GetMessages(string where, bool mark, string mid, string after, string before, bool includeCategories, int count = 0,
+        /// <returns>A list of messages.</returns>
+        public MessageContainer GetMessages(string where, bool mark, string mid, string after, string before, bool includeCategories, int count = 0,
             int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("message/" + where);
@@ -189,7 +187,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<MessageContainer>(ExecuteRequest(restRequest));
         }
     }
 }

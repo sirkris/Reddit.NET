@@ -8,11 +8,8 @@ using System.Collections.Generic;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class Listing
+    public class Post
     {
-        [JsonProperty("kind")]
-        public string Kind;
-
         [JsonProperty("approved_at_utc")]
         [JsonConverter(typeof(TimestampConvert))]
         public DateTime ApprovedAtUTC;
@@ -24,7 +21,7 @@ namespace Reddit.NET.Models.Structures
         public string SelfText;
 
         [JsonProperty("user_reports")]
-        public List<Dictionary<string, int>> UserReports;
+        public object UserReports;
 
         [JsonProperty("saved")]
         public bool Saved;
@@ -171,7 +168,7 @@ namespace Reddit.NET.Models.Structures
         public string PostHint;
 
         [JsonProperty("content_categories")]
-        public string ContentCategories;
+        public object ContentCategories;
 
         [JsonProperty("is_self")]
         public bool IsSelf;
@@ -334,7 +331,7 @@ namespace Reddit.NET.Models.Structures
         // Below are comment-specific properties.  --Kris
 
         [JsonProperty("replies")]
-        public List<Listing> Replies;
+        public List<Post> Replies;
 
         [JsonProperty("body_html")]
         public string BodyHTML;
@@ -363,27 +360,25 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("depth")]
         public int Depth;
 
-        public Listing(Post post)
+        [JsonProperty("sr_detail")]
+        public Subreddit SrDetail;
+
+        public Post(Controllers.Post post)
         {
             ImportFromPost(post);
         }
 
-        public Listing(SelfPost selfPost)
+        public Post(SelfPost selfPost)
         {
             ImportFromSelfPost(selfPost);
         }
 
-        public Listing(LinkPost linkPost)
+        public Post(LinkPost linkPost)
         {
             ImportFromLinkPost(linkPost);
         }
 
-        public Listing(Comment comment)
-        {
-            ImportFromComment(comment);
-        }
-
-        private void ImportFromPost(Post post)
+        private void ImportFromPost(Controllers.Post post)
         {
             this.Subreddit = post.Subreddit;
             this.Title = post.Title;
@@ -419,21 +414,6 @@ namespace Reddit.NET.Models.Structures
             this.ThumbnailWidth = linkPost.ThumbnailWidth;
         }
 
-        private void ImportFromComment(Comment comment)
-        {
-            ImportFromPost(comment);
-
-            this.Replies = comment.Replies;
-            this.Body = comment.Body;
-            this.BodyHTML = comment.BodyHTML;
-            this.ParentId = comment.ParentId;
-            this.CollapsedReason = comment.CollapsedReason;
-            this.Collapsed = comment.Collapsed;
-            this.IsSubmitter = comment.IsSubmitter;
-            this.ScoreHidden = comment.ScoreHidden;
-            this.Depth = comment.Depth;
-        }
-
-        public Listing() { }
+        public Post() { }
     }
 }

@@ -151,28 +151,30 @@ namespace Reddit.NET.Models
         /// Get user data by account IDs.
         /// </summary>
         /// <param name="ids">A comma-separated list of account fullnames</param>
-        /// <returns>A user object.</returns>
-        public object UserDataByAccountIds(string ids)
+        /// <returns>A dictionary of user summary objects.</returns>
+        public Dictionary<string, UserSummary> UserDataByAccountIds(string ids)
         {
             RestRequest restRequest = PrepareRequest("api/user_data_by_account_ids");
 
             restRequest.AddParameter("ids", ids);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<Dictionary<string, UserSummary>>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
         /// Check whether a username is available for registration.
         /// </summary>
         /// <param name="user">a valid, unused username</param>
-        /// <returns>Boolean value or JSON object containing errors.</returns>
-        public object UsernameAvailable(string user)
+        /// <returns>Boolean or null if error (i.e. invalid username).</returns>
+        public bool? UsernameAvailable(string user)
         {
             RestRequest restRequest = PrepareRequest("api/username_available");
 
             restRequest.AddParameter("user", user);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            object res = JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+
+            return (res != null && bool.TryParse(res.ToString(), out bool dump) ? (bool?)res : null);
         }
 
         // TODO - Needs testing.
@@ -222,9 +224,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="username">A valid, existing reddit username</param>
         /// <returns>A list of trophies.</returns>
-        public object Trophies(string username)
+        public TrophyList Trophies(string username)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/user/" + username + "/trophies"));
+            return JsonConvert.DeserializeObject<TrophyList>(ExecuteRequest("api/v1/user/" + username + "/trophies"));
         }
 
         /// <summary>
@@ -232,21 +234,20 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="username">the name of an existing user</param>
         /// <returns>A user listing.</returns>
-        public object About(string username)
+        public UserChild About(string username)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("user/" + username + "/about"));
+            return JsonConvert.DeserializeObject<UserChild>(ExecuteRequest("user/" + username + "/about"));
         }
 
         /// <summary>
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
-        /// <param name="where">One of (overview, submitted, comments, upvotes, downvoted, hidden, saved, gilded)</param>
+        /// <param name="where">One of (overview, submitted, upvotes, downvoted, hidden, saved, gilded)</param>
         /// <param name="context">an integer between 2 and 10</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="sort">one of (hot, new, top, controversial)</param>
         /// <param name="t">one of (hour, day, week, month, year, all)</param>
-        /// <param name="type">one of (links, comments)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories">boolean value</param>
@@ -254,7 +255,7 @@ namespace Reddit.NET.Models
         /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of objects containing the requested data.</returns>
-        public ListingContainer History(string username, string where, int context, string show, string sort, string t, string type,
+        public PostContainer PostHistory(string username, string where, int context, string show, string sort, string t,
             string after, string before, bool includeCategories, int count = 0, int limit = 25, bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
@@ -263,15 +264,51 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sort", sort);
             restRequest.AddParameter("t", t);
-            restRequest.AddParameter("type", type);
+            restRequest.AddParameter("type", "links");
             restRequest.AddParameter("after", after);
             restRequest.AddParameter("before", before);
             restRequest.AddParameter("include_categories", includeCategories);
             restRequest.AddParameter("count", count);
             restRequest.AddParameter("limit", limit);
             restRequest.AddParameter("sr_detail", srDetail);
-            
-            return JsonConvert.DeserializeObject<ListingContainer>(ExecuteRequest(restRequest));
+
+            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// This endpoint is a listing.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="where">One of (comments, saved, gilded)</param>
+        /// <param name="context">an integer between 2 and 10</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="sort">one of (hot, new, top, controversial)</param>
+        /// <param name="t">one of (hour, day, week, month, year, all)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of objects containing the requested data.</returns>
+        public CommentContainer CommentHistory(string username, string where, int context, string show, string sort, string t,
+            string after, string before, bool includeCategories, int count = 0, int limit = 25, bool srDetail = false)
+        {
+            RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
+
+            restRequest.AddParameter("context", context);
+            restRequest.AddParameter("show", show);
+            restRequest.AddParameter("sort", sort);
+            restRequest.AddParameter("t", t);
+            restRequest.AddParameter("type", "comments");
+            restRequest.AddParameter("after", after);
+            restRequest.AddParameter("before", before);
+            restRequest.AddParameter("include_categories", includeCategories);
+            restRequest.AddParameter("count", count);
+            restRequest.AddParameter("limit", limit);
+            restRequest.AddParameter("sr_detail", srDetail);
+
+            return JsonConvert.DeserializeObject<CommentContainer>(ExecuteRequest(restRequest));
         }
     }
 }

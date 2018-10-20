@@ -14,7 +14,7 @@ namespace Reddit.NET.Controllers
         public int? ThumbnailHeight;
         public int? ThumbnailWidth;
 
-        public LinkPost(Dispatch dispatch, Listing listing) : base(dispatch, listing)
+        public LinkPost(Dispatch dispatch, Models.Structures.Post listing) : base(dispatch, listing)
         {
             this.Preview = listing.Preview;
             this.URL = listing.URL;
@@ -37,7 +37,7 @@ namespace Reddit.NET.Controllers
             this.ThumbnailHeight = thumbnailHeight;
             this.ThumbnailWidth = thumbnailWidth;
 
-            this.Listing = new Listing(this);
+            this.Listing = new Models.Structures.Post(this);
         }
 
         public LinkPost(Dispatch dispatch) : base(dispatch) { }

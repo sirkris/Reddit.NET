@@ -1,7 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Reddit.NET.Controllers;
-using Reddit.NET.Models.Converters;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,12 +6,12 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class ListingContainer
+    public class MessageChild
     {
         [JsonProperty("kind")]
         public string Kind;
 
         [JsonProperty("data")]
-        public ListingData Data;
+        public Message Data;
     }
 }

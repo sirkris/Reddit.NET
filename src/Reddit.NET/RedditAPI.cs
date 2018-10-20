@@ -31,18 +31,19 @@ namespace Reddit.NET
             }
             else
             {
+                // TODO - Support for app-only authentication.  --Kris
                 throw new ArgumentException("Refresh token and access token can't both be empty.");
             }
         }
 
-        public Comment Comment(ModelStructures.Listing listing)
+        public Comment Comment(ModelStructures.Comment listing)
         {
             return new Comment(Models, listing);
         }
 
         public Comment Comment(string subreddit, string title, string author, string body, string bodyHtml,
             string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<ModelStructures.Listing> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+            ModelStructures.CommentContainer replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
@@ -55,7 +56,7 @@ namespace Reddit.NET
             return new Comment(Models);
         }
 
-        public LinkPost LinkPost(ModelStructures.Listing listing)
+        public LinkPost LinkPost(ModelStructures.Post listing)
         {
             return new LinkPost(Models, listing);
         }
@@ -75,7 +76,7 @@ namespace Reddit.NET
             return new LinkPost(Models);
         }
 
-        public SelfPost SelfPost(ModelStructures.Listing listing)
+        public SelfPost SelfPost(ModelStructures.Post listing)
         {
             return new SelfPost(Models, listing);
         }
@@ -129,6 +130,38 @@ namespace Reddit.NET
         public User User()
         {
             return new User(Models);
+        }
+
+        public Subreddit Subreddit(ModelStructures.Subreddit subreddit)
+        {
+            return new Subreddit(Models, subreddit);
+        }
+
+        public Subreddit Subreddit(ModelStructures.SubredditChild subredditChild)
+        {
+            return new Subreddit(Models, subredditChild);
+        }
+
+        public Subreddit Subreddit(string name, string title, string description, string sidebar,
+            string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
+            string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
+            bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
+            bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+        {
+            return new Subreddit(Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
+                wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
+                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
+        }
+
+        public Subreddit Subreddit(string name, string title = "", string description = "", string sidebar = "")
+        {
+            return new Subreddit(Models, name, title, description, sidebar);
+        }
+
+        public Subreddit Subreddit()
+        {
+            return new Subreddit(Models);
         }
     }
 }

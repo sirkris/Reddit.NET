@@ -88,9 +88,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit with the emojis</param>
         /// <returns>Emojis.</returns>
-        public object All(string subreddit)
+        public SnoomojiContainer All(string subreddit)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/" + subreddit + "/emojis/all"));
+            return JsonConvert.DeserializeObject<SnoomojiContainer>(ExecuteRequest("api/v1/" + subreddit + "/emojis/all"));
         }
     }
 }

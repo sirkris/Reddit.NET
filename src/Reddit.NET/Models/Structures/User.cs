@@ -11,16 +11,6 @@ namespace Reddit.NET.Models.Structures
     [Serializable]
     public class User
     {
-        [JsonProperty("loid")]
-        public string Loid;
-
-        [JsonProperty("loid_created")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime LoidCreated;
-
-        [JsonProperty("kind")]
-        public string Kind;
-
         [JsonProperty("is_employee")]
         public bool IsEmployee;
 

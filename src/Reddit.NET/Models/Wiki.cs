@@ -139,9 +139,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         /// <returns>A list of wiki pages.</returns>
-        public object Pages(string subreddit = null)
+        public WikiPageListing Pages(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "wiki/pages"));
+            return JsonConvert.DeserializeObject<WikiPageListing>(ExecuteRequest(Sr(subreddit) + "wiki/pages"));
         }
 
         /// <summary>
@@ -155,7 +155,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of wiki pages.</returns>
-        public object Revisions(string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        public WikiPageRevisionContainer Revisions(string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/revisions");
 
@@ -166,7 +166,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<WikiPageRevisionContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -182,7 +182,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of revisions.</returns>
-        public object PageRevisions(string page, string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        public WikiPageRevisionContainer PageRevisions(string page, string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/revisions/" + page);
 
@@ -193,7 +193,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<WikiPageRevisionContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -202,9 +202,9 @@ namespace Reddit.NET.Models
         /// <param name="page">the name of an existing wiki page</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         /// <returns>An object containing wiki page settings.</returns>
-        public object GetPermissions(string page, string subreddit = null)
+        public WikiPageSettingsContainer GetPermissions(string page, string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "wiki/settings/" + page));
+            return JsonConvert.DeserializeObject<WikiPageSettingsContainer>(ExecuteRequest(Sr(subreddit) + "wiki/settings/" + page));
         }
 
         // TODO - Needs testing.
@@ -235,14 +235,14 @@ namespace Reddit.NET.Models
         /// <param name="v2">a wiki revision ID</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         /// <returns>An object containing wiki page data.</returns>
-        public object Page(string page, string v, string v2, string subreddit = null)
+        public WikiPageContainer Page(string page, string v, string v2, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/" + page);
 
             restRequest.AddParameter("v", v);
             restRequest.AddParameter("v2", v2);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<WikiPageContainer>(ExecuteRequest(restRequest));
         }
     }
 }

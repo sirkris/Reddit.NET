@@ -37,13 +37,13 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="scopes">(optional) An OAuth2 scope string</param>
         /// <returns>A list of scopes.</returns>
-        public object Scopes(string scopes = null)
+        public Dictionary<string, Scope> Scopes(string scopes = null)
         {
             RestRequest restRequest = PrepareRequest("api/v1/scopes");
 
             restRequest.AddParameter("scopes", scopes);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<Dictionary<string, Scope>>(ExecuteRequest(restRequest));
         }
     }
 }
