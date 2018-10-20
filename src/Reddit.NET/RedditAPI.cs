@@ -31,6 +31,7 @@ namespace Reddit.NET
             }
             else
             {
+                // TODO - Support for app-only authentication.  --Kris
                 throw new ArgumentException("Refresh token and access token can't both be empty.");
             }
         }
