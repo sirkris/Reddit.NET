@@ -154,8 +154,8 @@ namespace Example
                     "public", "modonly")));
                 File.WriteAllText("Users.FriendInviteMod.json", JsonConvert.SerializeObject(reddit.Models.Users.Friend(null, null, null, null, 999, "RedditDotNetBot", "+all",
                     "moderator_invite", "RedditDotNETBot")));
-                */File.WriteAllText("LinksAndComments.SubmitLinkPost.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
-                    "link", false, true, null, true, false, "RedditDotNETBot", "", "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null)));/*
+                File.WriteAllText("LinksAndComments.SubmitLinkPost.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
+                    "link", false, true, null, true, false, "RedditDotNETBot", "", "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null)));
                 File.WriteAllText("LinksAndComments.Comment.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Comment(false, "", "This is a test comment.  So there.", "t3_9nhy54")));
                 
 
@@ -168,8 +168,11 @@ namespace Example
                 File.WriteAllText("Users.PostHistoryGilded.json", JsonConvert.SerializeObject(reddit.Models.Users.PostHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false)));
                 File.WriteAllText("Users.CommentHistoryComments.json", JsonConvert.SerializeObject(reddit.Models.Users.CommentHistory("KrisCraig", "comments", 10, "given", "top", "all", null, null, false)));
                 File.WriteAllText("Users.CommentHistorySaved.json", JsonConvert.SerializeObject(reddit.Models.Users.CommentHistory("KrisCraig", "saved", 10, "given", "top", "all", null, null, false)));
-                File.WriteAllText("Users.CommentHistoryGilded.json", JsonConvert.SerializeObject(reddit.Models.Users.CommentHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false)));*/
+                File.WriteAllText("Users.CommentHistoryGilded.json", JsonConvert.SerializeObject(reddit.Models.Users.CommentHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false)));
 
+                File.WriteAllText("PrivateMessages.GetMessagesInbox.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.GetMessages("inbox", false, "", "", "", false)));
+                File.WriteAllText("PrivateMessages.GetMessagesUnread.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.GetMessages("unread", false, "", "", "", false)));
+                File.WriteAllText("PrivateMessages.GetMessagesSent.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.GetMessages("sent", false, "", "", "", false)));*/
             }
         }
     }
