@@ -3,9 +3,8 @@ using Reddit.NET;
 using Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
-using System.Data;
 
-namespace Reddit.NETTests
+namespace Reddit.NETTests.ModelTests
 {
     [TestClass]
     public class AccountTests : BaseTests
