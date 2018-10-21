@@ -26,8 +26,17 @@ namespace Reddit.NETTests
 
         private Dictionary<string, string> GetData()
         {
+            string xmlData;
+            using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Reddit.NETTestsData.xml"))
+            {
+                using (System.IO.StreamReader streamReader = new System.IO.StreamReader(stream))
+                {
+                    xmlData = streamReader.ReadToEnd();
+                }
+            }
+
             System.Xml.XmlDocument xmlDocument = new System.Xml.XmlDocument();
-            xmlDocument.Load(AppDomain.CurrentDomain.BaseDirectory + @"\..\..\..\..\Reddit.NETTestsData.xml");
+            xmlDocument.LoadXml(xmlData);
 
             return new Dictionary<string, string>
             {
@@ -35,7 +44,7 @@ namespace Reddit.NETTests
                 { "RefreshToken", xmlDocument.GetElementsByTagName("RefreshToken")[0].InnerText },
                 { "Subreddit", xmlDocument.GetElementsByTagName("Subreddit")[0].InnerText }
             };
-
+            
             // TODO - Replace above workaround with commented code below for all test classes after .NET Core adds support for DataSourceAttribute.  --Kris
             // https://github.com/Microsoft/testfx/issues/233
             /*return new Dictionary<string, string>
