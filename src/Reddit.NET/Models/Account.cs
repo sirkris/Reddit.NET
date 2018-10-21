@@ -26,20 +26,21 @@ namespace Reddit.NET.Models
         /// Return a breakdown of subreddit karma.
         /// </summary>
         /// <returns>A breakdown of subreddit karma.</returns>
-        public List<UserKarma> Karma()
+        public UserKarmaContainer Karma()
         {
-            return JsonConvert.DeserializeObject<List<UserKarma>>(ExecuteRequest("api/v1/me/karma.json"));
+            return JsonConvert.DeserializeObject<UserKarmaContainer>(ExecuteRequest("api/v1/me/karma.json"));
         }
 
         /// <summary>
         /// Return the preference settings of the logged in user.
         /// </summary>
         /// <returns>The preference settings of the logged in user.</returns>
-        public object Prefs()
+        public AccountPrefs Prefs()
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/prefs.json"));
+            return JsonConvert.DeserializeObject<AccountPrefs>(ExecuteRequest("api/v1/me/prefs.json"));
         }
 
+        // TODO - Needs testing.  --Kris
         /// <summary>
         /// Update preferences.
         /// </summary>
@@ -58,15 +59,15 @@ namespace Reddit.NET.Models
         /// Return a list of trophies for the current user.
         /// </summary>
         /// <returns>A list of trophies for the current user.</returns>
-        public object Trophies()
+        public TrophyList Trophies()
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/trophies.json"));
+            return JsonConvert.DeserializeObject<TrophyList>(ExecuteRequest("api/v1/me/trophies.json"));
         }
 
         /// <summary>
         /// Get users with whom the current user has friended, blocked, or trusted.
         /// </summary>
-        /// <param name="where">One of (friends, blocked, messaging, trusted)</param>
+        /// <param name="where">One of (friends, messaging)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="count">a positive integer (default: 0)</param>
@@ -75,7 +76,7 @@ namespace Reddit.NET.Models
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="includeCategories">boolean value</param>
         /// <returns>A listing of users.</returns>
-        public object Prefs(string where, string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
+        public List<UserPrefsContainer> PrefsList(string where, string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
             bool srDetail = false, bool includeCategories = true)
         {
             RestRequest restRequest = PrepareRequest("prefs/" + where);
@@ -88,7 +89,35 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("sr_detail", srDetail);
             restRequest.AddParameter("include_categories", includeCategories);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<List<UserPrefsContainer>>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Get users with whom the current user has friended, blocked, or trusted.
+        /// </summary>
+        /// <param name="where">One of (blocked, trusted)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <returns>A listing of users.</returns>
+        public UserPrefsContainer PrefsSingle(string where, string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
+            bool srDetail = false, bool includeCategories = true)
+        {
+            RestRequest restRequest = PrepareRequest("prefs/" + where);
+
+            restRequest.AddParameter("after", after);
+            restRequest.AddParameter("before", before);
+            restRequest.AddParameter("count", count);
+            restRequest.AddParameter("limit", limit);
+            restRequest.AddParameter("show", show);
+            restRequest.AddParameter("sr_detail", srDetail);
+            restRequest.AddParameter("include_categories", includeCategories);
+
+            return JsonConvert.DeserializeObject<UserPrefsContainer>(ExecuteRequest(restRequest));
         }
     }
 }
