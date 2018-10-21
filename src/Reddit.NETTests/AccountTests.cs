@@ -8,53 +8,8 @@ using System.Data;
 namespace Reddit.NETTests
 {
     [TestClass]
-    public class AccountTests
+    public class AccountTests : BaseTests
     {
-        private TestContext TestContextInstance;
-
-        public TestContext TestContext
-        {
-            get
-            {
-                return TestContextInstance;
-            }
-            set
-            {
-                TestContextInstance = value;
-            }
-        }
-
-        private Dictionary<string, string> GetData()
-        {
-            string xmlData;
-            using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Reddit.NETTestsData.xml"))
-            {
-                using (System.IO.StreamReader streamReader = new System.IO.StreamReader(stream))
-                {
-                    xmlData = streamReader.ReadToEnd();
-                }
-            }
-
-            System.Xml.XmlDocument xmlDocument = new System.Xml.XmlDocument();
-            xmlDocument.LoadXml(xmlData);
-
-            return new Dictionary<string, string>
-            {
-                { "AppId", xmlDocument.GetElementsByTagName("AppId")[0].InnerText },
-                { "RefreshToken", xmlDocument.GetElementsByTagName("RefreshToken")[0].InnerText },
-                { "Subreddit", xmlDocument.GetElementsByTagName("Subreddit")[0].InnerText }
-            };
-            
-            // TODO - Replace above workaround with commented code below for all test classes after .NET Core adds support for DataSourceAttribute.  --Kris
-            // https://github.com/Microsoft/testfx/issues/233
-            /*return new Dictionary<string, string>
-            {
-                { "AppId", (string) TestContext.DataRow["AppId"] },
-                { "RefreshToken", (string) TestContext.DataRow["RefreshToken"] },
-                { "Subreddit", (string) TestContext.DataRow["Subreddit"] }
-            };*/
-        }
-
         [TestMethod]
         // TODO - Uncomment below and add to other TestMethods in all test classes when .NET Core adds support for this.  --Kris
         /*[DeploymentItem("Reddit.NETTests\\Reddit.NETTestsData.xml")]
