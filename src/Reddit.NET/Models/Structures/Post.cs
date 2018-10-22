@@ -331,7 +331,7 @@ namespace Reddit.NET.Models.Structures
         // Below are comment-specific properties.  --Kris
 
         [JsonProperty("replies")]
-        public List<Post> Replies;
+        public object Replies;
 
         [JsonProperty("body_html")]
         public string BodyHTML;

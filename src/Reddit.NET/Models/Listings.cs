@@ -215,7 +215,7 @@ namespace Reddit.NET.Models
         /// <returns>A random listing.</returns>
         public List<PostContainer> Random(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject<List<PostContainer>>(ExecuteRequest(Sr(subreddit) + "random"));
+             return JsonConvert.DeserializeObject<List<PostContainer>>(ExecuteRequest(Sr(subreddit) + "random"));
         }
 
         /// <summary>
