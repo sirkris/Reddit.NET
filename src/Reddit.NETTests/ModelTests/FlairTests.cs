@@ -22,6 +22,7 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsTrue(flairs.Count > 0);
         }
 
+        [TestMethod]
         public void UserFlairV2()
         {
             Dictionary<string, string> testData = GetData();
