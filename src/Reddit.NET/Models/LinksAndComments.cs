@@ -94,21 +94,45 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Return a listing of things specified by their fullnames.
         /// Only Links, Comments, and Subreddits are allowed.
         /// </summary>
         /// <param name="id">A comma-separated list of thing fullnames</param>
         /// <param name="subreddit">The subreddit with the listing.</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Info(string id, string subreddit = null)
+        /// <returns>The requested listings.</returns>
+        public List<(List<Post>, List<Comment>, List<Subreddit>)> Info(string id, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/info");
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            DynamicListingContainer res = JsonConvert.DeserializeObject<DynamicListingContainer>(ExecuteRequest(restRequest));
+
+            List<Post> posts = new List<Post>();
+            List<Comment> comments = new List<Comment>();
+            List<Subreddit> subreddits = new List<Subreddit>();
+
+            foreach (DynamicListingChild child in res.Data.Children)
+            {
+                switch (child.Kind)
+                {
+                    case "t3":
+                        posts.Add(JsonConvert.DeserializeObject<Post>(JsonConvert.SerializeObject(child.Data)));
+                        break;
+                    case "t1":
+                        comments.Add(JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data)));
+                        break;
+                    case "t5":
+                        subreddits.Add(JsonConvert.DeserializeObject<Subreddit>(JsonConvert.SerializeObject(child.Data)));
+                        break;
+                }
+            }
+
+            return new List<(List<Post>, List<Comment>, List<Subreddit>)>
+            {
+                (posts, comments, subreddits)
+            };
         }
 
         // TODO - Needs testing.

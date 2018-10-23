@@ -75,5 +75,22 @@ namespace Reddit.NETTests.ModelTests
 
             Assert.IsNotNull(modQueue);
         }
+
+        // Requires existing subreddit with mod privilages.  --Kris
+        [TestMethod]
+        public void Approve()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            Post post = reddit.Models.Listings.New(null, null, true, testData["Subreddit"]).Data.Children[0].Data;
+
+            reddit.Models.Moderation.Approve(post.Name);
+
+            post = reddit.Models.LinksAndComments.Info(post.Name)[0].Item1[0];
+
+            Assert.IsNotNull(post);
+            Assert.IsTrue(post.Approved);
+        }
     }
 }
