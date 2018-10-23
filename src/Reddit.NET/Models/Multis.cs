@@ -282,9 +282,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="multipath">multireddit url path</param>
         /// <returns>An object containing a description.</returns>
-        public object GetDescription(string multipath)
+        public LabeledMultiDescriptionContainer GetDescription(string multipath)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/multi/" + multipath + "/description"));
+            return JsonConvert.DeserializeObject<LabeledMultiDescriptionContainer>(ExecuteRequest("api/multi/" + multipath + "/description"));
         }
 
         // TODO - Needs testing.
