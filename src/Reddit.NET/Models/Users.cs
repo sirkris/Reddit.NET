@@ -54,7 +54,7 @@ namespace Reddit.NET.Models
         /// <param name="type">one of (friend, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
         /// <param name="subreddit">A subreddit</param>
         /// <returns>An object indicating any errors.</returns>
-        public object Friend(string banContext, string banMessage, string banReason, string container, int duration, string name,
+        public GenericContainer Friend(string banContext, string banMessage, string banReason, string container, int duration, string name,
             string permissions, string type, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/friend", Method.POST);
@@ -69,7 +69,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("type", type);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
