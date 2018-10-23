@@ -18,7 +18,7 @@ namespace Reddit.NETTests.ModelTests
 
             MessageContainer messages = reddit.Models.PrivateMessages.GetMessages("inbox", false, "", "", "", false);
 
-
+            Assert.IsNotNull(messages);
         }
 
         [TestMethod]
@@ -29,7 +29,7 @@ namespace Reddit.NETTests.ModelTests
 
             MessageContainer messages = reddit.Models.PrivateMessages.GetMessages("unread", false, "", "", "", false);
 
-
+            Assert.IsNotNull(messages);
         }
 
         [TestMethod]
@@ -40,7 +40,7 @@ namespace Reddit.NETTests.ModelTests
 
             MessageContainer messages = reddit.Models.PrivateMessages.GetMessages("sent", false, "", "", "", false);
 
-
+            Assert.IsNotNull(messages);
         }
 
         [TestMethod]
@@ -51,7 +51,7 @@ namespace Reddit.NETTests.ModelTests
 
             GenericContainer res = reddit.Models.PrivateMessages.Compose("", "", "Test Message", "This is a test.  So there.", "RedditDotNetBot");
 
-
+            Assert.IsNotNull(res);
         }
 
         [TestMethod]
@@ -61,6 +61,8 @@ namespace Reddit.NETTests.ModelTests
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
             GenericContainer res = reddit.Models.PrivateMessages.Compose(testData["Subreddit"], "", "Test Message", "This is a test.  So there.", "RedditDotNetBot");
+
+            Assert.IsNotNull(res);
         }
     }
 }
