@@ -54,6 +54,7 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(res);
         }
 
+        // Requires existing test subreddit.  --Kris
         [TestMethod]
         public void ComposeWithSr()
         {
