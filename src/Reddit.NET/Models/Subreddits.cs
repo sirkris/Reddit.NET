@@ -27,7 +27,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>An object containing the requested data.</returns>
-        public object About(string where, string after, string before, string user, bool includeCategories, string subreddit = null, int count = 0,
+        public DynamicShortListingContainer About(string where, string after, string before, string user, bool includeCategories, string subreddit = null, int count = 0,
             int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "about/" + where);
@@ -41,7 +41,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<DynamicShortListingContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Reddit.NET.Models
         /// <param name="includeUnadvertisable">boolean value</param>
         /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
         /// <returns>A list of subreddit names.</returns>
-        public object SearchRedditNames(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
+        public SubredditNames SearchRedditNames(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
         {
             RestRequest restRequest = PrepareRequest("api/search_reddit_names");
 
@@ -163,7 +163,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("include_unadvertisable", includeUnadvertisable);
             restRequest.AddParameter("query", query);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditNames>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -238,7 +238,7 @@ namespace Reddit.NET.Models
         /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
         /// <returns>An object indicating any errors.</returns>
-        public object SiteAdmin(bool allOriginalContent, bool allowDiscovery, bool allowImages, bool allowPostCrossposts, bool allowTop,
+        public GenericContainer SiteAdmin(bool allOriginalContent, bool allowDiscovery, bool allowImages, bool allowPostCrossposts, bool allowTop,
             bool allowVideos, bool collapseDeletedComments, string description, bool excludeBannedModqueue, bool freeFormReports,
             string gRecaptchaResponse, string headerTitle, bool hideAds, string keyColor, string lang, string linkType, string name, bool originalContentTagEnabled,
             bool over18, string publicDescription, bool showMedia, bool showMediaPreview, string spamComments, string spamLinks, string spamSelfPosts,
@@ -289,7 +289,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("wikimode", wikiMode);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace Reddit.NET.Models
         /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
         /// <returns>An object indicating any errors.</returns>
-        public object SiteAdmin(Subreddit subreddit, bool allowPostCrossposts, bool allowTop, bool excludeBannedModqueue, bool freeFormReports,
+        public GenericContainer SiteAdmin(Subreddit subreddit, bool allowPostCrossposts, bool allowTop, bool excludeBannedModqueue, bool freeFormReports,
             string gRecaptchaResponse, string linkType, string spamComments, string spamLinks, string spamSelfPosts, string sr, string themeSr,
             bool themeSrUpdate, string wikiMode, int wikiEditAge = 0, int wikiEditKarma = 0)
         {
@@ -337,9 +337,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>An object containing submission text.</returns>
-        public object SubmitText(string subreddit = null)
+        public SubredditSubmitText SubmitText(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/submit_text"));
+            return JsonConvert.DeserializeObject<SubredditSubmitText>(ExecuteRequest(Sr(subreddit) + "api/submit_text"));
         }
 
         // TODO - Needs testing.
@@ -556,9 +556,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>Subreddit traffic data.</returns>
-        public object Traffic(string subreddit)
+        public Traffic Traffic(string subreddit)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about/traffic"));
+            return JsonConvert.DeserializeObject<Traffic>(ExecuteRequest("r/" + subreddit + "/about/traffic"));
         }
 
         /*
