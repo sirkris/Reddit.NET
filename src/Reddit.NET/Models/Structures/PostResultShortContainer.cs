@@ -6,9 +6,9 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class PostResultData
+    public class PostResultShortContainer
     {
-        [JsonProperty("things")]
-        public List<PostChild> Things;
+        [JsonProperty("json")]
+        public PostResultShort JSON;
     }
 }

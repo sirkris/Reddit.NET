@@ -181,7 +181,20 @@ namespace Example
                 File.WriteAllText("LinksAndComments.InfoComment.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Info("t1_e7s0vb1")));
                 File.WriteAllText("LinksAndComments.InfoLinkCommentSub.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Info("t3_9nhy54,t1_e7s0vb1,t5_2r5rp")));
                 File.WriteAllText("LinksAndComments.SubmitSelfPost.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
-                                    "self", false, true, null, true, false, "RedditDotNETBot", "This is a self-post.", "Test post", null, null)));*/
+                                    "self", false, true, null, true, false, "RedditDotNETBot", "This is a self-post.", "Test post", null, null)));
+                File.WriteAllText("LinksAndComments.EditUserText.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.EditUserText(false, null,
+                    "(redacted)", "t3_9r7uo1")));
+                File.WriteAllText("LinksAndComments.Hide.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Hide("t3_9nhy54")));
+                File.WriteAllText("LinksAndComments.Unhide.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Unhide("t3_9nhy54")));
+                File.WriteAllText("LinksAndComments.Lock.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Lock("t3_9nhy54")));
+                File.WriteAllText("LinksAndComments.Unlock.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Unlock("t3_9nhy54")));
+                File.WriteAllText("LinksAndComments.Save.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Save("RDNTestCat", "t3_9nhy54")));
+                File.WriteAllText("LinksAndComments.Unsave.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Unsave("t3_9nhy54")));
+                File.WriteAllText("LinksAndComments.MarkNSFW.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.MarkNSFW("t3_9nhy54")));
+                File.WriteAllText("LinksAndComments.UnmarkNSFW.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.UnmarkNSFW("t3_9nhy54")));
+                File.WriteAllText("LinksAndComments.Spoiler.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Spoiler("t3_9nhy54")));
+                File.WriteAllText("LinksAndComments.Unspoiler.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Unspoiler("t3_9nhy54")));*/
+
             }
         }
     }

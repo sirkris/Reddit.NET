@@ -21,7 +21,7 @@ namespace Reddit.NETTests.ModelTests
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
             // Begin temp code.
-            PostResultContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
+            PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
                     "link", false, true, null, true, false, testData["Subreddit"], "",
                     "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
 
@@ -46,7 +46,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            PostResultContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
+            PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
                     "link", false, true, null, true, false, testData["Subreddit"], "",
                     "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
 
@@ -61,7 +61,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            PostResultContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "", "self", false, true, null, true, false, 
+            PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "", "self", false, true, null, true, false, 
                 testData["Subreddit"], "The Lizard People are coming and only super-intelligent robots like me can stop them.  Just saying.",
                 "We bots are your protectors!", null, null);
 
@@ -108,6 +108,47 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(infoLinkCommentSub.Subreddits);
             Assert.IsTrue(infoLinkCommentSub.Subreddits.Count == 1);
             Assert.IsTrue(infoLinkCommentSub.Subreddits[0].Name.Equals(subName));
+        }
+
+        [TestMethod]
+        public void ModifyPost()
+        {
+            // Create a post, then use it to test the various endpoints that require an existing post.  --Kris
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "", "self", false, true, null, true, false,
+                testData["Subreddit"], "The Lizard People are coming and only super-intelligent robots like me can stop them.  Just saying.",
+                "We bots are your protectors!", null, null);
+
+            Assert.IsNotNull(postResult);
+            Assert.IsNotNull(postResult.JSON);
+            Assert.IsNotNull(postResult.JSON.Data);
+
+            PostResultContainer postResultEdited = reddit.Models.LinksAndComments.EditUserText(false, null, "(redacted)", postResult.JSON.Data.Name);
+
+            Assert.IsNotNull(postResultEdited);
+            Assert.IsNotNull(postResultEdited.JSON);
+            Assert.IsNotNull(postResultEdited.JSON.Data);
+            Assert.IsNotNull(postResultEdited.JSON.Data.Things);
+            Assert.IsTrue(postResultEdited.JSON.Data.Things.Count == 1);
+            Assert.IsNotNull(postResultEdited.JSON.Data.Things[0].Data);
+            Assert.IsTrue(postResultEdited.JSON.Data.Things[0].Data.Name.Equals(postResult.JSON.Data.Name));
+
+            // These are all empty returns.  Exception is thrown if non-success response is returned.  --Kris
+            // TODO - Make these voids?  --Kris
+            reddit.Models.LinksAndComments.Hide(postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.Unhide(postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.Lock(postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.Unlock(postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.Save("RDNTestCat", postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.Unsave(postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.MarkNSFW(postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.UnmarkNSFW(postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.Spoiler(postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.Unspoiler(postResult.JSON.Data.Name);
+
+
         }
     }
 }
