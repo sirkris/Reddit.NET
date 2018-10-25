@@ -176,11 +176,12 @@ namespace Example
                 File.WriteAllText("PrivateMessages.Compose.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.Compose("", "", "Test Message", "This is a test.  So there.", "RedditDotNetBot")));
                 File.WriteAllText("PrivateMessages.ComposeWithSr.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.Compose("StillSandersForPres", "", "Test Message", "This is a test.  So there.", 
                     "RedditDotNetBot")));
-
+                
                 File.WriteAllText("LinksAndComments.Info.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Info("t3_9nhy54")));
                 File.WriteAllText("LinksAndComments.InfoComment.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Info("t1_e7s0vb1")));
-                File.WriteAllText("LinksAndComments.InfoLinkCommentSub.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Info("t3_9nhy54,t1_e7s0vb1,t5_2r5rp")));*/
-
+                File.WriteAllText("LinksAndComments.InfoLinkCommentSub.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Info("t3_9nhy54,t1_e7s0vb1,t5_2r5rp")));
+                File.WriteAllText("LinksAndComments.SubmitSelfPost.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
+                                    "self", false, true, null, true, false, "RedditDotNETBot", "This is a self-post.", "Test post", null, null)));*/
             }
         }
     }

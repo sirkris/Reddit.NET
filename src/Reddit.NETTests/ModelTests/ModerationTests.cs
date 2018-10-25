@@ -87,7 +87,7 @@ namespace Reddit.NETTests.ModelTests
 
             reddit.Models.Moderation.Approve(post.Name);
 
-            post = reddit.Models.LinksAndComments.Info(post.Name)[0].Item1[0];
+            post = reddit.Models.LinksAndComments.Info(post.Name).Posts[0];
 
             Assert.IsNotNull(post);
             Assert.IsTrue(post.Approved);
