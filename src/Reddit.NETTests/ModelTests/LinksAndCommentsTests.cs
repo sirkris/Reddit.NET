@@ -180,6 +180,8 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(suggestedSortResult);
             Assert.IsNotNull(suggestedSortResult.JSON);
             Assert.IsTrue(suggestedSortResult.JSON.Errors.Count == 0);
+
+            reddit.Models.LinksAndComments.Delete(postResult.JSON.Data.Name);
         }
 
         [TestMethod]
@@ -194,7 +196,5 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(moreChildren.Comments);
             Assert.IsNotNull(moreChildren.MoreData);
         }
-
-        
     }
 }
