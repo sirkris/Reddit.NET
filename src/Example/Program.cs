@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Reddit.NET;
 using Reddit.NET.Controllers;
+using ModelStructures = Reddit.NET.Models.Structures;
 using System;
 using System.IO;
 
@@ -29,7 +30,6 @@ namespace Example
 
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
                 /*
-                File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));
                 File.WriteAllText("Account.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Account.Trophies()));
                 File.WriteAllText("Account.PrefsFriends.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs("friends")));
                 File.WriteAllText("Account.PrefsBlocked.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs("blocked")));
@@ -207,7 +207,12 @@ namespace Example
                 File.WriteAllText("LinksAndComments.StickyOn.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.SetSubredditSticky("t3_9nhy54", 1, true, false)));
                 File.WriteAllText("LinksAndComments.StickyOff.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.SetSubredditSticky("t3_9nhy54", 1, false, false)));
                 File.WriteAllText("LinksAndComments.SetSuggestedSort.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.SetSuggestedSort("t3_9nhy54", "new")));
-                //File.WriteAllText("LinksAndComments.Delete.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Delete("t3_9riiex")));*/
+                //File.WriteAllText("LinksAndComments.Delete.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Delete("t3_9riiex")));
+
+                //ModelStructures.AccountPrefs accountPrefs = reddit.Models.Account.Prefs();
+                //accountPrefs.Autoplay = !accountPrefs.Autoplay;
+                //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(accountPrefs)));
+                File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));*/
 
             }
         }

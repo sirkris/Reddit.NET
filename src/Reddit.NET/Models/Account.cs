@@ -48,11 +48,23 @@ namespace Reddit.NET.Models
         /// <returns>(TODO - Untested)</returns>
         public object UpdatePrefs(string json)
         {
+            // TODO - API keeps returning 400.  Structure seems fine and this should work according to the API docs.  --Kris
             RestRequest restRequest = PrepareRequest("api/v1/me/prefs", Method.PATCH);
 
             restRequest.AddBody(json);
 
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+        }
+
+        // TODO - Needs testing.  --Kris
+        /// <summary>
+        /// Update preferences.
+        /// </summary>
+        /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
+        /// <returns>(TODO - Untested)</returns>
+        public object UpdatePrefs(AccountPrefs accountPrefs)
+        {
+            return UpdatePrefs(JsonConvert.SerializeObject(accountPrefs));
         }
 
         /// <summary>

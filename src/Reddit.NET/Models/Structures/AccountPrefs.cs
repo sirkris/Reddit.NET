@@ -33,7 +33,7 @@ namespace Reddit.NET.Models.Structures
         public bool VideoAutoplay;
 
         [JsonProperty("accept_pms")]
-        public object AcceptPms;  // TODO - Determine type.  --Kris
+        public string AcceptPms;
 
         [JsonProperty("third_party_site_data_personalized_content")]
         public bool ThirdPartySiteDataPersonalizedContent;
@@ -138,7 +138,10 @@ namespace Reddit.NET.Models.Structures
         public bool HighlightControversial;
 
         [JsonProperty("geopopular")]
-        public string Geopopular;
+        public string Geopopular;  // Not included in PATCH request.  --Kris
+
+        [JsonProperty("g")]
+        public string G;  // Not included in GET prefs return.  --Kris
 
         [JsonProperty("third_party_site_data_personalized_ads")]
         public bool ThirdPartySiteDataPersonalizedAds;
