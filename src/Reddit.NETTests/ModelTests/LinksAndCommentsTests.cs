@@ -180,8 +180,6 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(suggestedSortResult);
             Assert.IsNotNull(suggestedSortResult.JSON);
             Assert.IsTrue(suggestedSortResult.JSON.Errors.Count == 0);
-
-            // TODO
         }
 
         [TestMethod]
