@@ -135,9 +135,7 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(postResultEdited.JSON.Data.Things[0].Data);
             Assert.IsTrue(postResultEdited.JSON.Data.Things[0].Data.Name.Equals(postResult.JSON.Data.Name));
 
-            // These are all empty returns.  Exception is thrown if non-success response is returned.  --Kris
-            // TODO - Make these voids?  --Kris
-            reddit.Models.LinksAndComments.Hide(postResult.JSON.Data.Name);
+            // These are all empty JSON returns.  Exception is thrown if non-success response is returned.  --Kris
             reddit.Models.LinksAndComments.Unhide(postResult.JSON.Data.Name);
             reddit.Models.LinksAndComments.Lock(postResult.JSON.Data.Name);
             reddit.Models.LinksAndComments.Unlock(postResult.JSON.Data.Name);
@@ -147,8 +145,58 @@ namespace Reddit.NETTests.ModelTests
             reddit.Models.LinksAndComments.UnmarkNSFW(postResult.JSON.Data.Name);
             reddit.Models.LinksAndComments.Spoiler(postResult.JSON.Data.Name);
             reddit.Models.LinksAndComments.Unspoiler(postResult.JSON.Data.Name);
+            reddit.Models.LinksAndComments.SendReplies(postResult.JSON.Data.Name, false);
+            reddit.Models.LinksAndComments.SendReplies(postResult.JSON.Data.Name, true);
 
+            JQueryReturn reportResult = reddit.Models.LinksAndComments.Report("This is an API test.  Please disregard.",
+                    null, "This is a test.", false, "Some other reason.", "Some reason.", "Some rule reason.", "Some site reason.", "RedditDotNETBot",
+                    postResult.JSON.Data.Name, "RedditDotNetBot");
 
+            Assert.IsNotNull(reportResult);
+            Assert.IsTrue(reportResult.Success);
+
+            GenericContainer enableContestMode = reddit.Models.LinksAndComments.SetContestMode(postResult.JSON.Data.Name, true);
+            GenericContainer disableContestMode = reddit.Models.LinksAndComments.SetContestMode(postResult.JSON.Data.Name, false);
+
+            Assert.IsNotNull(enableContestMode);
+            Assert.IsNotNull(enableContestMode.JSON);
+            Assert.IsTrue(enableContestMode.JSON.Errors.Count == 0);
+            Assert.IsNotNull(disableContestMode);
+            Assert.IsNotNull(disableContestMode.JSON);
+            Assert.IsTrue(disableContestMode.JSON.Errors.Count == 0);
+
+            GenericContainer stickyOn = reddit.Models.LinksAndComments.SetSubredditSticky(postResult.JSON.Data.Name, 1, true, false);
+            GenericContainer stickyOff = reddit.Models.LinksAndComments.SetSubredditSticky(postResult.JSON.Data.Name, 1, false, false);
+
+            Assert.IsNotNull(stickyOn);
+            Assert.IsNotNull(stickyOn.JSON);
+            Assert.IsTrue(stickyOn.JSON.Errors.Count == 0);
+            Assert.IsNotNull(stickyOff);
+            Assert.IsNotNull(stickyOff.JSON);
+            Assert.IsTrue(stickyOff.JSON.Errors.Count == 0);
+
+            GenericContainer suggestedSortResult = reddit.Models.LinksAndComments.SetSuggestedSort(postResult.JSON.Data.Name, "new");
+
+            Assert.IsNotNull(suggestedSortResult);
+            Assert.IsNotNull(suggestedSortResult.JSON);
+            Assert.IsTrue(suggestedSortResult.JSON.Errors.Count == 0);
+
+            // TODO
         }
+
+        [TestMethod]
+        public void MoreChildren()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            MoreChildren moreChildren = reddit.Models.LinksAndComments.MoreChildren("dlpnw9j", false, "t3_6tyfna", "new");
+
+            Assert.IsNotNull(moreChildren);
+            Assert.IsNotNull(moreChildren.Comments);
+            Assert.IsNotNull(moreChildren.MoreData);
+        }
+
+        
     }
 }
