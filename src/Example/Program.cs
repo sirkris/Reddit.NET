@@ -4,6 +4,7 @@ using Reddit.NET.Controllers;
 using ModelStructures = Reddit.NET.Models.Structures;
 using System;
 using System.IO;
+using System.Linq;
 
 namespace Example
 {
@@ -214,6 +215,24 @@ namespace Example
                 //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(accountPrefs)));
                 File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));*/
 
+                //File.WriteAllText("Emoji.AcquireLease.json", JsonConvert.SerializeObject(reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.png", "image/png")));
+
+                // Upload Emoji image to Reddit.  --Kris
+                byte[] imageData;
+                using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Example.Resources.birdie.png"))
+                {
+                    using (BinaryReader binaryReader = new BinaryReader(stream))
+                    {
+                        imageData = binaryReader.ReadBytes(Int32.MaxValue / 2);
+                    }
+                }
+                ModelStructures.S3UploadLeaseContainer s3 = reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.png", "image/png");
+                //File.WriteAllText("Emoji.UploadLeaseImage.json", JsonConvert.SerializeObject(reddit.Models.Emoji.UploadLeaseImage(imageData, s3)));
+                reddit.Models.Emoji.UploadLeaseImage(imageData, s3);
+                File.WriteAllText("Emoji.Add.json", JsonConvert.SerializeObject(reddit.Models.Emoji.Add("RedditDotNETBot", "Birdie", s3.S3UploadLease.Fields.First(
+                    item => item.Name.Equals("key")).Value)));
+                while (true) { }
+                File.WriteAllText("Emoji.All2.json", JsonConvert.SerializeObject(reddit.Models.Emoji.All("RedditDotNETBot")));
             }
         }
     }

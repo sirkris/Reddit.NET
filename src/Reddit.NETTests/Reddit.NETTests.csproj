@@ -8,10 +8,14 @@
 
   <ItemGroup>
     <None Remove="Reddit.NETTestsData.xml" />
+    <None Remove="Resources\birdie.png" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Reddit.NETTestsData.xml" />
+    <EmbeddedResource Include="Resources\birdie.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

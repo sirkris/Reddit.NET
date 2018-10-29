@@ -51,7 +51,7 @@ namespace Reddit.NET.Models
         public RestRequest PrepareRequest(RestRequest restRequest)
         {
             restRequest.AddHeader("Authorization", "bearer " + AccessToken);
-            restRequest.AddHeader("User-Agent", "Reddit.NET");
+            //restRequest.AddHeader("User-Agent", "Reddit.NET");
 
             if (restRequest.Method == Method.POST || restRequest.Method == Method.PUT)
             {
