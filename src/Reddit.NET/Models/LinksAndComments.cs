@@ -257,7 +257,7 @@ namespace Reddit.NET.Models
             ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
+        // TODO - API returns 403 whenever I try to hit this endpoint.  No idea why.  --Kris
         /// <summary>
         /// Get a list of categories in which things are currently saved.
         /// See also: /api/save.
@@ -265,7 +265,6 @@ namespace Reddit.NET.Models
         /// <returns>(TODO - Untested)</returns>
         public object SavedCategories()
         {
-            // TODO - API returns 403 whenever I try to hit this endpoint.  No idea why.  --Kris
             return JsonConvert.DeserializeObject(ExecuteRequest("api/saved_categories"));
         }
 

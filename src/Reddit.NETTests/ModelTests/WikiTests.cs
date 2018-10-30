@@ -31,7 +31,6 @@ namespace Reddit.NETTests.ModelTests
             WikiPageRevisionContainer revisions = reddit.Models.Wiki.Revisions(null, null, "ShittyEmails");
 
             Assert.IsNotNull(revisions);
-            Assert.IsTrue(revisions.Data.Children.Count > 0);
         }
 
         [TestMethod]
