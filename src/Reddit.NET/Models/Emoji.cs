@@ -68,6 +68,7 @@ namespace Reddit.NET.Models
 
         // TODO - Can't get this to work.  Action URL keeps returning 403.  --Kris
         // See:  https://www.reddit.com/r/redditdev/comments/9s1pio/getting_aws_error_when_trying_to_upload_emoji/
+        // Update:  Switching headers to parameters helped, but now it's complaining about the content-type on the image for some reason.  --Kris
         /// <summary>
         /// Upload an Emoji.
         /// </summary>
@@ -83,8 +84,6 @@ namespace Reddit.NET.Models
             {
                 if (!s3Field.Name.Equals("content-type", StringComparison.OrdinalIgnoreCase))
                 {
-                    // Which?
-                    restRequest.AddHeader(s3Field.Name, s3Field.Value);
                     restRequest.AddParameter(s3Field.Name, s3Field.Value);
                 }
             }
@@ -95,8 +94,10 @@ namespace Reddit.NET.Models
             //restRequest.AddHeader("key", s3.S3UploadLease.Fields.First(item => item.Name.Equals("key", StringComparison.OrdinalIgnoreCase)).Value);
             //restRequest.AddParameter("key", s3.S3UploadLease.Fields.First(item => item.Name.Equals("key", StringComparison.OrdinalIgnoreCase)).Value);
 
-            restRequest.AddFileBytes("file", imageData, "birdie.png", s3.S3UploadLease.Fields.First(
+            restRequest.AddFileBytes("file", imageData, "birdie.jpg", s3.S3UploadLease.Fields.First(
                 item => item.Name.Equals("content-type", StringComparison.OrdinalIgnoreCase)).Value);
+
+            string blah = ExecuteRequest(restRequest);
 
             ExecuteRequest(restRequest);
         }

@@ -213,7 +213,7 @@ namespace Example
                 //ModelStructures.AccountPrefs accountPrefs = reddit.Models.Account.Prefs();
                 //accountPrefs.Autoplay = !accountPrefs.Autoplay;
                 //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(accountPrefs)));
-                File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));*/
+                File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));
 
                 //File.WriteAllText("Emoji.AcquireLease.json", JsonConvert.SerializeObject(reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.png", "image/png")));
 
@@ -226,13 +226,44 @@ namespace Example
                         imageData = binaryReader.ReadBytes(Int32.MaxValue / 2);
                     }
                 }
-                ModelStructures.S3UploadLeaseContainer s3 = reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.png", "image/png");
+                ModelStructures.S3UploadLeaseContainer s3 = reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.jpg", "image/jpeg");
                 //File.WriteAllText("Emoji.UploadLeaseImage.json", JsonConvert.SerializeObject(reddit.Models.Emoji.UploadLeaseImage(imageData, s3)));
                 reddit.Models.Emoji.UploadLeaseImage(imageData, s3);
                 File.WriteAllText("Emoji.Add.json", JsonConvert.SerializeObject(reddit.Models.Emoji.Add("RedditDotNETBot", "Birdie", s3.S3UploadLease.Fields.First(
                     item => item.Name.Equals("key")).Value)));
-                while (true) { }
                 File.WriteAllText("Emoji.All2.json", JsonConvert.SerializeObject(reddit.Models.Emoji.All("RedditDotNETBot")));
+
+                File.WriteAllText("Flair.CreateLink.json", JsonConvert.SerializeObject(reddit.Models.Flair.Create("", "t3_9rirb3", "", "Test Link Flair", "RedditDotNETBot")));
+                File.WriteAllText("Flair.CreateUser.json", JsonConvert.SerializeObject(reddit.Models.Flair.Create("", "", "KrisCraig", "Test User Flair", "RedditDotNETBot")));
+                File.WriteAllText("Flair.LinkFlair.json", JsonConvert.SerializeObject(reddit.Models.Flair.LinkFlair("RedditDotNETBot")));
+                File.WriteAllText("Flair.LinkFlairV2.json", JsonConvert.SerializeObject(reddit.Models.Flair.LinkFlairV2("RedditDotNETBot")));
+                File.WriteAllText("Flair.FlairTemplateLink.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairTemplate("", "", "LINK_FLAIR",
+                    DateTime.Now.ToString("fffffff"), false, "RedditDotNETBot")));
+                File.WriteAllText("Flair.FlairTemplateUser.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairTemplate("", "", "USER_FLAIR",
+                    DateTime.Now.ToString("fffffff"), false, "RedditDotNETBot")));
+                File.WriteAllText("Flair.FlairTemplateV2Link.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairTemplateV2("#88AAFF", "", "LINK_FLAIR", false,
+                    "V2-" + DateTime.Now.ToString("fffffff"), "dark", false, "RedditDotNETBot")));
+                File.WriteAllText("Flair.FlairTemplateV2User.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairTemplateV2("#005588", "", "USER_FLAIR", false,
+                    "V2-" + DateTime.Now.ToString("fffffff"), "light", false, "RedditDotNETBot")));
+                File.WriteAllText("Flair.FlairSelector.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairSelector(null, "RedditDotNETBot")));
+                File.WriteAllText("Flair.FlairSelectorLink.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairSelector(null, "RedditDotNETBot", "t3_9rirb3")));
+                File.WriteAllText("Flair.FlairSelectorUser.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairSelector("KrisCraig", "RedditDotNETBot")));
+                File.WriteAllText("Flair.FlairList.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairList("", "", "", "RedditDotNETBot")));
+                File.WriteAllText("Flair.FlairCSV.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairCSV("KrisCraig,Mod,"
+                    + Environment.NewLine + "quietidiot,Human,", "RedditDotNETBot")));
+                File.WriteAllText("Flair.SetFlairEnabled.json", JsonConvert.SerializeObject(reddit.Models.Flair.SetFlairEnabled(true, "RedditDotNETBot")));
+                //File.WriteAllText("Flair.SelectFlair.json", JsonConvert.SerializeObject(reddit.Models.Flair.SelectFlair("#88BBFF", "c1e232a6-db49-11e8-83f1-0e3c0039d3b4",
+                //    "", "", "all", "V2-3628702_EDITED", "dark", "RedditDotNETBot")));
+                //System.Collections.Generic.List<ModelStructures.Flair> flairs = reddit.Models.Flair.LinkFlair("RedditDotNETBot");
+                //flairs.Reverse();
+                //File.WriteAllText("Flair.FlairTemplateOrder.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairTemplateOrder("LINK_FLAIR", flairs, "RedditDotNETBot")));
+                File.WriteAllText("Flair.FlairConfig.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairConfig(true, "right", true, "right", true, "RedditDotNETBot")));
+                File.WriteAllText("Flair.DeleteFlair.json", JsonConvert.SerializeObject(reddit.Models.Flair.DeleteFlair("quietidiot", "RedditDotNETBot")));
+                File.WriteAllText("Flair.DeleteFlairTemplate.json", JsonConvert.SerializeObject(reddit.Models.Flair.DeleteFlairTemplate("0778d5ec-db43-11e8-9258-0e3a02270976",
+                    "RedditDotNETBot")));
+                File.WriteAllText("Flair.ClearFlairTemplates.json", JsonConvert.SerializeObject(reddit.Models.Flair.ClearFlairTemplates("USER_FLAIR", "RedditDotNETBot")));*/
+
+                
             }
         }
     }
