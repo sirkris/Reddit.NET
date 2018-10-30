@@ -335,5 +335,17 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
             Assert.IsNotNull(posts.Data.Children[0].Data);
         }
+
+        [TestMethod]
+        public void GetDuplicates()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            List<PostContainer> posts = reddit.Models.Listings.GetDuplicates("9gaze5", "", "", false, "num_comments", "");
+
+            Assert.IsNotNull(posts);
+            Assert.IsTrue(posts.Count > 0);
+        }
     }
 }

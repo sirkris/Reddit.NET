@@ -14,7 +14,7 @@ namespace Reddit.NET.Models
 
         public Listings(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
-        // TODO - Needs testing.
+        // TODO - API returns 400.  No idea why.  --Kris
         /// <summary>
         /// Return a list of trending subreddits, link to the comment in r/trendingsubreddits, and the comment count of that link.
         /// </summary>
@@ -113,7 +113,6 @@ namespace Reddit.NET.Models
             };
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Return a list of other submissions of the same URL
         /// This endpoint is a listing.
@@ -128,8 +127,8 @@ namespace Reddit.NET.Models
         /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object GetDuplicates(string article, string after, string before, bool crosspostsOnly, string sort, string sr,
+        /// <returns>A list of matching posts.</returns>
+        public List<PostContainer> GetDuplicates(string article, string after, string before, bool crosspostsOnly, string sort, string sr,
             int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest("duplicates/" + article);
@@ -144,7 +143,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<List<PostContainer>>(ExecuteRequest(restRequest));
         }
 
         /// <summary>

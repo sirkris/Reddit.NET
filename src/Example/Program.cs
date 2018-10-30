@@ -261,7 +261,10 @@ namespace Example
                 File.WriteAllText("Flair.DeleteFlair.json", JsonConvert.SerializeObject(reddit.Models.Flair.DeleteFlair("quietidiot", "RedditDotNETBot")));
                 File.WriteAllText("Flair.DeleteFlairTemplate.json", JsonConvert.SerializeObject(reddit.Models.Flair.DeleteFlairTemplate("0778d5ec-db43-11e8-9258-0e3a02270976",
                     "RedditDotNETBot")));
-                File.WriteAllText("Flair.ClearFlairTemplates.json", JsonConvert.SerializeObject(reddit.Models.Flair.ClearFlairTemplates("USER_FLAIR", "RedditDotNETBot")));*/
+                File.WriteAllText("Flair.ClearFlairTemplates.json", JsonConvert.SerializeObject(reddit.Models.Flair.ClearFlairTemplates("USER_FLAIR", "RedditDotNETBot")));
+
+                //File.WriteAllText("Listings.TrendingSubreddits.json", JsonConvert.SerializeObject(reddit.Models.Listings.TrendingSubreddits()));
+                File.WriteAllText("Listings.GetDuplicates.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetDuplicates("9gaze5", "", "", false, "num_comments", "")));*/
 
                 
             }
