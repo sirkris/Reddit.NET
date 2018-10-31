@@ -87,6 +87,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - No way to test without hitting endpoint from Users model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Accept an invite to moderate the specified subreddit.
         /// The authenticated user must have been invited to moderate the subreddit by one of its current moderators.
@@ -103,9 +104,10 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Move test from ModelTests to ControllerTests.  --Kris
         /// <summary>
         /// Approve a link or comment.
-        /// If the thing was removed, it will be re-inserted into appropriate listings.Any reports on the approved thing will be discarded.
+        /// If the thing was removed, it will be re-inserted into appropriate listings. Any reports on the approved thing will be discarded.
         /// See also: /api/remove.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
@@ -120,6 +122,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - No way to test without hitting endpoint from LinksAndComments model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Distinguish a thing's author with a sigil.
         /// This can be useful to draw attention to and confirm the identity of the user in the context of a link or comment of theirs.
@@ -149,6 +152,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - No way to test without hitting endpoint from LinksAndComments model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Prevent future reports on a thing from causing notifications.
         /// Any reports made about a thing after this flag is set on it will not cause notifications or make the thing show up in the various moderation listings.
@@ -166,6 +170,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - No way to test without hitting endpoint from Users model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Abdicate approved submitter status in a subreddit.
         /// See also: /api/friend.
@@ -182,6 +187,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - No way to test without hitting endpoint from Users model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Abdicate moderator status in a subreddit.
         /// See also: /api/friend.
@@ -197,7 +203,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
+        // TODO - Reddit API returns 500 server error when passing a user fullname (t2_2cclzaxt).  Maybe it expects a thread id, instead?  --Kris
         /// <summary>
         /// For muting user via modmail.
         /// </summary>
@@ -213,9 +219,10 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - No way to test without hitting endpoint from LinksAndComments or Modmail model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Remove a link, comment, or modmail message.
-        /// If the thing is a link, it will be removed from all subreddit listings.If the thing is a comment, it will be redacted and removed from all subreddit comment listings.
+        /// If the thing is a link, it will be removed from all subreddit listings. If the thing is a comment, it will be redacted and removed from all subreddit comment listings.
         /// See also: /api/approve.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
@@ -232,6 +239,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - No way to test without hitting endpoint from LinksAndComments model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Allow future reports on a thing to cause notifications.
         /// See also: /api/ignore_reports.
@@ -247,7 +255,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
+        // TODO - Reddit API returns 500 server error when passing a user fullname (t2_2cclzaxt).  Maybe it expects a thread id, instead?  --Kris
         /// <summary>
         /// For unmuting user via modmail.
         /// </summary>
@@ -262,16 +270,15 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Redirect to the subreddit's stylesheet if one exists.
         /// See also: /api/subreddit_stylesheet.
         /// </summary>
         /// <param name="subreddit">The subreddit being moderated</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Stylesheet(string subreddit = null)
+        /// <returns>The subreddit's CSS.</returns>
+        public string Stylesheet(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/stylesheet"));
+            return ExecuteRequest(Sr(subreddit) + "stylesheet");
         }
     }
 }

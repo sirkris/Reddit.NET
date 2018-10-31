@@ -68,7 +68,6 @@ namespace Example
                 File.WriteAllText("Moderation.ModQueueUnmoderated.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("unmoderated", null, null, "links", "StillSandersForPres")));
                 File.WriteAllText("Moderation.ModQueueEdited.json", JsonConvert.SerializeObject(reddit.Models.Moderation.ModQueue("edited", null, null, "links", "StillSandersForPres")));
                 File.WriteAllText("Moderation.Approve.json", JsonConvert.SerializeObject(reddit.Models.Moderation.Approve("t3_9gaze5")));
-                //File.WriteAllText("Moderation.Stylesheet.json", JsonConvert.SerializeObject(reddit.Models.Moderation.Stylesheet("StillSandersForPres")));
 
                 File.WriteAllText("Modmail.Subreddits.json", JsonConvert.SerializeObject(reddit.Models.Modmail.Subreddits()));
                 File.WriteAllText("Modmail.UnreadCount.json", JsonConvert.SerializeObject(reddit.Models.Modmail.UnreadCount()));
@@ -267,8 +266,12 @@ namespace Example
                 File.WriteAllText("Listings.GetDuplicates.json", JsonConvert.SerializeObject(reddit.Models.Listings.GetDuplicates("9gaze5", "", "", false, "num_comments", "")));
 
                 File.WriteAllText("Misc.SavedMediaText.json", JsonConvert.SerializeObject(reddit.Models.Misc.SavedMediaText(
-                    "https://e.thumbs.redditmedia.com/bOToSJt13ylszjE4.png", "pics")));*/
-                
+                    "https://e.thumbs.redditmedia.com/bOToSJt13ylszjE4.png", "pics")));
+
+                //File.WriteAllText("Moderation.MuteMessageAuthor.json", JsonConvert.SerializeObject(reddit.Models.Moderation.MuteMessageAuthor("t2_2cclzaxt")));
+                //File.WriteAllText("Moderation.UnmuteMessageAuthor.json", JsonConvert.SerializeObject(reddit.Models.Moderation.UnmuteMessageAuthor("t2_2cclzaxt")));
+                File.WriteAllText("Moderation.Stylesheet.json", reddit.Models.Moderation.Stylesheet("StillSandersForPres"));*/
+
                 
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.NET;
 using Reddit.NET.Models.Structures;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -76,7 +77,35 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(modQueue);
         }
 
+        [TestMethod]
+        public void Stylesheet()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            string css = "";
+            try
+            {
+                css = reddit.Models.Moderation.Stylesheet(testData["Subreddit"]);
+            }
+            catch (System.Net.WebException ex)
+            {
+                if (!ex.Data.Contains("res")
+                    || ((IRestResponse)ex.Data["res"]).StatusCode != System.Net.HttpStatusCode.NotFound)
+                {
+                    throw ex;
+                }
+                else
+                {
+                    Assert.Inconclusive("Subreddit does not contain a stylesheet.  Please create one and retest.");
+                }
+            }
+
+            Assert.IsNotNull(css);
+        }
+
         // Requires existing subreddit with mod privilages.  --Kris
+        // TODO - Move this to controller tests since it hits non-moderation endpoints.  --Kris
         [TestMethod]
         public void Approve()
         {
