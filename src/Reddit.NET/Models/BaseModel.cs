@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Reddit.NET.Models.EventHandlers;
 using Reddit.NET.Models.Structures;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -18,12 +19,24 @@ namespace Reddit.NET.Models
 
         internal abstract RestClient RestClient { get; set; }
 
+        public event EventHandler<TokenUpdateEventArgs> TokenUpdated;
+
         public BaseModel(string appId, string refreshToken, string accessToken, RestClient restClient)
         {
-            this.AppId = appId;
-            this.AccessToken = accessToken;
-            this.RefreshToken = refreshToken;
-            this.RestClient = restClient;
+            AppId = appId;
+            AccessToken = accessToken;
+            RefreshToken = refreshToken;
+            RestClient = restClient;
+        }
+
+        protected virtual void OnTokenUpdated(TokenUpdateEventArgs e)
+        {
+            TokenUpdated?.Invoke(this, e);
+        }
+
+        public void UpdateAccessToken(string accessToken)
+        {
+            AccessToken = accessToken;
         }
 
         public RestRequest PrepareRequest(string url, Method method = Method.GET)
@@ -69,7 +82,7 @@ namespace Reddit.NET.Models
         public string ExecuteRequest(RestRequest restRequest)
         {
             IRestResponse res = RestClient.Execute(restRequest);
-            int retry = 5;
+            int retry = 3;
             while ((res == null || !res.IsSuccessful)
                 && retry > 0)
             {
@@ -81,8 +94,7 @@ namespace Reddit.NET.Models
                  * --Kris
                  */
                 if (RefreshToken != null
-                    && (res.StatusCode == System.Net.HttpStatusCode.BadRequest
-                        || res.StatusCode == System.Net.HttpStatusCode.Unauthorized))
+                    && res.StatusCode == HttpStatusCode.Unauthorized)
                 {
                     RestClient keyCli = new RestClient("https://www.reddit.com");
                     RestRequest keyReq = new RestRequest("/api/v1/access_token", Method.POST);
@@ -97,6 +109,13 @@ namespace Reddit.NET.Models
                     if (keyRes != null && keyRes.IsSuccessful)
                     {
                         AccessToken = JsonConvert.DeserializeObject<JObject>(keyRes.Content).GetValue("access_token").ToString();
+
+                        TokenUpdateEventArgs args = new TokenUpdateEventArgs
+                        {
+                            AccessToken = AccessToken
+                        };
+                        OnTokenUpdated(args);
+
                         restRequest = PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters);
                     }
                 }
