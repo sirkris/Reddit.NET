@@ -272,7 +272,8 @@ namespace Example
                 //File.WriteAllText("Moderation.UnmuteMessageAuthor.json", JsonConvert.SerializeObject(reddit.Models.Moderation.UnmuteMessageAuthor("t2_2cclzaxt")));
                 File.WriteAllText("Moderation.Stylesheet.json", reddit.Models.Moderation.Stylesheet("StillSandersForPres"));*/
 
-                
+                //File.WriteAllText("Modmail.BulkRead.json", JsonConvert.SerializeObject(reddit.Models.Modmail.BulkRead("t5_3fblp", "all")));
+                File.WriteAllText("Modmail.GetConversations.json", JsonConvert.SerializeObject(reddit.Models.Modmail.GetConversations("", "t5_3fblp", "unread", "all")));
             }
         }
     }
