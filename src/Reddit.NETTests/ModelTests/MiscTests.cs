@@ -21,5 +21,16 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(scopes);
             Assert.IsTrue(scopes.Count > 0);
         }
+
+        [TestMethod]
+        public void SavedMediaText()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            Dictionary<string, string> res = reddit.Models.Misc.SavedMediaText("https://e.thumbs.redditmedia.com/bOToSJt13ylszjE4.png", "pics");
+
+            Assert.IsNotNull(res);
+        }
     }
 }
