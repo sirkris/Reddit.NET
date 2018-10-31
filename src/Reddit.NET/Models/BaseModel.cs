@@ -84,6 +84,8 @@ namespace Reddit.NET.Models
             IRestResponse res = RestClient.Execute(restRequest);
             int retry = 3;
             while ((res == null || !res.IsSuccessful)
+                && RefreshToken != null
+                && res.StatusCode == HttpStatusCode.Unauthorized
                 && retry > 0)
             {
                 /*
@@ -93,12 +95,7 @@ namespace Reddit.NET.Models
                  * 
                  * --Kris
                  */
-                if (RefreshToken != null
-                    && res.StatusCode == HttpStatusCode.Unauthorized)
-                {
-                    restRequest = RefreshAccessToken(restRequest);
-                }
-
+                restRequest = RefreshAccessToken(restRequest);
                 res = RestClient.Execute(restRequest);
 
                 retry--;
