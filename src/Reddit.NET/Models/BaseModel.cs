@@ -96,28 +96,7 @@ namespace Reddit.NET.Models
                 if (RefreshToken != null
                     && res.StatusCode == HttpStatusCode.Unauthorized)
                 {
-                    RestClient keyCli = new RestClient("https://www.reddit.com");
-                    RestRequest keyReq = new RestRequest("/api/v1/access_token", Method.POST);
-
-                    keyReq.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(AppId + ":")));
-                    keyReq.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-                    
-                    keyReq.AddParameter("grant_type", "refresh_token");
-                    keyReq.AddParameter("refresh_token", RefreshToken);
-
-                    IRestResponse keyRes = keyCli.Execute(keyReq);
-                    if (keyRes != null && keyRes.IsSuccessful)
-                    {
-                        AccessToken = JsonConvert.DeserializeObject<JObject>(keyRes.Content).GetValue("access_token").ToString();
-
-                        TokenUpdateEventArgs args = new TokenUpdateEventArgs
-                        {
-                            AccessToken = AccessToken
-                        };
-                        OnTokenUpdated(args);
-
-                        restRequest = PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters);
-                    }
+                    restRequest = RefreshAccessToken(restRequest);
                 }
 
                 res = RestClient.Execute(restRequest);
@@ -142,6 +121,36 @@ namespace Reddit.NET.Models
             else
             {
                 return res.Content;
+            }
+        }
+
+        private RestRequest RefreshAccessToken(RestRequest restRequest)
+        {
+            RestClient keyCli = new RestClient("https://www.reddit.com");
+            RestRequest keyReq = new RestRequest("/api/v1/access_token", Method.POST);
+
+            keyReq.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(AppId + ":")));
+            keyReq.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            keyReq.AddParameter("grant_type", "refresh_token");
+            keyReq.AddParameter("refresh_token", RefreshToken);
+
+            IRestResponse keyRes = keyCli.Execute(keyReq);
+            if (keyRes != null && keyRes.IsSuccessful)
+            {
+                AccessToken = JsonConvert.DeserializeObject<JObject>(keyRes.Content).GetValue("access_token").ToString();
+
+                TokenUpdateEventArgs args = new TokenUpdateEventArgs
+                {
+                    AccessToken = AccessToken
+                };
+                OnTokenUpdated(args);
+
+                return PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters);
+            }
+            else
+            {
+                return restRequest;
             }
         }
 
