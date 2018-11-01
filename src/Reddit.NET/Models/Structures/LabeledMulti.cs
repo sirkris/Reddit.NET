@@ -33,7 +33,7 @@ namespace Reddit.NET.Models.Structures
         public string IconURL;
 
         [JsonProperty("subreddits")]
-        public JArray Subreddits;
+        public List<UserSubredditContainer> Subreddits;
 
         [JsonProperty("created_utc")]
         [JsonConverter(typeof(TimestampConvert))]

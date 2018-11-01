@@ -270,10 +270,16 @@ namespace Example
 
                 //File.WriteAllText("Moderation.MuteMessageAuthor.json", JsonConvert.SerializeObject(reddit.Models.Moderation.MuteMessageAuthor("t2_2cclzaxt")));
                 //File.WriteAllText("Moderation.UnmuteMessageAuthor.json", JsonConvert.SerializeObject(reddit.Models.Moderation.UnmuteMessageAuthor("t2_2cclzaxt")));
-                File.WriteAllText("Moderation.Stylesheet.json", reddit.Models.Moderation.Stylesheet("StillSandersForPres"));*/
+                File.WriteAllText("Moderation.Stylesheet.json", reddit.Models.Moderation.Stylesheet("StillSandersForPres"));
 
                 //File.WriteAllText("Modmail.BulkRead.json", JsonConvert.SerializeObject(reddit.Models.Modmail.BulkRead("t5_3fblp", "all")));
-                File.WriteAllText("Modmail.GetConversations.json", JsonConvert.SerializeObject(reddit.Models.Modmail.GetConversations("", "t5_3fblp", "unread", "all")));
+                File.WriteAllText("Modmail.GetConversations.json", JsonConvert.SerializeObject(reddit.Models.Modmail.GetConversations("", "t5_3fblp", "unread", "all")));*/
+                string multiName = "RDNTest_" + DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
+                ModelStructures.LabeledMultiSubmit model = new ModelStructures.LabeledMultiSubmit("This is a test multi.",
+                    multiName, "None", "#0000FF",
+                    new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" }, "public", "classic");
+
+                File.WriteAllText("Multis.Create.json", JsonConvert.SerializeObject(reddit.Models.Multis.Create("user/KrisCraig/m/" + multiName, model, true)));
             }
         }
     }
