@@ -281,7 +281,12 @@ namespace Example
 
                 //File.WriteAllText("Multis.Create.json", JsonConvert.SerializeObject(reddit.Models.Multis.Create("user/KrisCraig/m/" + multiName, model, true)));*/
 
-                File.WriteAllText("PrivateMessages.UnblockSubreddit.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.UnblockSubreddit("t5_3fblp")));
+                //File.WriteAllText("PrivateMessages.UnblockSubreddit.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.UnblockSubreddit("t5_3fblp")));
+
+                //File.WriteAllText("Search.GetSearch.json", JsonConvert.SerializeObject(reddit.Models.Search.GetSearch("", "", "", false, "Florida", true, "new", "all",
+                //    "FloridaMan")));
+
+                
             }
         }
     }
