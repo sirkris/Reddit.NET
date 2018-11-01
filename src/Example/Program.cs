@@ -279,14 +279,20 @@ namespace Example
                     multiName, "None", "#0000FF",
                     new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" }, "public", "classic");
 
-                //File.WriteAllText("Multis.Create.json", JsonConvert.SerializeObject(reddit.Models.Multis.Create("user/KrisCraig/m/" + multiName, model, true)));*/
+                //File.WriteAllText("Multis.Create.json", JsonConvert.SerializeObject(reddit.Models.Multis.Create("user/KrisCraig/m/" + multiName, model, true)));
 
                 //File.WriteAllText("PrivateMessages.UnblockSubreddit.json", JsonConvert.SerializeObject(reddit.Models.PrivateMessages.UnblockSubreddit("t5_3fblp")));
 
                 //File.WriteAllText("Search.GetSearch.json", JsonConvert.SerializeObject(reddit.Models.Search.GetSearch("", "", "", false, "Florida", true, "new", "all",
                 //    "FloridaMan")));
 
-                
+                File.WriteAllText("Subreddits.SubredditAutocomplete.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubredditAutocomplete(false, true, "Shitty")));
+                File.WriteAllText("Subreddits.SubredditAutocompleteV2.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubredditAutocompleteV2(true, false,
+                    true, "Shitty")));*/
+                File.WriteAllText("Subreddits.SubredditStylesheetPreview.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubredditStylesheet("preview",
+                    "This is a test.", ".whatever{}", "RedditDotNETBot")));
+                File.WriteAllText("Subreddits.SubredditStylesheetSave.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubredditStylesheet("save",
+                    "This is a test.", ".whatever{}", "RedditDotNETBot")));
             }
         }
     }

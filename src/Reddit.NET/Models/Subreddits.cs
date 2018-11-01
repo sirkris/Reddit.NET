@@ -342,7 +342,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditSubmitText>(ExecuteRequest(Sr(subreddit) + "api/submit_text"));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Return a list of subreddits and data for subreddits whose names start with 'query'.
         /// Uses typeahead endpoint to recieve the list of subreddits names. Typeahead provides exact matches, typo correction, fuzzy matching and boosts subreddits to the top that the user is subscribed to.
@@ -350,8 +349,8 @@ namespace Reddit.NET.Models
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeProfiles">boolean value</param>
         /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SubredditAutocomplete(bool includeOver18, bool includeProfiles, string query)
+        /// <returns>Matching subreddits.</returns>
+        public SubredditAutocompleteResultContainer SubredditAutocomplete(bool includeOver18, bool includeProfiles, string query)
         {
             RestRequest restRequest = PrepareRequest("api/subreddit_autocomplete");
 
@@ -359,10 +358,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("include_profiles", includeProfiles);
             restRequest.AddParameter("query", query);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditAutocompleteResultContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Version 2 of SubredditAutocomplete.
         /// </summary>
@@ -371,8 +369,8 @@ namespace Reddit.NET.Models
         /// <param name="includeProfiles">boolean value</param>
         /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
         /// <param name="limit">an integer between 1 and 10 (default: 5)</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SubredditAutocompleteV2(bool includeCategories, bool includeOver18, bool includeProfiles, string query, int limit = 5)
+        /// <returns>Matching subreddits.</returns>
+        public SubredditContainer SubredditAutocompleteV2(bool includeCategories, bool includeOver18, bool includeProfiles, string query, int limit = 5)
         {
             RestRequest restRequest = PrepareRequest("api/subreddit_autocomplete_v2");
 
@@ -382,10 +380,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("query", query);
             restRequest.AddParameter("limit", limit);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Update a subreddit's stylesheet.
         /// op should be save to update the contents of the stylesheet.
@@ -394,8 +391,8 @@ namespace Reddit.NET.Models
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="stylesheetContents">the new stylesheet content</param>
         /// <param name="subreddit">The subreddit being queried</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SubredditStylesheet(string op, string reason, string stylesheetContents, string subreddit = null)
+        /// <returns>An object indicating any errors.</returns>
+        public GenericContainer SubredditStylesheet(string op, string reason, string stylesheetContents, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/subreddit_stylesheet", Method.POST);
 
@@ -404,7 +401,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("stylesheet_contents", stylesheetContents);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
@@ -481,7 +478,7 @@ namespace Reddit.NET.Models
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/upload_sr_img", Method.POST);
 
-            restRequest.AddParameter("file", file);
+            restRequest.AddFileBytes("file", file, name + "." + imgType);
             restRequest.AddParameter("header", header);
             restRequest.AddParameter("name", name);
             restRequest.AddParameter("upload_type", uploadType);

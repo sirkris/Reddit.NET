@@ -178,5 +178,40 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(res.JSON);
             Assert.IsTrue(res.JSON.Errors == null || res.JSON.Errors.Count == 0);
         }
+
+        [TestMethod]
+        public void SubredditAutocomplete()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            SubredditAutocompleteResultContainer subs = reddit.Models.Subreddits.SubredditAutocomplete(false, true, "Shitty");
+
+            Assert.IsNotNull(subs);
+        }
+
+        [TestMethod]
+        public void SubredditAutocompleteV2()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            SubredditContainer subs = reddit.Models.Subreddits.SubredditAutocompleteV2(true, false, true, "Shitty");
+
+            Assert.IsNotNull(subs);
+        }
+
+        [TestMethod]
+        public void SubredditStylesheet()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            GenericContainer res = reddit.Models.Subreddits.SubredditStylesheet("save", "This is a test.", ".whatever{}", testData["Subreddit"]);
+
+            Assert.IsNotNull(res);
+            Assert.IsNotNull(res.JSON);
+            Assert.IsTrue(res.JSON.Errors == null || res.JSON.Errors.Count == 0);
+        }
     }
 }
