@@ -75,16 +75,5 @@ namespace Reddit.NETTests.ModelTests
 
             Assert.IsNotNull(res);
         }
-
-        [TestMethod]
-        public void ModifyMulti()
-        {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
-            object res = reddit.Models.Multis.GetMultiSub("user/KrisCraig/m/unitedprogressives", "StillSandersForPres");
-
-            Assert.IsNotNull(res);
-        }
     }
 }
