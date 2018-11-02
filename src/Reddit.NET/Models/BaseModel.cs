@@ -39,36 +39,43 @@ namespace Reddit.NET.Models
             AccessToken = accessToken;
         }
 
-        public RestRequest PrepareRequest(string url, Method method = Method.GET)
+        public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
         {
             RestRequest restRequest = new RestRequest(url, method);
 
-            return PrepareRequest(restRequest);
+            return PrepareRequest(restRequest, contentType);
         }
 
-        public RestRequest PrepareRequest(string url, Method method, List<Parameter> parameters)
+        public RestRequest PrepareRequest(string url, Method method, List<Parameter> parameters, List<FileParameter> files, 
+            string contentType = "application/x-www-form-urlencoded")
         {
-            RestRequest restRequest = PrepareRequest(url, method);
+            RestRequest restRequest = PrepareRequest(url, method, contentType);
 
             foreach (Parameter param in parameters)
             {
-                if (!param.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase))
+                if (!param.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)
+                    && !param.Name.Equals("Content-Type", StringComparison.OrdinalIgnoreCase))
                 {
                     restRequest.AddParameter(param);
                 }
             }
             
+            foreach (FileParameter file in files)
+            {
+                restRequest.Files.Add(file);
+            }
+
             return restRequest;
         }
 
-        public RestRequest PrepareRequest(RestRequest restRequest)
+        public RestRequest PrepareRequest(RestRequest restRequest, string contentType = "application/x-www-form-urlencoded")
         {
             restRequest.AddHeader("Authorization", "bearer " + AccessToken);
             //restRequest.AddHeader("User-Agent", "Reddit.NET");
 
             if (restRequest.Method == Method.POST || restRequest.Method == Method.PUT)
             {
-                restRequest.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+                restRequest.AddHeader("Content-Type", contentType);
             }
 
             return restRequest;
@@ -143,7 +150,18 @@ namespace Reddit.NET.Models
                 };
                 OnTokenUpdated(args);
 
-                return PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters);
+                string contentType = "application/x-www-form-urlencoded";
+                foreach (Parameter param in restRequest.Parameters)
+                {
+                    if (param.Name.Equals("content-type", StringComparison.OrdinalIgnoreCase)
+                        || param.Name.Equals("contenttype", StringComparison.OrdinalIgnoreCase))
+                    {
+                        contentType = param.Value.ToString();
+                        break;
+                    }
+                }
+                
+                return PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters, restRequest.Files, contentType);
             }
             else
             {

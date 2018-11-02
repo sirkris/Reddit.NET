@@ -8,12 +8,20 @@
 
   <ItemGroup>
     <None Remove="Reddit.NETTestsData.xml" />
+    <None Remove="Resources\banner.jpg" />
     <None Remove="Resources\birdie.png" />
+    <None Remove="Resources\birdie256.jpg" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Reddit.NETTestsData.xml" />
+    <EmbeddedResource Include="Resources\banner.jpg">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\birdie.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\birdie256.jpg">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>

@@ -3,6 +3,7 @@ using Reddit.NET;
 using Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Reddit.NETTests.ModelTests
@@ -212,6 +213,126 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsNotNull(res);
             Assert.IsNotNull(res.JSON);
             Assert.IsTrue(res.JSON.Errors == null || res.JSON.Errors.Count == 0);
+        }
+
+        [TestMethod]
+        public void SubscribeByFullname()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            reddit.Models.Subreddits.SubscribeByFullname("sub", false, "t5_3fblp");
+        }
+
+        [TestMethod]
+        public void Subscribe()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            reddit.Models.Subreddits.Subscribe("unsub", false, testData["Subreddit"]);  // Unsubscribe
+            reddit.Models.Subreddits.Subscribe("sub", false, testData["Subreddit"]);  // Subscribe
+        }
+
+        [TestMethod]
+        public void Edit()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            SubredditSettingsContainer settings = reddit.Models.Subreddits.Edit(testData["Subreddit"], false, "");
+
+            Assert.IsNotNull(settings);
+            Assert.IsNotNull(settings.Data);
+        }
+
+        [TestMethod]
+        public void SubredditImages()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            // Get the embedded test images.  --Kris
+            byte[] imageData = GetResourceFile("birdie.png");
+            byte[] imageBannerData = GetResourceFile("banner.jpg");
+            byte[] imageIconData = GetResourceFile("birdie256.jpg");
+
+            // Add the images (two succeed, two fail due to size constraints).  --Kris
+            ImageUploadResult resHeader = reddit.Models.Subreddits.UploadSrImg(imageData, 1, "birdie", "header", testData["Subreddit"], "png");
+            ImageUploadResult resImg = reddit.Models.Subreddits.UploadSrImg(imageData, 0, "birdie", "img", testData["Subreddit"], "png");
+            ImageUploadResult resIcon = reddit.Models.Subreddits.UploadSrImg(imageData, 0, "birdie", "icon", testData["Subreddit"], "png");
+            ImageUploadResult resBanner = reddit.Models.Subreddits.UploadSrImg(imageData, 0, "birdie", "banner", testData["Subreddit"], "png");
+
+            Assert.IsNotNull(resHeader);
+            Assert.IsTrue(resHeader.Errors == null || resHeader.Errors.Count == 0);
+            Assert.IsTrue(resHeader.ErrorsValues == null || resHeader.ErrorsValues.Count == 0);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(resHeader.ImgSrc));
+
+            Assert.IsNotNull(resImg);
+            Assert.IsTrue(resImg.Errors == null || resImg.Errors.Count == 0);
+            Assert.IsTrue(resImg.ErrorsValues == null || resImg.ErrorsValues.Count == 0);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(resImg.ImgSrc));
+
+            Assert.IsNotNull(resIcon);
+            Assert.IsTrue(resIcon.Errors != null && resIcon.Errors.Count == 1);
+            Assert.IsTrue(resIcon.Errors[0].Equals("IMAGE_ERROR"));
+            Assert.IsTrue(resIcon.ErrorsValues != null && resIcon.ErrorsValues.Count == 1);
+            Assert.IsTrue(resIcon.ErrorsValues[0].Equals("must be 256x256 pixels"));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(resIcon.ImgSrc));
+
+            Assert.IsNotNull(resBanner);
+            Assert.IsTrue(resBanner.Errors != null && resBanner.Errors.Count == 1);
+            Assert.IsTrue(resBanner.Errors[0].Equals("IMAGE_ERROR"));
+            Assert.IsTrue(resBanner.ErrorsValues != null && resBanner.ErrorsValues.Count == 1);
+            Assert.IsTrue(resBanner.ErrorsValues[0].Equals("10:3 aspect ratio required"));
+            Assert.IsTrue(string.IsNullOrWhiteSpace(resBanner.ImgSrc));
+
+            // Add the remaining two images (both succeed).  --Kris
+            resIcon = reddit.Models.Subreddits.UploadSrImg(imageIconData, 0, "birdieIcon", "icon", testData["Subreddit"], "jpg");
+            resBanner = reddit.Models.Subreddits.UploadSrImg(imageBannerData, 0, "birdieBanner", "banner", testData["Subreddit"], "png");
+
+            Assert.IsNotNull(resIcon);
+            Assert.IsTrue(resIcon.Errors == null || resIcon.Errors.Count == 0);
+            Assert.IsTrue(resIcon.ErrorsValues == null || resIcon.ErrorsValues.Count == 0);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(resIcon.ImgSrc));
+
+            Assert.IsNotNull(resBanner);
+            Assert.IsTrue(resBanner.Errors == null || resBanner.Errors.Count == 0);
+            Assert.IsTrue(resBanner.ErrorsValues == null || resBanner.ErrorsValues.Count == 0);
+            Assert.IsFalse(string.IsNullOrWhiteSpace(resBanner.ImgSrc));
+
+            // Delete the images.  --Kris
+            GenericContainer resDelHeader = reddit.Models.Subreddits.DeleteSrHeader(testData["Subreddit"]);
+            GenericContainer resDelImg = reddit.Models.Subreddits.DeleteSrImg("birdie", testData["Subreddit"]);
+            GenericContainer resDelBanner = reddit.Models.Subreddits.DeleteSrBanner(testData["Subreddit"]);
+            GenericContainer resDelIcon = reddit.Models.Subreddits.DeleteSrIcon(testData["Subreddit"]);
+
+            Assert.IsNotNull(resDelHeader);
+            Assert.IsNotNull(resDelHeader.JSON);
+            Assert.IsTrue(resDelHeader.JSON.Errors == null || resDelHeader.JSON.Errors.Count == 0);
+
+            Assert.IsNotNull(resDelImg);
+            Assert.IsNotNull(resDelImg.JSON);
+            Assert.IsTrue(resDelImg.JSON.Errors == null || resDelImg.JSON.Errors.Count == 0);
+
+            Assert.IsNotNull(resDelBanner);
+            Assert.IsNotNull(resDelBanner.JSON);
+            Assert.IsTrue(resDelBanner.JSON.Errors == null || resDelBanner.JSON.Errors.Count == 0);
+
+            Assert.IsNotNull(resDelIcon);
+            Assert.IsNotNull(resDelIcon.JSON);
+            Assert.IsTrue(resDelIcon.JSON.Errors == null || resDelIcon.JSON.Errors.Count == 0);
+        }
+
+        private byte[] GetResourceFile(string filename)
+        {
+            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Resources." + filename))
+            {
+                using (BinaryReader binaryReader = new BinaryReader(stream))
+                {
+                    return binaryReader.ReadBytes(int.MaxValue / 2);
+                }
+            }
         }
     }
 }

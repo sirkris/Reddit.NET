@@ -217,14 +217,14 @@ namespace Example
                 //File.WriteAllText("Emoji.AcquireLease.json", JsonConvert.SerializeObject(reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.png", "image/png")));
 
                 // Upload Emoji image to Reddit.  --Kris
-                byte[] imageData;
+                */byte[] imageData;
                 using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Example.Resources.birdie.png"))
                 {
                     using (BinaryReader binaryReader = new BinaryReader(stream))
                     {
-                        imageData = binaryReader.ReadBytes(Int32.MaxValue / 2);
+                        imageData = binaryReader.ReadBytes(int.MaxValue / 2);
                     }
-                }
+                }/*
                 ModelStructures.S3UploadLeaseContainer s3 = reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.jpg", "image/jpeg");
                 //File.WriteAllText("Emoji.UploadLeaseImage.json", JsonConvert.SerializeObject(reddit.Models.Emoji.UploadLeaseImage(imageData, s3)));
                 reddit.Models.Emoji.UploadLeaseImage(imageData, s3);
@@ -288,11 +288,31 @@ namespace Example
 
                 File.WriteAllText("Subreddits.SubredditAutocomplete.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubredditAutocomplete(false, true, "Shitty")));
                 File.WriteAllText("Subreddits.SubredditAutocompleteV2.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubredditAutocompleteV2(true, false,
-                    true, "Shitty")));*/
+                    true, "Shitty")));
                 File.WriteAllText("Subreddits.SubredditStylesheetPreview.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubredditStylesheet("preview",
                     "This is a test.", ".whatever{}", "RedditDotNETBot")));
                 File.WriteAllText("Subreddits.SubredditStylesheetSave.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubredditStylesheet("save",
                     "This is a test.", ".whatever{}", "RedditDotNETBot")));
+                File.WriteAllText("Subreddits.UploadSrImgIcon.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.UploadSrImg(imageData, 0, "birdie",
+                    "icon", "RedditDotNETBot", "png")));
+                File.WriteAllText("Subreddits.UploadSrImgBanner.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.UploadSrImg(imageData, 0, "birdie",
+                    "banner", "RedditDotNETBot", "png")));
+                File.WriteAllText("Subreddits.UploadSrImgHeader.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.UploadSrImg(imageData, 1, "birdie",
+                    "header", "RedditDotNETBot", "png")));
+                File.WriteAllText("Subreddits.UploadSrImgImg.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.UploadSrImg(imageData, 0, "birdie",
+                    "img", "RedditDotNETBot", "png")));
+                File.WriteAllText("Subreddits.DeleteSrHeader.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.DeleteSrHeader("RedditDotNETBot")));
+                File.WriteAllText("Subreddits.DeleteSrImg.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.DeleteSrImg("birdie", "RedditDotNETBot")));
+                File.WriteAllText("Subreddits.DeleteSrBanner.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.DeleteSrBanner("RedditDotNETBot")));
+                File.WriteAllText("Subreddits.DeleteSrIcon.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.DeleteSrIcon("RedditDotNETBot")));
+                //File.WriteAllText("Subreddits.SubscribeByFullname.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubscribeByFullname("sub", false,
+                //    "t5_3fblp")));
+                //File.WriteAllText("Subreddits.Subscribe.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Subscribe("sub", false,
+                //    "RedditDotNETBot")));
+                //File.WriteAllText("Subreddits.SearchProfiles.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SearchProfiles("", "", "t2_6vsit", "relevance")));
+                File.WriteAllText("Subreddits.Edit.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", false, "")));
+                File.WriteAllText("Subreddits.EditWithCreated.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", true, "")));*/
+                
             }
         }
     }
