@@ -314,7 +314,7 @@ namespace Example
                 File.WriteAllText("Subreddits.EditWithCreated.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", true, "")));*/
 
                 //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(
-                //    new ModelStructures.AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, "t5_3fblp"))));
+                //    new ModelStructures.AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, ""))));
 
             }
         }

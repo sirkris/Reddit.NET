@@ -68,5 +68,17 @@ namespace Reddit.NETTests.ModelTests
 
             Assert.IsNotNull(trophies);
         }
+
+        [TestMethod]
+        public void UpdatePrefs()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            // This just grabs your existing preferences and sends them right back.  --Kris
+            AccountPrefs res = reddit.Models.Account.UpdatePrefs(new AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, ""));
+
+            Assert.IsNotNull(res);
+        }
     }
 }

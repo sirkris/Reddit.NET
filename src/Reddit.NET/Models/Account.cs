@@ -40,28 +40,26 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<AccountPrefs>(ExecuteRequest("api/v1/me/prefs.json"));
         }
 
-        // TODO - API keeps returning 400 with a JSON parse error.  Structure is correct and this should work according to the API docs.  --Kris
         /// <summary>
         /// Update preferences.
         /// </summary>
         /// <param name="json">See https://www.reddit.com/dev/api/#PATCH_api_v1_me_prefs for required format</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UpdatePrefs(string json)
+        /// <returns>The updated preference settings of the logged in user.</returns>
+        public AccountPrefs UpdatePrefs(string json)
         {
             RestRequest restRequest = PrepareRequest("api/v1/me/prefs", Method.PATCH);
 
-            restRequest.AddBody(json);
+            restRequest.AddParameter("json", json);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<AccountPrefs>(ExecuteRequest(restRequest));
         }
 
-        // TODO - API keeps returning 400 with a JSON parse error.  Structure seems fine and this should work according to the API docs.  --Kris
         /// <summary>
         /// Update preferences.
         /// </summary>
         /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UpdatePrefs(AccountPrefsSubmit accountPrefs)
+        /// <returns>The updated preference settings of the logged in user.</returns>
+        public AccountPrefs UpdatePrefs(AccountPrefsSubmit accountPrefs)
         {
             return UpdatePrefs(JsonConvert.SerializeObject(accountPrefs));
         }
