@@ -312,7 +312,10 @@ namespace Example
                 //File.WriteAllText("Subreddits.SearchProfiles.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SearchProfiles("", "", "t2_6vsit", "relevance")));
                 File.WriteAllText("Subreddits.Edit.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", false, "")));
                 File.WriteAllText("Subreddits.EditWithCreated.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", true, "")));*/
-                
+
+                //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(
+                //    new ModelStructures.AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, "t5_3fblp"))));
+
             }
         }
     }
