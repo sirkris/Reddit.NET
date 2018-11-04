@@ -71,7 +71,6 @@ namespace Reddit.NET.Models
         public RestRequest PrepareRequest(RestRequest restRequest, string contentType = "application/x-www-form-urlencoded")
         {
             restRequest.AddHeader("Authorization", "bearer " + AccessToken);
-            //restRequest.AddHeader("User-Agent", "Reddit.NET");
 
             if (restRequest.Method == Method.POST || restRequest.Method == Method.PUT)
             {
@@ -88,6 +87,8 @@ namespace Reddit.NET.Models
 
         public string ExecuteRequest(RestRequest restRequest)
         {
+            restRequest.AddHeader("User-Agent", "Reddit.NET");
+
             IRestResponse res = RestClient.Execute(restRequest);
             int retry = 3;
             while ((res == null || !res.IsSuccessful)

@@ -94,8 +94,14 @@ namespace Reddit.NETTests.ModelTests
 
             GenericContainer res = reddit.Models.Users.Friend(null, null, null, null, 999, "RedditDotNetBot", "+mail", "moderator_invite", testData["Subreddit"]);
 
+            // While we're at it, let's use this opportunity to test the SetPermissions endpoint.  --Kris
+            GenericContainer res2 = reddit.Models.Users.SetPermissions("RedditDotNetBot", "+wiki", "moderator_invite", testData["Subreddit"]);
+
             Assert.IsNotNull(res);
             Assert.IsTrue(res.JSON.Errors.Count == 0);
+
+            Assert.IsNotNull(res2);
+            Assert.IsTrue(res2.JSON.Errors.Count == 0);
         }
 
         [TestMethod]
@@ -206,6 +212,45 @@ namespace Reddit.NETTests.ModelTests
             CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false);
 
             Assert.IsNotNull(history);
+        }
+
+        [TestMethod]
+        public void BlockAndUnblock()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            // Block user.
+            UserActionResult res = reddit.Models.Users.BlockUser("", "RedditDotNetBot");
+
+            // Unblock user (returns empty JSON).
+            reddit.Models.Users.Unfriend("t2_6vsit", "", "RedditDotNetBot", "enemy");
+
+            Assert.IsNotNull(res);
+        }
+
+        [TestMethod]
+        public void Friendship()
+        {
+            Dictionary<string, string> testData = GetData();
+            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            // Add a friend.
+            UserActionResult updateRes = reddit.Models.Users.UpdateFriend("RedditDotNetBot", "{}");
+
+            // Get data on an existing friend.
+            UserActionResult getRes = reddit.Models.Users.GetFriend("RedditDotNetBot");
+
+            // It's just not working out.  Delete the friend and burn all their stuff.
+            reddit.Models.Users.DeleteFriend("RedditDotNetBot");
+
+            Assert.IsNotNull(updateRes);
+            Assert.IsNotNull(updateRes.Name);
+            Assert.IsTrue(updateRes.Name.Equals("RedditDotNetBot"));
+
+            Assert.IsNotNull(getRes);
+            Assert.IsNotNull(getRes.Name);
+            Assert.IsTrue(getRes.Name.Equals("RedditDotNetBot"));
         }
     }
 }

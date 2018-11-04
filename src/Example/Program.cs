@@ -311,11 +311,21 @@ namespace Example
                 //    "RedditDotNETBot")));
                 //File.WriteAllText("Subreddits.SearchProfiles.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SearchProfiles("", "", "t2_6vsit", "relevance")));
                 File.WriteAllText("Subreddits.Edit.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", false, "")));
-                File.WriteAllText("Subreddits.EditWithCreated.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", true, "")));*/
+                File.WriteAllText("Subreddits.EditWithCreated.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", true, "")));
 
                 //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(
                 //    new ModelStructures.AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, ""))));
 
+                File.WriteAllText("Users.BlockUser.json", JsonConvert.SerializeObject(reddit.Models.Users.BlockUser("", "RedditDotNetBot")));
+                File.WriteAllText("Users.UnfriendUnblockUser.json", JsonConvert.SerializeObject(reddit.Models.Users.Unfriend("t2_6vsit", "", "RedditDotNetBot", "enemy")));
+                //File.WriteAllText("Users.ReportUser.json", JsonConvert.SerializeObject(reddit.Models.Users.ReportUser("", "This is an API unit test.  Please disregard.", 
+                //    "RedditDotNetBot")));
+                ///string json = JsonConvert.SerializeObject(new System.Collections.Generic.Dictionary<string, string> { { "name", "RedditDotNetBot" }, { "note", "This is a test." } });
+                File.WriteAllText("Users.UpdateFriend.json", JsonConvert.SerializeObject(reddit.Models.Users.UpdateFriend("RedditDotNetBot", "{}")));
+                File.WriteAllText("Users.GetFriend.json", JsonConvert.SerializeObject(reddit.Models.Users.GetFriend("RedditDotNetBot")));
+                //File.WriteAllText("Users.DeleteFriend.json", JsonConvert.SerializeObject(reddit.Models.Users.DeleteFriend("RedditDotNetBot")));*/
+                File.WriteAllText("Users.SetPermissions.json", JsonConvert.SerializeObject(reddit.Models.Users.SetPermissions("RedditDotNetBot", "+wiki",
+                    "moderator_invite", "RedditDotNETBot")));
             }
         }
     }
