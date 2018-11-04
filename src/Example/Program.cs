@@ -323,9 +323,17 @@ namespace Example
                 ///string json = JsonConvert.SerializeObject(new System.Collections.Generic.Dictionary<string, string> { { "name", "RedditDotNetBot" }, { "note", "This is a test." } });
                 File.WriteAllText("Users.UpdateFriend.json", JsonConvert.SerializeObject(reddit.Models.Users.UpdateFriend("RedditDotNetBot", "{}")));
                 File.WriteAllText("Users.GetFriend.json", JsonConvert.SerializeObject(reddit.Models.Users.GetFriend("RedditDotNetBot")));
-                //File.WriteAllText("Users.DeleteFriend.json", JsonConvert.SerializeObject(reddit.Models.Users.DeleteFriend("RedditDotNetBot")));*/
+                //File.WriteAllText("Users.DeleteFriend.json", JsonConvert.SerializeObject(reddit.Models.Users.DeleteFriend("RedditDotNetBot")));
                 File.WriteAllText("Users.SetPermissions.json", JsonConvert.SerializeObject(reddit.Models.Users.SetPermissions("RedditDotNetBot", "+wiki",
                     "moderator_invite", "RedditDotNETBot")));
+
+                //File.WriteAllText("Wiki.AllowEditor.json", JsonConvert.SerializeObject(reddit.Models.Wiki.AllowEditor("index", "RedditDotNetBot", "ShittyEmails")));
+                //File.WriteAllText("Wiki.DenyEditor.json", JsonConvert.SerializeObject(reddit.Models.Wiki.DenyEditor("index", "RedditDotNetBot", "ShittyEmails")));
+                //File.WriteAllText("Wiki.Edit.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Edit("Lorem ipsum dolor sit amet, motherfucker.", "index", "",
+                //    "Because I can.", "RedditDotNETBot")));
+                File.WriteAllText("Wiki.Hide.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Hide("index", "8566d93a-e008-11e8-bfae-0e3db72e7e22", "RedditDotNETBot")));*/
+                //File.WriteAllText("Wiki.Revert.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Revert("index", "2c57192e-e006-11e8-9659-0e20fd6a62a2", "RedditDotNETBot")));
+                File.WriteAllText("Wiki.UpdatePermissions.json", JsonConvert.SerializeObject(reddit.Models.Wiki.UpdatePermissions("index", true, 0, "RedditDotNETBot")));
             }
         }
     }

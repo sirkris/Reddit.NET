@@ -13,43 +13,38 @@ namespace Reddit.NET.Models
 
         public Wiki(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Allow username to edit this wiki page.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
         /// <param name="username">the name of an existing user</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object AllowEditor(string page, string username, string subreddit = null)
+        public void AllowEditor(string page, string username, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/alloweditor/add", Method.POST);
 
             restRequest.AddParameter("page", page);
             restRequest.AddParameter("username", username);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Deny username to edit this wiki page.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
         /// <param name="username">the name of an existing user</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object DenyEditor(string page, string username, string subreddit = null)
+        public void DenyEditor(string page, string username, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/alloweditor/del", Method.POST);
 
             restRequest.AddParameter("page", page);
             restRequest.AddParameter("username", username);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Edit a wiki page.
         /// </summary>
@@ -58,8 +53,7 @@ namespace Reddit.NET.Models
         /// <param name="previous">the starting point revision for this edit</param>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Edit(string content, string page, string previous, string reason, string subreddit = null)
+        public void Edit(string content, string page, string previous, string reason, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/edit", Method.POST);
 
@@ -67,46 +61,44 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("previous", previous);
             restRequest.AddParameter("reason", reason);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(reason));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Toggle the public visibility of a wiki page revision.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
         /// <param name="revision">a wiki revision ID</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Hide(string page, string revision, string subreddit = null)
+        /// <returns>Status object indicating true if page was hidden, false if page was unhidden.</returns>
+        public StatusResult Hide(string page, string revision, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/hide", Method.POST);
 
             restRequest.AddParameter("page", page);
             restRequest.AddParameter("revision", revision);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(revision));
+            return JsonConvert.DeserializeObject<StatusResult>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Revert a wiki page to revision.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
         /// <param name="revision">a wiki revision ID</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Revert(string page, string revision, string subreddit = null)
+        public void Revert(string page, string revision, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/revert", Method.POST);
 
             restRequest.AddParameter("page", page);
             restRequest.AddParameter("revision", revision);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(revision));
+            ExecuteRequest(restRequest);
         }
 
         // TODO - Needs testing.
+        // TODO - Creating a discussion requires using LinksAndComments to link to the Wiki page, so will include this in controller tests.  --Kris
         /// <summary>
         /// Retrieve a list of discussions about this wiki page.
         /// This endpoint is a listing.
@@ -207,23 +199,35 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<WikiPageSettingsContainer>(ExecuteRequest(Sr(subreddit) + "wiki/settings/" + page));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Update the permissions and visibility of wiki page.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
-        /// <param name="listed">boolean value</param>
-        /// <param name="permLevel">an integer</param>
+        /// <param name="listed">boolean value (true = appear in /wiki/pages, false = don't appear in /wiki/pages)</param>
+        /// <param name="permLevel">an integer (0 = use wiki perms, 1 = only approved users may edit, 2 = only mods may edit or view)</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UpdatePermissions(string page, bool listed, int permLevel, string subreddit = null)
+        /// <returns>An object containing wiki page settings.</returns>
+        public WikiPageSettingsContainer UpdatePermissions(string page, bool listed, int permLevel, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/settings/" + page, Method.POST);
 
             restRequest.AddParameter("listed", listed);
             restRequest.AddParameter("permlevel", permLevel);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<WikiPageSettingsContainer>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Update the permissions and visibility of wiki page.
+        /// </summary>
+        /// <param name="wikiPageSettings">A valid instance of WikiPageSettings</param>
+        /// <param name="listed">boolean value (true = appear in /wiki/pages, false = don't appear in /wiki/pages)</param>
+        /// <param name="permLevel">an integer (0 = use wiki perms, 1 = only approved users may edit, 2 = only mods may edit or view)</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        /// <returns>An object containing wiki page settings.</returns>
+        public WikiPageSettingsContainer UpdatePermissions(string page, WikiPageSettings wikiPageSettings, string subreddit = null)
+        {
+            return UpdatePermissions(page, wikiPageSettings.Listed, wikiPageSettings.PermLevel, subreddit);
         }
 
         /// <summary>
