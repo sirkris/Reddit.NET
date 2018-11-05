@@ -331,9 +331,39 @@ namespace Example
                 //File.WriteAllText("Wiki.DenyEditor.json", JsonConvert.SerializeObject(reddit.Models.Wiki.DenyEditor("index", "RedditDotNetBot", "ShittyEmails")));
                 //File.WriteAllText("Wiki.Edit.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Edit("Lorem ipsum dolor sit amet, motherfucker.", "index", "",
                 //    "Because I can.", "RedditDotNETBot")));
-                File.WriteAllText("Wiki.Hide.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Hide("index", "8566d93a-e008-11e8-bfae-0e3db72e7e22", "RedditDotNETBot")));*/
+                File.WriteAllText("Wiki.Hide.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Hide("index", "8566d93a-e008-11e8-bfae-0e3db72e7e22", "RedditDotNETBot")));
                 //File.WriteAllText("Wiki.Revert.json", JsonConvert.SerializeObject(reddit.Models.Wiki.Revert("index", "2c57192e-e006-11e8-9659-0e20fd6a62a2", "RedditDotNETBot")));
                 File.WriteAllText("Wiki.UpdatePermissions.json", JsonConvert.SerializeObject(reddit.Models.Wiki.UpdatePermissions("index", true, 0, "RedditDotNETBot")));
+
+                File.WriteAllText("LiveThreads.Create.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.Create("This is a test.", false, "Resources text.", "Title text.")));
+                //File.WriteAllText("LiveThreads.GetById.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.GetById("11wa6l86jy5th")));
+                //File.WriteAllText("LiveThreads.GetByIdMultiple.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.GetById("11wa6l86jy5th,11wa45xqbkw3m")));
+                File.WriteAllText("LiveThreads.About.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.About("11wa6l86jy5th")));
+                File.WriteAllText("LiveThreads.HappeningNow.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.HappeningNow()));
+                File.WriteAllText("LiveThreads.Edit.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.Edit("11wa6l86jy5th", "This is an ADULTS-ONLY test.", 
+                    true, "Resources text.", "Title text.")));
+                File.WriteAllText("LiveThreads.InviteContributor.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.InviteContributor("11wa6l86jy5th",
+                    "RedditDotNetBot", "+update", "liveupdate_contributor_invite")));
+                File.WriteAllText("LiveThreads.Report.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.Report("11wa6l86jy5th", "spam")));
+                File.WriteAllText("LiveThreads.SetContributorPermissions.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.SetContributorPermissions("11wa6l86jy5th",
+                    "RedditDotNetBot", "+edit", "liveupdate_contributor_invite")));
+                File.WriteAllText("LiveThreads.Contributors.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.Contributors("11wa6l86jy5th")));
+                File.WriteAllText("LiveThreads.RemoveContributorInvite.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.RemoveContributorInvite("11wa6l86jy5th",
+                    "t2_2cclzaxt")));
+                File.WriteAllText("LiveThreads.Update.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.Update("11wa6l86jy5th", "Test update!")));
+                File.WriteAllText("LiveThreads.GetUpdates.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.GetUpdates("11wa6l86jy5th", "", "", "")));
+                File.WriteAllText("LiveThreads.StrikeUpdate.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.StrikeUpdate("11wa6l86jy5th",
+                    "LiveUpdate_7e623536-e0d4-11e8-a8f9-0e205404551e")));
+                File.WriteAllText("LiveThreads.GetUpdate.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.GetUpdate("11wa6l86jy5th",
+                    "7e623536-e0d4-11e8-a8f9-0e205404551e")));
+                File.WriteAllText("LiveThreads.DeleteUpdate.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.DeleteUpdate("11wa6l86jy5th",
+                    "LiveUpdate_7e623536-e0d4-11e8-a8f9-0e205404551e")));
+                //File.WriteAllText("LiveThreads.Discussions.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.Discussions("11wa6l86jy5th", "", "")));
+                File.WriteAllText("LiveThreads.LeaveContributor.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.LeaveContributor("11waah0gnqebm")));
+                File.WriteAllText("LiveThreads.RemoveContributor.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.RemoveContributor("11wa45xqbkw3m", "t2_6vsit")));
+                File.WriteAllText("LiveThreads.CloseThread.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.CloseThread("11wa6l86jy5th")));*/
+
+
             }
         }
     }

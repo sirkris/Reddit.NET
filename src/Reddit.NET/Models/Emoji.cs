@@ -97,8 +97,6 @@ namespace Reddit.NET.Models
             restRequest.AddFileBytes("file", imageData, "birdie.jpg", s3.S3UploadLease.Fields.First(
                 item => item.Name.Equals("content-type", StringComparison.OrdinalIgnoreCase)).Value);
 
-            string blah = ExecuteRequest(restRequest);
-
             ExecuteRequest(restRequest);
         }
 

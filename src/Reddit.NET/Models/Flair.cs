@@ -97,8 +97,13 @@ namespace Reddit.NET.Models
 
             restRequest.AddParameter("flair_type", flairType);
 
-            string order = string.Join(",", flairs);  // ?
-            restRequest.AddParameter("order", order);  // ?
+            List<string> flairIds = new List<string>();
+            foreach (Structures.Flair flair in flairs)
+            {
+                flairIds.Add(flair.Id);
+            }
+
+            restRequest.AddBody(JsonConvert.SerializeObject(flairIds));  // ?
 
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
