@@ -27,7 +27,7 @@ namespace Reddit.NET.Models
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>An object containing the requested data.</returns>
-        public object About(string where, string after, string before, string user, bool includeCategories, string subreddit = null, int count = 0,
+        public DynamicShortListingContainer About(string where, string after, string before, string user, bool includeCategories, string subreddit = null, int count = 0,
             int limit = 25, string show = "all", bool srDetail = false)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "about/" + where);
@@ -41,7 +41,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<DynamicShortListingContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -55,56 +55,52 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditChild>(ExecuteRequest("r/" + subreddit + "/about"));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Remove the subreddit's custom mobile banner.
         /// See also: /api/upload_sr_img.
         /// </summary>
         /// <param name="subreddit">The subreddit being queried</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object DeleteSrBanner(string subreddit = null)
+        /// <returns>An object indicating any errors.</returns>
+        public GenericContainer DeleteSrBanner(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_banner", Method.POST);
 
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Remove the subreddit's custom header image.
         /// The sitewide-default header image will be shown again after this call.
         /// See also: /api/upload_sr_img.
         /// </summary>
         /// <param name="subreddit">The subreddit being queried</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object DeleteSrHeader(string subreddit = null)
+        /// <returns>An object indicating any errors.</returns>
+        public GenericContainer DeleteSrHeader(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_header", Method.POST);
 
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Remove the subreddit's custom mobile icon.
         /// See also: /api/upload_sr_img.
         /// </summary>
         /// <param name="subreddit">The subreddit being queried</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object DeleteSrIcon(string subreddit = null)
+        /// <returns>An object indicating any errors.</returns>
+        public GenericContainer DeleteSrIcon(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_icon", Method.POST);
 
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Remove an image from the subreddit's custom image set.
         /// The image will no longer count against the subreddit's image limit. However, the actual image data may still be accessible for an unspecified amount of time. 
@@ -113,17 +109,18 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="imgName">a valid subreddit image name</param>
         /// <param name="subreddit">The subreddit being queried</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object DeleteSrImg(string imgName, string subreddit = null)
+        /// <returns>An object indicating any errors.</returns>
+        public GenericContainer DeleteSrImg(string imgName, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/delete_sr_img", Method.POST);
 
             restRequest.AddParameter("img_name", imgName);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
+        // TODO - Every test I try just returns an empty JSON result.  --Kris
         /// <summary>
         /// Return subreddits recommended for the given subreddit(s).
         /// Gets a list of subreddits recommended for srnames, filtering out any that appear in the optional omit param.
@@ -154,7 +151,7 @@ namespace Reddit.NET.Models
         /// <param name="includeUnadvertisable">boolean value</param>
         /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
         /// <returns>A list of subreddit names.</returns>
-        public object SearchRedditNames(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
+        public SubredditNames SearchRedditNames(bool exact, bool includeOver18, bool includeUnadvertisable, string query)
         {
             RestRequest restRequest = PrepareRequest("api/search_reddit_names");
 
@@ -163,7 +160,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("include_unadvertisable", includeUnadvertisable);
             restRequest.AddParameter("query", query);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditNames>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -238,7 +235,7 @@ namespace Reddit.NET.Models
         /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
         /// <returns>An object indicating any errors.</returns>
-        public object SiteAdmin(bool allOriginalContent, bool allowDiscovery, bool allowImages, bool allowPostCrossposts, bool allowTop,
+        public GenericContainer SiteAdmin(bool allOriginalContent, bool allowDiscovery, bool allowImages, bool allowPostCrossposts, bool allowTop,
             bool allowVideos, bool collapseDeletedComments, string description, bool excludeBannedModqueue, bool freeFormReports,
             string gRecaptchaResponse, string headerTitle, bool hideAds, string keyColor, string lang, string linkType, string name, bool originalContentTagEnabled,
             bool over18, string publicDescription, bool showMedia, bool showMediaPreview, string spamComments, string spamLinks, string spamSelfPosts,
@@ -289,7 +286,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("wikimode", wikiMode);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -317,7 +314,7 @@ namespace Reddit.NET.Models
         /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
         /// <returns>An object indicating any errors.</returns>
-        public object SiteAdmin(Subreddit subreddit, bool allowPostCrossposts, bool allowTop, bool excludeBannedModqueue, bool freeFormReports,
+        public GenericContainer SiteAdmin(Subreddit subreddit, bool allowPostCrossposts, bool allowTop, bool excludeBannedModqueue, bool freeFormReports,
             string gRecaptchaResponse, string linkType, string spamComments, string spamLinks, string spamSelfPosts, string sr, string themeSr,
             bool themeSrUpdate, string wikiMode, int wikiEditAge = 0, int wikiEditKarma = 0)
         {
@@ -337,12 +334,11 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>An object containing submission text.</returns>
-        public object SubmitText(string subreddit = null)
+        public SubredditSubmitText SubmitText(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest(Sr(subreddit) + "api/submit_text"));
+            return JsonConvert.DeserializeObject<SubredditSubmitText>(ExecuteRequest(Sr(subreddit) + "api/submit_text"));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Return a list of subreddits and data for subreddits whose names start with 'query'.
         /// Uses typeahead endpoint to recieve the list of subreddits names. Typeahead provides exact matches, typo correction, fuzzy matching and boosts subreddits to the top that the user is subscribed to.
@@ -350,8 +346,8 @@ namespace Reddit.NET.Models
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeProfiles">boolean value</param>
         /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SubredditAutocomplete(bool includeOver18, bool includeProfiles, string query)
+        /// <returns>Matching subreddits.</returns>
+        public SubredditAutocompleteResultContainer SubredditAutocomplete(bool includeOver18, bool includeProfiles, string query)
         {
             RestRequest restRequest = PrepareRequest("api/subreddit_autocomplete");
 
@@ -359,10 +355,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("include_profiles", includeProfiles);
             restRequest.AddParameter("query", query);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditAutocompleteResultContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Version 2 of SubredditAutocomplete.
         /// </summary>
@@ -371,8 +366,8 @@ namespace Reddit.NET.Models
         /// <param name="includeProfiles">boolean value</param>
         /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
         /// <param name="limit">an integer between 1 and 10 (default: 5)</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SubredditAutocompleteV2(bool includeCategories, bool includeOver18, bool includeProfiles, string query, int limit = 5)
+        /// <returns>Matching subreddits.</returns>
+        public SubredditContainer SubredditAutocompleteV2(bool includeCategories, bool includeOver18, bool includeProfiles, string query, int limit = 5)
         {
             RestRequest restRequest = PrepareRequest("api/subreddit_autocomplete_v2");
 
@@ -382,10 +377,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("query", query);
             restRequest.AddParameter("limit", limit);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Update a subreddit's stylesheet.
         /// op should be save to update the contents of the stylesheet.
@@ -394,8 +388,8 @@ namespace Reddit.NET.Models
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="stylesheetContents">the new stylesheet content</param>
         /// <param name="subreddit">The subreddit being queried</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SubredditStylesheet(string op, string reason, string stylesheetContents, string subreddit = null)
+        /// <returns>An object indicating any errors.</returns>
+        public GenericContainer SubredditStylesheet(string op, string reason, string stylesheetContents, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/subreddit_stylesheet", Method.POST);
 
@@ -404,10 +398,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("stylesheet_contents", stylesheetContents);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Subscribe to or unsubscribe from a subreddit.
         /// To subscribe, action should be sub.To unsubscribe, action should be unsub.The user must have access to the subreddit to be able to subscribe to it.
@@ -418,8 +411,7 @@ namespace Reddit.NET.Models
         /// <param name="action">one of (sub, unsub)</param>
         /// <param name="skipInitialDefaults">boolean value</param>
         /// <param name="sr">A comma-separated list of subreddit fullnames</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SubscribeByFullname(string action, bool skipInitialDefaults, string sr)
+        public void SubscribeByFullname(string action, bool skipInitialDefaults, string sr)
         {
             RestRequest restRequest = PrepareRequest("api/subscribe", Method.POST);
 
@@ -427,10 +419,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("skip_initial_defaults", skipInitialDefaults);
             restRequest.AddParameter("sr", sr);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Subscribe to or unsubscribe from a subreddit.
         /// To subscribe, action should be sub.To unsubscribe, action should be unsub.The user must have access to the subreddit to be able to subscribe to it.
@@ -441,8 +432,7 @@ namespace Reddit.NET.Models
         /// <param name="action">one of (sub, unsub)</param>
         /// <param name="skipInitialDefaults">boolean value</param>
         /// <param name="srName">A comma-separated list of subreddit names</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Subscribe(string action, bool skipInitialDefaults, string srName)
+        public void Subscribe(string action, bool skipInitialDefaults, string srName)
         {
             RestRequest restRequest = PrepareRequest("api/subscribe", Method.POST);
 
@@ -450,10 +440,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("skip_initial_defaults", skipInitialDefaults);
             restRequest.AddParameter("sr_name", srName);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Add or replace a subreddit image, custom header logo, custom mobile icon, or custom mobile banner.
         /// If the upload_type value is img, an image for use in the subreddit stylesheet is uploaded with the name specified in name.
@@ -471,27 +460,27 @@ namespace Reddit.NET.Models
         /// <param name="file">file upload with maximum size of 500 KiB</param>
         /// <param name="header">an integer between 0 and 1</param>
         /// <param name="name">a valid subreddit image name</param>
-        /// <param name="uploadType"one of (img, header, icon, banner)></param>
+        /// <param name="uploadType">one of (img, header, icon, banner)></param>
         /// <param name="subreddit">The subreddit being queried</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
         /// <param name="formId">(optional) can be ignored</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UploadSrImg(byte[] file, int header, string name, string uploadType, string subreddit = null, string imgType = "png",
-            string formId = null)
+        /// <returns>An object containing the resulting image URL and any errors.</returns>
+        public ImageUploadResult UploadSrImg(byte[] file, int header, string name, string uploadType, string subreddit = null, string imgType = "png",
+            string formId = "")
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/upload_sr_img", Method.POST);
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/upload_sr_img", Method.POST, "multipart/form-data");
 
-            restRequest.AddParameter("file", file);
+            restRequest.AddFileBytes("file", file, name + "." + imgType);
             restRequest.AddParameter("header", header);
             restRequest.AddParameter("name", name);
             restRequest.AddParameter("upload_type", uploadType);
             restRequest.AddParameter("img_type", imgType);
             restRequest.AddParameter("formid", formId);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<ImageUploadResult>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
+        // TODO - API returns 400 (after/before == "", q == "KrisCraig" or "t2_6vsit", sort == "relevance").  No idea why.  --Kris
         /// <summary>
         /// Search user profiles by title and description.
         /// This endpoint is a listing.
@@ -522,7 +511,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Get the current settings of a subreddit.
         /// This returns the current settings of the subreddit as used by /api/site_admin.
@@ -530,15 +518,15 @@ namespace Reddit.NET.Models
         /// <param name="subreddit">The subreddit being queried</param>
         /// <param name="created">one of (true, false)</param>
         /// <param name="location"></param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Edit(string subreddit, bool created, string location)
+        /// <returns>Settings for the requested subreddit.</returns>
+        public SubredditSettingsContainer Edit(string subreddit, bool created, string location)
         {
             RestRequest restRequest = PrepareRequest("r/" + subreddit + "/about/edit");
 
             restRequest.AddParameter("created", created);
             restRequest.AddParameter("location", location);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<SubredditSettingsContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -556,9 +544,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit being queried</param>
         /// <returns>Subreddit traffic data.</returns>
-        public object Traffic(string subreddit)
+        public Traffic Traffic(string subreddit)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("r/" + subreddit + "/about/traffic"));
+            return JsonConvert.DeserializeObject<Traffic>(ExecuteRequest("r/" + subreddit + "/about/traffic"));
         }
 
         /*
@@ -574,7 +562,7 @@ namespace Reddit.NET.Models
         }
 
         /* Note - The API docs show the wrong URL for this endpoint (I think).
-         * This endpoint returns 403, with the content saying, "Request forbidden by administrative rules."
+         * TODO - This endpoint returns 403, with the content saying, "Request forbidden by administrative rules."
          * The response object does contain the URL of the stickied post, though, interestingly enough.
          * 
          * --Kris

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Reddit.NET.Models.Converters;
 using System;
 using System.Collections.Generic;
@@ -32,7 +33,7 @@ namespace Reddit.NET.Models.Structures
         public string IconURL;
 
         [JsonProperty("subreddits")]
-        public object Subreddits;
+        public List<UserSubredditContainer> Subreddits;
 
         [JsonProperty("created_utc")]
         [JsonConverter(typeof(TimestampConvert))]

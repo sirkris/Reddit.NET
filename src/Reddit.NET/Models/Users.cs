@@ -13,21 +13,20 @@ namespace Reddit.NET.Models
 
         public Users(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
-        // TODO - Needs testing.
         /// <summary>
         /// For blocking a user.
         /// </summary>
-        /// <param name="accountId">ullname of a account</param>
+        /// <param name="accountId">fullname of a account</param>
         /// <param name="name">A valid, existing reddit username</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object BlockUser(string accountId, string name)
+        /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
+        public UserActionResult BlockUser(string accountId, string name)
         {
             RestRequest restRequest = PrepareRequest("api/block_user", Method.POST);
 
             restRequest.AddParameter("account_id", accountId);
             restRequest.AddParameter("name", name);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<UserActionResult>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -54,7 +53,7 @@ namespace Reddit.NET.Models
         /// <param name="type">one of (friend, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
         /// <param name="subreddit">A subreddit</param>
         /// <returns>An object indicating any errors.</returns>
-        public object Friend(string banContext, string banMessage, string banReason, string container, int duration, string name,
+        public GenericContainer Friend(string banContext, string banMessage, string banReason, string container, int duration, string name,
             string permissions, string type, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/friend", Method.POST);
@@ -69,18 +68,17 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("type", type);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
+        // Note - I tested this one manually.  Leaving out of automated tests so as not to spam the Reddit admins.  --Kris
         /// <summary>
         /// Report a user. Reporting a user brings it to the attention of a Reddit admin.
         /// </summary>
         /// <param name="details">JSON data</param>
         /// <param name="reason">a string no longer than 100 characters</param>
         /// <param name="user">A valid, existing reddit username</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object ReportUser(string details, string reason, string user)
+        public void ReportUser(string details, string reason, string user)
         {
             RestRequest restRequest = PrepareRequest("api/report_user", Method.POST);
 
@@ -88,10 +86,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("reason", reason);
             restRequest.AddParameter("user", user);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Set permissions.
         /// </summary>
@@ -99,8 +96,8 @@ namespace Reddit.NET.Models
         /// <param name="permissions"></param>
         /// <param name="type"></param>
         /// <param name="subreddit">A subreddit</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SetPermissions(string name, string permissions, string type, string subreddit = null)
+        /// <returns>An object indicating any errors.</returns>
+        public GenericContainer SetPermissions(string name, string permissions, string type, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/setpermissions", Method.POST);
 
@@ -109,10 +106,11 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("type", type);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
+        // TODO - Requires subreddit with mod access for most types so will put them in controller tests.  --Kris
         /// <summary>
         /// Remove a relationship between a user and another user or subreddit.
         /// The user can either be passed in by name (nuser) or by fullname (iuser).
@@ -177,29 +175,27 @@ namespace Reddit.NET.Models
             return (res != null && bool.TryParse(res.ToString(), out bool dump) ? (bool?)res : null);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Stop being friends with a user.
         /// </summary>
         /// <param name="username">A valid, existing reddit username</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object DeleteFriend(string username)
+        public void DeleteFriend(string username)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/friends/" + username, Method.DELETE));
+            ExecuteRequest("api/v1/me/friends/" + username, Method.DELETE);
         }
 
-        // TODO - Needs testing.
+        // Note - Returns 400 if you are not friends with the specified user.  --Kris
         /// <summary>
         /// Get information about a specific 'friend', such as notes.
         /// </summary>
         /// <param name="username">A valid, existing reddit username</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object GetFriend(string username)
+        /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
+        public UserActionResult GetFriend(string username)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/me/friends/" + username));
+            return JsonConvert.DeserializeObject<UserActionResult>(ExecuteRequest("api/v1/me/friends/" + username));
         }
 
-        // TODO - Needs testing.
+        // Note - If I include the recommended JSON fields, API returns the error, "you must have an active reddit gold subscription to do that".  --Kris
         /// <summary>
         /// Create or update a "friend" relationship.
         /// This operation is idempotent. It can be used to add a new friend, or update an existing friend (e.g., add/change the note on that friend).
@@ -209,16 +205,16 @@ namespace Reddit.NET.Models
         /// "name": A valid, existing reddit username
         /// "note": a string no longer than 300 characters
         /// }</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UpdateFriend(string username, string json)
+        /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
+        public UserActionResult UpdateFriend(string username, string json = "{}")
         {
             RestRequest restRequest = PrepareRequest("api/v1/me/friends/" + username, Method.PUT);
 
-            restRequest.AddBody(json);
+            restRequest.AddParameter("json", json);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<UserActionResult>(ExecuteRequest(restRequest));
         }
-
+        
         /// <summary>
         /// Return a list of trophies for the a given user.
         /// </summary>

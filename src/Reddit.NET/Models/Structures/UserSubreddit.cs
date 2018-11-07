@@ -20,6 +20,9 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("user_is_banned")]
         public bool UserIsBanned;
 
+        [JsonProperty("free_form_reports")]
+        public bool FreeFormReports;
+
         [JsonProperty("community_icon")]
         public string CommunityIcon;
 
@@ -63,7 +66,7 @@ namespace Reddit.NET.Models.Structures
         public string Description;
 
         [JsonProperty("header_size")]
-        public string HeaderSize;
+        public List<int> HeaderSize;
 
         [JsonProperty("subscribers")]
         public int Subscribers;

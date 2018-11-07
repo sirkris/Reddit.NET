@@ -29,6 +29,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Collapse a message
         /// See also: /api/uncollapse_message
@@ -68,6 +69,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Delete messages from the recipient's view of their inbox.
         /// </summary>
@@ -83,6 +85,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Queue up marking all messages for a user as read.
         /// This may take some time, and returns 202 to acknowledge acceptance of the request.
@@ -99,6 +102,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Mark a message as read.
         /// </summary>
@@ -113,7 +117,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
+        // TODO - Reddit API returns 500 server error.  No idea why.
         /// <summary>
         /// Unblock a subreddit.
         /// </summary>
@@ -129,6 +133,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Uncollapse a message.
         /// </summary>
@@ -144,6 +149,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Mark a message as unread.
         /// </summary>

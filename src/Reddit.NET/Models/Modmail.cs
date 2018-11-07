@@ -13,7 +13,7 @@ namespace Reddit.NET.Models
 
         public Modmail(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
-        // TODO - Needs testing.
+        // TODO - This endpoint keeps returning 404.  No idea why.  Tried with both DisplayName and fullname.  --Kris
         /// <summary>
         /// Marks all conversations read for a particular conversation state within the passed list of subreddits.
         /// </summary>
@@ -30,7 +30,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
+        // TODO - Requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Get conversations for a logged in user or subreddits.
         /// </summary>
@@ -39,8 +39,8 @@ namespace Reddit.NET.Models
         /// <param name="sort">one of (recent, mod, user, unread)</param>
         /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
         /// <param name="limit">an integer (default: 25)</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object GetConversations(string after, string entity, string sort, string state, int limit = 25)
+        /// <returns>The requested conversations.</returns>
+        public ConversationContainer GetConversations(string after, string entity, string sort, string state, int limit = 25)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations");
 
@@ -50,10 +50,11 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("state", state);
             restRequest.AddParameter("limit", limit);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<ConversationContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
+        // TODO - Requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Creates a new conversation for a particular SR.
         /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
@@ -78,6 +79,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Returns all messages, mod actions and conversation metadata for a given conversation id.
         /// </summary>
@@ -94,6 +96,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Creates a new message for a particular conversation.
         /// </summary>
@@ -114,6 +117,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Marks a conversation as archived.
         /// </summary>
@@ -125,6 +129,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Removes a highlight from a conversation.
         /// </summary>
@@ -136,6 +141,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Marks a conversation as highlighted.
         /// </summary>
@@ -147,6 +153,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Mutes the non mod user associated with a particular conversation.
         /// </summary>
@@ -158,6 +165,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Marks conversation as unarchived.
         /// </summary>
@@ -169,6 +177,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Unmutes the non mod user associated with a particular conversation.
         /// </summary>
@@ -180,6 +189,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Returns recent posts, comments and modmail conversations for a given user.
         /// </summary>
@@ -191,6 +201,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Marks a conversations as read for the user.
         /// </summary>
@@ -215,6 +226,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Marks conversations as unread for the user.
         /// </summary>

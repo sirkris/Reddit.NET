@@ -44,7 +44,7 @@ namespace Reddit.NET.Models
             RestRequest restRequest = PrepareRequest("api/multi/mine");
 
             restRequest.AddParameter("expand_srs", expandSrs);
-
+            string blah = ExecuteRequest(restRequest);
             return JsonConvert.DeserializeObject<List<LabeledMultiContainer>>(ExecuteRequest(restRequest));
         }
 
@@ -145,7 +145,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
+        // TODO - Returns 400 with the error, "Unable to parse JSON."  The JSON being sent is identical to what the docs specify.  --Kris
         /// <summary>
         /// Create a multi. Responds with 409 Conflict if it already exists.
         /// </summary>
@@ -169,12 +169,13 @@ namespace Reddit.NET.Models
         /// }</param>
         /// <param name="expandSrs">boolean value</param>
         /// <returns>(TODO - Untested)</returns>
-        public object Create(string multipath, string model, bool expandSrs)
+        public object Create(string multipath, LabeledMultiSubmit model, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath, Method.POST);
 
+            restRequest.AddBody(JsonConvert.SerializeObject(model));
             restRequest.AddParameter("expand_srs", expandSrs);
-
+            
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
@@ -282,9 +283,9 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="multipath">multireddit url path</param>
         /// <returns>An object containing a description.</returns>
-        public object GetDescription(string multipath)
+        public LabeledMultiDescriptionContainer GetDescription(string multipath)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/multi/" + multipath + "/description"));
+            return JsonConvert.DeserializeObject<LabeledMultiDescriptionContainer>(ExecuteRequest("api/multi/" + multipath + "/description"));
         }
 
         // TODO - Needs testing.

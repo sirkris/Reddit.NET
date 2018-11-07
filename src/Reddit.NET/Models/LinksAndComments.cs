@@ -27,7 +27,7 @@ namespace Reddit.NET.Models
         /// <param name="text">raw markdown text</param>
         /// <param name="thingId">fullname of parent thing</param>
         /// <returns>A Reddit comment.</returns>
-        public GenericContainer Comment(bool returnRtjson, string richtextJson, string text, string thingId)
+        public CommentResultContainer Comment(bool returnRtjson, string richtextJson, string text, string thingId)
         {
             RestRequest restRequest = PrepareRequest("api/comment", Method.POST);
 
@@ -37,25 +37,22 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("thing_id", thingId);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<CommentResultContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Delete a Link or Comment.
         /// </summary>
         /// <param name="id">fullname of a thing created by the user</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Delete(string id)
+        public void Delete(string id)
         {
             RestRequest restRequest = PrepareRequest("api/del", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Edit the body text of a comment or self-post.
         /// </summary>
@@ -63,8 +60,8 @@ namespace Reddit.NET.Models
         /// <param name="richtextJson">JSON data</param>
         /// <param name="text">raw markdown text</param>
         /// <param name="thingId">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object EditUserText(bool returnRtjson, string richtextJson, string text, string thingId)
+        /// <returns>The modified post data.</returns>
+        public PostResultContainer EditUserText(bool returnRtjson, string richtextJson, string text, string thingId)
         {
             RestRequest restRequest = PrepareRequest("api/editusertext", Method.POST);
 
@@ -74,77 +71,91 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("thing_id", thingId);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostResultContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Hide a link.
         /// This removes it from the user's default view of subreddit listings.
         /// See also: /api/unhide.
         /// </summary>
         /// <param name="id">A comma-separated list of link fullnames</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Hide(string id)
+        public void Hide(string id)
         {
             RestRequest restRequest = PrepareRequest("api/hide", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Return a listing of things specified by their fullnames.
         /// Only Links, Comments, and Subreddits are allowed.
         /// </summary>
         /// <param name="id">A comma-separated list of thing fullnames</param>
         /// <param name="subreddit">The subreddit with the listing.</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Info(string id, string subreddit = null)
+        /// <returns>The requested listings.</returns>
+        public Info Info(string id, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/info");
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            DynamicListingContainer res = JsonConvert.DeserializeObject<DynamicListingContainer>(ExecuteRequest(restRequest));
+
+            List<Post> posts = new List<Post>();
+            List<Comment> comments = new List<Comment>();
+            List<Subreddit> subreddits = new List<Subreddit>();
+
+            foreach (DynamicListingChild child in res.Data.Children)
+            {
+                switch (child.Kind)
+                {
+                    case "t3":
+                        posts.Add(JsonConvert.DeserializeObject<Post>(JsonConvert.SerializeObject(child.Data)));
+                        break;
+                    case "t1":
+                        comments.Add(JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data)));
+                        break;
+                    case "t5":
+                        subreddits.Add(JsonConvert.DeserializeObject<Subreddit>(JsonConvert.SerializeObject(child.Data)));
+                        break;
+                }
+            }
+
+            return new Info(posts, comments, subreddits);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Lock a link.
         /// Prevents a post from receiving new comments.
         /// See also: /api/unlock.
         /// </summary>
         /// <param name="id">fullname of a link</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Lock(string id)
+        public void Lock(string id)
         {
             RestRequest restRequest = PrepareRequest("api/lock", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Mark a link NSFW.
         /// See also: /api/unmarknsfw.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object MarkNSFW(string id)
+        public void MarkNSFW(string id)
         {
             RestRequest restRequest = PrepareRequest("api/marknsfw", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Retrieve additional comments omitted from a base comment tree.
         /// When a comment tree is rendered, the most relevant comments are selected for display first.
@@ -159,8 +170,8 @@ namespace Reddit.NET.Models
         /// <param name="linkId">fullname of a link</param>
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
         /// <param name="id">(optional) id of the associated MoreChildren object</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object MoreChildren(string children, bool limitChildren, string linkId, string sort, string id = null)
+        /// <returns>The requested comments.</returns>
+        public MoreChildren MoreChildren(string children, bool limitChildren, string linkId, string sort, string id = null)
         {
             RestRequest restRequest = PrepareRequest("api/morechildren");
 
@@ -171,10 +182,25 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("id", id);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            MultipleResponseContainer res = JsonConvert.DeserializeObject<MultipleResponseContainer>(ExecuteRequest(restRequest));
+
+            MoreChildren moreChildren = new MoreChildren();
+            foreach (DynamicListingChild child in res.JSON.Data.Things)
+            {
+                switch (child.Kind)
+                {
+                    case "t1":
+                        moreChildren.Comments.Add(JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data)));
+                        break;
+                    case "more":
+                        moreChildren.MoreData.Add(JsonConvert.DeserializeObject<MoreData>(JsonConvert.SerializeObject(child.Data)));
+                        break;
+                }
+            }
+
+            return moreChildren;
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Report a link, comment or message.
         /// Reporting a thing brings it to the attention of the subreddit's moderators.
@@ -192,8 +218,8 @@ namespace Reddit.NET.Models
         /// <param name="srName">a string no longer than 1000 characters</param>
         /// <param name="thingId">fullname of a thing</param>
         /// <param name="violatorUsername"></param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Report(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
+        /// <returns>A return object indicating success.</returns>
+        public JQueryReturn Report(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string srName, string thingId,
             string violatorUsername)
         {
@@ -211,10 +237,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("thing_id", thingId);
             restRequest.AddParameter("violator_username", violatorUsername);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<JQueryReturn>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Save a link or comment.
         /// Saved things are kept in the user's saved listing for later perusal.
@@ -222,18 +247,17 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="category">a category name</param>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Save(string category, string id)
+        public void Save(string category, string id)
         {
-            RestRequest restRequest = PrepareRequest("api/store_visits", Method.POST);
+            RestRequest restRequest = PrepareRequest("api/save", Method.POST);
 
             restRequest.AddParameter("category", category);
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
+        // TODO - API returns 403 whenever I try to hit this endpoint.  No idea why.  --Kris
         /// <summary>
         /// Get a list of categories in which things are currently saved.
         /// See also: /api/save.
@@ -244,33 +268,30 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest("api/saved_categories"));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Enable or disable inbox replies for a link or comment.
         /// state is a boolean that indicates whether you are enabling or disabling inbox replies - true to enable, false to disable.
         /// </summary>
         /// <param name="id">fullname of a thing created by the user</param>
         /// <param name="state">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SendReplies(string id, bool state)
+        public void SendReplies(string id, bool state)
         {
             RestRequest restRequest = PrepareRequest("api/sendreplies", Method.POST);
 
             restRequest.AddParameter("id", id);
             restRequest.AddParameter("state", state);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Set or unset "contest mode" for a link's comments.
         /// state is a boolean that indicates whether you are enabling or disabling contest mode - true to enable, false to disable.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="state">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SetContestMode(string id, bool state)
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer SetContestMode(string id, bool state)
         {
             RestRequest restRequest = PrepareRequest("api/set_contest_mode", Method.POST);
 
@@ -278,10 +299,9 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("state", state);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Set or unset a Link as the sticky in its subreddit.
         /// state is a boolean that indicates whether to sticky or unsticky this post - true to sticky, false to unsticky.
@@ -289,12 +309,12 @@ namespace Reddit.NET.Models
         /// It allows specifying a particular "slot" to sticky the post into, and if there is already a post stickied in that slot it will be replaced.
         /// If there is no post in the specified slot to replace, or num is None, the bottom-most slot will be used.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a link</param>
         /// <param name="num">an integer between 1 and 4</param>
         /// <param name="state">boolean value</param>
         /// <param name="toProfile">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SetSubredditSticky(string id, int num, bool state, bool toProfile)
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer SetSubredditSticky(string id, int num, bool state, bool toProfile)
         {
             RestRequest restRequest = PrepareRequest("api/set_subreddit_sticky", Method.POST);
 
@@ -304,19 +324,18 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("to_profile", toProfile);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Set a suggested sort for a link.
         /// Suggested sorts are useful to display comments in a certain preferred way for posts.
         /// For example, casual conversation may be better sorted by new by default, or AMAs may be sorted by Q&A.A sort of an empty string clears the default sort.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">fullname of a link</param>
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live, blank)</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SetSuggestedSort(string id, string sort)
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer SetSuggestedSort(string id, string sort)
         {
             RestRequest restRequest = PrepareRequest("api/set_suggested_sort", Method.POST);
 
@@ -324,22 +343,20 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("sort", sort);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Spoiler.
         /// </summary>
         /// <param name="id">fullname of a link</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Spoiler(string id)
+        public void Spoiler(string id)
         {
             RestRequest restRequest = PrepareRequest("api/spoiler", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         // TODO - Needs testing.
@@ -384,7 +401,7 @@ namespace Reddit.NET.Models
         /// <param name="url">a valid URL</param>
         /// <param name="videoPosterUrl">a valid URL</param>
         /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
-        public GenericContainer Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResopnse,
+        public PostResultShortContainer Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResopnse,
             string kind, bool nsfw, bool resubmit, string richtextJson, bool sendReplies, bool spoiler, string sr, string text,
             string title, string url, string videoPosterUrl)
         {
@@ -409,87 +426,77 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("video_poster_url", videoPosterUrl);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<PostResultShortContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Unhide a link.
         /// </summary>
         /// <param name="id">A comma-separated list of link fullnames</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Unhide(string id)
+        public void Unhide(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unhide", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Unlock a link.
         /// Allow a post to receive new comments.
         /// See also: /api/lock.
         /// </summary>
         /// <param name="id">fullname of a link</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Unlock(string id)
+        public void Unlock(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unlock", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Remove the NSFW marking from a link.
         /// See also: /api/marknsfw.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UnmarkNSFW(string id)
+        public void UnmarkNSFW(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unmarknsfw", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Unsave a link or comment.
         /// This removes the thing from the user's saved listings as well.
         /// See also: /api/save.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Unsave(string id)
+        public void Unsave(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unsave", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Remove spoiler.
         /// </summary>
         /// <param name="id">fullname of a link</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Unspoiler(string id)
+        public void Unspoiler(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unspoiler", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         // WARNING:  Automated bot-voting violates Reddit's rules.  --Kris

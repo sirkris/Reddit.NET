@@ -21,7 +21,7 @@ namespace Reddit.NET.Models.Structures
         public string SelfText;
 
         [JsonProperty("user_reports")]
-        public object UserReports;
+        public JArray UserReports;
 
         [JsonProperty("saved")]
         public bool Saved;
@@ -321,44 +321,11 @@ namespace Reddit.NET.Models.Structures
         [JsonConverter(typeof(TimestampConvert))]
         public DateTime CreatedUTC;
 
-        // TODO - Assuming it's a list of strings.  --Kris
         [JsonProperty("mod_reports")]
-        public List<string> ModReports;
+        public JArray ModReports;
 
         [JsonProperty("is_video")]
         public bool IsVideo;
-
-        // Below are comment-specific properties.  --Kris
-
-        [JsonProperty("replies")]
-        public List<Post> Replies;
-
-        [JsonProperty("body_html")]
-        public string BodyHTML;
-
-        [JsonProperty("parent_id")]
-        public string ParentId;
-
-        [JsonProperty("body")]
-        public string Body;
-
-        [JsonProperty("collapsed")]
-        public bool Collapsed;
-
-        [JsonProperty("is_submitter")]
-        public bool IsSubmitter;
-
-        [JsonProperty("collapsed_reason")]
-        public string CollapsedReason;
-
-        [JsonProperty("score_hidden")]
-        public bool ScoreHidden;
-
-        [JsonProperty("controversiality")]
-        public int Controversiality;
-
-        [JsonProperty("depth")]
-        public int Depth;
 
         [JsonProperty("sr_detail")]
         public Subreddit SrDetail;

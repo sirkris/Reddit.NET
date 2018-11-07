@@ -13,7 +13,7 @@ namespace Reddit.NET.Models
 
         public Search(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
-        // TODO - Needs testing.
+        // TODO - Every test I've tried returns no search results.  Not sure what I'm doing wrong (ex. the word "Florida" should appear somewhere in r/FloridaMan).  --Kris
         /// <summary>
         /// Search links page.
         /// This endpoint is a listing.

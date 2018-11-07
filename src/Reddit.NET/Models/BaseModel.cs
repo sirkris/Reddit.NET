@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Reddit.NET.Models.EventHandlers;
 using Reddit.NET.Models.Structures;
 using RestSharp;
 using RestSharp.Authenticators;
@@ -18,44 +19,62 @@ namespace Reddit.NET.Models
 
         internal abstract RestClient RestClient { get; set; }
 
+        public event EventHandler<TokenUpdateEventArgs> TokenUpdated;
+
         public BaseModel(string appId, string refreshToken, string accessToken, RestClient restClient)
         {
-            this.AppId = appId;
-            this.AccessToken = accessToken;
-            this.RefreshToken = refreshToken;
-            this.RestClient = restClient;
+            AppId = appId;
+            AccessToken = accessToken;
+            RefreshToken = refreshToken;
+            RestClient = restClient;
         }
 
-        public RestRequest PrepareRequest(string url, Method method = Method.GET)
+        protected virtual void OnTokenUpdated(TokenUpdateEventArgs e)
+        {
+            TokenUpdated?.Invoke(this, e);
+        }
+
+        public void UpdateAccessToken(string accessToken)
+        {
+            AccessToken = accessToken;
+        }
+
+        public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
         {
             RestRequest restRequest = new RestRequest(url, method);
 
-            return PrepareRequest(restRequest);
+            return PrepareRequest(restRequest, contentType);
         }
 
-        public RestRequest PrepareRequest(string url, Method method, List<Parameter> parameters)
+        public RestRequest PrepareRequest(string url, Method method, List<Parameter> parameters, List<FileParameter> files, 
+            string contentType = "application/x-www-form-urlencoded")
         {
-            RestRequest restRequest = PrepareRequest(url, method);
+            RestRequest restRequest = PrepareRequest(url, method, contentType);
 
             foreach (Parameter param in parameters)
             {
-                if (!param.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase))
+                if (!param.Name.Equals("Authorization", StringComparison.OrdinalIgnoreCase)
+                    && !param.Name.Equals("Content-Type", StringComparison.OrdinalIgnoreCase))
                 {
                     restRequest.AddParameter(param);
                 }
             }
             
+            foreach (FileParameter file in files)
+            {
+                restRequest.Files.Add(file);
+            }
+
             return restRequest;
         }
 
-        public RestRequest PrepareRequest(RestRequest restRequest)
+        public RestRequest PrepareRequest(RestRequest restRequest, string contentType = "application/x-www-form-urlencoded")
         {
             restRequest.AddHeader("Authorization", "bearer " + AccessToken);
-            restRequest.AddHeader("User-Agent", "Reddit.NET");
 
             if (restRequest.Method == Method.POST || restRequest.Method == Method.PUT)
             {
-                restRequest.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+                restRequest.AddHeader("Content-Type", contentType);
             }
 
             return restRequest;
@@ -68,9 +87,13 @@ namespace Reddit.NET.Models
 
         public string ExecuteRequest(RestRequest restRequest)
         {
+            restRequest.AddHeader("User-Agent", "Reddit.NET");
+
             IRestResponse res = RestClient.Execute(restRequest);
-            int retry = 5;
+            int retry = 3;
             while ((res == null || !res.IsSuccessful)
+                && RefreshToken != null
+                && res.StatusCode == HttpStatusCode.Unauthorized
                 && retry > 0)
             {
                 /*
@@ -80,27 +103,7 @@ namespace Reddit.NET.Models
                  * 
                  * --Kris
                  */
-                if (RefreshToken != null
-                    && (res.StatusCode == System.Net.HttpStatusCode.BadRequest
-                        || res.StatusCode == System.Net.HttpStatusCode.Unauthorized))
-                {
-                    RestClient keyCli = new RestClient("https://www.reddit.com");
-                    RestRequest keyReq = new RestRequest("/api/v1/access_token", Method.POST);
-
-                    keyReq.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(AppId + ":")));
-                    keyReq.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-                    
-                    keyReq.AddParameter("grant_type", "refresh_token");
-                    keyReq.AddParameter("refresh_token", RefreshToken);
-
-                    IRestResponse keyRes = keyCli.Execute(keyReq);
-                    if (keyRes != null && keyRes.IsSuccessful)
-                    {
-                        AccessToken = JsonConvert.DeserializeObject<JObject>(keyRes.Content).GetValue("access_token").ToString();
-                        restRequest = PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters);
-                    }
-                }
-
+                restRequest = RefreshAccessToken(restRequest);
                 res = RestClient.Execute(restRequest);
 
                 retry--;
@@ -123,6 +126,47 @@ namespace Reddit.NET.Models
             else
             {
                 return res.Content;
+            }
+        }
+
+        private RestRequest RefreshAccessToken(RestRequest restRequest)
+        {
+            RestClient keyCli = new RestClient("https://www.reddit.com");
+            RestRequest keyReq = new RestRequest("/api/v1/access_token", Method.POST);
+
+            keyReq.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(AppId + ":")));
+            keyReq.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+
+            keyReq.AddParameter("grant_type", "refresh_token");
+            keyReq.AddParameter("refresh_token", RefreshToken);
+
+            IRestResponse keyRes = keyCli.Execute(keyReq);
+            if (keyRes != null && keyRes.IsSuccessful)
+            {
+                AccessToken = JsonConvert.DeserializeObject<JObject>(keyRes.Content).GetValue("access_token").ToString();
+
+                TokenUpdateEventArgs args = new TokenUpdateEventArgs
+                {
+                    AccessToken = AccessToken
+                };
+                OnTokenUpdated(args);
+
+                string contentType = "application/x-www-form-urlencoded";
+                foreach (Parameter param in restRequest.Parameters)
+                {
+                    if (param.Name.Equals("content-type", StringComparison.OrdinalIgnoreCase)
+                        || param.Name.Equals("contenttype", StringComparison.OrdinalIgnoreCase))
+                    {
+                        contentType = param.Value.ToString();
+                        break;
+                    }
+                }
+                
+                return PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters, restRequest.Files, contentType);
+            }
+            else
+            {
+                return restRequest;
             }
         }
 
