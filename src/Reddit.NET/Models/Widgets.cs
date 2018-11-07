@@ -13,51 +13,130 @@ namespace Reddit.NET.Models
 
         public Widgets(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Add and return a widget to the specified subreddit.
         /// Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root object, which must be a valid widget kind.
         /// </summary>
         /// <param name="json">See https://www.reddit.com/dev/api/#POST_api_widget for expected format</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Add(string json)
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        /// <returns>The result payload.</returns>
+        public T Add<T>(string json, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest("api/widget", Method.POST);
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/widget", Method.POST);
 
-            restRequest.AddBody(json);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            restRequest.AddParameter("json", json);
+            
+            return JsonConvert.DeserializeObject<T>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
+        /// <summary>
+        /// Add and return a widget to the specified subreddit.
+        /// Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root object, which must be a valid widget kind.
+        /// </summary>
+        /// <param name="widgetTextArea">See https://www.reddit.com/dev/api/#POST_api_widget for expected format</param>
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        /// <returns>The result payload.</returns>
+        public WidgetTextArea Add(WidgetTextArea widgetTextArea, string subreddit = null)
+        {
+            return Add<WidgetTextArea>(JsonConvert.SerializeObject(widgetTextArea), subreddit);
+        }
+
+        /// <summary>
+        /// Add and return a widget to the specified subreddit.
+        /// Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root object, which must be a valid widget kind.
+        /// </summary>
+        /// <param name="widgetCalendar">See https://www.reddit.com/dev/api/#POST_api_widget for expected format</param>
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        /// <returns>The result payload.</returns>
+        public WidgetCalendar Add(WidgetCalendar widgetCalendar, string subreddit = null)
+        {
+            return Add<WidgetCalendar>(JsonConvert.SerializeObject(widgetCalendar), subreddit);
+        }
+
+        /// <summary>
+        /// Add and return a widget to the specified subreddit.
+        /// Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root object, which must be a valid widget kind.
+        /// </summary>
+        /// <param name="widgetCommunityList">See https://www.reddit.com/dev/api/#POST_api_widget for expected format</param>
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        /// <returns>The result payload.</returns>
+        public WidgetCommunityListDetailed Add(WidgetCommunityList widgetCommunityList, string subreddit = null)
+        {
+            return Add<WidgetCommunityListDetailed>(JsonConvert.SerializeObject(widgetCommunityList), subreddit);
+        }
+        
+        // TODO - Add support for other widget input types.  --Kris
+
         /// <summary>
         /// Delete a widget from the specified subreddit (if it exists).
         /// </summary>
         /// <param name="widgetId">id of an existing widget</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Delete(string widgetId)
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        public void Delete(string widgetId, string subreddit = null)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/widget/" + widgetId, Method.DELETE));
+            ExecuteRequest(Sr(subreddit) + "api/widget/" + widgetId, Method.DELETE);
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Update and return the data of a widget.
         /// Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root object, which must be a valid widget kind.
         /// </summary>
         /// <param name="widgetId">a valid widget id</param>
         /// <param name="json">See https://www.reddit.com/dev/api/#PUT_api_widget_{widget_id} for expected format</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Update(string widgetId, string json)
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        /// <returns>The result payload.</returns>
+        public T Update<T>(string widgetId, string json, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest("api/widget/" + widgetId, Method.PUT);
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/widget/" + widgetId, Method.PUT);
 
-            restRequest.AddBody(json);
+            restRequest.AddParameter("json", json);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<T>(ExecuteRequest(restRequest));
         }
 
+        /// <summary>
+        /// Update and return the data of a widget.
+        /// Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root object, which must be a valid widget kind.
+        /// </summary>
+        /// <param name="widgetId">a valid widget id</param>
+        /// <param name="widgetTextArea">See https://www.reddit.com/dev/api/#PUT_api_widget_{widget_id} for expected format</param>
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        /// <returns>The result payload.</returns>
+        public WidgetTextArea Update(string widgetId, WidgetTextArea widgetTextArea, string subreddit = null)
+        {
+            return Update<WidgetTextArea>(widgetId, JsonConvert.SerializeObject(widgetTextArea), subreddit);
+        }
+
+        /// <summary>
+        /// Update and return the data of a widget.
+        /// Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root object, which must be a valid widget kind.
+        /// </summary>
+        /// <param name="widgetId">a valid widget id</param>
+        /// <param name="widgetCalendar">See https://www.reddit.com/dev/api/#PUT_api_widget_{widget_id} for expected format</param>
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        /// <returns>The result payload.</returns>
+        public WidgetCalendar Update(string widgetId, WidgetCalendar widgetCalendar, string subreddit = null)
+        {
+            return Update<WidgetCalendar>(widgetId, JsonConvert.SerializeObject(widgetCalendar), subreddit);
+        }
+
+        /// <summary>
+        /// Update and return the data of a widget.
+        /// Accepts a JSON payload representing the widget data to be saved. Valid payloads differ in shape based on the "kind" attribute passed on the root object, which must be a valid widget kind.
+        /// </summary>
+        /// <param name="widgetId">a valid widget id</param>
+        /// <param name="widgetCommunityList">See https://www.reddit.com/dev/api/#PUT_api_widget_{widget_id} for expected format</param>
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        /// <returns>The result payload.</returns>
+        public WidgetCommunityList Update(string widgetId, WidgetCommunityList widgetCommunityList, string subreddit = null)
+        {
+            return Update<WidgetCommunityList>(widgetId, JsonConvert.SerializeObject(widgetCommunityList), subreddit);
+        }
+
+        // TODO - Add support for other widget input types.  --Kris
+
         // TODO - Needs testing.
+        // TODO - Skipping the S3 image upload stuff until I can get it to work (see Emoji).  --Kris
         /// <summary>
         /// Acquire and return an upload lease to s3 temp bucket.
         /// The return value of this function is a json object containing credentials for uploading assets to S3 bucket, S3 url for upload request and the key to use for uploading.
@@ -77,7 +156,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Update the order of widget_ids in the specified subreddit.
         /// </summary>
@@ -87,29 +165,40 @@ namespace Reddit.NET.Models
         /// a string,
         /// ...
         /// ]</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UpdateOrder(string section, string json)
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        public void UpdateOrder(string section, string json, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest("api/widget_order/" + section, Method.PATCH);
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/widget_order/" + section, Method.PATCH);
 
             restRequest.AddParameter("json", json);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
+        /// <summary>
+        /// Update the order of widget_ids in the specified subreddit.
+        /// </summary>
+        /// <param name="section">one of (sidebar)</param>
+        /// <param name="widgetIds">a list of widget ids</param>
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        public void UpdateOrder(string section, List<string> widgetIds, string subreddit = null)
+        {
+            UpdateOrder(section, JsonConvert.SerializeObject(widgetIds), subreddit);
+        }
+
         /// <summary>
         /// Return all widgets for the given subreddit.
         /// </summary>
         /// <param name="progressiveImages">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Get(bool progressiveImages)
+        /// <param name="subreddit">The subreddit with the widgets</param>
+        /// <returns>The requested widgets.</returns>
+        public WidgetResults Get(bool progressiveImages, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest("api/widgets");
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/widgets");
 
             restRequest.AddParameter("progressive_images", progressiveImages);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<WidgetResults>(ExecuteRequest(restRequest));
         }
     }
 }
