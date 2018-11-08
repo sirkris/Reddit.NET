@@ -2,9 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Reddit.NET.Exceptions;
 using Reddit.NET.Models.EventHandlers;
-using Reddit.NET.Models.Structures;
 using RestSharp;
-using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
 using System.Net;

@@ -2,8 +2,6 @@
 using Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Text;
 
 namespace Reddit.NETTests
 {

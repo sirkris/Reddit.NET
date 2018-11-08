@@ -1,9 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Reddit.NET.Models.Converters;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NET.Models.Structures
 {

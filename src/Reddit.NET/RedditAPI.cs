@@ -3,7 +3,6 @@ using ModelStructures = Reddit.NET.Models.Structures;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
-using System.Collections.Generic;
 
 namespace Reddit.NET
 {

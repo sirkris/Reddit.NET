@@ -1,10 +1,7 @@
-﻿using Newtonsoft.Json;
-using Reddit.NET;
+﻿using Reddit.NET;
 using Reddit.NET.Controllers;
-using ModelStructures = Reddit.NET.Models.Structures;
 using System;
 using System.IO;
-using System.Linq;
 
 namespace Example
 {
