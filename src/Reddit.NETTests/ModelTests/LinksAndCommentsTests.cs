@@ -25,19 +25,13 @@ namespace Reddit.NETTests.ModelTests
                     "link", false, true, null, true, false, testData["Subreddit"], "",
                     "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
 
-            Assert.IsNotNull(postResult);
-            Assert.IsNotNull(postResult.JSON);
-            Assert.IsNotNull(postResult.JSON.Data);
+            Validate(postResult);
             // End temp code.
 
             // TODO - Once decoupled, grab latest new post on test sub to get the post created in the previous method.  --Kris
             CommentResultContainer commentResult = reddit.Models.LinksAndComments.Comment(false, "", "This is a test comment.  So there.", postResult.JSON.Data.Name);
 
-            Assert.IsNotNull(commentResult);
-            Assert.IsNotNull(commentResult.JSON);
-            Assert.IsNotNull(commentResult.JSON.Data);
-            Assert.IsNotNull(commentResult.JSON.Data.Things);
-            Assert.IsTrue(commentResult.JSON.Data.Things.Count > 0);
+            Validate(commentResult);
         }
 
         [TestMethod]
@@ -50,9 +44,7 @@ namespace Reddit.NETTests.ModelTests
                     "link", false, true, null, true, false, testData["Subreddit"], "",
                     "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
 
-            Assert.IsNotNull(postResult);
-            Assert.IsNotNull(postResult.JSON);
-            Assert.IsNotNull(postResult.JSON.Data);
+            Validate(postResult);
         }
 
         [TestMethod]
@@ -65,9 +57,7 @@ namespace Reddit.NETTests.ModelTests
                 testData["Subreddit"], "The Lizard People are coming and only super-intelligent robots like me can stop them.  Just saying.",
                 "We bots are your protectors!", null, null);
 
-            Assert.IsNotNull(postResult);
-            Assert.IsNotNull(postResult.JSON);
-            Assert.IsNotNull(postResult.JSON.Data);
+            Validate(postResult);
         }
 
         [TestMethod]
@@ -121,16 +111,11 @@ namespace Reddit.NETTests.ModelTests
                 testData["Subreddit"], "The Lizard People are coming and only super-intelligent robots like me can stop them.  Just saying.",
                 "We bots are your protectors!", null, null);
 
-            Assert.IsNotNull(postResult);
-            Assert.IsNotNull(postResult.JSON);
-            Assert.IsNotNull(postResult.JSON.Data);
+            Validate(postResult);
 
             PostResultContainer postResultEdited = reddit.Models.LinksAndComments.EditUserText(false, null, "(redacted)", postResult.JSON.Data.Name);
 
-            Assert.IsNotNull(postResultEdited);
-            Assert.IsNotNull(postResultEdited.JSON);
-            Assert.IsNotNull(postResultEdited.JSON.Data);
-            Assert.IsNotNull(postResultEdited.JSON.Data.Things);
+            Validate(postResultEdited);
             Assert.IsTrue(postResultEdited.JSON.Data.Things.Count == 1);
             Assert.IsNotNull(postResultEdited.JSON.Data.Things[0].Data);
             Assert.IsTrue(postResultEdited.JSON.Data.Things[0].Data.Name.Equals(postResult.JSON.Data.Name));
@@ -152,34 +137,23 @@ namespace Reddit.NETTests.ModelTests
                     null, "This is a test.", false, "Some other reason.", "Some reason.", "Some rule reason.", "Some site reason.", "RedditDotNETBot",
                     postResult.JSON.Data.Name, "RedditDotNetBot");
 
-            Assert.IsNotNull(reportResult);
-            Assert.IsTrue(reportResult.Success);
+            Validate(reportResult);
 
             GenericContainer enableContestMode = reddit.Models.LinksAndComments.SetContestMode(postResult.JSON.Data.Name, true);
             GenericContainer disableContestMode = reddit.Models.LinksAndComments.SetContestMode(postResult.JSON.Data.Name, false);
 
-            Assert.IsNotNull(enableContestMode);
-            Assert.IsNotNull(enableContestMode.JSON);
-            Assert.IsTrue(enableContestMode.JSON.Errors.Count == 0);
-            Assert.IsNotNull(disableContestMode);
-            Assert.IsNotNull(disableContestMode.JSON);
-            Assert.IsTrue(disableContestMode.JSON.Errors.Count == 0);
+            Validate(enableContestMode);
+            Validate(disableContestMode);
 
             GenericContainer stickyOn = reddit.Models.LinksAndComments.SetSubredditSticky(postResult.JSON.Data.Name, 1, true, false);
             GenericContainer stickyOff = reddit.Models.LinksAndComments.SetSubredditSticky(postResult.JSON.Data.Name, 1, false, false);
 
-            Assert.IsNotNull(stickyOn);
-            Assert.IsNotNull(stickyOn.JSON);
-            Assert.IsTrue(stickyOn.JSON.Errors.Count == 0);
-            Assert.IsNotNull(stickyOff);
-            Assert.IsNotNull(stickyOff.JSON);
-            Assert.IsTrue(stickyOff.JSON.Errors.Count == 0);
+            Validate(stickyOn);
+            Validate(stickyOff);
 
             GenericContainer suggestedSortResult = reddit.Models.LinksAndComments.SetSuggestedSort(postResult.JSON.Data.Name, "new");
 
-            Assert.IsNotNull(suggestedSortResult);
-            Assert.IsNotNull(suggestedSortResult.JSON);
-            Assert.IsTrue(suggestedSortResult.JSON.Errors.Count == 0);
+            Validate(suggestedSortResult);
 
             reddit.Models.LinksAndComments.Delete(postResult.JSON.Data.Name);
         }
@@ -192,9 +166,7 @@ namespace Reddit.NETTests.ModelTests
 
             MoreChildren moreChildren = reddit.Models.LinksAndComments.MoreChildren("dlpnw9j", false, "t3_6tyfna", "new");
 
-            Assert.IsNotNull(moreChildren);
-            Assert.IsNotNull(moreChildren.Comments);
-            Assert.IsNotNull(moreChildren.MoreData);
+            Validate(moreChildren);
         }
     }
 }

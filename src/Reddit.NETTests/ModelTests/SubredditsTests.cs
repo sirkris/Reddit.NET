@@ -24,7 +24,7 @@ namespace Reddit.NETTests.ModelTests
             DynamicShortListingContainer aboutContributors = reddit.Models.Subreddits.About("contributors", null, null, null, false, "StillSandersForPres");
             DynamicShortListingContainer aboutWikiContributors = reddit.Models.Subreddits.About("wikicontributors", null, null, null, false, "StillSandersForPres");
             DynamicShortListingContainer aboutModerators = reddit.Models.Subreddits.About("moderators", null, null, null, false, "StillSandersForPres");
-
+            
             Assert.IsNotNull(about);
             Assert.IsTrue(about.Data.DisplayName.Equals("WayOfTheMueller"));
             Assert.IsNotNull(aboutBanned);
@@ -43,9 +43,7 @@ namespace Reddit.NETTests.ModelTests
 
             SubredditNames subredditNames = reddit.Models.Subreddits.SearchRedditNames(false, true, true, "Shitty");
 
-            Assert.IsNotNull(subredditNames);
-            Assert.IsNotNull(subredditNames.Names);
-            Assert.IsTrue(subredditNames.Names.Count > 0);
+            Validate(subredditNames);
         }
 
         [TestMethod]
@@ -67,9 +65,7 @@ namespace Reddit.NETTests.ModelTests
 
             SubSearch subSearch = reddit.Models.Subreddits.SearchSubreddits(false, true, true, "Shitty");
 
-            Assert.IsNotNull(subSearch);
-            Assert.IsNotNull(subSearch.Subreddits);
-            Assert.IsTrue(subSearch.Subreddits.Count > 0);
+            Validate(subSearch);
         }
 
         [TestMethod]
@@ -175,9 +171,7 @@ namespace Reddit.NETTests.ModelTests
                     "New Bot Post", "new", null, false, "Reddit.NET Bot Testing", "public", "modonly");
             }
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.JSON);
-            Assert.IsTrue(res.JSON.Errors == null || res.JSON.Errors.Count == 0);
+            Validate(res);
         }
 
         [TestMethod]
@@ -210,9 +204,7 @@ namespace Reddit.NETTests.ModelTests
 
             GenericContainer res = reddit.Models.Subreddits.SubredditStylesheet("save", "This is a test.", ".whatever{}", testData["Subreddit"]);
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.JSON);
-            Assert.IsTrue(res.JSON.Errors == null || res.JSON.Errors.Count == 0);
+            Validate(res);
         }
 
         [TestMethod]
@@ -242,8 +234,7 @@ namespace Reddit.NETTests.ModelTests
 
             SubredditSettingsContainer settings = reddit.Models.Subreddits.Edit(testData["Subreddit"], false, "");
 
-            Assert.IsNotNull(settings);
-            Assert.IsNotNull(settings.Data);
+            Validate(settings);
         }
 
         [TestMethod]
@@ -263,15 +254,8 @@ namespace Reddit.NETTests.ModelTests
             ImageUploadResult resIcon = reddit.Models.Subreddits.UploadSrImg(imageData, 0, "birdie", "icon", testData["Subreddit"], "png");
             ImageUploadResult resBanner = reddit.Models.Subreddits.UploadSrImg(imageData, 0, "birdie", "banner", testData["Subreddit"], "png");
 
-            Assert.IsNotNull(resHeader);
-            Assert.IsTrue(resHeader.Errors == null || resHeader.Errors.Count == 0);
-            Assert.IsTrue(resHeader.ErrorsValues == null || resHeader.ErrorsValues.Count == 0);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(resHeader.ImgSrc));
-
-            Assert.IsNotNull(resImg);
-            Assert.IsTrue(resImg.Errors == null || resImg.Errors.Count == 0);
-            Assert.IsTrue(resImg.ErrorsValues == null || resImg.ErrorsValues.Count == 0);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(resImg.ImgSrc));
+            Validate(resHeader);
+            Validate(resImg);
 
             Assert.IsNotNull(resIcon);
             Assert.IsTrue(resIcon.Errors != null && resIcon.Errors.Count == 1);
@@ -291,15 +275,8 @@ namespace Reddit.NETTests.ModelTests
             resIcon = reddit.Models.Subreddits.UploadSrImg(imageIconData, 0, "birdieIcon", "icon", testData["Subreddit"], "jpg");
             resBanner = reddit.Models.Subreddits.UploadSrImg(imageBannerData, 0, "birdieBanner", "banner", testData["Subreddit"], "png");
 
-            Assert.IsNotNull(resIcon);
-            Assert.IsTrue(resIcon.Errors == null || resIcon.Errors.Count == 0);
-            Assert.IsTrue(resIcon.ErrorsValues == null || resIcon.ErrorsValues.Count == 0);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(resIcon.ImgSrc));
-
-            Assert.IsNotNull(resBanner);
-            Assert.IsTrue(resBanner.Errors == null || resBanner.Errors.Count == 0);
-            Assert.IsTrue(resBanner.ErrorsValues == null || resBanner.ErrorsValues.Count == 0);
-            Assert.IsFalse(string.IsNullOrWhiteSpace(resBanner.ImgSrc));
+            Validate(resIcon);
+            Validate(resBanner);
 
             // Delete the images.  --Kris
             GenericContainer resDelHeader = reddit.Models.Subreddits.DeleteSrHeader(testData["Subreddit"]);
@@ -307,21 +284,10 @@ namespace Reddit.NETTests.ModelTests
             GenericContainer resDelBanner = reddit.Models.Subreddits.DeleteSrBanner(testData["Subreddit"]);
             GenericContainer resDelIcon = reddit.Models.Subreddits.DeleteSrIcon(testData["Subreddit"]);
 
-            Assert.IsNotNull(resDelHeader);
-            Assert.IsNotNull(resDelHeader.JSON);
-            Assert.IsTrue(resDelHeader.JSON.Errors == null || resDelHeader.JSON.Errors.Count == 0);
-
-            Assert.IsNotNull(resDelImg);
-            Assert.IsNotNull(resDelImg.JSON);
-            Assert.IsTrue(resDelImg.JSON.Errors == null || resDelImg.JSON.Errors.Count == 0);
-
-            Assert.IsNotNull(resDelBanner);
-            Assert.IsNotNull(resDelBanner.JSON);
-            Assert.IsTrue(resDelBanner.JSON.Errors == null || resDelBanner.JSON.Errors.Count == 0);
-
-            Assert.IsNotNull(resDelIcon);
-            Assert.IsNotNull(resDelIcon.JSON);
-            Assert.IsTrue(resDelIcon.JSON.Errors == null || resDelIcon.JSON.Errors.Count == 0);
+            Validate(resDelHeader);
+            Validate(resDelImg);
+            Validate(resDelBanner);
+            Validate(resDelIcon);
         }
 
         private byte[] GetResourceFile(string filename)

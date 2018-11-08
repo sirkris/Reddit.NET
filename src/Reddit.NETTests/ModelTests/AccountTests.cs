@@ -23,9 +23,7 @@ namespace Reddit.NETTests.ModelTests
 
             User me = reddit.Models.Account.Me();
 
-            Assert.IsNotNull(me);
-            Assert.IsFalse(me.Created.Equals(default(DateTime)));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(me.Name));
+            Validate(me);
         }
 
         [TestMethod]

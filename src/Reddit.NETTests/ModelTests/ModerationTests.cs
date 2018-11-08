@@ -30,7 +30,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("reports", null, null, "links", testData["Subreddit"]);
 
-            Assert.IsNotNull(modQueue);
+            Validate(modQueue, true);
         }
 
         [TestMethod]
@@ -41,7 +41,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("spam", null, null, "comments", testData["Subreddit"]);
 
-            Assert.IsNotNull(modQueue);
+            Validate(modQueue, true);
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("modqueue", null, null, "links", testData["Subreddit"]);
 
-            Assert.IsNotNull(modQueue);
+            Validate(modQueue, true);
         }
 
         [TestMethod]
@@ -63,7 +63,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("unmoderated", null, null, "links", testData["Subreddit"]);
 
-            Assert.IsNotNull(modQueue);
+            Validate(modQueue, true);
         }
 
         [TestMethod]
@@ -74,7 +74,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("edited", null, null, "links", testData["Subreddit"]);
 
-            Assert.IsNotNull(modQueue);
+            Validate(modQueue, true);
         }
 
         [TestMethod]

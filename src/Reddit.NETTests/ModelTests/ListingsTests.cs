@@ -18,13 +18,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.Best(null, null, true);
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
         }
 
         [TestMethod]
@@ -35,13 +29,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.Best(null, null, false);
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
         }
 
         [TestMethod]
@@ -52,13 +40,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.Best(null, null, true, 0, 25, "all", true);
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
             Assert.IsNotNull(posts.Data.Children[0].Data.SrDetail);
         }
 
@@ -70,13 +52,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.GetByNames("t3_9gaze5,t3_9mfizx");
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
         }
 
         [TestMethod]
@@ -93,13 +69,7 @@ namespace Reddit.NETTests.ModelTests
             PostContainer post = res[0].Item1;
             CommentContainer comments = res[0].Item2;
 
-            Assert.IsNotNull(post);
-            Assert.IsNotNull(post.Data);
-            Assert.IsNotNull(post.Data.Children);
-            Assert.IsTrue(post.Data.Children.Count == 1);
-            Assert.IsTrue(post.Kind.Equals("Listing"));
-            Assert.IsTrue(post.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(post.Data.Children[0].Data);
+            Validate(post);
             Assert.IsTrue(post.Data.Children[0].Data.Approved);
             Assert.IsFalse(post.Data.Children[0].Data.IsSelf);
             Assert.IsTrue(post.Data.Children[0].Data.Id.Equals("9gaze5"));
@@ -107,13 +77,7 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsTrue(post.Data.Children[0].Data.Subreddit.Equals("StillSandersForPres"));
             Assert.IsTrue(post.Data.Children[0].Data.Title.Equals("Reports of Widespread Voter Suppression in New York State Democratic Primary"));
 
-            Assert.IsNotNull(comments);
-            Assert.IsNotNull(comments.Data);
-            Assert.IsNotNull(comments.Data.Children);
-            Assert.IsTrue(comments.Data.Children.Count > 0);
-            Assert.IsTrue(comments.Kind.Equals("Listing"));
-            Assert.IsTrue(comments.Data.Children[0].Kind.Equals("t1"));
-            Assert.IsNotNull(comments.Data.Children[0].Data);
+            Validate(comments);
         }
 
         [TestMethod]
@@ -130,13 +94,7 @@ namespace Reddit.NETTests.ModelTests
             PostContainer post = res[0].Item1;
             CommentContainer comments = res[0].Item2;
 
-            Assert.IsNotNull(post);
-            Assert.IsNotNull(post.Data);
-            Assert.IsNotNull(post.Data.Children);
-            Assert.IsTrue(post.Data.Children.Count == 1);
-            Assert.IsTrue(post.Kind.Equals("Listing"));
-            Assert.IsTrue(post.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(post.Data.Children[0].Data);
+            Validate(post);
             Assert.IsFalse(post.Data.Children[0].Data.IsSelf);
             Assert.IsTrue(post.Data.Children[0].Data.Id.Equals("8gmf99"));
             Assert.IsTrue(post.Data.Children[0].Data.Author.Equals("KrisCraig"));
@@ -144,13 +102,7 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsTrue(post.Data.Children[0].Data.Title.Equals("Florida man with handlebar mustache assaults woman on plane, starts a fight with several passengers, " +
                 "yells at police to tase him and \"you'll see what happens\", then gets tased 10 times."));
 
-            Assert.IsNotNull(comments);
-            Assert.IsNotNull(comments.Data);
-            Assert.IsNotNull(comments.Data.Children);
-            Assert.IsTrue(comments.Data.Children.Count > 0);
-            Assert.IsTrue(comments.Kind.Equals("Listing"));
-            Assert.IsTrue(comments.Data.Children[0].Kind.Equals("t1"));
-            Assert.IsNotNull(comments.Data.Children[0].Data);
+            Validate(comments);
         }
 
         [TestMethod]
@@ -167,13 +119,7 @@ namespace Reddit.NETTests.ModelTests
             PostContainer post = res[0].Item1;
             CommentContainer comments = res[0].Item2;
 
-            Assert.IsNotNull(post);
-            Assert.IsNotNull(post.Data);
-            Assert.IsNotNull(post.Data.Children);
-            Assert.IsTrue(post.Data.Children.Count == 1);
-            Assert.IsTrue(post.Kind.Equals("Listing"));
-            Assert.IsTrue(post.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(post.Data.Children[0].Data);
+            Validate(post);
             Assert.IsFalse(post.Data.Children[0].Data.IsSelf);
             Assert.IsTrue(post.Data.Children[0].Data.Id.Equals("8gmf99"));
             Assert.IsTrue(post.Data.Children[0].Data.Author.Equals("KrisCraig"));
@@ -181,13 +127,7 @@ namespace Reddit.NETTests.ModelTests
             Assert.IsTrue(post.Data.Children[0].Data.Title.Equals("Florida man with handlebar mustache assaults woman on plane, starts a fight with several passengers, " +
                 "yells at police to tase him and \"you'll see what happens\", then gets tased 10 times."));
 
-            Assert.IsNotNull(comments);
-            Assert.IsNotNull(comments.Data);
-            Assert.IsNotNull(comments.Data.Children);
-            Assert.IsTrue(comments.Data.Children.Count > 0);
-            Assert.IsTrue(comments.Kind.Equals("Listing"));
-            Assert.IsTrue(comments.Data.Children[0].Kind.Equals("t1"));
-            Assert.IsNotNull(comments.Data.Children[0].Data);
+            Validate(comments);
         }
 
         [TestMethod]
@@ -198,13 +138,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.Hot("GLOBAL", null, null, true);
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
         }
 
         [TestMethod]
@@ -215,13 +149,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.New(null, null, true, "StillSandersForPres");
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
         }
 
         [TestMethod]
@@ -237,12 +165,7 @@ namespace Reddit.NETTests.ModelTests
 
                 Assert.IsNotNull(posts);
                 Assert.IsTrue(posts.Count > 0);
-                Assert.IsNotNull(posts[0].Data);
-                Assert.IsNotNull(posts[0].Data.Children);
-                Assert.IsTrue(posts[0].Data.Children.Count > 0);
-                Assert.IsTrue(posts[0].Kind.Equals("Listing"));
-                Assert.IsTrue(posts[0].Data.Children[0].Kind.Equals("t3"));
-                Assert.IsNotNull(posts[0].Data.Children[0].Data);
+                Validate(posts[0]);
             }
         }
 
@@ -259,12 +182,7 @@ namespace Reddit.NETTests.ModelTests
 
                 Assert.IsNotNull(posts);
                 Assert.IsTrue(posts.Count > 0);
-                Assert.IsNotNull(posts[0].Data);
-                Assert.IsNotNull(posts[0].Data.Children);
-                Assert.IsTrue(posts[0].Data.Children.Count > 0);
-                Assert.IsTrue(posts[0].Kind.Equals("Listing"));
-                Assert.IsTrue(posts[0].Data.Children[0].Kind.Equals("t3"));
-                Assert.IsNotNull(posts[0].Data.Children[0].Data);
+                Validate(posts[0]);
             }
         }
 
@@ -276,13 +194,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.Rising(null, null, true);
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
         }
 
         [TestMethod]
@@ -293,13 +205,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.Top("all", null, null, true);
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
         }
 
         [TestMethod]
@@ -310,13 +216,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.Top("day", null, null, true);
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
         }
 
         [TestMethod]
@@ -327,13 +227,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer posts = reddit.Models.Listings.Controversial("all", null, null, true);
 
-            Assert.IsNotNull(posts);
-            Assert.IsNotNull(posts.Data);
-            Assert.IsNotNull(posts.Data.Children);
-            Assert.IsTrue(posts.Data.Children.Count > 0);
-            Assert.IsTrue(posts.Kind.Equals("Listing"));
-            Assert.IsTrue(posts.Data.Children[0].Kind.Equals("t3"));
-            Assert.IsNotNull(posts.Data.Children[0].Data);
+            Validate(posts);
         }
 
         [TestMethod]
@@ -346,6 +240,7 @@ namespace Reddit.NETTests.ModelTests
 
             Assert.IsNotNull(posts);
             Assert.IsTrue(posts.Count > 0);
+            Validate(posts[0]);
         }
     }
 }

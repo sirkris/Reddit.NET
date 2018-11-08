@@ -54,8 +54,7 @@ namespace Reddit.NETTests.ModelTests
 
             WikiPageSettingsContainer permissions = reddit.Models.Wiki.GetPermissions("index", "ShittyEmails");
 
-            Assert.IsNotNull(permissions);
-            Assert.IsNotNull(permissions.Data);
+            Validate(permissions);
         }
 
         [TestMethod]
@@ -68,12 +67,9 @@ namespace Reddit.NETTests.ModelTests
             WikiPageContainer pageWithV = reddit.Models.Wiki.Page("index", "51c412fc-6b26-11e8-a963-0e7fba92da48", null, "ShittyEmails");
             WikiPageContainer pageWithV2 = reddit.Models.Wiki.Page("index", "51c412fc-6b26-11e8-a963-0e7fba92da48", "483f05ca-6b26-11e8-b04f-0e02e061d980", "ShittyEmails");
 
-            Assert.IsNotNull(page);
-            Assert.IsNotNull(page.Data);
-            Assert.IsNotNull(pageWithV);
-            Assert.IsNotNull(pageWithV.Data);
-            Assert.IsNotNull(pageWithV2);
-            Assert.IsNotNull(pageWithV2.Data);
+            Validate(page);
+            Validate(pageWithV);
+            Validate(pageWithV2);
         }
 
         [TestMethod]
@@ -120,8 +116,7 @@ namespace Reddit.NETTests.ModelTests
             // Ordered by most recent first.  --Kris
             WikiPageRevisionContainer revisions = reddit.Models.Wiki.PageRevisions("index", null, null, testData["Subreddit"]);
 
-            Assert.IsNotNull(revisions);
-            Assert.IsNotNull(revisions.Data);
+            Validate(revisions);
             Assert.IsTrue(revisions.Data.Children != null && revisions.Data.Children.Count > 0);
 
             // Edit an existing page.  --Kris
@@ -134,11 +129,8 @@ namespace Reddit.NETTests.ModelTests
             // Unhide the page.  --Kris
             StatusResult unhideRes = reddit.Models.Wiki.Hide("index", revisions.Data.Children[0].Id, testData["Subreddit"]);
 
-            Assert.IsNotNull(hideRes);
-            Assert.IsTrue(hideRes.Status);
-
-            Assert.IsNotNull(unhideRes);
-            Assert.IsFalse(unhideRes.Status);
+            Validate(hideRes);
+            Validate(unhideRes, false);
 
             // Revert to the original page version.  --Kris
             reddit.Models.Wiki.Revert("index", revisions.Data.Children[revisions.Data.Children.Count - 1].Id, testData["Subreddit"]);
@@ -146,8 +138,7 @@ namespace Reddit.NETTests.ModelTests
             // Update the permissions.  --Kris
             WikiPageSettingsContainer res = reddit.Models.Wiki.UpdatePermissions("index", true, 0, testData["Subreddit"]);
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.Data);
+            Validate(res);
         }
     }
 }
