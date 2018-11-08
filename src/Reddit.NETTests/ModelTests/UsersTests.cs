@@ -174,7 +174,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false);
 
-            Validate(history);
+            Validate(history, true);
         }
 
         [TestMethod]
@@ -207,7 +207,7 @@ namespace Reddit.NETTests.ModelTests
 
             CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false);
 
-            Validate(history);
+            Validate(history, true);
         }
 
         [TestMethod]
