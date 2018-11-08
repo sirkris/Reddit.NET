@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class ImageUploadResult : BaseResult
+    public class ImageUploadResult
     {
         [JsonProperty("errors")]
         public List<string> Errors;
