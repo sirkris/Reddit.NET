@@ -1,18 +1,13 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public abstract class WidgetButton
+    public abstract class WidgetButton : BaseContainer
     {
         [JsonProperty("description")]
         public string Description;
-
-        [JsonProperty("kind")]
-        public string Kind;
 
         [JsonProperty("shortName")]
         public string ShortName;

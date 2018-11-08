@@ -1,8 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
-using Reddit.NET.Models.Structures;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NET.Controllers
 {

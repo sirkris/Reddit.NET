@@ -1,7 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.NET;
 using Reddit.NET.Models.Structures;
-using System;
 using System.Collections.Generic;
 
 namespace Reddit.NETTests.ModelTests
@@ -23,9 +22,7 @@ namespace Reddit.NETTests.ModelTests
 
             User me = reddit.Models.Account.Me();
 
-            Assert.IsNotNull(me);
-            Assert.IsFalse(me.Created.Equals(default(DateTime)));
-            Assert.IsFalse(string.IsNullOrWhiteSpace(me.Name));
+            Validate(me);
         }
 
         [TestMethod]

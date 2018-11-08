@@ -2,9 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Reddit.NET;
 using Reddit.NET.Models.Structures;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NETTests.ModelTests
 {
@@ -37,8 +35,7 @@ namespace Reddit.NETTests.ModelTests
             // Retrieve the widgets we just created.  --Kris
             WidgetResults widgetResults = reddit.Models.Widgets.Get(false, "RedditDotNETBot");
 
-            Assert.IsNotNull(widgetResults);
-            Assert.IsNotNull(widgetResults.Items);
+            Validate(widgetResults);
 
             // Figure out which result goes with which type (only one of each which makes things easier).  --Kris
             string widgetTextAreaId = null;

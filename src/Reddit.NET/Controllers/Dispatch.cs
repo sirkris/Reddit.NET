@@ -1,9 +1,6 @@
 ﻿using Reddit.NET.Models;
 using Reddit.NET.Models.EventHandlers;
 using RestSharp;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NET.Controllers
 {

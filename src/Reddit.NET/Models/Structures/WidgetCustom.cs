@@ -1,12 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class WidgetCustom
+    public class WidgetCustom : BaseContainer
     {
         [JsonProperty("css")]
         public string CSS;
@@ -16,9 +15,6 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("imageData")]
         public List<WidgetCustomImageData> ImageData;
-
-        [JsonProperty("kind")]
-        public string Kind;
 
         [JsonProperty("shortName")]
         public string ShortName;

@@ -1,18 +1,14 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class WidgetImage
+    public class WidgetImage : BaseContainer
     {
         [JsonProperty("data")]
         public List<WidgetImageData> Data;
-
-        [JsonProperty("kind")]
-        public string Kind;
 
         [JsonProperty("shortName")]
         public string ShortName;

@@ -3,7 +3,6 @@ using Reddit.NET;
 using Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NETTests.ModelTests
 {
@@ -41,12 +40,8 @@ namespace Reddit.NETTests.ModelTests
             GenericContainer res1 = reddit.Models.Flair.ClearFlairTemplates("LINK_FLAIR", testData["Subreddit"]);
             GenericContainer res2 = reddit.Models.Flair.ClearFlairTemplates("USER_FLAIR", testData["Subreddit"]);
 
-            Assert.IsNotNull(res1);
-            Assert.IsNotNull(res1.JSON);
-            Assert.IsTrue(res1.JSON.Errors.Count == 0);
-            Assert.IsNotNull(res2);
-            Assert.IsNotNull(res2.JSON);
-            Assert.IsTrue(res1.JSON.Errors.Count == 0);
+            Validate(res1);
+            Validate(res2);
         }
 
         [TestMethod]
@@ -57,9 +52,7 @@ namespace Reddit.NETTests.ModelTests
 
             GenericContainer res = reddit.Models.Flair.DeleteFlair("KrisCraig", testData["Subreddit"]);
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.JSON);
-            Assert.IsTrue(res.JSON.Errors.Count == 0);
+            Validate(res);
         }
 
         [TestMethod]
@@ -70,9 +63,7 @@ namespace Reddit.NETTests.ModelTests
 
             GenericContainer res = reddit.Models.Flair.Create("", "", "KrisCraig", "Test User Flair", testData["Subreddit"]);
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.JSON);
-            Assert.IsTrue(res.JSON.Errors.Count == 0);
+            Validate(res);
         }
 
         [TestMethod]
@@ -83,9 +74,7 @@ namespace Reddit.NETTests.ModelTests
 
             GenericContainer res = reddit.Models.Flair.FlairConfig(true, "right", true, "right", true, testData["Subreddit"]);
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(res.JSON);
-            Assert.IsTrue(res.JSON.Errors.Count == 0);
+            Validate(res);
         }
 
         [TestMethod]
@@ -160,7 +149,7 @@ namespace Reddit.NETTests.ModelTests
 
             GenericContainer res = reddit.Models.Flair.SetFlairEnabled(true, testData["Subreddit"]);
 
-            Assert.IsNotNull(res);
+            Validate(res);
         }
 
         [TestMethod]
@@ -172,8 +161,8 @@ namespace Reddit.NETTests.ModelTests
             GenericContainer resLink = reddit.Models.Flair.FlairTemplate("", "", "LINK_FLAIR", DateTime.Now.ToString("fffffff"), false, testData["Subreddit"]);
             GenericContainer resUser = reddit.Models.Flair.FlairTemplate("", "", "USER_FLAIR", DateTime.Now.ToString("fffffff"), false, testData["Subreddit"]);
 
-            Assert.IsNotNull(resLink);
-            Assert.IsNotNull(resUser);
+            Validate(resLink);
+            Validate(resUser);
         }
 
         [TestMethod]
@@ -193,13 +182,8 @@ namespace Reddit.NETTests.ModelTests
             GenericContainer resLink = reddit.Models.Flair.DeleteFlairTemplate(linkFlair.Id, testData["Subreddit"]);
             GenericContainer resUser = reddit.Models.Flair.DeleteFlairTemplate(userFlair.Id, testData["Subreddit"]);
 
-            Assert.IsNotNull(resLink);
-            Assert.IsNotNull(resLink.JSON);
-            Assert.IsTrue(resLink.JSON.Errors.Count == 0);
-
-            Assert.IsNotNull(resUser);
-            Assert.IsNotNull(resUser.JSON);
-            Assert.IsTrue(resUser.JSON.Errors.Count == 0);
+            Validate(resLink);
+            Validate(resUser);
         }
     }
 }

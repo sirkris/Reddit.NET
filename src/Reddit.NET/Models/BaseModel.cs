@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Reddit.NET.Exceptions;
 using Reddit.NET.Models.EventHandlers;
-using Reddit.NET.Models.Structures;
 using RestSharp;
-using RestSharp.Authenticators;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -105,28 +104,55 @@ namespace Reddit.NET.Models
                  */
                 restRequest = RefreshAccessToken(restRequest);
                 res = RestClient.Execute(restRequest);
-
+                
                 retry--;
             }
 
             if (res == null)
             {
-                throw new WebException("Reddit API returned null response.");
+                throw new RedditException("Reddit API returned null response.");
             }
             else if (!res.IsSuccessful)
             {
-                WebException ex = new WebException("Reddit API returned non-success response.");
-
-                ex.Data.Add("StatusCode", res.StatusCode);
-                ex.Data.Add("StatusDescription", res.StatusDescription);
-                ex.Data.Add("res", res);
-
-                throw ex;
+                switch (res.StatusCode)
+                {
+                    default:
+                        throw (RedditException)BuildException(new RedditException("Reddit API returned non-success response."), res);
+                    case HttpStatusCode.BadGateway:
+                        throw (RedditBadGatewayException)BuildException(new RedditBadGatewayException("Reddit API returned Bad Gateway (502) response."), res);
+                    case HttpStatusCode.BadRequest:
+                        throw (RedditBadRequestException)BuildException(new RedditBadRequestException("Reddit API returned Bad Request (400) response."), res);
+                    case HttpStatusCode.Conflict:
+                        throw (RedditConflictException)BuildException(new RedditConflictException("Reddit API returned Conflict (409) response."), res);
+                    case HttpStatusCode.Forbidden:
+                        throw (RedditForbiddenException)BuildException(new RedditForbiddenException("Reddit API returned Forbidden (403) response."), res);
+                    case HttpStatusCode.GatewayTimeout:
+                        throw (RedditGatewayTimeoutException)BuildException(new RedditGatewayTimeoutException("Reddit API returned Gateway Timeout (504) response."), res);
+                    case HttpStatusCode.InternalServerError:
+                        throw (RedditInternalServerErrorException)BuildException(
+                            new RedditInternalServerErrorException("Reddit API returned Internal Server Error (500) response."), res);
+                    case HttpStatusCode.NotFound:
+                        throw (RedditNotFoundException)BuildException(new RedditNotFoundException("Reddit API returned Not Found (404) response."), res);
+                    case HttpStatusCode.ServiceUnavailable:
+                        throw (RedditServiceUnavailableException)BuildException(
+                            new RedditServiceUnavailableException("Reddit API returned Service Unavailable (503) response."), res);
+                    case HttpStatusCode.Unauthorized:
+                        throw (RedditUnauthorizedException)BuildException(new RedditUnauthorizedException("Reddit API returned Unauthorized (401) response."), res);
+                }
             }
             else
             {
                 return res.Content;
             }
+        }
+
+        private Exception BuildException(Exception ex, IRestResponse res)
+        {
+            ex.Data.Add("StatusCode", res.StatusCode);
+            ex.Data.Add("StatusDescription", res.StatusDescription);
+            ex.Data.Add("res", res);
+
+            return ex;
         }
 
         private RestRequest RefreshAccessToken(RestRequest restRequest)

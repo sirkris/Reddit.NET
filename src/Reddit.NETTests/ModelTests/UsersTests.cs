@@ -3,7 +3,6 @@ using Reddit.NET;
 using Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NETTests.ModelTests
 {
@@ -97,11 +96,8 @@ namespace Reddit.NETTests.ModelTests
             // While we're at it, let's use this opportunity to test the SetPermissions endpoint.  --Kris
             GenericContainer res2 = reddit.Models.Users.SetPermissions("RedditDotNetBot", "+wiki", "moderator_invite", testData["Subreddit"]);
 
-            Assert.IsNotNull(res);
-            Assert.IsTrue(res.JSON.Errors.Count == 0);
-
-            Assert.IsNotNull(res2);
-            Assert.IsTrue(res2.JSON.Errors.Count == 0);
+            Validate(res);
+            Validate(res2);
         }
 
         [TestMethod]
@@ -112,7 +108,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "overview", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history);
         }
 
         [TestMethod]
@@ -123,7 +119,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "submitted", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history);
         }
 
         [TestMethod]
@@ -134,7 +130,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "upvoted", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history);
         }
 
         [TestMethod]
@@ -145,7 +141,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "downvoted", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history);
         }
 
         [TestMethod]
@@ -156,7 +152,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "hidden", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history);
         }
 
         [TestMethod]
@@ -167,7 +163,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "saved", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history);
         }
 
         [TestMethod]
@@ -178,7 +174,7 @@ namespace Reddit.NETTests.ModelTests
 
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history, true);
         }
 
         [TestMethod]
@@ -189,7 +185,7 @@ namespace Reddit.NETTests.ModelTests
 
             CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "comments", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history);
         }
 
         [TestMethod]
@@ -200,7 +196,7 @@ namespace Reddit.NETTests.ModelTests
 
             CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "saved", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history);
         }
 
         [TestMethod]
@@ -211,7 +207,7 @@ namespace Reddit.NETTests.ModelTests
 
             CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false);
 
-            Assert.IsNotNull(history);
+            Validate(history, true);
         }
 
         [TestMethod]

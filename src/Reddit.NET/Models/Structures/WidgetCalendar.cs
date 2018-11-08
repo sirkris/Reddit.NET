@@ -1,21 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class WidgetCalendar
+    public class WidgetCalendar : BaseContainer
     {
         [JsonProperty("configuration")]
         public WidgetCalendarConfiguration Configuration;
 
         [JsonProperty("googleCalendarId")]
         public string GoogleCalendarId;
-
-        [JsonProperty("kind")]
-        public string Kind;
 
         [JsonProperty("requiresSync")]
         public bool RequiresSync;

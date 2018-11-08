@@ -1,16 +1,11 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class WidgetTextArea
+    public class WidgetTextArea : BaseContainer
     {
-        [JsonProperty("kind")]
-        public string Kind;
-
         [JsonProperty("shortName")]
         public string ShortName;
 
