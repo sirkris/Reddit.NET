@@ -6,13 +6,10 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class WidgetPostFlair
+    public class WidgetPostFlair : BaseContainer
     {
         [JsonProperty("display")]
         public string Display;
-
-        [JsonProperty("kind")]
-        public string Kind;
 
         [JsonProperty("order")]
         public List<string> Order;  // List of flair template ids.  --Kris

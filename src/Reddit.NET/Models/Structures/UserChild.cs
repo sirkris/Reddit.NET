@@ -6,11 +6,8 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class UserChild
+    public class UserChild : BaseContainer
     {
-        [JsonProperty("kind")]
-        public string Kind;
-
         [JsonProperty("data")]
         public User Data;
     }

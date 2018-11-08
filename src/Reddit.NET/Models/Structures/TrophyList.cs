@@ -6,11 +6,8 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class TrophyList
+    public class TrophyList : BaseContainer
     {
-        [JsonProperty("kind")]
-        public string Kind;
-
         [JsonProperty("data")]
         public TrophiesData Data;
     }

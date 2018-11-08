@@ -6,11 +6,8 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class ModActionContainer
+    public class ModActionContainer : BaseContainer
     {
-        [JsonProperty("kind")]
-        public string Kind;
-
         [JsonProperty("data")]
         public ModActionData Data;
     }

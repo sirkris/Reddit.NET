@@ -6,11 +6,8 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class ImageUploadResult
+    public class ImageUploadResult : BaseResult
     {
-        [JsonProperty("errors")]
-        public List<string> Errors;
-
         [JsonProperty("img_src")]
         public string ImgSrc;
 

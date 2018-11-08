@@ -6,11 +6,8 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class LiveUpdateEventContainer
+    public class LiveUpdateEventContainer : BaseContainer
     {
-        [JsonProperty("kind")]
-        public string Kind;
-
         [JsonProperty("data")]
         public LiveUpdateEvent Data;
     }

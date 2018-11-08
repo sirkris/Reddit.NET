@@ -6,16 +6,13 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class WidgetButton4Data
+    public class WidgetButton4Data : BaseContainer
     {
         [JsonProperty("json")]
         public WidgetImageProperties JSON;
 
         [JsonProperty("imageUrl")]
         public string ImageURL;
-
-        [JsonProperty("kind")]
-        public string Kind;
 
         [JsonProperty("linkUrl")]
         public string LinkURL;

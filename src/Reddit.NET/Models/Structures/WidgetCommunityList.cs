@@ -6,13 +6,10 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class WidgetCommunityList
+    public class WidgetCommunityList : BaseContainer
     {
         [JsonProperty("data")]
         public List<string> Data;  // List of subreddit names.  --Kris
-
-        [JsonProperty("kind")]
-        public string Kind;
 
         [JsonProperty("shortName")]
         public string ShortName;

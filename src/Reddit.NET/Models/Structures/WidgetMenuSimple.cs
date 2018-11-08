@@ -6,12 +6,9 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class WidgetMenuSimple
+    public class WidgetMenuSimple : BaseContainer
     {
         [JsonProperty("data")]
         public List<WidgetMenuData> Data;
-
-        [JsonProperty("kind")]
-        public string Kind;
     }
 }

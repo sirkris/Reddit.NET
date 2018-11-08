@@ -6,9 +6,9 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class DynamicShortListingContainer : BaseContainer
+    public abstract class BaseContainer
     {
-        [JsonProperty("data")]
-        public DynamicShortListingData Data;
+        [JsonProperty("kind")]
+        public string Kind;
     }
 }

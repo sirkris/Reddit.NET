@@ -6,13 +6,10 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class ActionResult
+    public class ActionResult : BaseResult
     {
         [JsonProperty("status")]
         public string Status;
-
-        [JsonProperty("errors")]
-        public object Errors;
 
         [JsonProperty("ok")]
         public bool Ok;

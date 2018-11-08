@@ -6,11 +6,8 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class PostResult
+    public class PostResult : BaseResult
     {
-        [JsonProperty("errors")]
-        public List<List<string>> Errors;
-
         [JsonProperty("data")]
         public PostResultData Data;
     }

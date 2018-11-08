@@ -6,11 +6,8 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class LiveThreadCreateResult
+    public class LiveThreadCreateResult : BaseResult
     {
-        [JsonProperty("errors")]
-        public List<List<string>> Errors;
-
         [JsonProperty("data")]
         public LiveThreadCreateResultData Data;
     }

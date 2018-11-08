@@ -6,13 +6,10 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class WidgetIdCard
+    public class WidgetIdCard : BaseContainer
     {
         [JsonProperty("currentlyViewingText")]
         public string CurrentlyViewingText;
-
-        [JsonProperty("kind")]
-        public string Kind;
 
         [JsonProperty("shortName")]
         public string ShortName;

@@ -6,11 +6,8 @@ using System.Text;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class LabeledMultiDescriptionContainer
+    public class LabeledMultiDescriptionContainer : BaseContainer
     {
-        [JsonProperty("kind")]
-        public string Kind;
-
         [JsonProperty("data")]
         public LabeledMultiDescription Data;
     }
