@@ -4,10 +4,13 @@ using System;
 namespace Reddit.NET.Models.Structures
 {
     [Serializable]
-    public class ActionResult : BaseResult
+    public class ActionResult
     {
         [JsonProperty("status")]
         public string Status;
+
+        [JsonProperty("errors")]
+        public object Errors;
 
         [JsonProperty("ok")]
         public bool Ok;
