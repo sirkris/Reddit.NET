@@ -196,6 +196,30 @@ namespace Reddit.NET.Models
             }
         }
 
+        public void AddParamIfNotNull(string name, bool? value, ref RestRequest restRequest)
+        {
+            if (value.HasValue)
+            {
+                restRequest.AddParameter(name, value.Value);
+            }
+        }
+
+        public void AddParamIfNotNull(string name, int? value, ref RestRequest restRequest)
+        {
+            if (value.HasValue)
+            {
+                restRequest.AddParameter(name, value.Value);
+            }
+        }
+
+        public void AddParamIfNotNull(string name, object value, ref RestRequest restRequest)
+        {
+            if (value != null)
+            {
+                restRequest.AddParameter(name, value);
+            }
+        }
+
         public string Sr(string subreddit)
         {
             return (!string.IsNullOrWhiteSpace(subreddit) ? "/r/" + subreddit + "/" : "");

@@ -26,13 +26,13 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// The full Listing object returned by the Reddit API;
         /// </summary>
-        public Models.Structures.Post Listing;
+        public ModelStructures.Post Listing;
 
         public List<Comment> Comments;  // TODO - Populate.  --Kris
 
         private readonly Dispatch Dispatch;
 
-        public Post(Dispatch dispatch, Models.Structures.Post listing)
+        public Post(Dispatch dispatch, ModelStructures.Post listing)
         {
             this.Subreddit = listing.Subreddit;
             this.Title = listing.Title;
