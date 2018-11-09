@@ -19,13 +19,27 @@ namespace Example
                 string refreshToken = args[1];
                 string accessToken = (args.Length > 2 ? args[2] : null);
 
+                // Initialize the API library instance.  --Kris
                 RedditAPI reddit = new RedditAPI(appId, refreshToken, accessToken);
 
+                // Get info on the Reddit user authenticated by the OAuth credentials.  --Kris
                 User me = reddit.User().Me();
 
                 Console.WriteLine("Username: " + me.Name);
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
 
+                // Create a new subreddit.  --Kris
+                //Subreddit newSub = reddit.Subreddit("RDNBotSub", "Test Subreddit", "Test sub created by Reddit.NET", "My sidebar.").Create();
+
+                // Get info about a subreddit.  --Kris
+                Subreddit sub = reddit.Subreddit("AskReddit").About();
+
+                Console.WriteLine("Subreddit Name: " + sub.Name);
+                Console.WriteLine("Subreddit Fullname: " + sub.Fullname);
+                Console.WriteLine("Subreddit Title: " + sub.Title);
+                Console.WriteLine("Subreddit Description: " + sub.Description);
+                
+                int i = 0;
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
                 /*
                 File.WriteAllText("Account.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Account.Trophies()));
@@ -206,7 +220,7 @@ namespace Example
                 File.WriteAllText("LinksAndComments.SetSuggestedSort.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.SetSuggestedSort("t3_9nhy54", "new")));
                 //File.WriteAllText("LinksAndComments.Delete.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Delete("t3_9riiex")));
 
-                //ModelStructures.AccountPrefs accountPrefs = reddit.Models.Account.Prefs();
+                //RedditThings.AccountPrefs accountPrefs = reddit.Models.Account.Prefs();
                 //accountPrefs.Autoplay = !accountPrefs.Autoplay;
                 //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(accountPrefs)));
                 File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));
@@ -222,7 +236,7 @@ namespace Example
                         imageData = binaryReader.ReadBytes(int.MaxValue / 2);
                     }
                 }/*
-                ModelStructures.S3UploadLeaseContainer s3 = reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.jpg", "image/jpeg");
+                RedditThings.S3UploadLeaseContainer s3 = reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.jpg", "image/jpeg");
                 //File.WriteAllText("Emoji.UploadLeaseImage.json", JsonConvert.SerializeObject(reddit.Models.Emoji.UploadLeaseImage(imageData, s3)));
                 reddit.Models.Emoji.UploadLeaseImage(imageData, s3);
                 File.WriteAllText("Emoji.Add.json", JsonConvert.SerializeObject(reddit.Models.Emoji.Add("RedditDotNETBot", "Birdie", s3.S3UploadLease.Fields.First(
@@ -250,7 +264,7 @@ namespace Example
                 File.WriteAllText("Flair.SetFlairEnabled.json", JsonConvert.SerializeObject(reddit.Models.Flair.SetFlairEnabled(true, "RedditDotNETBot")));
                 //File.WriteAllText("Flair.SelectFlair.json", JsonConvert.SerializeObject(reddit.Models.Flair.SelectFlair("#88BBFF", "c1e232a6-db49-11e8-83f1-0e3c0039d3b4",
                 //    "", "", "all", "V2-3628702_EDITED", "dark", "RedditDotNETBot")));
-                //System.Collections.Generic.List<ModelStructures.Flair> flairs = reddit.Models.Flair.LinkFlair("RedditDotNETBot");
+                //System.Collections.Generic.List<RedditThings.Flair> flairs = reddit.Models.Flair.LinkFlair("RedditDotNETBot");
                 //flairs.Reverse();
                 //File.WriteAllText("Flair.FlairTemplateOrder.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairTemplateOrder("LINK_FLAIR", flairs, "RedditDotNETBot")));
                 File.WriteAllText("Flair.FlairConfig.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairConfig(true, "right", true, "right", true, "RedditDotNETBot")));
@@ -272,7 +286,7 @@ namespace Example
                 //File.WriteAllText("Modmail.BulkRead.json", JsonConvert.SerializeObject(reddit.Models.Modmail.BulkRead("t5_3fblp", "all")));
                 File.WriteAllText("Modmail.GetConversations.json", JsonConvert.SerializeObject(reddit.Models.Modmail.GetConversations("", "t5_3fblp", "unread", "all")));
                 string multiName = "RDNTest_" + DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
-                ModelStructures.LabeledMultiSubmit model = new ModelStructures.LabeledMultiSubmit("This is a test multi.",
+                RedditThings.LabeledMultiSubmit model = new RedditThings.LabeledMultiSubmit("This is a test multi.",
                     multiName, "None", "#0000FF",
                     new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" }, "public", "classic");
 
@@ -311,7 +325,7 @@ namespace Example
                 File.WriteAllText("Subreddits.EditWithCreated.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", true, "")));
 
                 //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(
-                //    new ModelStructures.AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, ""))));
+                //    new RedditThings.AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, ""))));
 
                 File.WriteAllText("Users.BlockUser.json", JsonConvert.SerializeObject(reddit.Models.Users.BlockUser("", "RedditDotNetBot")));
                 File.WriteAllText("Users.UnfriendUnblockUser.json", JsonConvert.SerializeObject(reddit.Models.Users.Unfriend("t2_6vsit", "", "RedditDotNetBot", "enemy")));
@@ -361,28 +375,28 @@ namespace Example
                 File.WriteAllText("LiveThreads.CloseThread.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.CloseThread("11wa6l86jy5th")));
 
                 File.WriteAllText("Widgets.AddTextArea.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Add(
-                    new ModelStructures.WidgetTextArea("TestWidget", "This is a test."), "RedditDotNETBot")));
+                    new RedditThings.WidgetTextArea("TestWidget", "This is a test."), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.UpdateTextArea.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Update("widget_11wo976t5rax7",
-                    new ModelStructures.WidgetTextArea("TestWidgetMod", "This is a MODIFIED test."), "RedditDotNETBot")));
+                    new RedditThings.WidgetTextArea("TestWidgetMod", "This is a MODIFIED test."), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.GetWithProgressiveImages.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Get(true, "RedditDotNETBot")));
-                ModelStructures.WidgetResults widgetResults = reddit.Models.Widgets.Get(false, "RedditDotNETBot");
+                RedditThings.WidgetResults widgetResults = reddit.Models.Widgets.Get(false, "RedditDotNETBot");
                 System.Collections.Generic.List<string> order = widgetResults.Layout.Sidebar.Order;
                 order.Reverse();
                 //File.WriteAllText("Widgets.UpdateOrder.json", JsonConvert.SerializeObject(reddit.Models.Widgets.UpdateOrder("sidebar", order, "RedditDotNETBot")));
                 //File.WriteAllText("Widgets.Delete.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Delete(
                     new System.Collections.Generic.List<string>(widgetResults.Items.Keys)[widgetResults.Items.Keys.Count - 1], "RedditDotNETBot")));
                 File.WriteAllText("Widgets.AddCalendar.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Add(
-                    new ModelStructures.WidgetCalendar(new ModelStructures.WidgetCalendarConfiguration(0, true, true, true, true, true), "kris.craig@gmail.com",
-                    false, "Test Calendar Widget 2", new ModelStructures.WidgetStyles()), "RedditDotNETBot")));
+                    new RedditThings.WidgetCalendar(new RedditThings.WidgetCalendarConfiguration(0, true, true, true, true, true), "kris.craig@gmail.com",
+                    false, "Test Calendar Widget 2", new RedditThings.WidgetStyles()), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.UpdateCalendar.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Update("widget_11wuxmi1wr2pg",
-                    new ModelStructures.WidgetCalendar(new ModelStructures.WidgetCalendarConfiguration(20, true, true, true, true, true), "kris.craig@gmail.com",
-                    false, "Test Calendar Widget 2b", new ModelStructures.WidgetStyles()), "RedditDotNETBot")));
+                    new RedditThings.WidgetCalendar(new RedditThings.WidgetCalendarConfiguration(20, true, true, true, true, true), "kris.craig@gmail.com",
+                    false, "Test Calendar Widget 2b", new RedditThings.WidgetStyles()), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.AddCommunityList.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Add(
-                    new ModelStructures.WidgetCommunityList(new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" },
-                    "Test CommunityList Widget", new ModelStructures.WidgetStyles()), "RedditDotNETBot")));
+                    new RedditThings.WidgetCommunityList(new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" },
+                    "Test CommunityList Widget", new RedditThings.WidgetStyles()), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.UpdateCommunityList.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Update("widget_11wv1rdhjxydr",
-                    new ModelStructures.WidgetCommunityList(new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" },
-                    "Test CommunityList Widget B", new ModelStructures.WidgetStyles()), "RedditDotNETBot")));
+                    new RedditThings.WidgetCommunityList(new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" },
+                    "Test CommunityList Widget B", new RedditThings.WidgetStyles()), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.Get.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Get(false, "RedditDotNETBot")));*/
             }
         }

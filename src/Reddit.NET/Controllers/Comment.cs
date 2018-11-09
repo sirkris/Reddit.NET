@@ -1,4 +1,4 @@
-﻿using ModelStructures = Reddit.NET.Models.Structures;
+﻿using RedditThings = Reddit.NET.Models.Structures;
 using System;
 
 namespace Reddit.NET.Controllers
@@ -17,7 +17,7 @@ namespace Reddit.NET.Controllers
         public int DownVotes;
         public bool Removed;
         public bool Spam;
-        public ModelStructures.CommentContainer Replies;
+        public RedditThings.CommentContainer Replies;
         public string Body;
         public string BodyHTML;
         public string ParentId;
@@ -27,9 +27,9 @@ namespace Reddit.NET.Controllers
         public bool ScoreHidden;
         public int Depth;
 
-        public ModelStructures.Comment Listing;
+        public RedditThings.Comment Listing;
 
-        public Comment(Dispatch dispatch, ModelStructures.Comment listing)
+        public Comment(Dispatch dispatch, RedditThings.Comment listing)
         {
             this.Replies = listing.Replies;
             this.Body = listing.Body;
@@ -44,7 +44,7 @@ namespace Reddit.NET.Controllers
 
         public Comment(Dispatch dispatch, string subreddit, string title, string author, string body, string bodyHtml,
             string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            ModelStructures.CommentContainer replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
+            RedditThings.CommentContainer replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
@@ -58,7 +58,7 @@ namespace Reddit.NET.Controllers
             this.ScoreHidden = scoreHidden;
             this.Depth = depth;
 
-            this.Listing = new ModelStructures.Comment(this);
+            this.Listing = new RedditThings.Comment(this);
         }
 
         public Comment(Dispatch dispatch) { }

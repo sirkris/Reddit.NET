@@ -1,4 +1,4 @@
-﻿using ModelStructures = Reddit.NET.Models.Structures;
+﻿using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 
@@ -26,13 +26,13 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// The full Listing object returned by the Reddit API;
         /// </summary>
-        public ModelStructures.Post Listing;
+        public RedditThings.Post Listing;
 
         public List<Comment> Comments;  // TODO - Populate.  --Kris
 
         private readonly Dispatch Dispatch;
 
-        public Post(Dispatch dispatch, ModelStructures.Post listing)
+        public Post(Dispatch dispatch, RedditThings.Post listing)
         {
             this.Subreddit = listing.Subreddit;
             this.Title = listing.Title;
@@ -71,7 +71,7 @@ namespace Reddit.NET.Controllers
             this.Removed = removed;
             this.Spam = spam;
 
-            this.Listing = new ModelStructures.Post(this);
+            this.Listing = new RedditThings.Post(this);
 
             this.Dispatch = dispatch;
         }

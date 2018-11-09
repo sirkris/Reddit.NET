@@ -1,5 +1,5 @@
 ﻿using Reddit.NET.Controllers;
-using ModelStructures = Reddit.NET.Models.Structures;
+using RedditThings = Reddit.NET.Models.Structures;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
@@ -35,14 +35,14 @@ namespace Reddit.NET
             }
         }
 
-        public Comment Comment(ModelStructures.Comment listing)
+        public Comment Comment(RedditThings.Comment listing)
         {
             return new Comment(Models, listing);
         }
 
         public Comment Comment(string subreddit, string title, string author, string body, string bodyHtml,
             string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            ModelStructures.CommentContainer replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+            RedditThings.CommentContainer replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
@@ -55,7 +55,7 @@ namespace Reddit.NET
             return new Comment(Models);
         }
 
-        public LinkPost LinkPost(ModelStructures.Post listing)
+        public LinkPost LinkPost(RedditThings.Post listing)
         {
             return new LinkPost(Models, listing);
         }
@@ -75,7 +75,7 @@ namespace Reddit.NET
             return new LinkPost(Models);
         }
 
-        public SelfPost SelfPost(ModelStructures.Post listing)
+        public SelfPost SelfPost(RedditThings.Post listing)
         {
             return new SelfPost(Models, listing);
         }
@@ -112,7 +112,7 @@ namespace Reddit.NET
             return new SelfPost(Models);
         }
 
-        public User User(ModelStructures.User user)
+        public User User(RedditThings.User user)
         {
             return new User(Models, user);
         }
@@ -131,12 +131,12 @@ namespace Reddit.NET
             return new User(Models);
         }
 
-        public Subreddit Subreddit(ModelStructures.Subreddit subreddit)
+        public Subreddit Subreddit(RedditThings.Subreddit subreddit)
         {
             return new Subreddit(Models, subreddit);
         }
 
-        public Subreddit Subreddit(ModelStructures.SubredditChild subredditChild)
+        public Subreddit Subreddit(RedditThings.SubredditChild subredditChild)
         {
             return new Subreddit(Models, subredditChild);
         }

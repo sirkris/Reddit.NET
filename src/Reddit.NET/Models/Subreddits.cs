@@ -387,7 +387,7 @@ namespace Reddit.NET.Models
             return SiteAdmin(subreddit.AllOriginalContent, subreddit.AllowDiscovery, subreddit.AllowImages, allowPostCrossposts,
                 allowTop, subreddit.AllowVideos, subreddit.CollapseDeletedComments, subreddit.Description, excludeBannedModqueue,
                 freeFormReports, gRecaptchaResponse, subreddit.HeaderTitle, subreddit.HideAds, subreddit.KeyColor, subreddit.Lang, linkType,
-                subreddit.Name, subreddit.OriginalContentTagEnabled, subreddit.Over18, subreddit.PublicDescription, subreddit.ShowMedia,
+                subreddit.DisplayName, subreddit.OriginalContentTagEnabled, subreddit.Over18, subreddit.PublicDescription, subreddit.ShowMedia,
                 subreddit.ShowMediaPreview, spamComments, spamLinks, spamSelfPosts, subreddit.SpoilersEnabled, sr, subreddit.SubmitLinkLabel,
                 subreddit.SubmitText, subreddit.SubmitTextLabel, subreddit.SuggestedCommentSort, themeSr, themeSrUpdate, subreddit.Title,
                 subreddit.SubredditType, wikiMode, subreddit.CommentScoreHideMins, wikiEditAge, wikiEditKarma);

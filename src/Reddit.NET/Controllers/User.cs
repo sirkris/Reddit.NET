@@ -1,4 +1,4 @@
-﻿using ModelStructures = Reddit.NET.Models.Structures;
+﻿using RedditThings = Reddit.NET.Models.Structures;
 using System;
 
 namespace Reddit.NET.Controllers
@@ -27,11 +27,11 @@ namespace Reddit.NET.Controllers
         public int CommentKarma;
         public bool HasSubscribed;
 
-        public ModelStructures.User UserData;
+        public RedditThings.User UserData;
 
         private readonly Dispatch Dispatch;
 
-        public User(Dispatch dispatch, ModelStructures.User user)
+        public User(Dispatch dispatch, RedditThings.User user)
         {
             this.IsFriend = user.IsFriend;
             this.ProfanityFilter = user.PrefNoProfanity;
@@ -87,7 +87,7 @@ namespace Reddit.NET.Controllers
             this.CommentKarma = commentKarma;
             this.HasSubscribed = hasSubscribed;
 
-            this.UserData = new ModelStructures.User(this);
+            this.UserData = new RedditThings.User(this);
 
             this.Dispatch = dispatch;
         }
