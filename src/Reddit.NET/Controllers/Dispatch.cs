@@ -1,5 +1,5 @@
 ﻿using Reddit.NET.Models;
-using Reddit.NET.Models.EventHandlers;
+using Reddit.NET.Models.EventArgs;
 using RestSharp;
 
 namespace Reddit.NET.Controllers
@@ -69,6 +69,25 @@ namespace Reddit.NET.Controllers
             Users.TokenUpdated += C_TokenUpdated;
             Widgets.TokenUpdated += C_TokenUpdated;
             Wiki.TokenUpdated += C_TokenUpdated;
+
+            Account.RequestsUpdated += C_RequestsUpdated;
+            Captcha.RequestsUpdated += C_RequestsUpdated;
+            Emoji.RequestsUpdated += C_RequestsUpdated;
+            Flair.RequestsUpdated += C_RequestsUpdated;
+            LinksAndComments.RequestsUpdated += C_RequestsUpdated;
+            Listings.RequestsUpdated += C_RequestsUpdated;
+            LiveThreads.RequestsUpdated += C_RequestsUpdated;
+            Misc.RequestsUpdated += C_RequestsUpdated;
+            Moderation.RequestsUpdated += C_RequestsUpdated;
+            Modmail.RequestsUpdated += C_RequestsUpdated;
+            Multis.RequestsUpdated += C_RequestsUpdated;
+            PrivateMessages.RequestsUpdated += C_RequestsUpdated;
+            RedditGold.RequestsUpdated += C_RequestsUpdated;
+            Search.RequestsUpdated += C_RequestsUpdated;
+            Subreddits.RequestsUpdated += C_RequestsUpdated;
+            Users.RequestsUpdated += C_RequestsUpdated;
+            Widgets.RequestsUpdated += C_RequestsUpdated;
+            Wiki.RequestsUpdated += C_RequestsUpdated;
         }
 
         public void C_TokenUpdated(object sender, TokenUpdateEventArgs e)
@@ -91,6 +110,28 @@ namespace Reddit.NET.Controllers
             Users.UpdateAccessToken(e.AccessToken);
             Widgets.UpdateAccessToken(e.AccessToken);
             Wiki.UpdateAccessToken(e.AccessToken);
+        }
+
+        public void C_RequestsUpdated(object sender, RequestsUpdateEventArgs e)
+        {
+            Account.UpdateRequests(e.Requests);
+            Captcha.UpdateRequests(e.Requests);
+            Emoji.UpdateRequests(e.Requests);
+            Flair.UpdateRequests(e.Requests);
+            LinksAndComments.UpdateRequests(e.Requests);
+            Listings.UpdateRequests(e.Requests);
+            LiveThreads.UpdateRequests(e.Requests);
+            Misc.UpdateRequests(e.Requests);
+            Moderation.UpdateRequests(e.Requests);
+            Modmail.UpdateRequests(e.Requests);
+            Multis.UpdateRequests(e.Requests);
+            PrivateMessages.UpdateRequests(e.Requests);
+            RedditGold.UpdateRequests(e.Requests);
+            Search.UpdateRequests(e.Requests);
+            Subreddits.UpdateRequests(e.Requests);
+            Users.UpdateRequests(e.Requests);
+            Widgets.UpdateRequests(e.Requests);
+            Wiki.UpdateRequests(e.Requests);
         }
     }
 }

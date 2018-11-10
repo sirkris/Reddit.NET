@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Reddit.NET.Exceptions;
-using Reddit.NET.Models.EventHandlers;
+using Reddit.NET.Models.EventArgs;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -15,10 +15,12 @@ namespace Reddit.NET.Models
         private readonly string AppId;
         internal string AccessToken;
         private readonly string RefreshToken;
+        private List<DateTime> Requests;
 
         internal abstract RestClient RestClient { get; set; }
 
         public event EventHandler<TokenUpdateEventArgs> TokenUpdated;
+        public event EventHandler<RequestsUpdateEventArgs> RequestsUpdated;
 
         public BaseModel(string appId, string refreshToken, string accessToken, RestClient restClient)
         {
@@ -26,6 +28,7 @@ namespace Reddit.NET.Models
             AccessToken = accessToken;
             RefreshToken = refreshToken;
             RestClient = restClient;
+            Requests = new List<DateTime>();
         }
 
         protected virtual void OnTokenUpdated(TokenUpdateEventArgs e)
@@ -33,9 +36,61 @@ namespace Reddit.NET.Models
             TokenUpdated?.Invoke(this, e);
         }
 
+        protected virtual void OnRequestsUpdated(RequestsUpdateEventArgs e)
+        {
+            RequestsUpdated?.Invoke(this, e);
+        }
+
         public void UpdateAccessToken(string accessToken)
         {
             AccessToken = accessToken;
+        }
+
+        public void UpdateRequests(List<DateTime> requests)
+        {
+            Requests = requests;
+        }
+
+        private bool RequestReady()
+        {
+            if (Requests.Count < 60)
+            {
+                return true;
+            }
+            else
+            {
+                while (Requests.Count > 0)
+                {
+                    // As I understand, the general rule is 60 requests per minute.  --Kris
+                    if (Requests[0].AddMinutes(1) < DateTime.Now)
+                    {
+                        Requests.RemoveAt(0);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                RequestsUpdateEventArgs args = new RequestsUpdateEventArgs
+                {
+                    Requests = Requests
+                };
+                OnRequestsUpdated(args);
+
+                return (Requests.Count < 60);
+            }
+        }
+
+        private void AddRequest()
+        {
+            Requests.Add(DateTime.Now);
+
+            RequestsUpdateEventArgs args = new RequestsUpdateEventArgs
+            {
+                Requests = Requests
+            };
+            OnRequestsUpdated(args);
         }
 
         public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
@@ -86,6 +141,12 @@ namespace Reddit.NET.Models
 
         public string ExecuteRequest(RestRequest restRequest)
         {
+            // If we've reached the speed limit, hold until we're clear to proceed.  --Kris
+            while (!RequestReady()) { }
+
+            // Add to recent request history (used for ratelimiting purposes).  --Kris
+            AddRequest();
+
             restRequest.AddHeader("User-Agent", "Reddit.NET");
 
             IRestResponse res = RestClient.Execute(restRequest);
