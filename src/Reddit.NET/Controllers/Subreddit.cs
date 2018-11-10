@@ -2,6 +2,7 @@
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
 using System;
+using System.Reflection;
 
 namespace Reddit.NET.Controllers
 {
@@ -154,6 +155,24 @@ namespace Reddit.NET.Controllers
             SubmissionType = subreddit.SubmissionType;
         }
 
+        /// <summary>
+        /// Copy all property values from another subreddit instance onto this one.
+        /// </summary>
+        /// <param name="subreddit">The subreddit instance being copied</param>
+        /// <param name="overwrite">If true, any existing values are overwritten</param>
+        private void Import(Subreddit subreddit, bool overwrite = true)
+        {
+            foreach (PropertyInfo property in typeof(Subreddit).GetProperties())
+            {
+                if (property.CanWrite
+                    && (overwrite
+                        || property.GetValue(this, null) == null))
+                {
+                    property.SetValue(this, property.GetValue(subreddit, null), null);
+                }
+            }
+        }
+
         private void SetValues(string name, string title, string description, string sidebar,
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
@@ -224,6 +243,7 @@ namespace Reddit.NET.Controllers
         //                 Subreddit sub = reddit.Subreddit(reddit.Models.Subreddits.About("MyNewSubreddit"));
         /// <summary>
         /// Create a new subreddit and return the created result.
+        /// If a subreddit by that name already exists, an exception is thrown.
         /// </summary>
         /// <param name="allowPostCrossposts">boolean value</param>
         /// <param name="allowTop">boolean value</param>
@@ -241,7 +261,7 @@ namespace Reddit.NET.Controllers
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
         /// <returns>An instance of this class populated with the newly created subreddit.</returns>
         public Subreddit Create(bool allowPostCrossposts = true, bool allowTop = true, bool excludeBannedModqueue = false, bool freeFormReports = true,
-            string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high", 
+            string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
             string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
         {
             RedditThings.GenericContainer res = Dispatch.Subreddits.SiteAdmin(UpdateSubredditData(), allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse,
@@ -250,6 +270,82 @@ namespace Reddit.NET.Controllers
             Validate(res);
 
             return About();
+        }
+
+        /// <summary>
+        /// Create a new subreddit and return the created result.
+        /// If a subreddit by that name already exists, retrieve that existing subreddit and return the result.
+        /// If the subreddit already exists, the parameters passed to this method will be ignored.
+        /// </summary>
+        /// <param name="allowPostCrossposts">boolean value</param>
+        /// <param name="allowTop">boolean value</param>
+        /// <param name="excludeBannedModqueue">boolean value</param>
+        /// <param name="freeFormReports">boolean value</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="linkType">one of (any, link, self)</param>
+        /// <param name="spamComments">one of (low, high, all)</param>
+        /// <param name="spamLinks">one of (low, high, all)</param>
+        /// <param name="spamSelfPosts">one of (low, high, all)</param>
+        /// <param name="themeSr">subreddit name</param>
+        /// <param name="themeSrUpdate">boolean value</param>
+        /// <param name="wikiMode">one of (disabled, modonly, anyone)</param>
+        /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
+        /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
+        /// <returns>An instance of this class populated with the newly created or existing subreddit.</returns>
+        public Subreddit CreateIfNotExists(bool allowPostCrossposts = true, bool allowTop = true, bool excludeBannedModqueue = false, bool freeFormReports = true,
+            string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
+            string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
+        {
+            try
+            {
+                return Create(allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse, linkType, spamComments,
+                    spamLinks, spamSelfPosts, themeSr, themeSrUpdate, wikiMode, wikiEditAge, wikiEditKarma);
+            }
+            catch (RedditSubredditExistsException) { }
+
+            return About();
+        }
+
+        /// <summary>
+        /// Create a new subreddit and return the created result.
+        /// If a subreddit by that name already exists, update that existing subreddit and return the result.
+        /// </summary>
+        /// <param name="allowPostCrossposts">boolean value</param>
+        /// <param name="allowTop">boolean value</param>
+        /// <param name="excludeBannedModqueue">boolean value</param>
+        /// <param name="freeFormReports">boolean value</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="linkType">one of (any, link, self)</param>
+        /// <param name="spamComments">one of (low, high, all)</param>
+        /// <param name="spamLinks">one of (low, high, all)</param>
+        /// <param name="spamSelfPosts">one of (low, high, all)</param>
+        /// <param name="themeSr">subreddit name</param>
+        /// <param name="themeSrUpdate">boolean value</param>
+        /// <param name="wikiMode">one of (disabled, modonly, anyone)</param>
+        /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
+        /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
+        /// <returns>An instance of this class populated with the newly created or updated subreddit.</returns>
+        public Subreddit CreateOrUpdate(bool allowPostCrossposts = true, bool allowTop = true, bool excludeBannedModqueue = false, bool freeFormReports = true,
+            string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
+            string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
+        {
+            try
+            {
+                return Create(allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse, linkType, spamComments,
+                    spamLinks, spamSelfPosts, themeSr, themeSrUpdate, wikiMode, wikiEditAge, wikiEditKarma);
+            }
+            catch (RedditSubredditExistsException) { }
+
+            // If subreddit already exists, import its data to this instance so we can get the fullname.  --Kris
+            if (string.IsNullOrWhiteSpace(Fullname))
+            {
+                Import(About(), false);
+            }
+
+            return Update(allowPostCrossposts: allowPostCrossposts, allowTop: allowTop, excludeBannedModqueue: excludeBannedModqueue,
+                freeFormReports: freeFormReports, gRecaptchaResponse: gRecaptchaResponse, linkType: linkType, spamComments: spamComments,
+                spamLinks: spamLinks, spamSelfPosts: spamSelfPosts, themeSr: themeSr, themeSrUpdate: themeSrUpdate, wikiMode: wikiMode,
+                wikiEditAge: wikiEditAge, wikiEditKarma: wikiEditKarma);
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit").About();
@@ -301,8 +397,8 @@ namespace Reddit.NET.Controllers
         /// <param name="commentScoreHideMins">an integer between 0 and 1440 (default: 0)</param>
         /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
-        /// <returns>Whether the update was successful.</returns>
-        public bool Update(bool manualUpdate = false, bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
+        /// <returns>An instance of this class populated with the newly created or updated subreddit.</returns>
+        public Subreddit Update(bool manualUpdate = false, bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
             bool? allowTop = null, bool? allowVideos = null, bool? collapseDeletedComments = null, string description = null, bool? excludeBannedModqueue = null,
             bool? freeFormReports = null, string gRecaptchaResponse = null, string headerTitle = null, bool? hideAds = null, string keyColor = null, string lang = null,
             string linkType = null, string name = null, bool? originalContentTagEnabled = null, bool? over18 = null, string publicDescription = null, bool? showMedia = null,
@@ -328,7 +424,9 @@ namespace Reddit.NET.Controllers
                     wikiEditKarma);
             }
 
-            return (res != null && res.JSON != null && (res.JSON.Errors == null || res.JSON.Errors.Count == 0));
+            Validate(res);
+
+            return About();
         }
     }
 }
