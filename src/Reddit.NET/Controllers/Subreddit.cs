@@ -66,8 +66,8 @@ namespace Reddit.NET.Controllers
             ImportFromModel(subreddit);
 
             SubredditData = subreddit;
-            Posts = new SubredditPosts();
             Dispatch = dispatch;
+            Posts = new SubredditPosts(Dispatch, Name);
         }
 
         public Subreddit(Dispatch dispatch, RedditThings.SubredditChild subredditChild)
@@ -75,8 +75,8 @@ namespace Reddit.NET.Controllers
             ImportFromModel(subredditChild.Data);
 
             SubredditData = subredditChild.Data;
-            Posts = new SubredditPosts();
             Dispatch = dispatch;
+            Posts = new SubredditPosts(Dispatch, Name);
         }
 
         public Subreddit(Dispatch dispatch, string name, string title, string description, string sidebar,
@@ -91,8 +91,8 @@ namespace Reddit.NET.Controllers
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
 
             UpdateSubredditData();
-            Posts = new SubredditPosts();
             Dispatch = dispatch;
+            Posts = new SubredditPosts(Dispatch, Name);
         }
 
         public Subreddit(Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "")
@@ -100,14 +100,14 @@ namespace Reddit.NET.Controllers
             SetValues(name, title, description, sidebar);
 
             UpdateSubredditData();
-            Posts = new SubredditPosts();
             Dispatch = dispatch;
+            Posts = new SubredditPosts(Dispatch, Name);
         }
 
         public Subreddit(Dispatch dispatch)
         {
-            Posts = new SubredditPosts();
             Dispatch = dispatch;
+            Posts = new SubredditPosts(Dispatch, "");
         }
 
         private void ImportFromModel(RedditThings.Subreddit subreddit)
