@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers;
+using Reddit.NET.Controllers.EventArgs;
 using RedditThings = Reddit.NET.Models.Structures;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -26,7 +27,7 @@ namespace Reddit.NET
                 || !string.IsNullOrWhiteSpace(accessToken))
             {
                 // Passing "null" instead of null forces the Reddit API to return a non-200 status code on auth failure, freeing us from having to parse the content string.  --Kris
-                this.Models = new Dispatch(appId, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
+                Models = new Dispatch(appId, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
             }
             else
             {

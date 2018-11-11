@@ -2,6 +2,7 @@
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Reddit.NET.Controllers
@@ -59,24 +60,26 @@ namespace Reddit.NET.Controllers
 
         public SubredditPosts Posts;
 
-        private readonly Dispatch Dispatch;
+        internal readonly Dispatch Dispatch;
 
         public Subreddit(Dispatch dispatch, RedditThings.Subreddit subreddit)
+            : base()
         {
             ImportFromModel(subreddit);
 
             SubredditData = subreddit;
             Dispatch = dispatch;
-            Posts = new SubredditPosts(Dispatch, Name);
+            Posts = new SubredditPosts(this);
         }
 
         public Subreddit(Dispatch dispatch, RedditThings.SubredditChild subredditChild)
+            : base()
         {
             ImportFromModel(subredditChild.Data);
 
             SubredditData = subredditChild.Data;
             Dispatch = dispatch;
-            Posts = new SubredditPosts(Dispatch, Name);
+            Posts = new SubredditPosts(this);
         }
 
         public Subreddit(Dispatch dispatch, string name, string title, string description, string sidebar,
@@ -85,6 +88,7 @@ namespace Reddit.NET.Controllers
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
             int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+            : base()
         {
             SetValues(name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
@@ -92,22 +96,24 @@ namespace Reddit.NET.Controllers
 
             UpdateSubredditData();
             Dispatch = dispatch;
-            Posts = new SubredditPosts(Dispatch, Name);
+            Posts = new SubredditPosts(this);
         }
 
         public Subreddit(Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "")
+            : base()
         {
             SetValues(name, title, description, sidebar);
 
             UpdateSubredditData();
             Dispatch = dispatch;
-            Posts = new SubredditPosts(Dispatch, Name);
+            Posts = new SubredditPosts(this);
         }
 
         public Subreddit(Dispatch dispatch)
+            : base()
         {
             Dispatch = dispatch;
-            Posts = new SubredditPosts(Dispatch, "");
+            Posts = new SubredditPosts(this);
         }
 
         private void ImportFromModel(RedditThings.Subreddit subreddit)
@@ -216,6 +222,15 @@ namespace Reddit.NET.Controllers
             SubredditData = new RedditThings.Subreddit(this);
 
             return SubredditData;
+        }
+
+        public override void UpdateMonitoring(Dictionary<string, string> monitoring)
+        {
+            Monitoring = monitoring;
+            if (Posts != null)
+            {
+                Posts.Subreddit.UpdateMonitoring(monitoring);
+            }
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();

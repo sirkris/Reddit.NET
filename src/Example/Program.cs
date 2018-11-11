@@ -1,6 +1,8 @@
 ﻿using Reddit.NET;
 using Reddit.NET.Controllers;
+using Reddit.NET.Controllers.EventArgs;
 using System;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Example
@@ -38,6 +40,20 @@ namespace Example
                 Console.WriteLine("Subreddit Fullname: " + sub.Fullname);
                 Console.WriteLine("Subreddit Title: " + sub.Title);
                 Console.WriteLine("Subreddit Description: " + sub.Description);
+
+                // Get new posts from this subreddit.  --Kris
+                List<Post> newPosts = sub.Posts.New;
+
+                // Monitor new posts on this subreddit for a little while.  --Kris
+                sub.Posts.NewUpdated += C_NewPostsUpdated;
+                sub.Posts.MonitorNew();
+
+                DateTime start = DateTime.Now;
+                while (start.AddSeconds(15) > DateTime.Now) { }
+
+                // Stop monitoring new posts.  --Kris
+                sub.Posts.MonitorNew();
+                sub.Posts.NewUpdated -= C_NewPostsUpdated;
                 
                 int i = 0;
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
@@ -399,6 +415,12 @@ namespace Example
                     "Test CommunityList Widget B", new RedditThings.WidgetStyles()), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.Get.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Get(false, "RedditDotNETBot")));*/
             }
+        }
+
+        public static void C_NewPostsUpdated(object sender, PostsUpdateEventArgs e)
+        {
+            // TODO - Show which posts updated.  --Kris
+            Console.WriteLine("New post!");
         }
     }
 }
