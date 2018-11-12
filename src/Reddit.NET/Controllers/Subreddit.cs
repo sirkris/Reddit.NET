@@ -245,6 +245,14 @@ namespace Reddit.NET.Controllers
             return new Subreddit(Dispatch, Dispatch.Subreddits.About(Name));
         }
 
+        /// <summary>
+        /// Get the moderators of this subreddit.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="user">A valid, existing reddit username</param>
+        /// <returns>A list of subreddit moderators.</returns>
         public List<Moderator> GetModerators(string after = "", string before = "", int limit = 100, string user = "")
         {
             RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators", after, before, user, false, Name, limit: limit);
