@@ -1,4 +1,5 @@
-﻿using Reddit.NET.Controllers.Structures;
+﻿using Newtonsoft.Json;
+using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
 using System;
@@ -242,6 +243,21 @@ namespace Reddit.NET.Controllers
         public Subreddit About()
         {
             return new Subreddit(Dispatch, Dispatch.Subreddits.About(Name));
+        }
+
+        public List<Moderator> GetModerators(string after = "", string before = "", int limit = 100, string user = "")
+        {
+            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators", after, before, user, false, Name, limit: limit);
+
+            Validate(res);
+
+            List<Moderator> moderators = new List<Moderator>();
+            if (res.Data.Children != null)
+            {
+                moderators = JsonConvert.DeserializeObject<List<Moderator>>(JsonConvert.SerializeObject(res.Data.Children));
+            }
+
+            return moderators;
         }
 
         /// <summary>

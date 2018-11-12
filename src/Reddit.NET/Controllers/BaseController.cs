@@ -139,5 +139,23 @@ namespace Reddit.NET.Controllers
                 }
             }
         }
+
+        public void Validate(RedditThings.DynamicShortListingContainer dynamicShortListingContainer)
+        {
+            if (dynamicShortListingContainer == null)
+            {
+                throw new RedditControllerException("Reddit API returned null response.");
+            }
+
+            Validate(dynamicShortListingContainer.Data);
+        }
+
+        public void Validate(RedditThings.DynamicShortListingData dynamicShortListingData)
+        {
+            if (dynamicShortListingData == null)
+            {
+                throw new RedditControllerException("Reddit API returned empty response container.");
+            }
+        }
     }
 }

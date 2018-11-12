@@ -1,6 +1,7 @@
 ﻿using Reddit.NET;
 using Reddit.NET.Controllers;
 using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Structures;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,6 +47,17 @@ namespace Example
                 Console.WriteLine("Subreddit Fullname: " + sub.Fullname);
                 Console.WriteLine("Subreddit Title: " + sub.Title);
                 Console.WriteLine("Subreddit Description: " + sub.Description);
+
+                // Get moderators.  --Kris
+                List<Moderator> moderators = sub.GetModerators();
+
+                Console.WriteLine("Moderators:");
+                Console.WriteLine("{");
+                foreach (Moderator moderator in moderators)
+                {
+                    Console.WriteLine("\t" + moderator.Name);
+                }
+                Console.WriteLine("}");
 
                 // Get new posts from this subreddit.  --Kris
                 List<Post> newPosts = sub.Posts.New;
