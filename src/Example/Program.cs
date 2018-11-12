@@ -4,6 +4,7 @@ using Reddit.NET.Controllers.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Example
 {
@@ -44,18 +45,17 @@ namespace Example
                 // Get new posts from this subreddit.  --Kris
                 List<Post> newPosts = sub.Posts.New;
 
-                // Monitor new posts on this subreddit for a little while.  --Kris
+                // Monitor new posts on this subreddit for a minute.  --Kris
                 sub.Posts.NewUpdated += C_NewPostsUpdated;
                 sub.Posts.MonitorNew();
 
                 DateTime start = DateTime.Now;
-                while (start.AddSeconds(15) > DateTime.Now) { }
+                while (start.AddSeconds(60) > DateTime.Now) { }
 
                 // Stop monitoring new posts.  --Kris
                 sub.Posts.MonitorNew();
                 sub.Posts.NewUpdated -= C_NewPostsUpdated;
                 
-                int i = 0;
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
                 /*
                 File.WriteAllText("Account.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Account.Trophies()));
@@ -419,8 +419,10 @@ namespace Example
 
         public static void C_NewPostsUpdated(object sender, PostsUpdateEventArgs e)
         {
-            // TODO - Show which posts updated.  --Kris
-            Console.WriteLine("New post!");
+            foreach (Post post in e.Added)
+            {
+                Console.WriteLine("New Post by " + post.Author + ": " + post.Title);
+            }
         }
     }
 }

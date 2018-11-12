@@ -48,6 +48,59 @@ namespace Reddit.NET.Controllers
             UpdateMonitoring(e.Monitoring);
         }
 
+        /// <summary>
+        /// Scan two lists for any differences.  Sequence is ignored.
+        /// </summary>
+        /// <param name="oldList">The original list being compared against</param>
+        /// <param name="newList">The new list</param>
+        /// <param name="added">Any entries that are present in the new list but not the old</param>
+        /// <param name="removed">Any entries that are present in the old list but not the new</param>
+        /// <returns>True if the lists differ, otherwise false.</returns>
+        public bool ListDiff(List<Post> oldList, List<Post> newList, out List<Post> added, out List<Post> removed)
+        {
+            added = new List<Post>();
+            removed = new List<Post>();
+
+            // Index by Reddit fullname.  --Kris
+            Dictionary<string, Post> oldByFullname = new Dictionary<string, Post>();
+            Dictionary<string, Post> newByFullname = new Dictionary<string, Post>();
+            for (int i = 0; i < Math.Max(oldList.Count, newList.Count); i++)
+            {
+                if (i < oldList.Count)
+                {
+                    oldByFullname.Add(oldList[i].Fullname, oldList[i]);
+                }
+
+                if (i < newList.Count)
+                {
+                    newByFullname.Add(newList[i].Fullname, newList[i]);
+                }
+            }
+
+            // Scan for any new posts.  --Kris
+            foreach (KeyValuePair<string, Post> pair in newByFullname)
+            {
+                if (!oldByFullname.ContainsKey(pair.Key))
+                {
+                    added.Add(pair.Value);
+                }
+                else
+                {
+                    // So we don't have to check the same element twice.  --Kris
+                    oldByFullname.Remove(pair.Key);
+                }
+            }
+
+            // Scan for any posts no longer appearing in the list.  --Kris
+            foreach (KeyValuePair<string, Post> pair in oldByFullname)
+            {
+                // All the matching elements are gone, leaving only the removed ones.  --Kris
+                removed.Add(pair.Value);
+            }
+
+            return !(added.Count == 0 && removed.Count == 0);
+        }
+
         public Exception BuildException(Exception ex, List<List<string>> errors)
         {
             ex.Data.Add("errors", errors);

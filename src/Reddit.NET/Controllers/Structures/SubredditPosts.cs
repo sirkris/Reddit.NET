@@ -271,16 +271,18 @@ namespace Reddit.NET.Controllers.Structures
         {
             while (Subreddit.Monitoring.ContainsKey(key))
             {
-                List<Post> old = New;
+                List<Post> old = newPosts;
                 GetNew();
 
-                if (!New.SequenceEqual(old))
+                if (ListDiff(old, New, out List<Post> added, out List<Post> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     PostsUpdateEventArgs args = new PostsUpdateEventArgs
                     {
                         NewPosts = New,
-                        OldPosts = old
+                        OldPosts = old,
+                        Added = added,
+                        Removed = removed
                     };
                     OnNewUpdated(args);
                 }

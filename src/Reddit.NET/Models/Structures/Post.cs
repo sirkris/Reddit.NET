@@ -351,7 +351,7 @@ namespace Reddit.NET.Models.Structures
             this.Title = post.Title;
             this.Author = post.Author;
             this.Id = post.Id;
-            this.Name = post.Name;
+            this.Name = post.Fullname;
             this.Permalink = post.Permalink;
             this.Created = post.Created;
             this.Edited = post.Edited;
