@@ -14,6 +14,8 @@ namespace Reddit.NET.Controllers
 
         public event EventHandler<MonitoringUpdateEventArgs> MonitoringUpdated;
 
+        public int MonitoringWaitDelayMS = 1500;
+
         public BaseController()
         {
             Monitoring = new Dictionary<string, string>();

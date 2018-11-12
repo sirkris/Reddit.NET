@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
@@ -221,17 +222,8 @@ namespace Reddit.NET.Controllers.Structures
             return posts;
         }
 
-        // TODO - Monitor Best.  --Kris
-
-        // TODO - Monitor Hot.  --Kris
-
-        /// <summary>
-        /// Monitor the subreddit for new posts.
-        /// </summary>
-        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorNew()
+        private bool Monitor(string key, Thread thread)
         {
-            string key = Subreddit.Name + "_NewPosts";
             if (Subreddit.Monitoring.ContainsKey(key))
             {
                 // Stop monitoring.  --Kris
@@ -252,7 +244,7 @@ namespace Reddit.NET.Controllers.Structures
                 // Start monitoring.  --Kris
                 Subreddit.Monitoring.Add(key, null);
 
-                Threads.Add(key, new Thread(() => MonitorNewThread(key)));
+                Threads.Add(key, thread);
                 Threads[key].Start();
                 while (!Threads[key].IsAlive) { }
 
@@ -267,28 +259,132 @@ namespace Reddit.NET.Controllers.Structures
             }
         }
 
-        private void MonitorNewThread(string key)
+        private void MonitorThread(string key, string type)
         {
             while (Subreddit.Monitoring.ContainsKey(key))
             {
-                List<Post> old = newPosts;
-                GetNew();
+                List<Post> oldList;
+                List<Post> newList;
+                switch (type)
+                {
+                    default:
+                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                    case "best":
+                        oldList = best;
+                        newList = GetBest();
+                        break;
+                    case "hot":
+                        oldList = hot;
+                        newList = GetHot();
+                        break;
+                    case "new":
+                        oldList = newPosts;
+                        newList = GetNew();
+                        break;
+                    case "rising":
+                        oldList = rising;
+                        newList = GetRising();
+                        break;
+                    case "top":
+                        oldList = top;
+                        newList = GetTop();
+                        break;
+                    case "controversial":
+                        oldList = controversial;
+                        newList = GetControversial();
+                        break;
+                }
 
-                if (ListDiff(old, New, out List<Post> added, out List<Post> removed))
+                if (ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     PostsUpdateEventArgs args = new PostsUpdateEventArgs
                     {
-                        NewPosts = New,
-                        OldPosts = old,
+                        NewPosts = newList,
+                        OldPosts = oldList,
                         Added = added,
                         Removed = removed
                     };
-                    OnNewUpdated(args);
+                    switch (type)
+                    {
+                        case "best":
+                            OnBestUpdated(args);
+                            break;
+                        case "hot":
+                            OnHotUpdated(args);
+                            break;
+                        case "new":
+                            OnNewUpdated(args);
+                            break;
+                        case "rising":
+                            OnRisingUpdated(args);
+                            break;
+                        case "top":
+                            OnTopUpdated(args);
+                            break;
+                        case "controversial":
+                            OnControversialUpdated(args);
+                            break;
+                    }
                 }
 
-                Thread.Sleep(Subreddit.Monitoring.Count * 1500);
+                Thread.Sleep(Subreddit.Monitoring.Count * MonitoringWaitDelayMS);
             }
+        }
+
+        /// <summary>
+        /// Monitor Reddit for new "Best" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorBest()
+        {
+            string key = "BestPosts";
+            return Monitor(key, new Thread(() => MonitorBestThread(key)));
+        }
+
+        private void MonitorBestThread(string key)
+        {
+            MonitorThread(key, "best");
+        }
+
+        protected virtual void OnBestUpdated(PostsUpdateEventArgs e)
+        {
+            BestUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the subreddit for new "Hot" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorHot()
+        {
+            string key = Subreddit.Name + "_HotPosts";
+            return Monitor(key, new Thread(() => MonitorHotThread(key)));
+        }
+
+        private void MonitorHotThread(string key)
+        {
+            MonitorThread(key, "hot");
+        }
+
+        protected virtual void OnHotUpdated(PostsUpdateEventArgs e)
+        {
+            HotUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the subreddit for new posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorNew()
+        {
+            string key = Subreddit.Name + "_NewPosts";
+            return Monitor(key, new Thread(() => MonitorNewThread(key)));
+        }
+
+        private void MonitorNewThread(string key)
+        {
+            MonitorThread(key, "new");
         }
 
         protected virtual void OnNewUpdated(PostsUpdateEventArgs e)
@@ -296,10 +392,64 @@ namespace Reddit.NET.Controllers.Structures
             NewUpdated?.Invoke(this, e);
         }
 
-        // TODO - Monitor Rising.  --Kris
+        /// <summary>
+        /// Monitor the subreddit for new "Rising" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorRising()
+        {
+            string key = Subreddit.Name + "_RisingPosts";
+            return Monitor(key, new Thread(() => MonitorRisingThread(key)));
+        }
 
-        // TODO - Monitor Top.  --Kris
+        private void MonitorRisingThread(string key)
+        {
+            MonitorThread(key, "rising");
+        }
 
-        // TODO - Monitor Controversial.  --Kris
+        protected virtual void OnRisingUpdated(PostsUpdateEventArgs e)
+        {
+            RisingUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the subreddit for new "Top" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorTop()
+        {
+            string key = Subreddit.Name + "_TopPosts";
+            return Monitor(key, new Thread(() => MonitorTopThread(key)));
+        }
+
+        private void MonitorTopThread(string key)
+        {
+            MonitorThread(key, "top");
+        }
+
+        protected virtual void OnTopUpdated(PostsUpdateEventArgs e)
+        {
+            TopUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the subreddit for new "Controversial" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorControversial()
+        {
+            string key = Subreddit.Name + "_ControversialPosts";
+            return Monitor(key, new Thread(() => MonitorControversialThread(key)));
+        }
+
+        private void MonitorControversialThread(string key)
+        {
+            MonitorThread(key, "controversial");
+        }
+
+        protected virtual void OnControversialUpdated(PostsUpdateEventArgs e)
+        {
+            ControversialUpdated?.Invoke(this, e);
+        }
     }
 }
