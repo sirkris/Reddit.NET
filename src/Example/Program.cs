@@ -45,16 +45,22 @@ namespace Example
                 // Get new posts from this subreddit.  --Kris
                 List<Post> newPosts = sub.Posts.New;
 
+                Console.WriteLine("Retrieved " + newPosts.Count.ToString() + " new posts.");
+
                 // Monitor new posts on this subreddit for a minute.  --Kris
+                Console.WriteLine("Monitoring " + sub.Name + " for new posts....");
+
                 sub.Posts.NewUpdated += C_NewPostsUpdated;
-                sub.Posts.MonitorNew();
+                sub.Posts.MonitorNew();  // Toggle on.
 
                 DateTime start = DateTime.Now;
-                while (start.AddSeconds(60) > DateTime.Now) { }
+                while (start.AddMinutes(1) > DateTime.Now) { }
 
                 // Stop monitoring new posts.  --Kris
-                sub.Posts.MonitorNew();
+                sub.Posts.MonitorNew();  // Toggle off.
                 sub.Posts.NewUpdated -= C_NewPostsUpdated;
+
+                Console.WriteLine("Done monitoring!");
                 
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
                 /*
