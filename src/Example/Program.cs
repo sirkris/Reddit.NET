@@ -59,6 +59,11 @@ namespace Example
                 }
                 Console.WriteLine("}");
 
+                // Get banned users (requires mod access).  --Kris
+                //List<BannedUser> bannedUsers = reddit.Subreddit("StillSandersForPres").GetBannedUsers();
+
+                //Console.WriteLine("Banned users retrieved: " + bannedUsers.Count);
+
                 // Get new posts from this subreddit.  --Kris
                 List<Post> newPosts = sub.Posts.New;
 

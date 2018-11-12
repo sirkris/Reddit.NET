@@ -245,6 +245,17 @@ namespace Reddit.NET.Controllers
             return new Subreddit(Dispatch, Dispatch.Subreddits.About(Name));
         }
 
+        private List<T> GetAboutChildren<T>(RedditThings.DynamicShortListingContainer dynamicShortListingContainer)
+        {
+            List<T> res = new List<T>();
+            if (dynamicShortListingContainer.Data.Children != null)
+            {
+                res = JsonConvert.DeserializeObject<List<T>>(JsonConvert.SerializeObject(dynamicShortListingContainer.Data.Children));
+            }
+
+            return res;
+        }
+
         /// <summary>
         /// Get the moderators of this subreddit.
         /// </summary>
@@ -259,13 +270,24 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            List<Moderator> moderators = new List<Moderator>();
-            if (res.Data.Children != null)
-            {
-                moderators = JsonConvert.DeserializeObject<List<Moderator>>(JsonConvert.SerializeObject(res.Data.Children));
-            }
+            return GetAboutChildren<Moderator>(res);
+        }
 
-            return moderators;
+        /// <summary>
+        /// Get a list of users who were banned from this subreddit.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="user">A valid, existing reddit username</param>
+        /// <returns>A list of banned users.</returns>
+        public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 100, string user = "")
+        {
+            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned", after, before, user, false, Name, limit: limit);
+
+            Validate(res);
+
+            return GetAboutChildren<BannedUser>(res);
         }
 
         /// <summary>
