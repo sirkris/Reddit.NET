@@ -34,6 +34,11 @@ namespace Example
                 // Create a new subreddit.  --Kris
                 //Subreddit newSub = reddit.Subreddit("RDNBotSub", "Test Subreddit", "Test sub created by Reddit.NET", "My sidebar.").Create();
 
+                // Get best posts.  --Kris
+                List<Post> bestPosts = reddit.Subreddit().Posts.Best;
+
+                Console.WriteLine("Current best post (by " + bestPosts[0].Author + "): [" + bestPosts[0].Subreddit + "] " + bestPosts[0].Title);
+
                 // Get info about a subreddit.  --Kris
                 Subreddit sub = reddit.Subreddit("AskReddit").About();
 
