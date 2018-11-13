@@ -263,14 +263,89 @@ namespace Reddit.NET.Controllers
         /// <param name="before">fullname of a thing</param>
         /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
         /// <param name="user">A valid, existing reddit username</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of subreddit moderators.</returns>
-        public List<Moderator> GetModerators(string after = "", string before = "", int limit = 100, string user = "")
+        public List<Moderator> GetModerators(string after = "", string before = "", int limit = 100, string user = "", 
+            bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators", after, before, user, false, Name, limit: limit);
+            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators", after, before, user, includeCategories, Name, count, limit, 
+                show, srDetail);
 
             Validate(res);
 
             return GetAboutChildren<Moderator>(res);
+        }
+
+        /// <summary>
+        /// Get the approved submitters of this subreddit.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="user">A valid, existing reddit username</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of subreddit contributors.</returns>
+        public List<SubredditUser> GetContributors(string after = "", string before = "", int limit = 100, string user = "",
+            bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
+        {
+            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("contributors", after, before, user, includeCategories, Name, count, limit,
+                show, srDetail);
+
+            Validate(res);
+
+            return GetAboutChildren<SubredditUser>(res);
+        }
+
+        /// <summary>
+        /// Get the approved submitters of this subreddit's wiki.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="user">A valid, existing reddit username</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of subreddit contributors.</returns>
+        public List<SubredditUser> GetWikiContributors(string after = "", string before = "", int limit = 100, string user = "",
+            bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
+        {
+            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikicontributors", after, before, user, includeCategories, Name, count, limit,
+                show, srDetail);
+
+            Validate(res);
+
+            return GetAboutChildren<SubredditUser>(res);
+        }
+
+        /// <summary>
+        /// Get the muted users of this subreddit.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="user">A valid, existing reddit username</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of muted users.</returns>
+        public List<SubredditUser> GetMutedUsers(string after = "", string before = "", int limit = 100, string user = "",
+            bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
+        {
+            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("muted", after, before, user, includeCategories, Name, count, limit,
+                show, srDetail);
+
+            Validate(res);
+
+            return GetAboutChildren<SubredditUser>(res);
         }
 
         /// <summary>
@@ -280,10 +355,39 @@ namespace Reddit.NET.Controllers
         /// <param name="before">fullname of a thing</param>
         /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
         /// <param name="user">A valid, existing reddit username</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of banned users.</returns>
-        public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 100, string user = "")
+        public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 100, string user = "",
+            bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned", after, before, user, false, Name, limit: limit);
+            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned", after, before, user, includeCategories, Name, count, limit,
+                show, srDetail);
+
+            Validate(res);
+
+            return GetAboutChildren<BannedUser>(res);
+        }
+
+        /// <summary>
+        /// Get a list of users who were banned from this subreddit's wiki.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="user">A valid, existing reddit username</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of banned users.</returns>
+        public List<BannedUser> GetWikiBannedUsers(string after = "", string before = "", int limit = 100, string user = "",
+            bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
+        {
+            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikibanned", after, before, user, includeCategories, Name, count, limit,
+                show, srDetail);
 
             Validate(res);
 

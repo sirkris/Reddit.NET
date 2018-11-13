@@ -1,4 +1,5 @@
-﻿using Reddit.NET;
+﻿using Newtonsoft.Json;
+using Reddit.NET;
 using Reddit.NET.Controllers;
 using Reddit.NET.Controllers.EventArgs;
 using Reddit.NET.Controllers.Structures;
@@ -53,11 +54,81 @@ namespace Example
 
                 Console.WriteLine("Moderators:");
                 Console.WriteLine("{");
+                int i = 0;
                 foreach (Moderator moderator in moderators)
                 {
                     Console.WriteLine("\t" + moderator.Name);
+
+                    i++;
+                    if (i > 10 && moderators.Count > 12)
+                    {
+                        Console.WriteLine("(and " + (moderators.Count - 10).ToString() + " others)");
+                        break;
+                    }
                 }
                 Console.WriteLine("}");
+
+                // Get approved submitters (requires mod access).  --Kris
+                /*List<SubredditUser> contributors = reddit.Subreddit("StillSandersForPres").GetContributors();
+
+                Console.WriteLine("Approved Submitters:");
+                Console.WriteLine("{");
+                i = 0;
+                foreach (SubredditUser contributor in contributors)
+                {
+                    Console.WriteLine("\t" + contributor.Name);
+
+                    i++;
+                    if (i > 10 && contributors.Count > 12)
+                    {
+                        Console.WriteLine("(and " + (contributors.Count - 10).ToString() + " others)");
+                        break;
+                    }
+                }
+                Console.WriteLine("}");*/
+
+                // Get approved submitters for the wiki (requires mod access).  --Kris
+                /*List<SubredditUser> wikiContributors = reddit.Subreddit("StillSandersForPres").GetWikiContributors();
+
+                Console.WriteLine("Approved Wiki Submitters:");
+                Console.WriteLine("{");
+                i = 0;
+                foreach (SubredditUser wikiContributor in wikiContributors)
+                {
+                    Console.WriteLine("\t" + wikiContributor.Name);
+
+                    i++;
+                    if (i > 10 && wikiContributors.Count > 12)
+                    {
+                        Console.WriteLine("(and " + (wikiContributors.Count - 10).ToString() + " others)");
+                        break;
+                    }
+                }
+                Console.WriteLine("}");*/
+
+                // Get muted users (requires mod access).  --Kris
+                /*List<SubredditUser> mutedUsers = reddit.Subreddit("StillSandersForPres").GetMutedUsers();
+
+                Console.WriteLine("Muted Users:");
+                Console.WriteLine("{");
+                i = 0;
+                foreach (SubredditUser mutedUser in mutedUsers)
+                {
+                    Console.WriteLine("\t" + mutedUser.Name);
+
+                    i++;
+                    if (i > 10 && mutedUsers.Count > 12)
+                    {
+                        Console.WriteLine("(and " + (mutedUsers.Count - 10).ToString() + " others)");
+                        break;
+                    }
+                }
+                Console.WriteLine("}");*/
+
+                // Get wiki-banned users (requires mod access).  --Kris
+                //List<BannedUser> wikiBannedUsers = reddit.Subreddit("StillSandersForPres").GetWikiBannedUsers();
+
+                //Console.WriteLine("Wiki-banned users retrieved: " + wikiBannedUsers.Count);
 
                 // Get banned users (requires mod access).  --Kris
                 //List<BannedUser> bannedUsers = reddit.Subreddit("StillSandersForPres").GetBannedUsers();
@@ -142,11 +213,11 @@ namespace Example
 
                 File.WriteAllText("Subreddits.About.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("WayOfTheMueller")));
                 File.WriteAllText("Subreddits.AboutBanned.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("banned", null, null, null, false, "StillSandersForPres")));
-                File.WriteAllText("Subreddits.AboutMuted.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("muted", null, null, null, false, "StillSandersForPres")));
+                */File.WriteAllText("Subreddits.AboutMuted.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("muted", null, null, null, false, "StillSandersForPres")));
                 File.WriteAllText("Subreddits.AboutWikiBanned.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("wikibanned", null, null, null, false, "StillSandersForPres")));
                 File.WriteAllText("Subreddits.AboutContributors.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("contributors", null, null, null, false, "StillSandersForPres")));
                 File.WriteAllText("Subreddits.AboutWikiContributors.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("wikicontributors", null, null, null, false, "StillSandersForPres")));
-                File.WriteAllText("Subreddits.AboutModerators.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("moderators", null, null, null, false, "StillSandersForPres")));
+                /*File.WriteAllText("Subreddits.AboutModerators.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("moderators", null, null, null, false, "StillSandersForPres")));
                 File.WriteAllText("Subreddits.Recommend.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Recommend("t5_3ff8l,t5_3fblp", "t5_2cneq,t5_2zbq7,t5_38unr", false)));
                 File.WriteAllText("Subreddits.SearchRedditNames.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SearchRedditNames(false, true, true, "Shitty")));
                 File.WriteAllText("Subreddits.SubmitText.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubmitText("WayOfTheBern")));
