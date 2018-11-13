@@ -35,7 +35,6 @@ namespace Reddit.NET.Controllers
         public int? ActiveUserCount;
         public object IconImg;
         public bool CanAssignLinkFlair;
-        public string SubmitText;
         public bool AllowVideoGifs;
         public int Subscribers;
         public string SubmitTextLabel;
@@ -63,13 +62,28 @@ namespace Reddit.NET.Controllers
 
         internal readonly Dispatch Dispatch;
 
+        public RedditThings.SubredditSubmitText SubmitText
+        {
+            get
+            {
+                return (SubmitTextLastUpdated.HasValue
+                    && SubmitTextLastUpdated.Value.AddHours(1) > DateTime.Now ? submitText : GetSubmitText());
+            }
+            set
+            {
+                submitText = value;
+            }
+        }
+        internal RedditThings.SubredditSubmitText submitText;
+        private DateTime? SubmitTextLastUpdated;
+
         public Subreddit(Dispatch dispatch, RedditThings.Subreddit subreddit)
             : base()
         {
             ImportFromModel(subreddit);
 
-            SubredditData = subreddit;
             Dispatch = dispatch;
+            SubredditData = subreddit;
             Posts = new SubredditPosts(this);
         }
 
@@ -78,8 +92,8 @@ namespace Reddit.NET.Controllers
         {
             ImportFromModel(subredditChild.Data);
 
-            SubredditData = subredditChild.Data;
             Dispatch = dispatch;
+            SubredditData = subredditChild.Data;
             Posts = new SubredditPosts(this);
         }
 
@@ -95,8 +109,8 @@ namespace Reddit.NET.Controllers
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
 
-            UpdateSubredditData();
             Dispatch = dispatch;
+            UpdateSubredditData();
             Posts = new SubredditPosts(this);
         }
 
@@ -105,8 +119,8 @@ namespace Reddit.NET.Controllers
         {
             SetValues(name, title, description, sidebar);
 
-            UpdateSubredditData();
             Dispatch = dispatch;
+            UpdateSubredditData();
             Posts = new SubredditPosts(this);
         }
 
@@ -143,7 +157,7 @@ namespace Reddit.NET.Controllers
             ActiveUserCount = subreddit.ActiveUserCount;
             IconImg = subreddit.IconImg;
             CanAssignLinkFlair = subreddit.CanAssignLinkFlair;
-            SubmitText = subreddit.SubmitText;
+            SubmitText = new RedditThings.SubredditSubmitText(subreddit.SubmitText);
             AllowVideoGifs = subreddit.AllowVideoGifs;
             Subscribers = subreddit.Subscribers;
             SubmitTextLabel = subreddit.SubmitTextLabel;
@@ -191,7 +205,7 @@ namespace Reddit.NET.Controllers
             Title = title;
             Description = description;
             Sidebar = sidebar;
-            SubmitText = submissionText;
+            SubmitText = new RedditThings.SubredditSubmitText(submissionText);
             Lang = lang;
             SubredditType = subredditType;
             SubmissionType = submissionType;
@@ -392,6 +406,52 @@ namespace Reddit.NET.Controllers
             Validate(res);
 
             return GetAboutChildren<BannedUser>(res);
+        }
+
+        public RedditThings.SubredditSubmitText GetSubmitText()
+        {
+            RedditThings.SubredditSubmitText res = Dispatch.Subreddits.SubmitText(Name);
+
+            SubmitTextLastUpdated = DateTime.Now;
+
+            SubmitText = res;
+            return res;
+        }
+
+        /// <summary>
+        /// Remove the subreddit's custom mobile banner.
+        /// </summary>
+        public void DeleteBanner()
+        {
+            Validate(Dispatch.Subreddits.DeleteSrBanner(Name));
+        }
+
+        /// <summary>
+        /// Remove the subreddit's custom header image.
+        /// The sitewide-default header image will be shown again after this call.
+        /// </summary>
+        public void DeleteHeader()
+        {
+            Validate(Dispatch.Subreddits.DeleteSrHeader(Name));
+        }
+
+        /// <summary>
+        /// Remove the subreddit's custom mobile icon.
+        /// </summary>
+        public void DeleteIcon()
+        {
+            Validate(Dispatch.Subreddits.DeleteSrIcon(Name));
+        }
+
+        /// <summary>
+        /// Remove an image from the subreddit's custom image set.
+        /// The image will no longer count against the subreddit's image limit. However, the actual image data may still be accessible for an unspecified amount of time. 
+        /// If the image is currently referenced by the subreddit's stylesheet, that stylesheet will no longer validate and won't be editable until the image reference is removed.
+        /// </summary>
+        /// <param name="imgName">a valid subreddit image name</param>
+        public void DeleteImg(string imgName)
+        {
+            Validate(Dispatch.Subreddits.DeleteSrImg(imgName, Name));
         }
 
         /// <summary>

@@ -49,6 +49,9 @@ namespace Example
                 Console.WriteLine("Subreddit Title: " + sub.Title);
                 Console.WriteLine("Subreddit Description: " + sub.Description);
 
+                // Get submit text.  --Kris
+                Console.WriteLine("Submit text: " + sub.SubmitText.ToString());
+
                 // Get moderators.  --Kris
                 List<Moderator> moderators = sub.GetModerators();
 
@@ -213,11 +216,11 @@ namespace Example
 
                 File.WriteAllText("Subreddits.About.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("WayOfTheMueller")));
                 File.WriteAllText("Subreddits.AboutBanned.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("banned", null, null, null, false, "StillSandersForPres")));
-                */File.WriteAllText("Subreddits.AboutMuted.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("muted", null, null, null, false, "StillSandersForPres")));
+                File.WriteAllText("Subreddits.AboutMuted.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("muted", null, null, null, false, "StillSandersForPres")));
                 File.WriteAllText("Subreddits.AboutWikiBanned.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("wikibanned", null, null, null, false, "StillSandersForPres")));
                 File.WriteAllText("Subreddits.AboutContributors.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("contributors", null, null, null, false, "StillSandersForPres")));
                 File.WriteAllText("Subreddits.AboutWikiContributors.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("wikicontributors", null, null, null, false, "StillSandersForPres")));
-                /*File.WriteAllText("Subreddits.AboutModerators.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("moderators", null, null, null, false, "StillSandersForPres")));
+                File.WriteAllText("Subreddits.AboutModerators.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.About("moderators", null, null, null, false, "StillSandersForPres")));
                 File.WriteAllText("Subreddits.Recommend.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Recommend("t5_3ff8l,t5_3fblp", "t5_2cneq,t5_2zbq7,t5_38unr", false)));
                 File.WriteAllText("Subreddits.SearchRedditNames.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SearchRedditNames(false, true, true, "Shitty")));
                 File.WriteAllText("Subreddits.SubmitText.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.SubmitText("WayOfTheBern")));

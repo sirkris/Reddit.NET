@@ -137,6 +137,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// List subreddit names that begin with a query string.
         /// Subreddits whose names begin with query will be returned.
@@ -161,6 +162,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditNames>(ExecuteRequest(restRequest));
         }
 
+        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// List subreddits that begin with a query string.
         /// Subreddits whose names begin with query will be returned.
