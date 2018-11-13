@@ -62,6 +62,10 @@ namespace Reddit.NET.Controllers
 
         internal readonly Dispatch Dispatch;
 
+        /// <summary>
+        /// Get the submission text for the subreddit.
+        /// This text is set by the subreddit moderators and intended to be displayed on the submission form.
+        /// </summary>
         public RedditThings.SubredditSubmitText SubmitText
         {
             get
@@ -72,6 +76,7 @@ namespace Reddit.NET.Controllers
             set
             {
                 submitText = value;
+                SubmitTextLastUpdated = DateTime.Now;
             }
         }
         internal RedditThings.SubredditSubmitText submitText;
@@ -408,6 +413,11 @@ namespace Reddit.NET.Controllers
             return GetAboutChildren<BannedUser>(res);
         }
 
+        /// <summary>
+        /// Get the submission text for the subreddit.
+        /// This text is set by the subreddit moderators and intended to be displayed on the submission form.
+        /// </summary>
+        /// <returns>An object containing submission text.</returns>
         public RedditThings.SubredditSubmitText GetSubmitText()
         {
             RedditThings.SubredditSubmitText res = Dispatch.Subreddits.SubmitText(Name);
@@ -416,6 +426,33 @@ namespace Reddit.NET.Controllers
 
             SubmitText = res;
             return res;
+        }
+
+        /// <summary>
+        /// Update a subreddit's stylesheet.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="stylesheetContents">the new stylesheet content</param>
+        public void UpdateStylesheet(string reason, string stylesheetContents)
+        {
+            Validate(Dispatch.Subreddits.SubredditStylesheet("save", reason, stylesheetContents, Name));
+        }
+
+        /// <summary>
+        /// Subscribe to a subreddit.
+        /// </summary>
+        /// <param name="skipInitialDefaults">boolean value</param>
+        public void Subscribe(bool skipInitialDefaults = false)
+        {
+            Dispatch.Subreddits.Subscribe("sub", skipInitialDefaults, Name);
+        }
+
+        /// <summary>
+        /// Unsubscribe from a subreddit.
+        /// </summary>
+        public void Unsubscribe()
+        {
+            Dispatch.Subreddits.Subscribe("unsub", false, Name);
         }
 
         /// <summary>
@@ -455,12 +492,74 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Add or replace a subreddit stylesheet image.
+        /// </summary>
+        /// <param name="imgData">file upload with maximum size of 500 KiB</param>
+        /// <param name="imgName">a valid subreddit image name</param>
+        /// <param name="imgType">one of png or jpg (default: png)</param>
+        /// <returns>An object containing the resulting image URL and any errors.</returns>
+        public RedditThings.ImageUploadResult UploadImg(byte[] imgData, string imgName, string imgType = "png")
+        {
+            return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, imgName, "img", Name, imgType));
+        }
+
+        /// <summary>
+        /// Add or replace the subreddit logo image.
+        /// </summary>
+        /// <param name="imgData">file upload with maximum size of 500 KiB</param>
+        /// <param name="imgType">one of png or jpg (default: png)</param>
+        /// <returns>An object containing the resulting image URL and any errors.</returns>
+        public RedditThings.ImageUploadResult UploadHeader(byte[] imgData, string imgType = "png")
+        {
+            return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 1, null, "header", Name, imgType));
+        }
+
+        /// <summary>
+        /// Add or replace a subreddit mobile icon image.
+        /// </summary>
+        /// <param name="imgData">file upload with maximum size of 500 KiB</param>
+        /// <param name="imgType">one of png or jpg (default: png)</param>
+        /// <returns>An object containing the resulting image URL and any errors.</returns>
+        public RedditThings.ImageUploadResult UploadIcon(byte[] imgData, string imgType = "png")
+        {
+            return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, null, "icon", Name, imgType));
+        }
+
+        /// <summary>
+        /// Add or replace a subreddit mobile banner image.
+        /// </summary>
+        /// <param name="imgData">file upload with maximum size of 500 KiB</param>
+        /// <param name="imgType">one of png or jpg (default: png)</param>
+        /// <returns>An object containing the resulting image URL and any errors.</returns>
+        public RedditThings.ImageUploadResult UploadBanner(byte[] imgData, string imgType = "png")
+        {
+            return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, null, "banner", Name, imgType));
+        }
+
+        // TODO - Figure out what created and location are for.  --Kris
+        /// <summary>
+        /// Get the current settings of a subreddit.
+        /// </summary>
+        /// <param name="created">one of (true, false)</param>
+        /// <param name="location"></param>
+        /// <returns>Settings for the requested subreddit.</returns>
+        public RedditThings.SubredditSettingsContainer GetSettings(bool created = false, string location = "")
+        {
+            return Validate(Dispatch.Subreddits.Edit(Name, created, location));
+        }
+
+        /// <summary>
         /// Get the rules for the current subreddit.
         /// </summary>
         /// <returns>Subreddit rules.</returns>
         public RedditThings.RulesContainer GetRules()
         {
-            return Dispatch.Subreddits.Rules(Name);
+            return Validate(Dispatch.Subreddits.Rules(Name));
+        }
+
+        public RedditThings.Traffic GetTraffic()
+        {
+            return Validate(Dispatch.Subreddits.Traffic(Name));
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit", "My New Subreddit", "Some description.", "This is my sidebar!").Create();

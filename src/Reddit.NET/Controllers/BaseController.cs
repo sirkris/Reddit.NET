@@ -110,7 +110,39 @@ namespace Reddit.NET.Controllers
             return ex;
         }
 
-        public void Validate(RedditThings.GenericContainer genericContainer)
+        private void CheckErrors(List<List<string>> errors)
+        {
+            if (errors != null)
+            {
+                foreach (List<string> errorList in errors)
+                {
+                    CheckErrors(errorList);
+                }
+            }
+        }
+
+        // Exception thrown will be on the first error in the list.  --Kris
+        private void CheckErrors(List<string> errors)
+        {
+            if (errors != null)
+            {
+                foreach (string error in errors)
+                {
+                    switch (error)
+                    {
+                        default:
+                            throw (RedditControllerException)BuildException(new RedditControllerException("Reddit API returned errors."), new List<List<string>> { errors });
+                        case "RATELIMIT":
+                            throw (RedditRateLimitException)BuildException(new RedditRateLimitException("Reddit ratelimit exceeded."), new List<List<string>> { errors });
+                        case "SUBREDDIT_EXISTS":
+                            throw (RedditSubredditExistsException)BuildException(new RedditSubredditExistsException("That subreddit already exists."),
+                                new List<List<string>> { errors });
+                    }
+                }
+            }
+        }
+
+        public RedditThings.GenericContainer Validate(RedditThings.GenericContainer genericContainer)
         {
             if (genericContainer == null)
             {
@@ -118,29 +150,23 @@ namespace Reddit.NET.Controllers
             }
 
             Validate(genericContainer.JSON);
+
+            return genericContainer;
         }
 
-        public void Validate(RedditThings.Generic generic)
+        public RedditThings.Generic Validate(RedditThings.Generic generic)
         {
             if (generic == null)
             {
                 throw new RedditControllerException("Reddit API returned empty response container.");
             }
-            else if (generic.Errors != null && generic.Errors.Count > 0)
-            {
-                switch (generic.Errors[0][0])
-                {
-                    default:
-                        throw (RedditControllerException)BuildException(new RedditControllerException("Reddit API returned errors."), generic.Errors);
-                    case "RATELIMIT":
-                        throw (RedditRateLimitException)BuildException(new RedditRateLimitException("Reddit ratelimit exceeded."), generic.Errors);
-                    case "SUBREDDIT_EXISTS":
-                        throw (RedditSubredditExistsException)BuildException(new RedditSubredditExistsException("That subreddit already exists."), generic.Errors);
-                }
-            }
+
+            CheckErrors(generic.Errors);
+
+            return generic;
         }
 
-        public void Validate(RedditThings.DynamicShortListingContainer dynamicShortListingContainer)
+        public RedditThings.DynamicShortListingContainer Validate(RedditThings.DynamicShortListingContainer dynamicShortListingContainer)
         {
             if (dynamicShortListingContainer == null)
             {
@@ -148,14 +174,72 @@ namespace Reddit.NET.Controllers
             }
 
             Validate(dynamicShortListingContainer.Data);
+
+            return dynamicShortListingContainer;
         }
 
-        public void Validate(RedditThings.DynamicShortListingData dynamicShortListingData)
+        public RedditThings.DynamicShortListingData Validate(RedditThings.DynamicShortListingData dynamicShortListingData)
         {
             if (dynamicShortListingData == null)
             {
                 throw new RedditControllerException("Reddit API returned empty response container.");
             }
+
+            return dynamicShortListingData;
+        }
+
+        public RedditThings.ImageUploadResult Validate(RedditThings.ImageUploadResult imageUploadResult)
+        {
+            if (imageUploadResult == null)
+            {
+                throw new RedditControllerException("Reddit API returned null response.");
+            }
+
+            CheckErrors(imageUploadResult.Errors);
+
+            return imageUploadResult;
+        }
+
+        public RedditThings.SubredditSettingsContainer Validate(RedditThings.SubredditSettingsContainer subredditSettingsContainer)
+        {
+            if (subredditSettingsContainer == null)
+            {
+                throw new RedditControllerException("Reddit API returned null response.");
+            }
+
+            Validate(subredditSettingsContainer.Data);
+
+            return subredditSettingsContainer;
+        }
+
+        public RedditThings.SubredditSettings Validate(RedditThings.SubredditSettings subredditSettings)
+        {
+            if (subredditSettings == null)
+            {
+                throw new RedditControllerException("Reddit API returned empty response container.");
+            }
+
+            return subredditSettings;
+        }
+
+        public RedditThings.RulesContainer Validate(RedditThings.RulesContainer rulesContainer)
+        {
+            if (rulesContainer == null)
+            {
+                throw new RedditControllerException("Reddit API returned null response.");
+            }
+
+            return rulesContainer;
+        }
+
+        public RedditThings.Traffic Validate(RedditThings.Traffic traffic)
+        {
+            if (traffic == null)
+            {
+                throw new RedditControllerException("Reddit API returned null response.");
+            }
+
+            return traffic;
         }
     }
 }

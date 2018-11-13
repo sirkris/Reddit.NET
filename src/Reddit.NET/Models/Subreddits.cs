@@ -407,6 +407,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditSubmitText>(ExecuteRequest(Sr(subreddit) + "api/submit_text"));
         }
 
+        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Return a list of subreddits and data for subreddits whose names start with 'query'.
         /// Uses typeahead endpoint to recieve the list of subreddits names. Typeahead provides exact matches, typo correction, fuzzy matching and boosts subreddits to the top that the user is subscribed to.
@@ -426,6 +427,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditAutocompleteResultContainer>(ExecuteRequest(restRequest));
         }
 
+        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Version 2 of SubredditAutocomplete.
         /// </summary>
@@ -538,7 +540,7 @@ namespace Reddit.NET.Models
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/upload_sr_img", Method.POST, "multipart/form-data");
 
-            restRequest.AddFileBytes("file", file, name + "." + imgType);
+            restRequest.AddFileBytes("file", file, (!string.IsNullOrWhiteSpace(name) ? name : "image") + "." + imgType);
             restRequest.AddParameter("header", header);
             restRequest.AddParameter("name", name);
             restRequest.AddParameter("upload_type", uploadType);
@@ -644,6 +646,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Get subreddits the user has a relationship with.
         /// The where parameter chooses which subreddits are returned as follows:
@@ -679,6 +682,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
+        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Search subreddits by title and description.
         /// This endpoint is a listing.
@@ -711,6 +715,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
+        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Get all subreddits.
         /// The where parameter chooses the order in which the subreddits are displayed.
@@ -743,6 +748,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
+        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Get all user subreddits.
         /// The where parameter chooses the order in which the subreddits are displayed.
