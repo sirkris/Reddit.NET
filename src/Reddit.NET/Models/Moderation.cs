@@ -12,7 +12,7 @@ namespace Reddit.NET.Models
 
         /// <summary>
         /// Get a list of recent moderation actions.
-        /// Moderator actions taken within a subreddit are logged.This listing is a view of that log with various filters to aid in analyzing the information.
+        /// Moderator actions taken within a subreddit are logged. This listing is a view of that log with various filters to aid in analyzing the information.
         /// The optional mod parameter can be a comma-delimited list of moderator names to restrict the results to, or the string a to restrict the results to admin actions taken within the subreddit.
         /// The type parameter is optional and if sent limits the log entries returned to only those of the type specified.
         /// This endpoint is a listing.
@@ -47,6 +47,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<ModActionContainer>(ExecuteRequest(restRequest));
         }
 
+        // TODO - Split into two functions (only = links, only = comments).  Comments return not supported yet.  --Kris
         /// <summary>
         /// Return a listing of posts relevant to moderators.
         /// reports: Things that have been reported.

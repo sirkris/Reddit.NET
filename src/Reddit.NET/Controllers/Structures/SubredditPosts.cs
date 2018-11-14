@@ -17,6 +17,12 @@ namespace Reddit.NET.Controllers.Structures
         public event EventHandler<PostsUpdateEventArgs> TopUpdated;
         public event EventHandler<PostsUpdateEventArgs> ControversialUpdated;
 
+        public event EventHandler<PostsUpdateEventArgs> ModQueueUpdated;
+        public event EventHandler<PostsUpdateEventArgs> ModQueueReportsUpdated;
+        public event EventHandler<PostsUpdateEventArgs> ModQueueSpamUpdated;
+        public event EventHandler<PostsUpdateEventArgs> ModQueueUnmoderatedUpdated;
+        public event EventHandler<PostsUpdateEventArgs> ModQueueEditedUpdated;
+
         public List<Post> Best
         {
             get
@@ -35,8 +41,8 @@ namespace Reddit.NET.Controllers.Structures
         {
             get
             {
-                return (BestLastUpdated.HasValue
-                    && BestLastUpdated.Value.AddSeconds(15) > DateTime.Now ? hot : GetHot());
+                return (HotLastUpdated.HasValue
+                    && HotLastUpdated.Value.AddSeconds(15) > DateTime.Now ? hot : GetHot());
             }
             private set
             {
@@ -49,8 +55,8 @@ namespace Reddit.NET.Controllers.Structures
         {
             get
             {
-                return (BestLastUpdated.HasValue
-                    && BestLastUpdated.Value.AddSeconds(15) > DateTime.Now ? newPosts : GetNew());
+                return (NewLastUpdated.HasValue
+                    && NewLastUpdated.Value.AddSeconds(15) > DateTime.Now ? newPosts : GetNew());
             }
             private set
             {
@@ -63,8 +69,8 @@ namespace Reddit.NET.Controllers.Structures
         {
             get
             {
-                return (BestLastUpdated.HasValue
-                    && BestLastUpdated.Value.AddSeconds(15) > DateTime.Now ? rising : GetRising());
+                return (RisingLastUpdated.HasValue
+                    && RisingLastUpdated.Value.AddSeconds(15) > DateTime.Now ? rising : GetRising());
             }
             private set
             {
@@ -77,8 +83,8 @@ namespace Reddit.NET.Controllers.Structures
         {
             get
             {
-                return (BestLastUpdated.HasValue
-                    && BestLastUpdated.Value.AddSeconds(15) > DateTime.Now ? top : GetTop());
+                return (TopLastUpdated.HasValue
+                    && TopLastUpdated.Value.AddSeconds(15) > DateTime.Now ? top : GetTop());
             }
             private set
             {
@@ -91,8 +97,8 @@ namespace Reddit.NET.Controllers.Structures
         {
             get
             {
-                return (BestLastUpdated.HasValue
-                    && BestLastUpdated.Value.AddSeconds(15) > DateTime.Now ? controversial : GetControversial());
+                return (ControversialLastUpdated.HasValue
+                    && ControversialLastUpdated.Value.AddSeconds(15) > DateTime.Now ? controversial : GetControversial());
             }
             private set
             {
@@ -101,12 +107,88 @@ namespace Reddit.NET.Controllers.Structures
         }
         private List<Post> controversial;
 
+        public List<Post> ModQueue
+        {
+            get
+            {
+                return (ModQueueLastUpdated.HasValue
+                    && ModQueueLastUpdated.Value.AddSeconds(15) > DateTime.Now ? modQueue : GetModQueue());
+            }
+            private set
+            {
+                modQueue = value;
+            }
+        }
+        private List<Post> modQueue;
+
+        public List<Post> ModQueueReports
+        {
+            get
+            {
+                return (ModQueueLastUpdated.HasValue
+                    && ModQueueLastUpdated.Value.AddSeconds(15) > DateTime.Now ? modQueueReports : GetModQueue());
+            }
+            private set
+            {
+                modQueueReports = value;
+            }
+        }
+        private List<Post> modQueueReports;
+
+        public List<Post> ModQueueSpam
+        {
+            get
+            {
+                return (ModQueueLastUpdated.HasValue
+                    && ModQueueLastUpdated.Value.AddSeconds(15) > DateTime.Now ? modQueueSpam : GetModQueue());
+            }
+            private set
+            {
+                modQueueSpam = value;
+            }
+        }
+        private List<Post> modQueueSpam;
+
+        public List<Post> ModQueueUnmoderated
+        {
+            get
+            {
+                return (ModQueueLastUpdated.HasValue
+                    && ModQueueLastUpdated.Value.AddSeconds(15) > DateTime.Now ? modQueueUnmoderated : GetModQueue());
+            }
+            private set
+            {
+                modQueueUnmoderated = value;
+            }
+        }
+        private List<Post> modQueueUnmoderated;
+
+        public List<Post> ModQueueEdited
+        {
+            get
+            {
+                return (ModQueueLastUpdated.HasValue
+                    && ModQueueLastUpdated.Value.AddSeconds(15) > DateTime.Now ? modQueueEdited : GetModQueue());
+            }
+            private set
+            {
+                modQueueEdited = value;
+            }
+        }
+        private List<Post> modQueueEdited;
+
         private DateTime? BestLastUpdated;
         private DateTime? HotLastUpdated;
         private DateTime? NewLastUpdated;
         private DateTime? RisingLastUpdated;
         private DateTime? TopLastUpdated;
         private DateTime? ControversialLastUpdated;
+
+        private DateTime? ModQueueLastUpdated;
+        private DateTime? ModQueueReportsLastUpdated;
+        private DateTime? ModQueueSpamLastUpdated;
+        private DateTime? ModQueueUnmoderatedLastUpdated;
+        private DateTime? ModQueueEditedLastUpdated;
 
         private Dictionary<string, Thread> Threads;
 
@@ -117,7 +199,7 @@ namespace Reddit.NET.Controllers.Structures
         }
 
         public SubredditPosts(Subreddit subreddit, List<Post> best = null, List<Post> hot = null, List<Post> newPosts = null,
-            List<Post> rising = null, List<Post> top = null, List<Post> controversial = null)
+            List<Post> rising = null, List<Post> top = null, List<Post> controversial = null, List<Post> modQueue = null)
         {
             Best = best ?? new List<Post>();
             Hot = hot ?? new List<Post>();
@@ -126,12 +208,7 @@ namespace Reddit.NET.Controllers.Structures
             Top = top ?? new List<Post>();
             Controversial = controversial ?? new List<Post>();
 
-            BestLastUpdated = null;
-            HotLastUpdated = null;
-            NewLastUpdated = null;
-            RisingLastUpdated = null;
-            TopLastUpdated = null;
-            ControversialLastUpdated = null;
+            ModQueue = modQueue ?? new List<Post>();
 
             Threads = new Dictionary<string, Thread>();
 
@@ -201,6 +278,62 @@ namespace Reddit.NET.Controllers.Structures
             return posts;
         }
 
+        public List<Post> GetModQueuePosts(string location, string after = "", string before = "", int limit = 100, string show = "all",
+            bool srDetail = false, int count = 0)
+        {
+            return GetPosts(Subreddit.Dispatch.Moderation.ModQueue(location, after, before, "links", Subreddit.Name, count, limit, show, srDetail));
+        }
+
+        public List<Post> GetModQueue(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
+        {
+            List<Post> posts = GetModQueuePosts("modqueue", after, before, limit, show, srDetail, count);
+
+            ModQueueLastUpdated = DateTime.Now;
+
+            ModQueue = posts;
+            return posts;
+        }
+
+        public List<Post> GetModQueueReports(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
+        {
+            List<Post> posts = GetModQueuePosts("reports", after, before, limit, show, srDetail, count);
+
+            ModQueueReportsLastUpdated = DateTime.Now;
+
+            ModQueueReports = posts;
+            return posts;
+        }
+
+        public List<Post> GetModQueueSpam(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
+        {
+            List<Post> posts = GetModQueuePosts("spam", after, before, limit, show, srDetail, count);
+
+            ModQueueSpamLastUpdated = DateTime.Now;
+
+            ModQueueSpam = posts;
+            return posts;
+        }
+
+        public List<Post> GetModQueueUnmoderated(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
+        {
+            List<Post> posts = GetModQueuePosts("unmoderated", after, before, limit, show, srDetail, count);
+
+            ModQueueUnmoderatedLastUpdated = DateTime.Now;
+
+            ModQueueUnmoderated = posts;
+            return posts;
+        }
+
+        public List<Post> GetModQueueEdited(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
+        {
+            List<Post> posts = GetModQueuePosts("edited", after, before, limit, show, srDetail, count);
+
+            ModQueueEditedLastUpdated = DateTime.Now;
+
+            ModQueueEdited = posts;
+            return posts;
+        }
+        
         private List<Post> GetPosts(RedditThings.PostContainer postContainer)
         {
             List<Post> posts = new List<Post>();
@@ -293,6 +426,26 @@ namespace Reddit.NET.Controllers.Structures
                         oldList = controversial;
                         newList = GetControversial();
                         break;
+                    case "modqueue":
+                        oldList = modQueue;
+                        newList = GetModQueue();
+                        break;
+                    case "modqueuereports":
+                        oldList = modQueueReports;
+                        newList = GetModQueueReports();
+                        break;
+                    case "modqueuespam":
+                        oldList = modQueueSpam;
+                        newList = GetModQueueSpam();
+                        break;
+                    case "modqueueunmoderated":
+                        oldList = modQueueUnmoderated;
+                        newList = GetModQueueUnmoderated();
+                        break;
+                    case "modqueueedited":
+                        oldList = modQueueEdited;
+                        newList = GetModQueueEdited();
+                        break;
                 }
 
                 if (ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
@@ -324,6 +477,21 @@ namespace Reddit.NET.Controllers.Structures
                             break;
                         case "controversial":
                             OnControversialUpdated(args);
+                            break;
+                        case "modqueue":
+                            OnModQueueUpdated(args);
+                            break;
+                        case "modqueuereports":
+                            OnModQueueReportsUpdated(args);
+                            break;
+                        case "modqueuespam":
+                            OnModQueueSpamUpdated(args);
+                            break;
+                        case "modqueueunmoderated":
+                            OnModQueueUnmoderatedUpdated(args);
+                            break;
+                        case "modqueueedited":
+                            OnModQueueEditedUpdated(args);
                             break;
                     }
                 }
@@ -450,6 +618,106 @@ namespace Reddit.NET.Controllers.Structures
         protected virtual void OnControversialUpdated(PostsUpdateEventArgs e)
         {
             ControversialUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the subreddit's modqueue for new "modqueue" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorModQueue()
+        {
+            string key = Subreddit.Name + "_ModQueuePosts";
+            return Monitor(key, new Thread(() => MonitorModQueueThread(key)));
+        }
+
+        private void MonitorModQueueThread(string key)
+        {
+            MonitorThread(key, "modqueue");
+        }
+
+        protected virtual void OnModQueueUpdated(PostsUpdateEventArgs e)
+        {
+            ModQueueUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the subreddit's modqueue for new "reports" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorModQueueReports()
+        {
+            string key = Subreddit.Name + "_ModQueueReportsPosts";
+            return Monitor(key, new Thread(() => MonitorModQueueReportsThread(key)));
+        }
+
+        private void MonitorModQueueReportsThread(string key)
+        {
+            MonitorThread(key, "modqueuereports");
+        }
+
+        protected virtual void OnModQueueReportsUpdated(PostsUpdateEventArgs e)
+        {
+            ModQueueUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the subreddit's modqueue for new "spam" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorModQueueSpam()
+        {
+            string key = Subreddit.Name + "_ModQueueSpamPosts";
+            return Monitor(key, new Thread(() => MonitorModQueueSpamThread(key)));
+        }
+
+        private void MonitorModQueueSpamThread(string key)
+        {
+            MonitorThread(key, "modqueuespam");
+        }
+
+        protected virtual void OnModQueueSpamUpdated(PostsUpdateEventArgs e)
+        {
+            ModQueueUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the subreddit's modqueue for new "unmoderated" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorModQueueUnmoderated()
+        {
+            string key = Subreddit.Name + "_ModQueueUnmoderatedPosts";
+            return Monitor(key, new Thread(() => MonitorModQueueUnmoderatedThread(key)));
+        }
+
+        private void MonitorModQueueUnmoderatedThread(string key)
+        {
+            MonitorThread(key, "modqueueunmoderated");
+        }
+
+        protected virtual void OnModQueueUnmoderatedUpdated(PostsUpdateEventArgs e)
+        {
+            ModQueueUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the subreddit's modqueue for new "edited" posts.
+        /// </summary>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorModQueueEdited()
+        {
+            string key = Subreddit.Name + "_ModQueueEditedPosts";
+            return Monitor(key, new Thread(() => MonitorModQueueEditedThread(key)));
+        }
+
+        private void MonitorModQueueEditedThread(string key)
+        {
+            MonitorThread(key, "modqueueedited");
+        }
+
+        protected virtual void OnModQueueEditedUpdated(PostsUpdateEventArgs e)
+        {
+            ModQueueUpdated?.Invoke(this, e);
         }
     }
 }

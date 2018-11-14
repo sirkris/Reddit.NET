@@ -216,20 +216,6 @@ namespace Reddit.NET.Controllers
             return subredditSettings;
         }
 
-        public RedditThings.RulesContainer Validate(RedditThings.RulesContainer rulesContainer)
-        {
-            CheckNull(rulesContainer);
-
-            return rulesContainer;
-        }
-
-        public RedditThings.Traffic Validate(RedditThings.Traffic traffic)
-        {
-            CheckNull(traffic);
-
-            return traffic;
-        }
-
         public List<RedditThings.ActionResult> Validate(List<RedditThings.ActionResult> actionResults)
         {
             CheckNull(actionResults);
@@ -271,34 +257,6 @@ namespace Reddit.NET.Controllers
             return flairListResultContainer;
         }
 
-        public RedditThings.FlairListResult Validate(RedditThings.FlairListResult flairListResult)
-        {
-            CheckNull(flairListResult);
-
-            return flairListResult;
-        }
-
-        public RedditThings.FlairSelectorResultContainer Validate(RedditThings.FlairSelectorResultContainer flairSelectorResultContainer)
-        {
-            CheckNull(flairSelectorResultContainer);
-
-            return flairSelectorResultContainer;
-        }
-
-        public RedditThings.FlairSelectorResult Validate(RedditThings.FlairSelectorResult flairSelectorResult)
-        {
-            CheckNull(flairSelectorResult);
-
-            return flairSelectorResult;
-        }
-
-        public List<RedditThings.Flair> Validate(List<RedditThings.Flair> flairs)
-        {
-            CheckNull(flairs);
-
-            return flairs;
-        }
-
         public RedditThings.Flair Validate(RedditThings.Flair flair)
         {
             CheckNull(flair);
@@ -313,6 +271,23 @@ namespace Reddit.NET.Controllers
             CheckNull(flairV2.Id, "Reddit API returned flair object with no Id.");
 
             return flairV2;
+        }
+
+        public RedditThings.ModActionContainer Validate(RedditThings.ModActionContainer modActionContainer)
+        {
+            CheckNull(modActionContainer);
+
+            Validate(modActionContainer.Data);
+
+            return modActionContainer;
+        }
+
+        public RedditThings.ModActionData Validate(RedditThings.ModActionData modActionData)
+        {
+            CheckNull(modActionData, "Reddit API returned empty response object.");
+            CheckNull(modActionData.Children, "Reddit API returned response with null children.");
+
+            return modActionData;
         }
     }
 }

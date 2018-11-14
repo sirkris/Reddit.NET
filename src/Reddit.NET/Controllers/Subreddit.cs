@@ -855,6 +855,50 @@ namespace Reddit.NET.Controllers
             return Validate(Dispatch.Flair.UserFlairV2(Name));
         }
 
+        /// <summary>
+        /// Retrieve the advisory text about saving media for relevant media links.
+        /// This endpoint returns a notice for display during the post submission process that is pertinent to media links.
+        /// </summary>
+        /// <param name="url">a valid URL</param>
+        /// <returns>A Reddit notice message.</returns>
+        public Dictionary<string, string> SavedMediaText(string url)
+        {
+            return Validate(Dispatch.Misc.SavedMediaText(url, Name));
+        }
+
+        /// <summary>
+        /// Get a list of recent moderation actions.
+        /// Moderator actions taken within a subreddit are logged. This listing is a view of that log with various filters to aid in analyzing the information.
+        /// The optional mod parameter can be a comma-delimited list of moderator names to restrict the results to, or the string a to restrict the results to admin actions taken within the subreddit.
+        /// The type parameter is optional and if sent limits the log entries returned to only those of the type specified.
+        /// </summary>
+        /// <param name="type">one of (banuser, unbanuser, spamlink, removelink, approvelink, spamcomment, removecomment, approvecomment, addmoderator, invitemoderator, uninvitemoderator, 
+        /// acceptmoderatorinvite, removemoderator, addcontributor, removecontributor, editsettings, editflair, distinguish, marknsfw, wikibanned, wikicontributor, wikiunbanned, wikipagelisted, 
+        /// removewikicontributor, wikirevise, wikipermlevel, ignorereports, unignorereports, setpermissions, setsuggestedsort, sticky, unsticky, setcontestmode, unsetcontestmode, lock, unlock, 
+        /// muteuser, unmuteuser, createrule, editrule, deleterule, spoiler, unspoiler, modmail_enrollment, community_styling, community_widgets, markoriginalcontent)</param>
+        /// <param name="limit">the maximum number of items desired (maximum: 500)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="mod">(optional) a moderator filter</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A listing of recent moderation actions.</returns>
+        public RedditThings.ModActionContainer GetLog(string type = null, int limit = 100, string after = "", string before = "", string mod = null,
+            string show = "all", bool srDetail = false, int count = 0)
+        {
+            return Validate(Dispatch.Moderation.GetLog(after, before, Name, count, limit, mod, show, srDetail, type));
+        }
+
+        /// <summary>
+        /// Redirect to the subreddit's stylesheet if one exists.
+        /// </summary>
+        /// <returns>The subreddit's CSS.</returns>
+        public string Stylesheet()
+        {
+            return Dispatch.Moderation.Stylesheet(Name);
+        }
+        
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit", "My New Subreddit", "Some description.", "This is my sidebar!").Create();
         // Equivalent to:  reddit.Models.Subreddits.SiteAdmin(name:"MyNewSubreddit", title:"My New Subreddit", publicDescription:"Some description", description:"This is my sidebar!", ...);
         //                 Subreddit sub = reddit.Subreddit(reddit.Models.Subreddits.About("MyNewSubreddit"));
