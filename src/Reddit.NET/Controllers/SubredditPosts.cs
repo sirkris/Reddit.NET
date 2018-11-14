@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 
-namespace Reddit.NET.Controllers.Structures
+namespace Reddit.NET.Controllers
 {
     public class SubredditPosts : BaseController
     {
