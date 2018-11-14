@@ -253,7 +253,7 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// Create or configure a subreddit.
+        /// Create or configure a subreddit.  Null values are ignored.
         /// If sr is specified, the request will attempt to modify the specified subreddit. If not, a subreddit with name name will be created.
         /// This endpoint expects all values to be supplied on every request. If modifying a subset of options, it may be useful to get the current settings from /about/edit.json first.
         /// For backwards compatibility, description is the sidebar text and public_description is the publicly visible subreddit description.

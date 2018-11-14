@@ -557,9 +557,302 @@ namespace Reddit.NET.Controllers
             return Validate(Dispatch.Subreddits.Rules(Name));
         }
 
+        /// <summary>
+        /// Get the traffic for the current subreddit.
+        /// </summary>
+        /// <returns>Subreddit traffic.</returns>
         public RedditThings.Traffic GetTraffic()
         {
             return Validate(Dispatch.Subreddits.Traffic(Name));
+        }
+
+        /// <summary>
+        /// Clear link flair templates.
+        /// </summary>
+        public void ClearLinkFlairTemplates()
+        {
+            Validate(Dispatch.Flair.ClearFlairTemplates("LINK_FLAIR", Name));
+        }
+
+        /// <summary>
+        /// Clear user flair templates.
+        /// </summary>
+        public void ClearUserFlairTemplates()
+        {
+            Validate(Dispatch.Flair.ClearFlairTemplates("USER_FLAIR", Name));
+        }
+
+        /// <summary>
+        /// Delete flair.
+        /// </summary>
+        /// <param name="username">The user whose flair we're removing</param>
+        public void DeleteFlair(string username)
+        {
+            Validate(Dispatch.Flair.DeleteFlair(username, Name));
+        }
+
+        /// <summary>
+        /// Delete flair template.
+        /// </summary>
+        /// <param name="flairTemplateId">The ID of the flair template being deleted (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        public void DeleteFlairTemplate(string flairTemplateId)
+        {
+            Validate(Dispatch.Flair.DeleteFlairTemplate(flairTemplateId, Name));
+        }
+
+        /// <summary>
+        /// Create a new user flair.
+        /// </summary>
+        /// <param name="username">The user who's getting the new flair</param>
+        /// <param name="text">The flair text</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public void CreateFlair(string username, string text, string cssClass = "")
+        {
+            Validate(Dispatch.Flair.Create(cssClass, "", username, text, Name));
+        }
+
+        /// <summary>
+        /// Update the flair configuration settings for this subreddit.
+        /// </summary>
+        /// <param name="flairEnabled">boolean value</param>
+        /// <param name="flairPosition">one of (left, right)</param>
+        /// <param name="flairSelfAssignEnabled">boolean value</param>
+        /// <param name="linkFlairPosition">one of (left, right)</param>
+        /// <param name="linkFlairSelfAssignEnabled">boolean value</param>
+        public void FlairConfig(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled)
+        {
+            Validate(Dispatch.Flair.FlairConfig(flairEnabled, flairPosition, flairSelfAssignEnabled, linkFlairPosition, linkFlairSelfAssignEnabled, Name));
+        }
+
+        /// <summary>
+        /// Change the flair of multiple users in the same subreddit with a single API call.
+        /// Requires a string 'flair_csv' which has up to 100 lines of the form 'user,flairtext,cssclass' (Lines beyond the 100th are ignored).
+        /// If both cssclass and flairtext are the empty string for a given user, instead clears that user's flair.
+        /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
+        /// </summary>
+        /// <param name="flairCsv">comma-seperated flair information</param>
+        /// <returns>Action results.</returns>
+        public List<RedditThings.ActionResult> FlairCSV(string flairCsv)
+        {
+            return Validate(Dispatch.Flair.FlairCSV(flairCsv, Name));
+        }
+
+        /// <summary>
+        /// Change the flair of multiple users in the same subreddit with a single API call.
+        /// If both cssclass and flairtext are the empty string for a given user, instead clears that user's flair.
+        /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
+        /// </summary>
+        /// <param name="flairCsv">A valid FlairListResultContainer object</param>
+        /// <returns>Action results.</returns>
+        public List<RedditThings.ActionResult> FlairCSV(RedditThings.FlairListResultContainer flairCsv)
+        {
+            return FlairCSV(flairCsv.Users);
+        }
+
+        /// <summary>
+        /// Change the flair of multiple users in the same subreddit with a single API call.
+        /// If both cssclass and flairtext are the empty string for a given user, instead clears that user's flair.
+        /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
+        /// </summary>
+        /// <param name="flairCsv">A list of valid FlairListResult objects</param>
+        /// <returns>Action results.</returns>
+        public List<RedditThings.ActionResult> FlairCSV(List<RedditThings.FlairListResult> flairCsv)
+        {
+            string arg = "";
+            foreach (RedditThings.FlairListResult flairListResult in flairCsv)
+            {
+                arg += flairListResult.ToCSV();
+            }
+
+            return FlairCSV(arg);
+        }
+
+        /// <summary>
+        /// List of flairs.
+        /// </summary>
+        /// <param name="username">a user by name</param>
+        /// <param name="limit">the maximum number of items desired (maximum: 1000)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>Flair list results.</returns>
+        public List<RedditThings.FlairListResult> FlairList(string username = "", int limit = 100, string after = "", string before = "", int count = 0,
+            string show = "all", bool srDetail = false)
+        {
+            return Validate(Dispatch.Flair.FlairList(after, before, username, Name, count, limit, show, srDetail)).Users;
+        }
+
+        /// <summary>
+        /// Return information about a users's flair options.
+        /// </summary>
+        /// <param name="username">A valid Reddit username</param>
+        /// <returns>Flair results.</returns>
+        public RedditThings.FlairSelectorResultContainer FlairSelector(string username)
+        {
+            return Validate(Dispatch.Flair.FlairSelector(username, Name));
+        }
+
+        /// <summary>
+        /// Create a new link flair template.
+        /// </summary>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public void CreateLinkFlairTemplate(string text, bool textEditable = false, string cssClass = "")
+        {
+            Validate(Dispatch.Flair.FlairTemplate(cssClass, "", "LINK_FLAIR", text, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Create a new user flair template.
+        /// </summary>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public void CreateUserFlairTemplate(string text, bool textEditable = false, string cssClass = "")
+        {
+            Validate(Dispatch.Flair.FlairTemplate(cssClass, "", "USER_FLAIR", text, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Update an existing link flair template.
+        /// </summary>
+        /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public void UpdateLinkFlairTemplate(string flairTemplateId, string text = null, bool? textEditable = null, string cssClass = null)
+        {
+            Validate(Dispatch.Flair.FlairTemplate(cssClass, flairTemplateId, "LINK_FLAIR", text, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Update an existing user flair template.
+        /// </summary>
+        /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public void UpdateUserFlairTemplate(string flairTemplateId, string text = null, bool? textEditable = null, string cssClass = null)
+        {
+            Validate(Dispatch.Flair.FlairTemplate(cssClass, flairTemplateId, "USER_FLAIR", text, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Create a new link flair template.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="modOnly">boolean value</param>
+        /// <returns>The created flair object.</returns>
+        public RedditThings.FlairV2 CreateLinkFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
+            string backgroundColor = "#EEEEFF", bool modOnly = false)
+        {
+            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "LINK_FLAIR", modOnly, text, textColor, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Create a new user flair template.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="modOnly">boolean value</param>
+        /// <returns>The created flair object.</returns>
+        public RedditThings.FlairV2 CreateUserFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
+            string backgroundColor = "#EEEEFF", bool modOnly = false)
+        {
+            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "USER_FLAIR", modOnly, text, textColor, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Update an existing link flair template.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="modOnly">boolean value</param>
+        /// <returns>The updated flair object.</returns>
+        public RedditThings.FlairV2 UpdateLinkFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
+            string backgroundColor = null, bool? modOnly = null)
+        {
+            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "LINK_FLAIR", modOnly, text, textColor, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Update an existing user flair template.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="modOnly">boolean value</param>
+        /// <returns>The updated flair object.</returns>
+        public RedditThings.FlairV2 UpdateUserFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
+            string backgroundColor = null, bool? modOnly = null)
+        {
+            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "USER_FLAIR", modOnly, text, textColor, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Set flair enabled.
+        /// </summary>
+        /// <param name="flairEnabled">boolean value</param>
+        public void SetFlairEnabled(bool flairEnabled)
+        {
+            Validate(Dispatch.Flair.SetFlairEnabled(flairEnabled, Name));
+        }
+
+        /// <summary>
+        /// Return list of available link flair for the current subreddit.
+        /// Will not return flair if the user cannot set their own link flair and they are not a moderator that can set flair.
+        /// </summary>
+        /// <returns>List of available link flairs.</returns>
+        public List<RedditThings.Flair> LinkFlair()
+        {
+            return Validate(Dispatch.Flair.LinkFlair(Name));
+        }
+
+        /// <summary>
+        /// Return list of available link flair for the current subreddit.
+        /// Will not return flair if the user cannot set their own link flair and they are not a moderator that can set flair.
+        /// </summary>
+        /// <returns>List of available link flairs.</returns>
+        public List<RedditThings.FlairV2> LinkFlairV2()
+        {
+            return Validate(Dispatch.Flair.LinkFlairV2(Name));
+        }
+
+        /// <summary>
+        /// Return list of available user flair for the current subreddit.
+        /// Will not return flair if flair is disabled on the subreddit, the user cannot set their own flair, or they are not a moderator that can set flair.
+        /// </summary>
+        /// <returns>List of available user flairs.</returns>
+        public List<RedditThings.Flair> UserFlair()
+        {
+            return Validate(Dispatch.Flair.UserFlair(Name));
+        }
+
+        /// <summary>
+        /// Return list of available user flair for the current subreddit.
+        /// Will not return flair if flair is disabled on the subreddit, the user cannot set their own flair, or they are not a moderator that can set flair.
+        /// </summary>
+        /// <returns>List of available user flairs.</returns>
+        public List<RedditThings.FlairV2> UserFlairV2()
+        {
+            return Validate(Dispatch.Flair.UserFlairV2(Name));
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit", "My New Subreddit", "Some description.", "This is my sidebar!").Create();

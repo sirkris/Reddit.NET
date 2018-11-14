@@ -142,12 +142,24 @@ namespace Reddit.NET.Controllers
             }
         }
 
+        private void CheckNull(object res, string msg = "Reddit API returned null response.")
+        {
+            if (res == null)
+            {
+                throw new RedditControllerException(msg);
+            }
+        }
+
+        public dynamic Validate(dynamic obj)
+        {
+            CheckNull(obj);
+
+            return obj;
+        }
+        
         public RedditThings.GenericContainer Validate(RedditThings.GenericContainer genericContainer)
         {
-            if (genericContainer == null)
-            {
-                throw new RedditControllerException("Reddit API returned null response.");
-            }
+            CheckNull(genericContainer);
 
             Validate(genericContainer.JSON);
 
@@ -156,10 +168,7 @@ namespace Reddit.NET.Controllers
 
         public RedditThings.Generic Validate(RedditThings.Generic generic)
         {
-            if (generic == null)
-            {
-                throw new RedditControllerException("Reddit API returned empty response container.");
-            }
+            CheckNull(generic, "Reddit API returned empty response container.");
 
             CheckErrors(generic.Errors);
 
@@ -168,10 +177,7 @@ namespace Reddit.NET.Controllers
 
         public RedditThings.DynamicShortListingContainer Validate(RedditThings.DynamicShortListingContainer dynamicShortListingContainer)
         {
-            if (dynamicShortListingContainer == null)
-            {
-                throw new RedditControllerException("Reddit API returned null response.");
-            }
+            CheckNull(dynamicShortListingContainer);
 
             Validate(dynamicShortListingContainer.Data);
 
@@ -180,20 +186,14 @@ namespace Reddit.NET.Controllers
 
         public RedditThings.DynamicShortListingData Validate(RedditThings.DynamicShortListingData dynamicShortListingData)
         {
-            if (dynamicShortListingData == null)
-            {
-                throw new RedditControllerException("Reddit API returned empty response container.");
-            }
+            CheckNull(dynamicShortListingData, "Reddit API returned empty response container.");
 
             return dynamicShortListingData;
         }
 
         public RedditThings.ImageUploadResult Validate(RedditThings.ImageUploadResult imageUploadResult)
         {
-            if (imageUploadResult == null)
-            {
-                throw new RedditControllerException("Reddit API returned null response.");
-            }
+            CheckNull(imageUploadResult);
 
             CheckErrors(imageUploadResult.Errors);
 
@@ -202,10 +202,7 @@ namespace Reddit.NET.Controllers
 
         public RedditThings.SubredditSettingsContainer Validate(RedditThings.SubredditSettingsContainer subredditSettingsContainer)
         {
-            if (subredditSettingsContainer == null)
-            {
-                throw new RedditControllerException("Reddit API returned null response.");
-            }
+            CheckNull(subredditSettingsContainer);
 
             Validate(subredditSettingsContainer.Data);
 
@@ -214,32 +211,108 @@ namespace Reddit.NET.Controllers
 
         public RedditThings.SubredditSettings Validate(RedditThings.SubredditSettings subredditSettings)
         {
-            if (subredditSettings == null)
-            {
-                throw new RedditControllerException("Reddit API returned empty response container.");
-            }
+            CheckNull(subredditSettings, "Reddit API returned empty response container.");
 
             return subredditSettings;
         }
 
         public RedditThings.RulesContainer Validate(RedditThings.RulesContainer rulesContainer)
         {
-            if (rulesContainer == null)
-            {
-                throw new RedditControllerException("Reddit API returned null response.");
-            }
+            CheckNull(rulesContainer);
 
             return rulesContainer;
         }
 
         public RedditThings.Traffic Validate(RedditThings.Traffic traffic)
         {
-            if (traffic == null)
-            {
-                throw new RedditControllerException("Reddit API returned null response.");
-            }
+            CheckNull(traffic);
 
             return traffic;
+        }
+
+        public List<RedditThings.ActionResult> Validate(List<RedditThings.ActionResult> actionResults)
+        {
+            CheckNull(actionResults);
+
+            foreach (RedditThings.ActionResult actionResult in actionResults)
+            {
+                Validate(actionResult);
+            }
+
+            return actionResults;
+        }
+
+        public RedditThings.ActionResult Validate(RedditThings.ActionResult actionResult)
+        {
+            CheckNull(actionResult);
+
+            if (!actionResult.Ok)
+            {
+                RedditControllerException ex = new RedditControllerException("Reddit API returned non-Ok response.");
+
+                ex.Data.Add("actionResult", actionResult);
+
+                throw ex;
+            }
+
+            return actionResult;
+        }
+
+        public RedditThings.FlairListResultContainer Validate(RedditThings.FlairListResultContainer flairListResultContainer)
+        {
+            CheckNull(flairListResultContainer);
+            CheckNull(flairListResultContainer.Users, "Reddit API returned empty response container.");
+
+            foreach (RedditThings.FlairListResult flairListResult in flairListResultContainer.Users)
+            {
+                Validate(flairListResult);
+            }
+
+            return flairListResultContainer;
+        }
+
+        public RedditThings.FlairListResult Validate(RedditThings.FlairListResult flairListResult)
+        {
+            CheckNull(flairListResult);
+
+            return flairListResult;
+        }
+
+        public RedditThings.FlairSelectorResultContainer Validate(RedditThings.FlairSelectorResultContainer flairSelectorResultContainer)
+        {
+            CheckNull(flairSelectorResultContainer);
+
+            return flairSelectorResultContainer;
+        }
+
+        public RedditThings.FlairSelectorResult Validate(RedditThings.FlairSelectorResult flairSelectorResult)
+        {
+            CheckNull(flairSelectorResult);
+
+            return flairSelectorResult;
+        }
+
+        public List<RedditThings.Flair> Validate(List<RedditThings.Flair> flairs)
+        {
+            CheckNull(flairs);
+
+            return flairs;
+        }
+
+        public RedditThings.Flair Validate(RedditThings.Flair flair)
+        {
+            CheckNull(flair);
+            CheckNull(flair.Id, "Reddit API returned flair object with no Id.");
+
+            return flair;
+        }
+
+        public RedditThings.FlairV2 Validate(RedditThings.FlairV2 flairV2)
+        {
+            CheckNull(flairV2);
+            CheckNull(flairV2.Id, "Reddit API returned flair object with no Id.");
+
+            return flairV2;
         }
     }
 }
