@@ -898,6 +898,44 @@ namespace Reddit.NET.Controllers
         {
             return Dispatch.Moderation.Stylesheet(Name);
         }
+
+        /// <summary>
+        /// Set permissions.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
+        /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
+        public void SetUserPermissions(string username, string permissions, string type)
+        {
+            Validate(Dispatch.Users.SetPermissions(username, permissions, type, Name));
+        }
+
+        /// <summary>
+        /// Retrieve a list of wiki pages in this subreddit.
+        /// </summary>
+        /// <returns>>A list of wiki pages.</returns>
+        public List<string> GetWikiPages()
+        {
+            return ((RedditThings.WikiPageListing)Validate(Dispatch.Wiki.Pages(Name))).Data;
+        }
+
+        /// <summary>
+        /// Retrieve a list of recently changed wiki pages in this subreddit.
+        /// </summary>
+        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of wiki pages.</returns>
+        public List<RedditThings.WikiPageRevision> GetRecentWikiPageRevisions(int limit = 100, string after = "", string before = "", string show = "all",
+            bool srDetail = false, int count = 0)
+        {
+            return Validate(Dispatch.Wiki.Revisions(after, before, Name, count, limit, show, srDetail)).Data.Children;
+        }
+
+        // TODO - Add Emoji and Widgets endpoints once the S3 image upload issue is solved.  --Kris
         
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit", "My New Subreddit", "Some description.", "This is my sidebar!").Create();
         // Equivalent to:  reddit.Models.Subreddits.SiteAdmin(name:"MyNewSubreddit", title:"My New Subreddit", publicDescription:"Some description", description:"This is my sidebar!", ...);

@@ -289,5 +289,21 @@ namespace Reddit.NET.Controllers
 
             return modActionData;
         }
+
+        public RedditThings.WikiPageRevisionContainer Validate(RedditThings.WikiPageRevisionContainer wikiPageRevisionContainer)
+        {
+            CheckNull(wikiPageRevisionContainer);
+
+            Validate(wikiPageRevisionContainer.Data);
+
+            return wikiPageRevisionContainer;
+        }
+
+        public RedditThings.WikiPageRevisionData Validate(RedditThings.WikiPageRevisionData wikiPageRevisionData)
+        {
+            CheckNull(wikiPageRevisionData, "Reddit API returned empty response object.");
+
+            return wikiPageRevisionData;
+        }
     }
 }
