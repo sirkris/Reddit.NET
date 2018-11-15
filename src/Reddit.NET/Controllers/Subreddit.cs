@@ -5,6 +5,7 @@ using Reddit.NET.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
@@ -439,12 +440,37 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Update a subreddit's stylesheet asynchronously.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="stylesheetContents">the new stylesheet content</param>
+        public async void UpdateStylesheetAsync(string reason, string stylesheetContents)
+        {
+            await Task.Run(() =>
+            {
+                UpdateStylesheet(reason, stylesheetContents);
+            });
+        }
+        
+        /// <summary>
         /// Subscribe to a subreddit.
         /// </summary>
         /// <param name="skipInitialDefaults">boolean value</param>
         public void Subscribe(bool skipInitialDefaults = false)
         {
             Dispatch.Subreddits.Subscribe("sub", skipInitialDefaults, Name);
+        }
+
+        /// <summary>
+        /// Subscribe to a subreddit asynchronously.
+        /// </summary>
+        /// <param name="skipInitialDefaults">boolean value</param>
+        public async void SubscribeAsync(bool skipInitialDefaults = false)
+        {
+            await Task.Run(() =>
+            {
+                Subscribe(skipInitialDefaults);
+            });
         }
 
         /// <summary>
@@ -456,11 +482,33 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Unsubscribe from a subreddit asynchronously.
+        /// </summary>
+        public async void UnsubscribeAsync()
+        {
+            await Task.Run(() =>
+            {
+                Unsubscribe();
+            });
+        }
+
+        /// <summary>
         /// Remove the subreddit's custom mobile banner.
         /// </summary>
         public void DeleteBanner()
         {
             Validate(Dispatch.Subreddits.DeleteSrBanner(Name));
+        }
+
+        /// <summary>
+        /// Remove the subreddit's custom mobile banner asynchronously.
+        /// </summary>
+        public async void DeleteBannerAsync()
+        {
+            await Task.Run(() =>
+            {
+                DeleteBanner();
+            });
         }
 
         /// <summary>
@@ -473,11 +521,33 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Remove the subreddit's custom header image asynchronously.
+        /// </summary>
+        public async void DeleteHeaderAsync()
+        {
+            await Task.Run(() =>
+            {
+                DeleteHeader();
+            });
+        }
+
+        /// <summary>
         /// Remove the subreddit's custom mobile icon.
         /// </summary>
         public void DeleteIcon()
         {
             Validate(Dispatch.Subreddits.DeleteSrIcon(Name));
+        }
+
+        /// <summary>
+        /// Remove the subreddit's custom mobile icon asynchronously.
+        /// </summary>
+        public async void DeleteIconAsync()
+        {
+            await Task.Run(() =>
+            {
+                DeleteIcon();
+            });
         }
 
         /// <summary>
@@ -489,6 +559,20 @@ namespace Reddit.NET.Controllers
         public void DeleteImg(string imgName)
         {
             Validate(Dispatch.Subreddits.DeleteSrImg(imgName, Name));
+        }
+
+        /// <summary>
+        /// Remove an image from the subreddit's custom image set asynchronously.
+        /// The image will no longer count against the subreddit's image limit. However, the actual image data may still be accessible for an unspecified amount of time. 
+        /// If the image is currently referenced by the subreddit's stylesheet, that stylesheet will no longer validate and won't be editable until the image reference is removed.
+        /// </summary>
+        /// <param name="imgName">a valid subreddit image name</param>
+        public async void DeleteImgAsync(string imgName)
+        {
+            await Task.Run(() =>
+            {
+                DeleteImg(imgName);
+            });
         }
 
         /// <summary>
@@ -575,11 +659,33 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Clear link flair templates asynchronously.
+        /// </summary>
+        public async void ClearLinkFlairTemplatesAsync()
+        {
+            await Task.Run(() =>
+            {
+                ClearLinkFlairTemplates();
+            });
+        }
+
+        /// <summary>
         /// Clear user flair templates.
         /// </summary>
         public void ClearUserFlairTemplates()
         {
             Validate(Dispatch.Flair.ClearFlairTemplates("USER_FLAIR", Name));
+        }
+
+        /// <summary>
+        /// Clear user flair templates asynchronously.
+        /// </summary>
+        public async void ClearUserFlairTemplatesAsync()
+        {
+            await Task.Run(() =>
+            {
+                ClearUserFlairTemplates();
+            });
         }
 
         /// <summary>
@@ -592,12 +698,36 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Delete flair asynchronously.
+        /// </summary>
+        /// <param name="username">The user whose flair we're removing</param>
+        public async void DeleteFlairAsync(string username)
+        {
+            await Task.Run(() =>
+            {
+                DeleteFlair(username);
+            });
+        }
+
+        /// <summary>
         /// Delete flair template.
         /// </summary>
         /// <param name="flairTemplateId">The ID of the flair template being deleted (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
         public void DeleteFlairTemplate(string flairTemplateId)
         {
             Validate(Dispatch.Flair.DeleteFlairTemplate(flairTemplateId, Name));
+        }
+
+        /// <summary>
+        /// Delete flair template asynchronously.
+        /// <param name="flairTemplateId">The ID of the flair template being deleted (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        /// </summary>
+        public async void DeleteFlairTemplateAsync(string flairTemplateId)
+        {
+            await Task.Run(() =>
+            {
+                DeleteFlairTemplate(flairTemplateId);
+            });
         }
 
         /// <summary>
@@ -612,6 +742,20 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Create a new user flair asynchronously.
+        /// </summary>
+        /// <param name="username">The user who's getting the new flair</param>
+        /// <param name="text">The flair text</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public async void CreateFlairAsync(string username, string text, string cssClass = "")
+        {
+            await Task.Run(() =>
+            {
+                CreateFlair(username, text, cssClass);
+            });
+        }
+
+        /// <summary>
         /// Update the flair configuration settings for this subreddit.
         /// </summary>
         /// <param name="flairEnabled">boolean value</param>
@@ -622,6 +766,22 @@ namespace Reddit.NET.Controllers
         public void FlairConfig(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled)
         {
             Validate(Dispatch.Flair.FlairConfig(flairEnabled, flairPosition, flairSelfAssignEnabled, linkFlairPosition, linkFlairSelfAssignEnabled, Name));
+        }
+
+        /// <summary>
+        /// Update the flair configuration settings for this subreddit asynchronously.
+        /// </summary>
+        /// <param name="flairEnabled">boolean value</param>
+        /// <param name="flairPosition">one of (left, right)</param>
+        /// <param name="flairSelfAssignEnabled">boolean value</param>
+        /// <param name="linkFlairPosition">one of (left, right)</param>
+        /// <param name="linkFlairSelfAssignEnabled">boolean value</param>
+        public async void FlairConfigAsync(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled)
+        {
+            await Task.Run(() =>
+            {
+                FlairConfig(flairEnabled, flairPosition, flairSelfAssignEnabled, linkFlairPosition, linkFlairSelfAssignEnabled);
+            });
         }
 
         /// <summary>
@@ -706,6 +866,20 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Create a new link flair template asynchronously.
+        /// </summary>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public async void CreateLinkFlairTemplateAsync(string text, bool textEditable = false, string cssClass = "")
+        {
+            await Task.Run(() =>
+            {
+                CreateLinkFlairTemplate(text, textEditable, cssClass);
+            });
+        }
+
+        /// <summary>
         /// Create a new user flair template.
         /// </summary>
         /// <param name="text">a string no longer than 64 characters</param>
@@ -714,6 +888,20 @@ namespace Reddit.NET.Controllers
         public void CreateUserFlairTemplate(string text, bool textEditable = false, string cssClass = "")
         {
             Validate(Dispatch.Flair.FlairTemplate(cssClass, "", "USER_FLAIR", text, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Create a new user flair template asynchronously.
+        /// </summary>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public async void CreateUserFlairTemplateAsync(string text, bool textEditable = false, string cssClass = "")
+        {
+            await Task.Run(() =>
+            {
+                CreateUserFlairTemplate(text, textEditable, cssClass);
+            });
         }
 
         /// <summary>
@@ -729,6 +917,21 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Update an existing link flair template asynchronously.
+        /// </summary>
+        /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public async void UpdateLinkFlairTemplateAsync(string flairTemplateId, string text, bool textEditable = false, string cssClass = "")
+        {
+            await Task.Run(() =>
+            {
+                UpdateLinkFlairTemplate(flairTemplateId, text, textEditable, cssClass);
+            });
+        }
+
+        /// <summary>
         /// Update an existing user flair template.
         /// </summary>
         /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
@@ -738,6 +941,21 @@ namespace Reddit.NET.Controllers
         public void UpdateUserFlairTemplate(string flairTemplateId, string text = null, bool? textEditable = null, string cssClass = null)
         {
             Validate(Dispatch.Flair.FlairTemplate(cssClass, flairTemplateId, "USER_FLAIR", text, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Update an existing user flair template asynchronously.
+        /// </summary>
+        /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public async void UpdateUserFlairTemplateAsync(string flairTemplateId, string text, bool textEditable = false, string cssClass = "")
+        {
+            await Task.Run(() =>
+            {
+                UpdateUserFlairTemplate(flairTemplateId, text, textEditable, cssClass);
+            });
         }
 
         /// <summary>
@@ -813,6 +1031,18 @@ namespace Reddit.NET.Controllers
         public void SetFlairEnabled(bool flairEnabled)
         {
             Validate(Dispatch.Flair.SetFlairEnabled(flairEnabled, Name));
+        }
+
+        /// <summary>
+        /// Set flair enabled asynchronously.
+        /// </summary>
+        /// <param name="flairEnabled">boolean value</param>
+        public async void SetFlairEnabledAsync(bool flairEnabled)
+        {
+            await Task.Run(() =>
+            {
+                SetFlairEnabled(flairEnabled);
+            });
         }
 
         /// <summary>
@@ -908,6 +1138,20 @@ namespace Reddit.NET.Controllers
         public void SetUserPermissions(string username, string permissions, string type)
         {
             Validate(Dispatch.Users.SetPermissions(username, permissions, type, Name));
+        }
+
+        /// <summary>
+        /// Set permissions asynchronously.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
+        /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
+        public async void SetUserPermissionsAsync(string username, string permissions, string type)
+        {
+            await Task.Run(() =>
+            {
+                SetUserPermissions(username, permissions, type);
+            });
         }
 
         /// <summary>
