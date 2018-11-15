@@ -252,7 +252,7 @@ namespace Reddit.NET.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public WikiPage About(string v, string v2)
         {
-            return new WikiPage(Dispatch, ((RedditThings.WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, v, v2, Subreddit))).Data);
+            return new WikiPage(Dispatch, ((RedditThings.WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, v, v2, Subreddit))).Data, Subreddit, Name);
         }
     }
 }
