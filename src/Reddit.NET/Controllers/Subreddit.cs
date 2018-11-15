@@ -254,6 +254,55 @@ namespace Reddit.NET.Controllers
             }
         }
 
+        /// <summary>
+        /// Return the content of an existing wiki page.
+        /// If v is given, show the wiki page as it was at that version If both v and v2 are given, show a diff of the two.
+        /// </summary>
+        /// <param name="pageName">the name of an existing wiki page</param>
+        /// <param name="v">a wiki revision ID</param>
+        /// <param name="v2">a wiki revision ID</param>
+        /// <returns>A new instance of the WikiPage controller populated with the return data.</returns>
+        public WikiPage GetWikiPage(string pageName, string v = "", string v2 = "")
+        {
+            return WikiPage(pageName).About(v, v2);
+        }
+
+        /// <summary>
+        /// Return a new instance of the WikiPage controller.
+        /// </summary>
+        /// <param name="pageName">the name of an existing wiki page</param>
+        /// <param name="mayRevise">boolean value</param>
+        /// <param name="revisionDate">Date of current revision</param>
+        /// <param name="contentHtml">Page content as HTML</param>
+        /// <param name="revisionBy">Author of current revision</param>
+        /// <param name="contentMd">Page content as Markdown</param>
+        /// <returns>A new instance of the WikiPage controller.</returns>
+        public WikiPage WikiPage(string pageName, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd)
+        {
+            return new WikiPage(Dispatch, mayRevise, revisionDate, contentHtml, revisionBy, contentMd, Name, pageName);
+        }
+
+        /// <summary>
+        /// Return a new instance of the WikiPage controller.
+        /// </summary>
+        /// <param name="pageName">the name of an existing wiki page</param>
+        /// <param name="wikiPage">A valid instance of Models.Structures.WikiPage</param>
+        /// <returns>A new instance of the WikiPage controller.</returns>
+        public WikiPage WikiPage(string pageName, RedditThings.WikiPage wikiPage)
+        {
+            return new WikiPage(Dispatch, wikiPage, Name, pageName);
+        }
+
+        /// <summary>
+        /// Return a new instance of the WikiPage controller.
+        /// </summary>
+        /// <param name="pageName">the name of an existing wiki page</param>
+        /// <returns>A new instance of the WikiPage controller.</returns>
+        public WikiPage WikiPage(string pageName)
+        {
+            return new WikiPage(Dispatch, Name, pageName);
+        }
+
         // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();
         // Equivalent to:  Subreddit sub = reddit.Subreddit(reddit.Models.Subreddits.About("facepalm"));
         /// <summary>
@@ -281,14 +330,14 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="user">A valid, existing reddit username</param>
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of subreddit moderators.</returns>
-        public List<Moderator> GetModerators(string after = "", string before = "", int limit = 100, string user = "", 
+        public List<Moderator> GetModerators(string after = "", string before = "", int limit = 25, string user = "", 
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
             RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators", after, before, user, includeCategories, Name, count, limit, 
@@ -304,14 +353,14 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="user">A valid, existing reddit username</param>
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of subreddit contributors.</returns>
-        public List<SubredditUser> GetContributors(string after = "", string before = "", int limit = 100, string user = "",
+        public List<SubredditUser> GetContributors(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
             RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("contributors", after, before, user, includeCategories, Name, count, limit,
@@ -327,14 +376,14 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="user">A valid, existing reddit username</param>
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of subreddit contributors.</returns>
-        public List<SubredditUser> GetWikiContributors(string after = "", string before = "", int limit = 100, string user = "",
+        public List<SubredditUser> GetWikiContributors(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
             RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikicontributors", after, before, user, includeCategories, Name, count, limit,
@@ -350,14 +399,14 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="user">A valid, existing reddit username</param>
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of muted users.</returns>
-        public List<SubredditUser> GetMutedUsers(string after = "", string before = "", int limit = 100, string user = "",
+        public List<SubredditUser> GetMutedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
             RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("muted", after, before, user, includeCategories, Name, count, limit,
@@ -373,14 +422,14 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="user">A valid, existing reddit username</param>
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of banned users.</returns>
-        public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 100, string user = "",
+        public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
             RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned", after, before, user, includeCategories, Name, count, limit,
@@ -396,14 +445,14 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="user">A valid, existing reddit username</param>
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of banned users.</returns>
-        public List<BannedUser> GetWikiBannedUsers(string after = "", string before = "", int limit = 100, string user = "",
+        public List<BannedUser> GetWikiBannedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
             RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikibanned", after, before, user, includeCategories, Name, count, limit,
@@ -831,14 +880,14 @@ namespace Reddit.NET.Controllers
         /// List of flairs.
         /// </summary>
         /// <param name="username">a user by name</param>
-        /// <param name="limit">the maximum number of items desired (maximum: 1000)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 1000)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>Flair list results.</returns>
-        public List<RedditThings.FlairListResult> FlairList(string username = "", int limit = 100, string after = "", string before = "", int count = 0,
+        public List<RedditThings.FlairListResult> FlairList(string username = "", int limit = 25, string after = "", string before = "", int count = 0,
             string show = "all", bool srDetail = false)
         {
             return Validate(Dispatch.Flair.FlairList(after, before, username, Name, count, limit, show, srDetail)).Users;
@@ -1106,7 +1155,7 @@ namespace Reddit.NET.Controllers
         /// acceptmoderatorinvite, removemoderator, addcontributor, removecontributor, editsettings, editflair, distinguish, marknsfw, wikibanned, wikicontributor, wikiunbanned, wikipagelisted, 
         /// removewikicontributor, wikirevise, wikipermlevel, ignorereports, unignorereports, setpermissions, setsuggestedsort, sticky, unsticky, setcontestmode, unsetcontestmode, lock, unlock, 
         /// muteuser, unmuteuser, createrule, editrule, deleterule, spoiler, unspoiler, modmail_enrollment, community_styling, community_widgets, markoriginalcontent)</param>
-        /// <param name="limit">the maximum number of items desired (maximum: 500)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 500)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="mod">(optional) a moderator filter</param>
@@ -1114,7 +1163,7 @@ namespace Reddit.NET.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A listing of recent moderation actions.</returns>
-        public RedditThings.ModActionContainer GetLog(string type = null, int limit = 100, string after = "", string before = "", string mod = null,
+        public RedditThings.ModActionContainer GetLog(string type = null, int limit = 25, string after = "", string before = "", string mod = null,
             string show = "all", bool srDetail = false, int count = 0)
         {
             return Validate(Dispatch.Moderation.GetLog(after, before, Name, count, limit, mod, show, srDetail, type));
@@ -1166,14 +1215,14 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Retrieve a list of recently changed wiki pages in this subreddit.
         /// </summary>
-        /// <param name="limit">the maximum number of items desired (maximum: 100)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of wiki pages.</returns>
-        public List<RedditThings.WikiPageRevision> GetRecentWikiPageRevisions(int limit = 100, string after = "", string before = "", string show = "all",
+        public List<RedditThings.WikiPageRevision> GetRecentWikiPageRevisions(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = false, int count = 0)
         {
             return Validate(Dispatch.Wiki.Revisions(after, before, Name, count, limit, show, srDetail)).Data.Children;

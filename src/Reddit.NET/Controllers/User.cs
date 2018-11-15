@@ -33,31 +33,31 @@ namespace Reddit.NET.Controllers
 
         public User(Dispatch dispatch, RedditThings.User user)
         {
-            this.IsFriend = user.IsFriend;
-            this.ProfanityFilter = user.PrefNoProfanity;
-            this.IsSuspended = user.IsSuspended;
-            this.HasGoldSubscription = user.HasGoldSubscription;
-            this.NumFriends = user.NumFriends;
-            this.IsVerified = user.Verified;
-            this.HasNewModmail = user.NewModmailExists;
-            this.Id = user.Id;
-            this.Over18 = user.Over18;
-            this.IsGold = user.IsGold;
-            this.IsMod = user.IsMod;
-            this.HasVerifiedEmail = user.HasVerifiedEmail;
-            this.IconImg = user.IconImg;
-            this.HasModmail = user.HasModMail;
-            this.LinkKarma = user.LinkKarma;
-            this.InboxCount = user.InboxCount;
-            this.HasMail = user.HasMail;
-            this.Name = user.Name;
-            this.Created = user.Created;
-            this.CommentKarma = user.CommentKarma;
-            this.HasSubscribed = user.HasSubscribed;
+            IsFriend = user.IsFriend;
+            ProfanityFilter = user.PrefNoProfanity;
+            IsSuspended = user.IsSuspended;
+            HasGoldSubscription = user.HasGoldSubscription;
+            NumFriends = user.NumFriends;
+            IsVerified = user.Verified;
+            HasNewModmail = user.NewModmailExists;
+            Id = user.Id;
+            Over18 = user.Over18;
+            IsGold = user.IsGold;
+            IsMod = user.IsMod;
+            HasVerifiedEmail = user.HasVerifiedEmail;
+            IconImg = user.IconImg;
+            HasModmail = user.HasModMail;
+            LinkKarma = user.LinkKarma;
+            InboxCount = user.InboxCount;
+            HasMail = user.HasMail;
+            Name = user.Name;
+            Created = user.Created;
+            CommentKarma = user.CommentKarma;
+            HasSubscribed = user.HasSubscribed;
 
-            this.UserData = user;
+            UserData = user;
 
-            this.Dispatch = dispatch;
+            Dispatch = dispatch;
         }
 
         public User(Dispatch dispatch, string id, string name, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
@@ -65,31 +65,31 @@ namespace Reddit.NET.Controllers
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
         {
-            this.IsFriend = isFriend;
-            this.ProfanityFilter = profanityFilter;
-            this.IsSuspended = isSuspended;
-            this.HasGoldSubscription = hasGoldSubscription;
-            this.NumFriends = numFriends;
+            IsFriend = isFriend;
+            ProfanityFilter = profanityFilter;
+            IsSuspended = isSuspended;
+            HasGoldSubscription = hasGoldSubscription;
+            NumFriends = numFriends;
             this.IsVerified = IsVerified;
-            this.HasNewModmail = hasNewModmail;
-            this.Id = id;
-            this.Over18 = over18;
-            this.IsGold = isGold;
-            this.IsMod = isMod;
-            this.HasVerifiedEmail = hasVerifiedEmail;
-            this.IconImg = iconImg;
-            this.HasModmail = hasModmail;
-            this.LinkKarma = linkKarma;
-            this.InboxCount = inboxCount;
-            this.HasMail = hasMail;
-            this.Name = name;
-            this.Created = created;
-            this.CommentKarma = commentKarma;
-            this.HasSubscribed = hasSubscribed;
+            HasNewModmail = hasNewModmail;
+            Id = id;
+            Over18 = over18;
+            IsGold = isGold;
+            IsMod = isMod;
+            HasVerifiedEmail = hasVerifiedEmail;
+            IconImg = iconImg;
+            HasModmail = hasModmail;
+            LinkKarma = linkKarma;
+            InboxCount = inboxCount;
+            HasMail = hasMail;
+            Name = name;
+            Created = created;
+            CommentKarma = commentKarma;
+            HasSubscribed = hasSubscribed;
 
-            this.UserData = new RedditThings.User(this);
+            UserData = new RedditThings.User(this);
 
-            this.Dispatch = dispatch;
+            Dispatch = dispatch;
         }
 
         public User(Dispatch dispatch)

@@ -293,17 +293,31 @@ namespace Reddit.NET.Controllers
         public RedditThings.WikiPageRevisionContainer Validate(RedditThings.WikiPageRevisionContainer wikiPageRevisionContainer)
         {
             CheckNull(wikiPageRevisionContainer);
-
-            Validate(wikiPageRevisionContainer.Data);
+            CheckNull(wikiPageRevisionContainer.Data, "Reddit API returned empty response object.");
 
             return wikiPageRevisionContainer;
         }
 
         public RedditThings.WikiPageRevisionData Validate(RedditThings.WikiPageRevisionData wikiPageRevisionData)
         {
-            CheckNull(wikiPageRevisionData, "Reddit API returned empty response object.");
+            CheckNull(wikiPageRevisionData);
 
             return wikiPageRevisionData;
+        }
+
+        public RedditThings.WikiPageSettingsContainer Validate(RedditThings.WikiPageSettingsContainer wikiPageSettingsContainer)
+        {
+            CheckNull(wikiPageSettingsContainer);
+            CheckNull(wikiPageSettingsContainer.Data, "Reddit API returned empty response object.");
+
+            return wikiPageSettingsContainer;
+        }
+
+        public RedditThings.WikiPageSettings Validate(RedditThings.WikiPageSettings wikiPageSettings)
+        {
+            CheckNull(wikiPageSettings);
+
+            return wikiPageSettings;
         }
     }
 }

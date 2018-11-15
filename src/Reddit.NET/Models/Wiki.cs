@@ -45,7 +45,7 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Edit a wiki page.
         /// </summary>
-        /// <param name="content"></param>
+        /// <param name="content">The page content</param>
         /// <param name="page">the name of an existing page or a new page to create</param>
         /// <param name="previous">the starting point revision for this edit</param>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
@@ -54,7 +54,7 @@ namespace Reddit.NET.Models
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/edit", Method.POST);
 
-            restRequest.AddParameter("content", content);
+            AddParamIfNotNull("content", content, ref restRequest);
             restRequest.AddParameter("previous", previous);
             restRequest.AddParameter("reason", reason);
 
@@ -217,9 +217,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Update the permissions and visibility of wiki page.
         /// </summary>
+        /// <param name="page">the name of an existing wiki page</param>
         /// <param name="wikiPageSettings">A valid instance of WikiPageSettings</param>
-        /// <param name="listed">boolean value (true = appear in /wiki/pages, false = don't appear in /wiki/pages)</param>
-        /// <param name="permLevel">an integer (0 = use wiki perms, 1 = only approved users may edit, 2 = only mods may edit or view)</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         /// <returns>An object containing wiki page settings.</returns>
         public WikiPageSettingsContainer UpdatePermissions(string page, WikiPageSettings wikiPageSettings, string subreddit = null)
