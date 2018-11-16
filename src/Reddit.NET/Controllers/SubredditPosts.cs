@@ -657,7 +657,7 @@ namespace Reddit.NET.Controllers
 
         protected virtual void OnModQueueReportsUpdated(PostsUpdateEventArgs e)
         {
-            ModQueueUpdated?.Invoke(this, e);
+            ModQueueReportsUpdated?.Invoke(this, e);
         }
 
         /// <summary>
@@ -677,7 +677,7 @@ namespace Reddit.NET.Controllers
 
         protected virtual void OnModQueueSpamUpdated(PostsUpdateEventArgs e)
         {
-            ModQueueUpdated?.Invoke(this, e);
+            ModQueueSpamUpdated?.Invoke(this, e);
         }
 
         /// <summary>
@@ -697,7 +697,7 @@ namespace Reddit.NET.Controllers
 
         protected virtual void OnModQueueUnmoderatedUpdated(PostsUpdateEventArgs e)
         {
-            ModQueueUpdated?.Invoke(this, e);
+            ModQueueUnmoderatedUpdated?.Invoke(this, e);
         }
 
         /// <summary>
@@ -717,7 +717,7 @@ namespace Reddit.NET.Controllers
 
         protected virtual void OnModQueueEditedUpdated(PostsUpdateEventArgs e)
         {
-            ModQueueUpdated?.Invoke(this, e);
+            ModQueueEditedUpdated?.Invoke(this, e);
         }
     }
 }

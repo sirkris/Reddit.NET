@@ -84,7 +84,7 @@ namespace Reddit.NET.Models
         /// <param name="includeCategories">boolean value</param>
         /// <returns>A listing of users.</returns>
         public List<UserPrefsContainer> PrefsList(string where, string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
-            bool srDetail = false, bool includeCategories = true)
+            bool srDetail = false, bool includeCategories = false)
         {
             RestRequest restRequest = PrepareRequest("prefs/" + where);
 
@@ -112,7 +112,7 @@ namespace Reddit.NET.Models
         /// <param name="includeCategories">boolean value</param>
         /// <returns>A listing of users.</returns>
         public UserPrefsContainer PrefsSingle(string where, string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
-            bool srDetail = false, bool includeCategories = true)
+            bool srDetail = false, bool includeCategories = false)
         {
             RestRequest restRequest = PrepareRequest("prefs/" + where);
 

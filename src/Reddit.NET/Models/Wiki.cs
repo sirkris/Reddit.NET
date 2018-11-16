@@ -228,7 +228,7 @@ namespace Reddit.NET.Models
 
         /// <summary>
         /// Return the content of a wiki page.
-        /// If v is given, show the wiki page as it was at that version If both v and v2 are given, show a diff of the two.
+        /// If v is given, show the wiki page as it was at that version. If both v and v2 are given, show a diff of the two.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
         /// <param name="v">a wiki revision ID</param>

@@ -60,7 +60,7 @@ namespace Reddit.NET.Controllers
             Dispatch = dispatch;
         }
 
-        public User(Dispatch dispatch, string id, string name, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
+        public User(Dispatch dispatch, string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
@@ -94,16 +94,7 @@ namespace Reddit.NET.Controllers
 
         public User(Dispatch dispatch)
         {
-            this.Dispatch = dispatch;
-        }
-
-        /// <summary>
-        /// Returns a User instance with the data returned from a call to the "me" endpoint.
-        /// </summary>
-        public User Me()
-        {
-            // Recommended usage:  User me = ((Reddit) reddit).User().Me();
-            return new User(Dispatch, Dispatch.Account.Me());
+            Dispatch = dispatch;
         }
     }
 }

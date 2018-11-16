@@ -1,4 +1,4 @@
-﻿using Reddit.NET.Models;
+﻿using API = Reddit.NET.Models;
 using Reddit.NET.Models.EventArgs;
 using RestSharp;
 
@@ -6,24 +6,24 @@ namespace Reddit.NET.Controllers
 {
     public class Dispatch
     {
-        public Account Account;
-        public Captcha Captcha;
-        public Emoji Emoji;
-        public Flair Flair;
-        public LinksAndComments LinksAndComments;
-        public Listings Listings;
-        public LiveThreads LiveThreads;
-        public Misc Misc;
-        public Moderation Moderation;
-        public Modmail Modmail;
-        public Multis Multis;
-        public PrivateMessages PrivateMessages;
-        public RedditGold RedditGold;
-        public Search Search;
-        public Subreddits Subreddits;
-        public Users Users;
-        public Widgets Widgets;
-        public Wiki Wiki;
+        public API.Account Account;
+        public API.Captcha Captcha;
+        public API.Emoji Emoji;
+        public API.Flair Flair;
+        public API.LinksAndComments LinksAndComments;
+        public API.Listings Listings;
+        public API.LiveThreads LiveThreads;
+        public API.Misc Misc;
+        public API.Moderation Moderation;
+        public API.Modmail Modmail;
+        public API.Multis Multis;
+        public API.PrivateMessages PrivateMessages;
+        public API.RedditGold RedditGold;
+        public API.Search Search;
+        public API.Subreddits Subreddits;
+        public API.Users Users;
+        public API.Widgets Widgets;
+        public API.Wiki Wiki;
 
         /// <summary>
         /// Instantiate endpoint singletons.
@@ -32,24 +32,24 @@ namespace Reddit.NET.Controllers
         /// <param name="accessToken">The OAuth access token required to access the Reddit API.</param>
         public Dispatch(string appId, string refreshToken, string accessToken, RestClient restClient)
         {
-            Account = new Account(appId, refreshToken, accessToken, restClient);
-            Captcha = new Captcha(appId, refreshToken, accessToken, restClient);
-            Emoji = new Emoji(appId, refreshToken, accessToken, restClient);
-            Flair = new Flair(appId, refreshToken, accessToken, restClient);
-            LinksAndComments = new LinksAndComments(appId, refreshToken, accessToken, restClient);
-            Listings = new Listings(appId, refreshToken, accessToken, restClient);
-            LiveThreads = new LiveThreads(appId, refreshToken, accessToken, restClient);
-            Misc = new Misc(appId, refreshToken, accessToken, restClient);
-            Moderation = new Moderation(appId, refreshToken, accessToken, restClient);
-            Modmail = new Modmail(appId, refreshToken, accessToken, restClient);
-            Multis = new Multis(appId, refreshToken, accessToken, restClient);
-            PrivateMessages = new PrivateMessages(appId, refreshToken, accessToken, restClient);
-            RedditGold = new RedditGold(appId, refreshToken, accessToken, restClient);
-            Search = new Search(appId, refreshToken, accessToken, restClient);
-            Subreddits = new Subreddits(appId, refreshToken, accessToken, restClient);
-            Users = new Users(appId, refreshToken, accessToken, restClient);
-            Widgets = new Widgets(appId, refreshToken, accessToken, restClient);
-            Wiki = new Wiki(appId, refreshToken, accessToken, restClient);
+            Account = new API.Account(appId, refreshToken, accessToken, restClient);
+            Captcha = new API.Captcha(appId, refreshToken, accessToken, restClient);
+            Emoji = new API.Emoji(appId, refreshToken, accessToken, restClient);
+            Flair = new API.Flair(appId, refreshToken, accessToken, restClient);
+            LinksAndComments = new API.LinksAndComments(appId, refreshToken, accessToken, restClient);
+            Listings = new API.Listings(appId, refreshToken, accessToken, restClient);
+            LiveThreads = new API.LiveThreads(appId, refreshToken, accessToken, restClient);
+            Misc = new API.Misc(appId, refreshToken, accessToken, restClient);
+            Moderation = new API.Moderation(appId, refreshToken, accessToken, restClient);
+            Modmail = new API.Modmail(appId, refreshToken, accessToken, restClient);
+            Multis = new API.Multis(appId, refreshToken, accessToken, restClient);
+            PrivateMessages = new API.PrivateMessages(appId, refreshToken, accessToken, restClient);
+            RedditGold = new API.RedditGold(appId, refreshToken, accessToken, restClient);
+            Search = new API.Search(appId, refreshToken, accessToken, restClient);
+            Subreddits = new API.Subreddits(appId, refreshToken, accessToken, restClient);
+            Users = new API.Users(appId, refreshToken, accessToken, restClient);
+            Widgets = new API.Widgets(appId, refreshToken, accessToken, restClient);
+            Wiki = new API.Wiki(appId, refreshToken, accessToken, restClient);
 
             Account.TokenUpdated += C_TokenUpdated;
             Captcha.TokenUpdated += C_TokenUpdated;

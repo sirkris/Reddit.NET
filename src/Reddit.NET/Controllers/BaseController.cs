@@ -319,5 +319,33 @@ namespace Reddit.NET.Controllers
 
             return wikiPageSettings;
         }
+
+        public List<RedditThings.UserPrefsContainer> Validate(List<RedditThings.UserPrefsContainer> userPrefsContainers)
+        {
+            CheckNull(userPrefsContainers);
+
+            foreach (RedditThings.UserPrefsContainer userPrefsContainer in userPrefsContainers)
+            {
+                CheckNull(userPrefsContainer, "Reddit API returned a list with at least one null entry.");
+                CheckNull(userPrefsContainer.Data, "Reddit API returned a list with at least one entry that contains null data.");
+            }
+
+            return userPrefsContainers;
+        }
+
+        public RedditThings.UserPrefsContainer Validate(RedditThings.UserPrefsContainer userPrefsContainer)
+        {
+            CheckNull(userPrefsContainer);
+            CheckNull(userPrefsContainer.Data, "Reddit API returned empty response object.");
+
+            return userPrefsContainer;
+        }
+
+        public RedditThings.UserPrefsData Validate(RedditThings.UserPrefsData userPrefsData)
+        {
+            CheckNull(userPrefsData);
+
+            return userPrefsData;
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace Reddit.NET
             private set;
         }
 
+        public Account Account;
+
         public RedditAPI(string appId, string refreshToken, string accessToken = null)
         {
             /*
@@ -28,6 +30,9 @@ namespace Reddit.NET
             {
                 // Passing "null" instead of null forces the Reddit API to return a non-200 status code on auth failure, freeing us from having to parse the content string.  --Kris
                 Models = new Dispatch(appId, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
+
+                // Autoload the Account controller as a singleton.  --Kris
+                Account = new Account(Models);
             }
             else
             {
@@ -118,12 +123,12 @@ namespace Reddit.NET
             return new User(Models, user);
         }
 
-        public User User(string id, string name, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
+        public User User(string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
         {
-            return new User(Models, id, name, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
+            return new User(Models, name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
                 hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
         }
 

@@ -28,7 +28,7 @@ namespace Example
                 RedditAPI reddit = new RedditAPI(appId, refreshToken, accessToken);
 
                 // Get info on the Reddit user authenticated by the OAuth credentials.  --Kris
-                User me = reddit.User().Me();
+                User me = reddit.Account.Me;
 
                 Console.WriteLine("Username: " + me.Name);
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
