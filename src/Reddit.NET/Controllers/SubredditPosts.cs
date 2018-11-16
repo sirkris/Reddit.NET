@@ -220,7 +220,7 @@ namespace Reddit.NET.Controllers
         // Let's just pretend this one belongs to the "all" subreddit so we can put it here with the others.  --Kris
         public List<Post> GetBest(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Best(after, before, false, limit: limit));
+            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Best(after, before, false, limit: limit), Subreddit.Dispatch);
 
             BestLastUpdated = DateTime.Now;
 
@@ -230,7 +230,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetHot(string g = "", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Hot(g, after, before, false, limit: limit, subreddit: Subreddit.Name));
+            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Hot(g, after, before, false, limit: limit, subreddit: Subreddit.Name), Subreddit.Dispatch);
 
             HotLastUpdated = DateTime.Now;
 
@@ -240,7 +240,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetNew(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.New(after, before, false, limit: limit, subreddit: Subreddit.Name));
+            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.New(after, before, false, limit: limit, subreddit: Subreddit.Name), Subreddit.Dispatch);
 
             NewLastUpdated = DateTime.Now;
 
@@ -250,7 +250,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetRising(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Rising(after, before, false, limit: limit, subreddit: Subreddit.Name));
+            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Rising(after, before, false, limit: limit, subreddit: Subreddit.Name), Subreddit.Dispatch);
 
             RisingLastUpdated = DateTime.Now;
 
@@ -260,7 +260,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetTop(string t = "all", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Top(t, after, before, false, limit: limit, subreddit: Subreddit.Name));
+            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Top(t, after, before, false, limit: limit, subreddit: Subreddit.Name), Subreddit.Dispatch);
 
             TopLastUpdated = DateTime.Now;
 
@@ -270,7 +270,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetControversial(string t = "all", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Controversial(t, after, before, false, limit: limit, subreddit: Subreddit.Name));
+            List<Post> posts = GetPosts(Subreddit.Dispatch.Listings.Controversial(t, after, before, false, limit: limit, subreddit: Subreddit.Name), Subreddit.Dispatch);
 
             ControversialLastUpdated = DateTime.Now;
 
@@ -281,7 +281,7 @@ namespace Reddit.NET.Controllers
         public List<Post> GetModQueuePosts(string location, string after = "", string before = "", int limit = 100, string show = "all",
             bool srDetail = false, int count = 0)
         {
-            return GetPosts(Subreddit.Dispatch.Moderation.ModQueue(location, after, before, "links", Subreddit.Name, count, limit, show, srDetail));
+            return GetPosts(Subreddit.Dispatch.Moderation.ModQueue(location, after, before, "links", Subreddit.Name, count, limit, show, srDetail), Subreddit.Dispatch);
         }
 
         public List<Post> GetModQueue(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
@@ -331,27 +331,6 @@ namespace Reddit.NET.Controllers
             ModQueueEditedLastUpdated = DateTime.Now;
 
             ModQueueEdited = posts;
-            return posts;
-        }
-        
-        private List<Post> GetPosts(RedditThings.PostContainer postContainer)
-        {
-            List<Post> posts = new List<Post>();
-            foreach (RedditThings.PostChild postChild in postContainer.Data.Children)
-            {
-                if (postChild.Data != null)
-                {
-                    if (postChild.Data.IsSelf)
-                    {
-                        posts.Add(new SelfPost(Subreddit.Dispatch, postChild.Data));
-                    }
-                    else
-                    {
-                        posts.Add(new LinkPost(Subreddit.Dispatch, postChild.Data));
-                    }
-                }
-            }
-
             return posts;
         }
 

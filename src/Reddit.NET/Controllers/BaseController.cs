@@ -103,6 +103,41 @@ namespace Reddit.NET.Controllers
             return !(added.Count == 0 && removed.Count == 0);
         }
 
+        public List<Post> GetPosts(RedditThings.PostContainer postContainer, Dispatch dispatch)
+        {
+            List<Post> posts = new List<Post>();
+            foreach (RedditThings.PostChild postChild in postContainer.Data.Children)
+            {
+                if (postChild.Data != null)
+                {
+                    if (postChild.Data.IsSelf)
+                    {
+                        posts.Add(new SelfPost(dispatch, postChild.Data));
+                    }
+                    else
+                    {
+                        posts.Add(new LinkPost(dispatch, postChild.Data));
+                    }
+                }
+            }
+
+            return posts;
+        }
+
+        public List<Comment> GetComments(RedditThings.CommentContainer commentContainer, Dispatch dispatch)
+        {
+            List<Comment> comments = new List<Comment>();
+            foreach (RedditThings.CommentChild commentChild in commentContainer.Data.Children)
+            {
+                if (commentChild.Data != null)
+                {
+                    comments.Add(new Comment(dispatch, commentChild.Data));
+                }
+            }
+
+            return comments;
+        }
+
         public Exception BuildException(Exception ex, List<List<string>> errors)
         {
             ex.Data.Add("errors", errors);

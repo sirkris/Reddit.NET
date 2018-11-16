@@ -75,7 +75,7 @@ namespace Reddit.NET.Controllers
         {
             await Task.Run(() =>
             {
-                Validate(UpdatePrefs(accountPrefs));
+                UpdatePrefs(accountPrefs);
             });
         }
 
@@ -180,6 +180,71 @@ namespace Reddit.NET.Controllers
             bool includeCategories = false, int count = 0)
         {
             return Validate(Dispatch.Account.PrefsSingle("trusted", after, before, count, limit, show, srDetail, includeCategories)).Data.Children;
+        }
+
+        /// <summary>
+        /// Stop being friends with a user.
+        /// </summary>
+        /// <param name="username">A valid, existing reddit username</param>
+        public void DeleteFriend(string username)
+        {
+            Dispatch.Users.DeleteFriend(username);
+        }
+
+        /// <summary>
+        /// Asynchronously stop being friends with a user.
+        /// </summary>
+        /// <param name="username">A valid, existing reddit username</param>
+        public async void DeleteFriendAsync(string username)
+        {
+            await Task.Run(() =>
+            {
+                DeleteFriend(username);
+            });
+        }
+
+        /// <summary>
+        /// Get information about a specific 'friend', such as notes.
+        /// </summary>
+        /// <param name="username">A valid, existing reddit username</param>
+        /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
+        public RedditThings.UserActionResult GetFriend(string username)
+        {
+            return Validate(Dispatch.Users.GetFriend(username));
+        }
+
+        /// <summary>
+        /// Create or update a "friend" relationship.
+        /// This operation is idempotent. It can be used to add a new friend, or update an existing friend (e.g., add/change the note on that friend).
+        /// The JSON fields can only be included if you have a Reddit Gold subscription, for some reason.
+        /// </summary>
+        /// <param name="username">A valid, existing reddit username</param>
+        /// <param name="json">{
+        /// "name": A valid, existing reddit username
+        /// "note": a string no longer than 300 characters
+        /// }</param>
+        /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
+        public RedditThings.UserActionResult UpdateFriend(string username, string json = "{}")
+        {
+            return Validate(Dispatch.Users.UpdateFriend(username, json));
+        }
+
+        /// <summary>
+        /// Create or update a "friend" relationship asynchronously.
+        /// This operation is idempotent. It can be used to add a new friend, or update an existing friend (e.g., add/change the note on that friend).
+        /// The JSON fields can only be included if you have a Reddit Gold subscription, for some reason.
+        /// </summary>
+        /// <param name="username">A valid, existing reddit username</param>
+        /// <param name="json">{
+        /// "name": A valid, existing reddit username
+        /// "note": a string no longer than 300 characters
+        /// }</param>
+        public async void UpdateFriendAsync(string username, string json = "{}")
+        {
+            await Task.Run(() =>
+            {
+                UpdateFriend(username, json);
+            });
         }
     }
 }

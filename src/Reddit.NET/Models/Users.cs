@@ -28,7 +28,7 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// Create a relationship between a user and another user or subreddit
+        /// Create a relationship between a user and another user or subreddit.
         /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
         /// moderator: Use "moderator_invite"
         /// moderator_invite: modothers
@@ -143,6 +143,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Get user data by account IDs.
         /// </summary>
@@ -214,7 +215,7 @@ namespace Reddit.NET.Models
         }
         
         /// <summary>
-        /// Return a list of trophies for the a given user.
+        /// Return a list of trophies for the given user.
         /// </summary>
         /// <param name="username">A valid, existing reddit username</param>
         /// <returns>A list of trophies.</returns>

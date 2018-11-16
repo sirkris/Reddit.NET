@@ -1179,6 +1179,29 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Invite a user to become a moderator of this subreddit.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
+        public void ModeratorInvite(string username, string permissions)
+        {
+            Validate(Dispatch.Users.Friend(null, null, null, null, 999, username, permissions, "moderator_invite", Name));
+        }
+
+        /// <summary>
+        /// Asynchronously invite a user to become a moderator of this subreddit.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
+        public async void ModeratorInviteAsync(string username, string permissions)
+        {
+            await Task.Run(() =>
+            {
+                ModeratorInvite(username, permissions);
+            });
+        }
+
+        /// <summary>
         /// Set permissions.
         /// </summary>
         /// <param name="username">the name of an existing user</param>

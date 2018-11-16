@@ -106,7 +106,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "overview", 10, "given", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "overview", 10, "all", "", "all", null, null, false);
 
             Validate(history);
         }
@@ -117,7 +117,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "submitted", 10, "given", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "submitted", 10, "all", null, "all", "", "", false);
 
             Validate(history);
         }
@@ -128,7 +128,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "upvoted", 10, "given", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "upvoted", 10, "all", "top", "all", null, null, false);
 
             Validate(history);
         }
@@ -139,7 +139,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "downvoted", 10, "given", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "downvoted", 10, "all", "top", "all", null, null, false);
 
             Validate(history);
         }
@@ -150,7 +150,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "hidden", 10, "given", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "hidden", 10, "all", "top", "all", null, null, false);
 
             Validate(history);
         }
@@ -161,7 +161,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "saved", 10, "given", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "saved", 10, "all", "top", "all", null, null, false);
 
             Validate(history);
         }
@@ -172,7 +172,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "gilded", 10, "all", "top", "all", null, null, false);
 
             Validate(history, true);
         }
@@ -183,7 +183,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "comments", 10, "given", "top", "all", null, null, false);
+            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "comments", 10, "all", "top", "all", null, null, false);
 
             Validate(history);
         }
@@ -194,7 +194,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "saved", 10, "given", "top", "all", null, null, false);
+            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "saved", 10, "all", "top", "all", null, null, false);
 
             Validate(history);
         }
@@ -205,7 +205,7 @@ namespace Reddit.NETTests.ModelTests
             Dictionary<string, string> testData = GetData();
             RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
-            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "gilded", 10, "given", "top", "all", null, null, false);
+            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "gilded", 10, "all", "top", "all", null, null, false);
 
             Validate(history, true);
         }
