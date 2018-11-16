@@ -1,6 +1,7 @@
 ﻿using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
@@ -258,7 +259,7 @@ namespace Reddit.NET.Controllers
         /// <param name="context">an integer between 2 and 10</param>
         /// <param name="t">one of (hour, day, week, month, year, all)</param>
         /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="sort">one of (hot, new, top, controversial)</param>
+        /// <param name="sort">one of (hot, new, newForced, top, controversial)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
         /// <param name="includeCategories">boolean value</param>
@@ -270,7 +271,34 @@ namespace Reddit.NET.Controllers
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            return GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, sort, t, after, before, includeCategories, count, limit, srDetail)), Dispatch);
+            if (sort.Equals("newForced", StringComparison.OrdinalIgnoreCase))
+            {
+                return ForceNewSort(GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, "new", t, after, before, includeCategories, count, limit, srDetail)),
+                    Dispatch));
+            }
+            else
+            {
+                return GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, sort, t, after, before, includeCategories, count, limit, srDetail)), Dispatch);
+            }
+        }
+
+        /// <summary>
+        /// The Reddit API doesn't always return new-sorted posts in the correct chronological order (pinned posts are always on top, for example).
+        /// Use this method to give the list a proper sort.
+        /// </summary>
+        /// <param name="posts">A list of posts</param>
+        /// <param name="descending">If true, sort by descending order (newest first); otherwise, sort by ascending order (oldest first)</param>
+        /// <returns>A chronologically sorted list of posts.</returns>
+        public List<Post> ForceNewSort(List<Post> posts, bool descending = true)
+        {
+            if (descending)
+            {
+                return posts.OrderByDescending(p => p.Created).ToList();
+            }
+            else
+            {
+                return posts.OrderBy(p => p.Created).ToList();
+            }
         }
 
         /// <summary>

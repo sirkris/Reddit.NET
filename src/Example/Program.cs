@@ -33,6 +33,13 @@ namespace Example
                 Console.WriteLine("Username: " + me.Name);
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
 
+                // Get post and comment histories (note that pinned profile posts appear at the top even on new sort; use "newForced" sort as a workaround).  --Kris
+                List<Post> postHistory = reddit.User(me.Name).PostHistory("overview", sort: "newForced");
+                List<Comment> commentHistory = reddit.User(me.Name).CommentHistory(sort: "new");
+
+                Console.WriteLine("Most recent post: " + postHistory[0].Title);
+                Console.WriteLine("Most recent comment: " + commentHistory[0].Body);
+
                 // Create a new subreddit.  --Kris
                 //Subreddit newSub = reddit.Subreddit("RDNBotSub", "Test Subreddit", "Test sub created by Reddit.NET", "My sidebar.").Create();
 
@@ -50,7 +57,7 @@ namespace Example
                 Console.WriteLine("Subreddit Description: " + sub.Description);
 
                 // Get submit text.  --Kris
-                Console.WriteLine("Submit text: " + sub.SubmitText.ToString());
+                /*Console.WriteLine("Submit text: " + sub.SubmitText.ToString());
 
                 // Get moderators.  --Kris
                 List<Moderator> moderators = sub.GetModerators();
@@ -69,7 +76,7 @@ namespace Example
                         break;
                     }
                 }
-                Console.WriteLine("}");
+                Console.WriteLine("}");*/
 
                 // Get approved submitters (requires mod access).  --Kris
                 /*List<SubredditUser> contributors = reddit.Subreddit("StillSandersForPres").GetContributors();
