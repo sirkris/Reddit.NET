@@ -245,7 +245,7 @@ namespace Reddit.NET.Controllers
             return SubredditData;
         }
 
-        public override void UpdateMonitoring(Dictionary<string, string> monitoring)
+        public override void UpdateMonitoring(Dictionary<string, List<string>> monitoring)
         {
             Monitoring = monitoring;
             if (Posts != null)

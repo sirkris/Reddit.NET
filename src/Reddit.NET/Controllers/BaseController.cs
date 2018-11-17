@@ -3,6 +3,7 @@ using Reddit.NET.Controllers.EventArgs;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Reddit.NET.Controllers
@@ -10,7 +11,7 @@ namespace Reddit.NET.Controllers
     public abstract class BaseController
     {
         // Value is always null.  --Kris
-        public Dictionary<string, string> Monitoring;
+        public Dictionary<string, List<string>> Monitoring;
 
         public event EventHandler<MonitoringUpdateEventArgs> MonitoringUpdated;
 
@@ -18,21 +19,26 @@ namespace Reddit.NET.Controllers
 
         public BaseController()
         {
-            Monitoring = new Dictionary<string, string>();
+            Monitoring = new Dictionary<string, List<string>>();
             MonitoringUpdated += C_MonitoringUpdated;
         }
 
-        public void WaitOrDie(Thread thread, int timeout = 3)
+        public void WaitOrDie(Thread thread, int timeout = 60)
         {
             DateTime start = DateTime.Now;
             while (thread.IsAlive)
             {
                 if (start.AddSeconds(timeout) <= DateTime.Now)
                 {
-                    thread.Abort();
-                    break;
+                    // Thread.Abort was removed from .NET Core.  --Kris
+                    throw new RedditControllerException("Unable to terminate monitoring thread (thread not responding).");
                 }
             }
+        }
+
+        public int MonitoringCount()
+        {
+            return Monitoring.Sum(x => x.Value.Count);
         }
 
         protected virtual void OnMonitoringUpdated(MonitoringUpdateEventArgs e)
@@ -40,7 +46,7 @@ namespace Reddit.NET.Controllers
             MonitoringUpdated?.Invoke(this, e);
         }
 
-        public virtual void UpdateMonitoring(Dictionary<string, string> monitoring)
+        public virtual void UpdateMonitoring(Dictionary<string, List<string>> monitoring)
         {
             Monitoring = monitoring;
         }

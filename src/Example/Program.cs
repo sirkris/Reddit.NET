@@ -156,6 +156,24 @@ namespace Example
                 sub.Posts.NewUpdated += C_NewPostsUpdated;
                 sub.Posts.MonitorNew();  // Toggle on.
 
+                // But wait, there's more!  We can monitor posts on multiple subreddits at once (delay is automatically multiplied to keep us under speed the limit).  --Kris
+                Subreddit funny = reddit.Subreddit("funny");
+                Subreddit worldnews = reddit.Subreddit("worldnews");
+
+                // Before monitoring, let's grab the posts once so we have a point of comparison when identifying new posts that come in.  --Kris
+                funny.Posts.GetNew();
+                worldnews.Posts.GetNew();
+
+                Console.WriteLine("Monitoring funny for new posts....");
+
+                funny.Posts.NewUpdated += C_NewPostsUpdated;
+                funny.Posts.MonitorNew();  // Toggle on.
+
+                Console.WriteLine("Monitoring worldnews for new posts....");
+
+                worldnews.Posts.NewUpdated += C_NewPostsUpdated;
+                worldnews.Posts.MonitorNew();  // Toggle on.
+
                 DateTime start = DateTime.Now;
                 while (start.AddMinutes(1) > DateTime.Now) { }
 
@@ -163,8 +181,31 @@ namespace Example
                 sub.Posts.MonitorNew();  // Toggle off.
                 sub.Posts.NewUpdated -= C_NewPostsUpdated;
 
+                funny.Posts.MonitorNew();  // Toggle off.
+                funny.Posts.NewUpdated -= C_NewPostsUpdated;
+
+                worldnews.Posts.MonitorNew();  // Toggle off.
+                worldnews.Posts.NewUpdated -= C_NewPostsUpdated;
+
                 Console.WriteLine("Done monitoring!");
-                
+
+                // Now let's monitor r/all for a bit.  --Kris
+                Subreddit all = reddit.Subreddit("all");
+                all.Posts.GetNew();
+
+                Console.WriteLine("Monitoring r/all for new posts....");
+
+                all.Posts.MonitorNew();  // Toggle on.
+                all.Posts.NewUpdated += C_NewPostsUpdated;
+
+                start = DateTime.Now;
+                while (start.AddMinutes(1) > DateTime.Now) { }
+
+                all.Posts.MonitorNew();  // Toggle off.
+                all.Posts.NewUpdated -= C_NewPostsUpdated;
+
+                Console.WriteLine("Done monitoring!");
+
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
                 /*
                 File.WriteAllText("Account.Trophies.json", JsonConvert.SerializeObject(reddit.Models.Account.Trophies()));
@@ -353,7 +394,8 @@ namespace Example
                 //File.WriteAllText("Emoji.AcquireLease.json", JsonConvert.SerializeObject(reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.png", "image/png")));
 
                 // Upload Emoji image to Reddit.  --Kris
-                */byte[] imageData;
+                */
+                byte[] imageData;
                 using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Example.Resources.birdie.png"))
                 {
                     using (BinaryReader binaryReader = new BinaryReader(stream))
@@ -530,7 +572,7 @@ namespace Example
         {
             foreach (Post post in e.Added)
             {
-                Console.WriteLine("New Post by " + post.Author + ": " + post.Title);
+                Console.WriteLine("[" + post.Subreddit + "] New Post by " + post.Author + ": " + post.Title);
             }
         }
     }

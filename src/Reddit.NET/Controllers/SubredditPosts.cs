@@ -336,44 +336,76 @@ namespace Reddit.NET.Controllers
 
         private bool Monitor(string key, Thread thread)
         {
-            if (Subreddit.Monitoring.ContainsKey(key))
+            if (Subreddit.Monitoring.ContainsKey(key)
+                && Subreddit.Monitoring[key].Contains(Subreddit.Name))
             {
                 // Stop monitoring.  --Kris
-                Subreddit.Monitoring.Remove(key);
+                RemoveMonitoringKey(key);
                 WaitOrDie(Threads[key]);
-
-                // Event handler to populate Monitoring across all controllers.  --Kris
-                MonitoringUpdateEventArgs args = new MonitoringUpdateEventArgs
-                {
-                    Monitoring = Subreddit.Monitoring
-                };
-                OnMonitoringUpdated(args);
 
                 return false;
             }
             else
             {
                 // Start monitoring.  --Kris
-                Subreddit.Monitoring.Add(key, null);
+                AddMonitoringKey(key);
 
                 Threads.Add(key, thread);
                 Threads[key].Start();
                 while (!Threads[key].IsAlive) { }
 
-                // Event handler to populate Monitoring across all controllers.  --Kris
-                MonitoringUpdateEventArgs args = new MonitoringUpdateEventArgs
-                {
-                    Monitoring = Subreddit.Monitoring
-                };
-                OnMonitoringUpdated(args);
-
                 return true;
             }
         }
 
+        private void UpdateMonitoringArgs()
+        {
+            // Event handler to populate Monitoring across all controllers.  --Kris
+            MonitoringUpdateEventArgs args = new MonitoringUpdateEventArgs
+            {
+                Monitoring = Subreddit.Monitoring
+            };
+            OnMonitoringUpdated(args);
+        }
+
+        private void AddMonitoringKey(string key)
+        {
+            if (Subreddit.Monitoring.ContainsKey(key)
+                && Subreddit.Monitoring[key].Contains(Subreddit.Name))
+            {
+                throw new RedditControllerException("That object is already being monitored.");
+            }
+            else if (Subreddit.Monitoring.ContainsKey(key))
+            {
+                Subreddit.Monitoring[key].Add(Subreddit.Name);
+            }
+            else
+            {
+                Subreddit.Monitoring.Add(key, new List<string> { Subreddit.Name });
+            }
+
+            UpdateMonitoringArgs();
+        }
+
+        private void RemoveMonitoringKey(string key)
+        {
+            if (Subreddit.Monitoring.ContainsKey(key)
+                && Subreddit.Monitoring[key].Contains(Subreddit.Name))
+            {
+                Subreddit.Monitoring[key].Remove(Subreddit.Name);
+            }
+            else
+            {
+                throw new RedditControllerException("That object is not being monitored.");
+            }
+
+            UpdateMonitoringArgs();
+        }
+
         private void MonitorThread(string key, string type)
         {
-            while (Subreddit.Monitoring.ContainsKey(key))
+            while (Subreddit.Monitoring.ContainsKey(key) 
+                && Subreddit.Monitoring[key].Contains(Subreddit.Name))
             {
                 List<Post> oldList;
                 List<Post> newList;
@@ -475,7 +507,7 @@ namespace Reddit.NET.Controllers
                     }
                 }
 
-                Thread.Sleep(Subreddit.Monitoring.Count * MonitoringWaitDelayMS);
+                Thread.Sleep(MonitoringCount() * MonitoringWaitDelayMS);
             }
         }
 

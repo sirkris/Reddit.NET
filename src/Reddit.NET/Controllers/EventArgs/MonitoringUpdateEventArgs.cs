@@ -4,6 +4,6 @@ namespace Reddit.NET.Controllers.EventArgs
 {
     public class MonitoringUpdateEventArgs
     {
-        public Dictionary<string, string> Monitoring { get; set; }
+        public Dictionary<string, List<string>> Monitoring { get; set; }
     }
 }
