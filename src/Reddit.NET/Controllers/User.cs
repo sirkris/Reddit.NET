@@ -1,4 +1,5 @@
-﻿using RedditThings = Reddit.NET.Models.Structures;
+﻿using Reddit.NET.Exceptions;
+using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,6 +17,7 @@ namespace Reddit.NET.Controllers
         public bool IsVerified;
         public bool HasNewModmail;
         public string Id;
+        public string Fullname;
         public bool Over18;
         public bool IsGold;
         public bool IsMod;
@@ -36,34 +38,49 @@ namespace Reddit.NET.Controllers
 
         public User(Dispatch dispatch, RedditThings.User user)
         {
-            IsFriend = user.IsFriend;
-            ProfanityFilter = user.PrefNoProfanity;
-            IsSuspended = user.IsSuspended;
-            HasGoldSubscription = user.HasGoldSubscription;
-            NumFriends = user.NumFriends;
-            IsVerified = user.Verified;
-            HasNewModmail = user.NewModmailExists;
-            Id = user.Id;
-            Over18 = user.Over18;
-            IsGold = user.IsGold;
-            IsMod = user.IsMod;
-            HasVerifiedEmail = user.HasVerifiedEmail;
-            IconImg = user.IconImg;
-            HasModmail = user.HasModMail;
-            LinkKarma = user.LinkKarma;
-            InboxCount = user.InboxCount;
-            HasMail = user.HasMail;
-            Name = user.Name;
-            Created = user.Created;
-            CommentKarma = user.CommentKarma;
-            HasSubscribed = user.HasSubscribed;
+            Import(user);
+            Dispatch = dispatch;
+        }
 
-            UserData = user;
-
+        public User(Dispatch dispatch, User user)
+        {
+            Import(user);
             Dispatch = dispatch;
         }
 
         public User(Dispatch dispatch, string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
+            bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
+            bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
+            bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
+        {
+            Import(name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
+                hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
+
+            Dispatch = dispatch;
+        }
+
+        public User(Dispatch dispatch)
+        {
+            Dispatch = dispatch;
+        }
+
+        private void Import(RedditThings.User user)
+        {
+            Import(user.Name, user.Id, user.IsFriend, user.PrefNoProfanity, user.IsSuspended, user.HasGoldSubscription, user.NumFriends,
+                user.Verified, user.NewModmailExists, user.Over18, user.IsGold, user.IsMod, user.HasVerifiedEmail, user.IconImg, user.HasModMail,
+                user.LinkKarma, user.InboxCount, user.HasMail, user.Created, user.CommentKarma, user.HasSubscribed);
+
+            UserData = user;
+        }
+
+        private void Import(User user)
+        {
+            Import(user.Name, user.Id, user.IsFriend, user.ProfanityFilter, user.IsSuspended, user.HasGoldSubscription, user.NumFriends,
+                user.IsVerified, user.HasNewModmail, user.Over18, user.IsGold, user.IsMod, user.HasVerifiedEmail, user.IconImg, user.HasModmail,
+                user.LinkKarma, user.InboxCount, user.HasMail, user.Created, user.CommentKarma, user.HasSubscribed);
+        }
+
+        private void Import(string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
@@ -76,6 +93,7 @@ namespace Reddit.NET.Controllers
             this.IsVerified = IsVerified;
             HasNewModmail = hasNewModmail;
             Id = id;
+            Fullname = (!string.IsNullOrWhiteSpace(Id) ? "t2_" + Id : null);
             Over18 = over18;
             IsGold = isGold;
             IsMod = isMod;
@@ -91,13 +109,22 @@ namespace Reddit.NET.Controllers
             HasSubscribed = hasSubscribed;
 
             UserData = new RedditThings.User(this);
-
-            Dispatch = dispatch;
         }
 
-        public User(Dispatch dispatch)
+        /// <summary>
+        /// For use in methods whose endpoints require a fullname.
+        /// </summary>
+        private void CheckFullname()
         {
-            Dispatch = dispatch;
+            if (Fullname == null)
+            {
+                if (string.IsNullOrWhiteSpace(Name))
+                {
+                    throw new RedditControllerException("This action requires a named user instance.");
+                }
+
+                Import(About());
+            }
         }
 
         // TODO - Break this fucker up into multiple methods.  --Kris
@@ -321,6 +348,206 @@ namespace Reddit.NET.Controllers
         {
             return GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", context, show, sort, t, after, before, includeCategories, count, limit, 
                 srDetail)), Dispatch);
+        }
+
+        /// <summary>
+        /// Delete flair.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        public void DeleteFlair(string subreddit)
+        {
+            Validate(Dispatch.Flair.DeleteFlair(Name, subreddit));
+        }
+
+        /// <summary>
+        /// Delete flair asynchronously.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        public async void DeleteFlairAsync(string subreddit)
+        {
+            await Task.Run(() =>
+            {
+                DeleteFlair(subreddit);
+            });
+        }
+
+        /// <summary>
+        /// Create a new user flair.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <param name="text">The flair text</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public void CreateFlair(string subreddit, string text, string cssClass = "")
+        {
+            Validate(Dispatch.Flair.Create(cssClass, "", Name, text, subreddit));
+        }
+
+        /// <summary>
+        /// Create a new user flair asynchronously.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <param name="text">The flair text</param>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        public async void CreateFlairAsync(string subreddit, string text, string cssClass = "")
+        {
+            await Task.Run(() =>
+            {
+                CreateFlair(subreddit, text, cssClass);
+            });
+        }
+
+        /// <summary>
+        /// List of flairs.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 1000)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>Flair list results.</returns>
+        public List<RedditThings.FlairListResult> FlairList(string subreddit = "", int limit = 25, string after = "", string before = "", int count = 0,
+            string show = "all", bool srDetail = false)
+        {
+            return Validate(Dispatch.Flair.FlairList(after, before, Name, subreddit, count, limit, show, srDetail)).Users;
+        }
+
+        /// <summary>
+        /// Return information about a users's flair options.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>Flair results.</returns>
+        public RedditThings.FlairSelectorResultContainer FlairSelector(string subreddit)
+        {
+            return Validate(Dispatch.Flair.FlairSelector(Name, subreddit));
+        }
+
+        /// <summary>
+        /// Invite another user to contribute to a live thread.
+        /// Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="permissions">permission description e.g. +update,+edit,-manage</param>
+        /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
+        public void InviteToLiveThread(string thread, string permissions, string type)
+        {
+            Validate(Dispatch.LiveThreads.InviteContributor(thread, Name, permissions, type));
+        }
+
+        /// <summary>
+        /// Asynchronously invite another user to contribute to a live thread.
+        /// Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="permissions">permission description e.g. +update,+edit,-manage</param>
+        /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
+        public async void InviteToLiveThreadAsync(string thread, string permissions, string type)
+        {
+            await Task.Run(() =>
+            {
+                InviteToLiveThread(thread, permissions, type);
+            });
+        }
+
+        /// <summary>
+        /// Revoke another user's contributorship.
+        /// Requires the manage permission for this thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public void RemoveFromLiveThread(string thread)
+        {
+            CheckFullname();
+
+            Validate(Dispatch.LiveThreads.RemoveContributor(thread, Fullname));
+        }
+
+        /// <summary>
+        /// Revoke another user's contributorship asynchronously.
+        /// Requires the manage permission for this thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public async void RemoveFromLiveThreadAsync(string thread)
+        {
+            await Task.Run(() =>
+            {
+                RemoveFromLiveThread(thread);
+            });
+        }
+
+        /// <summary>
+        /// Revoke an outstanding contributor invite.
+        /// Requires the manage permission for this thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public void RevokeLiveThreadInvitation(string thread)
+        {
+            CheckFullname();
+
+            Validate(Dispatch.LiveThreads.RemoveContributorInvite(thread, Fullname));
+        }
+
+        /// <summary>
+        /// Revoke an outstanding contributor invite asynchronously.
+        /// Requires the manage permission for this thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public async void RevokeLiveThreadInvitationAsync(string thread)
+        {
+            await Task.Run(() =>
+            {
+                RevokeLiveThreadInvitation(thread);
+            });
+        }
+
+        /// <summary>
+        /// Change a contributor or contributor invite's permissions.
+        /// Requires the manage permission for this thread.
+        /// Note that permissions overrides the previous value completely.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="permissions">permission description e.g. +update,+edit,-manage</param>
+        /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
+        public void SetLiveThreadPermissions(string thread, string permissions, string type)
+        {
+            Validate(Dispatch.LiveThreads.SetContributorPermissions(thread, Name, permissions, type));
+        }
+
+        /// <summary>
+        /// Change a contributor or contributor invite's permissions asynchronously.
+        /// Requires the manage permission for this thread.
+        /// Note that permissions overrides the previous value completely.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="permissions">permission description e.g. +update,+edit,-manage</param>
+        /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
+        public async void SetLiveThreadPermissionsAsync(string thread, string permissions, string type)
+        {
+            await Task.Run(() =>
+            {
+                SetLiveThreadPermissions(thread, permissions, type);
+            });
+        }
+
+        /// <summary>
+        /// Fetch a list of public multis belonging to this user.
+        /// </summary>
+        /// <param name="expandSrs">boolean value</param>
+        /// <returns>A list of multis.</returns>
+        public List<RedditThings.LabeledMulti> Multis(bool expandSrs = false)
+        {
+            List<RedditThings.LabeledMultiContainer> labeledMultiContainers = Dispatch.Multis.User(Name, expandSrs);
+
+            List<RedditThings.LabeledMulti> res = new List<RedditThings.LabeledMulti>();
+            if (labeledMultiContainers != null)
+            {
+                foreach (RedditThings.LabeledMultiContainer labeledMultiContainer in labeledMultiContainers)
+                {
+                    res.Add(labeledMultiContainer.Data);
+                }
+            }
+
+            return res;
         }
     }
 }
