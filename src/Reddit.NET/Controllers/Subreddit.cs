@@ -1252,7 +1252,7 @@ namespace Reddit.NET.Controllers
         }
 
         // TODO - Add Emoji and Widgets endpoints once the S3 image upload issue is solved.  --Kris
-        
+
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit", "My New Subreddit", "Some description.", "This is my sidebar!").Create();
         // Equivalent to:  reddit.Models.Subreddits.SiteAdmin(name:"MyNewSubreddit", title:"My New Subreddit", publicDescription:"Some description", description:"This is my sidebar!", ...);
         //                 Subreddit sub = reddit.Subreddit(reddit.Models.Subreddits.About("MyNewSubreddit"));

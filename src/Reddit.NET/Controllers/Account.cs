@@ -356,5 +356,73 @@ namespace Reddit.NET.Controllers
         {
             return GetMessages("sent", mark, limit, after, before, show, srDetail, includeCategories, count, mid);
         }
+
+        /// <summary>
+        /// Get subreddits that the current user is subscribed to.
+        /// </summary>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of Subreddit objects.</returns>
+        public List<Subreddit> MySubscribedSubreddits(int limit = 25, string after = "", string before = "", string show = "all",
+            bool srDetail = true, bool includeCategories = false, int count = 0)
+        {
+            return GetSubreddits(Dispatch.Subreddits.Mine("subscriber", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
+        }
+
+        /// <summary>
+        /// Get subreddits that the current user is an approved submitter in.
+        /// </summary>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of Subreddit objects.</returns>
+        public List<Subreddit> MyContributingSubreddits(int limit = 25, string after = "", string before = "", string show = "all",
+            bool srDetail = true, bool includeCategories = false, int count = 0)
+        {
+            return GetSubreddits(Dispatch.Subreddits.Mine("contributor", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
+        }
+
+        /// <summary>
+        /// Get subreddits that the current user is a moderator of.
+        /// </summary>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of Subreddit objects.</returns>
+        public List<Subreddit> MyModeratorSubreddits(int limit = 25, string after = "", string before = "", string show = "all",
+            bool srDetail = true, bool includeCategories = false, int count = 0)
+        {
+            return GetSubreddits(Dispatch.Subreddits.Mine("moderator", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
+        }
+
+        /// <summary>
+        /// Get subreddits that the current user is subscribed to that contain hosted video links.
+        /// </summary>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of Subreddit objects.</returns>
+        public List<Subreddit> MyStreamingSubreddits(int limit = 25, string after = "", string before = "", string show = "all",
+            bool srDetail = true, bool includeCategories = false, int count = 0)
+        {
+            return GetSubreddits(Dispatch.Subreddits.Mine("streams", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
+        }
     }
 }

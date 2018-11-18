@@ -646,7 +646,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Get subreddits the user has a relationship with.
         /// The where parameter chooses which subreddits are returned as follows:

@@ -144,6 +144,20 @@ namespace Reddit.NET.Controllers
             return comments;
         }
 
+        public List<Subreddit> GetSubreddits(RedditThings.SubredditContainer subredditContainer, Dispatch dispatch)
+        {
+            List<Subreddit> subreddits = new List<Subreddit>();
+            foreach (RedditThings.SubredditChild subredditChild in subredditContainer.Data.Children)
+            {
+                if (subredditChild.Data != null)
+                {
+                    subreddits.Add(new Subreddit(dispatch, subredditChild.Data));
+                }
+            }
+
+            return subreddits;
+        }
+
         public Exception BuildException(Exception ex, List<List<string>> errors)
         {
             ex.Data.Add("errors", errors);

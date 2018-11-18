@@ -549,5 +549,51 @@ namespace Reddit.NET.Controllers
 
             return res;
         }
+
+        /// <summary>
+        /// Allow this user to edit the specified wiki page on the specified subreddit.
+        /// </summary>
+        /// <param name="page">the name of an existing wiki page</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public void AllowWikiEdit(string page, string subreddit = null)
+        {
+            Dispatch.Wiki.AllowEditor(page, Name, subreddit);
+        }
+
+        /// <summary>
+        /// Asynchronously allow this user to edit the specified wiki page on the specified subreddit.
+        /// </summary>
+        /// <param name="page">the name of an existing wiki page</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async void AllowWikiEditAsync(string page, string subreddit = null)
+        {
+            await Task.Run(() =>
+            {
+                AllowWikiEdit(page, subreddit);
+            });
+        }
+
+        /// <summary>
+        /// Deny this user from editing the specified wiki page on the specified subreddit.
+        /// </summary>
+        /// <param name="page">the name of an existing wiki page</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public void DenyWikiEdit(string page, string subreddit = null)
+        {
+            Dispatch.Wiki.DenyEditor(page, Name, subreddit);
+        }
+
+        /// <summary>
+        /// Asynchronously deny this user from editing the specified wiki page on the specified subreddit.
+        /// </summary>
+        /// <param name="page">the name of an existing wiki page</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async void DenyWikiEditAsync(string page, string subreddit = null)
+        {
+            await Task.Run(() =>
+            {
+                DenyWikiEdit(page, subreddit);
+            });
+        }
     }
 }
