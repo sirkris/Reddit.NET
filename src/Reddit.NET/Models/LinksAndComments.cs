@@ -157,8 +157,10 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Retrieve additional comments omitted from a base comment tree.
         /// When a comment tree is rendered, the most relevant comments are selected for display first.
-        /// Remaining comments are stubbed out with "MoreComments" links. This API call is used to retrieve the additional comments represented by those stubs, up to 100 at a time.
-        /// The two core parameters required are link and children. link is the fullname of the link whose comments are being fetched. children is a comma-delimited list of comment ID36s that need to be fetched.
+        /// Remaining comments are stubbed out with "MoreComments" links. 
+        /// This API call is used to retrieve the additional comments represented by those stubs, up to 100 at a time.
+        /// The two core parameters required are link and children. link is the fullname of the link whose comments are being fetched. 
+        /// children is a comma-delimited list of comment ID36s that need to be fetched.
         /// If id is passed, it should be the ID of the MoreComments object this call is replacing. This is needed only for the HTML UI's purposes and is optional otherwise.
         /// NOTE: you may only make one request at a time to this API endpoint. Higher concurrency will result in an error being returned.
         /// If limit_children is True, only return the children requested.
@@ -215,7 +217,7 @@ namespace Reddit.NET.Models
         /// <param name="siteReason">a string no longer than 100 characters</param>
         /// <param name="srName">a string no longer than 1000 characters</param>
         /// <param name="thingId">fullname of a thing</param>
-        /// <param name="violatorUsername"></param>
+        /// <param name="violatorUsername">A valid Reddit username</param>
         /// <returns>A return object indicating success.</returns>
         public JQueryReturn Report(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string srName, string thingId,
@@ -328,7 +330,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Set a suggested sort for a link.
         /// Suggested sorts are useful to display comments in a certain preferred way for posts.
-        /// For example, casual conversation may be better sorted by new by default, or AMAs may be sorted by Q&A.A sort of an empty string clears the default sort.
+        /// For example, casual conversation may be better sorted by new by default, or AMAs may be sorted by Q&A.
+        /// A sort of an empty string clears the default sort.
         /// </summary>
         /// <param name="id">fullname of a link</param>
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live, blank)</param>
@@ -443,7 +446,7 @@ namespace Reddit.NET.Models
 
         /// <summary>
         /// Unlock a link.
-        /// Allow a post to receive new comments.
+        /// Allows a post to receive new comments.
         /// See also: /api/lock.
         /// </summary>
         /// <param name="id">fullname of a link</param>

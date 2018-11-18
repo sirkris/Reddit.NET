@@ -421,5 +421,48 @@ namespace Reddit.NET.Controllers
 
             return postResultShort;
         }
+
+        public RedditThings.PostResultContainer Validate(RedditThings.PostResultContainer postResultContainer)
+        {
+            CheckNull(postResultContainer);
+            CheckNull(postResultContainer.JSON, "Reddit API returned an empty response object.");
+            CheckErrors(postResultContainer.JSON.Errors);
+            CheckNull(postResultContainer.JSON.Data, "Reddit API returned a response object with null data.");
+            CheckNull(postResultContainer.JSON.Data.Things, "Reddit API returned a response object with empty data.");
+
+            if (postResultContainer.JSON.Data.Things.Count == 0)
+            {
+                throw new RedditControllerException("Reddit API returned a PostResultContainer with an empty result list.");
+            }
+
+            return postResultContainer;
+        }
+
+        public RedditThings.PostResult Validate(RedditThings.PostResult postResult)
+        {
+            CheckNull(postResult);
+            CheckErrors(postResult.Errors);
+            CheckNull(postResult.Data, "Reddit API returned an empty response object.");
+            CheckNull(postResult.Data.Things, "Reddit API returned a response object with empty data.");
+
+            if (postResult.Data.Things.Count == 0)
+            {
+                throw new RedditControllerException("Reddit API returned a PostResult with an empty result list.");
+            }
+
+            return postResult;
+        }
+
+        public RedditThings.JQueryReturn Validate(RedditThings.JQueryReturn jQueryReturn)
+        {
+            CheckNull(jQueryReturn);
+
+            if (!jQueryReturn.Success)
+            {
+                throw new RedditControllerException("Reddit API returned a non-success response.");
+            }
+
+            return jQueryReturn;
+        }
     }
 }

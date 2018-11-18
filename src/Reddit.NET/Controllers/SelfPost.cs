@@ -1,4 +1,5 @@
-﻿using RedditThings = Reddit.NET.Models.Structures;
+﻿using Reddit.NET.Exceptions;
+using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Threading.Tasks;
 
@@ -103,6 +104,48 @@ namespace Reddit.NET.Controllers
             {
                 Submit(resubmit, ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
             });
+        }
+
+        /// <summary>
+        /// Edit the body text of this self post.  This instance will be automatically updated with the return data.
+        /// </summary>
+        /// <param name="text">raw markdown text</param>
+        /// <returns>This instance populated with the modified post data returned by the API.</returns>
+        public SelfPost Edit(string text)
+        {
+            Import(Validate(Dispatch.LinksAndComments.EditUserText(false, null, text, Fullname)).JSON.Data.Things[0].Data);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Edit the body text of this self post asynchronously.  This instance will be automatically updated with the return data.
+        /// </summary>
+        /// <param name="text">raw markdown text</param>
+        public async void EditAsync(string text)
+        {
+            await Task.Run(() =>
+            {
+                Edit(text);
+            });
+        }
+
+        /// <summary>
+        /// Return information about the current SelfPost instance.
+        /// </summary>
+        /// <returns>An instance of this class populated with the retrieved data.</returns>
+        public SelfPost About()
+        {
+            RedditThings.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            if (info == null
+                || info.Posts == null
+                || info.Posts.Count == 0
+                || Fullname.Equals(info.Posts[0].Name))
+            {
+                throw new RedditControllerException("Unable to retrieve post data.");
+            }
+
+            return new SelfPost(Dispatch, info.Posts[0]);
         }
     }
 }
