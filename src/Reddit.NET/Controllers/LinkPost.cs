@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
+using RedditThings = Reddit.NET.Models.Structures;
 using System;
+using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
@@ -13,65 +15,80 @@ namespace Reddit.NET.Controllers
 
         public LinkPost(Dispatch dispatch, Models.Structures.Post listing) : base(dispatch, listing)
         {
-            this.Preview = listing.Preview;
-            this.URL = listing.URL;
-            this.Thumbnail = listing.Thumbnail;
-            this.ThumbnailHeight = listing.ThumbnailHeight;
-            this.ThumbnailWidth = listing.ThumbnailWidth;
+            Preview = listing.Preview;
+            URL = listing.URL;
+            Thumbnail = listing.Thumbnail;
+            ThumbnailHeight = listing.ThumbnailHeight;
+            ThumbnailWidth = listing.ThumbnailWidth;
         }
 
         public LinkPost(Dispatch dispatch, string subreddit, string title, string author, string url, string thumbnail = null,
             int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
             string id = null, string name = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
-            bool removed = false, bool spam = false)
+            bool removed = false, bool spam = false, bool nsfw = false)
             : base(dispatch, subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
-                  removed, spam)
+                  removed, spam, nsfw)
         {
-            this.Preview = preview;
-            this.URL = url;
-            this.Thumbnail = thumbnail;
-            this.ThumbnailHeight = thumbnailHeight;
-            this.ThumbnailWidth = thumbnailWidth;
+            Preview = preview;
+            URL = url;
+            Thumbnail = thumbnail;
+            ThumbnailHeight = thumbnailHeight;
+            ThumbnailWidth = thumbnailWidth;
 
-            this.Listing = new Models.Structures.Post(this);
+            Listing = new RedditThings.Post(this);
         }
 
         public LinkPost(Dispatch dispatch) : base(dispatch) { }
 
-        public override bool Submit()
+        /// <summary>
+        /// Submit this link post to Reddit.  This instance will automatically be updated with the resulting fullname/id.
+        /// </summary>
+        /// <param name="resubmit">boolean value</param>
+        /// <param name="ad">boolean value</param>
+        /// <param name="app"></param>
+        /// <param name="extension">extension used for redirects</param>
+        /// <param name="flairId">a string no longer than 36 characters</param>
+        /// <param name="flairText">a string no longer than 64 characters</param>
+        /// <param name="gRecapthaResponse"></param>
+        /// <param name="sendReplies">boolean value</param>
+        /// <param name="spoiler">boolean value</param>
+        /// <param name="videoPosterUrl">a valid URL</param>
+        /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
+        public override RedditThings.PostResultShortData Submit(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+            string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
+            string videoPosterUrl = "")
         {
-            if (!Validate())
+            RedditThings.PostResultShortData res = Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
+                gRecapthaResponse, "link", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, null, Title, URL, videoPosterUrl)).JSON.Data;
+
+            Id = res.Id;
+            Fullname = "t3_" + Id;
+
+            return res;
+        }
+
+        /// <summary>
+        /// Submit this link post to Reddit asynchronously.  This instance will automatically be updated with the resulting fullname/id.
+        /// </summary>
+        /// <param name="resubmit">boolean value</param>
+        /// <param name="ad">boolean value</param>
+        /// <param name="app"></param>
+        /// <param name="extension">extension used for redirects</param>
+        /// <param name="flairId">a string no longer than 36 characters</param>
+        /// <param name="flairText">a string no longer than 64 characters</param>
+        /// <param name="gRecapthaResponse"></param>
+        /// <param name="sendReplies">boolean value</param>
+        /// <param name="spoiler">boolean value</param>
+        /// <param name="videoPosterUrl">a valid URL</param>
+        public async void SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+            string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
+            string videoPosterUrl = "")
+        {
+            await Task.Run(() =>
             {
-                return false;
-            }
-
-            // TODO - Submit to Reddit, populate listing, and update properties.  --Kris
-
-
-            return true;
-        }
-
-        /// <summary>
-        /// Check to see if all required properties are present for submission to Reddit.
-        /// </summary>
-        /// <returns>Whether this instance is ready to submit.</returns>
-        public override bool Validate()
-        {
-            // TODO - Check required properties.  --Kris
-
-
-            return true;
-        }
-
-        /// <summary>
-        /// Query the Reddit API and populate this instance with the result.
-        /// <param name="subreddit">The subreddit where the post exists.</param>
-        /// </summary>
-        /// <param name="postId">The Reddit post ID.</param>
-        private void GetByPostId(string subreddit, string postId)
-        {
-            // TODO
+                Submit(resubmit, ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
+            });
         }
     }
 }

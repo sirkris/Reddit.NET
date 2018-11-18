@@ -347,38 +347,39 @@ namespace Reddit.NET.Models.Structures
 
         private void ImportFromPost(Controllers.Post post)
         {
-            this.Subreddit = post.Subreddit;
-            this.Title = post.Title;
-            this.Author = post.Author;
-            this.Id = post.Id;
-            this.Name = post.Fullname;
-            this.Permalink = post.Permalink;
-            this.Created = post.Created;
-            this.Edited = post.Edited;
-            this.Score = post.Score;
-            this.Ups = post.UpVotes;
-            this.Downs = post.DownVotes;
-            this.Removed = post.Removed;
-            this.Spam = post.Spam;
+            Subreddit = post.Subreddit;
+            Title = post.Title;
+            Author = post.Author;
+            Id = post.Id;
+            Name = post.Fullname;
+            Permalink = post.Permalink;
+            Created = post.Created;
+            Edited = post.Edited;
+            Score = post.Score;
+            Ups = post.UpVotes;
+            Downs = post.DownVotes;
+            Removed = post.Removed;
+            Spam = post.Spam;
+            Over18 = post.NSFW;
         }
 
         private void ImportFromSelfPost(SelfPost selfPost)
         {
             ImportFromPost(selfPost);
 
-            this.SelfText = selfPost.SelfText;
-            this.SelfTextHTML = selfPost.SelfTextHTML;
+            SelfText = selfPost.SelfText;
+            SelfTextHTML = selfPost.SelfTextHTML;
         }
 
         private void ImportFromLinkPost(LinkPost linkPost)
         {
             ImportFromPost(linkPost);
 
-            this.Preview = linkPost.Preview;
-            this.URL = linkPost.URL;
-            this.Thumbnail = linkPost.Thumbnail;
-            this.ThumbnailHeight = linkPost.ThumbnailHeight;
-            this.ThumbnailWidth = linkPost.ThumbnailWidth;
+            Preview = linkPost.Preview;
+            URL = linkPost.URL;
+            Thumbnail = linkPost.Thumbnail;
+            ThumbnailHeight = linkPost.ThumbnailHeight;
+            ThumbnailWidth = linkPost.ThumbnailWidth;
         }
 
         public Post() { }

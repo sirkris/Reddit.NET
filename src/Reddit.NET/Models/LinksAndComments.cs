@@ -372,6 +372,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Controller support for image, video, and videogif kinds.  --Kris
         /// <summary>
         /// Submit a link to a subreddit.
         /// Submit will create a link or self-post in the subreddit sr with the title title.
@@ -386,7 +387,7 @@ namespace Reddit.NET.Models
         /// <param name="extension">extension used for redirects</param>
         /// <param name="flairId">a string no longer than 36 characters</param>
         /// <param name="flairText">a string no longer than 64 characters</param>
-        /// <param name="gRecaptchaResopnse"></param>
+        /// <param name="gRecaptchaResponse"></param>
         /// <param name="kind">one of (link, self, image, video, videogif)</param>
         /// <param name="nsfw">boolean value</param>
         /// <param name="resubmit">boolean value</param>
@@ -399,7 +400,7 @@ namespace Reddit.NET.Models
         /// <param name="url">a valid URL</param>
         /// <param name="videoPosterUrl">a valid URL</param>
         /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
-        public PostResultShortContainer Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResopnse,
+        public PostResultShortContainer Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResponse,
             string kind, bool nsfw, bool resubmit, string richtextJson, bool sendReplies, bool spoiler, string sr, string text,
             string title, string url, string videoPosterUrl)
         {
@@ -410,7 +411,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("extension", extension);
             restRequest.AddParameter("flair_id", flairId);
             restRequest.AddParameter("flair_text", flairText);
-            restRequest.AddParameter("g-recaptcha-response", gRecaptchaResopnse);
+            restRequest.AddParameter("g-recaptcha-response", gRecaptchaResponse);
             restRequest.AddParameter("kind", kind);
             restRequest.AddParameter("nsfw", nsfw);
             restRequest.AddParameter("resubmit", resubmit);

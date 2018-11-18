@@ -7,7 +7,7 @@ namespace Reddit.NET.Controllers
     /// <summary>
     /// Base class for posts and comments.
     /// </summary>
-    public abstract class Post
+    public abstract class Post : BaseController
     {
         public string Subreddit;
         public string Title;
@@ -22,6 +22,7 @@ namespace Reddit.NET.Controllers
         public int DownVotes;
         public bool Removed;
         public bool Spam;
+        public bool NSFW;
 
         /// <summary>
         /// The full Listing object returned by the Reddit API;
@@ -30,7 +31,7 @@ namespace Reddit.NET.Controllers
 
         public List<Comment> Comments;  // TODO - Populate.  --Kris
 
-        private readonly Dispatch Dispatch;
+        internal readonly Dispatch Dispatch;
 
         public Post(Dispatch dispatch, RedditThings.Post listing)
         {
@@ -47,6 +48,7 @@ namespace Reddit.NET.Controllers
             DownVotes = listing.Downs;
             Removed = listing.Removed;
             Spam = listing.Spam;
+            NSFW = listing.Over18;
 
             Listing = listing;
 
@@ -55,7 +57,7 @@ namespace Reddit.NET.Controllers
 
         public Post(Dispatch dispatch, string subreddit, string title, string author, string id = null, string name = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
-            int downVotes = 0, bool removed = false, bool spam = false)
+            int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
             Subreddit = subreddit;
             Title = title;
@@ -70,6 +72,7 @@ namespace Reddit.NET.Controllers
             DownVotes = downVotes;
             Removed = removed;
             Spam = spam;
+            NSFW = nsfw;
 
             Listing = new RedditThings.Post(this);
 
@@ -81,7 +84,8 @@ namespace Reddit.NET.Controllers
             Dispatch = dispatch;
         }
 
-        abstract public bool Submit();
-        abstract public bool Validate();
+        abstract public RedditThings.PostResultShortData Submit(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+            string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
+            string videoPosterUrl = "");
     }
 }

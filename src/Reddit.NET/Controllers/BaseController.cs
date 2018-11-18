@@ -402,5 +402,24 @@ namespace Reddit.NET.Controllers
 
             return userPrefsData;
         }
+
+        public RedditThings.PostResultShortContainer Validate(RedditThings.PostResultShortContainer postResultShortContainer)
+        {
+            CheckNull(postResultShortContainer);
+            CheckNull(postResultShortContainer.JSON, "Reddit API returned an empty response object.");
+            CheckErrors(postResultShortContainer.JSON.Errors);
+            CheckNull(postResultShortContainer.JSON.Data, "Reddit API returned a response object with null data.");
+
+            return postResultShortContainer;
+        }
+
+        public RedditThings.PostResultShort Validate(RedditThings.PostResultShort postResultShort)
+        {
+            CheckNull(postResultShort);
+            CheckErrors(postResultShort.Errors);
+            CheckNull(postResultShort.Data, "Reddit API returned an empty response object.");
+
+            return postResultShort;
+        }
     }
 }

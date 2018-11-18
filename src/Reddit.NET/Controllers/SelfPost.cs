@@ -1,4 +1,6 @@
-﻿using System;
+﻿using RedditThings = Reddit.NET.Models.Structures;
+using System;
+using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
@@ -11,10 +13,10 @@ namespace Reddit.NET.Controllers
         /// Create new Self Post instance from Reddit API listing.
         /// </summary>
         /// <param name="listing">Listing returned by Reddit API.</param>
-        public SelfPost(Dispatch dispatch, Models.Structures.Post listing) : base(dispatch, listing)
+        public SelfPost(Dispatch dispatch, RedditThings.Post listing) : base(dispatch, listing)
         {
-            this.SelfText = listing.SelfText;
-            this.SelfTextHTML = listing.SelfTextHTML;
+            SelfText = listing.SelfText;
+            SelfTextHTML = listing.SelfTextHTML;
         }
 
         /// <summary>
@@ -42,21 +44,10 @@ namespace Reddit.NET.Controllers
             : base(dispatch, subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
                   removed, spam)
         {
-            this.SelfText = selfText;
-            this.SelfTextHTML = selfTextHtml;
+            SelfText = selfText;
+            SelfTextHTML = selfTextHtml;
 
-            this.Listing = new Models.Structures.Post(this);
-        }
-
-        /// <summary>
-        /// Query the Reddit API and populate this new instance with the result.
-        /// </summary>
-        /// <param name="postId">The Reddit post ID.</param>
-        public SelfPost(Dispatch dispatch, string subreddit, string postId) : base(dispatch)
-        {
-            GetByPostId(subreddit, postId);
-
-            this.Listing = new Models.Structures.Post(this);
+            Listing = new RedditThings.Post(this);
         }
 
         /// <summary>
@@ -65,40 +56,53 @@ namespace Reddit.NET.Controllers
         public SelfPost(Dispatch dispatch) : base(dispatch) { }
 
         /// <summary>
-        /// Submit self post to Reddit.
+        /// Submit this self post to Reddit.  This instance will automatically be updated with the resulting fullname/id.
         /// </summary>
-        /// <returns>Whether submission was successful.</returns>
-        public override bool Submit()
+        /// <param name="resubmit">boolean value</param>
+        /// <param name="ad">boolean value</param>
+        /// <param name="app"></param>
+        /// <param name="extension">extension used for redirects</param>
+        /// <param name="flairId">a string no longer than 36 characters</param>
+        /// <param name="flairText">a string no longer than 64 characters</param>
+        /// <param name="gRecapthaResponse"></param>
+        /// <param name="sendReplies">boolean value</param>
+        /// <param name="spoiler">boolean value</param>
+        /// <param name="videoPosterUrl">a valid URL</param>
+        /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
+        public override RedditThings.PostResultShortData Submit(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+            string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
+            string videoPosterUrl = "")
         {
-            if (!Validate())
+            RedditThings.PostResultShortData res = Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
+                gRecapthaResponse, "self", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, SelfText, Title, null, videoPosterUrl)).JSON.Data;
+
+            Id = res.Id;
+            Fullname = "t3_" + Id;
+
+            return res;
+        }
+
+        /// <summary>
+        /// Submit this self post to Reddit asynchronously.  This instance will automatically be updated with the resulting fullname/id.
+        /// </summary>
+        /// <param name="resubmit">boolean value</param>
+        /// <param name="ad">boolean value</param>
+        /// <param name="app"></param>
+        /// <param name="extension">extension used for redirects</param>
+        /// <param name="flairId">a string no longer than 36 characters</param>
+        /// <param name="flairText">a string no longer than 64 characters</param>
+        /// <param name="gRecapthaResponse"></param>
+        /// <param name="sendReplies">boolean value</param>
+        /// <param name="spoiler">boolean value</param>
+        /// <param name="videoPosterUrl">a valid URL</param>
+        public async void SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+            string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
+            string videoPosterUrl = "")
+        {
+            await Task.Run(() =>
             {
-                return false;
-            }
-
-            // TODO - Submit to Reddit, populate listing, and update properties.  --Kris
-
-
-            return true;
-        }
-
-        /// <summary>
-        /// Check to see if all required properties are present for submission to Reddit.
-        /// </summary>
-        /// <returns>Whether this instance is ready to submit.</returns>
-        public override bool Validate()
-        {
-            return (!String.IsNullOrWhiteSpace(Subreddit)
-                && !String.IsNullOrWhiteSpace(Title));
-        }
-
-        /// <summary>
-        /// Query the Reddit API and populate this instance with the result.
-        /// </summary>
-        /// <param name="subreddit">The subreddit where the post exists.</param>
-        /// <param name="postId">The Reddit post ID.</param>
-        private void GetByPostId(string subreddit, string postId)
-        {
-            // TODO
+                Submit(resubmit, ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
+            });
         }
     }
 }
