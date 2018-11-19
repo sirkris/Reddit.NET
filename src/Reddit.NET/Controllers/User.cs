@@ -310,25 +310,6 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
-        /// The Reddit API doesn't always return new-sorted posts in the correct chronological order (pinned posts are always on top, for example).
-        /// Use this method to give the list a proper sort.
-        /// </summary>
-        /// <param name="posts">A list of posts</param>
-        /// <param name="descending">If true, sort by descending order (newest first); otherwise, sort by ascending order (oldest first)</param>
-        /// <returns>A chronologically sorted list of posts.</returns>
-        public List<Post> ForceNewSort(List<Post> posts, bool descending = true)
-        {
-            if (descending)
-            {
-                return posts.OrderByDescending(p => p.Created).ToList();
-            }
-            else
-            {
-                return posts.OrderBy(p => p.Created).ToList();
-            }
-        }
-
-        /// <summary>
         /// Retrieve the user's comment history.
         /// </summary>
         /// <param name="context">an integer between 2 and 10</param>

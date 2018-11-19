@@ -10,7 +10,6 @@ namespace Reddit.NET.Controllers
 {
     public abstract class BaseController
     {
-        // Value is always null.  --Kris
         public Dictionary<string, List<string>> Monitoring;
 
         public event EventHandler<MonitoringUpdateEventArgs> MonitoringUpdated;
@@ -109,6 +108,98 @@ namespace Reddit.NET.Controllers
             return !(added.Count == 0 && removed.Count == 0);
         }
 
+        /// <summary>
+        /// Scan two lists for any differences.  Sequence is ignored.
+        /// </summary>
+        /// <param name="oldList">The original list being compared against</param>
+        /// <param name="newList">The new list</param>
+        /// <param name="added">Any entries that are present in the new list but not the old</param>
+        /// <param name="removed">Any entries that are present in the old list but not the new</param>
+        /// <returns>True if the lists differ, otherwise false.</returns>
+        public bool ListDiff(List<RedditThings.Message> oldList, List<RedditThings.Message> newList, out List<RedditThings.Message> added, 
+            out List<RedditThings.Message> removed)
+        {
+            added = new List<RedditThings.Message>();
+            removed = new List<RedditThings.Message>();
+
+            // Index by Reddit fullname.  --Kris
+            Dictionary<string, RedditThings.Message> oldById = new Dictionary<string, RedditThings.Message>();
+            Dictionary<string, RedditThings.Message> newById = new Dictionary<string, RedditThings.Message>();
+            for (int i = 0; i < Math.Max(oldList.Count, newList.Count); i++)
+            {
+                if (i < oldList.Count)
+                {
+                    oldById.Add(oldList[i].Id, oldList[i]);
+                }
+
+                if (i < newList.Count)
+                {
+                    newById.Add(newList[i].Id, newList[i]);
+                }
+            }
+
+            // Scan for any new posts.  --Kris
+            foreach (KeyValuePair<string, RedditThings.Message> pair in newById)
+            {
+                if (!oldById.ContainsKey(pair.Key))
+                {
+                    added.Add(pair.Value);
+                }
+                else
+                {
+                    // So we don't have to check the same element twice.  --Kris
+                    oldById.Remove(pair.Key);
+                }
+            }
+
+            // Scan for any posts no longer appearing in the list.  --Kris
+            foreach (KeyValuePair<string, RedditThings.Message> pair in oldById)
+            {
+                // All the matching elements are gone, leaving only the removed ones.  --Kris
+                removed.Add(pair.Value);
+            }
+
+            return !(added.Count == 0 && removed.Count == 0);
+        }
+
+        /// <summary>
+        /// The Reddit API doesn't always return new-sorted posts in the correct chronological order (pinned posts are always on top, for example).
+        /// Use this method to give the list a proper sort.
+        /// </summary>
+        /// <param name="posts">A list of posts</param>
+        /// <param name="descending">If true, sort by descending order (newest first); otherwise, sort by ascending order (oldest first)</param>
+        /// <returns>A chronologically sorted list of posts.</returns>
+        public List<Post> ForceNewSort(List<Post> posts, bool descending = true)
+        {
+            if (descending)
+            {
+                return posts.OrderByDescending(p => p.Created).ToList();
+            }
+            else
+            {
+                return posts.OrderBy(p => p.Created).ToList();
+            }
+        }
+
+        /// <summary>
+        /// The Reddit API doesn't always return new-sorted comments in the correct chronological order (pinned comments are always on top, for example).
+        /// Use this method to give the list a proper sort.
+        /// </summary>
+        /// <param name="comments">A list of comments</param>
+        /// <param name="descending">If true, sort by descending order (newest first); otherwise, sort by ascending order (oldest first)</param>
+        /// <returns>A chronologically sorted list of comments.</returns>
+        public List<Comment> ForceNewSort(List<Comment> comments, bool descending = true)
+        {
+            if (descending)
+            {
+                return comments.OrderByDescending(p => p.Created).ToList();
+            }
+            else
+            {
+                return comments.OrderBy(p => p.Created).ToList();
+            }
+        }
+
         public List<Post> GetPosts(RedditThings.PostContainer postContainer, Dispatch dispatch)
         {
             List<Post> posts = new List<Post>();
@@ -156,6 +247,50 @@ namespace Reddit.NET.Controllers
             }
 
             return subreddits;
+        }
+
+        internal void AddMonitoringKey(string key, string subKey, ref Dictionary<string, List<string>> monitoring)
+        {
+            if (monitoring.ContainsKey(key)
+                && monitoring[key].Contains(subKey))
+            {
+                throw new RedditControllerException("That object is already being monitored.");
+            }
+            else if (monitoring.ContainsKey(key))
+            {
+                monitoring[key].Add(subKey);
+            }
+            else
+            {
+                monitoring.Add(key, new List<string> { subKey });
+            }
+
+            UpdateMonitoringArgs(ref monitoring);
+        }
+
+        internal void RemoveMonitoringKey(string key, string subKey, ref Dictionary<string, List<string>> monitoring)
+        {
+            if (monitoring.ContainsKey(key)
+                && monitoring[key].Contains(subKey))
+            {
+                monitoring[key].Remove(subKey);
+            }
+            else
+            {
+                throw new RedditControllerException("That object is not being monitored.");
+            }
+
+            UpdateMonitoringArgs(ref monitoring);
+        }
+
+        private void UpdateMonitoringArgs(ref Dictionary<string, List<string>> monitoring)
+        {
+            // Event handler to populate Monitoring across all controllers.  --Kris
+            MonitoringUpdateEventArgs args = new MonitoringUpdateEventArgs
+            {
+                Monitoring = monitoring
+            };
+            OnMonitoringUpdated(args);
         }
 
         public Exception BuildException(Exception ex, List<List<string>> errors)

@@ -23,11 +23,14 @@ namespace Reddit.NET.Controllers
         private User me;
         private DateTime? MeLastUpdated;
 
+        public PrivateMessages Messages;
+
         public Dispatch Dispatch;
 
         public Account(Dispatch dispatch)
         {
             Dispatch = dispatch;
+            Messages = new PrivateMessages(Dispatch);
         }
 
         /// <summary>
@@ -266,95 +269,6 @@ namespace Reddit.NET.Controllers
             }
 
             return res;
-        }
-
-        /// <summary>
-        /// Retrieve private messages for the current user.
-        /// </summary>
-        /// <param name="where">One of (inbox, unread, sent)</param>
-        /// <param name="mark">one of (true, false)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <param name="includeCategories">boolean value</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="mid"></param>
-        /// <returns>A list of messages.</returns>
-        public List<RedditThings.Message> GetMessages(string where, bool mark = true, int limit = 25, string after = "", string before = "",
-            string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
-        {
-            RedditThings.MessageContainer messageContainer = Dispatch.PrivateMessages.GetMessages(where, mark, mid, after, before, includeCategories,
-                count, limit, show, srDetail);
-
-            List<RedditThings.Message> res = new List<RedditThings.Message>();
-            if (messageContainer != null && messageContainer.Data != null && messageContainer.Data.Children != null)
-            {
-                foreach (RedditThings.MessageChild messageChild in messageContainer.Data.Children)
-                {
-                    res.Add(messageChild.Data);
-                }
-            }
-
-            return res;
-        }
-
-        /// <summary>
-        /// Retrieve private inbox messages for the current user.
-        /// </summary>
-        /// <param name="mark">one of (true, false)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <param name="includeCategories">boolean value</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="mid"></param>
-        /// <returns>A list of messages.</returns>
-        public List<RedditThings.Message> GetMessagesInbox(bool mark = true, int limit = 25, string after = "", string before = "",
-            string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
-        {
-            return GetMessages("inbox", mark, limit, after, before, show, srDetail, includeCategories, count, mid);
-        }
-
-        /// <summary>
-        /// Retrieve private unread messages for the current user.
-        /// </summary>
-        /// <param name="mark">one of (true, false)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <param name="includeCategories">boolean value</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="mid"></param>
-        /// <returns>A list of messages.</returns>
-        public List<RedditThings.Message> GetMessagesUnread(bool mark = true, int limit = 25, string after = "", string before = "",
-            string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
-        {
-            return GetMessages("unread", mark, limit, after, before, show, srDetail, includeCategories, count, mid);
-        }
-
-        /// <summary>
-        /// Retrieve private sent messages for the current user.
-        /// </summary>
-        /// <param name="mark">one of (true, false)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <param name="includeCategories">boolean value</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="mid"></param>
-        /// <returns>A list of messages.</returns>
-        public List<RedditThings.Message> GetMessagesSent(bool mark = true, int limit = 25, string after = "", string before = "",
-            string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
-        {
-            return GetMessages("sent", mark, limit, after, before, show, srDetail, includeCategories, count, mid);
         }
 
         /// <summary>
