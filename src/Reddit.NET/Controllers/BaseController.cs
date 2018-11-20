@@ -223,6 +223,11 @@ namespace Reddit.NET.Controllers
 
         public List<Comment> GetComments(RedditThings.CommentContainer commentContainer, Dispatch dispatch)
         {
+            if (commentContainer == null || commentContainer.Data == null || commentContainer.Data.Children == null)
+            {
+                return null;
+            }
+
             List<Comment> comments = new List<Comment>();
             foreach (RedditThings.CommentChild commentChild in commentContainer.Data.Children)
             {
