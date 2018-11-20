@@ -4,6 +4,7 @@ using RedditThings = Reddit.NET.Models.Structures;
 using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
+using System.Collections.Generic;
 
 namespace Reddit.NET
 {
@@ -46,14 +47,19 @@ namespace Reddit.NET
             return new Comment(Models, listing);
         }
 
-        public Comment Comment(string subreddit, string title, string author, string body, string bodyHtml,
-            string parentId = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            RedditThings.CommentContainer replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+        public Comment Comment(string subreddit, string author, string body, string parentId, string bodyHtml = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(Models, subreddit, title, author, body, bodyHtml, parentId, collapsedReason, collapsed, isSubmitter,
+            return new Comment(Models, subreddit, author, body, bodyHtml, parentId, collapsedReason, collapsed, isSubmitter,
                 replies, scoreHidden, depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        public Comment Comment(string name)
+        {
+            return new Comment(Models, name);
         }
 
         public Comment Comment()
@@ -74,6 +80,11 @@ namespace Reddit.NET
         {
             return new LinkPost(Models, subreddit, title, author, url, thumbnail, thumbnailHeight, thumbnailWidth, preview,
                 id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        public LinkPost LinkPost(string name)
+        {
+            return new LinkPost(Models, name);
         }
 
         public LinkPost LinkPost()
@@ -111,6 +122,11 @@ namespace Reddit.NET
         {
             return new SelfPost(Models, subreddit, title, author, selfText, selfTextHtml, id, name, permalink, created,
                 edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        public SelfPost SelfPost(string name)
+        {
+            return new SelfPost(Models, name);
         }
 
         public SelfPost SelfPost()

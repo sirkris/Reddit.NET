@@ -30,7 +30,20 @@ namespace Reddit.NET.Controllers
         /// </summary>
         public RedditThings.Post Listing;
 
-        public List<Comment> Comments;  // TODO - Populate.  --Kris
+        public List<Comment> Comments
+        {
+            get
+            {
+                return (CommentsLastUpdated.HasValue
+                    && CommentsLastUpdated.Value.AddSeconds(15) > DateTime.Now ? comments : GetComments());
+            }
+            private set
+            {
+                comments = value;
+            }
+        }
+        private List<Comment> comments;
+        private DateTime? CommentsLastUpdated;
 
         internal readonly Dispatch Dispatch;
 
@@ -46,6 +59,12 @@ namespace Reddit.NET.Controllers
         {
             Import(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
             Dispatch = dispatch;
+        }
+
+        public Post(Dispatch dispatch, string name)
+        {
+            Dispatch = dispatch;
+            Fullname = name;
         }
 
         public Post(Dispatch dispatch)
@@ -98,6 +117,46 @@ namespace Reddit.NET.Controllers
         abstract public RedditThings.PostResultShortData Submit(bool resubmit = false, bool ad = false, string app = "", string extension = "",
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "");
+
+        public Comment Comment(string author, string body, string bodyHtml = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        public Comment Comment()
+        {
+            return new Comment(Dispatch, Subreddit, null, null, Fullname);
+        }
+
+        /// <summary>
+        /// Retrieve comment replies to this post.
+        /// </summary>
+        /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of comments.</returns>
+        public List<Comment> GetComments(string sort = "new", int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+        {
+            List<Comment> comments = GetComments(Dispatch.Listings.GetComments(Id, context, showEdits, showMore, sort, threaded, truncate, Subreddit, null,
+                depth, limit, srDetail), Dispatch);
+
+            CommentsLastUpdated = DateTime.Now;
+
+            Comments = comments;
+            return comments;
+        }
 
         /// <summary>
         /// Delete this post.
@@ -244,7 +303,7 @@ namespace Reddit.NET.Controllers
         /// Save this post.
         /// Saved things are kept in the user's saved listing for later perusal.
         /// </summary>
-        /// <param name="category"a category name></param>
+        /// <param name="category">a category name</param>
         public void Save(string category)
         {
             Dispatch.LinksAndComments.Save(category, Fullname);
@@ -254,7 +313,7 @@ namespace Reddit.NET.Controllers
         /// Save this post asynchronously.
         /// Saved things are kept in the user's saved listing for later perusal.
         /// </summary>
-        /// <param name="category"a category name></param>
+        /// <param name="category">a category name</param>
         public async void SaveAsync(string category)
         {
             await Task.Run(() =>
@@ -543,5 +602,15 @@ namespace Reddit.NET.Controllers
         }
 
         // TODO - Add vote methods (up/down) once Model tested.  --Kris
+
+        /// <summary>
+        /// Approve this post.
+        /// If the thing was removed, it will be re-inserted into appropriate listings.
+        /// Any reports on the approved thing will be discarded.
+        /// </summary>
+        public void Approve()
+        {
+            Dispatch.Moderation.Approve(Fullname);
+        }
     }
 }

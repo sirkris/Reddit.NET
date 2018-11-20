@@ -11,8 +11,9 @@ namespace Reddit.NET.Controllers
         public string SelfTextHTML;
 
         /// <summary>
-        /// Create new Self Post instance from Reddit API listing.
+        /// Create new SelfPost instance from Reddit API listing.
         /// </summary>
+        /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="listing">Listing returned by Reddit API.</param>
         public SelfPost(Dispatch dispatch, RedditThings.Post listing) : base(dispatch, listing)
         {
@@ -21,8 +22,9 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
-        /// Create a new Self Post instance and populate manually.
+        /// Create a new SelfPost instance and populate manually.
         /// </summary>
+        /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="subreddit">The subreddit the post belongs to.</param>
         /// <param name="title">Post title.</param>
         /// <param name="author">Reddit user who authored the post.</param>
@@ -52,8 +54,17 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Create a new SelfPost instance populated only with its Fullname.
+        /// Useful for About() queries (e.g. new SelfPost("t3_whatever").About() will retrieve a new SelfPost by its fullname).
+        /// </summary>
+        /// <param name="dispatch">An instance of the Dispatch controller</param>
+        /// <param name="name">fullname of a thing</param>
+        public SelfPost(Dispatch dispatch, string name) : base(dispatch, name) { }
+
+        /// <summary>
         /// Create an empty SelfPost instance.
         /// </summary>
+        /// <param name="dispatch">An instance of the Dispatch controller</param>
         public SelfPost(Dispatch dispatch) : base(dispatch) { }
 
         /// <summary>

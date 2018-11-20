@@ -11,9 +11,10 @@ namespace Reddit.NET.Models
 
         public LinksAndComments(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Message reply in a controller.  --Kris
         /// <summary>
         /// Submit a new comment or reply to a message.
-        /// parent is the fullname of the thing being replied to.Its value changes the kind of object created by this request:
+        /// parent is the fullname of the thing being replied to. Its value changes the kind of object created by this request:
         /// the fullname of a Link: a top-level comment in that Link's thread. (requires submit scope)
         /// the fullname of a Comment: a comment reply to that comment. (requires submit scope)
         /// the fullname of a Message: a message reply to that message. (requires privatemessages scope)
@@ -52,12 +53,12 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// Edit the body text of a comment or self-post.
+        /// Edit the body text of a self-post.
         /// </summary>
         /// <param name="returnRtjson">boolean value</param>
         /// <param name="richtextJson">JSON data</param>
         /// <param name="text">raw markdown text</param>
-        /// <param name="thingId">fullname of a thing</param>
+        /// <param name="thingId">fullname of a self post</param>
         /// <returns>The modified post data.</returns>
         public PostResultContainer EditUserText(bool returnRtjson, string richtextJson, string text, string thingId)
         {
@@ -70,6 +71,27 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("api_type", "json");
 
             return JsonConvert.DeserializeObject<PostResultContainer>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Edit the body text of a comment.
+        /// </summary>
+        /// <param name="returnRtjson">boolean value</param>
+        /// <param name="richtextJson">JSON data</param>
+        /// <param name="text">raw markdown text</param>
+        /// <param name="thingId">fullname of a comment</param>
+        /// <returns>The modified comment data.</returns>
+        public CommentResultContainer EditUserTextComment(bool returnRtjson, string richtextJson, string text, string thingId)
+        {
+            RestRequest restRequest = PrepareRequest("api/editusertext", Method.POST);
+
+            restRequest.AddParameter("return_rtjson", returnRtjson);
+            restRequest.AddParameter("richtext_json", richtextJson);
+            restRequest.AddParameter("text", text);
+            restRequest.AddParameter("thing_id", thingId);
+            restRequest.AddParameter("api_type", "json");
+
+            return JsonConvert.DeserializeObject<CommentResultContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>

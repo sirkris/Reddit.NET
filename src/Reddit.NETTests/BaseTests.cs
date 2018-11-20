@@ -87,6 +87,7 @@ namespace Reddit.NETTests
             Assert.IsNotNull(commentResultContainer.JSON.Data);
             Assert.IsNotNull(commentResultContainer.JSON.Data.Things);
             Assert.IsTrue(commentResultContainer.JSON.Data.Things.Count > 0);
+            Assert.IsNotNull(commentResultContainer.JSON.Data.Things[0].Data);
         }
 
         public void Validate(PostResultContainer postResultContainer)

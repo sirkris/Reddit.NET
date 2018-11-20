@@ -235,6 +235,11 @@ namespace Reddit.NET.Controllers
             return comments;
         }
 
+        public List<Comment> GetComments(List<(RedditThings.PostContainer, RedditThings.CommentContainer)> ps, Dispatch dispatch)
+        {
+            return GetComments(ps[0].Item2, dispatch);
+        }
+
         public List<Subreddit> GetSubreddits(RedditThings.SubredditContainer subredditContainer, Dispatch dispatch)
         {
             List<Subreddit> subreddits = new List<Subreddit>();
@@ -598,6 +603,41 @@ namespace Reddit.NET.Controllers
             }
 
             return jQueryReturn;
+        }
+
+        public List<(RedditThings.PostContainer, RedditThings.CommentContainer)> Validate(List<(RedditThings.PostContainer, RedditThings.CommentContainer)> ps)
+        {
+            CheckNull(ps);
+
+            if (ps.Count == 0)
+            {
+                throw new RedditControllerException("Empty list returned.");
+            }
+
+            CheckNull(ps[0].Item1);
+            CheckNull(ps[0].Item2);
+
+            return ps;
+        }
+
+        public RedditThings.CommentResultContainer Validate(RedditThings.CommentResultContainer commentResultContainer)
+        {
+            CheckNull(commentResultContainer);
+            CheckNull(commentResultContainer.JSON, "Reddit API returned empty response object.");
+
+            CheckErrors(commentResultContainer.JSON.Errors);
+
+            CheckNull(commentResultContainer.JSON.Data, "Reddit API returned response object with empty JSON.");
+            CheckNull(commentResultContainer.JSON.Data.Things, "Reddit API returned response object with empty data.");
+
+            if (commentResultContainer.JSON.Data.Things.Count == 0)
+            {
+                throw new RedditControllerException("JSON data contains empty comments list.");
+            }
+
+            CheckNull(commentResultContainer.JSON.Data.Things[0].Data, "Reddit API returned response object with null comment data.");
+
+            return commentResultContainer;
         }
     }
 }

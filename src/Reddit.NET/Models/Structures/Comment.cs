@@ -219,7 +219,7 @@ namespace Reddit.NET.Models.Structures
             this.Subreddit = comment.Subreddit;
             this.Author = comment.Author;
             this.Id = comment.Id;
-            this.Name = comment.Name;
+            this.Name = comment.Fullname;
             this.Permalink = comment.Permalink;
             this.Created = comment.Created;
             this.Edited = comment.Edited;
@@ -231,7 +231,7 @@ namespace Reddit.NET.Models.Structures
             this.Replies = comment.Replies;
             this.Body = comment.Body;
             this.BodyHTML = comment.BodyHTML;
-            this.ParentId = comment.ParentId;
+            this.ParentId = comment.ParentFullname;
             this.CollapsedReason = comment.CollapsedReason;
             this.Collapsed = comment.Collapsed;
             this.IsSubmitter = comment.IsSubmitter;

@@ -40,6 +40,8 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
+        public LinkPost(Dispatch dispatch, string name) : base(dispatch, name) { }
+
         public LinkPost(Dispatch dispatch) : base(dispatch) { }
 
         /// <summary>

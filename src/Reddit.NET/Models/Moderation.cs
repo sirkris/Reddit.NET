@@ -105,18 +105,18 @@ namespace Reddit.NET.Models
         // TODO - Move test from ModelTests to ControllerTests.  --Kris
         /// <summary>
         /// Approve a link or comment.
-        /// If the thing was removed, it will be re-inserted into appropriate listings. Any reports on the approved thing will be discarded.
+        /// If the thing was removed, it will be re-inserted into appropriate listings.
+        /// Any reports on the approved thing will be discarded.
         /// See also: /api/remove.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>Empty JSON.</returns>
-        public object Approve(string id)
+        public void Approve(string id)
         {
             RestRequest restRequest = PrepareRequest("api/approve", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         // TODO - Needs testing.

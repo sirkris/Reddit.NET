@@ -338,5 +338,23 @@ namespace Reddit.NET.Controllers
         {
             return GetSubreddits(Dispatch.Subreddits.Mine("streams", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
         }
+
+        /// <summary>
+        /// Returns a list of srs that the user moderates that are also enrolled in the new modmail.
+        /// </summary>
+        /// <returns>A list of subreddits.</returns>
+        public Dictionary<string, RedditThings.ModmailSubreddit> ModmailSubreddits()
+        {
+            return ((RedditThings.ModmailSubredditContainer)Validate(Dispatch.Modmail.Subreddits())).Subreddits;
+        }
+
+        /// <summary>
+        /// Endpoint to retrieve the unread conversation count by conversation state.
+        /// </summary>
+        /// <returns>An object with the int properties: highlighted, notifications, archived, new, inprogress, and mod.</returns>
+        public RedditThings.ModmailUnreadCount ModmailUnreadCount()
+        {
+            return Validate(Dispatch.Modmail.UnreadCount());
+        }
     }
 }
