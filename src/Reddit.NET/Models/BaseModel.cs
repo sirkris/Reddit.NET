@@ -3,6 +3,7 @@ using Newtonsoft.Json.Linq;
 using Reddit.NET.Exceptions;
 using Reddit.NET.Models.EventArgs;
 using RestSharp;
+using ControlStructures = Reddit.NET.Controllers.Structures;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -15,10 +16,14 @@ namespace Reddit.NET.Models
         private readonly string AppId;
         internal string AccessToken;
         private readonly string RefreshToken;
+
         private List<DateTime> Requests;
+
+        internal ControlStructures.MonitoringSnapshot Monitoring;
 
         internal abstract RestClient RestClient { get; set; }
 
+        public event EventHandler<MonitoringUpdateEventArgs> MonitoringUpdated;
         public event EventHandler<TokenUpdateEventArgs> TokenUpdated;
         public event EventHandler<RequestsUpdateEventArgs> RequestsUpdated;
 
@@ -29,6 +34,19 @@ namespace Reddit.NET.Models
             RefreshToken = refreshToken;
             RestClient = restClient;
             Requests = new List<DateTime>();
+
+            Monitoring = new ControlStructures.MonitoringSnapshot();
+        }
+
+        public virtual void UpdateMonitoring(MonitoringUpdateEventArgs e)
+        {
+            Monitoring.Remove(e.Removed);
+            Monitoring.Add(e.Added);
+        }
+
+        protected virtual void OnMonitoringUpdated(MonitoringUpdateEventArgs e)
+        {
+            MonitoringUpdated?.Invoke(this, e);
         }
 
         protected virtual void OnTokenUpdated(TokenUpdateEventArgs e)
@@ -49,6 +67,49 @@ namespace Reddit.NET.Models
         public void UpdateRequests(List<DateTime> requests)
         {
             Requests = requests;
+        }
+
+        internal void AddMonitoringKey(string key, string subKey, ref ControlStructures.MonitoringSnapshot monitoring)
+        {
+            ControlStructures.MonitoringSnapshot added = new ControlStructures.MonitoringSnapshot();
+            if (monitoring.Get(key).Contains(subKey))
+            {
+                throw new RedditMonitoringException("That object is already being monitored.");
+            }
+            else
+            {
+                monitoring.Get(key).Add(subKey);
+                added.Get(key).Add(subKey);
+            }
+
+            UpdateMonitoringArgs(added, null);
+        }
+
+        internal void RemoveMonitoringKey(string key, string subKey, ref ControlStructures.MonitoringSnapshot monitoring)
+        {
+            ControlStructures.MonitoringSnapshot removed = new ControlStructures.MonitoringSnapshot();
+            if (monitoring.Get(key).Contains(subKey))
+            {
+                monitoring.Get(key).Remove(subKey);
+                removed.Get(key).Add(subKey);
+            }
+            else
+            {
+                throw new RedditMonitoringException("That object is not being monitored.");
+            }
+
+            UpdateMonitoringArgs(null, removed);
+        }
+
+        private void UpdateMonitoringArgs(ControlStructures.MonitoringSnapshot added, ControlStructures.MonitoringSnapshot removed)
+        {
+            // Event handler to populate Monitoring across all controllers.  --Kris
+            MonitoringUpdateEventArgs args = new MonitoringUpdateEventArgs
+            {
+                Added = added,
+                Removed = removed
+            };
+            OnMonitoringUpdated(args);
         }
 
         private bool RequestReady()

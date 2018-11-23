@@ -1,4 +1,5 @@
-﻿using Reddit.NET.Exceptions;
+﻿using Reddit.NET.Controllers.Structures;
+using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
@@ -31,6 +32,9 @@ namespace Reddit.NET.Controllers
         public DateTime Created;
         public int CommentKarma;
         public bool HasSubscribed;
+
+        internal override ref Models.Misc MonitorModel => ref MonitorModelNull;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         public RedditThings.User UserData;
 

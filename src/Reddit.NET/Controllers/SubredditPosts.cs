@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
@@ -23,6 +24,9 @@ namespace Reddit.NET.Controllers
         public event EventHandler<PostsUpdateEventArgs> ModQueueUnmoderatedUpdated;
         public event EventHandler<PostsUpdateEventArgs> ModQueueEditedUpdated;
 
+        internal override ref Models.Misc MonitorModel => ref Subreddit.Dispatch.Misc;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+
         public List<Post> Best
         {
             get
@@ -35,7 +39,7 @@ namespace Reddit.NET.Controllers
                 best = value;
             }
         }
-        private List<Post> best;
+        internal List<Post> best;
 
         public List<Post> Hot
         {
@@ -49,7 +53,7 @@ namespace Reddit.NET.Controllers
                 hot = value;
             }
         }
-        private List<Post> hot;
+        internal List<Post> hot;
 
         public List<Post> New
         {
@@ -63,7 +67,7 @@ namespace Reddit.NET.Controllers
                 newPosts = value;
             }
         }
-        private List<Post> newPosts;
+        internal List<Post> newPosts;
 
         public List<Post> Rising
         {
@@ -77,7 +81,7 @@ namespace Reddit.NET.Controllers
                 rising = value;
             }
         }
-        private List<Post> rising;
+        internal List<Post> rising;
 
         public List<Post> Top
         {
@@ -91,7 +95,7 @@ namespace Reddit.NET.Controllers
                 top = value;
             }
         }
-        private List<Post> top;
+        internal List<Post> top;
 
         public List<Post> Controversial
         {
@@ -105,7 +109,7 @@ namespace Reddit.NET.Controllers
                 controversial = value;
             }
         }
-        private List<Post> controversial;
+        internal List<Post> controversial;
 
         public List<Post> ModQueue
         {
@@ -119,7 +123,7 @@ namespace Reddit.NET.Controllers
                 modQueue = value;
             }
         }
-        private List<Post> modQueue;
+        internal List<Post> modQueue;
 
         public List<Post> ModQueueReports
         {
@@ -133,7 +137,7 @@ namespace Reddit.NET.Controllers
                 modQueueReports = value;
             }
         }
-        private List<Post> modQueueReports;
+        internal List<Post> modQueueReports;
 
         public List<Post> ModQueueSpam
         {
@@ -147,7 +151,7 @@ namespace Reddit.NET.Controllers
                 modQueueSpam = value;
             }
         }
-        private List<Post> modQueueSpam;
+        internal List<Post> modQueueSpam;
 
         public List<Post> ModQueueUnmoderated
         {
@@ -161,7 +165,7 @@ namespace Reddit.NET.Controllers
                 modQueueUnmoderated = value;
             }
         }
-        private List<Post> modQueueUnmoderated;
+        internal List<Post> modQueueUnmoderated;
 
         public List<Post> ModQueueEdited
         {
@@ -175,7 +179,7 @@ namespace Reddit.NET.Controllers
                 modQueueEdited = value;
             }
         }
-        private List<Post> modQueueEdited;
+        internal List<Post> modQueueEdited;
 
         private DateTime? BestLastUpdated;
         private DateTime? HotLastUpdated;
@@ -189,8 +193,6 @@ namespace Reddit.NET.Controllers
         private DateTime? ModQueueSpamLastUpdated;
         private DateTime? ModQueueUnmoderatedLastUpdated;
         private DateTime? ModQueueEditedLastUpdated;
-
-        private Dictionary<string, Thread> Threads;
 
         public Subreddit Subreddit
         {
@@ -219,8 +221,6 @@ namespace Reddit.NET.Controllers
             Threads = new Dictionary<string, Thread>();
 
             Subreddit = subreddit;
-
-            MonitoringUpdated += C_MonitoringUpdated;
         }
 
         // Let's just pretend this one belongs to the "all" subreddit so we can put it here with the others.  --Kris
@@ -340,139 +340,6 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
-        private bool Monitor(string key, Thread thread)
-        {
-            if (Subreddit.Monitoring.ContainsKey(key)
-                && Subreddit.Monitoring[key].Contains(Subreddit.Name))
-            {
-                // Stop monitoring.  --Kris
-                RemoveMonitoringKey(key, Subreddit.Name, ref Subreddit.Monitoring);
-                WaitOrDie(Threads[key]);
-
-                return false;
-            }
-            else
-            {
-                // Start monitoring.  --Kris
-                AddMonitoringKey(key, Subreddit.Name, ref Subreddit.Monitoring);
-
-                Threads.Add(key, thread);
-                Threads[key].Start();
-                while (!Threads[key].IsAlive) { }
-
-                return true;
-            }
-        }
-
-        private void MonitorThread(string key, string type)
-        {
-            while (Subreddit.Monitoring.ContainsKey(key) 
-                && Subreddit.Monitoring[key].Contains(Subreddit.Name))
-            {
-                List<Post> oldList;
-                List<Post> newList;
-                switch (type)
-                {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "best":
-                        oldList = best;
-                        newList = GetBest();
-                        break;
-                    case "hot":
-                        oldList = hot;
-                        newList = GetHot();
-                        break;
-                    case "new":
-                        oldList = newPosts;
-                        newList = GetNew();
-                        break;
-                    case "rising":
-                        oldList = rising;
-                        newList = GetRising();
-                        break;
-                    case "top":
-                        oldList = top;
-                        newList = GetTop();
-                        break;
-                    case "controversial":
-                        oldList = controversial;
-                        newList = GetControversial();
-                        break;
-                    case "modqueue":
-                        oldList = modQueue;
-                        newList = GetModQueue();
-                        break;
-                    case "modqueuereports":
-                        oldList = modQueueReports;
-                        newList = GetModQueueReports();
-                        break;
-                    case "modqueuespam":
-                        oldList = modQueueSpam;
-                        newList = GetModQueueSpam();
-                        break;
-                    case "modqueueunmoderated":
-                        oldList = modQueueUnmoderated;
-                        newList = GetModQueueUnmoderated();
-                        break;
-                    case "modqueueedited":
-                        oldList = modQueueEdited;
-                        newList = GetModQueueEdited();
-                        break;
-                }
-
-                if (ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
-                {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    PostsUpdateEventArgs args = new PostsUpdateEventArgs
-                    {
-                        NewPosts = newList,
-                        OldPosts = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    switch (type)
-                    {
-                        case "best":
-                            OnBestUpdated(args);
-                            break;
-                        case "hot":
-                            OnHotUpdated(args);
-                            break;
-                        case "new":
-                            OnNewUpdated(args);
-                            break;
-                        case "rising":
-                            OnRisingUpdated(args);
-                            break;
-                        case "top":
-                            OnTopUpdated(args);
-                            break;
-                        case "controversial":
-                            OnControversialUpdated(args);
-                            break;
-                        case "modqueue":
-                            OnModQueueUpdated(args);
-                            break;
-                        case "modqueuereports":
-                            OnModQueueReportsUpdated(args);
-                            break;
-                        case "modqueuespam":
-                            OnModQueueSpamUpdated(args);
-                            break;
-                        case "modqueueunmoderated":
-                            OnModQueueUnmoderatedUpdated(args);
-                            break;
-                        case "modqueueedited":
-                            OnModQueueEditedUpdated(args);
-                            break;
-                    }
-                }
-
-                Thread.Sleep(MonitoringCount() * MonitoringWaitDelayMS);
-            }
-        }
-
         /// <summary>
         /// Monitor Reddit for new "Best" posts.
         /// </summary>
@@ -480,15 +347,15 @@ namespace Reddit.NET.Controllers
         public bool MonitorBest()
         {
             string key = "BestPosts";
-            return Monitor(key, new Thread(() => MonitorBestThread(key)));
+            return Monitor(key, new Thread(() => MonitorBestThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorBestThread(string key)
         {
-            MonitorThread(key, "best");
+            MonitorPostsThread(Monitoring, this, key, "best", Subreddit.Name);
         }
 
-        protected virtual void OnBestUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnBestUpdated(PostsUpdateEventArgs e)
         {
             BestUpdated?.Invoke(this, e);
         }
@@ -499,16 +366,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorHot()
         {
-            string key = Subreddit.Name + "_HotPosts";
-            return Monitor(key, new Thread(() => MonitorHotThread(key)));
+            string key = "HotPosts";
+            return Monitor(key, new Thread(() => MonitorHotThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorHotThread(string key)
         {
-            MonitorThread(key, "hot");
+            MonitorPostsThread(Monitoring, this, key, "hot", Subreddit.Name);
         }
 
-        protected virtual void OnHotUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnHotUpdated(PostsUpdateEventArgs e)
         {
             HotUpdated?.Invoke(this, e);
         }
@@ -519,16 +386,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorNew()
         {
-            string key = Subreddit.Name + "_NewPosts";
-            return Monitor(key, new Thread(() => MonitorNewThread(key)));
+            string key = "NewPosts";
+            return Monitor(key, new Thread(() => MonitorNewThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorNewThread(string key)
         {
-            MonitorThread(key, "new");
+            MonitorPostsThread(Monitoring, this, key, "new", Subreddit.Name);
         }
 
-        protected virtual void OnNewUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnNewUpdated(PostsUpdateEventArgs e)
         {
             NewUpdated?.Invoke(this, e);
         }
@@ -539,16 +406,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorRising()
         {
-            string key = Subreddit.Name + "_RisingPosts";
-            return Monitor(key, new Thread(() => MonitorRisingThread(key)));
+            string key = "RisingPosts";
+            return Monitor(key, new Thread(() => MonitorRisingThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorRisingThread(string key)
         {
-            MonitorThread(key, "rising");
+            MonitorPostsThread(Monitoring, this, key, "rising", Subreddit.Name);
         }
 
-        protected virtual void OnRisingUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnRisingUpdated(PostsUpdateEventArgs e)
         {
             RisingUpdated?.Invoke(this, e);
         }
@@ -559,16 +426,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorTop()
         {
-            string key = Subreddit.Name + "_TopPosts";
-            return Monitor(key, new Thread(() => MonitorTopThread(key)));
+            string key = "TopPosts";
+            return Monitor(key, new Thread(() => MonitorTopThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorTopThread(string key)
         {
-            MonitorThread(key, "top");
+            MonitorPostsThread(Monitoring, this, key, "top", Subreddit.Name);
         }
 
-        protected virtual void OnTopUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnTopUpdated(PostsUpdateEventArgs e)
         {
             TopUpdated?.Invoke(this, e);
         }
@@ -579,16 +446,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorControversial()
         {
-            string key = Subreddit.Name + "_ControversialPosts";
-            return Monitor(key, new Thread(() => MonitorControversialThread(key)));
+            string key = "ControversialPosts";
+            return Monitor(key, new Thread(() => MonitorControversialThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorControversialThread(string key)
         {
-            MonitorThread(key, "controversial");
+            MonitorPostsThread(Monitoring, this, key, "controversial", Subreddit.Name);
         }
 
-        protected virtual void OnControversialUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnControversialUpdated(PostsUpdateEventArgs e)
         {
             ControversialUpdated?.Invoke(this, e);
         }
@@ -599,16 +466,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorModQueue()
         {
-            string key = Subreddit.Name + "_ModQueuePosts";
-            return Monitor(key, new Thread(() => MonitorModQueueThread(key)));
+            string key = "ModQueuePosts";
+            return Monitor(key, new Thread(() => MonitorModQueueThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorModQueueThread(string key)
         {
-            MonitorThread(key, "modqueue");
+            MonitorPostsThread(Monitoring, this, key, "modqueue", Subreddit.Name);
         }
 
-        protected virtual void OnModQueueUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnModQueueUpdated(PostsUpdateEventArgs e)
         {
             ModQueueUpdated?.Invoke(this, e);
         }
@@ -619,16 +486,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorModQueueReports()
         {
-            string key = Subreddit.Name + "_ModQueueReportsPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueReportsThread(key)));
+            string key = "ModQueueReportsPosts";
+            return Monitor(key, new Thread(() => MonitorModQueueReportsThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorModQueueReportsThread(string key)
         {
-            MonitorThread(key, "modqueuereports");
+            MonitorPostsThread(Monitoring, this, key, "modqueuereports", Subreddit.Name);
         }
 
-        protected virtual void OnModQueueReportsUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnModQueueReportsUpdated(PostsUpdateEventArgs e)
         {
             ModQueueReportsUpdated?.Invoke(this, e);
         }
@@ -639,16 +506,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorModQueueSpam()
         {
-            string key = Subreddit.Name + "_ModQueueSpamPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueSpamThread(key)));
+            string key = "ModQueueSpamPosts";
+            return Monitor(key, new Thread(() => MonitorModQueueSpamThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorModQueueSpamThread(string key)
         {
-            MonitorThread(key, "modqueuespam");
+            MonitorPostsThread(Monitoring, this, key, "modqueuespam", Subreddit.Name);
         }
 
-        protected virtual void OnModQueueSpamUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnModQueueSpamUpdated(PostsUpdateEventArgs e)
         {
             ModQueueSpamUpdated?.Invoke(this, e);
         }
@@ -659,16 +526,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorModQueueUnmoderated()
         {
-            string key = Subreddit.Name + "_ModQueueUnmoderatedPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueUnmoderatedThread(key)));
+            string key = "ModQueueUnmoderatedPosts";
+            return Monitor(key, new Thread(() => MonitorModQueueUnmoderatedThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorModQueueUnmoderatedThread(string key)
         {
-            MonitorThread(key, "modqueueunmoderated");
+            MonitorPostsThread(Monitoring, this, key, "modqueueunmoderated", Subreddit.Name);
         }
 
-        protected virtual void OnModQueueUnmoderatedUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnModQueueUnmoderatedUpdated(PostsUpdateEventArgs e)
         {
             ModQueueUnmoderatedUpdated?.Invoke(this, e);
         }
@@ -679,16 +546,16 @@ namespace Reddit.NET.Controllers
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorModQueueEdited()
         {
-            string key = Subreddit.Name + "_ModQueueEditedPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueEditedThread(key)));
+            string key = "ModQueueEditedPosts";
+            return Monitor(key, new Thread(() => MonitorModQueueEditedThread(key)), Subreddit.Name, this);
         }
 
         private void MonitorModQueueEditedThread(string key)
         {
-            MonitorThread(key, "modqueueedited");
+            MonitorPostsThread(Monitoring, this, key, "modqueueedited", Subreddit.Name);
         }
 
-        protected virtual void OnModQueueEditedUpdated(PostsUpdateEventArgs e)
+        internal virtual void OnModQueueEditedUpdated(PostsUpdateEventArgs e)
         {
             ModQueueEditedUpdated?.Invoke(this, e);
         }

@@ -1,25 +1,37 @@
 ﻿using Reddit.NET.Exceptions;
 using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 
 namespace Reddit.NET.Controllers
 {
     public abstract class BaseController
     {
-        public Dictionary<string, List<string>> Monitoring;
+        internal abstract ref Models.Misc MonitorModel { get; }
+        internal Models.Misc MonitorModelNull = null;
+        internal MonitoringSnapshot MonitoringSnapshotNull = null;
 
-        public event EventHandler<MonitoringUpdateEventArgs> MonitoringUpdated;
+        internal abstract ref MonitoringSnapshot Monitoring { get; }
 
         public int MonitoringWaitDelayMS = 1500;
 
+        internal Dictionary<string, Thread> Threads;
+
+        private volatile bool Terminate = false;
+
         public BaseController()
         {
-            Monitoring = new Dictionary<string, List<string>>();
-            MonitoringUpdated += C_MonitoringUpdated;
+            
+        }
+
+        internal void TerminateThread()
+        {
+            Terminate = true;
         }
 
         public void WaitOrDie(Thread thread, int timeout = 60)
@@ -33,26 +45,6 @@ namespace Reddit.NET.Controllers
                     throw new RedditControllerException("Unable to terminate monitoring thread (thread not responding).");
                 }
             }
-        }
-
-        public int MonitoringCount()
-        {
-            return Monitoring.Sum(x => x.Value.Count);
-        }
-
-        protected virtual void OnMonitoringUpdated(MonitoringUpdateEventArgs e)
-        {
-            MonitoringUpdated?.Invoke(this, e);
-        }
-
-        public virtual void UpdateMonitoring(Dictionary<string, List<string>> monitoring)
-        {
-            Monitoring = monitoring;
-        }
-
-        public void C_MonitoringUpdated(object sender, MonitoringUpdateEventArgs e)
-        {
-            UpdateMonitoring(e.Monitoring);
         }
 
         /// <summary>
@@ -259,48 +251,325 @@ namespace Reddit.NET.Controllers
             return subreddits;
         }
 
-        internal void AddMonitoringKey(string key, string subKey, ref Dictionary<string, List<string>> monitoring)
+        internal void MonitorPrivateMessagesThread(MonitoringSnapshot monitoring, PrivateMessages privateMessages, string key, string type, int startDelayMs = 0)
         {
-            if (monitoring.ContainsKey(key)
-                && monitoring[key].Contains(subKey))
+            if (startDelayMs > 0)
             {
-                throw new RedditControllerException("That object is already being monitored.");
+                Thread.Sleep(startDelayMs);
             }
-            else if (monitoring.ContainsKey(key))
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains("PrivateMessages"))
             {
-                monitoring[key].Add(subKey);
+                List<RedditThings.Message> oldList;
+                List<RedditThings.Message> newList;
+                switch (type)
+                {
+                    default:
+                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                    case "inbox":
+                        oldList = privateMessages.inbox;
+                        newList = privateMessages.GetMessagesInbox();
+                        break;
+                    case "unread":
+                        oldList = privateMessages.unread;
+                        newList = privateMessages.GetMessagesUnread();
+                        break;
+                    case "sent":
+                        oldList = privateMessages.sent;
+                        newList = privateMessages.GetMessagesSent();
+                        break;
+                }
+
+                if (ListDiff(oldList, newList, out List<RedditThings.Message> added, out List<RedditThings.Message> removed))
+                {
+                    // Event handler to alert the calling app that the list has changed.  --Kris
+                    MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
+                    {
+                        NewMessages = newList,
+                        OldMessages = oldList,
+                        Added = added,
+                        Removed = removed
+                    };
+                    TriggerUpdate(privateMessages, args, type);
+                }
+
+                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+            }
+        }
+
+        internal void MonitorPostsThread(MonitoringSnapshot monitoring, SubredditPosts posts, string key, string type, string subKey, int startDelayMs = 0)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(subKey))
+            {
+                List<Post> oldList;
+                List<Post> newList;
+                switch (type)
+                {
+                    default:
+                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                    case "best":
+                        oldList = posts.best;
+                        newList = posts.GetBest();
+                        break;
+                    case "hot":
+                        oldList = posts.hot;
+                        newList = posts.GetHot();
+                        break;
+                    case "new":
+                        oldList = posts.newPosts;
+                        newList = posts.GetNew();
+                        break;
+                    case "rising":
+                        oldList = posts.rising;
+                        newList = posts.GetRising();
+                        break;
+                    case "top":
+                        oldList = posts.top;
+                        newList = posts.GetTop();
+                        break;
+                    case "controversial":
+                        oldList = posts.controversial;
+                        newList = posts.GetControversial();
+                        break;
+                    case "modqueue":
+                        oldList = posts.modQueue;
+                        newList = posts.GetModQueue();
+                        break;
+                    case "modqueuereports":
+                        oldList = posts.modQueueReports;
+                        newList = posts.GetModQueueReports();
+                        break;
+                    case "modqueuespam":
+                        oldList = posts.modQueueSpam;
+                        newList = posts.GetModQueueSpam();
+                        break;
+                    case "modqueueunmoderated":
+                        oldList = posts.modQueueUnmoderated;
+                        newList = posts.GetModQueueUnmoderated();
+                        break;
+                    case "modqueueedited":
+                        oldList = posts.modQueueEdited;
+                        newList = posts.GetModQueueEdited();
+                        break;
+                }
+
+                if (ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
+                {
+                    // Event handler to alert the calling app that the list has changed.  --Kris
+                    PostsUpdateEventArgs args = new PostsUpdateEventArgs
+                    {
+                        NewPosts = newList,
+                        OldPosts = oldList,
+                        Added = added,
+                        Removed = removed
+                    };
+                    TriggerUpdate(posts, args, type);
+                }
+                
+                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+            }
+        }
+
+        private void TriggerUpdate(SubredditPosts posts, PostsUpdateEventArgs args, string type)
+        {
+            switch (type)
+            {
+                case "best":
+                    posts.OnBestUpdated(args);
+                    break;
+                case "hot":
+                    posts.OnHotUpdated(args);
+                    break;
+                case "new":
+                    posts.OnNewUpdated(args);
+                    break;
+                case "rising":
+                    posts.OnRisingUpdated(args);
+                    break;
+                case "top":
+                    posts.OnTopUpdated(args);
+                    break;
+                case "controversial":
+                    posts.OnControversialUpdated(args);
+                    break;
+                case "modqueue":
+                    posts.OnModQueueUpdated(args);
+                    break;
+                case "modqueuereports":
+                    posts.OnModQueueReportsUpdated(args);
+                    break;
+                case "modqueuespam":
+                    posts.OnModQueueSpamUpdated(args);
+                    break;
+                case "modqueueunmoderated":
+                    posts.OnModQueueUnmoderatedUpdated(args);
+                    break;
+                case "modqueueedited":
+                    posts.OnModQueueEditedUpdated(args);
+                    break;
+            }
+        }
+
+        private void TriggerUpdate(PrivateMessages privateMessages, MessagesUpdateEventArgs args, string type)
+        {
+            switch (type)
+            {
+                case "inbox":
+                    privateMessages.OnInboxUpdated(args);
+                    break;
+                case "unread":
+                    privateMessages.OnUnreadUpdated(args);
+                    break;
+                case "sent":
+                    privateMessages.OnSentUpdated(args);
+                    break;
+            }
+        }
+
+        private Thread CreateMonitoringThread(string key, string subKey, PrivateMessages privateMessages, int startDelayMs = 0)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "PrivateMessagesInbox":
+                    return new Thread(() => MonitorPrivateMessagesThread(Monitoring, privateMessages, key, "inbox", startDelayMs));
+                case "PrivateMessagesUnread":
+                    return new Thread(() => MonitorPrivateMessagesThread(Monitoring, privateMessages, key, "unread", startDelayMs));
+                case "PrivateMessagesSent":
+                    return new Thread(() => MonitorPrivateMessagesThread(Monitoring, privateMessages, key, "sent", startDelayMs));
+            }
+        }
+
+        private Thread CreateMonitoringThread(string key, string subKey, SubredditPosts posts, int startDelayMs = 0)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "BestPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "best", posts.Subreddit.Name, startDelayMs));
+                case "HotPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "hot", posts.Subreddit.Name, startDelayMs));
+                case "NewPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "new", posts.Subreddit.Name, startDelayMs));
+                case "RisingPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "rising", posts.Subreddit.Name, startDelayMs));
+                case "TopPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "top", posts.Subreddit.Name, startDelayMs));
+                case "ControversialPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "controversial", posts.Subreddit.Name, startDelayMs));
+                case "ModQueuePosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueue", posts.Subreddit.Name, startDelayMs));
+                case "ModQueueReportsPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueuereports", posts.Subreddit.Name, startDelayMs));
+                case "ModQueueSpamPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueuespam", posts.Subreddit.Name, startDelayMs));
+                case "ModQueueUnmoderatedPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueueunmoderated", posts.Subreddit.Name, startDelayMs));
+                case "ModQueueEditedPosts":
+                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueueedited", posts.Subreddit.Name, startDelayMs));
+            }
+        }
+
+        private void LaunchThreadIfNotNull(string key, Thread thread)
+        {
+            if (thread != null)
+            {
+                Threads.Add(key, thread);
+                Threads[key].Start();
+                while (!Threads[key].IsAlive) { }
+            }
+        }
+
+        internal bool Monitor(string key, Thread thread, string subKey, SubredditPosts posts)
+        {
+            bool res = Monitor(key, thread, subKey, out Thread newThread);
+
+            RebuildThreads(posts);
+            LaunchThreadIfNotNull(key, newThread);
+
+            return res;
+        }
+        
+        internal bool Monitor(string key, Thread thread, PrivateMessages privateMessages)
+        {
+            bool res = Monitor(key, thread, "PrivateMessages", out Thread newThread);
+
+            RebuildThreads(privateMessages);
+            LaunchThreadIfNotNull(key, newThread);
+
+            return res;
+        }
+
+        internal bool Monitor(string key, Thread thread, string subKey, out Thread newThread)
+        {
+            newThread = null;
+            if (Monitoring.Get(key).Contains(subKey))
+            {
+                // Stop monitoring.  --Kris
+                MonitorModel.RemoveMonitoringKey(key, subKey, ref Monitoring);
+                WaitOrDie(Threads[key]);
+
+                Threads.Remove(key);
+
+                return false;
             }
             else
             {
-                monitoring.Add(key, new List<string> { subKey });
-            }
+                // Start monitoring.  --Kris
+                MonitorModel.AddMonitoringKey(key, subKey, ref Monitoring);
 
-            UpdateMonitoringArgs(ref monitoring);
+                newThread = thread;
+
+                return true;
+            }
         }
 
-        internal void RemoveMonitoringKey(string key, string subKey, ref Dictionary<string, List<string>> monitoring)
+        private void KillThreads(Dictionary<string, Thread> oldThreads)
         {
-            if (monitoring.ContainsKey(key)
-                && monitoring[key].Contains(subKey))
+            TerminateThread();
+
+            foreach (KeyValuePair<string, Thread> pair in oldThreads)
             {
-                monitoring[key].Remove(subKey);
-            }
-            else
-            {
-                throw new RedditControllerException("That object is not being monitored.");
+                pair.Value.Join();
+                Threads.Remove(pair.Key);
             }
 
-            UpdateMonitoringArgs(ref monitoring);
+            Terminate = false;
         }
 
-        private void UpdateMonitoringArgs(ref Dictionary<string, List<string>> monitoring)
+        internal void RebuildThreads(SubredditPosts posts)
         {
-            // Event handler to populate Monitoring across all controllers.  --Kris
-            MonitoringUpdateEventArgs args = new MonitoringUpdateEventArgs
+            Dictionary<string, Thread> oldThreads = Threads;
+            KillThreads(oldThreads);
+
+            int i = 0;
+            foreach (KeyValuePair<string, Thread> pair in oldThreads)
             {
-                Monitoring = monitoring
-            };
-            OnMonitoringUpdated(args);
+                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, posts.Subreddit.Name, posts, (i * MonitoringWaitDelayMS)));
+                i++;
+            }
+        }
+
+        internal void RebuildThreads(PrivateMessages privateMessages)
+        {
+            Dictionary<string, Thread> oldThreads = Threads;
+            KillThreads(oldThreads);
+
+            int i = 0;
+            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            {
+                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, "PrivateMessages", privateMessages, (i * MonitoringWaitDelayMS)));
+                i++;
+            }
         }
 
         public Exception BuildException(Exception ex, List<List<string>> errors)

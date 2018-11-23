@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Reddit.NET.Controllers.EventArgs;
 using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
@@ -52,6 +53,9 @@ namespace Reddit.NET.Controllers
         public int CommentScoreHideMins;
         public bool ShowMediaPreview;
         public string SubmissionType;
+
+        internal override ref Models.Misc MonitorModel => ref MonitorModelNull;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         public RedditThings.Subreddit SubredditData
         {
@@ -243,15 +247,6 @@ namespace Reddit.NET.Controllers
             SubredditData = new RedditThings.Subreddit(this);
 
             return SubredditData;
-        }
-
-        public override void UpdateMonitoring(Dictionary<string, List<string>> monitoring)
-        {
-            Monitoring = monitoring;
-            if (Posts != null)
-            {
-                Posts.Subreddit.UpdateMonitoring(monitoring);
-            }
         }
 
         /// <summary>

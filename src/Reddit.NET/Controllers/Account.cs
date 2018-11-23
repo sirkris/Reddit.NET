@@ -1,4 +1,5 @@
-﻿using RedditThings = Reddit.NET.Models.Structures;
+﻿using Reddit.NET.Controllers.Structures;
+using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,6 +23,9 @@ namespace Reddit.NET.Controllers
         }
         private User me;
         private DateTime? MeLastUpdated;
+
+        internal override ref Models.Misc MonitorModel => ref MonitorModelNull;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         public PrivateMessages Messages;
 

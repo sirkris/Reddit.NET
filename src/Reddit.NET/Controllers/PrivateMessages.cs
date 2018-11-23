@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
@@ -14,6 +15,9 @@ namespace Reddit.NET.Controllers
         public event EventHandler<MessagesUpdateEventArgs> UnreadUpdated;
         public event EventHandler<MessagesUpdateEventArgs> SentUpdated;
 
+        internal override ref Models.Misc MonitorModel => ref Dispatch.Misc;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+
         public List<RedditThings.Message> Inbox
         {
             get
@@ -26,7 +30,7 @@ namespace Reddit.NET.Controllers
                 inbox = value;
             }
         }
-        private List<RedditThings.Message> inbox;
+        internal List<RedditThings.Message> inbox;
 
         public List<RedditThings.Message> Unread
         {
@@ -40,7 +44,7 @@ namespace Reddit.NET.Controllers
                 unread = value;
             }
         }
-        private List<RedditThings.Message> unread;
+        internal List<RedditThings.Message> unread;
 
         public List<RedditThings.Message> Sent
         {
@@ -54,13 +58,11 @@ namespace Reddit.NET.Controllers
                 sent = value;
             }
         }
-        private List<RedditThings.Message> sent;
+        internal List<RedditThings.Message> sent;
 
         private DateTime? InboxLastUpdated;
         private DateTime? UnreadLastUpdated;
         private DateTime? SentLastUpdated;
-
-        private Dictionary<string, Thread> Threads;
 
         private readonly Dispatch Dispatch;
 
@@ -74,8 +76,6 @@ namespace Reddit.NET.Controllers
             Threads = new Dictionary<string, Thread>();
 
             Dispatch = dispatch;
-
-            MonitoringUpdated += C_MonitoringUpdated;
         }
 
         /// <summary>
@@ -183,129 +183,52 @@ namespace Reddit.NET.Controllers
             return GetMessages("sent", mark, limit, after, before, show, srDetail, includeCategories, count, mid);
         }
 
-        private bool Monitor(string key, Thread thread)
-        {
-            if (Monitoring.ContainsKey(key)
-                && Monitoring[key].Contains("PrivateMessages"))
-            {
-                // Stop monitoring.  --Kris
-                RemoveMonitoringKey(key, "PrivateMessages", ref Monitoring);
-                WaitOrDie(Threads[key]);
-
-                return false;
-            }
-            else
-            {
-                // Start monitoring.  --Kris
-                AddMonitoringKey(key, "PrivateMessages", ref Monitoring);
-
-                Threads.Add(key, thread);
-                Threads[key].Start();
-                while (!Threads[key].IsAlive) { }
-
-                return true;
-            }
-        }
-
-        private void MonitorThread(string key, string type)
-        {
-            while (Monitoring.ContainsKey(key)
-                && Monitoring[key].Contains("PrivateMessages"))
-            {
-                List<RedditThings.Message> oldList;
-                List<RedditThings.Message> newList;
-                switch (type)
-                {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "inbox":
-                        oldList = inbox;
-                        newList = GetMessagesInbox();
-                        break;
-                    case "unread":
-                        oldList = unread;
-                        newList = GetMessagesUnread();
-                        break;
-                    case "sent":
-                        oldList = sent;
-                        newList = GetMessagesSent();
-                        break;
-                }
-
-                if (ListDiff(oldList, newList, out List<RedditThings.Message> added, out List<RedditThings.Message> removed))
-                {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
-                    {
-                        NewMessages = newList,
-                        OldMessages = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    switch (type)
-                    {
-                        case "inbox":
-                            OnInboxUpdated(args);
-                            break;
-                        case "unread":
-                            OnUnreadUpdated(args);
-                            break;
-                        case "sent":
-                            OnSentUpdated(args);
-                            break;
-                    }
-                }
-
-                Thread.Sleep(MonitoringCount() * MonitoringWaitDelayMS);
-            }
-        }
-
-        protected virtual void OnInboxUpdated(MessagesUpdateEventArgs e)
+        internal virtual void OnInboxUpdated(MessagesUpdateEventArgs e)
         {
             InboxUpdated?.Invoke(this, e);
         }
 
-        protected virtual void OnUnreadUpdated(MessagesUpdateEventArgs e)
+        internal virtual void OnUnreadUpdated(MessagesUpdateEventArgs e)
         {
             UnreadUpdated?.Invoke(this, e);
         }
 
-        protected virtual void OnSentUpdated(MessagesUpdateEventArgs e)
+        internal virtual void OnSentUpdated(MessagesUpdateEventArgs e)
         {
             SentUpdated?.Invoke(this, e);
         }
 
         public bool MonitorInbox()
         {
-            string key = "PrivateMessages_Inbox";
-            return Monitor(key, new Thread(() => MonitorInboxThread(key)));
+            string key = "PrivateMessagesInbox";
+            return Monitor(key, new Thread(() => MonitorInboxThread(key)), this);
         }
 
         private void MonitorInboxThread(string key)
         {
-            MonitorThread(key, "inbox");
+            MonitorPrivateMessagesThread(Monitoring, this, key, "inbox");
         }
 
         public bool MonitorUnread()
         {
-            string key = "PrivateMessages_Unread";
-            return Monitor(key, new Thread(() => MonitorUnreadThread(key)));
+            string key = "PrivateMessagesUnread";
+            return Monitor(key, new Thread(() => MonitorUnreadThread(key)), this);
         }
 
         private void MonitorUnreadThread(string key)
         {
-            MonitorThread(key, "unread");
+            MonitorPrivateMessagesThread(Monitoring, this, key, "unread");
         }
 
         public bool MonitorSent()
         {
-            string key = "PrivateMessages_Sent";
-            return Monitor(key, new Thread(() => MonitorSentThread(key)));
+            string key = "PrivateMessagesSent";
+            return Monitor(key, new Thread(() => MonitorSentThread(key)), this);
         }
 
         private void MonitorSentThread(string key)
         {
-            MonitorThread(key, "sent");
+            MonitorPrivateMessagesThread(Monitoring, this, key, "sent");
         }
     }
 }

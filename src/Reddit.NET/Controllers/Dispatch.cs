@@ -88,6 +88,25 @@ namespace Reddit.NET.Controllers
             Users.RequestsUpdated += C_RequestsUpdated;
             Widgets.RequestsUpdated += C_RequestsUpdated;
             Wiki.RequestsUpdated += C_RequestsUpdated;
+
+            Account.MonitoringUpdated += C_MonitoringUpdated;
+            Captcha.MonitoringUpdated += C_MonitoringUpdated;
+            Emoji.MonitoringUpdated += C_MonitoringUpdated;
+            Flair.MonitoringUpdated += C_MonitoringUpdated;
+            LinksAndComments.MonitoringUpdated += C_MonitoringUpdated;
+            Listings.MonitoringUpdated += C_MonitoringUpdated;
+            LiveThreads.MonitoringUpdated += C_MonitoringUpdated;
+            Misc.MonitoringUpdated += C_MonitoringUpdated;
+            Moderation.MonitoringUpdated += C_MonitoringUpdated;
+            Modmail.MonitoringUpdated += C_MonitoringUpdated;
+            Multis.MonitoringUpdated += C_MonitoringUpdated;
+            PrivateMessages.MonitoringUpdated += C_MonitoringUpdated;
+            RedditGold.MonitoringUpdated += C_MonitoringUpdated;
+            Search.MonitoringUpdated += C_MonitoringUpdated;
+            Subreddits.MonitoringUpdated += C_MonitoringUpdated;
+            Users.MonitoringUpdated += C_MonitoringUpdated;
+            Widgets.MonitoringUpdated += C_MonitoringUpdated;
+            Wiki.MonitoringUpdated += C_MonitoringUpdated;
         }
 
         public void C_TokenUpdated(object sender, TokenUpdateEventArgs e)
@@ -132,6 +151,28 @@ namespace Reddit.NET.Controllers
             Users.UpdateRequests(e.Requests);
             Widgets.UpdateRequests(e.Requests);
             Wiki.UpdateRequests(e.Requests);
+        }
+
+        public void C_MonitoringUpdated(object sender, MonitoringUpdateEventArgs e)
+        {
+            Account.UpdateMonitoring(e);
+            Captcha.UpdateMonitoring(e);
+            Emoji.UpdateMonitoring(e);
+            Flair.UpdateMonitoring(e);
+            LinksAndComments.UpdateMonitoring(e);
+            Listings.UpdateMonitoring(e);
+            LiveThreads.UpdateMonitoring(e);
+            Misc.UpdateMonitoring(e);
+            Moderation.UpdateMonitoring(e);
+            Modmail.UpdateMonitoring(e);
+            Multis.UpdateMonitoring(e);
+            PrivateMessages.UpdateMonitoring(e);
+            RedditGold.UpdateMonitoring(e);
+            Search.UpdateMonitoring(e);
+            Subreddits.UpdateMonitoring(e);
+            Users.UpdateMonitoring(e);
+            Widgets.UpdateMonitoring(e);
+            Wiki.UpdateMonitoring(e);
         }
     }
 }

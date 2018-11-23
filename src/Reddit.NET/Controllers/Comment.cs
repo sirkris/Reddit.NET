@@ -1,4 +1,5 @@
-﻿using Reddit.NET.Exceptions;
+﻿using Reddit.NET.Controllers.Structures;
+using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,9 @@ namespace Reddit.NET.Controllers
         public bool IsSubmitter;
         public bool ScoreHidden;
         public int Depth;
+
+        internal override ref Models.Misc MonitorModel => ref MonitorModelNull;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         public RedditThings.Comment Listing;
         public List<Comment> Comments

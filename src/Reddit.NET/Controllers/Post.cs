@@ -1,4 +1,5 @@
-﻿using RedditThings = Reddit.NET.Models.Structures;
+﻿using Reddit.NET.Controllers.Structures;
+using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -24,6 +25,9 @@ namespace Reddit.NET.Controllers
         public bool Removed;
         public bool Spam;
         public bool NSFW;
+
+        internal override ref Models.Misc MonitorModel => ref MonitorModelNull;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         /// <summary>
         /// The full Listing object returned by the Reddit API;
