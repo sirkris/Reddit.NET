@@ -108,6 +108,59 @@ namespace Reddit.NET.Controllers
         /// <param name="added">Any entries that are present in the new list but not the old</param>
         /// <param name="removed">Any entries that are present in the old list but not the new</param>
         /// <returns>True if the lists differ, otherwise false.</returns>
+        public bool ListDiff(List<Comment> oldList, List<Comment> newList, out List<Comment> added, out List<Comment> removed)
+        {
+            added = new List<Comment>();
+            removed = new List<Comment>();
+
+            // Index by Reddit fullname.  --Kris
+            Dictionary<string, Comment> oldByFullname = new Dictionary<string, Comment>();
+            Dictionary<string, Comment> newByFullname = new Dictionary<string, Comment>();
+            for (int i = 0; i < Math.Max(oldList.Count, newList.Count); i++)
+            {
+                if (i < oldList.Count)
+                {
+                    oldByFullname.Add(oldList[i].Fullname, oldList[i]);
+                }
+
+                if (i < newList.Count)
+                {
+                    newByFullname.Add(newList[i].Fullname, newList[i]);
+                }
+            }
+
+            // Scan for any new posts.  --Kris
+            foreach (KeyValuePair<string, Comment> pair in newByFullname)
+            {
+                if (!oldByFullname.ContainsKey(pair.Key))
+                {
+                    added.Add(pair.Value);
+                }
+                else
+                {
+                    // So we don't have to check the same element twice.  --Kris
+                    oldByFullname.Remove(pair.Key);
+                }
+            }
+
+            // Scan for any posts no longer appearing in the list.  --Kris
+            foreach (KeyValuePair<string, Comment> pair in oldByFullname)
+            {
+                // All the matching elements are gone, leaving only the removed ones.  --Kris
+                removed.Add(pair.Value);
+            }
+
+            return !(added.Count == 0 && removed.Count == 0);
+        }
+
+        /// <summary>
+        /// Scan two lists for any differences.  Sequence is ignored.
+        /// </summary>
+        /// <param name="oldList">The original list being compared against</param>
+        /// <param name="newList">The new list</param>
+        /// <param name="added">Any entries that are present in the new list but not the old</param>
+        /// <param name="removed">Any entries that are present in the old list but not the new</param>
+        /// <returns>True if the lists differ, otherwise false.</returns>
         public bool ListDiff(List<RedditThings.Message> oldList, List<RedditThings.Message> newList, out List<RedditThings.Message> added, 
             out List<RedditThings.Message> removed)
         {
@@ -372,7 +425,74 @@ namespace Reddit.NET.Controllers
                     };
                     TriggerUpdate(posts, args, type);
                 }
-                
+
+                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+            }
+        }
+
+        internal void MonitorCommentsThread(MonitoringSnapshot monitoring, Comments comments, string key, string type, string subKey, int startDelayMs = 0)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(subKey))
+            {
+                List<Comment> oldList;
+                List<Comment> newList;
+                switch (type)
+                {
+                    default:
+                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                    case "confidence":
+                        oldList = comments.confidence;
+                        newList = comments.GetConfidence();
+                        break;
+                    case "top":
+                        oldList = comments.top;
+                        newList = comments.GetTop();
+                        break;
+                    case "new":
+                        oldList = comments.newComments;
+                        newList = comments.GetNew();
+                        break;
+                    case "controversial":
+                        oldList = comments.controversial;
+                        newList = comments.GetControversial();
+                        break;
+                    case "old":
+                        oldList = comments.old;
+                        newList = comments.GetOld();
+                        break;
+                    case "random":
+                        oldList = comments.random;
+                        newList = comments.GetRandom();
+                        break;
+                    case "qa":
+                        oldList = comments.qa;
+                        newList = comments.GetQA();
+                        break;
+                    case "live":
+                        oldList = comments.live;
+                        newList = comments.GetLive();
+                        break;
+                }
+
+                if (ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
+                {
+                    // Event handler to alert the calling app that the list has changed.  --Kris
+                    CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
+                    {
+                        NewComments = newList,
+                        OldComments = oldList,
+                        Added = added,
+                        Removed = removed
+                    };
+                    TriggerUpdate(comments, args, type);
+                }
+
                 Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
             }
         }
@@ -417,6 +537,37 @@ namespace Reddit.NET.Controllers
             }
         }
 
+        private void TriggerUpdate(Comments comments, CommentsUpdateEventArgs args, string type)
+        {
+            switch (type)
+            {
+                case "confidence":
+                    comments.OnConfidenceUpdated(args);
+                    break;
+                case "top":
+                    comments.OnTopUpdated(args);
+                    break;
+                case "new":
+                    comments.OnNewUpdated(args);
+                    break;
+                case "controversial":
+                    comments.OnControversialUpdated(args);
+                    break;
+                case "old":
+                    comments.OnOldUpdated(args);
+                    break;
+                case "random":
+                    comments.OnRandomUpdated(args);
+                    break;
+                case "qa":
+                    comments.OnQAUpdated(args);
+                    break;
+                case "live":
+                    comments.OnLiveUpdated(args);
+                    break;
+            }
+        }
+
         private void TriggerUpdate(PrivateMessages privateMessages, MessagesUpdateEventArgs args, string type)
         {
             switch (type)
@@ -430,6 +581,31 @@ namespace Reddit.NET.Controllers
                 case "sent":
                     privateMessages.OnSentUpdated(args);
                     break;
+            }
+        }
+
+        private Thread CreateMonitoringThread(string key, string subKey, Comments comments, int startDelayMs = 0)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "ConfidenceComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "confidence", comments.SubKey, startDelayMs));
+                case "TopComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "top", comments.SubKey, startDelayMs));
+                case "NewComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "new", comments.SubKey, startDelayMs));
+                case "ControversialComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "controversial", comments.SubKey, startDelayMs));
+                case "OldComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "old", comments.SubKey, startDelayMs));
+                case "RandomComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "random", comments.SubKey, startDelayMs));
+                case "QAComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "qa", comments.SubKey, startDelayMs));
+                case "LiveComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "live", comments.SubKey, startDelayMs));
             }
         }
 
@@ -498,7 +674,17 @@ namespace Reddit.NET.Controllers
 
             return res;
         }
-        
+
+        internal bool Monitor(string key, Thread thread, string subKey, Comments comments)
+        {
+            bool res = Monitor(key, thread, subKey, out Thread newThread);
+
+            RebuildThreads(comments);
+            LaunchThreadIfNotNull(key, newThread);
+
+            return res;
+        }
+
         internal bool Monitor(string key, Thread thread, PrivateMessages privateMessages)
         {
             bool res = Monitor(key, thread, "PrivateMessages", out Thread newThread);
@@ -555,6 +741,19 @@ namespace Reddit.NET.Controllers
             foreach (KeyValuePair<string, Thread> pair in oldThreads)
             {
                 Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, posts.Subreddit.Name, posts, (i * MonitoringWaitDelayMS)));
+                i++;
+            }
+        }
+
+        internal void RebuildThreads(Comments comments)
+        {
+            Dictionary<string, Thread> oldThreads = Threads;
+            KillThreads(oldThreads);
+
+            int i = 0;
+            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            {
+                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, comments.SubKey, comments, (i * MonitoringWaitDelayMS)));
                 i++;
             }
         }

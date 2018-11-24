@@ -36,20 +36,8 @@ namespace Reddit.NET.Controllers
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         public RedditThings.Comment Listing;
-        public List<Comment> Comments
-        {
-            get
-            {
-                return (CommentsLastUpdated.HasValue
-                    && CommentsLastUpdated.Value.AddSeconds(15) > DateTime.Now ? comments : GetComments());
-            }
-            private set
-            {
-                comments = value;
-            }
-        }
-        private List<Comment> comments;
-        private DateTime? CommentsLastUpdated;
+
+        public Comments Comments;
 
         internal readonly Dispatch Dispatch;
 
@@ -57,6 +45,7 @@ namespace Reddit.NET.Controllers
         {
             Dispatch = dispatch;
             Import(listing);
+            Comments = new Comments(new Post(Dispatch, ParentFullname).About(), this);
         }
 
         public Comment(Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
@@ -68,6 +57,7 @@ namespace Reddit.NET.Controllers
             Dispatch = dispatch;
             Import(subreddit, author, body, bodyHtml, parentFullname, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
                 depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+            Comments = new Comments(new Post(Dispatch, parentFullname).About(), this);
         }
 
         public Comment(Dispatch dispatch, string name)
@@ -167,31 +157,6 @@ namespace Reddit.NET.Controllers
             }
 
             return new Comment(Dispatch, info.Comments[0]);
-        }
-
-        /// <summary>
-        /// Retrieve comment replies to this comment.
-        /// </summary>
-        /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
-        /// <param name="context">an integer between 0 and 8</param>
-        /// <param name="truncate">an integer between 0 and 50</param>
-        /// <param name="showEdits">boolean value</param>
-        /// <param name="showMore">boolean value</param>
-        /// <param name="threaded">boolean value</param>
-        /// <param name="depth">(optional) an integer</param>
-        /// <param name="limit">(optional) an integer</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns>A list of comments.</returns>
-        public List<Comment> GetComments(string sort = "new", int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
-        {
-            List<Comment> comments = GetComments(Dispatch.Listings.GetComments(ParentId, context, showEdits, showMore, sort, threaded, truncate, Subreddit, Id,
-                depth, limit, srDetail), Dispatch);
-
-            CommentsLastUpdated = DateTime.Now;
-
-            Comments = comments;
-            return comments;
         }
 
         /// <summary>

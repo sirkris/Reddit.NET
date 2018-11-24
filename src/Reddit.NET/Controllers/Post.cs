@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.Structures;
+using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Reddit.NET.Controllers
     /// <summary>
     /// Base class for posts and comments.
     /// </summary>
-    public abstract class Post : BaseController
+    public class Post : BaseController
     {
         public string Subreddit;
         public string Title;
@@ -34,20 +35,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         public RedditThings.Post Listing;
 
-        public List<Comment> Comments
-        {
-            get
-            {
-                return (CommentsLastUpdated.HasValue
-                    && CommentsLastUpdated.Value.AddSeconds(15) > DateTime.Now ? comments : GetComments());
-            }
-            private set
-            {
-                comments = value;
-            }
-        }
-        private List<Comment> comments;
-        private DateTime? CommentsLastUpdated;
+        public Comments Comments;
 
         internal readonly Dispatch Dispatch;
 
@@ -63,17 +51,20 @@ namespace Reddit.NET.Controllers
         {
             Import(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
             Dispatch = dispatch;
+            Comments = new Comments(this);
         }
 
         public Post(Dispatch dispatch, string name)
         {
             Dispatch = dispatch;
             Fullname = name;
+            Comments = new Comments(this);
         }
 
         public Post(Dispatch dispatch)
         {
             Dispatch = dispatch;
+            Comments = new Comments(this);
         }
 
         internal void Import(RedditThings.Post listing)
@@ -118,10 +109,6 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
-        abstract public RedditThings.PostResultShortData Submit(bool resubmit = false, bool ad = false, string app = "", string extension = "",
-            string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
-            string videoPosterUrl = "");
-
         public Comment Comment(string author, string body, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
@@ -138,28 +125,21 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
-        /// Retrieve comment replies to this post.
+        /// Return information about the current Post instance.
         /// </summary>
-        /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
-        /// <param name="context">an integer between 0 and 8</param>
-        /// <param name="truncate">an integer between 0 and 50</param>
-        /// <param name="showEdits">boolean value</param>
-        /// <param name="showMore">boolean value</param>
-        /// <param name="threaded">boolean value</param>
-        /// <param name="depth">(optional) an integer</param>
-        /// <param name="limit">(optional) an integer</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <returns>A list of comments.</returns>
-        public List<Comment> GetComments(string sort = "new", int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+        /// <returns>An instance of this class populated with the retrieved data.</returns>
+        public Post About()
         {
-            List<Comment> comments = GetComments(Dispatch.Listings.GetComments(Id, context, showEdits, showMore, sort, threaded, truncate, Subreddit, null,
-                depth, limit, srDetail), Dispatch);
+            RedditThings.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            if (info == null
+                || info.Posts == null
+                || info.Posts.Count == 0
+                || Fullname.Equals(info.Posts[0].Name))
+            {
+                throw new RedditControllerException("Unable to retrieve post data.");
+            }
 
-            CommentsLastUpdated = DateTime.Now;
-
-            Comments = comments;
-            return comments;
+            return new Post(Dispatch, info.Posts[0]);
         }
 
         /// <summary>
