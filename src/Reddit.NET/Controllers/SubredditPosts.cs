@@ -24,7 +24,7 @@ namespace Reddit.NET.Controllers
         public event EventHandler<PostsUpdateEventArgs> ModQueueUnmoderatedUpdated;
         public event EventHandler<PostsUpdateEventArgs> ModQueueEditedUpdated;
 
-        internal override ref Models.Misc MonitorModel => ref Subreddit.Dispatch.Misc;
+        internal override ref Models.Internal.Monitor MonitorModel => ref Subreddit.Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         public List<Post> Best

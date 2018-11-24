@@ -32,7 +32,7 @@ namespace Reddit.NET.Controllers
         public bool ScoreHidden;
         public int Depth;
 
-        internal override ref Models.Misc MonitorModel => ref MonitorModelNull;
+        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         public RedditThings.Comment Listing;

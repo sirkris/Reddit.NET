@@ -12,10 +12,10 @@ namespace Reddit.NET.Controllers
 {
     public abstract class BaseController
     {
-        internal abstract ref Models.Misc MonitorModel { get; }
-        internal Models.Misc MonitorModelNull = null;
+        internal Models.Internal.Monitor MonitorNull = null;
         internal MonitoringSnapshot MonitoringSnapshotNull = null;
-
+        
+        internal abstract ref Models.Internal.Monitor MonitorModel { get; }
         internal abstract ref MonitoringSnapshot Monitoring { get; }
 
         public int MonitoringWaitDelayMS = 1500;

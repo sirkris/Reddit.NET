@@ -17,7 +17,7 @@ namespace Reddit.NET.Controllers
         public string Name;
         public string Subreddit;
 
-        internal override ref Models.Misc MonitorModel => ref MonitorModelNull;
+        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         internal readonly Dispatch Dispatch;

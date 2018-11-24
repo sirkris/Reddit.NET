@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using Reddit.NET.Models.Internal;
 
 namespace Reddit.NET.Controllers
 {
@@ -15,7 +16,7 @@ namespace Reddit.NET.Controllers
         public event EventHandler<MessagesUpdateEventArgs> UnreadUpdated;
         public event EventHandler<MessagesUpdateEventArgs> SentUpdated;
 
-        internal override ref Models.Misc MonitorModel => ref Dispatch.Misc;
+        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         public List<RedditThings.Message> Inbox
