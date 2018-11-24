@@ -597,7 +597,6 @@ namespace Example
         {
             foreach (Comment comment in e.Added)
             {
-                // TODO - comment.Root.Title is null or empty.  --Kris
                 Console.WriteLine("[" + comment.Subreddit + "/" + comment.Root.Title + "] New Comment by " + comment.Author + ": " + comment.Body);
             }
         }

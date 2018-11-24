@@ -88,7 +88,7 @@ namespace Reddit.NET.Controllers
             get
             {
                 return (TopLastUpdated.HasValue
-                    && TopLastUpdated.Value.AddSeconds(15) > DateTime.Now ? top : GetTop());
+                    && TopLastUpdated.Value.AddSeconds(15) > DateTime.Now ? top : GetTop(TopT));
             }
             private set
             {
@@ -102,7 +102,7 @@ namespace Reddit.NET.Controllers
             get
             {
                 return (ControversialLastUpdated.HasValue
-                    && ControversialLastUpdated.Value.AddSeconds(15) > DateTime.Now ? controversial : GetControversial());
+                    && ControversialLastUpdated.Value.AddSeconds(15) > DateTime.Now ? controversial : GetControversial(ControversialT));
             }
             private set
             {
@@ -200,6 +200,9 @@ namespace Reddit.NET.Controllers
             private set;
         }
 
+        private string TopT = "all";
+        private string ControversialT = "all";
+
         public SubredditPosts(Subreddit subreddit, List<Post> best = null, List<Post> hot = null, List<Post> newPosts = null,
             List<Post> rising = null, List<Post> top = null, List<Post> controversial = null, List<Post> modQueue = null, 
             List<Post> modQueueReports = null, List<Post> modQueueSpam = null, List<Post> modQueueUnmoderated = null, 
@@ -270,6 +273,7 @@ namespace Reddit.NET.Controllers
             TopLastUpdated = DateTime.Now;
 
             Top = posts;
+            TopT = t;
             return posts;
         }
 
@@ -280,6 +284,7 @@ namespace Reddit.NET.Controllers
             ControversialLastUpdated = DateTime.Now;
 
             Controversial = posts;
+            ControversialT = t;
             return posts;
         }
 
