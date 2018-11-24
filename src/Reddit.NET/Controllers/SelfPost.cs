@@ -145,13 +145,13 @@ namespace Reddit.NET.Controllers
         /// Return information about the current SelfPost instance.
         /// </summary>
         /// <returns>An instance of this class populated with the retrieved data.</returns>
-        public SelfPost About()
+        public new SelfPost About()
         {
             RedditThings.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
                 || info.Posts == null
                 || info.Posts.Count == 0
-                || Fullname.Equals(info.Posts[0].Name))
+                || !Fullname.Equals(info.Posts[0].Name))
             {
                 throw new RedditControllerException("Unable to retrieve post data.");
             }

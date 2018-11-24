@@ -35,7 +35,18 @@ namespace Reddit.NET.Controllers
         /// </summary>
         public RedditThings.Post Listing;
 
-        public Comments Comments;
+        public Comments Comments
+        {
+            get
+            {
+                return comments ?? InitComments();
+            }
+            private set
+            {
+                comments = value;
+            }
+        }
+        private Comments comments = null;
 
         internal readonly Dispatch Dispatch;
 
@@ -51,20 +62,23 @@ namespace Reddit.NET.Controllers
         {
             Import(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
             Dispatch = dispatch;
-            Comments = new Comments(this);
         }
 
         public Post(Dispatch dispatch, string name)
         {
             Dispatch = dispatch;
             Fullname = name;
-            Comments = new Comments(this);
         }
 
         public Post(Dispatch dispatch)
         {
             Dispatch = dispatch;
+        }
+
+        private Comments InitComments()
+        {
             Comments = new Comments(this);
+            return Comments;
         }
 
         internal void Import(RedditThings.Post listing)
@@ -134,14 +148,14 @@ namespace Reddit.NET.Controllers
             if (info == null
                 || info.Posts == null
                 || info.Posts.Count == 0
-                || Fullname.Equals(info.Posts[0].Name))
+                || !Fullname.Equals(info.Posts[0].Name))
             {
                 throw new RedditControllerException("Unable to retrieve post data.");
             }
 
             return new Post(Dispatch, info.Posts[0]);
         }
-
+        
         /// <summary>
         /// Delete this post.
         /// </summary>

@@ -32,12 +32,36 @@ namespace Reddit.NET.Controllers
         public bool ScoreHidden;
         public int Depth;
 
+        public Post Root
+        {
+            get
+            {
+                return (root ?? GetRoot(ParentFullname));
+            }
+            private set
+            {
+                root = value;
+            }
+        }
+        private Post root = null;
+
         internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         public RedditThings.Comment Listing;
 
-        public Comments Comments;
+        public Comments Comments
+        {
+            get
+            {
+                return comments ?? InitComments();
+            }
+            private set
+            {
+                comments = value;
+            }
+        }
+        private Comments comments = null;
 
         internal readonly Dispatch Dispatch;
 
@@ -45,9 +69,8 @@ namespace Reddit.NET.Controllers
         {
             Dispatch = dispatch;
             Import(listing);
-            Comments = new Comments(new Post(Dispatch, ParentFullname).About(), this);
         }
-
+        
         public Comment(Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
@@ -57,7 +80,6 @@ namespace Reddit.NET.Controllers
             Dispatch = dispatch;
             Import(subreddit, author, body, bodyHtml, parentFullname, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
                 depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
-            Comments = new Comments(new Post(Dispatch, parentFullname).About(), this);
         }
 
         public Comment(Dispatch dispatch, string name)
@@ -69,6 +91,12 @@ namespace Reddit.NET.Controllers
         public Comment(Dispatch dispatch)
         {
             Dispatch = dispatch;
+        }
+
+        private Comments InitComments()
+        {
+            Comments = new Comments(new Post(Dispatch, Root.Fullname).About(), this);
+            return Comments;
         }
 
         private void Import(RedditThings.Comment listing)
@@ -110,7 +138,7 @@ namespace Reddit.NET.Controllers
             Body = body;
             BodyHTML = bodyHtml;
             ParentFullname = parentFullname;
-            ParentId = (!string.IsNullOrEmpty(ParentFullname) && ParentFullname.StartsWith("t3_") ? ParentFullname.Substring(3) : null);
+            ParentId = (!string.IsNullOrEmpty(ParentFullname) && (ParentFullname.StartsWith("t3_") || ParentFullname.StartsWith("t1_")) ? ParentFullname.Substring(3) : null); ;
             CollapsedReason = collapsedReason;
             Collapsed = collapsed;
             IsSubmitter = isSubmitter;
@@ -129,6 +157,35 @@ namespace Reddit.NET.Controllers
             Spam = spam;
 
             Listing = new RedditThings.Comment(this);
+        }
+
+        public Post GetRoot(string fullname = null)
+        {
+            fullname = fullname ?? ParentFullname;
+            if (string.IsNullOrWhiteSpace(fullname))
+            {
+                return null;
+            }
+
+            RedditThings.Info info = null;
+            do
+            {
+                info = Validate(Dispatch.LinksAndComments.Info(fullname, Subreddit));
+                fullname = GetInfoPostOrCommentParentFullname(info);
+            } while (info != null && info.Comments != null && info.Comments.Count > 0
+                && !string.IsNullOrWhiteSpace(fullname) && !fullname.StartsWith("t3_"));
+
+            return new Post(Dispatch, fullname);
+        }
+
+        private string GetInfoPostOrCommentParentFullname(RedditThings.Info info)
+        {
+            if (info == null)
+            {
+                return null;
+            }
+
+            return (info.Posts != null && info.Posts.Count > 0 ? info.Posts[0].Name : info.Comments[0].ParentId);
         }
 
         /// <summary>
