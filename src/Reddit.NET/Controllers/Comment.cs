@@ -175,7 +175,7 @@ namespace Reddit.NET.Controllers
             } while (info != null && info.Comments != null && info.Comments.Count > 0
                 && !string.IsNullOrWhiteSpace(fullname) && !fullname.StartsWith("t3_"));
 
-            return new Post(Dispatch, fullname);
+            return new Post(Dispatch, fullname).About();
         }
 
         private string GetInfoPostOrCommentParentFullname(RedditThings.Info info)
