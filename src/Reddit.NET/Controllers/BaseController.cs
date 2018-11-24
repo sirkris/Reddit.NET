@@ -26,7 +26,7 @@ namespace Reddit.NET.Controllers
 
         public BaseController()
         {
-            
+            Threads = new Dictionary<string, Thread>();
         }
 
         internal void TerminateThread()

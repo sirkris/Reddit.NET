@@ -68,7 +68,8 @@ namespace Reddit.NET.Controllers
         private readonly Dispatch Dispatch;
 
         public PrivateMessages(Dispatch dispatch, List<RedditThings.Message> inbox = null, List<RedditThings.Message> unread = null,
-            List<RedditThings.Message> sent = null)
+            List<RedditThings.Message> sent = null) 
+            : base()
         {
             Inbox = inbox ?? new List<RedditThings.Message>();
             Unread = unread ?? new List<RedditThings.Message>();

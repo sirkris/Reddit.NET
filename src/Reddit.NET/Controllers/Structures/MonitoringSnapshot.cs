@@ -20,11 +20,21 @@ namespace Reddit.NET.Controllers.Structures
         public List<string> PrivateMessagesInbox;
         public List<string> PrivateMessagesUnread;
         public List<string> PrivateMessagesSent;
+        public List<string> ConfidenceComments;
+        public List<string> TopComments;
+        public List<string> NewComments;
+        public List<string> ControversialComments;
+        public List<string> OldComments;
+        public List<string> RandomComments;
+        public List<string> QAComments;
+        public List<string> LiveComments;
 
         public MonitoringSnapshot(List<string> bestPosts = null, List<string> hotPosts = null, List<string> newPosts = null, List<string> risingPosts = null, 
             List<string> topPosts = null, List<string> controversialPosts = null, List<string> modQueuePosts = null, List<string> modQueueReportsPosts = null, 
             List<string> modQueueSpamPosts = null, List<string> modQueueUnmoderatedPosts = null, List<string> modQueueEditedPosts = null, 
-            List<string> privateMessagesInbox = null, List<string> privateMessagesUnread = null, List<string> privateMessagesSent = null)
+            List<string> privateMessagesInbox = null, List<string> privateMessagesUnread = null, List<string> privateMessagesSent = null, 
+            List<string> confidenceComments = null, List<string> topComments = null, List<string> newComments = null, List<string> controversialComments = null, 
+            List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null)
         {
             BestPosts = (bestPosts ?? new List<string>());
             HotPosts = (hotPosts ?? new List<string>());
@@ -40,6 +50,14 @@ namespace Reddit.NET.Controllers.Structures
             PrivateMessagesInbox = (privateMessagesInbox ?? new List<string>());
             PrivateMessagesUnread = (privateMessagesUnread ?? new List<string>());
             PrivateMessagesSent = (privateMessagesSent ?? new List<string>());
+            ConfidenceComments = (confidenceComments ?? new List<string>());
+            TopComments = (topComments ?? new List<string>());
+            NewComments = (newComments ?? new List<string>());
+            ControversialComments = (controversialComments ?? new List<string>());
+            OldComments = (oldComments ?? new List<string>());
+            RandomComments = (randomComments ?? new List<string>());
+            QAComments = (qaComments ?? new List<string>());
+            LiveComments = (liveComments ?? new List<string>());
         }
 
         public ref List<string> Get(string key)
@@ -76,6 +94,22 @@ namespace Reddit.NET.Controllers.Structures
                     return ref PrivateMessagesUnread;
                 case "PrivateMessagesSent":
                     return ref PrivateMessagesSent;
+                case "ConfidenceComments":
+                    return ref ConfidenceComments;
+                case "TopComments":
+                    return ref TopComments;
+                case "NewComments":
+                    return ref NewComments;
+                case "ControversialComments":
+                    return ref ControversialComments;
+                case "OldComments":
+                    return ref OldComments;
+                case "RandomComments":
+                    return ref RandomComments;
+                case "QAComments":
+                    return ref QAComments;
+                case "LiveComments":
+                    return ref LiveComments;
             }
         }
 
@@ -97,6 +131,14 @@ namespace Reddit.NET.Controllers.Structures
                 Add(monitoringSnapshot.PrivateMessagesInbox, ref PrivateMessagesInbox);
                 Add(monitoringSnapshot.PrivateMessagesUnread, ref PrivateMessagesUnread);
                 Add(monitoringSnapshot.PrivateMessagesSent, ref PrivateMessagesSent);
+                Add(monitoringSnapshot.ConfidenceComments, ref ConfidenceComments);
+                Add(monitoringSnapshot.TopComments, ref TopComments);
+                Add(monitoringSnapshot.NewComments, ref NewComments);
+                Add(monitoringSnapshot.ControversialComments, ref ControversialComments);
+                Add(monitoringSnapshot.OldComments, ref OldComments);
+                Add(monitoringSnapshot.RandomComments, ref RandomComments);
+                Add(monitoringSnapshot.QAComments, ref QAComments);
+                Add(monitoringSnapshot.LiveComments, ref LiveComments);
             }
         }
 
@@ -129,6 +171,14 @@ namespace Reddit.NET.Controllers.Structures
                 Remove(monitoringSnapshot.PrivateMessagesInbox, ref PrivateMessagesInbox);
                 Remove(monitoringSnapshot.PrivateMessagesUnread, ref PrivateMessagesUnread);
                 Remove(monitoringSnapshot.PrivateMessagesSent, ref PrivateMessagesSent);
+                Remove(monitoringSnapshot.ConfidenceComments, ref ConfidenceComments);
+                Remove(monitoringSnapshot.TopComments, ref TopComments);
+                Remove(monitoringSnapshot.NewComments, ref NewComments);
+                Remove(monitoringSnapshot.ControversialComments, ref ControversialComments);
+                Remove(monitoringSnapshot.OldComments, ref OldComments);
+                Remove(monitoringSnapshot.RandomComments, ref RandomComments);
+                Remove(monitoringSnapshot.QAComments, ref QAComments);
+                Remove(monitoringSnapshot.LiveComments, ref LiveComments);
             }
         }
 
@@ -157,7 +207,15 @@ namespace Reddit.NET.Controllers.Structures
                 + ModQueueEditedPosts.Count
                 + PrivateMessagesInbox.Count
                 + PrivateMessagesUnread.Count
-                + PrivateMessagesSent.Count);
+                + PrivateMessagesSent.Count
+                + ConfidenceComments.Count
+                + TopComments.Count
+                + NewComments.Count
+                + ControversialComments.Count
+                + OldComments.Count
+                + RandomComments.Count
+                + QAComments.Count
+                + LiveComments.Count);
         }
     }
 }

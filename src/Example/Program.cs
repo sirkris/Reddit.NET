@@ -189,6 +189,23 @@ namespace Example
 
                 Console.WriteLine("Done monitoring!");
 
+                // Grab today's top post in AskReddit and monitor its new comments.  --Kris
+                Post post = sub.Posts.GetTop("day")[0];
+                post.Comments.GetNew();
+
+                Console.WriteLine("Monitoring today's top post on AskReddit....");
+
+                post.Comments.MonitorNew();  // Toggle on.
+                post.Comments.NewUpdated += C_NewCommentsUpdated;
+
+                start = DateTime.Now;
+                while (start.AddMinutes(1) > DateTime.Now) { }
+
+                post.Comments.MonitorNew();  // Toggle off.
+                post.Comments.NewUpdated -= C_NewCommentsUpdated;
+
+                Console.WriteLine("Done monitoring!");
+
                 // Now let's monitor r/all for a bit.  --Kris
                 Subreddit all = reddit.Subreddit("all");
                 all.Posts.GetNew();
@@ -573,6 +590,15 @@ namespace Example
             foreach (Post post in e.Added)
             {
                 Console.WriteLine("[" + post.Subreddit + "] New Post by " + post.Author + ": " + post.Title);
+            }
+        }
+
+        public static void C_NewCommentsUpdated(object sender, CommentsUpdateEventArgs e)
+        {
+            foreach (Comment comment in e.Added)
+            {
+                // TODO - comment.Root.Title is null or empty.  --Kris
+                Console.WriteLine("[" + comment.Subreddit + "/" + comment.Root.Title + "] New Comment by " + comment.Author + ": " + comment.Body);
             }
         }
     }

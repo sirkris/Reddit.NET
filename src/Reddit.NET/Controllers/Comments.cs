@@ -159,7 +159,8 @@ namespace Reddit.NET.Controllers
         public string SubKey;
 
         public Comments(Post post = null, Comment comment = null, List<Comment> confidence = null, List<Comment> top = null, List<Comment> newComments = null, List<Comment> controversial = null,
-            List<Comment> old = null, List<Comment> random = null, List<Comment> qa = null, List<Comment> live = null)
+            List<Comment> old = null, List<Comment> random = null, List<Comment> qa = null, List<Comment> live = null) 
+            : base()
         {
             Confidence = confidence ?? new List<Comment>();
             Top = top ?? new List<Comment>();

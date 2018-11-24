@@ -203,7 +203,8 @@ namespace Reddit.NET.Controllers
         public SubredditPosts(Subreddit subreddit, List<Post> best = null, List<Post> hot = null, List<Post> newPosts = null,
             List<Post> rising = null, List<Post> top = null, List<Post> controversial = null, List<Post> modQueue = null, 
             List<Post> modQueueReports = null, List<Post> modQueueSpam = null, List<Post> modQueueUnmoderated = null, 
-            List<Post> modQueueEdited = null)
+            List<Post> modQueueEdited = null) 
+            : base()
         {
             Best = best ?? new List<Post>();
             Hot = hot ?? new List<Post>();
@@ -217,8 +218,6 @@ namespace Reddit.NET.Controllers
             ModQueueSpam = modQueueSpam ?? new List<Post>();
             ModQueueUnmoderated = modQueueUnmoderated ?? new List<Post>();
             ModQueueEdited = modQueueEdited ?? new List<Post>();
-
-            Threads = new Dictionary<string, Thread>();
 
             Subreddit = subreddit;
         }
