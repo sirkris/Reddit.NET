@@ -610,5 +610,15 @@ namespace Reddit.NET.Controllers
         {
             Dispatch.Moderation.Approve(Fullname);
         }
+
+        /// <summary>
+        /// Return information about a users's flair options.
+        /// </summary>
+        /// <param name="username">A valid Reddit username</param>
+        /// <returns>Flair results.</returns>
+        public RedditThings.FlairSelectorResultContainer FlairSelector(string username)
+        {
+            return Validate(Dispatch.Flair.FlairSelector(username, Subreddit, Fullname));
+        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -183,6 +183,195 @@ namespace Reddit.NET
         public Subreddit Subreddit()
         {
             return new Subreddit(Models);
+        }
+
+        /// <summary>
+        /// Get a listing of posts by fullname.
+        /// </summary>
+        /// <param name="fullnames">A list of post fullnames</param>
+        /// <returns>A list of populated posts.</returns>
+        public List<Post> GetPosts(List<string> fullnames)
+        {
+            return Account.GetPosts(Account.Validate(Models.Listings.GetByNames(string.Join(",", fullnames))), Models);
+        }
+
+        /// <summary>
+        /// Get a listing of posts by fullname.
+        /// </summary>
+        /// <param name="posts">A list of post objects with valid Fullnames</param>
+        /// <returns>A list of populated posts.</returns>
+        public List<Post> GetPosts(List<Post> posts)
+        {
+            List<string> fullnames = new List<string>();
+            foreach (Post post in posts)
+            {
+                fullnames.Add(post.Fullname);
+            }
+
+            return GetPosts(fullnames);
+        }
+
+        /// <summary>
+        /// Retrieve descriptions of reddit's OAuth2 scopes.
+        /// If no scopes are given, information on all scopes are returned.
+        /// Invalid scope(s) will result in a 400 error with body that indicates the invalid scope(s).
+        /// </summary>
+        /// <param name="scopes">(optional) An OAuth2 scope string</param>
+        /// <returns>A list of scopes.</returns>
+        public Dictionary<string, RedditThings.Scope> Scopes(string scopes = null)
+        {
+            return Account.Validate(Models.Misc.Scopes(scopes));
+        }
+
+        /// <summary>
+        /// List subreddit names that begin with a query string.
+        /// Subreddits whose names begin with query will be returned.
+        /// If include_over_18 is false, subreddits with over-18 content restrictions will be filtered from the results.
+        /// If include_unadvertisable is False, subreddits that have hide_ads set to True or are on the anti_ads_subreddits list will be filtered.
+        /// If exact is true, only an exact match will be returned. Exact matches are inclusive of over_18 subreddits, but not hide_ad subreddits when include_unadvertisable is False.
+        /// </summary>
+        /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
+        /// <param name="exact">boolean value</param>
+        /// <param name="includeOver18">boolean value</param>
+        /// <param name="includeUnadvertisable">boolean value</param>
+        /// <returns>A list of subreddit names.</returns>
+        public List<string> SearchRedditNames(string query, bool exact = false, bool includeOver18 = true, bool includeUnadvertisable = true)
+        {
+            return ((RedditThings.SubredditNames)Account.Validate(Models.Subreddits.SearchRedditNames(exact, includeOver18, includeUnadvertisable, query))).Names;
+        }
+
+        /// <summary>
+        /// List subreddits that begin with a query string.
+        /// Subreddits whose names begin with query will be returned.
+        /// If include_over_18 is false, subreddits with over-18 content restrictions will be filtered from the results.
+        /// If include_unadvertisable is False, subreddits that have hide_ads set to True or are on the anti_ads_subreddits list will be filtered.
+        /// If exact is true, only an exact match will be returned.Exact matches are inclusive of over_18 subreddits, but not hide_ad subreddits when include_unadvertisable is False.
+        /// </summary>
+        /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
+        /// <param name="exact">boolean value</param>
+        /// <param name="includeOver18">boolean value</param>
+        /// <param name="includeUnadvertisable">boolean value</param>
+        /// <returns>A list of subreddit listings.</returns>
+        public List<RedditThings.SubSearchResult> SearchSubredditNames(string query, bool exact = false, bool includeOver18 = true, bool includeUnadvertisable = true)
+        {
+            return ((RedditThings.SubSearch)Account.Validate(Models.Subreddits.SearchSubreddits(exact, includeOver18, includeUnadvertisable, query))).Subreddits;
+        }
+
+        /// <summary>
+        /// Search subreddits by title and description.
+        /// </summary>
+        /// <param name="query">a search query</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="showUsers">boolean value</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="sort">one of (relevance, activity)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of subreddit objects.</returns>
+        public List<Subreddit> SearchSubreddits(string query, int limit = 25, bool showUsers = false, string after = "", string before = "", string sort = "relevance",
+            string show = "all", bool srDetail = false, int count = 0)
+        {
+            return Account.GetSubreddits(Account.Validate(Models.Subreddits.Search(after, before, query, showUsers, sort, count, limit, show, srDetail)), Models);
+        }
+
+        /// <summary>
+        /// Return a list of subreddits and data for subreddits whose names start with 'query'.
+        /// Uses typeahead endpoint to recieve the list of subreddits names. 
+        /// Typeahead provides exact matches, typo correction, fuzzy matching and boosts subreddits to the top that the user is subscribed to.
+        /// </summary>
+        /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
+        /// <param name="includeOver18">boolean value</param>
+        /// <param name="includeProfiles">boolean value</param>
+        /// <returns>Matching subreddits.</returns>
+        public List<RedditThings.SubredditAutocompleteResult> SubredditAutocomplete(string query, bool includeOver18 = true, bool includeProfiles = true)
+        {
+            return ((RedditThings.SubredditAutocompleteResultContainer)Account.Validate(Models.Subreddits.SubredditAutocomplete(includeOver18, includeProfiles, query))).Subreddits;
+        }
+
+        /// <summary>
+        /// Version 2 of SubredditAutocomplete.
+        /// </summary>
+        /// <param name="query">a string up to 50 characters long, consisting of printable characters</param>
+        /// <param name="includeOver18"boolean value></param>
+        /// <param name="includeProfiles">boolean value</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="limit">an integer between 1 and 10 (default: 5)</param>
+        /// <returns>Matching subreddits.</returns>
+        public List<Subreddit> SubredditAutocompleteV2(string query, bool includeOver18 = true, bool includeProfiles = true, bool includeCategories = true, int limit = 5)
+        {
+            return Account.GetSubreddits(Account.Validate(Models.Subreddits.SubredditAutocompleteV2(includeCategories, includeOver18, includeProfiles, query, limit)), Models);
+        }
+
+        // TODO - Split this up and maybe create a new Subreddits controller for these?  --Kris
+        /// <summary>
+        /// Get all subreddits.
+        /// The where parameter chooses the order in which the subreddits are displayed.
+        /// popular sorts on the activity of the subreddit and the position of the subreddits can shift around.
+        /// new sorts the subreddits based on their creation date, newest first.
+        /// </summary>
+        /// <param name="where">One of (popular, new, gold, default)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>List of subreddit objects.</returns>
+        public List<Subreddit> GetSubreddits(string where, int limit = 25, string after = "", string before = "", bool includeCategories = false,
+            string show = "all", bool srDetail = false, int count = 0)
+        {
+            return Account.GetSubreddits(Account.Validate(Models.Subreddits.Get(where, after, before, includeCategories, count, limit, show, srDetail)), Models);
+        }
+
+        // TODO - Split this up and maybe create a new Subreddits controller for these?  --Kris
+        /// <summary>
+        /// Get all subreddits.
+        /// The where parameter chooses the order in which the subreddits are displayed.
+        /// popular sorts on the activity of the subreddit and the position of the subreddits can shift around.
+        /// new sorts the subreddits based on their creation date, newest first.
+        /// </summary>
+        /// <param name="where">One of (popular, new, gold, default)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>List of subreddit objects.</returns>
+        public List<Subreddit> GetUserSubreddits(string where, int limit = 25, string after = "", string before = "", bool includeCategories = false,
+            string show = "all", bool srDetail = false, int count = 0)
+        {
+            return Account.GetSubreddits(Account.Validate(Models.Subreddits.GetUserSubreddits(where, after, before, includeCategories, count, limit, show, srDetail)), Models);
+        }
+
+        /// <summary>
+        /// Get user data by account IDs.
+        /// </summary>
+        /// <param name="fullnames">A list of account fullnames</param>
+        /// <returns>A dictionary of user summary objects.</returns>
+        public List<User> UserDataByAccountIds(List<string> fullnames)
+        {
+            return Account.Validate(Models.Users.UserDataByAccountIds(string.Join(",", fullnames)));
+        }
+
+        /// <summary>
+        /// Get user data by account IDs.
+        /// </summary>
+        /// <param name="users">A list of user objects with valid Fullnames</param>
+        /// <returns>A dictionary of user summary objects.</returns>
+        public List<User> UserDataByAccountIds(List<User> users)
+        {
+            List<string> fullnames = new List<string>();
+            foreach (User user in users)
+            {
+                fullnames.Add(user.Fullname);
+            }
+
+            return UserDataByAccountIds(fullnames);
         }
     }
 }

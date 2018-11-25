@@ -247,6 +247,11 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetPosts(RedditThings.PostContainer postContainer, Dispatch dispatch)
         {
+            if (postContainer == null || postContainer.Data == null || postContainer.Data.Children == null)
+            {
+                return null;
+            }
+
             List<Post> posts = new List<Post>();
             foreach (RedditThings.PostChild postChild in postContainer.Data.Children)
             {
@@ -261,6 +266,22 @@ namespace Reddit.NET.Controllers
                         posts.Add(new LinkPost(dispatch, postChild.Data));
                     }
                 }
+            }
+
+            return posts;
+        }
+
+        public List<Post> GetPosts(List<RedditThings.PostContainer> postContainers, Dispatch dispatch)
+        {
+            if (postContainers == null)
+            {
+                return null;
+            }
+
+            List<Post> posts = new List<Post>();
+            foreach (RedditThings.PostContainer postContainer in postContainers)
+            {
+                posts.AddRange(GetPosts(postContainer, dispatch));
             }
 
             return posts;
@@ -1111,6 +1132,15 @@ namespace Reddit.NET.Controllers
             CheckNull(commentResultContainer.JSON.Data.Things[0].Data, "Reddit API returned response object with null comment data.");
 
             return commentResultContainer;
+        }
+
+        public RedditThings.SubredditContainer Validate(RedditThings.SubredditContainer subredditContainer)
+        {
+            CheckNull(subredditContainer);
+            CheckNull(subredditContainer.Data, "Reddit API returned empty response object.");
+            CheckNull(subredditContainer.Data.Children, "Reddit API returned a response object with null children.");
+
+            return subredditContainer;
         }
     }
 }

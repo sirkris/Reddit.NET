@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Reddit.NET.Models.Internal;
 
 namespace Reddit.NET.Controllers
@@ -183,6 +184,35 @@ namespace Reddit.NET.Controllers
             string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
         {
             return GetMessages("sent", mark, limit, after, before, show, srDetail, includeCategories, count, mid);
+        }
+
+        /// <summary>
+        /// Send a private message.
+        /// </summary>
+        /// <param name="to">the name of an existing user</param>
+        /// <param name="subject">a string no longer than 100 characters</param>
+        /// <param name="text">raw markdown text</param>
+        /// <param name="fromSr">subreddit name</param>
+        /// <param name="gRecaptchaResponse"></param>
+        public void Compose(string to, string subject, string text, string fromSr = "", string gRecaptchaResponse = "")
+        {
+            Validate(Dispatch.PrivateMessages.Compose(fromSr, gRecaptchaResponse, subject, text, to));
+        }
+
+        /// <summary>
+        /// Send a private message asynchronously.
+        /// </summary>
+        /// <param name="to">the name of an existing user</param>
+        /// <param name="subject">a string no longer than 100 characters</param>
+        /// <param name="text">raw markdown text</param>
+        /// <param name="fromSr">subreddit name</param>
+        /// <param name="gRecaptchaResponse"></param>
+        public async void ComposeAsync(string to, string subject, string text, string fromSr = "", string gRecaptchaResponse = "")
+        {
+            await Task.Run(() =>
+            {
+                Compose(to, subject, text, fromSr, gRecaptchaResponse);
+            });
         }
 
         internal virtual void OnInboxUpdated(MessagesUpdateEventArgs e)

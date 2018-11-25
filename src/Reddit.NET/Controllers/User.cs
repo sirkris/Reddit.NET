@@ -580,5 +580,24 @@ namespace Reddit.NET.Controllers
                 DenyWikiEdit(page, subreddit);
             });
         }
+
+        /// <summary>
+        /// Block this user.
+        /// </summary>
+        public void Block()
+        {
+            Validate(Dispatch.Users.BlockUser(Fullname ?? null, Name ?? null));
+        }
+
+        /// <summary>
+        /// Block this user asynchronously.
+        /// </summary>
+        public async void BlockAsync()
+        {
+            await Task.Run(() =>
+            {
+                Block();
+            });
+        }
     }
 }

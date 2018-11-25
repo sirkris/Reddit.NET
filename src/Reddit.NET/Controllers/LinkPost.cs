@@ -2,6 +2,7 @@
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
@@ -110,6 +111,43 @@ namespace Reddit.NET.Controllers
             }
 
             return new LinkPost(Dispatch, info.Posts[0]);
+        }
+
+        /// <summary>
+        /// Return a list of other submissions of the same URL.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="crosspostsOnly">boolean value</param>
+        /// <param name="sort">one of (num_comments, new)</param>
+        /// <param name="sr">subreddit name</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of matching posts.</returns>
+        public List<LinkPost> GetDuplicates(string after = "", string before = "", bool crosspostsOnly = false, string sort = "new", string sr = "",
+            int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        {
+            return GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, after, before, crosspostsOnly, sort, sr, count, limit, show, srDetail)), Dispatch);
+        }
+
+        /// <summary>
+        /// Return a list of crossposts.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="sort">one of (num_comments, new)</param>
+        /// <param name="sr">subreddit name</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of matching posts.</returns>
+        public List<LinkPost> GetCrossPosts(string after = "", string before = "", string sort = "new", string sr = "",
+            int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        {
+            return GetDuplicates(after, before, true, sort, sr, count, limit, show, srDetail);
         }
     }
 }

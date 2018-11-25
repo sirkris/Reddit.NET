@@ -137,13 +137,12 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// List subreddit names that begin with a query string.
         /// Subreddits whose names begin with query will be returned.
         /// If include_over_18 is false, subreddits with over-18 content restrictions will be filtered from the results.
         /// If include_unadvertisable is False, subreddits that have hide_ads set to True or are on the anti_ads_subreddits list will be filtered.
-        /// If exact is true, only an exact match will be returned.Exact matches are inclusive of over_18 subreddits, but not hide_ad subreddits when include_unadvertisable is False.
+        /// If exact is true, only an exact match will be returned. Exact matches are inclusive of over_18 subreddits, but not hide_ad subreddits when include_unadvertisable is False.
         /// </summary>
         /// <param name="exact">boolean value</param>
         /// <param name="includeOver18">boolean value</param>
@@ -162,7 +161,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditNames>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// List subreddits that begin with a query string.
         /// Subreddits whose names begin with query will be returned.
@@ -407,10 +405,10 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditSubmitText>(ExecuteRequest(Sr(subreddit) + "api/submit_text"));
         }
 
-        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Return a list of subreddits and data for subreddits whose names start with 'query'.
-        /// Uses typeahead endpoint to recieve the list of subreddits names. Typeahead provides exact matches, typo correction, fuzzy matching and boosts subreddits to the top that the user is subscribed to.
+        /// Uses typeahead endpoint to recieve the list of subreddits names. 
+        /// Typeahead provides exact matches, typo correction, fuzzy matching and boosts subreddits to the top that the user is subscribed to.
         /// </summary>
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeProfiles">boolean value</param>
@@ -427,7 +425,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditAutocompleteResultContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Version 2 of SubredditAutocomplete.
         /// </summary>
@@ -681,7 +678,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Search subreddits by title and description.
         /// This endpoint is a listing.
@@ -714,7 +710,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Get all subreddits.
         /// The where parameter chooses the order in which the subreddits are displayed.
@@ -747,7 +742,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<SubredditContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Get all user subreddits.
         /// The where parameter chooses the order in which the subreddits are displayed.

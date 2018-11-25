@@ -143,7 +143,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to a controller.  --Kris
         /// <summary>
         /// Get user data by account IDs.
         /// </summary>
