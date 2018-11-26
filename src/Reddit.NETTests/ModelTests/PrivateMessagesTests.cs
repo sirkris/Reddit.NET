@@ -8,12 +8,11 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class PrivateMessagesTests : BaseTests
     {
+        public PrivateMessagesTests() : base() { }
+
         [TestMethod]
         public void GetMessagesInbox()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             MessageContainer messages = reddit.Models.PrivateMessages.GetMessages("inbox", false, "", "", "", false);
 
             Assert.IsNotNull(messages);
@@ -22,9 +21,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetMessagesUnread()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             MessageContainer messages = reddit.Models.PrivateMessages.GetMessages("unread", false, "", "", "", false);
 
             Assert.IsNotNull(messages);
@@ -33,9 +29,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetMessagesSent()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             MessageContainer messages = reddit.Models.PrivateMessages.GetMessages("sent", false, "", "", "", false);
 
             Assert.IsNotNull(messages);
@@ -44,9 +37,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Compose()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             GenericContainer res = reddit.Models.PrivateMessages.Compose("", "", "Test Message", "This is a test.  So there.", "RedditDotNetBot");
 
             Assert.IsNotNull(res);
@@ -56,9 +46,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void ComposeWithSr()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             GenericContainer res = reddit.Models.PrivateMessages.Compose(testData["Subreddit"], "", "Test Message", "This is a test.  So there.", "RedditDotNetBot");
 
             Assert.IsNotNull(res);

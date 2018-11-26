@@ -9,12 +9,11 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class ModerationTests : BaseTests
     {
+        public ModerationTests() : base() { }
+
         [TestMethod]
         public void GetLog()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             ModActionContainer log = reddit.Models.Moderation.GetLog(null, null, testData["Subreddit"]);
 
             Assert.IsNotNull(log);
@@ -23,9 +22,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void ModQueueReports()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("reports", null, null, "links", testData["Subreddit"]);
 
             Validate(modQueue, true);
@@ -34,9 +30,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void ModQueueSpam()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("spam", null, null, "comments", testData["Subreddit"]);
 
             Validate(modQueue, true);
@@ -45,9 +38,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void ModQueue()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("modqueue", null, null, "links", testData["Subreddit"]);
 
             Validate(modQueue, true);
@@ -56,9 +46,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void ModQueueUnmoderated()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("unmoderated", null, null, "links", testData["Subreddit"]);
 
             Validate(modQueue, true);
@@ -67,9 +54,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void ModQueueEdited()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer modQueue = reddit.Models.Moderation.ModQueue("edited", null, null, "links", testData["Subreddit"]);
 
             Validate(modQueue, true);
@@ -78,9 +62,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Stylesheet()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             string css = "";
             try
             {
@@ -103,13 +84,10 @@ namespace Reddit.NETTests.ModelTests
         }
 
         // Requires existing subreddit with mod privilages.  --Kris
-        // TODO - Move this to controller tests since it hits non-moderation endpoints.  --Kris
+        // TODO - Move this to workflow tests since it hits non-moderation endpoints.  --Kris
         [TestMethod]
         public void Approve()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             Post post = reddit.Models.Listings.New(null, null, true, testData["Subreddit"]).Data.Children[0].Data;
 
             reddit.Models.Moderation.Approve(post.Name);

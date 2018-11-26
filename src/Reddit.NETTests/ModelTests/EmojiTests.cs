@@ -8,12 +8,11 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class EmojiTests : BaseTests
     {
+        public EmojiTests() : base() { }
+
         [TestMethod]
         public void All()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SnoomojiContainer snoomojiContainer = reddit.Models.Emoji.All("WayOfTheBern");
 
             Assert.IsNotNull(snoomojiContainer);

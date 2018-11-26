@@ -8,12 +8,11 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class MultisTests : BaseTests
     {
+        public MultisTests() : base() { }
+
         [TestMethod]
         public void Mine()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             List<LabeledMultiContainer> mine = reddit.Models.Multis.Mine(false);
 
             Assert.IsNotNull(mine);
@@ -22,9 +21,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void MineWithExpandSrs()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             List<LabeledMultiContainer> mine = reddit.Models.Multis.Mine(true);
 
             Assert.IsNotNull(mine);
@@ -33,9 +29,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void User()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             List<LabeledMultiContainer> multis = reddit.Models.Multis.User("KrisCraig", false);
 
             Assert.IsNotNull(multis);
@@ -44,9 +37,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Get()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             LabeledMultiContainer multi = reddit.Models.Multis.Get("user/KrisCraig/m/unitedprogressives", false);
 
             Assert.IsNotNull(multi);
@@ -55,9 +45,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetDescription()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             LabeledMultiDescriptionContainer description = reddit.Models.Multis.GetDescription("user/KrisCraig/m/unitedprogressives");
 
             Assert.IsNotNull(description);
@@ -66,12 +53,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetMultiSub()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
-            object res = reddit.Models.Multis.GetMultiSub("user/KrisCraig/m/unitedprogressives", "StillSandersForPres");
-
-            Assert.IsNotNull(res);
+            Assert.IsNotNull(reddit.Models.Multis.GetMultiSub("user/KrisCraig/m/unitedprogressives", "StillSandersForPres"));
         }
     }
 }

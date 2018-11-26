@@ -37,7 +37,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ControllerTests\" />
+    <Folder Include="ControllerTests\WorkflowTests\" />
+    <Folder Include="ModelTests\WorkflowTests\" />
   </ItemGroup>
 
 </Project>

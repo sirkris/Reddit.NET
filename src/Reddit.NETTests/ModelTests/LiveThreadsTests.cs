@@ -8,13 +8,12 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class LiveThreadsTests : BaseTests
     {
+        public LiveThreadsTests() : base() { }
+
         // All endpoints being tested require an existing live thread, so we'll just stick them into a single method until sorted tests are supported.  --Kris
         [TestMethod]
         public void Workflow()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             // Create a new live thread.  --Kris
             LiveThreadCreateResultContainer createRes = reddit.Models.LiveThreads.Create("This is a test.", false, "Resources text.", "Title text.");
 

@@ -1,7 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.NET;
+using Controllers = Reddit.NET.Controllers;
 using Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Reddit.NETTests
 {
@@ -19,6 +22,15 @@ namespace Reddit.NETTests
             {
                 TestContextInstance = value;
             }
+        }
+
+        protected readonly Dictionary<string, string> testData;
+        protected readonly RedditAPI reddit;
+
+        public BaseTests()
+        {
+            testData = GetData();
+            reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
         }
 
         public Dictionary<string, string> GetData()
@@ -54,11 +66,36 @@ namespace Reddit.NETTests
             };*/
         }
 
+        protected byte[] GetResourceFile(string filename)
+        {
+            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Resources." + filename))
+            {
+                using (BinaryReader binaryReader = new BinaryReader(stream))
+                {
+                    return binaryReader.ReadBytes(int.MaxValue / 2);
+                }
+            }
+        }
+
+        public void Validate(dynamic dynamic)
+        {
+            Assert.IsNotNull(dynamic);
+        }
+
         public void Validate(User user)
         {
             Assert.IsNotNull(user);
             Assert.IsFalse(user.Created.Equals(default(DateTime)));
             Assert.IsFalse(string.IsNullOrWhiteSpace(user.Name));
+        }
+
+        public void Validate(Controllers.User user)
+        {
+            Assert.IsNotNull(user);
+            Assert.IsFalse(user.Created.Equals(default(DateTime)));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(user.Name));
+
+            Validate(user.UserData);
         }
 
         public void Validate(GenericContainer genericContainer)

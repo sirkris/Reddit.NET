@@ -25,7 +25,7 @@ namespace Reddit.NET.Controllers
         public API.Widgets Widgets;
         public API.Wiki Wiki;
 
-        public API.Internal.Monitor Monitor;
+        internal API.Internal.Monitor Monitor;
 
         /// <summary>
         /// Instantiate endpoint singletons.

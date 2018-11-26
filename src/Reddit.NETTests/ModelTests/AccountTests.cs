@@ -8,6 +8,8 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class AccountTests : BaseTests
     {
+        public AccountTests() : base() { }
+
         [TestMethod]
         // TODO - Uncomment below and add to other TestMethods in all test classes when .NET Core adds support for this.  --Kris
         /*[DeploymentItem("Reddit.NETTests\\Reddit.NETTestsData.xml")]
@@ -17,9 +19,6 @@ namespace Reddit.NETTests.ModelTests
                     DataAccessMethod.Sequential)]*/
         public void Me()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             User me = reddit.Models.Account.Me();
 
             Validate(me);
@@ -28,9 +27,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Karma()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             UserKarmaContainer karma = reddit.Models.Account.Karma();
 
             Assert.IsNotNull(karma);
@@ -39,9 +35,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Prefs()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             AccountPrefs prefs = reddit.Models.Account.Prefs();
             List<UserPrefsContainer> prefsFriends = reddit.Models.Account.PrefsList("friends");
             List<UserPrefsContainer> prefsMessaging = reddit.Models.Account.PrefsList("messaging");
@@ -58,9 +51,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Trophies()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             TrophyList trophies = reddit.Models.Account.Trophies();
 
             Assert.IsNotNull(trophies);
@@ -69,9 +59,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void UpdatePrefs()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             // This just grabs your existing preferences and sends them right back.  --Kris
             AccountPrefs res = reddit.Models.Account.UpdatePrefs(new AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, ""));
 

@@ -8,12 +8,11 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class MiscTests : BaseTests
     {
+        public MiscTests() : base() { }
+
         [TestMethod]
         public void Scopes()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             Dictionary<string, Scope> scopes = reddit.Models.Misc.Scopes();
 
             Assert.IsNotNull(scopes);
@@ -23,9 +22,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SavedMediaText()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             Dictionary<string, string> res = reddit.Models.Misc.SavedMediaText("https://e.thumbs.redditmedia.com/bOToSJt13ylszjE4.png", "pics");
 
             Assert.IsNotNull(res);

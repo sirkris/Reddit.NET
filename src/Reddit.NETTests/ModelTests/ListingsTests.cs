@@ -8,12 +8,11 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class ListingsTests : BaseTests
     {
+        public ListingsTests() : base() { }
+
         [TestMethod]
         public void Best()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.Best(null, null, true);
 
             Validate(posts);
@@ -22,9 +21,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void BestNoCats()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.Best(null, null, false);
 
             Validate(posts);
@@ -33,9 +29,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void BestWithSrDetail()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.Best(null, null, true, 0, 25, "all", true);
 
             Validate(posts);
@@ -45,9 +38,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetByNames()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.GetByNames("t3_9gaze5,t3_9mfizx");
 
             Validate(posts);
@@ -56,9 +46,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetComments()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("9gaze5", 0, false, false, "top", true, 0);
 
             Assert.IsNotNull(res);
@@ -81,9 +68,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetCommentsWithEditsAndMoreAndTruncate()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("8gmf99", 0, true, true, "top", true, 50);
 
             Assert.IsNotNull(res);
@@ -106,9 +90,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetCommentsWithContext()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("8gmf99", 8, true, true, "top", true, 0, "FloridaMan", "dyd2vtc");
 
             Assert.IsNotNull(res);
@@ -131,9 +112,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Hot()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.Hot("GLOBAL", null, null, true);
 
             Validate(posts);
@@ -142,9 +120,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void New()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.New(null, null, true, "StillSandersForPres");
 
             Validate(posts);
@@ -153,9 +128,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Random()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             // If there's a problem, Random() can pass on some and fail on others, so we'll do a short loop to better catch that on a single run.  --Kris
             for (int i = 1; i <= 5; i++)
             {
@@ -170,9 +142,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void RandomNoSub()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             // If there's a problem, Random() can pass on some and fail on others, so we'll do a short loop to better catch that on a single run.  --Kris
             for (int i = 1; i <= 5; i++)
             {
@@ -187,9 +156,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Rising()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.Rising(null, null, true);
 
             Validate(posts);
@@ -198,9 +164,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Top()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.Top("all", null, null, true);
 
             Validate(posts);
@@ -209,9 +172,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void TopDay()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.Top("day", null, null, true);
 
             Validate(posts);
@@ -220,9 +180,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Controversial()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostContainer posts = reddit.Models.Listings.Controversial("all", null, null, true);
 
             Validate(posts);
@@ -231,9 +188,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetDuplicates()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             List<PostContainer> posts = reddit.Models.Listings.GetDuplicates("9gaze5", "", "", false, "num_comments", "");
 
             Assert.IsNotNull(posts);
