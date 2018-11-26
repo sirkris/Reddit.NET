@@ -208,7 +208,7 @@ namespace Reddit.NET.Controllers
             if (info == null
                 || info.Comments == null
                 || info.Comments.Count == 0
-                || Fullname.Equals(info.Comments[0].Name))
+                || !Fullname.Equals(info.Comments[0].Name))
             {
                 throw new RedditControllerException("Unable to retrieve comment data.");
             }
