@@ -11,7 +11,6 @@ namespace Reddit.NETTests.ControllerTests
     [TestClass]
     public class CommentTests : BaseTests
     {
-        private readonly string CommentId;
         private readonly string CommentFullname;
 
         private Comment Comment
@@ -29,8 +28,7 @@ namespace Reddit.NETTests.ControllerTests
 
         public CommentTests() : base()
         {
-            CommentId = "ch6sgn4";
-            CommentFullname = "t1_" + CommentId;
+            CommentFullname = "t1_ch6sgn4";
         }
 
         private Comment GetComment()
@@ -43,6 +41,7 @@ namespace Reddit.NETTests.ControllerTests
         public void About()
         {
             Validate(Comment);
+            Assert.IsTrue(Comment.Fullname.Equals(CommentFullname));
         }
 
         [TestMethod]
