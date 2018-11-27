@@ -247,6 +247,24 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetPosts(RedditThings.PostContainer postContainer, Dispatch dispatch)
         {
+            return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts);
+        }
+
+        public List<Post> GetPosts(RedditThings.PostContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts)
+        {
+            return GetPosts(postContainer, dispatch, out linkPosts, out List<SelfPost> selfPosts);
+        }
+
+        public List<Post> GetPosts(RedditThings.PostContainer postContainer, Dispatch dispatch, out List<SelfPost> selfPosts)
+        {
+            return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out selfPosts);
+        }
+
+        public List<Post> GetPosts(RedditThings.PostContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
+        {
+            linkPosts = new List<LinkPost>();
+            selfPosts = new List<SelfPost>();
+
             if (postContainer == null || postContainer.Data == null || postContainer.Data.Children == null)
             {
                 return null;
@@ -259,11 +277,15 @@ namespace Reddit.NET.Controllers
                 {
                     if (postChild.Data.IsSelf)
                     {
-                        posts.Add(new SelfPost(dispatch, postChild.Data));
+                        SelfPost selfPost = new SelfPost(dispatch, postChild.Data);
+                        posts.Add(selfPost);
+                        selfPosts.Add(selfPost);
                     }
                     else
                     {
-                        posts.Add(new LinkPost(dispatch, postChild.Data));
+                        LinkPost linkPost = new LinkPost(dispatch, postChild.Data);
+                        posts.Add(linkPost);
+                        linkPosts.Add(linkPost);
                     }
                 }
             }
@@ -273,6 +295,24 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetPosts(List<RedditThings.PostContainer> postContainers, Dispatch dispatch)
         {
+            return GetPosts(postContainers, dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts);
+        }
+
+        public List<Post> GetPosts(List<RedditThings.PostContainer> postContainers, Dispatch dispatch, out List<LinkPost> linkPosts)
+        {
+            return GetPosts(postContainers, dispatch, out linkPosts, out List<SelfPost> selfPosts);
+        }
+
+        public List<Post> GetPosts(List<RedditThings.PostContainer> postContainers, Dispatch dispatch, out List<SelfPost> selfPosts)
+        {
+            return GetPosts(postContainers, dispatch, out List<LinkPost> linkPosts, out selfPosts);
+        }
+
+        public List<Post> GetPosts(List<RedditThings.PostContainer> postContainers, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
+        {
+            linkPosts = new List<LinkPost>();
+            selfPosts = new List<SelfPost>();
+
             if (postContainers == null)
             {
                 return null;
@@ -281,7 +321,7 @@ namespace Reddit.NET.Controllers
             List<Post> posts = new List<Post>();
             foreach (RedditThings.PostContainer postContainer in postContainers)
             {
-                posts.AddRange(GetPosts(postContainer, dispatch));
+                posts.AddRange(GetPosts(postContainer, dispatch, out linkPosts, out selfPosts));
             }
 
             return posts;

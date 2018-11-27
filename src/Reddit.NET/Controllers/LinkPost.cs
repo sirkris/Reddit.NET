@@ -129,7 +129,10 @@ namespace Reddit.NET.Controllers
         public List<LinkPost> GetDuplicates(string after = "", string before = "", bool crosspostsOnly = false, string sort = "new", string sr = "",
             int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
-            return GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, after, before, crosspostsOnly, sort, sr, count, limit, show, srDetail)), Dispatch);
+            GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, after, before, crosspostsOnly, sort, sr, count, limit, show, srDetail)), Dispatch, 
+                out List<LinkPost> linkPosts);
+
+            return linkPosts;
         }
 
         /// <summary>

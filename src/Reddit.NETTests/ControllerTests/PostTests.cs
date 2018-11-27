@@ -11,7 +11,7 @@ namespace Reddit.NETTests.ControllerTests
     [TestClass]
     public class PostTests : BaseTests
     {
-        private readonly string PostFullname;
+        protected readonly string PostFullname;
 
         private Post Post
         {
