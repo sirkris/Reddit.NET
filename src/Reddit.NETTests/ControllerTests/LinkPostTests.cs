@@ -43,5 +43,12 @@ namespace Reddit.NETTests.ControllerTests
         {
             Validate(Post.GetCrossPosts());
         }
+
+        [TestMethod]
+        public void IsLink()
+        {
+            Assert.IsFalse(Post.Listing.IsSelf);
+            Assert.IsNotNull(Post.URL);
+        }
     }
 }

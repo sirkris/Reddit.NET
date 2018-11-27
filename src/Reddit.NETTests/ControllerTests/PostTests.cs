@@ -11,7 +11,7 @@ namespace Reddit.NETTests.ControllerTests
     [TestClass]
     public class PostTests : BaseTests
     {
-        protected readonly string PostFullname;
+        protected string PostFullname;
 
         private Post Post
         {
@@ -28,7 +28,7 @@ namespace Reddit.NETTests.ControllerTests
 
         public PostTests() : base()
         {
-            PostFullname = "t3_24g5xq";
+            PostFullname = PostFullname ?? "t3_24g5xq";
         }
 
         private Post GetPost()
@@ -57,7 +57,7 @@ namespace Reddit.NETTests.ControllerTests
         }
 
         [TestMethod]
-        public void MoreChildren()
+        public virtual void MoreChildren()
         {
             RedditThings.MoreChildren moreChildren = Post.MoreChildren("ch6sgn4", false, "new");
 
