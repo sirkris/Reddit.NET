@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Controllers.EventArgs;
 using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
@@ -632,6 +631,20 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Add or replace a subreddit stylesheet image asynchronously.
+        /// </summary>
+        /// <param name="imgData">file upload with maximum size of 500 KiB</param>
+        /// <param name="imgName">a valid subreddit image name</param>
+        /// <param name="imgType">one of png or jpg (default: png)</param>
+        public async void UploadImgAsync(byte[] imgData, string imgName, string imgType = "png")
+        {
+            await Task.Run(() =>
+            {
+                UploadImg(imgData, imgName, imgType);
+            });
+        }
+
+        /// <summary>
         /// Add or replace the subreddit logo image.
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
@@ -640,6 +653,19 @@ namespace Reddit.NET.Controllers
         public RedditThings.ImageUploadResult UploadHeader(byte[] imgData, string imgType = "png")
         {
             return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 1, null, "header", Name, imgType));
+        }
+
+        /// <summary>
+        /// Add or replace the subreddit logo image asynchronously.
+        /// </summary>
+        /// <param name="imgData">file upload with maximum size of 500 KiB</param>
+        /// <param name="imgType">one of png or jpg (default: png)</param>
+        public async void UploadHeaderAsync(byte[] imgData, string imgType = "png")
+        {
+            await Task.Run(() =>
+            {
+                UploadHeader(imgData, imgType);
+            });
         }
 
         /// <summary>
@@ -654,6 +680,19 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Add or replace a subreddit mobile icon image asynchronously.
+        /// </summary>
+        /// <param name="imgData">file upload with maximum size of 500 KiB</param>
+        /// <param name="imgType">one of png or jpg (default: png)</param>
+        public async void UploadIconAsync(byte[] imgData, string imgType = "png")
+        {
+            await Task.Run(() =>
+            {
+                UploadIcon(imgData, imgType);
+            });
+        }
+
+        /// <summary>
         /// Add or replace a subreddit mobile banner image.
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
@@ -662,6 +701,19 @@ namespace Reddit.NET.Controllers
         public RedditThings.ImageUploadResult UploadBanner(byte[] imgData, string imgType = "png")
         {
             return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, null, "banner", Name, imgType));
+        }
+
+        /// <summary>
+        /// Add or replace a subreddit mobile banner image asynchronously.
+        /// </summary>
+        /// <param name="imgData">file upload with maximum size of 500 KiB</param>
+        /// <param name="imgType">one of png or jpg (default: png)</param>
+        public async void UploadBannerAsync(byte[] imgData, string imgType = "png")
+        {
+            await Task.Run(() =>
+            {
+                UploadBanner(imgData, imgType);
+            });
         }
 
         // TODO - Figure out what created and location are for.  --Kris
@@ -842,6 +894,21 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Asynchronously change the flair of multiple users in the same subreddit with a single API call.
+        /// Requires a string 'flair_csv' which has up to 100 lines of the form 'user,flairtext,cssclass' (Lines beyond the 100th are ignored).
+        /// If both cssclass and flairtext are the empty string for a given user, instead clears that user's flair.
+        /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
+        /// </summary>
+        /// <param name="flairCsv">comma-seperated flair information</param>
+        public async void FlairCSVAsync(string flairCsv)
+        {
+            await Task.Run(() =>
+            {
+                FlairCSV(flairCsv);
+            });
+        }
+
+        /// <summary>
         /// Change the flair of multiple users in the same subreddit with a single API call.
         /// If both cssclass and flairtext are the empty string for a given user, instead clears that user's flair.
         /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
@@ -851,6 +918,20 @@ namespace Reddit.NET.Controllers
         public List<RedditThings.ActionResult> FlairCSV(RedditThings.FlairListResultContainer flairCsv)
         {
             return FlairCSV(flairCsv.Users);
+        }
+
+        /// <summary>
+        /// Asynchronously change the flair of multiple users in the same subreddit with a single API call.
+        /// If both cssclass and flairtext are the empty string for a given user, instead clears that user's flair.
+        /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
+        /// </summary>
+        /// <param name="flairCsv">A valid FlairListResultContainer object</param>
+        public async void FlairCSVAsync(RedditThings.FlairListResultContainer flairCsv)
+        {
+            await Task.Run(() =>
+            {
+                FlairCSV(flairCsv);
+            });
         }
 
         /// <summary>
@@ -869,6 +950,20 @@ namespace Reddit.NET.Controllers
             }
 
             return FlairCSV(arg);
+        }
+
+        /// <summary>
+        /// Asynchronously change the flair of multiple users in the same subreddit with a single API call.
+        /// If both cssclass and flairtext are the empty string for a given user, instead clears that user's flair.
+        /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
+        /// </summary>
+        /// <param name="flairCsv">A list of valid FlairListResult objects</param>
+        public async void FlairCSVAsync(List<RedditThings.FlairListResult> flairCsv)
+        {
+            await Task.Run(() =>
+            {
+                FlairCSV(flairCsv);
+            });
         }
 
         /// <summary>
@@ -1019,6 +1114,24 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Create a new link flair template asynchronously.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="modOnly">boolean value</param>
+        public async void CreateLinkFlairTemplateV2Async(string text, bool textEditable = false, string textColor = "dark",
+            string backgroundColor = "#EEEEFF", bool modOnly = false)
+        {
+            await Task.Run(() =>
+            {
+                CreateLinkFlairTemplateV2(text, textEditable, textColor, backgroundColor, modOnly);
+            });
+        }
+
+        /// <summary>
         /// Create a new user flair template.
         /// This new endpoint is primarily used for the redesign.
         /// </summary>
@@ -1032,6 +1145,24 @@ namespace Reddit.NET.Controllers
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
             return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "USER_FLAIR", modOnly, text, textColor, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Create a new user flair template asynchronously.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="modOnly">boolean value</param>
+        public async void CreateUserFlairTemplateV2Async(string text, bool textEditable = false, string textColor = "dark",
+            string backgroundColor = "#EEEEFF", bool modOnly = false)
+        {
+            await Task.Run(() =>
+            {
+                CreateUserFlairTemplateV2(text, textEditable, textColor, backgroundColor, modOnly);
+            });
         }
 
         /// <summary>
@@ -1052,6 +1183,25 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Update an existing link flair template asynchronously.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="modOnly">boolean value</param>
+        public async void UpdateLinkFlairTemplateV2Async(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
+            string backgroundColor = null, bool? modOnly = null)
+        {
+            await Task.Run(() =>
+            {
+                UpdateLinkFlairTemplateV2(flairTemplateId, text, textEditable, textColor, backgroundColor, modOnly);
+            });
+        }
+
+        /// <summary>
         /// Update an existing user flair template.
         /// This new endpoint is primarily used for the redesign.
         /// </summary>
@@ -1066,6 +1216,25 @@ namespace Reddit.NET.Controllers
             string backgroundColor = null, bool? modOnly = null)
         {
             return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "USER_FLAIR", modOnly, text, textColor, textEditable, Name));
+        }
+
+        /// <summary>
+        /// Update an existing user flair template asynchronously.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="modOnly">boolean value</param>
+        public async void UpdateUserFlairTemplateV2Async(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
+            string backgroundColor = null, bool? modOnly = null)
+        {
+            await Task.Run(() =>
+            {
+                UpdateUserFlairTemplateV2(flairTemplateId, text, textEditable, textColor, backgroundColor, modOnly);
+            });
         }
 
         /// <summary>
@@ -1437,6 +1606,67 @@ namespace Reddit.NET.Controllers
             Validate(res);
 
             return About();
+        }
+
+        /// <summary>
+        /// Update an existing subreddit asynchronously.
+        /// </summary>
+        /// <param name="manualUpdate">if true, only the values explicitly passed to this method will be updated (default: false)</param>
+        /// <param name="allOriginalContent">boolean value</param>
+        /// <param name="allowDiscovery">boolean value</param>
+        /// <param name="allowImages">boolean value</param>
+        /// <param name="allowPostCrossposts">boolean value</param>
+        /// <param name="allowTop">boolean value</param>
+        /// <param name="allowVideos">boolean value</param>
+        /// <param name="collapseDeletedComments">boolean value</param>
+        /// <param name="description">raw markdown text</param>
+        /// <param name="excludeBannedModqueue">boolean value</param>
+        /// <param name="freeFormReports">boolean value</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle">a string no longer than 500 characters</param>
+        /// <param name="hideAds">boolean value</param>
+        /// <param name="keyColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="lang">a valid IETF language tag (underscore separated)</param>
+        /// <param name="linkType">one of (any, link, self)</param>
+        /// <param name="name">subreddit name</param>
+        /// <param name="originalContentTagEnabled">boolean value</param>
+        /// <param name="over18">boolean value</param>
+        /// <param name="publicDescription">raw markdown text</param>
+        /// <param name="showMedia">boolean value</param>
+        /// <param name="showMediaPreview">boolean value</param>
+        /// <param name="spamComments">one of (low, high, all)</param>
+        /// <param name="spamLinks">one of (low, high, all)</param>
+        /// <param name="spamSelfPosts">one of (low, high, all)</param>
+        /// <param name="spoilersEnabled">boolean value</param>
+        /// <param name="sr">fullname of a thing</param>
+        /// <param name="submitLinkLabel">a string no longer than 60 characters</param>
+        /// <param name="submitText">raw markdown text</param>
+        /// <param name="submitTextLabel">a string no longer than 60 characters</param>
+        /// <param name="suggestedCommentSort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
+        /// <param name="themeSr">subreddit name</param>
+        /// <param name="themeSrUpdate">boolean value</param>
+        /// <param name="title">a string no longer than 100 characters</param>
+        /// <param name="type">one of (gold_restricted, archived, restricted, employees_only, gold_only, private, user, public)</param>
+        /// <param name="wikiMode">one of (disabled, modonly, anyone)</param>
+        /// <param name="commentScoreHideMins">an integer between 0 and 1440 (default: 0)</param>
+        /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
+        /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
+        public async void UpdateAsync(bool manualUpdate = false, bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
+            bool? allowTop = null, bool? allowVideos = null, bool? collapseDeletedComments = null, string description = null, bool? excludeBannedModqueue = null,
+            bool? freeFormReports = null, string gRecaptchaResponse = null, string headerTitle = null, bool? hideAds = null, string keyColor = null, string lang = null,
+            string linkType = null, string name = null, bool? originalContentTagEnabled = null, bool? over18 = null, string publicDescription = null, bool? showMedia = null,
+            bool? showMediaPreview = null, string spamComments = null, string spamLinks = null, string spamSelfPosts = null, bool? spoilersEnabled = null, string sr = null,
+            string submitLinkLabel = null, string submitText = null, string submitTextLabel = null, string suggestedCommentSort = null, string themeSr = null,
+            bool? themeSrUpdate = null, string title = null, string type = null, string wikiMode = null, int? commentScoreHideMins = null, int? wikiEditAge = null,
+            int? wikiEditKarma = null)
+        {
+            await Task.Run(() =>
+            {
+                Update(manualUpdate, allOriginalContent, allowDiscovery, allowImages, allowPostCrossposts, allowTop, allowVideos, collapseDeletedComments, description,
+                    excludeBannedModqueue, freeFormReports, gRecaptchaResponse, headerTitle, hideAds, keyColor, lang, linkType, name, originalContentTagEnabled,
+                    over18, publicDescription, showMedia, showMediaPreview, spamComments, spamLinks, spamSelfPosts, spoilersEnabled, sr, submitLinkLabel, submitText,
+                    submitTextLabel, suggestedCommentSort, themeSr, themeSrUpdate, title, type, wikiMode, commentScoreHideMins, wikiEditAge, wikiEditKarma);
+            });
         }
     }
 }
