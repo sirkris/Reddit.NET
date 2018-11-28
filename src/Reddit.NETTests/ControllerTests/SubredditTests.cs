@@ -202,5 +202,71 @@ namespace Reddit.NETTests.ControllerTests
         {
             Subreddit.Stylesheet();
         }
+
+        [TestMethod]
+        public void Best()
+        {
+            Validate(Subreddit.Posts.Best);
+        }
+
+        [TestMethod]
+        public void Hot()
+        {
+            Validate(Subreddit.Posts.Hot);
+        }
+
+        [TestMethod]
+        public void New()
+        {
+            Validate(Subreddit.Posts.New);
+        }
+
+        [TestMethod]
+        public void Rising()
+        {
+            Validate(Subreddit.Posts.Rising);
+        }
+
+        [TestMethod]
+        public void Top()
+        {
+            Validate(Subreddit.Posts.Top);
+        }
+
+        [TestMethod]
+        public void Controversial()
+        {
+            Validate(Subreddit.Posts.Controversial);
+        }
+
+        [TestMethod]
+        public void ModQueue()
+        {
+            Validate(Subreddit.Posts.ModQueue);
+        }
+
+        [TestMethod]
+        public void ModQueueReports()
+        {
+            Validate(Subreddit.Posts.ModQueueReports);
+        }
+
+        [TestMethod]
+        public void ModQueueSpam()
+        {
+            Validate(Subreddit.Posts.ModQueueSpam);
+        }
+
+        [TestMethod]
+        public void ModQueueUnmoderated()
+        {
+            Validate(Subreddit.Posts.ModQueueUnmoderated);
+        }
+
+        [TestMethod]
+        public void ModQueueEdited()
+        {
+            Validate(Subreddit.Posts.ModQueueEdited);
+        }
     }
 }
