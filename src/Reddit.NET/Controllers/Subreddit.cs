@@ -86,6 +86,25 @@ namespace Reddit.NET.Controllers
         internal RedditThings.SubredditSubmitText submitText;
         private DateTime? SubmitTextLastUpdated;
 
+        /// <summary>
+        /// Get the moderators of this subreddit.
+        /// </summary>
+        public List<Moderator> Moderators
+        {
+            get
+            {
+                return (ModeratorsLastUpdated.HasValue
+                    && ModeratorsLastUpdated.Value.AddMinutes(1) > DateTime.Now ? moderators : GetModerators());
+            }
+            set
+            {
+                moderators = value;
+                ModeratorsLastUpdated = DateTime.Now;
+            }
+        }
+        internal List<Moderator> moderators;
+        private DateTime? ModeratorsLastUpdated;
+
         public Subreddit(Dispatch dispatch, RedditThings.Subreddit subreddit)
             : base()
         {
@@ -339,7 +358,8 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            return GetAboutChildren<Moderator>(res);
+            Moderators = GetAboutChildren<Moderator>(res);
+            return Moderators;
         }
 
         /// <summary>
