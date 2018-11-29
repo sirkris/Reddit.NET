@@ -14,7 +14,7 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
-        private List<string> Pages
+        public List<string> Pages
         {
             get
             {

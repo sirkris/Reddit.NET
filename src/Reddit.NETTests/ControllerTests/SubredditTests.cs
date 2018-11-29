@@ -15,7 +15,7 @@ namespace Reddit.NETTests.ControllerTests
         {
             get
             {
-                return subreddit ?? GetSubreddit();
+                return subreddit ?? GetSubreddit(ref subreddit);
             }
             set
             {
@@ -33,16 +33,6 @@ namespace Reddit.NETTests.ControllerTests
             ImageData = GetResourceFile("birdie.png");
             ImageBannerData = GetResourceFile("banner.jpg");
             ImageIconData = GetResourceFile("birdie256.jpg");
-        }
-
-        /// <summary>
-        /// Retrieves your test subreddit.  It is assumed that the subreddit already exists at this point.
-        /// </summary>
-        /// <returns>The populated Subreddit data.</returns>
-        private Subreddit GetSubreddit()
-        {
-            Subreddit = reddit.Subreddit(testData["Subreddit"]).About();
-            return Subreddit;
         }
 
         [TestMethod]

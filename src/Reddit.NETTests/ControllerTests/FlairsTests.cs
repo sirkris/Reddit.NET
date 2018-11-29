@@ -15,7 +15,7 @@ namespace Reddit.NETTests.ControllerTests
         {
             get
             {
-                return subreddit ?? GetSubreddit();
+                return subreddit ?? GetSubreddit(ref subreddit);
             }
             set
             {
@@ -25,16 +25,6 @@ namespace Reddit.NETTests.ControllerTests
         private Subreddit subreddit;
 
         public FlairsTests() : base() { }
-
-        /// <summary>
-        /// Retrieves your test subreddit.  It is assumed that the subreddit already exists at this point.
-        /// </summary>
-        /// <returns>The populated Subreddit data.</returns>
-        private Subreddit GetSubreddit()
-        {
-            Subreddit = reddit.Subreddit(testData["Subreddit"]).About();
-            return Subreddit;
-        }
 
         [TestMethod]
         public void ClearLinkFlairTemplates()

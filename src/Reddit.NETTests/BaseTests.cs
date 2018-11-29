@@ -77,6 +77,16 @@ namespace Reddit.NETTests
             }
         }
 
+        /// <summary>
+        /// Retrieves your test subreddit.  It is assumed that the subreddit already exists at this point.
+        /// </summary>
+        /// <returns>The populated Subreddit data.</returns>
+        protected Controllers.Subreddit GetSubreddit(ref Controllers.Subreddit subreddit)
+        {
+            subreddit = reddit.Subreddit(testData["Subreddit"]).About();
+            return subreddit;
+        }
+
         public void Validate(dynamic dynamic)
         {
             Assert.IsNotNull(dynamic);
