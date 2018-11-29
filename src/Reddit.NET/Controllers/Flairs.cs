@@ -595,7 +595,7 @@ namespace Reddit.NET.Controllers
         /// Set flair enabled.
         /// </summary>
         /// <param name="flairEnabled">boolean value</param>
-        public void SetFlairEnabled(bool flairEnabled)
+        public void SetFlairEnabled(bool flairEnabled = true)
         {
             Validate(Dispatch.Flair.SetFlairEnabled(flairEnabled, Subreddit.Name));
         }
@@ -604,7 +604,7 @@ namespace Reddit.NET.Controllers
         /// Set flair enabled asynchronously.
         /// </summary>
         /// <param name="flairEnabled">boolean value</param>
-        public async void SetFlairEnabledAsync(bool flairEnabled)
+        public async void SetFlairEnabledAsync(bool flairEnabled = true)
         {
             await Task.Run(() =>
             {

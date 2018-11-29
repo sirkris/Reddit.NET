@@ -264,5 +264,22 @@ namespace Reddit.NETTests
                 Assert.IsFalse(statusResult.Status);
             }
         }
+
+        public void Validate(List<ActionResult> actionResults, int minCount = 0)
+        {
+            Assert.IsNotNull(actionResults);
+            Assert.IsTrue(actionResults.Count >= minCount);
+
+            foreach (ActionResult actionResult in actionResults)
+            {
+                Validate(actionResult);
+            }
+        }
+
+        public void Validate(ActionResult actionResult)
+        {
+            Assert.IsNotNull(actionResult);
+            Assert.IsTrue(actionResult.Ok);
+        }
     }
 }

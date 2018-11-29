@@ -168,24 +168,6 @@ namespace Reddit.NETTests.ControllerTests
         }
 
         [TestMethod]
-        public void ClearLinkFlairTemplates()
-        {
-            Subreddit.ClearLinkFlairTemplates();
-        }
-
-        [TestMethod]
-        public void ClearUserFlairTemplates()
-        {
-            Subreddit.ClearUserFlairTemplates();
-        }
-
-        [TestMethod]
-        public void DeleteFlair()
-        {
-            Subreddit.DeleteFlair("KrisCraig");
-        }
-
-        [TestMethod]
         public void SavedMediaText()
         {
             Validate(Subreddit.SavedMediaText("https://e.thumbs.redditmedia.com/bOToSJt13ylszjE4.png"));
