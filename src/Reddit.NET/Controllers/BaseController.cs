@@ -1,4 +1,5 @@
-﻿using Reddit.NET.Exceptions;
+﻿using Newtonsoft.Json;
+using Reddit.NET.Exceptions;
 using Reddit.NET.Controllers.EventArgs;
 using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
@@ -830,6 +831,17 @@ namespace Reddit.NET.Controllers
                 Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, "PrivateMessages", privateMessages, (i * MonitoringWaitDelayMS)));
                 i++;
             }
+        }
+
+        protected List<T> GetAboutChildren<T>(RedditThings.DynamicShortListingContainer dynamicShortListingContainer)
+        {
+            List<T> res = new List<T>();
+            if (dynamicShortListingContainer.Data.Children != null)
+            {
+                res = JsonConvert.DeserializeObject<List<T>>(JsonConvert.SerializeObject(dynamicShortListingContainer.Data.Children));
+            }
+
+            return res;
         }
 
         public Exception BuildException(Exception ex, List<List<string>> errors)
