@@ -11,9 +11,10 @@ namespace Reddit.NET.Models
 
         public LinksAndComments(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
+        // TODO - Message reply in a controller.  --Kris
         /// <summary>
         /// Submit a new comment or reply to a message.
-        /// parent is the fullname of the thing being replied to.Its value changes the kind of object created by this request:
+        /// parent is the fullname of the thing being replied to. Its value changes the kind of object created by this request:
         /// the fullname of a Link: a top-level comment in that Link's thread. (requires submit scope)
         /// the fullname of a Comment: a comment reply to that comment. (requires submit scope)
         /// the fullname of a Message: a message reply to that message. (requires privatemessages scope)
@@ -52,12 +53,12 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// Edit the body text of a comment or self-post.
+        /// Edit the body text of a self-post.
         /// </summary>
         /// <param name="returnRtjson">boolean value</param>
         /// <param name="richtextJson">JSON data</param>
         /// <param name="text">raw markdown text</param>
-        /// <param name="thingId">fullname of a thing</param>
+        /// <param name="thingId">fullname of a self post</param>
         /// <returns>The modified post data.</returns>
         public PostResultContainer EditUserText(bool returnRtjson, string richtextJson, string text, string thingId)
         {
@@ -70,6 +71,27 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("api_type", "json");
 
             return JsonConvert.DeserializeObject<PostResultContainer>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Edit the body text of a comment.
+        /// </summary>
+        /// <param name="returnRtjson">boolean value</param>
+        /// <param name="richtextJson">JSON data</param>
+        /// <param name="text">raw markdown text</param>
+        /// <param name="thingId">fullname of a comment</param>
+        /// <returns>The modified comment data.</returns>
+        public CommentResultContainer EditUserTextComment(bool returnRtjson, string richtextJson, string text, string thingId)
+        {
+            RestRequest restRequest = PrepareRequest("api/editusertext", Method.POST);
+
+            restRequest.AddParameter("return_rtjson", returnRtjson);
+            restRequest.AddParameter("richtext_json", richtextJson);
+            restRequest.AddParameter("text", text);
+            restRequest.AddParameter("thing_id", thingId);
+            restRequest.AddParameter("api_type", "json");
+
+            return JsonConvert.DeserializeObject<CommentResultContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -157,8 +179,10 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Retrieve additional comments omitted from a base comment tree.
         /// When a comment tree is rendered, the most relevant comments are selected for display first.
-        /// Remaining comments are stubbed out with "MoreComments" links. This API call is used to retrieve the additional comments represented by those stubs, up to 100 at a time.
-        /// The two core parameters required are link and children. link is the fullname of the link whose comments are being fetched. children is a comma-delimited list of comment ID36s that need to be fetched.
+        /// Remaining comments are stubbed out with "MoreComments" links. 
+        /// This API call is used to retrieve the additional comments represented by those stubs, up to 100 at a time.
+        /// The two core parameters required are link and children. link is the fullname of the link whose comments are being fetched. 
+        /// children is a comma-delimited list of comment ID36s that need to be fetched.
         /// If id is passed, it should be the ID of the MoreComments object this call is replacing. This is needed only for the HTML UI's purposes and is optional otherwise.
         /// NOTE: you may only make one request at a time to this API endpoint. Higher concurrency will result in an error being returned.
         /// If limit_children is True, only return the children requested.
@@ -215,7 +239,7 @@ namespace Reddit.NET.Models
         /// <param name="siteReason">a string no longer than 100 characters</param>
         /// <param name="srName">a string no longer than 1000 characters</param>
         /// <param name="thingId">fullname of a thing</param>
-        /// <param name="violatorUsername"></param>
+        /// <param name="violatorUsername">A valid Reddit username</param>
         /// <returns>A return object indicating success.</returns>
         public JQueryReturn Report(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string srName, string thingId,
@@ -328,7 +352,8 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Set a suggested sort for a link.
         /// Suggested sorts are useful to display comments in a certain preferred way for posts.
-        /// For example, casual conversation may be better sorted by new by default, or AMAs may be sorted by Q&A.A sort of an empty string clears the default sort.
+        /// For example, casual conversation may be better sorted by new by default, or AMAs may be sorted by Q&A.
+        /// A sort of an empty string clears the default sort.
         /// </summary>
         /// <param name="id">fullname of a link</param>
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live, blank)</param>
@@ -372,6 +397,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
+        // TODO - Controller support for image, video, and videogif kinds.  --Kris
         /// <summary>
         /// Submit a link to a subreddit.
         /// Submit will create a link or self-post in the subreddit sr with the title title.
@@ -386,7 +412,7 @@ namespace Reddit.NET.Models
         /// <param name="extension">extension used for redirects</param>
         /// <param name="flairId">a string no longer than 36 characters</param>
         /// <param name="flairText">a string no longer than 64 characters</param>
-        /// <param name="gRecaptchaResopnse"></param>
+        /// <param name="gRecaptchaResponse"></param>
         /// <param name="kind">one of (link, self, image, video, videogif)</param>
         /// <param name="nsfw">boolean value</param>
         /// <param name="resubmit">boolean value</param>
@@ -399,7 +425,7 @@ namespace Reddit.NET.Models
         /// <param name="url">a valid URL</param>
         /// <param name="videoPosterUrl">a valid URL</param>
         /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
-        public PostResultShortContainer Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResopnse,
+        public PostResultShortContainer Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResponse,
             string kind, bool nsfw, bool resubmit, string richtextJson, bool sendReplies, bool spoiler, string sr, string text,
             string title, string url, string videoPosterUrl)
         {
@@ -410,7 +436,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("extension", extension);
             restRequest.AddParameter("flair_id", flairId);
             restRequest.AddParameter("flair_text", flairText);
-            restRequest.AddParameter("g-recaptcha-response", gRecaptchaResopnse);
+            restRequest.AddParameter("g-recaptcha-response", gRecaptchaResponse);
             restRequest.AddParameter("kind", kind);
             restRequest.AddParameter("nsfw", nsfw);
             restRequest.AddParameter("resubmit", resubmit);
@@ -442,7 +468,7 @@ namespace Reddit.NET.Models
 
         /// <summary>
         /// Unlock a link.
-        /// Allow a post to receive new comments.
+        /// Allows a post to receive new comments.
         /// See also: /api/lock.
         /// </summary>
         /// <param name="id">fullname of a link</param>

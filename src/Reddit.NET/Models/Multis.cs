@@ -117,7 +117,7 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="multipath">multireddit url path</param>
         /// <param name="expandSrs">boolean value</param>
-        /// <returns></returns>
+        /// <returns>A LabeledMultiContainer.</returns>
         public LabeledMultiContainer Get(string multipath, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath);

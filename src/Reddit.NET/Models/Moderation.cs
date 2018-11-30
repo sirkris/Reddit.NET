@@ -12,7 +12,7 @@ namespace Reddit.NET.Models
 
         /// <summary>
         /// Get a list of recent moderation actions.
-        /// Moderator actions taken within a subreddit are logged.This listing is a view of that log with various filters to aid in analyzing the information.
+        /// Moderator actions taken within a subreddit are logged. This listing is a view of that log with various filters to aid in analyzing the information.
         /// The optional mod parameter can be a comma-delimited list of moderator names to restrict the results to, or the string a to restrict the results to admin actions taken within the subreddit.
         /// The type parameter is optional and if sent limits the log entries returned to only those of the type specified.
         /// This endpoint is a listing.
@@ -47,6 +47,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<ModActionContainer>(ExecuteRequest(restRequest));
         }
 
+        // TODO - Split into two functions (only = links, only = comments).  Comments return not supported yet.  --Kris
         /// <summary>
         /// Return a listing of posts relevant to moderators.
         /// reports: Things that have been reported.
@@ -104,18 +105,18 @@ namespace Reddit.NET.Models
         // TODO - Move test from ModelTests to ControllerTests.  --Kris
         /// <summary>
         /// Approve a link or comment.
-        /// If the thing was removed, it will be re-inserted into appropriate listings. Any reports on the approved thing will be discarded.
+        /// If the thing was removed, it will be re-inserted into appropriate listings.
+        /// Any reports on the approved thing will be discarded.
         /// See also: /api/remove.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>Empty JSON.</returns>
-        public object Approve(string id)
+        public void Approve(string id)
         {
             RestRequest restRequest = PrepareRequest("api/approve", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         // TODO - Needs testing.

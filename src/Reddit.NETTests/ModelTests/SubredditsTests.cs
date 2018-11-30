@@ -2,19 +2,17 @@
 using Reddit.NET;
 using Reddit.NET.Models.Structures;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Reddit.NETTests.ModelTests
 {
     [TestClass]
     public class SubredditsTests : BaseTests
     {
+        public SubredditsTests() : base() { }
+
         [TestMethod]
         public void About()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditChild about = reddit.Models.Subreddits.About("WayOfTheMueller");
             DynamicShortListingContainer aboutBanned = reddit.Models.Subreddits.About("banned", null, null, null, false, "StillSandersForPres");
             DynamicShortListingContainer aboutMuted = reddit.Models.Subreddits.About("muted", null, null, null, false, "StillSandersForPres");
@@ -36,9 +34,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SearchRedditNames()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditNames subredditNames = reddit.Models.Subreddits.SearchRedditNames(false, true, true, "Shitty");
 
             Validate(subredditNames);
@@ -47,9 +42,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SubmitText()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditSubmitText subredditSubmitText = reddit.Models.Subreddits.SubmitText("WayOfTheBern");
 
             Assert.IsNotNull(subredditSubmitText);
@@ -58,9 +50,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SearchSubreddits()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubSearch subSearch = reddit.Models.Subreddits.SearchSubreddits(false, true, true, "Shitty");
 
             Validate(subSearch);
@@ -69,9 +58,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Rules()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             RulesContainer rules = reddit.Models.Subreddits.Rules("WayOfTheBern");
 
             Assert.IsNotNull(rules);
@@ -80,9 +66,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Traffic()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             Traffic traffic = reddit.Models.Subreddits.Traffic("StillSandersForPres");
 
             Assert.IsNotNull(traffic);
@@ -91,9 +74,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Mine()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditContainer mineSubscriber = reddit.Models.Subreddits.Mine("subscriber", null, null, false);
             SubredditContainer mineContributor = reddit.Models.Subreddits.Mine("contributor", null, null, false);
             SubredditContainer mineModerator = reddit.Models.Subreddits.Mine("moderator", null, null, false);
@@ -106,9 +86,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Search()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditContainer search = reddit.Models.Subreddits.Search(null, null, "Sanders", false, "relevance");
             SubredditContainer searchWithShowUsers = reddit.Models.Subreddits.Search(null, null, "Sanders", true, "relevance");
 
@@ -119,9 +96,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Get()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditContainer popularSubs = reddit.Models.Subreddits.Get("popular", null, null, false);
             SubredditContainer newSubs = reddit.Models.Subreddits.Get("new", null, null, false);
             SubredditContainer defaultSubs = reddit.Models.Subreddits.Get("default", null, null, false);
@@ -134,9 +108,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetUserSubreddits()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditContainer popularUserSubs = reddit.Models.Subreddits.GetUserSubreddits("popular", null, null, false);
             SubredditContainer newUserSubs = reddit.Models.Subreddits.GetUserSubreddits("new", null, null, false);
 
@@ -148,9 +119,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SiteAdmin()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             // Attempt to create a new subreddit.  --Kris
             GenericContainer res = reddit.Models.Subreddits.SiteAdmin(false, true, true, true, true, true, false, "Test subreddit created by Reddit.NET.",
                 false, true, null, "Reddit.NET Bot Testing", false, "#0000FF", "en-US", "any", testData["Subreddit"], true, false, "Test subreddit created by Reddit.NET.",
@@ -175,9 +143,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SubredditAutocomplete()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditAutocompleteResultContainer subs = reddit.Models.Subreddits.SubredditAutocomplete(false, true, "Shitty");
 
             Assert.IsNotNull(subs);
@@ -186,9 +151,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SubredditAutocompleteV2()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditContainer subs = reddit.Models.Subreddits.SubredditAutocompleteV2(true, false, true, "Shitty");
 
             Assert.IsNotNull(subs);
@@ -197,9 +159,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SubredditStylesheet()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             GenericContainer res = reddit.Models.Subreddits.SubredditStylesheet("save", "This is a test.", ".whatever{}", testData["Subreddit"]);
 
             Validate(res);
@@ -208,18 +167,12 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SubscribeByFullname()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             reddit.Models.Subreddits.SubscribeByFullname("sub", false, "t5_3fblp");
         }
 
         [TestMethod]
         public void Subscribe()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             reddit.Models.Subreddits.Subscribe("unsub", false, testData["Subreddit"]);  // Unsubscribe
             reddit.Models.Subreddits.Subscribe("sub", false, testData["Subreddit"]);  // Subscribe
         }
@@ -227,9 +180,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Edit()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             SubredditSettingsContainer settings = reddit.Models.Subreddits.Edit(testData["Subreddit"], false, "");
 
             Validate(settings);
@@ -238,9 +188,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SubredditImages()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             // Get the embedded test images.  --Kris
             byte[] imageData = GetResourceFile("birdie.png");
             byte[] imageBannerData = GetResourceFile("banner.jpg");
@@ -286,17 +233,6 @@ namespace Reddit.NETTests.ModelTests
             Validate(resDelImg);
             Validate(resDelBanner);
             Validate(resDelIcon);
-        }
-
-        private byte[] GetResourceFile(string filename)
-        {
-            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Resources." + filename))
-            {
-                using (BinaryReader binaryReader = new BinaryReader(stream))
-                {
-                    return binaryReader.ReadBytes(int.MaxValue / 2);
-                }
-            }
         }
     }
 }

@@ -59,6 +59,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
+        // In the controllers, link flair can be created from Post.  User flair can be created from Subreddit or User (no practical difference).  --Kris
         /// <summary>
         /// Create a new flair.
         /// </summary>
@@ -176,6 +177,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<FlairListResultContainer>(ExecuteRequest(restRequest));
         }
 
+        // In the controllers, link can be specified from Post.  Otherwise, call from Subreddit or User (no practical difference).  --Kris
         /// <summary>
         /// Return information about a users's flair options.
         /// If link is given, return link flair options. Otherwise, return user flair options for this subreddit.
@@ -207,13 +209,29 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer FlairTemplate(string cssClass, string flairTemplateId, string flairType, string text, bool textEditable, string subreddit = null)
         {
+            return FlairTemplate(cssClass, flairTemplateId, flairType, text, (bool?)textEditable, subreddit);
+        }
+
+        /// <summary>
+        /// Create or update a flair template.  Null values are ignored.
+        /// </summary>
+        /// <param name="cssClass">a valid subreddit image name</param>
+        /// <param name="flairTemplateId">the ID of the template to modify; leave blank to create new</param>
+        /// <param name="flairType">one of (USER_FLAIR, LINK_FLAIR)</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer FlairTemplate(string cssClass = null, string flairTemplateId = null, string flairType = null, string text = null,
+            bool? textEditable = null, string subreddit = null)
+        {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairtemplate", Method.POST);
 
-            restRequest.AddParameter("css_class", cssClass);
-            restRequest.AddParameter("flair_template_id", flairTemplateId);
-            restRequest.AddParameter("flair_type", flairType);
-            restRequest.AddParameter("text", text);
-            restRequest.AddParameter("text_editable", textEditable);
+            AddParamIfNotNull("css_class", cssClass, ref restRequest);
+            AddParamIfNotNull("flair_template_id", flairTemplateId, ref restRequest);
+            AddParamIfNotNull("flair_type", flairType, ref restRequest);
+            AddParamIfNotNull("text", text, ref restRequest);
+            AddParamIfNotNull("text_editable", textEditable, ref restRequest);
             restRequest.AddParameter("api_type", "json");
 
             return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
@@ -234,6 +252,35 @@ namespace Reddit.NET.Models
         /// <returns>The created flair object.</returns>
         public FlairV2 FlairTemplateV2(string backgroundColor, string flairTemplateId, string flairType, bool modOnly, string text, string textColor,
             bool textEditable, string subreddit = null)
+        {
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairtemplate_v2", Method.POST);
+
+            restRequest.AddParameter("background_color", backgroundColor);
+            restRequest.AddParameter("flair_template_id", flairTemplateId);
+            restRequest.AddParameter("flair_type", flairType);
+            restRequest.AddParameter("mod_only", modOnly);
+            restRequest.AddParameter("text", text);
+            restRequest.AddParameter("text_color", textColor);
+            restRequest.AddParameter("text_editable", textEditable);
+
+            return JsonConvert.DeserializeObject<FlairV2>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Create or update a flair template.  Null values are ignored.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
+        /// <param name="flairTemplateId">the ID of the template to modify; leave blank to create new</param>
+        /// <param name="flairType">one of (USER_FLAIR, LINK_FLAIR)</param>
+        /// <param name="modOnly">boolean value</param>
+        /// <param name="text">a string no longer than 64 characters</param>
+        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="textEditable">boolean value</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>The created flair object.</returns>
+        public FlairV2 FlairTemplateV2(string backgroundColor = null, string flairTemplateId = null, string flairType = null, bool? modOnly = null, 
+            string text = null, string textColor = null, bool? textEditable = null, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairtemplate_v2", Method.POST);
 

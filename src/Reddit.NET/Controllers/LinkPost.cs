@@ -1,5 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
+using Reddit.NET.Exceptions;
+using RedditThings = Reddit.NET.Models.Structures;
 using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
@@ -13,65 +17,140 @@ namespace Reddit.NET.Controllers
 
         public LinkPost(Dispatch dispatch, Models.Structures.Post listing) : base(dispatch, listing)
         {
-            this.Preview = listing.Preview;
-            this.URL = listing.URL;
-            this.Thumbnail = listing.Thumbnail;
-            this.ThumbnailHeight = listing.ThumbnailHeight;
-            this.ThumbnailWidth = listing.ThumbnailWidth;
+            Preview = listing.Preview;
+            URL = listing.URL;
+            Thumbnail = listing.Thumbnail;
+            ThumbnailHeight = listing.ThumbnailHeight;
+            ThumbnailWidth = listing.ThumbnailWidth;
         }
 
         public LinkPost(Dispatch dispatch, string subreddit, string title, string author, string url, string thumbnail = null,
             int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
             string id = null, string name = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
-            bool removed = false, bool spam = false)
+            bool removed = false, bool spam = false, bool nsfw = false)
             : base(dispatch, subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes,
-                  removed, spam)
+                  removed, spam, nsfw)
         {
-            this.Preview = preview;
-            this.URL = url;
-            this.Thumbnail = thumbnail;
-            this.ThumbnailHeight = thumbnailHeight;
-            this.ThumbnailWidth = thumbnailWidth;
+            Preview = preview;
+            URL = url;
+            Thumbnail = thumbnail;
+            ThumbnailHeight = thumbnailHeight;
+            ThumbnailWidth = thumbnailWidth;
 
-            this.Listing = new Models.Structures.Post(this);
+            Listing = new RedditThings.Post(this);
         }
+
+        public LinkPost(Dispatch dispatch, string name) : base(dispatch, name) { }
 
         public LinkPost(Dispatch dispatch) : base(dispatch) { }
 
-        public override bool Submit()
+        /// <summary>
+        /// Submit this link post to Reddit.  This instance will automatically be updated with the resulting fullname/id.
+        /// </summary>
+        /// <param name="resubmit">boolean value</param>
+        /// <param name="ad">boolean value</param>
+        /// <param name="app"></param>
+        /// <param name="extension">extension used for redirects</param>
+        /// <param name="flairId">a string no longer than 36 characters</param>
+        /// <param name="flairText">a string no longer than 64 characters</param>
+        /// <param name="gRecapthaResponse"></param>
+        /// <param name="sendReplies">boolean value</param>
+        /// <param name="spoiler">boolean value</param>
+        /// <param name="videoPosterUrl">a valid URL</param>
+        /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
+        public RedditThings.PostResultShortData Submit(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+            string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
+            string videoPosterUrl = "")
         {
-            if (!Validate())
+            RedditThings.PostResultShortData res = Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
+                gRecapthaResponse, "link", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, null, Title, URL, videoPosterUrl)).JSON.Data;
+
+            Id = res.Id;
+            Fullname = "t3_" + Id;
+
+            return res;
+        }
+
+        /// <summary>
+        /// Submit this link post to Reddit asynchronously.  This instance will automatically be updated with the resulting fullname/id.
+        /// </summary>
+        /// <param name="resubmit">boolean value</param>
+        /// <param name="ad">boolean value</param>
+        /// <param name="app"></param>
+        /// <param name="extension">extension used for redirects</param>
+        /// <param name="flairId">a string no longer than 36 characters</param>
+        /// <param name="flairText">a string no longer than 64 characters</param>
+        /// <param name="gRecapthaResponse"></param>
+        /// <param name="sendReplies">boolean value</param>
+        /// <param name="spoiler">boolean value</param>
+        /// <param name="videoPosterUrl">a valid URL</param>
+        public async void SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+            string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
+            string videoPosterUrl = "")
+        {
+            await Task.Run(() =>
             {
-                return false;
+                Submit(resubmit, ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
+            });
+        }
+
+        /// <summary>
+        /// Return information about the current LinkPost instance.
+        /// </summary>
+        /// <returns>An instance of this class populated with the retrieved data.</returns>
+        public new LinkPost About()
+        {
+            RedditThings.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            if (info == null
+                || info.Posts == null
+                || info.Posts.Count == 0
+                || !Fullname.Equals(info.Posts[0].Name))
+            {
+                throw new RedditControllerException("Unable to retrieve post data.");
             }
 
-            // TODO - Submit to Reddit, populate listing, and update properties.  --Kris
-
-
-            return true;
+            return new LinkPost(Dispatch, info.Posts[0]);
         }
 
         /// <summary>
-        /// Check to see if all required properties are present for submission to Reddit.
+        /// Return a list of other submissions of the same URL.
         /// </summary>
-        /// <returns>Whether this instance is ready to submit.</returns>
-        public override bool Validate()
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="crosspostsOnly">boolean value</param>
+        /// <param name="sort">one of (num_comments, new)</param>
+        /// <param name="sr">subreddit name</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of matching posts.</returns>
+        public List<LinkPost> GetDuplicates(string after = "", string before = "", bool crosspostsOnly = false, string sort = "new", string sr = "",
+            int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
-            // TODO - Check required properties.  --Kris
+            GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, after, before, crosspostsOnly, sort, sr, count, limit, show, srDetail)), Dispatch, 
+                out List<LinkPost> linkPosts);
 
-
-            return true;
+            return linkPosts;
         }
 
         /// <summary>
-        /// Query the Reddit API and populate this instance with the result.
-        /// <param name="subreddit">The subreddit where the post exists.</param>
+        /// Return a list of crossposts.
         /// </summary>
-        /// <param name="postId">The Reddit post ID.</param>
-        private void GetByPostId(string subreddit, string postId)
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="sort">one of (num_comments, new)</param>
+        /// <param name="sr">subreddit name</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of matching posts.</returns>
+        public List<LinkPost> GetCrossPosts(string after = "", string before = "", string sort = "new", string sr = "",
+            int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
-            // TODO
+            return GetDuplicates(after, before, true, sort, sr, count, limit, show, srDetail);
         }
     }
 }

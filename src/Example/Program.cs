@@ -1,7 +1,12 @@
-﻿using Reddit.NET;
+﻿using Newtonsoft.Json;
+using Reddit.NET;
 using Reddit.NET.Controllers;
+using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Structures;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Example
 {
@@ -19,12 +24,204 @@ namespace Example
                 string refreshToken = args[1];
                 string accessToken = (args.Length > 2 ? args[2] : null);
 
+                // Initialize the API library instance.  --Kris
                 RedditAPI reddit = new RedditAPI(appId, refreshToken, accessToken);
 
-                User me = reddit.User().Me();
+                // Get info on the Reddit user authenticated by the OAuth credentials.  --Kris
+                User me = reddit.Account.Me;
 
                 Console.WriteLine("Username: " + me.Name);
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
+
+                // Get post and comment histories (note that pinned profile posts appear at the top even on new sort; use "newForced" sort as a workaround).  --Kris
+                List<Post> postHistory = me.PostHistory(sort: "newForced");
+                List<Comment> commentHistory = me.CommentHistory(sort: "new");
+
+                Console.WriteLine("Most recent post: " + postHistory[0].Title);
+                Console.WriteLine("Most recent comment: " + commentHistory[0].Body);
+
+                // Create a new subreddit.  --Kris
+                //Subreddit newSub = reddit.Subreddit("RDNBotSub", "Test Subreddit", "Test sub created by Reddit.NET", "My sidebar.").Create();
+
+                // Get best posts.  --Kris
+                List<Post> bestPosts = reddit.Subreddit().Posts.Best;
+
+                Console.WriteLine("Current best post (by " + bestPosts[0].Author + "): [" + bestPosts[0].Subreddit + "] " + bestPosts[0].Title);
+
+                // Get info about a subreddit.  --Kris
+                Subreddit sub = reddit.Subreddit("AskReddit").About();
+
+                Console.WriteLine("Subreddit Name: " + sub.Name);
+                Console.WriteLine("Subreddit Fullname: " + sub.Fullname);
+                Console.WriteLine("Subreddit Title: " + sub.Title);
+                Console.WriteLine("Subreddit Description: " + sub.Description);
+
+                // Get submit text.  --Kris
+                /*Console.WriteLine("Submit text: " + sub.SubmitText.ToString());
+
+                // Get moderators.  --Kris
+                List<Moderator> moderators = sub.GetModerators();
+
+                Console.WriteLine("Moderators:");
+                Console.WriteLine("{");
+                int i = 0;
+                foreach (Moderator moderator in moderators)
+                {
+                    Console.WriteLine("\t" + moderator.Name);
+
+                    i++;
+                    if (i > 10 && moderators.Count > 12)
+                    {
+                        Console.WriteLine("(and " + (moderators.Count - 10).ToString() + " others)");
+                        break;
+                    }
+                }
+                Console.WriteLine("}");*/
+
+                // Get approved submitters (requires mod access).  --Kris
+                /*List<SubredditUser> contributors = reddit.Subreddit("StillSandersForPres").GetContributors();
+
+                Console.WriteLine("Approved Submitters:");
+                Console.WriteLine("{");
+                i = 0;
+                foreach (SubredditUser contributor in contributors)
+                {
+                    Console.WriteLine("\t" + contributor.Name);
+
+                    i++;
+                    if (i > 10 && contributors.Count > 12)
+                    {
+                        Console.WriteLine("(and " + (contributors.Count - 10).ToString() + " others)");
+                        break;
+                    }
+                }
+                Console.WriteLine("}");*/
+
+                // Get approved submitters for the wiki (requires mod access).  --Kris
+                /*List<SubredditUser> wikiContributors = reddit.Subreddit("StillSandersForPres").GetWikiContributors();
+
+                Console.WriteLine("Approved Wiki Submitters:");
+                Console.WriteLine("{");
+                i = 0;
+                foreach (SubredditUser wikiContributor in wikiContributors)
+                {
+                    Console.WriteLine("\t" + wikiContributor.Name);
+
+                    i++;
+                    if (i > 10 && wikiContributors.Count > 12)
+                    {
+                        Console.WriteLine("(and " + (wikiContributors.Count - 10).ToString() + " others)");
+                        break;
+                    }
+                }
+                Console.WriteLine("}");*/
+
+                // Get muted users (requires mod access).  --Kris
+                /*List<SubredditUser> mutedUsers = reddit.Subreddit("StillSandersForPres").GetMutedUsers();
+
+                Console.WriteLine("Muted Users:");
+                Console.WriteLine("{");
+                i = 0;
+                foreach (SubredditUser mutedUser in mutedUsers)
+                {
+                    Console.WriteLine("\t" + mutedUser.Name);
+
+                    i++;
+                    if (i > 10 && mutedUsers.Count > 12)
+                    {
+                        Console.WriteLine("(and " + (mutedUsers.Count - 10).ToString() + " others)");
+                        break;
+                    }
+                }
+                Console.WriteLine("}");*/
+
+                // Get wiki-banned users (requires mod access).  --Kris
+                //List<BannedUser> wikiBannedUsers = reddit.Subreddit("StillSandersForPres").GetWikiBannedUsers();
+
+                //Console.WriteLine("Wiki-banned users retrieved: " + wikiBannedUsers.Count);
+
+                // Get banned users (requires mod access).  --Kris
+                //List<BannedUser> bannedUsers = reddit.Subreddit("StillSandersForPres").GetBannedUsers();
+
+                //Console.WriteLine("Banned users retrieved: " + bannedUsers.Count);
+
+                // Get new posts from this subreddit.  --Kris
+                List<Post> newPosts = sub.Posts.New;
+
+                Console.WriteLine("Retrieved " + newPosts.Count.ToString() + " new posts.");
+
+                // Monitor new posts on this subreddit for a minute.  --Kris
+                Console.WriteLine("Monitoring " + sub.Name + " for new posts....");
+
+                sub.Posts.NewUpdated += C_NewPostsUpdated;
+                sub.Posts.MonitorNew();  // Toggle on.
+
+                // But wait, there's more!  We can monitor posts on multiple subreddits at once (delay is automatically multiplied to keep us under speed the limit).  --Kris
+                Subreddit funny = reddit.Subreddit("funny");
+                Subreddit worldnews = reddit.Subreddit("worldnews");
+
+                // Before monitoring, let's grab the posts once so we have a point of comparison when identifying new posts that come in.  --Kris
+                funny.Posts.GetNew();
+                worldnews.Posts.GetNew();
+
+                Console.WriteLine("Monitoring funny for new posts....");
+
+                funny.Posts.NewUpdated += C_NewPostsUpdated;
+                funny.Posts.MonitorNew();  // Toggle on.
+
+                Console.WriteLine("Monitoring worldnews for new posts....");
+
+                worldnews.Posts.NewUpdated += C_NewPostsUpdated;
+                worldnews.Posts.MonitorNew();  // Toggle on.
+
+                DateTime start = DateTime.Now;
+                while (start.AddMinutes(1) > DateTime.Now) { }
+
+                // Stop monitoring new posts.  --Kris
+                sub.Posts.MonitorNew();  // Toggle off.
+                sub.Posts.NewUpdated -= C_NewPostsUpdated;
+
+                funny.Posts.MonitorNew();  // Toggle off.
+                funny.Posts.NewUpdated -= C_NewPostsUpdated;
+
+                worldnews.Posts.MonitorNew();  // Toggle off.
+                worldnews.Posts.NewUpdated -= C_NewPostsUpdated;
+
+                Console.WriteLine("Done monitoring!");
+
+                // Grab today's top post in AskReddit and monitor its new comments.  --Kris
+                Post post = sub.Posts.GetTop("day")[0];
+                post.Comments.GetNew();
+
+                Console.WriteLine("Monitoring today's top post on AskReddit....");
+
+                post.Comments.MonitorNew();  // Toggle on.
+                post.Comments.NewUpdated += C_NewCommentsUpdated;
+
+                start = DateTime.Now;
+                while (start.AddMinutes(1) > DateTime.Now) { }
+
+                post.Comments.MonitorNew();  // Toggle off.
+                post.Comments.NewUpdated -= C_NewCommentsUpdated;
+
+                Console.WriteLine("Done monitoring!");
+
+                // Now let's monitor r/all for a bit.  --Kris
+                Subreddit all = reddit.Subreddit("all");
+                all.Posts.GetNew();
+
+                Console.WriteLine("Monitoring r/all for new posts....");
+
+                all.Posts.MonitorNew();  // Toggle on.
+                all.Posts.NewUpdated += C_NewPostsUpdated;
+
+                start = DateTime.Now;
+                while (start.AddMinutes(1) > DateTime.Now) { }
+
+                all.Posts.MonitorNew();  // Toggle off.
+                all.Posts.NewUpdated -= C_NewPostsUpdated;
+
+                Console.WriteLine("Done monitoring!");
 
                 // Temporary code - Verify I've got all the models right and catalogue their returns.  Will then proceed to writing unit tests.  --Kris
                 /*
@@ -206,7 +403,7 @@ namespace Example
                 File.WriteAllText("LinksAndComments.SetSuggestedSort.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.SetSuggestedSort("t3_9nhy54", "new")));
                 //File.WriteAllText("LinksAndComments.Delete.json", JsonConvert.SerializeObject(reddit.Models.LinksAndComments.Delete("t3_9riiex")));
 
-                //ModelStructures.AccountPrefs accountPrefs = reddit.Models.Account.Prefs();
+                //RedditThings.AccountPrefs accountPrefs = reddit.Models.Account.Prefs();
                 //accountPrefs.Autoplay = !accountPrefs.Autoplay;
                 //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(accountPrefs)));
                 File.WriteAllText("Account.Prefs.json", JsonConvert.SerializeObject(reddit.Models.Account.Prefs()));
@@ -214,7 +411,8 @@ namespace Example
                 //File.WriteAllText("Emoji.AcquireLease.json", JsonConvert.SerializeObject(reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.png", "image/png")));
 
                 // Upload Emoji image to Reddit.  --Kris
-                */byte[] imageData;
+                */
+                byte[] imageData;
                 using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Example.Resources.birdie.png"))
                 {
                     using (BinaryReader binaryReader = new BinaryReader(stream))
@@ -222,7 +420,7 @@ namespace Example
                         imageData = binaryReader.ReadBytes(int.MaxValue / 2);
                     }
                 }/*
-                ModelStructures.S3UploadLeaseContainer s3 = reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.jpg", "image/jpeg");
+                RedditThings.S3UploadLeaseContainer s3 = reddit.Models.Emoji.AcquireLease("RedditDotNETBot", "birdie.jpg", "image/jpeg");
                 //File.WriteAllText("Emoji.UploadLeaseImage.json", JsonConvert.SerializeObject(reddit.Models.Emoji.UploadLeaseImage(imageData, s3)));
                 reddit.Models.Emoji.UploadLeaseImage(imageData, s3);
                 File.WriteAllText("Emoji.Add.json", JsonConvert.SerializeObject(reddit.Models.Emoji.Add("RedditDotNETBot", "Birdie", s3.S3UploadLease.Fields.First(
@@ -250,7 +448,7 @@ namespace Example
                 File.WriteAllText("Flair.SetFlairEnabled.json", JsonConvert.SerializeObject(reddit.Models.Flair.SetFlairEnabled(true, "RedditDotNETBot")));
                 //File.WriteAllText("Flair.SelectFlair.json", JsonConvert.SerializeObject(reddit.Models.Flair.SelectFlair("#88BBFF", "c1e232a6-db49-11e8-83f1-0e3c0039d3b4",
                 //    "", "", "all", "V2-3628702_EDITED", "dark", "RedditDotNETBot")));
-                //System.Collections.Generic.List<ModelStructures.Flair> flairs = reddit.Models.Flair.LinkFlair("RedditDotNETBot");
+                //System.Collections.Generic.List<RedditThings.Flair> flairs = reddit.Models.Flair.LinkFlair("RedditDotNETBot");
                 //flairs.Reverse();
                 //File.WriteAllText("Flair.FlairTemplateOrder.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairTemplateOrder("LINK_FLAIR", flairs, "RedditDotNETBot")));
                 File.WriteAllText("Flair.FlairConfig.json", JsonConvert.SerializeObject(reddit.Models.Flair.FlairConfig(true, "right", true, "right", true, "RedditDotNETBot")));
@@ -272,7 +470,7 @@ namespace Example
                 //File.WriteAllText("Modmail.BulkRead.json", JsonConvert.SerializeObject(reddit.Models.Modmail.BulkRead("t5_3fblp", "all")));
                 File.WriteAllText("Modmail.GetConversations.json", JsonConvert.SerializeObject(reddit.Models.Modmail.GetConversations("", "t5_3fblp", "unread", "all")));
                 string multiName = "RDNTest_" + DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
-                ModelStructures.LabeledMultiSubmit model = new ModelStructures.LabeledMultiSubmit("This is a test multi.",
+                RedditThings.LabeledMultiSubmit model = new RedditThings.LabeledMultiSubmit("This is a test multi.",
                     multiName, "None", "#0000FF",
                     new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" }, "public", "classic");
 
@@ -311,7 +509,7 @@ namespace Example
                 File.WriteAllText("Subreddits.EditWithCreated.json", JsonConvert.SerializeObject(reddit.Models.Subreddits.Edit("RedditDotNETBot", true, "")));
 
                 //File.WriteAllText("Account.UpdatePrefs.json", JsonConvert.SerializeObject(reddit.Models.Account.UpdatePrefs(
-                //    new ModelStructures.AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, ""))));
+                //    new RedditThings.AccountPrefsSubmit(reddit.Models.Account.Prefs(), "US", false, ""))));
 
                 File.WriteAllText("Users.BlockUser.json", JsonConvert.SerializeObject(reddit.Models.Users.BlockUser("", "RedditDotNetBot")));
                 File.WriteAllText("Users.UnfriendUnblockUser.json", JsonConvert.SerializeObject(reddit.Models.Users.Unfriend("t2_6vsit", "", "RedditDotNetBot", "enemy")));
@@ -361,29 +559,45 @@ namespace Example
                 File.WriteAllText("LiveThreads.CloseThread.json", JsonConvert.SerializeObject(reddit.Models.LiveThreads.CloseThread("11wa6l86jy5th")));
 
                 File.WriteAllText("Widgets.AddTextArea.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Add(
-                    new ModelStructures.WidgetTextArea("TestWidget", "This is a test."), "RedditDotNETBot")));
+                    new RedditThings.WidgetTextArea("TestWidget", "This is a test."), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.UpdateTextArea.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Update("widget_11wo976t5rax7",
-                    new ModelStructures.WidgetTextArea("TestWidgetMod", "This is a MODIFIED test."), "RedditDotNETBot")));
+                    new RedditThings.WidgetTextArea("TestWidgetMod", "This is a MODIFIED test."), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.GetWithProgressiveImages.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Get(true, "RedditDotNETBot")));
-                ModelStructures.WidgetResults widgetResults = reddit.Models.Widgets.Get(false, "RedditDotNETBot");
+                RedditThings.WidgetResults widgetResults = reddit.Models.Widgets.Get(false, "RedditDotNETBot");
                 System.Collections.Generic.List<string> order = widgetResults.Layout.Sidebar.Order;
                 order.Reverse();
                 //File.WriteAllText("Widgets.UpdateOrder.json", JsonConvert.SerializeObject(reddit.Models.Widgets.UpdateOrder("sidebar", order, "RedditDotNETBot")));
                 //File.WriteAllText("Widgets.Delete.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Delete(
                     new System.Collections.Generic.List<string>(widgetResults.Items.Keys)[widgetResults.Items.Keys.Count - 1], "RedditDotNETBot")));
                 File.WriteAllText("Widgets.AddCalendar.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Add(
-                    new ModelStructures.WidgetCalendar(new ModelStructures.WidgetCalendarConfiguration(0, true, true, true, true, true), "kris.craig@gmail.com",
-                    false, "Test Calendar Widget 2", new ModelStructures.WidgetStyles()), "RedditDotNETBot")));
+                    new RedditThings.WidgetCalendar(new RedditThings.WidgetCalendarConfiguration(0, true, true, true, true, true), "kris.craig@gmail.com",
+                    false, "Test Calendar Widget 2", new RedditThings.WidgetStyles()), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.UpdateCalendar.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Update("widget_11wuxmi1wr2pg",
-                    new ModelStructures.WidgetCalendar(new ModelStructures.WidgetCalendarConfiguration(20, true, true, true, true, true), "kris.craig@gmail.com",
-                    false, "Test Calendar Widget 2b", new ModelStructures.WidgetStyles()), "RedditDotNETBot")));
+                    new RedditThings.WidgetCalendar(new RedditThings.WidgetCalendarConfiguration(20, true, true, true, true, true), "kris.craig@gmail.com",
+                    false, "Test Calendar Widget 2b", new RedditThings.WidgetStyles()), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.AddCommunityList.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Add(
-                    new ModelStructures.WidgetCommunityList(new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" },
-                    "Test CommunityList Widget", new ModelStructures.WidgetStyles()), "RedditDotNETBot")));
+                    new RedditThings.WidgetCommunityList(new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" },
+                    "Test CommunityList Widget", new RedditThings.WidgetStyles()), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.UpdateCommunityList.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Update("widget_11wv1rdhjxydr",
-                    new ModelStructures.WidgetCommunityList(new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" },
-                    "Test CommunityList Widget B", new ModelStructures.WidgetStyles()), "RedditDotNETBot")));
+                    new RedditThings.WidgetCommunityList(new System.Collections.Generic.List<string> { "StillSandersForPres", "RedditDotNETBot" },
+                    "Test CommunityList Widget B", new RedditThings.WidgetStyles()), "RedditDotNETBot")));
                 File.WriteAllText("Widgets.Get.json", JsonConvert.SerializeObject(reddit.Models.Widgets.Get(false, "RedditDotNETBot")));*/
+            }
+        }
+
+        public static void C_NewPostsUpdated(object sender, PostsUpdateEventArgs e)
+        {
+            foreach (Post post in e.Added)
+            {
+                Console.WriteLine("[" + post.Subreddit + "] New Post by " + post.Author + ": " + post.Title);
+            }
+        }
+
+        public static void C_NewCommentsUpdated(object sender, CommentsUpdateEventArgs e)
+        {
+            foreach (Comment comment in e.Added)
+            {
+                Console.WriteLine("[" + comment.Subreddit + "/" + comment.Root.Title + "] New Comment by " + comment.Author + ": " + comment.Body);
             }
         }
     }

@@ -9,12 +9,11 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class WidgetsTests : BaseTests
     {
+        public WidgetsTests() : base() { }
+
         [TestMethod]
         public void Workflow()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             // Create TextArea Widget.  --Kris
             WidgetTextArea widgetTextArea = reddit.Models.Widgets.Add(new WidgetTextArea("Test Widget", "This is a test."), testData["Subreddit"]);
 

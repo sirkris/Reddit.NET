@@ -216,28 +216,43 @@ namespace Reddit.NET.Models.Structures
 
         private void ImportFromComment(Controllers.Comment comment)
         {
-            this.Subreddit = comment.Subreddit;
-            this.Author = comment.Author;
-            this.Id = comment.Id;
-            this.Name = comment.Name;
-            this.Permalink = comment.Permalink;
-            this.Created = comment.Created;
-            this.Edited = comment.Edited;
-            this.Score = comment.Score;
-            this.Ups = comment.UpVotes;
-            this.Downs = comment.DownVotes;
-            this.Removed = comment.Removed;
-            this.Spam = comment.Spam;
-            this.Replies = comment.Replies;
-            this.Body = comment.Body;
-            this.BodyHTML = comment.BodyHTML;
-            this.ParentId = comment.ParentId;
-            this.CollapsedReason = comment.CollapsedReason;
-            this.Collapsed = comment.Collapsed;
-            this.IsSubmitter = comment.IsSubmitter;
-            this.ScoreHidden = comment.ScoreHidden;
-            this.Depth = comment.Depth;
-        }
+            Subreddit = comment.Subreddit;
+            Author = comment.Author;
+            Id = comment.Id;
+            Name = comment.Fullname;
+            Permalink = comment.Permalink;
+            Created = comment.Created;
+            Edited = comment.Edited;
+            Score = comment.Score;
+            Ups = comment.UpVotes;
+            Downs = comment.DownVotes;
+            Removed = comment.Removed;
+            Spam = comment.Spam;
+            Body = comment.Body;
+            BodyHTML = comment.BodyHTML;
+            ParentId = comment.ParentFullname;
+            CollapsedReason = comment.CollapsedReason;
+            Collapsed = comment.Collapsed;
+            IsSubmitter = comment.IsSubmitter;
+            ScoreHidden = comment.ScoreHidden;
+            Depth = comment.Depth;
 
+            Replies = null;
+            if (comment.Replies != null && comment.Replies.Count > 0)
+            {
+                Replies = new CommentContainer
+                {
+                    Data = new CommentData
+                    {
+                        Children = new List<CommentChild>()
+                    }
+                };
+
+                foreach (Controllers.Comment commentReply in comment.Replies)
+                {
+                    Replies.Data.Children.Add(new CommentChild { Data = new Comment(commentReply) });
+                }
+            }
+        }
     }
 }

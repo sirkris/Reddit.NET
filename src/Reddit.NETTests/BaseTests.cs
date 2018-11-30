@@ -1,7 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.NET;
+using Controllers = Reddit.NET.Controllers;
 using Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Reddit.NETTests
 {
@@ -19,6 +22,15 @@ namespace Reddit.NETTests
             {
                 TestContextInstance = value;
             }
+        }
+
+        protected readonly Dictionary<string, string> testData;
+        protected readonly RedditAPI reddit;
+
+        public BaseTests()
+        {
+            testData = GetData();
+            reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
         }
 
         public Dictionary<string, string> GetData()
@@ -54,11 +66,46 @@ namespace Reddit.NETTests
             };*/
         }
 
+        protected byte[] GetResourceFile(string filename)
+        {
+            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Resources." + filename))
+            {
+                using (BinaryReader binaryReader = new BinaryReader(stream))
+                {
+                    return binaryReader.ReadBytes(int.MaxValue / 2);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Retrieves your test subreddit.  It is assumed that the subreddit already exists at this point.
+        /// </summary>
+        /// <returns>The populated Subreddit data.</returns>
+        protected Controllers.Subreddit GetSubreddit(ref Controllers.Subreddit subreddit)
+        {
+            subreddit = reddit.Subreddit(testData["Subreddit"]).About();
+            return subreddit;
+        }
+
+        public void Validate(dynamic dynamic)
+        {
+            Assert.IsNotNull(dynamic);
+        }
+
         public void Validate(User user)
         {
             Assert.IsNotNull(user);
             Assert.IsFalse(user.Created.Equals(default(DateTime)));
             Assert.IsFalse(string.IsNullOrWhiteSpace(user.Name));
+        }
+
+        public void Validate(Controllers.User user)
+        {
+            Assert.IsNotNull(user);
+            Assert.IsFalse(user.Created.Equals(default(DateTime)));
+            Assert.IsFalse(string.IsNullOrWhiteSpace(user.Name));
+
+            Validate(user.UserData);
         }
 
         public void Validate(GenericContainer genericContainer)
@@ -87,6 +134,7 @@ namespace Reddit.NETTests
             Assert.IsNotNull(commentResultContainer.JSON.Data);
             Assert.IsNotNull(commentResultContainer.JSON.Data.Things);
             Assert.IsTrue(commentResultContainer.JSON.Data.Things.Count > 0);
+            Assert.IsNotNull(commentResultContainer.JSON.Data.Things[0].Data);
         }
 
         public void Validate(PostResultContainer postResultContainer)
@@ -225,6 +273,23 @@ namespace Reddit.NETTests
             {
                 Assert.IsFalse(statusResult.Status);
             }
+        }
+
+        public void Validate(List<ActionResult> actionResults, int minCount = 0)
+        {
+            Assert.IsNotNull(actionResults);
+            Assert.IsTrue(actionResults.Count >= minCount);
+
+            foreach (ActionResult actionResult in actionResults)
+            {
+                Validate(actionResult);
+            }
+        }
+
+        public void Validate(ActionResult actionResult)
+        {
+            Assert.IsNotNull(actionResult);
+            Assert.IsTrue(actionResult.Ok);
         }
     }
 }

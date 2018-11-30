@@ -9,15 +9,14 @@ namespace Reddit.NETTests.ModelTests
     [TestClass]
     public class LinksAndCommentsTests : BaseTests
     {
+        public LinksAndCommentsTests() : base() { }
+
         [TestMethod]
         public void PostAndComment()
         {
             // Put the two together here since we need something to comment on and I prefer to do it in the sub specified in the XML.  --Kris
             // TODO - Decouple once Microsoft adds support for OrderedTests in V2.  --Kris
             // https://github.com/Microsoft/testfx/issues/25
-
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
 
             // Begin temp code.
             PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
@@ -36,9 +35,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SubmitLinkPost()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
                     "link", false, true, null, true, false, testData["Subreddit"], "",
                     "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
@@ -49,9 +45,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void SubmitSelfPost()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "", "self", false, true, null, true, false, 
                 testData["Subreddit"], "The Lizard People are coming and only super-intelligent robots like me can stop them.  Just saying.",
                 "We bots are your protectors!", null, null);
@@ -62,9 +55,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Info()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             string postName = "t3_9nhy54";
             string commentName = "t1_e7s0vb1";
             string subName = "t5_2r5rp";
@@ -103,9 +93,6 @@ namespace Reddit.NETTests.ModelTests
         public void ModifyPost()
         {
             // Create a post, then use it to test the various endpoints that require an existing post.  --Kris
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "", "self", false, true, null, true, false,
                 testData["Subreddit"], "The Lizard People are coming and only super-intelligent robots like me can stop them.  Just saying.",
                 "We bots are your protectors!", null, null);
@@ -160,9 +147,6 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void MoreChildren()
         {
-            Dictionary<string, string> testData = GetData();
-            RedditAPI reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
-
             MoreChildren moreChildren = reddit.Models.LinksAndComments.MoreChildren("dlpnw9j", false, "t3_6tyfna", "new");
 
             Validate(moreChildren);

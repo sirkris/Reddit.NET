@@ -11,5 +11,24 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("submit_text_html")]
         public string SubmitTextHTML;
+
+        public SubredditSubmitText(string submitText, string submitTextHtml)
+        {
+            SubmitText = submitText;
+            SubmitTextHTML = submitTextHtml;
+        }
+
+        public SubredditSubmitText(string submitText)
+        {
+            SubmitText = submitText;
+            SubmitTextHTML = submitText;
+        }
+
+        public SubredditSubmitText() { }
+
+        public override string ToString()
+        {
+            return SubmitText;
+        }
     }
 }
