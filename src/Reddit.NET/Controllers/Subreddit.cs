@@ -166,6 +166,9 @@ namespace Reddit.NET.Controllers
             : base()
         {
             Dispatch = dispatch;
+            Posts = new SubredditPosts(this);
+            Flairs = new Flairs(this, Dispatch);
+            Wiki = new Wiki(Dispatch, Name);
         }
 
         private void ImportFromModel(RedditThings.Subreddit subreddit)

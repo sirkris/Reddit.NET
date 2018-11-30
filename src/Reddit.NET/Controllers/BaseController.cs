@@ -48,37 +48,43 @@ namespace Reddit.NET.Controllers
             }
         }
 
+        private string GetFullnameFromObj(dynamic obj)
+        {
+            return (obj is string ? obj : (string)obj.Fullname);
+        }
+
         /// <summary>
         /// Scan two lists for any differences.  Sequence is ignored.
+        /// T must be a string or an object with a string Fullname.
         /// </summary>
         /// <param name="oldList">The original list being compared against</param>
         /// <param name="newList">The new list</param>
         /// <param name="added">Any entries that are present in the new list but not the old</param>
         /// <param name="removed">Any entries that are present in the old list but not the new</param>
         /// <returns>True if the lists differ, otherwise false.</returns>
-        public bool ListDiff(List<Post> oldList, List<Post> newList, out List<Post> added, out List<Post> removed)
+        public bool ListDiff<T>(List<T> oldList, List<T> newList, out List<T> added, out List<T> removed)
         {
-            added = new List<Post>();
-            removed = new List<Post>();
+            added = new List<T>();
+            removed = new List<T>();
 
             // Index by Reddit fullname.  --Kris
-            Dictionary<string, Post> oldByFullname = new Dictionary<string, Post>();
-            Dictionary<string, Post> newByFullname = new Dictionary<string, Post>();
+            Dictionary<string, T> oldByFullname = new Dictionary<string, T>();
+            Dictionary<string, T> newByFullname = new Dictionary<string, T>();
             for (int i = 0; i < Math.Max(oldList.Count, newList.Count); i++)
             {
                 if (i < oldList.Count)
                 {
-                    oldByFullname.Add(oldList[i].Fullname, oldList[i]);
+                    oldByFullname.Add(GetFullnameFromObj(oldList[i]), oldList[i]);
                 }
 
                 if (i < newList.Count)
                 {
-                    newByFullname.Add(newList[i].Fullname, newList[i]);
+                    newByFullname.Add(GetFullnameFromObj(newList[i]), newList[i]);
                 }
             }
 
-            // Scan for any new posts.  --Kris
-            foreach (KeyValuePair<string, Post> pair in newByFullname)
+            // Scan for any new objects.  --Kris
+            foreach (KeyValuePair<string, T> pair in newByFullname)
             {
                 if (!oldByFullname.ContainsKey(pair.Key))
                 {
@@ -91,115 +97,8 @@ namespace Reddit.NET.Controllers
                 }
             }
 
-            // Scan for any posts no longer appearing in the list.  --Kris
-            foreach (KeyValuePair<string, Post> pair in oldByFullname)
-            {
-                // All the matching elements are gone, leaving only the removed ones.  --Kris
-                removed.Add(pair.Value);
-            }
-
-            return !(added.Count == 0 && removed.Count == 0);
-        }
-
-        /// <summary>
-        /// Scan two lists for any differences.  Sequence is ignored.
-        /// </summary>
-        /// <param name="oldList">The original list being compared against</param>
-        /// <param name="newList">The new list</param>
-        /// <param name="added">Any entries that are present in the new list but not the old</param>
-        /// <param name="removed">Any entries that are present in the old list but not the new</param>
-        /// <returns>True if the lists differ, otherwise false.</returns>
-        public bool ListDiff(List<Comment> oldList, List<Comment> newList, out List<Comment> added, out List<Comment> removed)
-        {
-            added = new List<Comment>();
-            removed = new List<Comment>();
-
-            // Index by Reddit fullname.  --Kris
-            Dictionary<string, Comment> oldByFullname = new Dictionary<string, Comment>();
-            Dictionary<string, Comment> newByFullname = new Dictionary<string, Comment>();
-            for (int i = 0; i < Math.Max(oldList.Count, newList.Count); i++)
-            {
-                if (i < oldList.Count)
-                {
-                    oldByFullname.Add(oldList[i].Fullname, oldList[i]);
-                }
-
-                if (i < newList.Count)
-                {
-                    newByFullname.Add(newList[i].Fullname, newList[i]);
-                }
-            }
-
-            // Scan for any new posts.  --Kris
-            foreach (KeyValuePair<string, Comment> pair in newByFullname)
-            {
-                if (!oldByFullname.ContainsKey(pair.Key))
-                {
-                    added.Add(pair.Value);
-                }
-                else
-                {
-                    // So we don't have to check the same element twice.  --Kris
-                    oldByFullname.Remove(pair.Key);
-                }
-            }
-
-            // Scan for any posts no longer appearing in the list.  --Kris
-            foreach (KeyValuePair<string, Comment> pair in oldByFullname)
-            {
-                // All the matching elements are gone, leaving only the removed ones.  --Kris
-                removed.Add(pair.Value);
-            }
-
-            return !(added.Count == 0 && removed.Count == 0);
-        }
-
-        /// <summary>
-        /// Scan two lists for any differences.  Sequence is ignored.
-        /// </summary>
-        /// <param name="oldList">The original list being compared against</param>
-        /// <param name="newList">The new list</param>
-        /// <param name="added">Any entries that are present in the new list but not the old</param>
-        /// <param name="removed">Any entries that are present in the old list but not the new</param>
-        /// <returns>True if the lists differ, otherwise false.</returns>
-        public bool ListDiff(List<RedditThings.Message> oldList, List<RedditThings.Message> newList, out List<RedditThings.Message> added, 
-            out List<RedditThings.Message> removed)
-        {
-            added = new List<RedditThings.Message>();
-            removed = new List<RedditThings.Message>();
-
-            // Index by Reddit fullname.  --Kris
-            Dictionary<string, RedditThings.Message> oldById = new Dictionary<string, RedditThings.Message>();
-            Dictionary<string, RedditThings.Message> newById = new Dictionary<string, RedditThings.Message>();
-            for (int i = 0; i < Math.Max(oldList.Count, newList.Count); i++)
-            {
-                if (i < oldList.Count)
-                {
-                    oldById.Add(oldList[i].Id, oldList[i]);
-                }
-
-                if (i < newList.Count)
-                {
-                    newById.Add(newList[i].Id, newList[i]);
-                }
-            }
-
-            // Scan for any new posts.  --Kris
-            foreach (KeyValuePair<string, RedditThings.Message> pair in newById)
-            {
-                if (!oldById.ContainsKey(pair.Key))
-                {
-                    added.Add(pair.Value);
-                }
-                else
-                {
-                    // So we don't have to check the same element twice.  --Kris
-                    oldById.Remove(pair.Key);
-                }
-            }
-
-            // Scan for any posts no longer appearing in the list.  --Kris
-            foreach (KeyValuePair<string, RedditThings.Message> pair in oldById)
+            // Scan for any objects no longer appearing in the list.  --Kris
+            foreach (KeyValuePair<string, T> pair in oldByFullname)
             {
                 // All the matching elements are gone, leaving only the removed ones.  --Kris
                 removed.Add(pair.Value);
@@ -396,7 +295,7 @@ namespace Reddit.NET.Controllers
                         break;
                 }
 
-                if (ListDiff(oldList, newList, out List<RedditThings.Message> added, out List<RedditThings.Message> removed))
+                if (ListDiff<RedditThings.Message>(oldList, newList, out List<RedditThings.Message> added, out List<RedditThings.Message> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
@@ -475,7 +374,7 @@ namespace Reddit.NET.Controllers
                         break;
                 }
 
-                if (ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
+                if (ListDiff<Post>(oldList, newList, out List<Post> added, out List<Post> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     PostsUpdateEventArgs args = new PostsUpdateEventArgs
@@ -542,7 +441,7 @@ namespace Reddit.NET.Controllers
                         break;
                 }
 
-                if (ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
+                if (ListDiff<Comment>(oldList, newList, out List<Comment> added, out List<Comment> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
