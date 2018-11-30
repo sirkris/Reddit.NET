@@ -23,7 +23,7 @@ namespace Reddit.NET.Controllers
 
         internal Dictionary<string, Thread> Threads;
 
-        private volatile bool Terminate = false;
+        protected volatile bool Terminate = false;
 
         public BaseController()
         {
@@ -265,53 +265,6 @@ namespace Reddit.NET.Controllers
             return subreddits;
         }
 
-        internal void MonitorPrivateMessagesThread(MonitoringSnapshot monitoring, PrivateMessages privateMessages, string key, string type, int startDelayMs = 0)
-        {
-            if (startDelayMs > 0)
-            {
-                Thread.Sleep(startDelayMs);
-            }
-
-            while (!Terminate
-                && Monitoring.Get(key).Contains("PrivateMessages"))
-            {
-                List<RedditThings.Message> oldList;
-                List<RedditThings.Message> newList;
-                switch (type)
-                {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "inbox":
-                        oldList = privateMessages.inbox;
-                        newList = privateMessages.GetMessagesInbox();
-                        break;
-                    case "unread":
-                        oldList = privateMessages.unread;
-                        newList = privateMessages.GetMessagesUnread();
-                        break;
-                    case "sent":
-                        oldList = privateMessages.sent;
-                        newList = privateMessages.GetMessagesSent();
-                        break;
-                }
-
-                if (ListDiff<RedditThings.Message>(oldList, newList, out List<RedditThings.Message> added, out List<RedditThings.Message> removed))
-                {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
-                    {
-                        NewMessages = newList,
-                        OldMessages = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    TriggerUpdate(privateMessages, args, type);
-                }
-
-                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
-            }
-        }
-
         internal void MonitorPostsThread(MonitoringSnapshot monitoring, SubredditPosts posts, string key, string type, string subKey, int startDelayMs = 0)
         {
             if (startDelayMs > 0)
@@ -458,7 +411,7 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private void TriggerUpdate(SubredditPosts posts, PostsUpdateEventArgs args, string type)
+        protected void TriggerUpdate(SubredditPosts posts, PostsUpdateEventArgs args, string type)
         {
             switch (type)
             {
@@ -498,7 +451,7 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private void TriggerUpdate(Comments comments, CommentsUpdateEventArgs args, string type)
+        protected void TriggerUpdate(Comments comments, CommentsUpdateEventArgs args, string type)
         {
             switch (type)
             {
@@ -529,22 +482,6 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private void TriggerUpdate(PrivateMessages privateMessages, MessagesUpdateEventArgs args, string type)
-        {
-            switch (type)
-            {
-                case "inbox":
-                    privateMessages.OnInboxUpdated(args);
-                    break;
-                case "unread":
-                    privateMessages.OnUnreadUpdated(args);
-                    break;
-                case "sent":
-                    privateMessages.OnSentUpdated(args);
-                    break;
-            }
-        }
-
         private Thread CreateMonitoringThread(string key, string subKey, Comments comments, int startDelayMs = 0)
         {
             switch (key)
@@ -567,21 +504,6 @@ namespace Reddit.NET.Controllers
                     return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "qa", comments.SubKey, startDelayMs));
                 case "LiveComments":
                     return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "live", comments.SubKey, startDelayMs));
-            }
-        }
-
-        private Thread CreateMonitoringThread(string key, string subKey, PrivateMessages privateMessages, int startDelayMs = 0)
-        {
-            switch (key)
-            {
-                default:
-                    throw new RedditControllerException("Unrecognized key.");
-                case "PrivateMessagesInbox":
-                    return new Thread(() => MonitorPrivateMessagesThread(Monitoring, privateMessages, key, "inbox", startDelayMs));
-                case "PrivateMessagesUnread":
-                    return new Thread(() => MonitorPrivateMessagesThread(Monitoring, privateMessages, key, "unread", startDelayMs));
-                case "PrivateMessagesSent":
-                    return new Thread(() => MonitorPrivateMessagesThread(Monitoring, privateMessages, key, "sent", startDelayMs));
             }
         }
 
@@ -616,7 +538,7 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private void LaunchThreadIfNotNull(string key, Thread thread)
+        protected void LaunchThreadIfNotNull(string key, Thread thread)
         {
             if (thread != null)
             {
@@ -646,16 +568,6 @@ namespace Reddit.NET.Controllers
             return res;
         }
 
-        internal bool Monitor(string key, Thread thread, PrivateMessages privateMessages)
-        {
-            bool res = Monitor(key, thread, "PrivateMessages", out Thread newThread);
-
-            RebuildThreads(privateMessages);
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
-        }
-
         internal bool Monitor(string key, Thread thread, string subKey, out Thread newThread)
         {
             newThread = null;
@@ -680,7 +592,7 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private void KillThreads(Dictionary<string, Thread> oldThreads)
+        protected void KillThreads(Dictionary<string, Thread> oldThreads)
         {
             TerminateThread();
 
@@ -715,19 +627,6 @@ namespace Reddit.NET.Controllers
             foreach (KeyValuePair<string, Thread> pair in oldThreads)
             {
                 Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, comments.SubKey, comments, (i * MonitoringWaitDelayMS)));
-                i++;
-            }
-        }
-
-        internal void RebuildThreads(PrivateMessages privateMessages)
-        {
-            Dictionary<string, Thread> oldThreads = Threads;
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (KeyValuePair<string, Thread> pair in oldThreads)
-            {
-                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, "PrivateMessages", privateMessages, (i * MonitoringWaitDelayMS)));
                 i++;
             }
         }

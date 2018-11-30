@@ -1,18 +1,22 @@
 ﻿using Newtonsoft.Json;
+using Reddit.NET.Controllers.EventArgs;
 using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
     public class Wiki : BaseController
     {
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
+        public event EventHandler<WikiPagesUpdateEventArgs> PagesUpdated;
+
+        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         public List<string> Pages
         {
@@ -159,6 +163,81 @@ namespace Reddit.NET.Controllers
             bool srDetail = false, int count = 0)
         {
             return Validate(Dispatch.Wiki.Revisions(after, before, Subreddit, count, limit, show, srDetail)).Data.Children;
+        }
+
+        internal virtual void OnPagesUpdated(WikiPagesUpdateEventArgs e)
+        {
+            PagesUpdated?.Invoke(this, e);
+        }
+
+        public bool MonitorPages()
+        {
+            string key = "WikiPages";
+            return Monitor(key, new Thread(() => MonitorPagesThread(key)));
+        }
+
+        private bool Monitor(string key, Thread thread)
+        {
+            bool res = Monitor(key, thread, Subreddit, out Thread newThread);
+
+            RebuildThreads();
+            LaunchThreadIfNotNull(key, newThread);
+
+            return res;
+        }
+
+        internal void RebuildThreads()
+        {
+            Dictionary<string, Thread> oldThreads = Threads;
+            KillThreads(oldThreads);
+
+            int i = 0;
+            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            {
+                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, Subreddit, (i * MonitoringWaitDelayMS)));
+                i++;
+            }
+        }
+
+        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "WikiPages":
+                    return new Thread(() => MonitorPagesThread(key, startDelayMs));
+            }
+        }
+        
+        internal void MonitorPagesThread(string key, int startDelayMs = 0)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(Subreddit))
+            {
+                List<string> oldList = pages;
+                List<string> newList = GetPages();
+
+                if (ListDiff(oldList, newList, out List<string> added, out List<string> removed))
+                {
+                    // Event handler to alert the calling app that the list has changed.  --Kris
+                    WikiPagesUpdateEventArgs args = new WikiPagesUpdateEventArgs
+                    {
+                        NewPages = newList,
+                        OldPages = oldList,
+                        Added = added,
+                        Removed = removed
+                    };
+                    OnPagesUpdated(args);
+                }
+
+                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+            }
         }
     }
 }

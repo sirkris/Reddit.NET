@@ -28,13 +28,15 @@ namespace Reddit.NET.Controllers.Structures
         public List<string> RandomComments;
         public List<string> QAComments;
         public List<string> LiveComments;
+        public List<string> WikiPages;
 
         public MonitoringSnapshot(List<string> bestPosts = null, List<string> hotPosts = null, List<string> newPosts = null, List<string> risingPosts = null, 
             List<string> topPosts = null, List<string> controversialPosts = null, List<string> modQueuePosts = null, List<string> modQueueReportsPosts = null, 
             List<string> modQueueSpamPosts = null, List<string> modQueueUnmoderatedPosts = null, List<string> modQueueEditedPosts = null, 
             List<string> privateMessagesInbox = null, List<string> privateMessagesUnread = null, List<string> privateMessagesSent = null, 
             List<string> confidenceComments = null, List<string> topComments = null, List<string> newComments = null, List<string> controversialComments = null, 
-            List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null)
+            List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null, 
+            List<string> wikiPages = null)
         {
             BestPosts = (bestPosts ?? new List<string>());
             HotPosts = (hotPosts ?? new List<string>());
@@ -58,6 +60,7 @@ namespace Reddit.NET.Controllers.Structures
             RandomComments = (randomComments ?? new List<string>());
             QAComments = (qaComments ?? new List<string>());
             LiveComments = (liveComments ?? new List<string>());
+            WikiPages = (wikiPages ?? new List<string>());
         }
 
         public ref List<string> Get(string key)
@@ -110,6 +113,8 @@ namespace Reddit.NET.Controllers.Structures
                     return ref QAComments;
                 case "LiveComments":
                     return ref LiveComments;
+                case "WikiPages":
+                    return ref WikiPages;
             }
         }
 
@@ -139,6 +144,7 @@ namespace Reddit.NET.Controllers.Structures
                 Add(monitoringSnapshot.RandomComments, ref RandomComments);
                 Add(monitoringSnapshot.QAComments, ref QAComments);
                 Add(monitoringSnapshot.LiveComments, ref LiveComments);
+                Add(monitoringSnapshot.WikiPages, ref WikiPages);
             }
         }
 
@@ -179,6 +185,7 @@ namespace Reddit.NET.Controllers.Structures
                 Remove(monitoringSnapshot.RandomComments, ref RandomComments);
                 Remove(monitoringSnapshot.QAComments, ref QAComments);
                 Remove(monitoringSnapshot.LiveComments, ref LiveComments);
+                Remove(monitoringSnapshot.WikiPages, ref WikiPages);
             }
         }
 
@@ -215,7 +222,8 @@ namespace Reddit.NET.Controllers.Structures
                 + OldComments.Count
                 + RandomComments.Count
                 + QAComments.Count
-                + LiveComments.Count);
+                + LiveComments.Count 
+                + WikiPages.Count);
         }
     }
 }
