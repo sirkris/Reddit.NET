@@ -298,7 +298,7 @@ namespace Reddit.NET.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> PostHistory(string where, int context = 3, string t = "all", int limit = 25, string sort = "",
+        public List<Post> PostHistory(string where = "overview", int context = 3, string t = "all", int limit = 25, string sort = "",
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {

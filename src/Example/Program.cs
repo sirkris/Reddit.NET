@@ -34,7 +34,7 @@ namespace Example
                 Console.WriteLine("Cake Day: " + me.Created.ToString("D"));
 
                 // Get post and comment histories (note that pinned profile posts appear at the top even on new sort; use "newForced" sort as a workaround).  --Kris
-                List<Post> postHistory = me.PostHistory("overview", sort: "newForced");
+                List<Post> postHistory = me.PostHistory(sort: "newForced");
                 List<Comment> commentHistory = me.CommentHistory(sort: "new");
 
                 Console.WriteLine("Most recent post: " + postHistory[0].Title);
