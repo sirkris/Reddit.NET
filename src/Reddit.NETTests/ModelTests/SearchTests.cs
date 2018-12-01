@@ -6,7 +6,5 @@ namespace Reddit.NETTests.ModelTests
     public class SearchTests : BaseTests
     {
         public SearchTests() : base() { }
-
-
     }
 }
