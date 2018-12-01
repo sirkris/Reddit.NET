@@ -11,7 +11,6 @@ namespace Reddit.NET.Models
 
         public LinksAndComments(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
-        // TODO - Message reply in a controller.  --Kris
         /// <summary>
         /// Submit a new comment or reply to a message.
         /// parent is the fullname of the thing being replied to. Its value changes the kind of object created by this request:

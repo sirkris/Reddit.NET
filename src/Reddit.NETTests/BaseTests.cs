@@ -26,20 +26,27 @@ namespace Reddit.NETTests
 
         protected readonly Dictionary<string, string> testData;
         protected readonly RedditAPI reddit;
+        protected readonly RedditAPI reddit2;
 
         public BaseTests()
         {
             testData = GetData();
             reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            try
+            {
+                reddit2 = new RedditAPI(testData["AppId"], testData["RefreshToken2"]);
+            }
+            catch (Exception) { }
         }
 
         public Dictionary<string, string> GetData()
         {
             // Begin .NET Core workaround.  --Kris
             string xmlData;
-            using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Reddit.NETTestsData.xml"))
+            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Reddit.NETTestsData.xml"))
             {
-                using (System.IO.StreamReader streamReader = new System.IO.StreamReader(stream))
+                using (StreamReader streamReader = new StreamReader(stream))
                 {
                     xmlData = streamReader.ReadToEnd();
                 }
@@ -52,6 +59,7 @@ namespace Reddit.NETTests
             {
                 { "AppId", xmlDocument.GetElementsByTagName("AppId")[0].InnerText },
                 { "RefreshToken", xmlDocument.GetElementsByTagName("RefreshToken")[0].InnerText },
+                { "RefreshToken2", xmlDocument.GetElementsByTagName("RefreshToken2")[0].InnerText },
                 { "Subreddit", xmlDocument.GetElementsByTagName("Subreddit")[0].InnerText }
             };
             // End .NET Core workaround.  --Kris
@@ -85,6 +93,24 @@ namespace Reddit.NETTests
         {
             subreddit = reddit.Subreddit(testData["Subreddit"]).About();
             return subreddit;
+        }
+
+        /// <summary>
+        /// Retrieves your secondary test user.
+        /// </summary>
+        /// <returns>The populated User data.</returns>
+        protected Controllers.User GetTargetUser()
+        {
+            return reddit2.Account.Me;
+        }
+
+        /// <summary>
+        /// Retrieves your secondary test user.
+        /// </summary>
+        /// <returns>The populated User model structure data.</returns>
+        protected User GetTargetUserModel()
+        {
+            return reddit2.Models.Account.Me();
         }
 
         public void Validate(dynamic dynamic)

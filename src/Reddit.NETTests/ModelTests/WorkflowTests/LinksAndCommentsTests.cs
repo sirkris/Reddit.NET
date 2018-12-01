@@ -1,8 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.NET;
+using Reddit.NET.Controllers.EventArgs;
 using Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace Reddit.NETTests.ModelTests.WorkflowTests
 {
@@ -22,7 +24,59 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
 
             CommentResultContainer commentResult = reddit.Models.LinksAndComments.Comment(false, "", "This is a test comment.  So there.", postResult.JSON.Data.Name);
 
+            CommentResultContainer commentResult2 = reddit.Models.LinksAndComments.Comment(false, "", "This is a reply to a test comment.", commentResult.JSON.Data.Things[0].Data.Name);
+
             Validate(commentResult);
+            Validate(commentResult2);
+        }
+
+        [TestMethod]
+        public void MessageReply()
+        {
+            User me = reddit.Models.Account.Me();
+            User patsy = GetTargetUserModel();
+
+            // Create the initial message.  --Kris
+            reddit.Models.PrivateMessages.Compose("", "", "Test Message", "This is a test.  So there.", patsy.Name);
+
+            // Wait until the message arrives, then grab it.  The message ID is not returned by the Compose endpoint.  --Kris
+            DateTime start = DateTime.Now;
+            MessageContainer messages = null;
+            while (start.AddMinutes(2) >= DateTime.Now
+                && GetTestMessage(out messages, me.Name) == null)
+            {
+                Thread.Sleep(1500);
+            }
+
+            Message message = GetTestMessage(messages, me.Name);
+
+            Assert.IsNotNull(message);  // If this fails, it likely means that the test message has not yet arrived.  --Kris
+
+            // Now that we have our initial test message, let's reply to it.  --Kris
+            CommentResultContainer commentResultContainer = reddit2.Models.LinksAndComments.Comment(false, "", "Message received.", message.Name);
+
+            Validate(commentResultContainer);
+        }
+
+        private Message GetTestMessage(out MessageContainer messages, string sender, string subject = "Test Message")
+        {
+            messages = reddit2.Models.PrivateMessages.GetMessages("unread", true, "", "", "", false);
+
+            return GetTestMessage(messages, sender, subject);
+        }
+
+        private Message GetTestMessage(MessageContainer messages, string sender, string subject = "Test Message")
+        {
+            foreach (MessageChild messageChild in messages.Data.Children)
+            {
+                if (messageChild.Data.Author.Equals(sender)
+                    && messageChild.Data.Subject.Equals(subject))
+                {
+                    return messageChild.Data;
+                }
+            }
+
+            return null;
         }
 
         [TestMethod]
