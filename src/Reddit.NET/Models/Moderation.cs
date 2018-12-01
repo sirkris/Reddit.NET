@@ -102,7 +102,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Move test from ModelTests to ControllerTests.  --Kris
         /// <summary>
         /// Approve a link or comment.
         /// If the thing was removed, it will be re-inserted into appropriate listings.

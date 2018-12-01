@@ -13,6 +13,8 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
         [TestMethod]
         public void Workflow()
         {
+            User patsy = GetTargetUserModel();
+
             // Create a new live thread.  --Kris
             LiveThreadCreateResultContainer createRes = reddit.Models.LiveThreads.Create("This is a test.", false, "Resources text.", "Title text.");
 
@@ -29,12 +31,12 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Validate(editRes);
 
             // Invite a contributor.  --Kris
-            GenericContainer inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, "RedditDotNetBot", "+update", "liveupdate_contributor_invite");
+            GenericContainer inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, patsy.Name, "+update", "liveupdate_contributor_invite");
 
             Validate(inviteRes);
 
             // Change contributor permissions.  --Kris
-            GenericContainer permsRes = reddit.Models.LiveThreads.SetContributorPermissions(liveEvent.Data.Id, "RedditDotNetBot", "+edit", "liveupdate_contributor_invite");
+            GenericContainer permsRes = reddit.Models.LiveThreads.SetContributorPermissions(liveEvent.Data.Id, patsy.Name, "+edit", "liveupdate_contributor_invite");
 
             Validate(permsRes);
 
@@ -49,12 +51,39 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Assert.IsNotNull(contributors[1].Data);
             Assert.IsNotNull(contributors[1].Data.Children);
             Assert.IsTrue(contributors[1].Data.Children.Count == 1);
-            Assert.IsTrue(contributors[1].Data.Children[0].Name.Equals("RedditDotNetBot"));
+            Assert.IsTrue(contributors[1].Data.Children[0].Name.Equals(patsy.Name));
 
             // Remove contributor invite.  --Kris
             GenericContainer removeInviteRes = reddit.Models.LiveThreads.RemoveContributorInvite(liveEvent.Data.Id, contributors[1].Data.Children[0].Id);
 
             Validate(removeInviteRes);
+
+            // Re-invite contributor so they can accept it.  --Kris
+            inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, patsy.Name, "+update", "liveupdate_contributor_invite");
+
+            Validate(inviteRes);
+
+            // Accept the invitation.  --Kris
+            GenericContainer acceptRes = reddit2.Models.LiveThreads.AcceptContributorInvite(liveEvent.Data.Id);
+
+            Validate(acceptRes);
+
+            // Target user is doing a lousy job.  --Kris
+            GenericContainer removeRes = reddit.Models.LiveThreads.RemoveContributor(liveEvent.Data.Id, "t2_" + patsy.Id);
+
+            Validate(removeRes);
+
+            // Target user has friends in high places.  --Kris
+            inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, patsy.Name, "+update", "liveupdate_contributor_invite");
+            acceptRes = reddit2.Models.LiveThreads.AcceptContributorInvite(liveEvent.Data.Id);
+
+            Validate(inviteRes);
+            Validate(acceptRes);
+
+            // You can't fire me!  I quit!  --Kris
+            GenericContainer leaveRes = reddit2.Models.LiveThreads.LeaveContributor(liveEvent.Data.Id);
+
+            Validate(leaveRes);
 
             // Post an update.  --Kris
             string update = "Test update.";
