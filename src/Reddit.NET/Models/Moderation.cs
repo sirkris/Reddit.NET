@@ -84,8 +84,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
-        // TODO - No way to test without hitting endpoint from Users model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Accept an invite to moderate the specified subreddit.
         /// The authenticated user must have been invited to moderate the subreddit by one of its current moderators.
@@ -93,13 +91,13 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="subreddit">The subreddit being moderated</param>
         /// <returns>(TODO - Untested)</returns>
-        public object AcceptModeratorInvite(string subreddit = null)
+        public GenericContainer AcceptModeratorInvite(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/accept_moderator_invite", Method.POST);
 
             restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -118,11 +116,57 @@ namespace Reddit.NET.Models
             ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
-        // TODO - No way to test without hitting endpoint from LinksAndComments model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Distinguish a thing's author with a sigil.
         /// This can be useful to draw attention to and confirm the identity of the user in the context of a link or comment of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish. depends on user.
+        /// The first time a top-level comment is moderator distinguished, the author of the link the comment is in reply to will get a notification in their inbox.
+        /// sticky is a boolean flag for comments, which will stick the distingushed comment to the top of all comments threads.
+        /// If a comment is marked sticky, it will override any other stickied comment for that link (as only one comment may be stickied at a time). Only top-level comments may be stickied.
+        /// </summary>
+        /// <param name="how">one of (yes, no, admin, special)</param>
+        /// <param name="id">fullname of a thing</param>
+        /// <param name="sticky">boolean value</param>
+        /// <returns>The distinguished post or comment object.</returns>
+        public T Distinguish<T>(string how, string id, bool? sticky = null)
+        {
+            RestRequest restRequest = PrepareRequest("api/distinguish", Method.POST);
+
+            restRequest.AddParameter("id", id);
+            restRequest.AddParameter("how", how);
+            if (sticky.HasValue)
+            {
+                restRequest.AddParameter("sticky", sticky.Value);
+            }
+            restRequest.AddParameter("api_type", "json");
+            
+            return JsonConvert.DeserializeObject<T>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Distinguish a post's author with a sigil.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a link of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish. depends on user.
+        /// </summary>
+        /// <param name="how">one of (yes, no, admin, special)</param>
+        /// <param name="id">fullname of a thing</param>
+        /// <returns>The distinguished post object.</returns>
+        public PostResultContainer DistinguishPost(string how, string id)
+        {
+            return Distinguish<PostResultContainer>(how, id);
+        }
+
+        /// <summary>
+        /// Distinguish a comment's author with a sigil.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a comment of theirs.
         /// The options for distinguish are as follows:
         /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
         /// no - remove any distinguishes.
@@ -135,69 +179,53 @@ namespace Reddit.NET.Models
         /// <param name="how">one of (yes, no, admin, special)</param>
         /// <param name="id">fullname of a thing</param>
         /// <param name="sticky">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Distinguish(string how, string id, bool sticky)
+        /// <returns>The distinguished comment object.</returns>
+        public CommentResultContainer DistinguishComment(string how, string id, bool? sticky = null)
         {
-            RestRequest restRequest = PrepareRequest("api/distinguish", Method.POST);
-
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("how", how);
-            restRequest.AddParameter("sticky", sticky);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return Distinguish<CommentResultContainer>(how, id, sticky);
         }
 
-        // TODO - Needs testing.
-        // TODO - No way to test without hitting endpoint from LinksAndComments model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Prevent future reports on a thing from causing notifications.
         /// Any reports made about a thing after this flag is set on it will not cause notifications or make the thing show up in the various moderation listings.
         /// See also: /api/unignore_reports.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object IgnoreReports(string id)
+        public void IgnoreReports(string id)
         {
             RestRequest restRequest = PrepareRequest("api/ignore_reports", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
-        // TODO - No way to test without hitting endpoint from Users model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Abdicate approved submitter status in a subreddit.
         /// See also: /api/friend.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object LeaveContributor(string id)
+        public void LeaveContributor(string id)
         {
             RestRequest restRequest = PrepareRequest("api/leavecontributor", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
-        // TODO - No way to test without hitting endpoint from Users model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Abdicate moderator status in a subreddit.
         /// See also: /api/friend.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object LeaveModerator(string id)
+        public void LeaveModerator(string id)
         {
             RestRequest restRequest = PrepareRequest("api/leavemoderator", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         // TODO - Reddit API returns 500 server error when passing a user fullname (t2_2cclzaxt).  Maybe it expects a thread id, instead?  --Kris
@@ -215,8 +243,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
-        // TODO - No way to test without hitting endpoint from LinksAndComments or Modmail model, so will include this in controller tests only.  --Kris
+        // TODO - Test with Modmail.  --Kris
         /// <summary>
         /// Remove a link, comment, or modmail message.
         /// If the thing is a link, it will be removed from all subreddit listings. If the thing is a comment, it will be redacted and removed from all subreddit comment listings.
@@ -224,32 +251,28 @@ namespace Reddit.NET.Models
         /// </summary>
         /// <param name="id">fullname of a thing</param>
         /// <param name="spam">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Remove(string id, bool spam)
+        public void Remove(string id, bool spam)
         {
             RestRequest restRequest = PrepareRequest("api/remove", Method.POST);
 
             restRequest.AddParameter("id", id);
             restRequest.AddParameter("spam", spam);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
-        // TODO - No way to test without hitting endpoint from LinksAndComments model, so will include this in controller tests only.  --Kris
         /// <summary>
         /// Allow future reports on a thing to cause notifications.
         /// See also: /api/ignore_reports.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UnignoreReports(string id)
+        public void UnignoreReports(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unignore_reports", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         // TODO - Reddit API returns 500 server error when passing a user fullname (t2_2cclzaxt).  Maybe it expects a thread id, instead?  --Kris

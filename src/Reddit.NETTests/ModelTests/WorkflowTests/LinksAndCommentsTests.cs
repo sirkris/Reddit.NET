@@ -16,17 +16,16 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
         [TestMethod]
         public void PostAndComment()
         {
-            PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
-                    "link", false, true, null, true, false, testData["Subreddit"], "",
-                    "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
+            PostResultShortContainer postResult = TestPost();
 
             Validate(postResult);
 
-            CommentResultContainer commentResult = reddit.Models.LinksAndComments.Comment(false, "", "This is a test comment.  So there.", postResult.JSON.Data.Name);
-
-            CommentResultContainer commentResult2 = reddit.Models.LinksAndComments.Comment(false, "", "This is a reply to a test comment.", commentResult.JSON.Data.Things[0].Data.Name);
+            CommentResultContainer commentResult = TestComment(postResult.JSON.Data.Name);
 
             Validate(commentResult);
+
+            CommentResultContainer commentResult2 = TestCommentReply(commentResult.JSON.Data.Things[0].Data.Name);
+
             Validate(commentResult2);
         }
 

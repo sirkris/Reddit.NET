@@ -85,6 +85,23 @@ namespace Reddit.NETTests
             }
         }
 
+        public PostResultShortContainer TestPost()
+        {
+            return reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
+                    "link", false, true, null, true, false, testData["Subreddit"], "",
+                    "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
+        }
+
+        public CommentResultContainer TestComment(string parentFullname)
+        {
+            return reddit.Models.LinksAndComments.Comment(false, "", "This is a test comment.  So there.", parentFullname);
+        }
+
+        public CommentResultContainer TestCommentReply(string parentFullname)
+        {
+            return reddit.Models.LinksAndComments.Comment(false, "", "This is a reply to a test comment.", parentFullname);
+        }
+
         /// <summary>
         /// Retrieves your test subreddit.  It is assumed that the subreddit already exists at this point.
         /// </summary>
