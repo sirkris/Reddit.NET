@@ -201,6 +201,8 @@ namespace Reddit.NET.Models
                             new RedditServiceUnavailableException("Reddit API returned Service Unavailable (503) response."), res);
                     case HttpStatusCode.Unauthorized:
                         throw (RedditUnauthorizedException)BuildException(new RedditUnauthorizedException("Reddit API returned Unauthorized (401) response."), res);
+                    case HttpStatusCode.UnprocessableEntity:
+                        throw (RedditUnprocessableEntityException)BuildException(new RedditUnprocessableEntityException("Reddit API returned Unprocessable Entity (422) response."), res);
                 }
             }
             else

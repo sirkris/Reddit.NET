@@ -135,6 +135,15 @@ namespace Reddit.NETTests
             Assert.IsNotNull(dynamic);
         }
 
+        public void Validate(ModmailConversationContainer modmailConversationContainer)
+        {
+            Assert.IsNotNull(modmailConversationContainer);
+            Assert.IsNotNull(modmailConversationContainer.Conversation);
+            Assert.IsFalse(modmailConversationContainer.Conversation.LastUpdated.Equals(default(DateTime)));
+            Assert.IsNotNull(modmailConversationContainer.Messages);
+            Assert.IsTrue(modmailConversationContainer.Messages.Count > 0);
+        }
+
         public void Validate(User user)
         {
             Assert.IsNotNull(user);

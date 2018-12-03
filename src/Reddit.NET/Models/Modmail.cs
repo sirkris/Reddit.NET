@@ -27,7 +27,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Get conversations for a logged in user or subreddits.
         /// </summary>
@@ -50,8 +49,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<ConversationContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Creates a new conversation for a particular SR.
         /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
@@ -60,9 +57,9 @@ namespace Reddit.NET.Models
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="srName">subreddit name</param>
         /// <param name="subject">a string no longer than 100 characters</param>
-        /// <param name="to">Modmail conversation recipient fullname</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object NewConversation(string body, bool isAuthorHidden, string srName, string subject, string to)
+        /// <param name="to">Modmail conversation recipient username</param>
+        /// <returns>An object containing the conversation data.</returns>
+        public ModmailConversationContainer NewConversation(string body, bool isAuthorHidden, string srName, string subject, string to)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations", Method.POST);
 
@@ -71,29 +68,25 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("srName", srName);
             restRequest.AddParameter("subject", subject);
             restRequest.AddParameter("to", to);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Returns all messages, mod actions and conversation metadata for a given conversation id.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <param name="markRead">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object GetConversation(string conversationId, bool markRead)
+        /// <returns>An object containing the conversation data.</returns>
+        public ModmailConversationContainer GetConversation(string conversationId, bool markRead)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/" + conversationId);
 
             restRequest.AddParameter("markRead", markRead);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Creates a new message for a particular conversation.
         /// </summary>
@@ -101,20 +94,19 @@ namespace Reddit.NET.Models
         /// <param name="body">raw markdown text</param>
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="isInternal">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object NewMessage(string conversationId, string body, bool isAuthorHidden, bool isInternal)
+        /// <returns>An object containing the conversation data.</returns>
+        public ModmailConversationContainer NewMessage(string conversationId, string body, bool isAuthorHidden, bool isInternal)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/" + conversationId, Method.POST);
 
             restRequest.AddParameter("body", body);
             restRequest.AddParameter("isAuthorHidden", isAuthorHidden);
             restRequest.AddParameter("isInternal", isInternal);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
+        // TODO - Keeps returning 422, saying the conversation is not archivable without any indication as to why.  --Kris
         /// <summary>
         /// Marks a conversation as archived.
         /// </summary>
@@ -125,44 +117,37 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/archive", Method.POST));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Removes a highlight from a conversation.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object RemoveHighlight(string conversationId)
+        /// <returns>An object containing the conversation data.</returns>
+        public ModmailConversationContainer RemoveHighlight(string conversationId)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/highlight", Method.DELETE));
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest("api/mod/conversations/" + conversationId + "/highlight", Method.DELETE));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Marks a conversation as highlighted.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object MarkHighlighted(string conversationId)
+        /// <returns>An object containing the conversation data.</returns>
+        public ModmailConversationContainer MarkHighlighted(string conversationId)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/highlight", Method.POST));
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest("api/mod/conversations/" + conversationId + "/highlight", Method.POST));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Mutes the non mod user associated with a particular conversation.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Mute(string conversationId)
+        /// <returns>An object containing the conversation data.</returns>
+        public ModmailConversationContainer Mute(string conversationId)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/mute", Method.POST));
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest("api/mod/conversations/" + conversationId + "/mute", Method.POST));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
+        // TODO - Will test when I can get the archive endpoint to work.  --Kris
         /// <summary>
         /// Marks conversation as unarchived.
         /// </summary>
@@ -173,44 +158,37 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/unarchive", Method.POST));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Unmutes the non mod user associated with a particular conversation.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UnMute(string conversationId)
+        /// <returns>An object containing the conversation data.</returns>
+        public ModmailConversationContainer UnMute(string conversationId)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/unmute", Method.POST));
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest("api/mod/conversations/" + conversationId + "/unmute", Method.POST));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
-        /// Returns recent posts, comments and modmail conversations for a given user.
+        /// Returns recent posts, comments and modmail conversations for the user that started this conversation.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object User(string conversationId)
+        /// <returns>An object containing the user data.</returns>
+        public ModmailUser User(string conversationId)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/mod/conversations/" + conversationId + "/user"));
+            return JsonConvert.DeserializeObject<ModmailUser>(ExecuteRequest("api/mod/conversations/" + conversationId + "/user"));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Marks a conversations as read for the user.
         /// </summary>
         /// <param name="conversationIds">A comma-separated list of items</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object MarkRead(string conversationIds)
+        public void MarkRead(string conversationIds)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/read", Method.POST);
 
             restRequest.AddParameter("conversationIds", conversationIds);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         /// <summary>
@@ -222,20 +200,17 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<ModmailSubredditContainer>(ExecuteRequest("api/mod/conversations/subreddits"));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires endpoint that requires subreddit fullname retrieval so put this in ControllerTests only.  --Kris
         /// <summary>
         /// Marks conversations as unread for the user.
         /// </summary>
         /// <param name="conversationIds">A comma-separated list of items</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object MarkUnread(string conversationIds)
+        public void MarkUnread(string conversationIds)
         {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/unread", Method.POST);
 
             restRequest.AddParameter("conversationIds", conversationIds);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         /// <summary>
