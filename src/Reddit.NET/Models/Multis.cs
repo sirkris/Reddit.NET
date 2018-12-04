@@ -11,7 +11,6 @@ namespace Reddit.NET.Models
 
         public Multis(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Copy a multi.
         /// Responds with 409 Conflict if the target already exists.
@@ -20,16 +19,16 @@ namespace Reddit.NET.Models
         /// <param name="displayName">a string no longer than 50 characters</param>
         /// <param name="from">multireddit url path</param>
         /// <param name="to">destination multireddit url path</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Copy(string displayName, string from, string to)
+        /// <returns>An object containing the multireddit data.</returns>
+        public LabeledMultiContainer Copy(string displayName, string from, string to)
         {
             RestRequest restRequest = PrepareRequest("api/multi/copy", Method.POST);
 
             restRequest.AddParameter("display_name", displayName);
             restRequest.AddParameter("from", from);
             restRequest.AddParameter("to", to);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            
+            return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -42,27 +41,26 @@ namespace Reddit.NET.Models
             RestRequest restRequest = PrepareRequest("api/multi/mine");
 
             restRequest.AddParameter("expand_srs", expandSrs);
-            string blah = ExecuteRequest(restRequest);
+            
             return JsonConvert.DeserializeObject<List<LabeledMultiContainer>>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Rename a multi.
         /// </summary>
         /// <param name="displayName">a string no longer than 50 characters</param>
         /// <param name="from">multireddit url path</param>
         /// <param name="to">destination multireddit url path</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Rename(string displayName, string from, string to)
+        /// <returns>An object containing the multireddit data.</returns>
+        public LabeledMultiContainer Rename(string displayName, string from, string to)
         {
             RestRequest restRequest = PrepareRequest("api/multi/rename", Method.POST);
 
             restRequest.AddParameter("display_name", displayName);
             restRequest.AddParameter("from", from);
             restRequest.AddParameter("to", to);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            
+            return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -80,23 +78,22 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<List<LabeledMultiContainer>>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Delete a multi.
         /// </summary>
         /// <param name="multipath">multireddit url path</param>
         /// <param name="expandSrs">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Delete(string multipath, bool expandSrs)
+        public void Delete(string multipath, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath, Method.DELETE);
 
             restRequest.AddParameter("expand_srs", expandSrs);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         // TODO - Needs testing.
+        // TODO - Figure out what these filters are supposed to be.  --Kris
         /// <summary>
         /// Delete a filter.
         /// </summary>
@@ -128,6 +125,7 @@ namespace Reddit.NET.Models
         }
 
         // TODO - Needs testing.
+        // TODO - Figure out what these filters are supposed to be.  --Kris
         /// <summary>
         /// Get a filter.
         /// </summary>
@@ -143,7 +141,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Returns 400 with the error, "Unable to parse JSON."  The JSON being sent is identical to what the docs specify.  --Kris
         /// <summary>
         /// Create a multi. Responds with 409 Conflict if it already exists.
         /// </summary>
@@ -166,18 +163,19 @@ namespace Reddit.NET.Models
         /// "weighting_scheme": one of(`classic`, `fresh`),
         /// }</param>
         /// <param name="expandSrs">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Create(string multipath, LabeledMultiSubmit model, bool expandSrs)
+        /// <returns>An object containing the multireddit data.</returns>
+        public LabeledMultiContainer Create(string multipath, LabeledMultiSubmit model, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath, Method.POST);
 
-            restRequest.AddBody(JsonConvert.SerializeObject(model));
+            restRequest.AddParameter("model", JsonConvert.SerializeObject(model));
             restRequest.AddParameter("expand_srs", expandSrs);
             
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
+        // TODO - Figure out what these filters are supposed to be.  --Kris
         /// <summary>
         /// Create a filter. Responds with 409 Conflict if it already exists.
         /// </summary>
@@ -210,7 +208,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Create or update a multi.
         /// </summary>
@@ -233,17 +230,19 @@ namespace Reddit.NET.Models
         /// "weighting_scheme": one of(`classic`, `fresh`),
         /// }</param>
         /// <param name="expandSrs">boolean value</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Update(string multipath, string model, bool expandSrs)
+        /// <returns>An object containing the multireddit data.</returns>
+        public LabeledMultiContainer Update(string multipath, LabeledMultiSubmit model, bool expandSrs)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath, Method.PUT);
 
+            restRequest.AddParameter("model", JsonConvert.SerializeObject(model));
             restRequest.AddParameter("expand_srs", expandSrs);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
+        // TODO - Figure out what these filters are supposed to be.  --Kris
         /// <summary>
         /// Create or update a filter.
         /// </summary>
@@ -286,38 +285,33 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<LabeledMultiDescriptionContainer>(ExecuteRequest("api/multi/" + multipath + "/description"));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Change a multi's markdown description.
         /// </summary>
         /// <param name="multipath">multireddit url path</param>
-        /// <param name="model">json data:
-        /// {
-        /// "body_md": raw markdown text,
-        /// }</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UpdateDescription(string multipath, string model)
+        /// <param name="description">The new description markdown text</param>
+        /// <returns>An object containing a description.</returns>
+        public LabeledMultiDescriptionContainer UpdateDescription(string multipath, string description)
         {
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath + "/description", Method.PUT);
 
-            restRequest.AddParameter("model", model);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            restRequest.AddParameter("model", "{\"body_md\": \"" + description + "\"}");
+            
+            return JsonConvert.DeserializeObject<LabeledMultiDescriptionContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Remove a subreddit from a multi.
         /// </summary>
         /// <param name="multipath">multireddit url path</param>
         /// <param name="srName">subreddit name</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object DeleteMultiSub(string multipath, string srName)
+        public void DeleteMultiSub(string multipath, string srName)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/multi/" + multipath + "/r/" + srName, Method.DELETE));
+            ExecuteRequest("api/multi/" + multipath + "/r/" + srName, Method.DELETE);
         }
 
         // TODO - Needs testing.
+        // TODO - Figure out what these filters are supposed to be.  --Kris
         /// <summary>
         /// Remove a subreddit from a filter.
         /// </summary>
@@ -335,12 +329,13 @@ namespace Reddit.NET.Models
         /// <param name="multipath">multireddit url path</param>
         /// <param name="srName">subreddit name</param>
         /// <returns>An object containing the subreddit name.</returns>
-        public object GetMultiSub(string multipath, string srName)
+        public NamedObj GetMultiSub(string multipath, string srName)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/multi/" + multipath + "/r/" + srName));
+            return JsonConvert.DeserializeObject<NamedObj>(ExecuteRequest("api/multi/" + multipath + "/r/" + srName));
         }
 
         // TODO - Needs testing.
+        // TODO - Figure out what these filters are supposed to be.  --Kris
         /// <summary>
         /// Get data about a subreddit in a filter.
         /// </summary>
@@ -352,23 +347,23 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest("api/filter/" + filterpath + "/r/" + srName));
         }
 
-        // TODO - Needs testing.
         /// <summary>
         /// Add a subreddit to a multi.
         /// </summary>
         /// <param name="multipath">multireddit url path</param>
         /// <param name="srName">subreddit name</param>
-        /// <param name="model">json data:
-        /// {
-        /// "name": subreddit name,
-        /// }</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object AddMultiSub(string multipath, string srName, string model)
+        /// <returns>An object containing the name of the added subreddit.</returns>
+        public NamedObj AddMultiSub(string multipath, string srName)
         {
-            return JsonConvert.DeserializeObject(ExecuteRequest("api/multi/" + multipath + "/r/" + srName, Method.PUT));
+            RestRequest restRequest = PrepareRequest("api/multi/" + multipath + "/r/" + srName, Method.PUT);
+
+            restRequest.AddParameter("model", "{\"name\": \"" + srName + "\"}");
+
+            return JsonConvert.DeserializeObject<NamedObj>(ExecuteRequest(restRequest));
         }
 
         // TODO - Needs testing.
+        // TODO - Figure out what these filters are supposed to be.  --Kris
         /// <summary>
         /// Add a subreddit to a filter.
         /// </summary>

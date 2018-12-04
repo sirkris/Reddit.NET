@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using Reddit.NET;
 using Controllers = Reddit.NET.Controllers;
 using Reddit.NET.Models.Structures;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -128,6 +130,26 @@ namespace Reddit.NETTests
         protected User GetTargetUserModel()
         {
             return reddit2.Models.Account.Me();
+        }
+
+        protected void CheckBadRequest(string reason, string message, Exception ex)
+        {
+            BadRequest badRequest = null;
+            try
+            {
+                badRequest = JsonConvert.DeserializeObject<BadRequest>(((RestResponse)ex.Data["res"]).Content);
+            }
+            catch (Exception) { }
+
+            if (badRequest == null
+                || !badRequest.Reason.Equals(reason))
+            {
+                throw ex;
+            }
+            else
+            {
+                Assert.Inconclusive(message);
+            }
         }
 
         public void Validate(dynamic dynamic)

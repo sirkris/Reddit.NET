@@ -40,22 +40,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             }
             catch (RedditBadRequestException ex)
             {
-                BadRequest badRequest = null;
-                try
-                {
-                    badRequest = JsonConvert.DeserializeObject<BadRequest>(((RestResponse)ex.Data["res"]).Content);
-                }
-                catch (Exception) { }
-
-                if (badRequest == null
-                    || !badRequest.Reason.Equals("USER_MUTED"))
-                {
-                    throw ex;
-                }
-                else
-                {
-                    Assert.Inconclusive("Target user cannot be muted when the test begins.");
-                }
+                CheckBadRequest("USER_MUTED", "Target user cannot be muted when the test begins.", ex);
             }
 
             Validate(modmailConversationContainer);
