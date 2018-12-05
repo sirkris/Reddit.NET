@@ -10,36 +10,32 @@ namespace Reddit.NET.Models
 
         public PrivateMessages(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
 
-        // TODO - Needs testing.
+        // Tested this one manually because there's no way to unblock a user via the API and having one test user blocking the other will cause tests to fail.  --Kris
         /// <summary>
         /// For blocking the author of a thing via inbox.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Block(string id)
+        public void Block(string id)
         {
             RestRequest restRequest = PrepareRequest("api/block", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
-        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Collapse a message
         /// See also: /api/uncollapse_message
         /// </summary>
         /// <param name="id">A comma-separated list of thing fullnames</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object CollapseMessage(string id)
+        public void CollapseMessage(string id)
         {
             RestRequest restRequest = PrepareRequest("api/collapse_message", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         /// <summary>
@@ -65,53 +61,44 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
-        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Delete messages from the recipient's view of their inbox.
         /// </summary>
         /// <param name="id">fullname of a thing</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object DelMsg(string id)
+        public void DelMsg(string id)
         {
             RestRequest restRequest = PrepareRequest("api/del_msg", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
-        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Queue up marking all messages for a user as read.
         /// This may take some time, and returns 202 to acknowledge acceptance of the request.
         /// </summary>
         /// <param name="filterTypes">A comma-separated list of items</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object ReadAllMessages(string filterTypes)
+        public void ReadAllMessages(string filterTypes)
         {
             RestRequest restRequest = PrepareRequest("api/read_all_messages", Method.POST);
 
             restRequest.AddParameter("filter_types", filterTypes);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
-        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Mark a message as read.
         /// </summary>
         /// <param name="id">A comma-separated list of thing fullnames</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object ReadMessage(string id)
+        public void ReadMessage(string id)
         {
             RestRequest restRequest = PrepareRequest("api/read_message", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         // TODO - Reddit API returns 500 server error.  No idea why.
@@ -129,36 +116,30 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
-        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Uncollapse a message.
         /// </summary>
         /// <param name="id">A comma-separated list of thing fullnames</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UncollapseMessage(string id)
+        public void UncollapseMessage(string id)
         {
             RestRequest restRequest = PrepareRequest("api/uncollapse_message", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
-        // TODO - Message retrieval requires a message.  Even sending to self requires username from Me endpoint, so will handle in controller tests.  --Kris
         /// <summary>
         /// Mark a message as unread.
         /// </summary>
         /// <param name="id">A comma-separated list of thing fullnames</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object UnreadMessage(string id)
+        public void UnreadMessage(string id)
         {
             RestRequest restRequest = PrepareRequest("api/unread_message", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         /// <summary>
