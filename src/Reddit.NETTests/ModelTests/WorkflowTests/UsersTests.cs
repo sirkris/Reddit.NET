@@ -31,5 +31,18 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Assert.IsNotNull(getRes.Name);
             Assert.IsTrue(getRes.Name.Equals("RedditDotNetBot"));
         }
+
+        [TestMethod]
+        public void FriendAndUnfriend()
+        {
+            User me = reddit.Models.Account.Me();
+            User patsy = GetTargetUserModel();
+
+            string myFullname = "t2_" + me.Id;
+            string patsyFullname = "t2_" + patsy.Id;
+
+            Validate(reddit.Models.Users.Friend(null, null, null, null, 999, patsy.Name, "+mail", "moderator_invite", testData["Subreddit"]));
+            reddit.Models.Users.Unfriend(null, patsyFullname, patsy.Name, "moderator_invite", testData["Subreddit"]);
+        }
     }
 }
