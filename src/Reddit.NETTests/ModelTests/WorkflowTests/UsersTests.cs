@@ -15,7 +15,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
         public void Friendship()
         {
             // Add a friend.
-            UserActionResult updateRes = reddit.Models.Users.UpdateFriend("RedditDotNetBot", "{}");
+            UserActionResult updateRes = reddit.Models.Users.UpdateFriend("RedditDotNetBot");
 
             // Get data on an existing friend.
             UserActionResult getRes = reddit.Models.Users.GetFriend("RedditDotNetBot");

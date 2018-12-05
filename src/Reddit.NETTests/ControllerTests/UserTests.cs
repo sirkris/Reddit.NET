@@ -42,7 +42,27 @@ namespace Reddit.NETTests.ControllerTests
         [TestMethod]
         public void SetPermissions()
         {
-            reddit.User("RedditDotNetBot").SetPermissions(testData["Subreddit"], "+wiki", "moderator_invite");
+            SetPermissions(true);
+        }
+
+        private void SetPermissions(bool retry)
+        {
+            try
+            {
+                reddit.User("RedditDotNetBot").SetPermissions(testData["Subreddit"], "+wiki", "moderator_invite");
+            }
+            catch (RedditInternalServerErrorException ex)
+            {
+                if (retry)
+                {
+                    Validate(reddit.Models.Users.Friend(null, null, null, null, 999, "RedditDotNetBot", "+mail", "moderator_invite", testData["Subreddit"]));
+                    SetPermissions(false);
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
         }
 
         [TestMethod]
