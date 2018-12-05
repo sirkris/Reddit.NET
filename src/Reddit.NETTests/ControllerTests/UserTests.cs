@@ -55,7 +55,7 @@ namespace Reddit.NETTests.ControllerTests
             {
                 if (retry)
                 {
-                    Validate(reddit.Models.Users.Friend(null, null, null, null, 999, "RedditDotNetBot", "+mail", "moderator_invite", testData["Subreddit"]));
+                    reddit.User("RedditDotNetBot").AddRelationship(null, null, null, null, 999, "+mail", "moderator_invite", testData["Subreddit"]);
                     SetPermissions(false);
                 }
                 else
