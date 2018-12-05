@@ -94,8 +94,7 @@ namespace Reddit.NET.Models
             ExecuteRequest(restRequest);
         }
 
-        // TODO - Needs testing.
-        // TODO - Creating a discussion requires using LinksAndComments to link to the Wiki page, so will include this in controller tests.  --Kris
+        // TODO - Either this feature doesn't work or even the busiest subreddits have no Wiki discussion posts.  All my tests yield a listing container with no children.  --Kris
         /// <summary>
         /// Retrieve a list of discussions about this wiki page.
         /// This endpoint is a listing.
@@ -119,7 +118,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("limit", limit);
             restRequest.AddParameter("show", show);
             restRequest.AddParameter("sr_detail", srDetail);
-
+            
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
