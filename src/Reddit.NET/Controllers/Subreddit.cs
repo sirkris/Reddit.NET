@@ -290,7 +290,7 @@ namespace Reddit.NET.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new LinkPost(Dispatch, this, title, author, url, thumbnail, thumbnailHeight, thumbnailWidth, preview,
+            return new LinkPost(Dispatch, this, title, url, author, thumbnail, thumbnailHeight, thumbnailWidth, preview,
                 id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -313,7 +313,7 @@ namespace Reddit.NET.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new SelfPost(Dispatch, this, title, author, selfText, selfTextHtml, id, fullname, permalink, created, 
+            return new SelfPost(Dispatch, this, title, selfText, selfTextHtml, author, id, fullname, permalink, created, 
                 edited, score, upVotes, downVotes, removed, spam);
         }
 
