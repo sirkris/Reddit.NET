@@ -73,19 +73,19 @@ namespace Reddit.NET.Controllers
         
         public Comment(Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
             Dispatch = dispatch;
             Import(subreddit, author, body, bodyHtml, parentFullname, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
-                depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
-        public Comment(Dispatch dispatch, string name)
+        public Comment(Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
-            Fullname = name;
+            Fullname = fullname;
         }
 
         public Comment(Dispatch dispatch)
@@ -129,7 +129,7 @@ namespace Reddit.NET.Controllers
 
         private void Import(string subreddit, string author, string body, string bodyHtml,
             string parentFullname = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
@@ -146,7 +146,7 @@ namespace Reddit.NET.Controllers
             ScoreHidden = scoreHidden;
             Depth = depth;
             Id = id;
-            Fullname = name;
+            Fullname = fullname;
             Permalink = permalink;
             Created = created;
             Edited = edited;

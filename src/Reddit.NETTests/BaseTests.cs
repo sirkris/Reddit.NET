@@ -87,6 +87,16 @@ namespace Reddit.NETTests
             }
         }
 
+        public Controllers.LinkPost TestLinkPost()
+        {
+            return reddit.Subreddit(testData["Subreddit"]).LinkPost("Test Link Post", "htttp://www.go-fuck-yourself.com").Submit();
+        }
+
+        public Controllers.SelfPost TestSelfPost()
+        {
+            return reddit.Subreddit(testData["Subreddit"]).SelfPost("Test Self Post", "It is now: " + DateTime.Now.ToString("r"));
+        }
+
         public PostResultShortContainer TestPost()
         {
             return reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",

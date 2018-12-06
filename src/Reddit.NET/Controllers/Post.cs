@@ -52,22 +52,43 @@ namespace Reddit.NET.Controllers
 
         public Post(Dispatch dispatch, RedditThings.Post listing)
         {
-            Import(listing);
             Dispatch = dispatch;
+            Import(listing);
         }
 
-        public Post(Dispatch dispatch, string subreddit, string title, string author, string id = null, string name = null, string permalink = null,
+        public Post(Dispatch dispatch, string subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
-            Import(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
             Dispatch = dispatch;
+            Import(subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
         }
 
-        public Post(Dispatch dispatch, string name)
+        public Post(Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
-            Fullname = name;
+            Fullname = fullname;
+        }
+
+        public Post(Dispatch dispatch, string fullname, Subreddit subreddit)
+        {
+            Dispatch = dispatch;
+            Fullname = fullname;
+            Subreddit = subreddit.Name;
+        }
+
+        public Post(Dispatch dispatch, Subreddit subreddit)
+        {
+            Dispatch = dispatch;
+            Subreddit = subreddit.Name;
+        }
+
+        public Post(Dispatch dispatch, Subreddit subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
+            DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
+            int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
+        {
+            Dispatch = dispatch;
+            Import(subreddit.Name, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
         }
 
         public Post(Dispatch dispatch)
@@ -101,7 +122,7 @@ namespace Reddit.NET.Controllers
             Listing = listing;
         }
 
-        internal void Import(string subreddit, string title, string author, string id = null, string name = null, string permalink = null,
+        internal void Import(string subreddit, string title, string author, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
@@ -109,7 +130,7 @@ namespace Reddit.NET.Controllers
             Title = title;
             Author = author;
             Id = id;
-            Fullname = name;
+            Fullname = fullname;
             Permalink = permalink;
             Created = created;
             Edited = edited;
@@ -125,12 +146,12 @@ namespace Reddit.NET.Controllers
 
         public Comment Comment(string author, string body, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
             return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
-                depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
         public Comment Comment()

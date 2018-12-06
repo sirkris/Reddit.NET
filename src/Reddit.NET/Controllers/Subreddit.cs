@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
@@ -277,6 +278,72 @@ namespace Reddit.NET.Controllers
             SubredditData = new RedditThings.Subreddit(this);
 
             return SubredditData;
+        }
+
+        /// <summary>
+        /// Create a new LinkPost object attached to this subreddit.
+        /// </summary>
+        /// <returns>A new LinkPost object attached to this subreddit.</returns>
+        public LinkPost LinkPost(string title = null, string url = null, string author = null,
+            string thumbnail = null, int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
+            string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
+            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
+            bool removed = false, bool spam = false)
+        {
+            return new LinkPost(Dispatch, this, title, author, url, thumbnail, thumbnailHeight, thumbnailWidth, preview,
+                id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        /// <summary>
+        /// Create a new LinkPost object with the specified fullname attached to this subreddit.
+        /// </summary>
+        /// <param name="fullname">The fullname of an existing LinkPost.</param>
+        /// <returns>A new LinkPost object attached to this subreddit.</returns>
+        public LinkPost LinkPost(string fullname)
+        {
+            return new LinkPost(Dispatch, fullname, this);
+        }
+
+        /// <summary>
+        /// Create a new SelfPost object attached to this subreddit.
+        /// </summary>
+        /// <returns>A new SelfPost object attached to this subreddit.</returns>
+        public SelfPost SelfPost(string title = null, string selfText = null, string selfTextHtml = null, string author = null,
+            string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
+            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
+            bool removed = false, bool spam = false)
+        {
+            return new SelfPost(Dispatch, this, title, author, selfText, selfTextHtml, id, fullname, permalink, created, 
+                edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        /// <summary>
+        /// Create a new SelfPost object with the specified fullname attached to this subreddit.
+        /// </summary>
+        /// <param name="fullname">The fullname of an existing SelfPost.</param>
+        /// <returns>A new SelfPost object attached to this subreddit.</returns>
+        public SelfPost SelfPost(string fullname)
+        {
+            return new SelfPost(Dispatch, fullname, this);
+        }
+
+        /// <summary>
+        /// Create a new generic Post object attached to this subreddit.
+        /// </summary>
+        /// <returns>A new generic Post object attached to this subreddit.</returns>
+        public Post Post()
+        {
+            return new Post(Dispatch, this);
+        }
+
+        /// <summary>
+        /// Create a new generic Post object with the specified fullname attached to this subreddit.
+        /// </summary>
+        /// <param name="fullname">The fullname of an existing Post.</param>
+        /// <returns>A new generic Post object attached to this subreddit.</returns>
+        public Post Post(string fullname)
+        {
+            return new Post(Dispatch, fullname, this);
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();
