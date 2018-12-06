@@ -94,7 +94,7 @@ namespace Reddit.NETTests
 
         public Controllers.SelfPost TestSelfPost()
         {
-            return reddit.Subreddit(testData["Subreddit"]).SelfPost("Test Self Post", "It is now: " + DateTime.Now.ToString("r"));
+            return reddit.Subreddit(testData["Subreddit"]).SelfPost("Test Self Post", "It is now: " + DateTime.Now.ToString("r")).Submit();
         }
 
         public PostResultShortContainer TestPost()
