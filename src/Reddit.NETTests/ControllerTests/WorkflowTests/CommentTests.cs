@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.NET;
 using Reddit.NET.Controllers;
+using Reddit.NET.Controllers.EventArgs;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
@@ -37,8 +38,13 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             }
         }
         private Comment comment;
-        
-        public CommentTests() : base() { }
+
+        private Dictionary<string, Comment> NewComments;
+
+        public CommentTests() : base()
+        {
+            NewComments = new Dictionary<string, Comment>();
+        }
 
         private SelfPost TestSelfPost()
         {
@@ -93,6 +99,40 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             await Comment.UnsaveAsync();
             await Comment.DisableSendRepliesAsync();
             await Comment.EnableSendRepliesAsync();
+        }
+
+        [TestMethod]
+        public async Task MonitorNewComments()
+        {
+            Comment.Comments.GetNew();
+            Comment.Comments.MonitorNew();
+            Comment.Comments.NewUpdated += C_NewCommentsUpdated;
+
+            for (int i = 1; i <= 10; i++)
+            {
+                await Comment.ReplyAsync("Comment #" + i.ToString());
+            }
+
+            DateTime start = DateTime.Now;
+            while (NewComments.Count < 10
+                && start.AddMinutes(1) > DateTime.Now) { }
+
+            Comment.Comments.NewUpdated -= C_NewCommentsUpdated;
+            Comment.Comments.MonitorNew();
+
+            Assert.AreEqual(10, NewComments.Count);
+        }
+
+        // When a new comment is detected in MonitorNewComments, this method will add it/them to the list.  --Kris
+        private void C_NewCommentsUpdated(object sender, CommentsUpdateEventArgs e)
+        {
+            foreach (Comment comment in e.Added)
+            {
+                if (!NewComments.ContainsKey(comment.Fullname))
+                {
+                    NewComments.Add(comment.Fullname, comment);
+                }
+            }
         }
     }
 }

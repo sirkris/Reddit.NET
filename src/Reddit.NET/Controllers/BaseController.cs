@@ -67,6 +67,21 @@ namespace Reddit.NET.Controllers
             added = new List<T>();
             removed = new List<T>();
 
+            if (oldList == null && newList == null)
+            {
+                return false;
+            }
+            else if (oldList == null)
+            {
+                added = newList;
+                return true;
+            }
+            else if (newList == null)
+            {
+                removed = oldList;
+                return true;
+            }
+
             // Index by Reddit fullname.  --Kris
             Dictionary<string, T> oldByFullname = new Dictionary<string, T>();
             Dictionary<string, T> newByFullname = new Dictionary<string, T>();
@@ -327,7 +342,7 @@ namespace Reddit.NET.Controllers
                         break;
                 }
 
-                if (ListDiff<Post>(oldList, newList, out List<Post> added, out List<Post> removed))
+                if (ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     PostsUpdateEventArgs args = new PostsUpdateEventArgs
@@ -394,7 +409,7 @@ namespace Reddit.NET.Controllers
                         break;
                 }
 
-                if (ListDiff<Comment>(oldList, newList, out List<Comment> added, out List<Comment> removed))
+                if (ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     CommentsUpdateEventArgs args = new CommentsUpdateEventArgs

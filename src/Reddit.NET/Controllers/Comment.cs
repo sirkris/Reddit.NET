@@ -197,6 +197,39 @@ namespace Reddit.NET.Controllers
             return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, Body, ParentFullname)).JSON.Data.Things[0].Data);
         }
 
+        public Comment Reply(string body, string bodyHtml = null, string author = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            return BuildReply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).Submit();
+        }
+
+        public async Task ReplyAsync(string body, string bodyHtml = null, string author = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            await Task.Run(() =>
+            {
+                Reply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                    depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+            });
+        }
+
+        public Comment BuildReply(string body, string bodyHtml = null, string author = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+        }
+
         /// <summary>
         /// Submit this comment to Reddit asynchronously.
         /// </summary>

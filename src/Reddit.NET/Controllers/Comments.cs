@@ -200,39 +200,39 @@ namespace Reddit.NET.Controllers
             {
                 case "confidence":
                     ConfidenceLastUpdated = DateTime.Now;
-                    Confidence = comments;
+                    Confidence = comments[0].Replies;
                     break;
                 case "top":
                     TopLastUpdated = DateTime.Now;
-                    Top = comments;
+                    Top = comments[0].Replies;
                     break;
                 case "new":
                     NewLastUpdated = DateTime.Now;
-                    New = comments;
+                    New = comments[0].Replies;
                     break;
                 case "controversial":
                     ControversialLastUpdated = DateTime.Now;
-                    Controversial = comments;
+                    Controversial = comments[0].Replies;
                     break;
                 case "old":
                     OldLastUpdated = DateTime.Now;
-                    Old = comments;
+                    Old = comments[0].Replies;
                     break;
                 case "random":
                     RandomLastUpdated = DateTime.Now;
-                    Random = comments;
+                    Random = comments[0].Replies;
                     break;
                 case "qa":
                     QALastUpdated = DateTime.Now;
-                    QA = comments;
+                    QA = comments[0].Replies;
                     break;
                 case "live":
                     LiveLastUpdated = DateTime.Now;
-                    Live = comments;
+                    Live = comments[0].Replies;
                     break;
             }
 
-            return comments;
+            return comments[0].Replies;
         }
 
         public List<Comment> GetConfidence(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,

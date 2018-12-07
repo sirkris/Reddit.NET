@@ -82,7 +82,7 @@ namespace Reddit.NET.Models
         public List<(PostContainer, CommentContainer)> GetComments(string article, int context, bool showEdits, bool showMore, string sort, bool threaded, int truncate,
             string subreddit = null, string comment = null, int? depth = null, int? limit = null, bool srDetail = false)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "comments/" + article);
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "comments/" + article + (!string.IsNullOrWhiteSpace(comment) ? "/_/" + comment : ""));
 
             restRequest.AddParameter("context", context);
             restRequest.AddParameter("showedits", showEdits);
