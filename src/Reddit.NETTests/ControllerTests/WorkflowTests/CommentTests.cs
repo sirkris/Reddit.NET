@@ -102,7 +102,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         }
 
         [TestMethod]
-        public async Task MonitorNewComments()
+        public void MonitorNewComments()
         {
             Comment.Comments.GetNew();
             Comment.Comments.MonitorNew();
@@ -110,7 +110,8 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
 
             for (int i = 1; i <= 10; i++)
             {
-                await Comment.ReplyAsync("Comment #" + i.ToString());
+                // Despite what VS says, we don't want to use await here.  --Kris
+                Comment.ReplyAsync("Comment #" + i.ToString());
             }
 
             DateTime start = DateTime.Now;
