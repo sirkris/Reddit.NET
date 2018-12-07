@@ -90,6 +90,12 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         }
 
         [TestMethod]
+        public void Reply()
+        {
+            Validate(Comment.Reply("This is a comment reply.").Reply("This is another reply.").Reply("This is yet another reply."));
+        }
+
+        [TestMethod]
         public async Task ModifyAsync()
         {
             await Comment.SubmitAsync();
@@ -104,7 +110,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         [TestMethod]
         public void MonitorNewComments()
         {
-            Comment.Comments.GetNew();
+            Comment.Comments.GetNew();  // This call prevents any existing "new"-sorted comments from triggering the update event.  --Kris
             Comment.Comments.MonitorNew();
             Comment.Comments.NewUpdated += C_NewCommentsUpdated;
 
