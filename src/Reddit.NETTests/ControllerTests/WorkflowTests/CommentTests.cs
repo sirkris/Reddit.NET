@@ -71,9 +71,22 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         }
 
         [TestMethod]
+        public async Task DeleteAsync()
+        {
+            await Comment.DeleteAsync();
+        }
+
+        [TestMethod]
         public void Report()
         {
             Comment.Report("This is a test (additional info).", "", "This is a test (custom).", false, "This is a test (other).", "This is a test (reason).",
+                "This is a test (rule reason).", "This is a test (site reason).", "");
+        }
+
+        [TestMethod]
+        public async Task ReportAsync()
+        {
+            await Comment.ReportAsync("This is a test (additional info).", "", "This is a test (custom).", false, "This is a test (other).", "This is a test (reason).",
                 "This is a test (rule reason).", "This is a test (site reason).", "");
         }
 
