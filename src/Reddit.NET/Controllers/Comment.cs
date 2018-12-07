@@ -191,11 +191,21 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Submit this comment to Reddit.
         /// </summary>
-        /// <param name="body">raw markdown text</param>
         /// <returns>An instance of this class populated with the return data.</returns>
-        public Comment Submit(string body)
+        public Comment Submit()
         {
-            return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, body, Fullname)).JSON.Data.Things[0].Data);
+            return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, Body, ParentFullname)).JSON.Data.Things[0].Data);
+        }
+
+        /// <summary>
+        /// Submit this comment to Reddit asynchronously.
+        /// </summary>
+        public async Task SubmitAsync()
+        {
+            await Task.Run(() =>
+            {
+                Submit();
+            });
         }
 
         /// <summary>
@@ -227,7 +237,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Delete this comment asynchronously.
         /// </summary>
-        public async void DeleteAsync()
+        public async Task DeleteAsync()
         {
             await Task.Run(() =>
             {
@@ -266,7 +276,7 @@ namespace Reddit.NET.Controllers
         /// <param name="ruleReason">a string no longer than 100 characters</param>
         /// <param name="siteReason">a string no longer than 100 characters</param>
         /// <param name="violatorUsername">A valid Reddit username</param>
-        public async void ReportAsync(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
+        public async Task ReportAsync(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string violatorUsername)
         {
             await Task.Run(() =>
@@ -290,7 +300,7 @@ namespace Reddit.NET.Controllers
         /// Saved things are kept in the user's saved listing for later perusal.
         /// </summary>
         /// <param name="category">a category name</param>
-        public async void SaveAsync(string category)
+        public async Task SaveAsync(string category)
         {
             await Task.Run(() =>
             {
@@ -309,7 +319,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Enable inbox replies for this comment asynchronously.
         /// </summary>
-        public async void EnableSendRepliesAsync()
+        public async Task EnableSendRepliesAsync()
         {
             await Task.Run(() =>
             {
@@ -328,7 +338,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Disable inbox replies for this comment asynchronously.
         /// </summary>
-        public async void DisableSendRepliesAsync()
+        public async Task DisableSendRepliesAsync()
         {
             await Task.Run(() =>
             {
@@ -349,7 +359,7 @@ namespace Reddit.NET.Controllers
         /// Unsave this comment asynchronously.
         /// This removes the thing from the user's saved listings as well.
         /// </summary>
-        public async void UnsaveAsync()
+        public async Task UnsaveAsync()
         {
             await Task.Run(() =>
             {
@@ -373,7 +383,7 @@ namespace Reddit.NET.Controllers
         /// Edit the body text of this comment asynchronously.  This instance will be automatically updated with the return data.
         /// </summary>
         /// <param name="text">raw markdown text</param>
-        public async void EditAsync(string text)
+        public async Task EditAsync(string text)
         {
             await Task.Run(() =>
             {

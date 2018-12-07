@@ -207,7 +207,7 @@ namespace Reddit.NET.Controllers
         /// <param name="text">raw markdown text</param>
         /// <param name="fromSr">subreddit name</param>
         /// <param name="gRecaptchaResponse"></param>
-        public async void ComposeAsync(string to, string subject, string text, string fromSr = "", string gRecaptchaResponse = "")
+        public async Task ComposeAsync(string to, string subject, string text, string fromSr = "", string gRecaptchaResponse = "")
         {
             await Task.Run(() =>
             {

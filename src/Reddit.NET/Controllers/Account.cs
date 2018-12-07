@@ -78,7 +78,7 @@ namespace Reddit.NET.Controllers
         /// Update preferences asynchronously.
         /// </summary>
         /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
-        public async void UpdatePrefsAsync(RedditThings.AccountPrefsSubmit accountPrefs)
+        public async Task UpdatePrefsAsync(RedditThings.AccountPrefsSubmit accountPrefs)
         {
             await Task.Run(() =>
             {
@@ -202,7 +202,7 @@ namespace Reddit.NET.Controllers
         /// Asynchronously stop being friends with a user.
         /// </summary>
         /// <param name="username">A valid, existing reddit username</param>
-        public async void DeleteFriendAsync(string username)
+        public async Task DeleteFriendAsync(string username)
         {
             await Task.Run(() =>
             {
@@ -246,7 +246,7 @@ namespace Reddit.NET.Controllers
         /// "name": A valid, existing reddit username
         /// "note": a string no longer than 300 characters
         /// }</param>
-        public async void UpdateFriendAsync(string username, string json = "{}")
+        public async Task UpdateFriendAsync(string username, string json = "{}")
         {
             await Task.Run(() =>
             {

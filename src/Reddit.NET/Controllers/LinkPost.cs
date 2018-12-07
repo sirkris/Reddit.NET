@@ -114,7 +114,7 @@ namespace Reddit.NET.Controllers
         /// <param name="sendReplies">boolean value</param>
         /// <param name="spoiler">boolean value</param>
         /// <param name="videoPosterUrl">a valid URL</param>
-        public async void SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+        public async Task SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {

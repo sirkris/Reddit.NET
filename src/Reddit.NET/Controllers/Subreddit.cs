@@ -480,7 +480,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="stylesheetContents">the new stylesheet content</param>
-        public async void UpdateStylesheetAsync(string reason, string stylesheetContents)
+        public async Task UpdateStylesheetAsync(string reason, string stylesheetContents)
         {
             await Task.Run(() =>
             {
@@ -501,7 +501,7 @@ namespace Reddit.NET.Controllers
         /// Subscribe to a subreddit asynchronously.
         /// </summary>
         /// <param name="skipInitialDefaults">boolean value</param>
-        public async void SubscribeAsync(bool skipInitialDefaults = false)
+        public async Task SubscribeAsync(bool skipInitialDefaults = false)
         {
             await Task.Run(() =>
             {
@@ -520,7 +520,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Unsubscribe from a subreddit asynchronously.
         /// </summary>
-        public async void UnsubscribeAsync()
+        public async Task UnsubscribeAsync()
         {
             await Task.Run(() =>
             {
@@ -539,7 +539,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove the subreddit's custom mobile banner asynchronously.
         /// </summary>
-        public async void DeleteBannerAsync()
+        public async Task DeleteBannerAsync()
         {
             await Task.Run(() =>
             {
@@ -559,7 +559,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove the subreddit's custom header image asynchronously.
         /// </summary>
-        public async void DeleteHeaderAsync()
+        public async Task DeleteHeaderAsync()
         {
             await Task.Run(() =>
             {
@@ -578,7 +578,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove the subreddit's custom mobile icon asynchronously.
         /// </summary>
-        public async void DeleteIconAsync()
+        public async Task DeleteIconAsync()
         {
             await Task.Run(() =>
             {
@@ -603,7 +603,7 @@ namespace Reddit.NET.Controllers
         /// If the image is currently referenced by the subreddit's stylesheet, that stylesheet will no longer validate and won't be editable until the image reference is removed.
         /// </summary>
         /// <param name="imgName">a valid subreddit image name</param>
-        public async void DeleteImgAsync(string imgName)
+        public async Task DeleteImgAsync(string imgName)
         {
             await Task.Run(() =>
             {
@@ -629,7 +629,7 @@ namespace Reddit.NET.Controllers
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgName">a valid subreddit image name</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async void UploadImgAsync(byte[] imgData, string imgName, string imgType = "png")
+        public async Task UploadImgAsync(byte[] imgData, string imgName, string imgType = "png")
         {
             await Task.Run(() =>
             {
@@ -653,7 +653,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async void UploadHeaderAsync(byte[] imgData, string imgType = "png")
+        public async Task UploadHeaderAsync(byte[] imgData, string imgType = "png")
         {
             await Task.Run(() =>
             {
@@ -677,7 +677,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async void UploadIconAsync(byte[] imgData, string imgType = "png")
+        public async Task UploadIconAsync(byte[] imgData, string imgType = "png")
         {
             await Task.Run(() =>
             {
@@ -701,7 +701,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async void UploadBannerAsync(byte[] imgData, string imgType = "png")
+        public async Task UploadBannerAsync(byte[] imgData, string imgType = "png")
         {
             await Task.Run(() =>
             {
@@ -798,7 +798,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="username">the name of an existing user</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
-        public async void ModeratorInviteAsync(string username, string permissions)
+        public async Task ModeratorInviteAsync(string username, string permissions)
         {
             await Task.Run(() =>
             {
@@ -823,7 +823,7 @@ namespace Reddit.NET.Controllers
         /// <param name="username">the name of an existing user</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
-        public async void SetUserPermissionsAsync(string username, string permissions, string type)
+        public async Task SetUserPermissionsAsync(string username, string permissions, string type)
         {
             await Task.Run(() =>
             {
@@ -1067,7 +1067,7 @@ namespace Reddit.NET.Controllers
         /// <param name="commentScoreHideMins">an integer between 0 and 1440 (default: 0)</param>
         /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
-        public async void UpdateAsync(bool manualUpdate = false, bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
+        public async Task UpdateAsync(bool manualUpdate = false, bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
             bool? allowTop = null, bool? allowVideos = null, bool? collapseDeletedComments = null, string description = null, bool? excludeBannedModqueue = null,
             bool? freeFormReports = null, string gRecaptchaResponse = null, string headerTitle = null, bool? hideAds = null, string keyColor = null, string lang = null,
             string linkType = null, string name = null, bool? originalContentTagEnabled = null, bool? over18 = null, string publicDescription = null, bool? showMedia = null,

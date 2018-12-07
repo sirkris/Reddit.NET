@@ -164,7 +164,7 @@ namespace Reddit.NET.Controllers
         /// <param name="sendReplies">boolean value</param>
         /// <param name="spoiler">boolean value</param>
         /// <param name="videoPosterUrl">a valid URL</param>
-        public async void SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+        public async Task SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
@@ -190,7 +190,7 @@ namespace Reddit.NET.Controllers
         /// Edit the body text of this self post asynchronously.  This instance will be automatically updated with the return data.
         /// </summary>
         /// <param name="text">raw markdown text</param>
-        public async void EditAsync(string text)
+        public async Task EditAsync(string text)
         {
             await Task.Run(() =>
             {

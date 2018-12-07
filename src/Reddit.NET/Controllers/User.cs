@@ -183,7 +183,7 @@ namespace Reddit.NET.Controllers
         /// <param name="permissions"></param>
         /// <param name="type">one of (friend, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
         /// <param name="subreddit">A subreddit</param>
-        public async void AddRelationshipAsync(string banContext, string banMessage, string banReason, string container, int duration,
+        public async Task AddRelationshipAsync(string banContext, string banMessage, string banReason, string container, int duration,
             string permissions, string type, string subreddit = null)
         {
             await Task.Run(() =>
@@ -208,7 +208,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="details">JSON data</param>
         /// <param name="reason">a string no longer than 100 characters</param>
-        public async void ReportAsync(string details, string reason)
+        public async Task ReportAsync(string details, string reason)
         {
             await Task.Run(() =>
             {
@@ -233,7 +233,7 @@ namespace Reddit.NET.Controllers
         /// <param name="usernsubredditame">the name of an existing subreddit</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
-        public async void SetPermissionsAsync(string subreddit, string permissions, string type)
+        public async Task SetPermissionsAsync(string subreddit, string permissions, string type)
         {
             await Task.Run(() =>
             {
@@ -348,7 +348,7 @@ namespace Reddit.NET.Controllers
         /// Delete flair asynchronously.
         /// </summary>
         /// <param name="subreddit">The subreddit with the flairs</param>
-        public async void DeleteFlairAsync(string subreddit)
+        public async Task DeleteFlairAsync(string subreddit)
         {
             await Task.Run(() =>
             {
@@ -373,7 +373,7 @@ namespace Reddit.NET.Controllers
         /// <param name="subreddit">The subreddit with the flairs</param>
         /// <param name="text">The flair text</param>
         /// <param name="cssClass">a valid subreddit image name</param>
-        public async void CreateFlairAsync(string subreddit, string text, string cssClass = "")
+        public async Task CreateFlairAsync(string subreddit, string text, string cssClass = "")
         {
             await Task.Run(() =>
             {
@@ -427,7 +427,7 @@ namespace Reddit.NET.Controllers
         /// <param name="thread">id</param>
         /// <param name="permissions">permission description e.g. +update,+edit,-manage</param>
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
-        public async void InviteToLiveThreadAsync(string thread, string permissions, string type)
+        public async Task InviteToLiveThreadAsync(string thread, string permissions, string type)
         {
             await Task.Run(() =>
             {
@@ -452,7 +452,7 @@ namespace Reddit.NET.Controllers
         /// Requires the manage permission for this thread.
         /// </summary>
         /// <param name="thread">id</param>
-        public async void RemoveFromLiveThreadAsync(string thread)
+        public async Task RemoveFromLiveThreadAsync(string thread)
         {
             await Task.Run(() =>
             {
@@ -477,7 +477,7 @@ namespace Reddit.NET.Controllers
         /// Requires the manage permission for this thread.
         /// </summary>
         /// <param name="thread">id</param>
-        public async void RevokeLiveThreadInvitationAsync(string thread)
+        public async Task RevokeLiveThreadInvitationAsync(string thread)
         {
             await Task.Run(() =>
             {
@@ -506,7 +506,7 @@ namespace Reddit.NET.Controllers
         /// <param name="thread">id</param>
         /// <param name="permissions">permission description e.g. +update,+edit,-manage</param>
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
-        public async void SetLiveThreadPermissionsAsync(string thread, string permissions, string type)
+        public async Task SetLiveThreadPermissionsAsync(string thread, string permissions, string type)
         {
             await Task.Run(() =>
             {
@@ -550,7 +550,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        public async void AllowWikiEditAsync(string page, string subreddit = null)
+        public async Task AllowWikiEditAsync(string page, string subreddit = null)
         {
             await Task.Run(() =>
             {
@@ -573,7 +573,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        public async void DenyWikiEditAsync(string page, string subreddit = null)
+        public async Task DenyWikiEditAsync(string page, string subreddit = null)
         {
             await Task.Run(() =>
             {
@@ -592,7 +592,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Block this user asynchronously.
         /// </summary>
-        public async void BlockAsync()
+        public async Task BlockAsync()
         {
             await Task.Run(() =>
             {

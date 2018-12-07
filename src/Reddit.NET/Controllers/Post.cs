@@ -144,7 +144,7 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
-        public Comment Comment(string author, string body, string bodyHtml = null,
+        public Comment Comment(string body, string bodyHtml = null, string author = null, 
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
@@ -188,7 +188,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Delete this post asynchronously.
         /// </summary>
-        public async void DeleteAsync()
+        public async Task DeleteAsync()
         {
             await Task.Run(() =>
             {
@@ -209,7 +209,7 @@ namespace Reddit.NET.Controllers
         /// Hide this post asynchronously.
         /// This removes it from the user's default view of subreddit listings.
         /// </summary>
-        public async void HideAsync()
+        public async Task HideAsync()
         {
             await Task.Run(() =>
             {
@@ -230,7 +230,7 @@ namespace Reddit.NET.Controllers
         /// Lock this post asynchronously.
         /// Prevents a post from receiving new comments.
         /// </summary>
-        public async void LockAsync()
+        public async Task LockAsync()
         {
             await Task.Run(() =>
             {
@@ -249,7 +249,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Mark this post as NSFW asynchronously.
         /// </summary>
-        public async void MarkNSFWAsync()
+        public async Task MarkNSFWAsync()
         {
             await Task.Run(() =>
             {
@@ -309,7 +309,7 @@ namespace Reddit.NET.Controllers
         /// <param name="ruleReason">a string no longer than 100 characters</param>
         /// <param name="siteReason">a string no longer than 100 characters</param>
         /// <param name="violatorUsername">A valid Reddit username</param>
-        public async void ReportAsync(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
+        public async Task ReportAsync(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string violatorUsername)
         {
             await Task.Run(() =>
@@ -333,7 +333,7 @@ namespace Reddit.NET.Controllers
         /// Saved things are kept in the user's saved listing for later perusal.
         /// </summary>
         /// <param name="category">a category name</param>
-        public async void SaveAsync(string category)
+        public async Task SaveAsync(string category)
         {
             await Task.Run(() =>
             {
@@ -352,7 +352,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Enable inbox replies for this post asynchronously.
         /// </summary>
-        public async void EnableSendRepliesAsync()
+        public async Task EnableSendRepliesAsync()
         {
             await Task.Run(() =>
             {
@@ -371,7 +371,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Disable inbox replies for this post asynchronously.
         /// </summary>
-        public async void DisableSendRepliesAsync()
+        public async Task DisableSendRepliesAsync()
         {
             await Task.Run(() =>
             {
@@ -390,7 +390,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Enable contest mode for this post asynchronously.
         /// </summary>
-        public async void EnableContestModeAsync()
+        public async Task EnableContestModeAsync()
         {
             await Task.Run(() =>
             {
@@ -409,7 +409,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Disable contest mode for this post asynchronously.
         /// </summary>
-        public async void DisableContestModeAsync()
+        public async Task DisableContestModeAsync()
         {
             await Task.Run(() =>
             {
@@ -438,7 +438,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="num">an integer between 1 and 4</param>
         /// <param name="toProfile">boolean value</param>
-        public async void SetSubredditStickyAsync(int num, bool toProfile)
+        public async Task SetSubredditStickyAsync(int num, bool toProfile)
         {
             await Task.Run(() =>
             {
@@ -467,7 +467,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="num">an integer between 1 and 4</param>
         /// <param name="toProfile">boolean value</param>
-        public async void UnsetSubredditStickyAsync(int num, bool toProfile)
+        public async Task UnsetSubredditStickyAsync(int num, bool toProfile)
         {
             await Task.Run(() =>
             {
@@ -494,7 +494,7 @@ namespace Reddit.NET.Controllers
         /// A sort of an empty string clears the default sort.
         /// </summary>
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live, blank)</param>
-        public async void SetSuggestedSortAsync(string sort)
+        public async Task SetSuggestedSortAsync(string sort)
         {
             await Task.Run(() =>
             {
@@ -513,7 +513,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Mark this post as containing spoilers asynchronously.
         /// </summary>
-        public async void SpoilerAsync()
+        public async Task SpoilerAsync()
         {
             await Task.Run(() =>
             {
@@ -532,7 +532,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Unhide this post asynchronously.
         /// </summary>
-        public async void UnhideAsync()
+        public async Task UnhideAsync()
         {
             await Task.Run(() =>
             {
@@ -553,7 +553,7 @@ namespace Reddit.NET.Controllers
         /// Unlock this post asynchronously.
         /// Allows this post to receive new comments.
         /// </summary>
-        public async void UnlockAsync()
+        public async Task UnlockAsync()
         {
             await Task.Run(() =>
             {
@@ -572,7 +572,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove the NSFW marking from this post asynchronously.
         /// </summary>
-        public async void UnmarkNSFWAsync()
+        public async Task UnmarkNSFWAsync()
         {
             await Task.Run(() =>
             {
@@ -593,7 +593,7 @@ namespace Reddit.NET.Controllers
         /// Unsave this post asynchronously.
         /// This removes the thing from the user's saved listings as well.
         /// </summary>
-        public async void UnsaveAsync()
+        public async Task UnsaveAsync()
         {
             await Task.Run(() =>
             {
@@ -612,7 +612,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove spoiler asynchronously.
         /// </summary>
-        public async void UnspoilerAsync()
+        public async Task UnspoilerAsync()
         {
             await Task.Run(() =>
             {

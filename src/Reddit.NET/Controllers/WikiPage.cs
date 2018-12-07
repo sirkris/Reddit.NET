@@ -79,7 +79,7 @@ namespace Reddit.NET.Controllers
         /// Asynchronously allow username to edit this wiki page.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
-        public async void AllowEditorAsync(string username)
+        public async Task AllowEditorAsync(string username)
         {
             await Task.Run(() =>
             {
@@ -100,7 +100,7 @@ namespace Reddit.NET.Controllers
         /// Asynchronously deny username to edit this wiki page.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
-        public async void DenyEditorAsync(string username)
+        public async Task DenyEditorAsync(string username)
         {
             await Task.Run(() =>
             {
@@ -125,7 +125,7 @@ namespace Reddit.NET.Controllers
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="content">The page content</param>
         /// <param name="previous">the starting point revision for this edit</param>
-        public async void EditAsync(string reason, string content = null, string previous = "")
+        public async Task EditAsync(string reason, string content = null, string previous = "")
         {
             await Task.Run(() =>
             {
@@ -147,7 +147,7 @@ namespace Reddit.NET.Controllers
         /// Toggle the public visibility of a wiki page revision asynchronously.
         /// </summary>
         /// <param name="revision">a wiki revision ID</param>
-        public async void HideAsync(string revision)
+        public async Task HideAsync(string revision)
         {
             await Task.Run(() =>
             {
@@ -168,7 +168,7 @@ namespace Reddit.NET.Controllers
         /// Revert a wiki page to revision asynchronously.
         /// </summary>
         /// <param name="revision">a wiki revision ID</param>
-        public async void RevertAsync(string revision)
+        public async Task RevertAsync(string revision)
         {
             await Task.Run(() =>
             {
@@ -217,7 +217,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="listed">boolean value (true = appear in /wiki/pages, false = don't appear in /wiki/pages)</param>
         /// <param name="permLevel">an integer (0 = use wiki perms, 1 = only approved users may edit, 2 = only mods may edit or view)</param>
-        public async void UpdatePermissionsAsync(bool listed, int permLevel)
+        public async Task UpdatePermissionsAsync(bool listed, int permLevel)
         {
             await Task.Run(() =>
             {
@@ -239,7 +239,7 @@ namespace Reddit.NET.Controllers
         /// Update the permissions and visibility of wiki page asynchronously.
         /// </summary>
         /// <param name="wikiPageSettings">A valid instance of WikiPageSettings</param>
-        public async void UpdatePermissionsAsync(RedditThings.WikiPageSettings wikiPageSettings)
+        public async Task UpdatePermissionsAsync(RedditThings.WikiPageSettings wikiPageSettings)
         {
             await Task.Run(() =>
             {

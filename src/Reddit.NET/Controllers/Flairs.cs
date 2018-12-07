@@ -109,7 +109,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Clear link flair templates asynchronously.
         /// </summary>
-        public async void ClearLinkFlairTemplatesAsync()
+        public async Task ClearLinkFlairTemplatesAsync()
         {
             await Task.Run(() =>
             {
@@ -128,7 +128,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Clear user flair templates asynchronously.
         /// </summary>
-        public async void ClearUserFlairTemplatesAsync()
+        public async Task ClearUserFlairTemplatesAsync()
         {
             await Task.Run(() =>
             {
@@ -149,7 +149,7 @@ namespace Reddit.NET.Controllers
         /// Delete flair asynchronously.
         /// </summary>
         /// <param name="username">The user whose flair we're removing</param>
-        public async void DeleteFlairAsync(string username)
+        public async Task DeleteFlairAsync(string username)
         {
             await Task.Run(() =>
             {
@@ -170,7 +170,7 @@ namespace Reddit.NET.Controllers
         /// Delete flair template asynchronously.
         /// <param name="flairTemplateId">The ID of the flair template being deleted (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
         /// </summary>
-        public async void DeleteFlairTemplateAsync(string flairTemplateId)
+        public async Task DeleteFlairTemplateAsync(string flairTemplateId)
         {
             await Task.Run(() =>
             {
@@ -195,7 +195,7 @@ namespace Reddit.NET.Controllers
         /// <param name="username">The user who's getting the new flair</param>
         /// <param name="text">The flair text</param>
         /// <param name="cssClass">a valid subreddit image name</param>
-        public async void CreateFlairAsync(string username, string text, string cssClass = "")
+        public async Task CreateFlairAsync(string username, string text, string cssClass = "")
         {
             await Task.Run(() =>
             {
@@ -224,7 +224,7 @@ namespace Reddit.NET.Controllers
         /// <param name="flairSelfAssignEnabled">boolean value</param>
         /// <param name="linkFlairPosition">one of (left, right)</param>
         /// <param name="linkFlairSelfAssignEnabled">boolean value</param>
-        public async void FlairConfigAsync(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled)
+        public async Task FlairConfigAsync(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled)
         {
             await Task.Run(() =>
             {
@@ -252,7 +252,7 @@ namespace Reddit.NET.Controllers
         /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
         /// </summary>
         /// <param name="flairCsv">comma-seperated flair information</param>
-        public async void FlairCSVAsync(string flairCsv)
+        public async Task FlairCSVAsync(string flairCsv)
         {
             await Task.Run(() =>
             {
@@ -278,7 +278,7 @@ namespace Reddit.NET.Controllers
         /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
         /// </summary>
         /// <param name="flairCsv">A valid FlairListResultContainer object</param>
-        public async void FlairCSVAsync(RedditThings.FlairListResultContainer flairCsv)
+        public async Task FlairCSVAsync(RedditThings.FlairListResultContainer flairCsv)
         {
             await Task.Run(() =>
             {
@@ -310,7 +310,7 @@ namespace Reddit.NET.Controllers
         /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
         /// </summary>
         /// <param name="flairCsv">A list of valid FlairListResult objects</param>
-        public async void FlairCSVAsync(List<RedditThings.FlairListResult> flairCsv)
+        public async Task FlairCSVAsync(List<RedditThings.FlairListResult> flairCsv)
         {
             await Task.Run(() =>
             {
@@ -364,7 +364,7 @@ namespace Reddit.NET.Controllers
         /// <param name="text">a string no longer than 64 characters</param>
         /// <param name="textEditable">boolean value</param>
         /// <param name="cssClass">a valid subreddit image name</param>
-        public async void CreateLinkFlairTemplateAsync(string text, bool textEditable = false, string cssClass = "")
+        public async Task CreateLinkFlairTemplateAsync(string text, bool textEditable = false, string cssClass = "")
         {
             await Task.Run(() =>
             {
@@ -389,7 +389,7 @@ namespace Reddit.NET.Controllers
         /// <param name="text">a string no longer than 64 characters</param>
         /// <param name="textEditable">boolean value</param>
         /// <param name="cssClass">a valid subreddit image name</param>
-        public async void CreateUserFlairTemplateAsync(string text, bool textEditable = false, string cssClass = "")
+        public async Task CreateUserFlairTemplateAsync(string text, bool textEditable = false, string cssClass = "")
         {
             await Task.Run(() =>
             {
@@ -416,7 +416,7 @@ namespace Reddit.NET.Controllers
         /// <param name="text">a string no longer than 64 characters</param>
         /// <param name="textEditable">boolean value</param>
         /// <param name="cssClass">a valid subreddit image name</param>
-        public async void UpdateLinkFlairTemplateAsync(string flairTemplateId, string text, bool textEditable = false, string cssClass = "")
+        public async Task UpdateLinkFlairTemplateAsync(string flairTemplateId, string text, bool textEditable = false, string cssClass = "")
         {
             await Task.Run(() =>
             {
@@ -443,7 +443,7 @@ namespace Reddit.NET.Controllers
         /// <param name="text">a string no longer than 64 characters</param>
         /// <param name="textEditable">boolean value</param>
         /// <param name="cssClass">a valid subreddit image name</param>
-        public async void UpdateUserFlairTemplateAsync(string flairTemplateId, string text, bool textEditable = false, string cssClass = "")
+        public async Task UpdateUserFlairTemplateAsync(string flairTemplateId, string text, bool textEditable = false, string cssClass = "")
         {
             await Task.Run(() =>
             {
@@ -476,7 +476,7 @@ namespace Reddit.NET.Controllers
         /// <param name="textColor">one of (light, dark)</param>
         /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
         /// <param name="modOnly">boolean value</param>
-        public async void CreateLinkFlairTemplateV2Async(string text, bool textEditable = false, string textColor = "dark",
+        public async Task CreateLinkFlairTemplateV2Async(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
             await Task.Run(() =>
@@ -510,7 +510,7 @@ namespace Reddit.NET.Controllers
         /// <param name="textColor">one of (light, dark)</param>
         /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
         /// <param name="modOnly">boolean value</param>
-        public async void CreateUserFlairTemplateV2Async(string text, bool textEditable = false, string textColor = "dark",
+        public async Task CreateUserFlairTemplateV2Async(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
             await Task.Run(() =>
@@ -546,7 +546,7 @@ namespace Reddit.NET.Controllers
         /// <param name="textColor">one of (light, dark)</param>
         /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
         /// <param name="modOnly">boolean value</param>
-        public async void UpdateLinkFlairTemplateV2Async(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
+        public async Task UpdateLinkFlairTemplateV2Async(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
             await Task.Run(() =>
@@ -582,7 +582,7 @@ namespace Reddit.NET.Controllers
         /// <param name="textColor">one of (light, dark)</param>
         /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
         /// <param name="modOnly">boolean value</param>
-        public async void UpdateUserFlairTemplateV2Async(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
+        public async Task UpdateUserFlairTemplateV2Async(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
             await Task.Run(() =>
@@ -604,7 +604,7 @@ namespace Reddit.NET.Controllers
         /// Set flair enabled asynchronously.
         /// </summary>
         /// <param name="flairEnabled">boolean value</param>
-        public async void SetFlairEnabledAsync(bool flairEnabled = true)
+        public async Task SetFlairEnabledAsync(bool flairEnabled = true)
         {
             await Task.Run(() =>
             {

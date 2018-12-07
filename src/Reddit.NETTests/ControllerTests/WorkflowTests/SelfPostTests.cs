@@ -26,9 +26,10 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
 
         public SelfPostTests() : base() { }
 
-        public SelfPost TestSelfPost()
+        private SelfPost TestSelfPost()
         {
-            return reddit.Subreddit(testData["Subreddit"]).SelfPost("Test Self Post", "It is now: " + DateTime.Now.ToString("F")).Submit();
+            Post = reddit.Subreddit(testData["Subreddit"]).SelfPost("Test Self Post", "It is now: " + DateTime.Now.ToString("F")).Submit();
+            return Post;
         }
 
         [TestMethod]
