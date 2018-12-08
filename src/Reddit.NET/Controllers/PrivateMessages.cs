@@ -187,6 +187,29 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Queue up marking all messages for a user as read.
+        /// This may take some time, and returns 202 to acknowledge acceptance of the request.
+        /// </summary>
+        /// <param name="filterTypes">A comma-separated list of items</param>
+        public void MarkAllRead(string filterTypes = "")
+        {
+            Dispatch.PrivateMessages.ReadAllMessages(filterTypes);
+        }
+
+        /// <summary>
+        /// Asynchronously queue up marking all messages for a user as read.
+        /// This may take some time, and returns 202 to acknowledge acceptance of the request.
+        /// </summary>
+        /// <param name="filterTypes">A comma-separated list of items</param>
+        public async Task MarkAllReadAsync(string filterTypes = "")
+        {
+            await Task.Run(() =>
+            {
+                MarkAllRead(filterTypes);
+            });
+        }
+
+        /// <summary>
         /// Send a private message.
         /// </summary>
         /// <param name="to">the name of an existing user</param>
