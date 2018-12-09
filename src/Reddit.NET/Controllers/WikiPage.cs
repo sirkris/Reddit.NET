@@ -109,6 +109,19 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Edit a wiki page and return an instance with the updated data.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="content">The page content</param>
+        /// <param name="previous">the starting point revision for this edit</param>
+        /// <returns>The updated WikiPage.</returns>
+        public WikiPage EditAndReturn(string reason, string content = null, string previous = "")
+        {
+            Edit(reason, content, previous);
+            return About();
+        }
+
+        /// <summary>
         /// Edit a wiki page.
         /// </summary>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
@@ -162,6 +175,17 @@ namespace Reddit.NET.Controllers
         public void Revert(string revision)
         {
             Dispatch.Wiki.Revert(Name, revision, Subreddit);
+        }
+
+        /// <summary>
+        /// Revert a wiki page to revision and return an instance with the updated data.
+        /// </summary>
+        /// <param name="revision">a wiki revision ID</param>
+        /// <returns>The updated WikiPage.</returns>
+        public WikiPage RevertAndReturn(string revision)
+        {
+            Revert(revision);
+            return About();
         }
 
         /// <summary>
@@ -254,7 +278,7 @@ namespace Reddit.NET.Controllers
         /// <param name="v">a wiki revision ID</param>
         /// <param name="v2">a wiki revision ID</param>
         /// <returns>An instance of this class populated with the retrieved data.</returns>
-        public WikiPage About(string v, string v2)
+        public WikiPage About(string v = "", string v2 = "")
         {
             return new WikiPage(Dispatch, ((RedditThings.WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, v, v2, Subreddit))).Data, Subreddit, Name);
         }
