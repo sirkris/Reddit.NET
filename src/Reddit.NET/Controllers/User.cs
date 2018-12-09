@@ -192,6 +192,30 @@ namespace Reddit.NET.Controllers
             });
         }
 
+        // TODO - Break this fucker up into multiple methods.  --Kris
+        /// <summary>
+        /// Remove a relationship between a user and another user or subreddit.
+        /// If type is friend or enemy, 'container' MUST be the current user's fullname; for other types, the subreddit must be set via URL (e.g., /r/funny/api/unfriend).
+        /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
+        /// moderator: Use "moderator_invite"
+        /// moderator_invite: modothers
+        /// contributor: modcontributors
+        /// banned: modcontributors
+        /// muted: modcontributors
+        /// wikibanned: modcontributors and modwiki
+        /// wikicontributor: modcontributors and modwiki
+        /// friend: Use /api/v1/me/friends/{username}
+        /// enemy: Use /api/block
+        /// Complement to POST_friend
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="type">one of (friend, enemy, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
+        /// <param name="subreddit">A subreddit</param>
+        public void RemoveRelationship(string container, string type, string subreddit = null)
+        {
+            Dispatch.Users.Unfriend(container, Fullname, Name, type, subreddit);
+        }
+
         // Note - I tested this one manually.  Leaving out of automated tests so as not to spam the Reddit admins.  --Kris
         /// <summary>
         /// Report a user. Reporting a user brings it to the attention of a Reddit admin.
