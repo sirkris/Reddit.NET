@@ -43,7 +43,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
 
             // Add the remaining two images (both succeed).  --Kris
             resIcon = reddit.Models.Subreddits.UploadSrImg(imageIconData, 0, "birdieIcon", "icon", testData["Subreddit"], "jpg");
-            resBanner = reddit.Models.Subreddits.UploadSrImg(imageBannerData, 0, "birdieBanner", "banner", testData["Subreddit"], "png");
+            resBanner = reddit.Models.Subreddits.UploadSrImg(imageBannerData, 0, "birdieBanner", "banner", testData["Subreddit"], "jpg");
 
             Validate(resIcon);
             Validate(resBanner);

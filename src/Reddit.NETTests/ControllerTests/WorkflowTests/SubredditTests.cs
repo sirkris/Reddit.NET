@@ -44,8 +44,8 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             // Add the images.  --Kris
             Validate(Subreddit.UploadHeader(imageData));
             Validate(Subreddit.UploadImg(imageData, "birdie"));
-            Validate(Subreddit.UploadIcon(imageIconData));
-            Validate(Subreddit.UploadBanner(imageBannerData));
+            Validate(Subreddit.UploadIcon(imageIconData, "jpg"));
+            Validate(Subreddit.UploadBanner(imageBannerData, "jpg"));
 
             // Delete the images.  --Kris
             Subreddit.DeleteHeader();
