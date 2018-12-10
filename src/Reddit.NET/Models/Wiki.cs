@@ -55,10 +55,23 @@ namespace Reddit.NET.Models
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/edit", Method.POST);
 
             AddParamIfNotNull("content", content, ref restRequest);
+            restRequest.AddParameter("page", page);
             restRequest.AddParameter("previous", previous);
             restRequest.AddParameter("reason", reason);
-
+            
             ExecuteRequest(restRequest);
+        }
+
+        /// <summary>
+        /// Create a wiki page.
+        /// </summary>
+        /// <param name="content">The page content</param>
+        /// <param name="page">the name of the new page being created</param>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public void Create(string content, string page, string reason, string subreddit = null)
+        {
+            Edit(content, page, null, reason, subreddit);
         }
 
         /// <summary>

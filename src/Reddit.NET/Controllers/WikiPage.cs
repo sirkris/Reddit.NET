@@ -147,6 +147,29 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Create a new wiki page.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="content">The page content</param>
+        public void Create(string reason, string content = null)
+        {
+            Dispatch.Wiki.Create(content, Name, reason, Subreddit);
+        }
+
+        /// <summary>
+        /// Create a new wiki page asynchronously.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="content">The page content</param>
+        public async Task CreateAsync(string reason, string content = null)
+        {
+            await Task.Run(() =>
+            {
+                Create(reason, content);
+            });
+        }
+
+        /// <summary>
         /// Toggle the public visibility of a wiki page revision.
         /// </summary>
         /// <param name="revision">a wiki revision ID</param>

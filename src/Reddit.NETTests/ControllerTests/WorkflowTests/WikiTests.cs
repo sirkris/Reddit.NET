@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.NET;
 using Reddit.NET.Controllers;
+using Reddit.NET.Controllers.EventArgs;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
@@ -37,7 +38,12 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         }
         private WikiPage index;
 
-        public WikiTests() : base() { }
+        private Dictionary<string, bool> Pages;
+
+        public WikiTests() : base()
+        {
+            Pages = new Dictionary<string, bool>();
+        }
 
         private WikiPage GetIndex()
         {
@@ -77,6 +83,41 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
 
             // Update the permissions.  --Kris
             Index.UpdatePermissions(true, 0);
+        }
+
+        [TestMethod]
+        public void MonitorPages()
+        {
+            Subreddit.Wiki.GetPages();  // This call prevents any existing wiki pages from triggering the update event.  --Kris
+            Subreddit.Wiki.MonitorPages();
+            Subreddit.Wiki.PagesUpdated += C_PagesUpdated;
+
+            for (int i = 1; i <= 10; i++)
+            {
+                // Despite what VS says, we don't want to use await here.  --Kris
+                Subreddit.Wiki.Page("Test Page " + DateTime.Now.ToString("yyyyMMddHHmmssfffff") + "-" + i.ToString()).CreateAsync("None of your business.", "This is a test.");
+            }
+
+            DateTime start = DateTime.Now;
+            while (Pages.Count < 10
+                && start.AddMinutes(1) > DateTime.Now) { }
+
+            Subreddit.Wiki.PagesUpdated -= C_PagesUpdated;
+            Subreddit.Wiki.MonitorPages();
+
+            Assert.AreEqual(10, Pages.Count);
+        }
+
+        // When a new wiki page is detected in MonitorNewPages, this method will add it/them to the list.  --Kris
+        private void C_PagesUpdated(object sender, WikiPagesUpdateEventArgs e)
+        {
+            foreach (string page in e.Added)
+            {
+                if (!Pages.ContainsKey(page))
+                {
+                    Pages.Add(page, true);
+                }
+            }
         }
     }
 }
