@@ -1,7 +1,10 @@
 ﻿using Reddit.NET.Controllers.Structures;
+using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
@@ -17,8 +20,10 @@ namespace Reddit.NET.Controllers
         public string Name;
         public string Subreddit;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
+        public event EventHandler<WikiPageUpdateEventArgs> PageUpdated;
+
+        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         internal readonly Dispatch Dispatch;
 
@@ -304,6 +309,78 @@ namespace Reddit.NET.Controllers
         public WikiPage About(string v = "", string v2 = "")
         {
             return new WikiPage(Dispatch, ((RedditThings.WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, v, v2, Subreddit))).Data, Subreddit, Name);
+        }
+
+        internal virtual void OnPagesUpdated(WikiPageUpdateEventArgs e)
+        {
+            PageUpdated?.Invoke(this, e);
+        }
+
+        public bool MonitorPage()
+        {
+            string key = "WikiPage";
+            return Monitor(key, new Thread(() => MonitorPageThread(key)));
+        }
+
+        private bool Monitor(string key, Thread thread)
+        {
+            bool res = Monitor(key, thread, Name, out Thread newThread);
+
+            RebuildThreads();
+            LaunchThreadIfNotNull(key, newThread);
+
+            return res;
+        }
+
+        private void RebuildThreads()
+        {
+            Dictionary<string, Thread> oldThreads = Threads;
+            KillThreads(oldThreads);
+
+            int i = 0;
+            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            {
+                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, (i * MonitoringWaitDelayMS)));
+                i++;
+            }
+        }
+
+        private Thread CreateMonitoringThread(string key, int startDelayMs = 0)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "WikiPage":
+                    return new Thread(() => MonitorPageThread(key, startDelayMs));
+            }
+        }
+
+        private void MonitorPageThread(string key, int startDelayMs = 0)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(Name))
+            {
+                WikiPage newPage = About();
+
+                if (!newPage.RevisionDate.Equals(RevisionDate))
+                {
+                    // Event handler to alert the calling app that the list has changed.  --Kris
+                    WikiPageUpdateEventArgs args = new WikiPageUpdateEventArgs
+                    {
+                        NewPage = newPage, 
+                        OldPage = this
+                    };
+                    OnPagesUpdated(args);
+                }
+
+                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+            }
         }
     }
 }

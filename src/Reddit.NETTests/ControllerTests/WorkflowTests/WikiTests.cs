@@ -39,10 +39,12 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         private WikiPage index;
 
         private Dictionary<string, bool> Pages;
+        private bool PageUpdated;
 
         public WikiTests() : base()
         {
             Pages = new Dictionary<string, bool>();
+            PageUpdated = false;
         }
 
         private WikiPage GetIndex()
@@ -108,7 +110,26 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             Assert.AreEqual(10, Pages.Count);
         }
 
-        // When a new wiki page is detected in MonitorNewPages, this method will add it/them to the list.  --Kris
+        [TestMethod]
+        public void MonitorPage()
+        {
+            Index.MonitorPage();
+            Index.PageUpdated += C_PageUpdated;
+
+            // Despite what VS says, we don't want to use await here.  --Kris
+            Index.EditAsync("You wouldn't understand.", "This page has been updated.", Index.Revisions()[0].Id);
+
+            DateTime start = DateTime.Now;
+            while (!PageUpdated
+                && start.AddMinutes(1) > DateTime.Now) { }
+
+            Index.PageUpdated -= C_PageUpdated;
+            Index.MonitorPage();
+
+            Assert.IsTrue(PageUpdated);
+        }
+
+        // When a new wiki page is detected in MonitorPages, this method will add it/them to the list.  --Kris
         private void C_PagesUpdated(object sender, WikiPagesUpdateEventArgs e)
         {
             foreach (string page in e.Added)
@@ -118,6 +139,11 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
                     Pages.Add(page, true);
                 }
             }
+        }
+
+        private void C_PageUpdated(object sender, WikiPageUpdateEventArgs e)
+        {
+            PageUpdated = true;
         }
     }
 }
