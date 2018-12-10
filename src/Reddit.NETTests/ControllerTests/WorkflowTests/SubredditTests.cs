@@ -25,7 +25,12 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         }
         private Subreddit subreddit;
 
-        public SubredditTests() : base() { }
+        private Dictionary<string, Post> NewPosts;
+
+        public SubredditTests() : base()
+        {
+            NewPosts = new Dictionary<string, Post>();
+        }
 
         private Subreddit GetSubreddit()
         {
@@ -52,6 +57,47 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             Subreddit.DeleteImg("birdie");
             Subreddit.DeleteIcon();
             Subreddit.DeleteBanner();
+        }
+
+        [TestMethod]
+        public void MonitorNewPosts()
+        {
+            Subreddit.Posts.GetNew();  // This call prevents any existing "new"-sorted posts from triggering the update event.  --Kris
+            Subreddit.Posts.MonitorNew();
+            Subreddit.Posts.NewUpdated += C_NewPostsUpdated;
+
+            for (int i = 1; i <= 5; i++)
+            {
+                // Despite what VS says, we don't want to use await here.  --Kris
+                Subreddit.LinkPost("Test Link Post #" + i.ToString(), "https://github.com/sirkris/Reddit.NET").SubmitAsync(true);
+            }
+
+            for (int i = 1; i <= 5; i++)
+            {
+                // Despite what VS says, we don't want to use await here.  --Kris
+                Subreddit.SelfPost("Test Self Post #" + i.ToString(), "This is a test post created by [Reddit.NET](https://github.com/sirkris/Reddit.NET).").SubmitAsync();
+            }
+
+            DateTime start = DateTime.Now;
+            while (NewPosts.Count < 10
+                && start.AddMinutes(1) > DateTime.Now) { }
+
+            Subreddit.Posts.NewUpdated -= C_NewPostsUpdated;
+            Subreddit.Posts.MonitorNew();
+
+            Assert.AreEqual(10, NewPosts.Count);
+        }
+
+        // When a new post is detected in MonitorNewPosts, this method will add it/them to the list.  --Kris
+        private void C_NewPostsUpdated(object sender, PostsUpdateEventArgs e)
+        {
+            foreach (Post post in e.Added)
+            {
+                if (!NewPosts.ContainsKey(post.Fullname))
+                {
+                    NewPosts.Add(post.Fullname, post);
+                }
+            }
         }
     }
 }

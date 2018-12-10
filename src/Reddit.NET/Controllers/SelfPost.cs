@@ -132,7 +132,6 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Submit this self post to Reddit.
         /// </summary>
-        /// <param name="resubmit">boolean value</param>
         /// <param name="ad">boolean value</param>
         /// <param name="app"></param>
         /// <param name="extension">extension used for redirects</param>
@@ -143,18 +142,17 @@ namespace Reddit.NET.Controllers
         /// <param name="spoiler">boolean value</param>
         /// <param name="videoPosterUrl">a valid URL</param>
         /// <returns>A copy of this instance populated with the ID and Fullname returned by the API.</returns>
-        public SelfPost Submit(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+        public SelfPost Submit( bool ad = false, string app = "", string extension = "",
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
             return new SelfPost(Dispatch, Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
-                gRecapthaResponse, "self", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, SelfText, Title, null, videoPosterUrl)).JSON.Data, this);
+                gRecapthaResponse, "self", NSFW, false, null, sendReplies, spoiler, Subreddit, SelfText, Title, null, videoPosterUrl)).JSON.Data, this);
         }
 
         /// <summary>
         /// Submit this self post to Reddit asynchronously.  This instance will automatically be updated with the resulting fullname/id.
         /// </summary>
-        /// <param name="resubmit">boolean value</param>
         /// <param name="ad">boolean value</param>
         /// <param name="app"></param>
         /// <param name="extension">extension used for redirects</param>
@@ -164,13 +162,13 @@ namespace Reddit.NET.Controllers
         /// <param name="sendReplies">boolean value</param>
         /// <param name="spoiler">boolean value</param>
         /// <param name="videoPosterUrl">a valid URL</param>
-        public async Task SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+        public async Task SubmitAsync(bool ad = false, string app = "", string extension = "",
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
             await Task.Run(() =>
             {
-                Submit(resubmit, ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
+                Submit(ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
             });
         }
 
