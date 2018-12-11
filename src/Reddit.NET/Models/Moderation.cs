@@ -90,7 +90,7 @@ namespace Reddit.NET.Models
         /// See also: /api/friend and /subreddits/mine.
         /// </summary>
         /// <param name="subreddit">The subreddit being moderated</param>
-        /// <returns>(TODO - Untested)</returns>
+        /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer AcceptModeratorInvite(string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/accept_moderator_invite", Method.POST);

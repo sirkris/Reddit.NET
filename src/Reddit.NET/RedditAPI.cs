@@ -176,6 +176,11 @@ namespace Reddit.NET
             return new User(Models, user);
         }
 
+        public User User(User user)
+        {
+            return new User(Models, user);
+        }
+
         public User User(string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
@@ -190,6 +195,11 @@ namespace Reddit.NET
             return new User(Models);
         }
 
+        public Subreddit Subreddit(Subreddit subreddit)
+        {
+            return new Subreddit(Models, subreddit);
+        }
+
         public Subreddit Subreddit(RedditThings.Subreddit subreddit)
         {
             return new Subreddit(Models, subreddit);
@@ -200,21 +210,17 @@ namespace Reddit.NET
             return new Subreddit(Models, subredditChild);
         }
 
-        public Subreddit Subreddit(string name, string title, string description, string sidebar,
+        public Subreddit Subreddit(string name, string title = "", string description = "", string sidebar = "",
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            string fullname = null)
         {
             return new Subreddit(Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
-                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
-        }
-
-        public Subreddit Subreddit(string name, string title = "", string description = "", string sidebar = "")
-        {
-            return new Subreddit(Models, name, title, description, sidebar);
+                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
         }
 
         public Subreddit Subreddit()

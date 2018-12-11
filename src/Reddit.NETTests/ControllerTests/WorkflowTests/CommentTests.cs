@@ -65,6 +65,12 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         }
 
         [TestMethod]
+        public void Distinguish()
+        {
+            Comment.Distinguish("yes");
+        }
+
+        [TestMethod]
         public void Delete()
         {
             Comment.Delete();
@@ -118,6 +124,12 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             await Comment.UnsaveAsync();
             await Comment.DisableSendRepliesAsync();
             await Comment.EnableSendRepliesAsync();
+        }
+
+        [TestMethod]
+        public void Remove()
+        {
+            Comment.Remove();
         }
 
         [TestMethod]

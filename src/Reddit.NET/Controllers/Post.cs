@@ -176,7 +176,43 @@ namespace Reddit.NET.Controllers
 
             return new Post(Dispatch, info.Posts[0]);
         }
-        
+
+        /// <summary>
+        /// Distinguish a post's author with a sigil.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a link of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish. depends on user.
+        /// </summary>
+        /// <param name="how">one of (yes, no, admin, special)</param>
+        /// <returns>The distinguished post object.</returns>
+        public Post Distinguish(string how)
+        {
+            return GetPosts(Validate(Dispatch.Moderation.DistinguishPost(how, Fullname)), Dispatch)[0];
+        }
+
+        /// <summary>
+        /// Remove this post from all subreddit listings.
+        /// </summary>
+        /// <param name="spam">boolean value</param>
+        public void Remove(bool spam = false)
+        {
+            Dispatch.Moderation.Remove(Fullname, spam);
+        }
+
+        /// <summary>
+        /// Asynchronously remove this post from all subreddit listings.
+        /// </summary>
+        public async Task RemoveAsync(bool spam = false)
+        {
+            await Task.Run(() =>
+            {
+                Remove(spam);
+            });
+        }
+
         /// <summary>
         /// Delete this post.
         /// </summary>

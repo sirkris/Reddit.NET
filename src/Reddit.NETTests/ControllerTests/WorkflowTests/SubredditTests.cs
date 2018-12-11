@@ -60,6 +60,27 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         }
 
         [TestMethod]
+        public void ModeratorInvite()
+        {
+            User patsy = GetTargetUser();
+
+            reddit.User(patsy).AddRelationship("", "", "", "", 999, "+wiki", "moderator_invite", Subreddit.Name);
+
+            reddit2.Subreddit(Subreddit.Name).AcceptModeratorInvite();
+            reddit2.Subreddit(Subreddit.Name, fullname: Subreddit.Fullname).LeaveModerator();
+        }
+
+        [TestMethod]
+        public void ContributorInvite()
+        {
+            User patsy = GetTargetUser();
+
+            reddit.User(patsy).AddRelationship("", "", "", "", 999, "+wiki", "contributor", Subreddit.Name);
+
+            reddit2.Subreddit(Subreddit.Name, fullname: Subreddit.Fullname).LeaveContributor();
+        }
+
+        [TestMethod]
         public void MonitorNewPosts()
         {
             Subreddit.Posts.GetNew();  // This call prevents any existing "new"-sorted posts from triggering the update event.  --Kris

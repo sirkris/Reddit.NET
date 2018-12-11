@@ -111,9 +111,9 @@ namespace Reddit.NET.Controllers
         public Subreddit(Dispatch dispatch, RedditThings.Subreddit subreddit)
             : base()
         {
+            Dispatch = dispatch;
             ImportFromModel(subreddit);
 
-            Dispatch = dispatch;
             SubredditData = subreddit;
             Posts = new SubredditPosts(this);
             Flairs = new Flairs(this, Dispatch);
@@ -123,40 +123,39 @@ namespace Reddit.NET.Controllers
         public Subreddit(Dispatch dispatch, RedditThings.SubredditChild subredditChild)
             : base()
         {
+            Dispatch = dispatch;
             ImportFromModel(subredditChild.Data);
 
-            Dispatch = dispatch;
             SubredditData = subredditChild.Data;
             Posts = new SubredditPosts(this);
             Flairs = new Flairs(this, Dispatch);
             Wiki = new Wiki(Dispatch, Name);
         }
 
-        public Subreddit(Dispatch dispatch, string name, string title, string description, string sidebar,
+        public Subreddit(Dispatch dispatch, Subreddit subreddit)
+        {
+            Dispatch = dispatch;
+
+            Import(subreddit, true);
+
+            SubredditData = subreddit.SubredditData;
+        }
+
+        public Subreddit(Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "",
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            string fullname = null)
             : base()
         {
+            Dispatch = dispatch;
+
             SetValues(name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
-                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
+                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
 
-            Dispatch = dispatch;
-            UpdateSubredditData();
-            Posts = new SubredditPosts(this);
-            Flairs = new Flairs(this, Dispatch);
-            Wiki = new Wiki(Dispatch, Name);
-        }
-
-        public Subreddit(Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "")
-            : base()
-        {
-            SetValues(name, title, description, sidebar);
-
-            Dispatch = dispatch;
             UpdateSubredditData();
             Posts = new SubredditPosts(this);
             Flairs = new Flairs(this, Dispatch);
@@ -240,7 +239,8 @@ namespace Reddit.NET.Controllers
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            string fullname = null)
         {
             Name = name;
             Title = title;
@@ -267,6 +267,7 @@ namespace Reddit.NET.Controllers
             IconImg = iconImage;
             PrimaryColor = primaryColor;
             KeyColor = keyColor;
+            Fullname = fullname;
         }
 
         /// <summary>
@@ -355,6 +356,31 @@ namespace Reddit.NET.Controllers
         public Subreddit About()
         {
             return new Subreddit(Dispatch, Dispatch.Subreddits.About(Name));
+        }
+
+        /// <summary>
+        /// Accept an invite to moderate the specified subreddit.
+        /// The authenticated user must have been invited to moderate the subreddit by one of its current moderators.
+        /// </summary>
+        public void AcceptModeratorInvite()
+        {
+            Validate(Dispatch.Moderation.AcceptModeratorInvite(Name));
+        }
+
+        /// <summary>
+        /// Abdicate moderator status in a subreddit.
+        /// </summary>
+        public void LeaveModerator()
+        {
+            Dispatch.Moderation.LeaveModerator(Fullname);
+        }
+
+        /// <summary>
+        /// Abdicate approved submitter status in a subreddit.
+        /// </summary>
+        public void LeaveContributor()
+        {
+            Dispatch.Moderation.LeaveContributor(Fullname);
         }
 
         /// <summary>

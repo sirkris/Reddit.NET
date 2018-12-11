@@ -238,17 +238,17 @@ namespace Reddit.NET.Controllers
             });
         }
 
-        internal virtual void OnInboxUpdated(MessagesUpdateEventArgs e)
+        protected virtual void OnInboxUpdated(MessagesUpdateEventArgs e)
         {
             InboxUpdated?.Invoke(this, e);
         }
 
-        internal virtual void OnUnreadUpdated(MessagesUpdateEventArgs e)
+        protected virtual void OnUnreadUpdated(MessagesUpdateEventArgs e)
         {
             UnreadUpdated?.Invoke(this, e);
         }
 
-        internal virtual void OnSentUpdated(MessagesUpdateEventArgs e)
+        protected virtual void OnSentUpdated(MessagesUpdateEventArgs e)
         {
             SentUpdated?.Invoke(this, e);
         }
@@ -286,7 +286,7 @@ namespace Reddit.NET.Controllers
             MonitorPrivateMessagesThread(key, "sent");
         }
 
-        internal void MonitorPrivateMessagesThread(string key, string type, int startDelayMs = 0)
+        private void MonitorPrivateMessagesThread(string key, string type, int startDelayMs = 0)
         {
             if (startDelayMs > 0)
             {

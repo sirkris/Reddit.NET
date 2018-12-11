@@ -160,6 +160,54 @@ namespace Reddit.NET.Controllers
             }
         }
 
+        public List<Post> GetPosts(RedditThings.PostResultContainer postContainer, Dispatch dispatch)
+        {
+            return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts);
+        }
+
+        public List<Post> GetPosts(RedditThings.PostResultContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts)
+        {
+            return GetPosts(postContainer, dispatch, out linkPosts, out List<SelfPost> selfPosts);
+        }
+
+        public List<Post> GetPosts(RedditThings.PostResultContainer postContainer, Dispatch dispatch, out List<SelfPost> selfPosts)
+        {
+            return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out selfPosts);
+        }
+
+        public List<Post> GetPosts(RedditThings.PostResultContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
+        {
+            linkPosts = new List<LinkPost>();
+            selfPosts = new List<SelfPost>();
+
+            if (postContainer == null || postContainer.JSON == null || postContainer.JSON.Data == null || postContainer.JSON.Data.Things == null)
+            {
+                return null;
+            }
+
+            List<Post> posts = new List<Post>();
+            foreach (RedditThings.PostChild postChild in postContainer.JSON.Data.Things)
+            {
+                if (postChild.Data != null)
+                {
+                    if (postChild.Data.IsSelf)
+                    {
+                        SelfPost selfPost = new SelfPost(dispatch, postChild.Data);
+                        posts.Add(selfPost);
+                        selfPosts.Add(selfPost);
+                    }
+                    else
+                    {
+                        LinkPost linkPost = new LinkPost(dispatch, postChild.Data);
+                        posts.Add(linkPost);
+                        linkPosts.Add(linkPost);
+                    }
+                }
+            }
+
+            return posts;
+        }
+
         public List<Post> GetPosts(RedditThings.PostContainer postContainer, Dispatch dispatch)
         {
             return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts);
@@ -240,6 +288,25 @@ namespace Reddit.NET.Controllers
             }
 
             return posts;
+        }
+
+        public List<Comment> GetComments(RedditThings.CommentResultContainer commentContainer, Dispatch dispatch)
+        {
+            if (commentContainer == null || commentContainer.JSON == null || commentContainer.JSON.Data == null || commentContainer.JSON.Data.Things == null)
+            {
+                return null;
+            }
+
+            List<Comment> comments = new List<Comment>();
+            foreach (RedditThings.CommentChild commentChild in commentContainer.JSON.Data.Things)
+            {
+                if (commentChild.Data != null)
+                {
+                    comments.Add(new Comment(dispatch, commentChild.Data));
+                }
+            }
+
+            return comments;
         }
 
         public List<Comment> GetComments(RedditThings.CommentContainer commentContainer, Dispatch dispatch)

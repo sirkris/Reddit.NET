@@ -37,5 +37,17 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         {
             Validate(Post);
         }
+
+        [TestMethod]
+        public void Distinguish()
+        {
+            Post.Distinguish("yes");
+        }
+
+        [TestMethod]
+        public void Remove()
+        {
+            Post.Remove();
+        }
     }
 }

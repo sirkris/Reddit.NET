@@ -28,6 +28,7 @@ namespace Reddit.NET.Controllers
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         public PrivateMessages Messages;
+        public Modmail Modmail;
 
         public Dispatch Dispatch;
 
@@ -35,6 +36,7 @@ namespace Reddit.NET.Controllers
         {
             Dispatch = dispatch;
             Messages = new PrivateMessages(Dispatch);
+            Modmail = new Modmail(Dispatch);
         }
 
         /// <summary>

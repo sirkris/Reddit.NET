@@ -138,7 +138,7 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// Mutes the non mod user associated with a particular conversation.
+        /// Mutes the non-mod user associated with a particular conversation.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the conversation data.</returns>
@@ -179,7 +179,7 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// Marks a conversations as read for the user.
+        /// Marks conversations as read for the user.
         /// </summary>
         /// <param name="conversationIds">A comma-separated list of items</param>
         public void MarkRead(string conversationIds)

@@ -82,6 +82,8 @@ namespace Reddit.NET.Controllers
             Import(user.Name, user.Id, user.IsFriend, user.ProfanityFilter, user.IsSuspended, user.HasGoldSubscription, user.NumFriends,
                 user.IsVerified, user.HasNewModmail, user.Over18, user.IsGold, user.IsMod, user.HasVerifiedEmail, user.IconImg, user.HasModmail,
                 user.LinkKarma, user.InboxCount, user.HasMail, user.Created, user.CommentKarma, user.HasSubscribed);
+
+            UserData = user.UserData;
         }
 
         private void Import(string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,

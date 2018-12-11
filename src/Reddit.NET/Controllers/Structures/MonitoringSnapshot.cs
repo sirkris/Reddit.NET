@@ -30,14 +30,19 @@ namespace Reddit.NET.Controllers.Structures
         public List<string> LiveComments;
         public List<string> WikiPages;
         public List<string> WikiPage;
-
+        public List<string> ModmailMessagesRecent;
+        public List<string> ModmailMessagesMod;
+        public List<string> ModmailMessagesUser;
+        public List<string> ModmailMessagesUnread;
+        
         public MonitoringSnapshot(List<string> bestPosts = null, List<string> hotPosts = null, List<string> newPosts = null, List<string> risingPosts = null, 
             List<string> topPosts = null, List<string> controversialPosts = null, List<string> modQueuePosts = null, List<string> modQueueReportsPosts = null, 
             List<string> modQueueSpamPosts = null, List<string> modQueueUnmoderatedPosts = null, List<string> modQueueEditedPosts = null, 
             List<string> privateMessagesInbox = null, List<string> privateMessagesUnread = null, List<string> privateMessagesSent = null, 
             List<string> confidenceComments = null, List<string> topComments = null, List<string> newComments = null, List<string> controversialComments = null, 
             List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null, 
-            List<string> wikiPages = null, List<string> wikiPage = null)
+            List<string> wikiPages = null, List<string> wikiPage = null, List<string> modmailMessagesRecent = null, List<string> modmailMessagesMod = null, 
+            List<string> modmailMessagesUser = null, List<string> modmailMessagesUnread = null)
         {
             BestPosts = bestPosts ?? new List<string>();
             HotPosts = hotPosts ?? new List<string>();
@@ -63,6 +68,10 @@ namespace Reddit.NET.Controllers.Structures
             LiveComments = liveComments ?? new List<string>();
             WikiPages = wikiPages ?? new List<string>();
             WikiPage = wikiPage ?? new List<string>();
+            ModmailMessagesRecent = modmailMessagesRecent ?? new List<string>();
+            ModmailMessagesMod = modmailMessagesMod ?? new List<string>();
+            ModmailMessagesUser = modmailMessagesUser ?? new List<string>();
+            ModmailMessagesUnread = modmailMessagesUnread ?? new List<string>();
         }
 
         public ref List<string> Get(string key)
@@ -119,6 +128,14 @@ namespace Reddit.NET.Controllers.Structures
                     return ref WikiPages;
                 case "WikiPage":
                     return ref WikiPage;
+                case "ModmailMessagesRecent":
+                    return ref ModmailMessagesRecent;
+                case "ModmailMessagesMod":
+                    return ref ModmailMessagesMod;
+                case "ModmailMessagesUser":
+                    return ref ModmailMessagesUser;
+                case "ModmailMessagesUnread":
+                    return ref ModmailMessagesUnread;
             }
         }
         
@@ -150,6 +167,10 @@ namespace Reddit.NET.Controllers.Structures
                 Add(monitoringSnapshot.LiveComments, ref LiveComments);
                 Add(monitoringSnapshot.WikiPages, ref WikiPages);
                 Add(monitoringSnapshot.WikiPage, ref WikiPage);
+                Add(monitoringSnapshot.ModmailMessagesRecent, ref ModmailMessagesRecent);
+                Add(monitoringSnapshot.ModmailMessagesMod, ref ModmailMessagesMod);
+                Add(monitoringSnapshot.ModmailMessagesUser, ref ModmailMessagesUser);
+                Add(monitoringSnapshot.ModmailMessagesUnread, ref ModmailMessagesUnread);
             }
         }
 
@@ -192,6 +213,10 @@ namespace Reddit.NET.Controllers.Structures
                 Remove(monitoringSnapshot.LiveComments, ref LiveComments);
                 Remove(monitoringSnapshot.WikiPages, ref WikiPages);
                 Remove(monitoringSnapshot.WikiPage, ref WikiPage);
+                Remove(monitoringSnapshot.ModmailMessagesRecent, ref ModmailMessagesRecent);
+                Remove(monitoringSnapshot.ModmailMessagesMod, ref ModmailMessagesMod);
+                Remove(monitoringSnapshot.ModmailMessagesUser, ref ModmailMessagesUser);
+                Remove(monitoringSnapshot.ModmailMessagesUnread, ref ModmailMessagesUnread);
             }
         }
 
@@ -230,7 +255,11 @@ namespace Reddit.NET.Controllers.Structures
                 + QAComments.Count
                 + LiveComments.Count
                 + WikiPages.Count
-                + WikiPage.Count);
+                + WikiPage.Count
+                + ModmailMessagesRecent.Count
+                + ModmailMessagesMod.Count
+                + ModmailMessagesUser.Count
+                + ModmailMessagesUnread.Count);
         }
     }
 }
