@@ -83,8 +83,14 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             // Revert to the original page version.  --Kris
             Index = Index.RevertAndReturn(revisions[revisions.Count - 1].Id);
 
+            // Create a new wiki page.  --Kris
+            WikiPage myTestPage = Subreddit.Wiki.Page("TestPage" + DateTime.Now.ToString("yyyyMMddHHmmssfffff"))
+                                    .CreateAndReturn("Because I have a god complex.", "This is the content of my test page.");
+
+            Validate(myTestPage);
+
             // Update the permissions.  --Kris
-            Index.UpdatePermissions(true, 0);
+            myTestPage.UpdatePermissions(true, 0);
         }
 
         [TestMethod]

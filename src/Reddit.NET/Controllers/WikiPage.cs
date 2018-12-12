@@ -152,6 +152,17 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Create a new wiki page and return an instance with the updated data.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="content">The page content</param>
+        public WikiPage CreateAndReturn(string reason, string content = null)
+        {
+            Create(reason, content);
+            return new WikiPage(Dispatch, Dispatch.Wiki.Page(Name.ToLower(), "", "", Subreddit).Data, Subreddit, Name);
+        }
+
+        /// <summary>
         /// Create a new wiki page.
         /// </summary>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
