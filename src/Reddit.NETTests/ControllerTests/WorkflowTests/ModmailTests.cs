@@ -12,11 +12,11 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
     [TestClass]
     public class ModmailTests : BaseTests
     {
-        private Dictionary<string, string> NewMessages;
+        private int NewMessages;
 
         public ModmailTests() : base()
         {
-            NewMessages = new Dictionary<string, string>();
+            NewMessages = 0;
         }
 
         [TestMethod]
@@ -80,6 +80,8 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         [TestMethod]
         public void MonitorUnreadMessages()
         {
+            reddit.Account.Modmail.GetUnreadConversations();
+
             User patsy = GetTargetUser();
 
             RedditThings.ModmailConversationContainer conversation = reddit2.Account.Modmail.NewConversation("This is a new modmail conversation.", "Test Message", testData["Subreddit"]);
@@ -94,23 +96,20 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             reddit.Account.Modmail.UnreadUpdated += C_UnreadMessagesUpdated;
 
             DateTime start = DateTime.Now;
-            while (NewMessages.Count < 10
-                && start.AddSeconds(30) > DateTime.Now) { }
+            while (NewMessages < 10
+                && start.AddSeconds(60) > DateTime.Now) { }
 
             reddit.Account.Modmail.UnreadUpdated -= C_UnreadMessagesUpdated;
             reddit.Account.Modmail.MonitorUnread();
 
-            Assert.IsTrue(NewMessages.Count >= 10);
+            Assert.IsTrue(NewMessages >= 10);
         }
 
         private void C_UnreadMessagesUpdated(object sender, ModmailConversationsEventArgs e)
         {
             foreach (KeyValuePair<string, RedditThings.ConversationMessage> pair in e.AddedMessages)
             {
-                if (!NewMessages.ContainsKey(pair.Value.BodyMarkdown))
-                {
-                    NewMessages.Add(pair.Value.BodyMarkdown, pair.Value.Author.Name);
-                }
+                NewMessages++;
             }
         }
     }

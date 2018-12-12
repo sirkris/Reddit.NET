@@ -33,6 +33,14 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
 
             Assert.IsTrue(MonitorForMessage(reddit2.Account.Messages, me.Name, subject, body));
             Assert.IsTrue(MonitorForMessage(reddit.Account.Messages, patsy.Name, subject, bodyReply));
+
+            reddit.Account.Messages.CollapseMessage(reddit.Account.Messages.Unread[0].Fullname);
+            reddit.Account.Messages.UncollapseMessage(reddit.Account.Messages.Unread[0].Fullname);
+
+            reddit2.Account.Messages.ReadMessage(reddit.Account.Messages.Unread[0].Fullname);
+            reddit2.Account.Messages.UnreadMessage(reddit.Account.Messages.Unread[0].Fullname);
+
+            reddit2.Account.Messages.DeleteMessage(reddit.Account.Messages.Unread[0].Fullname);
         }
 
         /// <summary>

@@ -25,7 +25,7 @@ namespace Reddit.NET.Models
         }
 
         /// <summary>
-        /// Collapse a message
+        /// Collapse a message.
         /// See also: /api/uncollapse_message
         /// </summary>
         /// <param name="id">A comma-separated list of thing fullnames</param>

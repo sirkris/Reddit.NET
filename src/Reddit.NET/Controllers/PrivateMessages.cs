@@ -210,6 +210,111 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Collapse a message.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public void CollapseMessage(string ids)
+        {
+            Dispatch.PrivateMessages.CollapseMessage(ids);
+        }
+
+        /// <summary>
+        /// Collapse a message asynchronously.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public async Task CollapseMessageAsync(string ids)
+        {
+            await Task.Run(() =>
+            {
+                CollapseMessage(ids);
+            });
+        }
+
+        /// <summary>
+        /// Delete messages from the recipient's view of their inbox.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public void DeleteMessage(string id)
+        {
+            Dispatch.PrivateMessages.DelMsg(id);
+        }
+
+        /// <summary>
+        /// Delete messages from the recipient's view of their inbox asynchronously.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public async Task DeleteMessageAsync(string id)
+        {
+            await Task.Run(() =>
+            {
+                DeleteMessage(id);
+            });
+        }
+
+        /// <summary>
+        /// Mark a message as read.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public void ReadMessage(string ids)
+        {
+            Dispatch.PrivateMessages.ReadMessage(ids);
+        }
+
+        /// <summary>
+        /// Mark a message as read asynchronously.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public async Task ReadMessageAsync(string ids)
+        {
+            await Task.Run(() =>
+            {
+                ReadMessage(ids);
+            });
+        }
+
+        /// <summary>
+        /// Uncollapse a message.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public void UncollapseMessage(string ids)
+        {
+            Dispatch.PrivateMessages.UncollapseMessage(ids);
+        }
+
+        /// <summary>
+        /// Uncollapse a message asynchronously.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public async Task UncollapseMessageAsync(string ids)
+        {
+            await Task.Run(() =>
+            {
+                UncollapseMessage(ids);
+            });
+        }
+
+        /// <summary>
+        /// Mark a message as unread.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public void UnreadMessage(string ids)
+        {
+            Dispatch.PrivateMessages.UnreadMessage(ids);
+        }
+
+        /// <summary>
+        /// Mark a message as unread asynchronously.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public async Task UnreadMessageAsync(string ids)
+        {
+            await Task.Run(() =>
+            {
+                UnreadMessage(ids);
+            });
+        }
+
+        /// <summary>
         /// Send a private message.
         /// </summary>
         /// <param name="to">the name of an existing user</param>
