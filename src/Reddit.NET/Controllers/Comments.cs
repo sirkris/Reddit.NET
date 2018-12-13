@@ -196,43 +196,44 @@ namespace Reddit.NET.Controllers
             List<Comment> comments = GetComments(Post.Dispatch.Listings.GetComments(Post.Id, context, showEdits, showMore, sort, threaded, truncate, Post.Subreddit, Comment?.Id,
                 depth, limit, srDetail), Post.Dispatch);
 
+            List<Comment> replies = (Comment != null ? comments[0].Replies : comments);
             switch (sort)
             {
                 case "confidence":
                     ConfidenceLastUpdated = DateTime.Now;
-                    Confidence = comments[0].Replies;
+                    Confidence = replies;
                     break;
                 case "top":
                     TopLastUpdated = DateTime.Now;
-                    Top = comments[0].Replies;
+                    Top = replies;
                     break;
                 case "new":
                     NewLastUpdated = DateTime.Now;
-                    New = comments[0].Replies;
+                    New = replies;
                     break;
                 case "controversial":
                     ControversialLastUpdated = DateTime.Now;
-                    Controversial = comments[0].Replies;
+                    Controversial = replies;
                     break;
                 case "old":
                     OldLastUpdated = DateTime.Now;
-                    Old = comments[0].Replies;
+                    Old = replies;
                     break;
                 case "random":
                     RandomLastUpdated = DateTime.Now;
-                    Random = comments[0].Replies;
+                    Random = replies;
                     break;
                 case "qa":
                     QALastUpdated = DateTime.Now;
-                    QA = comments[0].Replies;
+                    QA = replies;
                     break;
                 case "live":
                     LiveLastUpdated = DateTime.Now;
-                    Live = comments[0].Replies;
+                    Live = replies;
                     break;
             }
 
-            return comments[0].Replies;
+            return replies;
         }
 
         public List<Comment> GetConfidence(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,

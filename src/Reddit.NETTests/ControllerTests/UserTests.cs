@@ -51,18 +51,23 @@ namespace Reddit.NETTests.ControllerTests
             {
                 reddit.User("RedditDotNetBot").SetPermissions(testData["Subreddit"], "+wiki", "moderator_invite");
             }
-            catch (RedditInternalServerErrorException ex)
+            catch (Exception ex) when (ex is RedditInvalidPermissionTypeException || ex is RedditInternalServerErrorException)
             {
                 if (retry)
                 {
-                    reddit.User("RedditDotNetBot").AddRelationship(null, null, null, null, 999, "+mail", "moderator_invite", testData["Subreddit"]);
-                    SetPermissions(false);
+                    InviteMod();
                 }
                 else
                 {
                     throw ex;
                 }
             }
+        }
+
+        private void InviteMod()
+        {
+            reddit.User("RedditDotNetBot").AddRelationship(null, null, null, null, 999, "+mail", "moderator_invite", testData["Subreddit"]);
+            SetPermissions(false);
         }
 
         [TestMethod]

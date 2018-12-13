@@ -167,9 +167,8 @@ namespace Reddit.NET.Models.Structures
         [JsonConverter(typeof(TimestampConvert))]
         public DateTime CreatedUTC;
 
-        // TODO - Assuming it's a list of strings.  --Kris
         [JsonProperty("mod_reports")]
-        public List<string> ModReports;
+        public List<List<string>> ModReports;
 
         [JsonProperty("replies")]
         public CommentContainer Replies;

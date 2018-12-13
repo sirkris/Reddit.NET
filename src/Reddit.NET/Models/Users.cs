@@ -300,7 +300,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("count", count);
             restRequest.AddParameter("limit", limit);
             restRequest.AddParameter("sr_detail", srDetail);
-
+            string blah = ExecuteRequest(restRequest);
             return JsonConvert.DeserializeObject<CommentContainer>(ExecuteRequest(restRequest));
         }
     }

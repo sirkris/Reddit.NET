@@ -439,6 +439,9 @@ namespace Reddit.NET.Controllers
                         case "SUBREDDIT_EXISTS":
                             throw (RedditSubredditExistsException)BuildException(new RedditSubredditExistsException("That subreddit already exists."),
                                 new List<List<string>> { errors });
+                        case "INVALID_PERMISSION_TYPE":
+                            throw (RedditInvalidPermissionTypeException)BuildException(new RedditInvalidPermissionTypeException(errors[1]),
+                                new List<List<string>> { errors });
                     }
                 }
             }
