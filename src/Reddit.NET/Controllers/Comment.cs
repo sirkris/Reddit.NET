@@ -63,7 +63,7 @@ namespace Reddit.NET.Controllers
         }
         private Comments comments = null;
 
-        internal readonly Dispatch Dispatch;
+        private readonly Dispatch Dispatch;
 
         public Comment(Dispatch dispatch, RedditThings.Comment listing)
         {

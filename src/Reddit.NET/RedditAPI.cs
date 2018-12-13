@@ -171,6 +171,24 @@ namespace Reddit.NET
             return new Post(Models);
         }
 
+        public LiveThread LiveThread(RedditThings.LiveUpdateEvent liveUpdateEvent)
+        {
+            return new LiveThread(Models, liveUpdateEvent);
+        }
+
+        public LiveThread LiveThread(string title = null, string description = null, bool nsfw = false, string resources = null,
+            string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
+            string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
+        {
+            return new LiveThread(Models, title, description, nsfw, resources, id, name, websocketUrl, announcementUrl, state,
+                icon, totalViews, viewerCount, created);
+        }
+
+        public LiveThread LiveThread(string id)
+        {
+            return new LiveThread(Models, id);
+        }
+
         public User User(RedditThings.User user)
         {
             return new User(Models, user);

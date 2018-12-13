@@ -362,5 +362,47 @@ namespace Reddit.NET.Controllers
         {
             return Validate(Dispatch.Modmail.UnreadCount());
         }
+
+        /// <summary>
+        /// Accept a pending invitation to contribute to a live thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public void AcceptLiveThreadInvite(string thread)
+        {
+            Validate(Dispatch.LiveThreads.AcceptContributorInvite(thread));
+        }
+
+        /// <summary>
+        /// Asynchronously accept a pending invitation to contribute to a live thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public async Task AcceptLiveThreadInviteAsync(string thread)
+        {
+            await Task.Run(() =>
+            {
+                AcceptLiveThreadInvite(thread);
+            });
+        }
+
+        /// <summary>
+        /// Abdicate contributorship of the thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public void AbandonLiveThread(string thread)
+        {
+            Validate(Dispatch.LiveThreads.LeaveContributor(thread));
+        }
+
+        /// <summary>
+        /// Abdicate contributorship of the thread asynchronously.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public async Task AbandonLiveThreadAsync(string thread)
+        {
+            await Task.Run(() =>
+            {
+                AbandonLiveThread(thread);
+            });
+        }
     }
 }

@@ -347,6 +347,17 @@ namespace Reddit.NET.Controllers
             return subreddits;
         }
 
+        public List<RedditThings.LiveUpdate> GetLiveUpdates(RedditThings.LiveUpdateContainer liveUpdateContainer)
+        {
+            List<RedditThings.LiveUpdate> res = new List<RedditThings.LiveUpdate>();
+            foreach (RedditThings.LiveUpdateChild liveUpdateChild in liveUpdateContainer.Data.Children)
+            {
+                res.Add(liveUpdateChild.Data);
+            }
+
+            return res;
+        }
+
         protected void LaunchThreadIfNotNull(string key, Thread thread)
         {
             if (thread != null)
@@ -503,6 +514,41 @@ namespace Reddit.NET.Controllers
             CheckErrors(imageUploadResult.Errors);
 
             return imageUploadResult;
+        }
+
+        public RedditThings.LiveUpdateEventContainer Validate(RedditThings.LiveUpdateEventContainer liveUpdateEventContainer)
+        {
+            CheckNull(liveUpdateEventContainer);
+            CheckNull(liveUpdateEventContainer.Data);
+
+            return liveUpdateEventContainer;
+        }
+
+        public RedditThings.LiveThreadCreateResultContainer Validate(RedditThings.LiveThreadCreateResultContainer liveThreadCreateResultContainer)
+        {
+            CheckNull(liveThreadCreateResultContainer);
+            CheckNull(liveThreadCreateResultContainer.JSON);
+            CheckErrors(liveThreadCreateResultContainer.JSON.Errors);
+            CheckNull(liveThreadCreateResultContainer.JSON.Data);
+            CheckNull(liveThreadCreateResultContainer.JSON.Data.Id);
+
+            return liveThreadCreateResultContainer;
+        }
+
+        public RedditThings.LiveUpdateContainer Validate(RedditThings.LiveUpdateContainer liveUpdateContainer, int? minChildren = null)
+        {
+            CheckNull(liveUpdateContainer);
+            CheckNull(liveUpdateContainer.Data);
+            if (minChildren.HasValue)
+            {
+                CheckNull(liveUpdateContainer.Data.Children);
+                if (liveUpdateContainer.Data.Children.Count < minChildren.Value)
+                {
+                    throw new RedditControllerException("Expected number of results not returned.");
+                }
+            }
+
+            return liveUpdateContainer;
         }
 
         public RedditThings.SubredditSettingsContainer Validate(RedditThings.SubredditSettingsContainer subredditSettingsContainer)

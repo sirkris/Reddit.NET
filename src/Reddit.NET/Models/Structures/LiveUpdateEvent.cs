@@ -68,5 +68,24 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("icon")]
         public string Icon;
+
+        public LiveUpdateEvent(Controllers.LiveThread liveThread)
+        {
+            Id = liveThread.Id;
+            Description = liveThread.Description;
+            NSFW = liveThread.NSFW;
+            Resources = liveThread.Resources;
+            Title = liveThread.Title;
+            TotalViews = liveThread.TotalViews;
+            Created = liveThread.Created;
+            Name = liveThread.Name;
+            WebsocketURL = liveThread.WebsocketURL;
+            AnnouncementURL = liveThread.AnnouncementURL;
+            State = liveThread.State;
+            ViewerCount = liveThread.ViewerCount;
+            Icon = liveThread.Icon;
+        }
+
+        public LiveUpdateEvent() { }
     }
 }
