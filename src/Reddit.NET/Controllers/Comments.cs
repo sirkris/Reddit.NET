@@ -444,7 +444,7 @@ namespace Reddit.NET.Controllers
             LiveUpdated?.Invoke(this, e);
         }
 
-        internal void MonitorCommentsThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0)
+        private void MonitorCommentsThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0)
         {
             if (startDelayMs > 0)
             {

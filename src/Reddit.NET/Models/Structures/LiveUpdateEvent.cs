@@ -78,7 +78,7 @@ namespace Reddit.NET.Models.Structures
             Title = liveThread.Title;
             TotalViews = liveThread.TotalViews;
             Created = liveThread.Created;
-            Name = liveThread.Name;
+            Name = liveThread.Fullname;
             WebsocketURL = liveThread.WebsocketURL;
             AnnouncementURL = liveThread.AnnouncementURL;
             State = liveThread.State;

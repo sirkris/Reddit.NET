@@ -1,18 +1,25 @@
-﻿using Reddit.NET.Controllers.Structures;
+﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
     public class LiveThread : BaseController
     {
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
+        public event EventHandler<LiveThreadUpdateEventArgs> ThreadUpdated;
+        public event EventHandler<LiveThreadContributorsUpdateEventArgs> ContributorsUpdated;
+        public event EventHandler<LiveThreadUpdatesUpdateEventArgs> UpdatesUpdated;
+
+        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         public string Id;
+        public string Fullname;
         public string Description;
         public bool NSFW;
         public string Resources;
@@ -20,7 +27,6 @@ namespace Reddit.NET.Controllers
 
         public int? TotalViews;
         public DateTime Created;
-        public string Name;
         public string WebsocketURL;  // TODO - Support for Websockets.  --Kris
         public bool IsAnnouncement;
         public string AnnouncementURL;
@@ -44,6 +50,21 @@ namespace Reddit.NET.Controllers
         }
         private List<RedditThings.LiveUpdate> updates;
         private DateTime? UpdatesLastUpdated;
+
+        public List<RedditThings.UserListContainer> Contributors
+        {
+            get
+            {
+                return (ContributorsLastUpdated.HasValue
+                    && ContributorsLastUpdated.Value.AddSeconds(15) > DateTime.Now ? contributors : GetContributors());
+            }
+            private set
+            {
+                contributors = value;
+            }
+        }
+        private List<RedditThings.UserListContainer> contributors;
+        private DateTime? ContributorsLastUpdated;
 
         private readonly Dispatch Dispatch;
 
@@ -76,7 +97,7 @@ namespace Reddit.NET.Controllers
         }
 
         private void Import(string id, string description, bool nsfw, string resources, string title,
-            int? totalViews, DateTime created, string name, string websocketUrl, string announcementUrl,
+            int? totalViews, DateTime created, string fullname, string websocketUrl, string announcementUrl,
             string state, int viewerCount, string icon)
         {
             Id = id;
@@ -86,7 +107,7 @@ namespace Reddit.NET.Controllers
             Title = title;
             TotalViews = totalViews;
             Created = created;
-            Name = name;
+            Fullname = fullname;
             WebsocketURL = websocketUrl;
             AnnouncementURL = announcementUrl;
             State = state;
@@ -457,9 +478,12 @@ namespace Reddit.NET.Controllers
         /// Note that this includes users who were invited but have not yet accepted.
         /// </summary>
         /// <returns>A list of users (0 => Active contributors, 1 => Invited/pending contributors).</returns>
-        public List<RedditThings.UserListContainer> Contributors()
+        public List<RedditThings.UserListContainer> GetContributors()
         {
-            return Validate(Dispatch.LiveThreads.Contributors(Id));
+            Contributors = Validate(Dispatch.LiveThreads.Contributors(Id));
+            ContributorsLastUpdated = DateTime.Now;
+
+            return Contributors;
         }
 
         /// <summary>
@@ -470,6 +494,226 @@ namespace Reddit.NET.Controllers
         public RedditThings.LiveUpdate GetUpdate(string updateId)
         {
             return Validate(Dispatch.LiveThreads.GetUpdate(Id, updateId), 1).Data.Children[0].Data;
+        }
+
+        protected virtual void OnThreadUpdated(LiveThreadUpdateEventArgs e)
+        {
+            ThreadUpdated?.Invoke(this, e);
+        }
+
+        protected virtual void OnContributorsUpdated(LiveThreadContributorsUpdateEventArgs e)
+        {
+            ContributorsUpdated?.Invoke(this, e);
+        }
+
+        protected virtual void OnUpdatesUpdated(LiveThreadUpdatesUpdateEventArgs e)
+        {
+            UpdatesUpdated?.Invoke(this, e);
+        }
+
+        public bool MonitorThread()
+        {
+            string key = "LiveThread";
+            return Monitor(key, new Thread(() => MonitorThreadThread(key)), Id);
+        }
+
+        public bool MonitorContributors()
+        {
+            string key = "LiveThreadContributors";
+            return Monitor(key, new Thread(() => MonitorContributorsThread(key)), Id);
+        }
+
+        public bool MonitorUpdates()
+        {
+            string key = "LiveThreadUpdates";
+            return Monitor(key, new Thread(() => MonitorUpdatesThread(key)), Id);
+        }
+
+        private bool Monitor(string key, Thread thread, string subKey)
+        {
+            bool res = Monitor(key, thread, subKey, out Thread newThread);
+
+            RebuildThreads();
+            LaunchThreadIfNotNull(key, newThread);
+
+            return res;
+        }
+
+        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "LiveThread":
+                    return new Thread(() => MonitorLiveThread(key, "thread", subKey, startDelayMs));
+                case "LiveThreadContributors":
+                    return new Thread(() => MonitorLiveThread(key, "contributors", subKey, startDelayMs));
+                case "LiveThreadUpdates":
+                    return new Thread(() => MonitorLiveThread(key, "updates", subKey, startDelayMs));
+            }
+        }
+
+        private void RebuildThreads()
+        {
+            Dictionary<string, Thread> oldThreads = Threads;
+            KillThreads(oldThreads);
+
+            int i = 0;
+            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            {
+                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, Id, (i * MonitoringWaitDelayMS)));
+                i++;
+            }
+        }
+
+        private void MonitorThreadThread(string key)
+        {
+            MonitorLiveThread(key, "thread", Id);
+        }
+
+        private void MonitorContributorsThread(string key)
+        {
+            MonitorLiveThread(key, "contributors", Id);
+        }
+
+        private void MonitorUpdatesThread(string key)
+        {
+            MonitorLiveThread(key, "updates", Id);
+        }
+
+        private void MonitorLiveThread(string key, string type, string subKey, int startDelayMs = 0)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(subKey))
+            {
+                switch (type)
+                {
+                    default:
+                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                    case "LiveThread":
+                        CheckLiveThread();
+                        break;
+                    case "LiveThreadContributors":
+                        CheckContributors();
+                        break;
+                    case "LiveThreadUpdates":
+                        CheckUpdates();
+                        break;
+                }
+
+                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+            }
+        }
+
+        private bool Diff(LiveThread compare)
+        {
+            return !(Id.Equals(compare.Id)
+                && Description.Equals(compare.Description)
+                && NSFW.Equals(compare.NSFW)
+                && Resources.Equals(compare.Resources)
+                && TotalViews.Equals(compare.TotalViews)
+                && Created.Equals(compare.Created)
+                && Fullname.Equals(compare.Fullname)
+                && WebsocketURL.Equals(compare.WebsocketURL)
+                && IsAnnouncement.Equals(compare.IsAnnouncement)
+                && AnnouncementURL.Equals(compare.AnnouncementURL)
+                && State.Equals(compare.State)
+                && ViewerCount.Equals(compare.ViewerCount)
+                && Icon.Equals(compare.Icon));
+        }
+
+        private void CheckLiveThread()
+        {
+            LiveThread newThread = About();
+
+            if (Diff(newThread))
+            {
+                // Event handler to alert the calling app that the object has changed.  --Kris
+                LiveThreadUpdateEventArgs args = new LiveThreadUpdateEventArgs
+                {
+                    OldThread = this, 
+                    NewThread = newThread
+                };
+                OnThreadUpdated(args);
+            }
+        }
+
+        /// <summary>
+        /// If automatic monitoring of the thread (not updates or contributors) is enabled, this callback will apply any changes to this instance.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void C_ApplyThreadUpdates(object sender, LiveThreadUpdateEventArgs e)
+        {
+            Import(e.NewThread.Id, e.NewThread.Description, e.NewThread.NSFW, e.NewThread.Resources, e.NewThread.Title, e.NewThread.TotalViews,
+                e.NewThread.Created, e.NewThread.Fullname, e.NewThread.WebsocketURL, e.NewThread.AnnouncementURL, e.NewThread.State, e.NewThread.ViewerCount,
+                e.NewThread.Icon);
+        }
+
+        private void CheckContributors()
+        {
+            List<RedditThings.UserListContainer> oldList = contributors;
+            List<RedditThings.UserListContainer> newList = GetContributors();
+
+            if (UserListDiff(oldList, newList, out List<RedditThings.UserListContainer> added, out List<RedditThings.UserListContainer> removed))
+            {
+                // Event handler to alert the calling app that the list has changed.  --Kris
+                LiveThreadContributorsUpdateEventArgs args = new LiveThreadContributorsUpdateEventArgs
+                {
+                    OldContributors = oldList, 
+                    NewContributors = newList, 
+                    Added = added, 
+                    Removed = removed
+                };
+                OnContributorsUpdated(args);
+            }
+        }
+
+        private bool UserListDiff(List<RedditThings.UserListContainer> oldList, List<RedditThings.UserListContainer> newList, out List<RedditThings.UserListContainer> added,
+            out List<RedditThings.UserListContainer> removed)
+        {
+            added = new List<RedditThings.UserListContainer>();
+            removed = new List<RedditThings.UserListContainer>();
+
+            for (int i = 0; i <= 1; i++)
+            {
+                added.Add(new RedditThings.UserListContainer { Data = new RedditThings.UserListData { Children = new List<RedditThings.UserListChild>() } });
+                removed.Add(new RedditThings.UserListContainer { Data = new RedditThings.UserListData { Children = new List<RedditThings.UserListChild>() } });
+
+                if (ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<RedditThings.UserListChild> childrenAdded, out List<RedditThings.UserListChild> childrenRemoved))
+                {
+                    added[i].Data.Children = childrenAdded;
+                    removed[i].Data.Children = childrenRemoved;
+                }
+            }
+
+            return !(added[0].Data.Children.Count == 0 && removed[0].Data.Children.Count == 0 
+                && added[1].Data.Children.Count == 0 && removed[1].Data.Children.Count == 0);
+        }
+
+        private void CheckUpdates()
+        {
+            List<RedditThings.LiveUpdate> oldList = new List<RedditThings.LiveUpdate>();
+            List<RedditThings.LiveUpdate> newList = new List<RedditThings.LiveUpdate>();
+
+            if (ListDiff(oldList, newList, out List<RedditThings.LiveUpdate> added, out List<RedditThings.LiveUpdate> removed))
+            {
+                // Event handler to alert the calling app that the list has changed.  --Kris
+                LiveThreadUpdatesUpdateEventArgs args = new LiveThreadUpdatesUpdateEventArgs
+                {
+                    OldUpdates = oldList,
+                    NewUpdates = newList,
+                    Added = added,
+                    Removed = removed
+                };
+                OnUpdatesUpdated(args);
+            }
         }
     }
 }
