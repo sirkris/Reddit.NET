@@ -4,6 +4,7 @@ using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -67,6 +68,17 @@ namespace Reddit.NET.Controllers
         private DateTime? ContributorsLastUpdated;
 
         private readonly Dispatch Dispatch;
+
+        public LiveThread(Dispatch dispatch, LiveThread liveThread)
+        {
+            Dispatch = dispatch;
+
+            Import(liveThread.Id, liveThread.Description, liveThread.NSFW, liveThread.Resources, liveThread.Title,
+                liveThread.TotalViews, liveThread.Created, liveThread.Fullname, liveThread.WebsocketURL, liveThread.AnnouncementURL,
+                liveThread.State, liveThread.ViewerCount, liveThread.Icon);
+
+            EventData = liveThread.EventData;
+        }
 
         public LiveThread(Dispatch dispatch, RedditThings.LiveUpdateEvent liveUpdateEvent)
         {
@@ -149,9 +161,37 @@ namespace Reddit.NET.Controllers
         /// <param name="nsfw">boolean value</param>
         /// <param name="resources">raw markdown text</param>
         /// <returns>An instance of this class populated with data from the new live thread.</returns>
-        public LiveThread Create(string title, string description, bool nsfw, string resources)
+        public LiveThread Create(string title = null, string description = null, bool? nsfw = null, string resources = null, bool retry = true)
         {
-            return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.Create(description, nsfw, resources, title)).JSON.Data.Id).About();
+            try
+            {
+                return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.Create(description ?? Description, nsfw ?? NSFW, resources ?? Resources, title ?? Title)).JSON.Data.Id).About();
+            }
+            catch (RedditRateLimitException ex)
+            {
+                List<string> errors = ((List<List<string>>)ex.Data["errors"])[0];
+
+                // TODO - Move this to where it'll work for all endpoints.  --Kris
+                // If the wait time is in seconds (i.e. less than a minute), just go ahead and wait then retry.  --Kris
+                int waitSeconds = 0;
+                if (errors[1].StartsWith("you are doing that too much. try again in ")
+                    && errors[1].EndsWith("seconds."))
+                {
+                    waitSeconds = Convert.ToInt32(Regex.Match(errors[1], @"\d+").Value);
+                }
+
+                if (retry
+                    && waitSeconds > 0
+                    && waitSeconds < 60)
+                {
+                    Thread.Sleep(waitSeconds * 1000);
+                    return Create(title, description, nsfw, resources, false);
+                }
+                else
+                {
+                    throw ex;
+                }
+            }
         }
 
         /// <summary>
@@ -162,7 +202,7 @@ namespace Reddit.NET.Controllers
         /// <param name="nsfw">boolean value</param>
         /// <param name="resources">raw markdown text</param>
         /// <returns>An instance of this class populated with data from the new live thread.</returns>
-        public async Task CreateAsync(string title, string description, bool nsfw, string resources)
+        public async Task CreateAsync(string title = null, string description = null, bool? nsfw = null, string resources = null)
         {
             await Task.Run(() =>
             {
@@ -216,7 +256,7 @@ namespace Reddit.NET.Controllers
         /// Delete an update from the thread.
         /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
         /// </summary>
-        /// <param name="updateId">the ID of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
+        /// <param name="updateName">the Name of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
         public void DeleteUpdate(string updateId)
         {
             Validate(Dispatch.LiveThreads.DeleteUpdate(Id, updateId));
@@ -226,7 +266,7 @@ namespace Reddit.NET.Controllers
         /// Delete an update from the thread asynchronously.
         /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
         /// </summary>
-        /// <param name="updateId">the ID of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
+        /// <param name="updateName">the Name of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
         public async Task DeleteUpdateAsync(string updateId)
         {
             await Task.Run(() =>

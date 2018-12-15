@@ -176,6 +176,11 @@ namespace Reddit.NET
             return new LiveThread(Models, liveUpdateEvent);
         }
 
+        public LiveThread LiveThread(LiveThread liveThread)
+        {
+            return new LiveThread(Models, liveThread);
+        }
+
         public LiveThread LiveThread(string title = null, string description = null, bool nsfw = false, string resources = null,
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))

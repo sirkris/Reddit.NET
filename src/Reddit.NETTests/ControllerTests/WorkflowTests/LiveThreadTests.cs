@@ -1,0 +1,127 @@
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.NET;
+using Reddit.NET.Controllers;
+using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Exceptions;
+using RedditThings = Reddit.NET.Models.Structures;
+using System;
+using System.Collections.Generic;
+using System.Threading;
+
+namespace Reddit.NETTests.ControllerTests.WorkflowTests
+{
+    [TestClass]
+    public class LiveThreadTests : BaseTests
+    {
+        private LiveThread LiveThread
+        {
+            get
+            {
+                return liveThread ?? CreateThread();
+            }
+            set
+            {
+                liveThread = value;
+            }
+        }
+        private LiveThread liveThread;
+
+        public LiveThreadTests() : base() { }
+
+        private LiveThread CreateThread()
+        {
+            LiveThread = reddit.LiveThread("Test Thread", "This is a test live thread created by Reddit.NET.").Create(nsfw: false, resources: "Resources text.");
+            return LiveThread;
+        }
+
+        [TestMethod]
+        public void Create()
+        {
+            Validate(LiveThread);
+        }
+
+        [TestMethod]
+        public void SaveChanges()
+        {
+            Validate(LiveThread);
+
+            // Make some changes.  --Kris
+            LiveThread.NSFW = true;
+            string updatedResourcesText = "Updated resources text.";
+            LiveThread.Resources = updatedResourcesText;
+
+            // Save the changes (makes a call to the Edit model).  --Kris
+            LiveThread.SaveChanges();
+
+            // Update the live thread instance to match what the API has (should be the same after SaveChanges was called).  --Kris
+            LiveThread = LiveThread.About();
+
+            // If SaveChanges failed for whatever reason, the values will not match.  --Kris
+            Validate(LiveThread);
+            Assert.AreEqual(true, LiveThread.NSFW);
+            Assert.AreEqual(updatedResourcesText, LiveThread.Resources);
+        }
+
+        [TestMethod]
+        public void Workflow()
+        {
+            User patsy = GetTargetUser();
+
+            // Create a new live thread.  --Kris
+            Validate(LiveThread);
+
+            // Edit the live thread.  --Kris
+            LiveThread.Edit(LiveThread.Title, LiveThread.Description, false, LiveThread.Resources);
+
+            // Invite a contributor.  --Kris
+            LiveThread.InviteContributor(patsy.Name, "+update", "liveupdate_contributor_invite");
+
+            // Change contributor permissions.  --Kris
+            LiveThread.SetContributorPermissions(patsy.Name, "+edit", "liveupdate_contributor_invite");
+
+            // Remove contributor invite.  --Kris
+            LiveThread.RemoveContributorInvite(patsy.Fullname);
+
+            // Re-invite contributor so they can accept it.  Note how this can also be called from the User instance.  --Kris
+            reddit.User(patsy.Name).InviteToLiveThread(LiveThread.Id, "+update", "liveupdate_contributor_invite");
+
+            // Accept the invitation.  --Kris
+            reddit2.Account.AcceptLiveThreadInvite(LiveThread.Id);
+
+            // Target user is doing a lousy job.  --Kris
+            reddit.User(patsy.Name).RemoveFromLiveThread(LiveThread.Id);
+
+            // Target user has friends in high places.  --Kris
+            reddit.User(patsy.Name).InviteToLiveThread(LiveThread.Id, "+update", "liveupdate_contributor_invite");
+            reddit2.LiveThread(LiveThread).AcceptContributorInvite();
+
+            // You can't fire me!  I quit!  --Kris
+            reddit2.LiveThread(LiveThread).Abandon();
+
+            // Post an update.  --Kris
+            string update = "Test update.";
+            LiveThread.Update(update);
+
+            // Get updates.  --Kris
+            Validate(LiveThread.Updates);
+            Assert.AreEqual(1, LiveThread.Updates.Count);
+            Assert.IsNotNull(LiveThread.Updates[0]);
+            Assert.AreEqual(update, LiveThread.Updates[0].Body);
+
+            // Strike update.  --Kris
+            LiveThread.StrikeUpdate(LiveThread.Updates[0].Name);
+
+            // Get update.  --Kris
+            RedditThings.LiveUpdate liveUpdate = LiveThread.GetUpdate(LiveThread.Updates[0].Id);
+
+            Validate(liveUpdate);
+            Assert.AreEqual(LiveThread.Updates[0].Id, liveUpdate.Id);
+
+            // Delete update.  --Kris
+            LiveThread.DeleteUpdate(liveUpdate.Name);
+
+            // Close the live thread.  --Kris
+            LiveThread.Close();
+        }
+    }
+}
