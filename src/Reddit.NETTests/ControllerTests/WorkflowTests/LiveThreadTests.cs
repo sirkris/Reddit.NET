@@ -26,6 +26,10 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         }
         private LiveThread liveThread;
 
+        private bool LiveThreadUpdated = false;
+        private bool LiveThreadContributorsUpdated = false;
+        private List<RedditThings.LiveUpdate> LiveThreadUpdates;
+
         public LiveThreadTests() : base() { }
 
         private LiveThread CreateThread()
@@ -37,7 +41,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         [TestMethod]
         public void Create()
         {
-            Validate(LiveThread);
+            Validate(LiveThread).Close();
         }
 
         [TestMethod]
@@ -122,6 +126,85 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
 
             // Close the live thread.  --Kris
             LiveThread.Close();
+        }
+
+        [TestMethod]
+        public void Monitoring()
+        {
+            User patsy = GetTargetUser();
+
+            reddit.User(patsy).InviteToLiveThread(LiveThread.Id, "+update", "liveupdate_contributor_invite");
+
+            // Create a new live thread.  --Kris
+            Validate(LiveThread);
+
+            // Monitor the thread for any configuration changes.  --Kris
+            LiveThread.MonitorThread();
+            LiveThread.ThreadUpdated += C_LiveThreadUpdated;
+
+            // Monitor the thread for new and abdicated/removed contributors.  --Kris
+            LiveThread.GetContributors();
+            LiveThread.MonitorContributors();
+            LiveThread.ContributorsUpdated += C_LiveThreadContributorsUpdated;
+
+            // Monitor the thread for new and deleted updates.  --Kris
+            // TODO - Trigger an event if one of the NewUpdates list has a stricken value that differs from its OldUpdates list counterpart.  --Kris
+            LiveThread.MonitorUpdates();
+            LiveThread.UpdatesUpdated += C_LiveThreadUpdatesUpdated;
+
+            // Make changes to trigger all three monitors and validate the results.  --Kris
+            patsy.AcceptLiveThreadInvite(LiveThread.Id);
+
+            // Despite what VS says, we don't want to use await here.  --Kris
+            LiveThread.EditAsync(LiveThread.Title, LiveThread.Description, !LiveThread.NSFW, LiveThread.Resources);
+
+            LiveThreadUpdates = new List<RedditThings.LiveUpdate>();
+            for (int i = 1; i <= 5; i++)
+            {
+                // Despite what VS says, we don't want to use await here.  --Kris
+                LiveThread.UpdateAsync("Primary user test update #" + i.ToString());
+                patsy.UpdateLiveThreadAsync(LiveThread.Id, "Secondary user test update #" + i.ToString());
+            }
+
+            DateTime start = DateTime.Now;
+            while ((!LiveThreadUpdated || !LiveThreadContributorsUpdated || LiveThreadUpdates.Count < 10)
+                && start.AddMinutes(1) > DateTime.Now) { }
+
+            // Stop monitoring and close the thread.  --Kris
+            LiveThread.MonitorUpdates();
+            LiveThread.UpdatesUpdated -= C_LiveThreadUpdatesUpdated;
+
+            LiveThread.MonitorContributors();
+            LiveThread.ContributorsUpdated -= C_LiveThreadContributorsUpdated;
+
+            LiveThread.MonitorThread();
+            LiveThread.ThreadUpdated -= C_LiveThreadUpdated;
+
+            LiveThread.Close();
+
+            Assert.IsTrue(LiveThreadUpdated);
+            Assert.IsTrue(LiveThreadContributorsUpdated);
+            Assert.AreEqual(10, LiveThreadUpdates.Count);
+        }
+
+        private void C_LiveThreadUpdated(object sender, LiveThreadUpdateEventArgs e)
+        {
+            try
+            {
+                Assert.AreNotEqual(e.OldThread.NSFW, e.NewThread.NSFW);
+                LiveThreadUpdated = true;
+            } catch (AssertFailedException) { }
+        }
+
+        private void C_LiveThreadContributorsUpdated(object sender, LiveThreadContributorsUpdateEventArgs e)
+        {
+            Assert.IsTrue(e.Added.Count > 0);
+            LiveThreadContributorsUpdated = true;
+        }
+
+        private void C_LiveThreadUpdatesUpdated(object sender, LiveThreadUpdatesUpdateEventArgs e)
+        {
+            LiveThreadUpdates.AddRange(e.Added);
         }
     }
 }

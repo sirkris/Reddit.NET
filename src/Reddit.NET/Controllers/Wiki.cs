@@ -188,13 +188,13 @@ namespace Reddit.NET.Controllers
 
         internal void RebuildThreads()
         {
-            Dictionary<string, Thread> oldThreads = Threads;
+            List<string> oldThreads = new List<string>(Threads.Keys);
             KillThreads(oldThreads);
 
             int i = 0;
-            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            foreach (string key in oldThreads)
             {
-                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, Subreddit, (i * MonitoringWaitDelayMS)));
+                Threads.Add(key, CreateMonitoringThread(key, Subreddit, (i * MonitoringWaitDelayMS)));
                 i++;
             }
         }

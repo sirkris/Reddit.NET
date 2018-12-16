@@ -157,6 +157,14 @@ namespace Reddit.NETTests
             Assert.IsNotNull(dynamic);
         }
 
+        public Controllers.LiveThread Validate(Controllers.LiveThread liveThread)
+        {
+            Assert.IsNotNull(liveThread);
+            Assert.IsNotNull(liveThread.Id);
+
+            return liveThread;
+        }
+
         public void Validate(ModmailConversationContainer modmailConversationContainer)
         {
             Assert.IsNotNull(modmailConversationContainer);

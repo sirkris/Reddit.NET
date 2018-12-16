@@ -596,13 +596,14 @@ namespace Reddit.NET.Controllers
 
         private void RebuildThreads()
         {
-            Dictionary<string, Thread> oldThreads = Threads;
+            List<string> oldThreads = new List<string>(Threads.Keys);
             KillThreads(oldThreads);
 
             int i = 0;
-            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            foreach (string key in oldThreads)
             {
-                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, Id, (i * MonitoringWaitDelayMS)));
+                Threads.Add(key, CreateMonitoringThread(key, Id, (i * MonitoringWaitDelayMS)));
+                Threads[key].Start();
                 i++;
             }
         }
@@ -636,13 +637,13 @@ namespace Reddit.NET.Controllers
                 {
                     default:
                         throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "LiveThread":
+                    case "thread":
                         CheckLiveThread();
                         break;
-                    case "LiveThreadContributors":
+                    case "contributors":
                         CheckContributors();
                         break;
-                    case "LiveThreadUpdates":
+                    case "updates":
                         CheckUpdates();
                         break;
                 }
@@ -660,7 +661,6 @@ namespace Reddit.NET.Controllers
                 && TotalViews.Equals(compare.TotalViews)
                 && Created.Equals(compare.Created)
                 && Fullname.Equals(compare.Fullname)
-                && WebsocketURL.Equals(compare.WebsocketURL)
                 && IsAnnouncement.Equals(compare.IsAnnouncement)
                 && AnnouncementURL.Equals(compare.AnnouncementURL)
                 && State.Equals(compare.State)
@@ -721,6 +721,21 @@ namespace Reddit.NET.Controllers
             added = new List<RedditThings.UserListContainer>();
             removed = new List<RedditThings.UserListContainer>();
 
+            if (oldList == null && newList == null)
+            {
+                return false;
+            }
+            else if (oldList == null)
+            {
+                added = newList;
+                return true;
+            }
+            else if (newList == null)
+            {
+                removed = oldList;
+                return true;
+            }
+
             for (int i = 0; i <= 1; i++)
             {
                 added.Add(new RedditThings.UserListContainer { Data = new RedditThings.UserListData { Children = new List<RedditThings.UserListChild>() } });
@@ -739,8 +754,8 @@ namespace Reddit.NET.Controllers
 
         private void CheckUpdates()
         {
-            List<RedditThings.LiveUpdate> oldList = new List<RedditThings.LiveUpdate>();
-            List<RedditThings.LiveUpdate> newList = new List<RedditThings.LiveUpdate>();
+            List<RedditThings.LiveUpdate> oldList = updates;
+            List<RedditThings.LiveUpdate> newList = GetUpdates();
 
             if (ListDiff(oldList, newList, out List<RedditThings.LiveUpdate> added, out List<RedditThings.LiveUpdate> removed))
             {

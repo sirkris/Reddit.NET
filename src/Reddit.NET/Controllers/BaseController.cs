@@ -36,6 +36,11 @@ namespace Reddit.NET.Controllers
             Terminate = true;
         }
 
+        internal void ReviveThread()
+        {
+            Terminate = false;
+        }
+
         public void WaitOrDie(Thread thread, int timeout = 60)
         {
             DateTime start = DateTime.Now;
@@ -393,17 +398,22 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        protected void KillThreads(Dictionary<string, Thread> oldThreads)
+        protected void KillThreads(List<string> oldThreads)
         {
             TerminateThread();
 
-            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            foreach (string key in oldThreads)
             {
-                pair.Value.Join();
-                Threads.Remove(pair.Key);
+                try
+                {
+                    Threads[key].Join();
+                }
+                catch (Exception) { }
+
+                Threads.Remove(key);
             }
 
-            Terminate = false;
+            ReviveThread();
         }
 
         protected List<T> GetAboutChildren<T>(RedditThings.DynamicShortListingContainer dynamicShortListingContainer)

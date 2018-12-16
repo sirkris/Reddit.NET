@@ -541,6 +541,52 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Post an update to a live thread.
+        /// Requires the update permission for this thread.
+        /// </summary>
+        /// <param name="id">The ID of the live thread</param>
+        /// <param name="body">raw markdown text</param>
+        public void UpdateLiveThread(string id, string body)
+        {
+            Validate(Dispatch.LiveThreads.Update(id, body));
+        }
+
+        /// <summary>
+        /// Post an update to a live thread asynchronously.
+        /// Requires the update permission for this thread.
+        /// </summary>
+        /// <param name="id">The ID of the live thread</param>
+        /// <param name="body">raw markdown text</param>
+        public async Task UpdateLiveThreadAsync(string id, string body)
+        {
+            await Task.Run(() =>
+            {
+                UpdateLiveThread(id, body);
+            });
+        }
+
+        /// <summary>
+        /// Accept a pending invitation to contribute to the thread.
+        /// </summary>
+        /// <param name="id">The ID of the live thread</param>
+        public void AcceptLiveThreadInvite(string id)
+        {
+            Validate(Dispatch.LiveThreads.AcceptContributorInvite(id));
+        }
+
+        /// <summary>
+        /// Asynchronously accept a pending invitation to contribute to the thread.
+        /// </summary>
+        /// <param name="id">The ID of the live thread</param>
+        public async Task AcceptLiveThreadInviteAsync(string id)
+        {
+            await Task.Run(() =>
+            {
+                AcceptLiveThreadInvite(id);
+            });
+        }
+
+        /// <summary>
         /// Fetch a list of public multis belonging to this user.
         /// </summary>
         /// <param name="expandSrs">boolean value</param>

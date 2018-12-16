@@ -34,7 +34,10 @@ namespace Reddit.NET.Controllers.Structures
         public List<string> ModmailMessagesMod;
         public List<string> ModmailMessagesUser;
         public List<string> ModmailMessagesUnread;
-        
+        public List<string> LiveThread;
+        public List<string> LiveThreadContributors;
+        public List<string> LiveThreadUpdates;
+
         public MonitoringSnapshot(List<string> bestPosts = null, List<string> hotPosts = null, List<string> newPosts = null, List<string> risingPosts = null, 
             List<string> topPosts = null, List<string> controversialPosts = null, List<string> modQueuePosts = null, List<string> modQueueReportsPosts = null, 
             List<string> modQueueSpamPosts = null, List<string> modQueueUnmoderatedPosts = null, List<string> modQueueEditedPosts = null, 
@@ -42,7 +45,8 @@ namespace Reddit.NET.Controllers.Structures
             List<string> confidenceComments = null, List<string> topComments = null, List<string> newComments = null, List<string> controversialComments = null, 
             List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null, 
             List<string> wikiPages = null, List<string> wikiPage = null, List<string> modmailMessagesRecent = null, List<string> modmailMessagesMod = null, 
-            List<string> modmailMessagesUser = null, List<string> modmailMessagesUnread = null)
+            List<string> modmailMessagesUser = null, List<string> modmailMessagesUnread = null, List<string> liveThread = null, List<string> liveThreadContributors = null, 
+            List<string> liveThreadUpdates = null)
         {
             BestPosts = bestPosts ?? new List<string>();
             HotPosts = hotPosts ?? new List<string>();
@@ -72,6 +76,9 @@ namespace Reddit.NET.Controllers.Structures
             ModmailMessagesMod = modmailMessagesMod ?? new List<string>();
             ModmailMessagesUser = modmailMessagesUser ?? new List<string>();
             ModmailMessagesUnread = modmailMessagesUnread ?? new List<string>();
+            LiveThread = liveThread ?? new List<string>();
+            LiveThreadContributors = liveThreadContributors ?? new List<string>();
+            LiveThreadUpdates = liveThreadUpdates ?? new List<string>();
         }
 
         public ref List<string> Get(string key)
@@ -136,6 +143,12 @@ namespace Reddit.NET.Controllers.Structures
                     return ref ModmailMessagesUser;
                 case "ModmailMessagesUnread":
                     return ref ModmailMessagesUnread;
+                case "LiveThread":
+                    return ref LiveThread;
+                case "LiveThreadContributors":
+                    return ref LiveThreadContributors;
+                case "LiveThreadUpdates":
+                    return ref LiveThreadUpdates;
             }
         }
         
@@ -171,6 +184,9 @@ namespace Reddit.NET.Controllers.Structures
                 Add(monitoringSnapshot.ModmailMessagesMod, ref ModmailMessagesMod);
                 Add(monitoringSnapshot.ModmailMessagesUser, ref ModmailMessagesUser);
                 Add(monitoringSnapshot.ModmailMessagesUnread, ref ModmailMessagesUnread);
+                Add(monitoringSnapshot.LiveThread, ref LiveThread);
+                Add(monitoringSnapshot.LiveThreadContributors, ref LiveThreadContributors);
+                Add(monitoringSnapshot.LiveThreadUpdates, ref LiveThreadUpdates);
             }
         }
 
@@ -217,6 +233,9 @@ namespace Reddit.NET.Controllers.Structures
                 Remove(monitoringSnapshot.ModmailMessagesMod, ref ModmailMessagesMod);
                 Remove(monitoringSnapshot.ModmailMessagesUser, ref ModmailMessagesUser);
                 Remove(monitoringSnapshot.ModmailMessagesUnread, ref ModmailMessagesUnread);
+                Remove(monitoringSnapshot.LiveThread, ref LiveThread);
+                Remove(monitoringSnapshot.LiveThreadContributors, ref LiveThreadContributors);
+                Remove(monitoringSnapshot.LiveThreadUpdates, ref LiveThreadUpdates);
             }
         }
 
@@ -259,7 +278,10 @@ namespace Reddit.NET.Controllers.Structures
                 + ModmailMessagesRecent.Count
                 + ModmailMessagesMod.Count
                 + ModmailMessagesUser.Count
-                + ModmailMessagesUnread.Count);
+                + ModmailMessagesUnread.Count
+                + LiveThread.Count
+                + LiveThreadContributors.Count
+                + LiveThreadUpdates.Count);
         }
     }
 }
