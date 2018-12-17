@@ -523,7 +523,6 @@ namespace Reddit.NET.Models
         }
 
         // WARNING:  Automated bot-voting violates Reddit's rules.  --Kris
-        // TODO - Needs testing.
         /// <summary>
         /// Cast a vote on a thing.
         /// id should be the fullname of the Link or Comment to vote on.
@@ -535,16 +534,15 @@ namespace Reddit.NET.Models
         /// <param name="dir">vote direction. one of (1, 0, -1)</param>
         /// <param name="id">fullname of a thing</param>
         /// <param name="rank">an integer greater than 1</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Vote(int dir, string id, int rank)
+        public void Vote(int dir, string id, int rank)
         {
             RestRequest restRequest = PrepareRequest("api/vote", Method.POST);
 
             restRequest.AddParameter("dir", dir);
             restRequest.AddParameter("id", id);
             restRequest.AddParameter("rank", rank);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            
+            ExecuteRequest(restRequest);
         }
     }
 }

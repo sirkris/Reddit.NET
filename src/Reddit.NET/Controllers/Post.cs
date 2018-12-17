@@ -656,7 +656,80 @@ namespace Reddit.NET.Controllers
             });
         }
 
-        // TODO - Add vote methods (up/down) once Model tested.  --Kris
+        /// <summary>
+        /// Upvote this post.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public void Upvote()
+        {
+            Dispatch.LinksAndComments.Vote(1, Fullname, 2);
+        }
+
+        /// <summary>
+        /// Upvote this post asynchronously.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public async Task UpvoteAsync()
+        {
+            await Task.Run(() =>
+            {
+                Upvote();
+            });
+        }
+
+        /// <summary>
+        /// Downvote this post.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public void Downvote()
+        {
+            Dispatch.LinksAndComments.Vote(-1, Fullname, 2);
+        }
+
+        /// <summary>
+        /// Downvote this post asynchronously.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public async Task DownvoteAsync()
+        {
+            await Task.Run(() =>
+            {
+                Downvote();
+            });
+        }
+
+        /// <summary>
+        /// Unvote this post.  This is equivalent to "un-voting" by clicking again on a highlighted arrow.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public void Unvote()
+        {
+            Dispatch.LinksAndComments.Vote(0, Fullname, 2);
+        }
+
+        /// <summary>
+        /// Unvote this post asynchronously.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public async Task UnvoteAsync()
+        {
+            await Task.Run(() =>
+            {
+                Unvote();
+            });
+        }
 
         /// <summary>
         /// Approve this post.
