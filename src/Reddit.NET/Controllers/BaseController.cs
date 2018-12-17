@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Reddit.NET.Controllers
@@ -33,6 +34,11 @@ namespace Reddit.NET.Controllers
         internal void TerminateThread()
         {
             Terminate = true;
+        }
+
+        internal void ReviveThread()
+        {
+            Terminate = false;
         }
 
         public void WaitOrDie(Thread thread, int timeout = 60)
@@ -66,6 +72,21 @@ namespace Reddit.NET.Controllers
         {
             added = new List<T>();
             removed = new List<T>();
+
+            if (oldList == null && newList == null)
+            {
+                return false;
+            }
+            else if (oldList == null)
+            {
+                added = newList;
+                return true;
+            }
+            else if (newList == null)
+            {
+                removed = oldList;
+                return true;
+            }
 
             // Index by Reddit fullname.  --Kris
             Dictionary<string, T> oldByFullname = new Dictionary<string, T>();
@@ -143,6 +164,54 @@ namespace Reddit.NET.Controllers
             {
                 return comments.OrderBy(p => p.Created).ToList();
             }
+        }
+
+        public List<Post> GetPosts(RedditThings.PostResultContainer postContainer, Dispatch dispatch)
+        {
+            return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts);
+        }
+
+        public List<Post> GetPosts(RedditThings.PostResultContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts)
+        {
+            return GetPosts(postContainer, dispatch, out linkPosts, out List<SelfPost> selfPosts);
+        }
+
+        public List<Post> GetPosts(RedditThings.PostResultContainer postContainer, Dispatch dispatch, out List<SelfPost> selfPosts)
+        {
+            return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out selfPosts);
+        }
+
+        public List<Post> GetPosts(RedditThings.PostResultContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
+        {
+            linkPosts = new List<LinkPost>();
+            selfPosts = new List<SelfPost>();
+
+            if (postContainer == null || postContainer.JSON == null || postContainer.JSON.Data == null || postContainer.JSON.Data.Things == null)
+            {
+                return null;
+            }
+
+            List<Post> posts = new List<Post>();
+            foreach (RedditThings.PostChild postChild in postContainer.JSON.Data.Things)
+            {
+                if (postChild.Data != null)
+                {
+                    if (postChild.Data.IsSelf)
+                    {
+                        SelfPost selfPost = new SelfPost(dispatch, postChild.Data);
+                        posts.Add(selfPost);
+                        selfPosts.Add(selfPost);
+                    }
+                    else
+                    {
+                        LinkPost linkPost = new LinkPost(dispatch, postChild.Data);
+                        posts.Add(linkPost);
+                        linkPosts.Add(linkPost);
+                    }
+                }
+            }
+
+            return posts;
         }
 
         public List<Post> GetPosts(RedditThings.PostContainer postContainer, Dispatch dispatch)
@@ -227,6 +296,25 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        public List<Comment> GetComments(RedditThings.CommentResultContainer commentContainer, Dispatch dispatch)
+        {
+            if (commentContainer == null || commentContainer.JSON == null || commentContainer.JSON.Data == null || commentContainer.JSON.Data.Things == null)
+            {
+                return null;
+            }
+
+            List<Comment> comments = new List<Comment>();
+            foreach (RedditThings.CommentChild commentChild in commentContainer.JSON.Data.Things)
+            {
+                if (commentChild.Data != null)
+                {
+                    comments.Add(new Comment(dispatch, commentChild.Data));
+                }
+            }
+
+            return comments;
+        }
+
         public List<Comment> GetComments(RedditThings.CommentContainer commentContainer, Dispatch dispatch)
         {
             if (commentContainer == null || commentContainer.Data == null || commentContainer.Data.Children == null)
@@ -265,277 +353,15 @@ namespace Reddit.NET.Controllers
             return subreddits;
         }
 
-        internal void MonitorPostsThread(MonitoringSnapshot monitoring, SubredditPosts posts, string key, string type, string subKey, int startDelayMs = 0)
+        public List<RedditThings.LiveUpdate> GetLiveUpdates(RedditThings.LiveUpdateContainer liveUpdateContainer)
         {
-            if (startDelayMs > 0)
+            List<RedditThings.LiveUpdate> res = new List<RedditThings.LiveUpdate>();
+            foreach (RedditThings.LiveUpdateChild liveUpdateChild in liveUpdateContainer.Data.Children)
             {
-                Thread.Sleep(startDelayMs);
+                res.Add(liveUpdateChild.Data);
             }
 
-            while (!Terminate
-                && Monitoring.Get(key).Contains(subKey))
-            {
-                List<Post> oldList;
-                List<Post> newList;
-                switch (type)
-                {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "best":
-                        oldList = posts.best;
-                        newList = posts.GetBest();
-                        break;
-                    case "hot":
-                        oldList = posts.hot;
-                        newList = posts.GetHot();
-                        break;
-                    case "new":
-                        oldList = posts.newPosts;
-                        newList = posts.GetNew();
-                        break;
-                    case "rising":
-                        oldList = posts.rising;
-                        newList = posts.GetRising();
-                        break;
-                    case "top":
-                        oldList = posts.top;
-                        newList = posts.GetTop();
-                        break;
-                    case "controversial":
-                        oldList = posts.controversial;
-                        newList = posts.GetControversial();
-                        break;
-                    case "modqueue":
-                        oldList = posts.modQueue;
-                        newList = posts.GetModQueue();
-                        break;
-                    case "modqueuereports":
-                        oldList = posts.modQueueReports;
-                        newList = posts.GetModQueueReports();
-                        break;
-                    case "modqueuespam":
-                        oldList = posts.modQueueSpam;
-                        newList = posts.GetModQueueSpam();
-                        break;
-                    case "modqueueunmoderated":
-                        oldList = posts.modQueueUnmoderated;
-                        newList = posts.GetModQueueUnmoderated();
-                        break;
-                    case "modqueueedited":
-                        oldList = posts.modQueueEdited;
-                        newList = posts.GetModQueueEdited();
-                        break;
-                }
-
-                if (ListDiff<Post>(oldList, newList, out List<Post> added, out List<Post> removed))
-                {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    PostsUpdateEventArgs args = new PostsUpdateEventArgs
-                    {
-                        NewPosts = newList,
-                        OldPosts = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    TriggerUpdate(posts, args, type);
-                }
-
-                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
-            }
-        }
-
-        internal void MonitorCommentsThread(MonitoringSnapshot monitoring, Comments comments, string key, string type, string subKey, int startDelayMs = 0)
-        {
-            if (startDelayMs > 0)
-            {
-                Thread.Sleep(startDelayMs);
-            }
-
-            while (!Terminate
-                && Monitoring.Get(key).Contains(subKey))
-            {
-                List<Comment> oldList;
-                List<Comment> newList;
-                switch (type)
-                {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "confidence":
-                        oldList = comments.confidence;
-                        newList = comments.GetConfidence();
-                        break;
-                    case "top":
-                        oldList = comments.top;
-                        newList = comments.GetTop();
-                        break;
-                    case "new":
-                        oldList = comments.newComments;
-                        newList = comments.GetNew();
-                        break;
-                    case "controversial":
-                        oldList = comments.controversial;
-                        newList = comments.GetControversial();
-                        break;
-                    case "old":
-                        oldList = comments.old;
-                        newList = comments.GetOld();
-                        break;
-                    case "random":
-                        oldList = comments.random;
-                        newList = comments.GetRandom();
-                        break;
-                    case "qa":
-                        oldList = comments.qa;
-                        newList = comments.GetQA();
-                        break;
-                    case "live":
-                        oldList = comments.live;
-                        newList = comments.GetLive();
-                        break;
-                }
-
-                if (ListDiff<Comment>(oldList, newList, out List<Comment> added, out List<Comment> removed))
-                {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
-                    {
-                        NewComments = newList,
-                        OldComments = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    TriggerUpdate(comments, args, type);
-                }
-
-                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
-            }
-        }
-
-        protected void TriggerUpdate(SubredditPosts posts, PostsUpdateEventArgs args, string type)
-        {
-            switch (type)
-            {
-                case "best":
-                    posts.OnBestUpdated(args);
-                    break;
-                case "hot":
-                    posts.OnHotUpdated(args);
-                    break;
-                case "new":
-                    posts.OnNewUpdated(args);
-                    break;
-                case "rising":
-                    posts.OnRisingUpdated(args);
-                    break;
-                case "top":
-                    posts.OnTopUpdated(args);
-                    break;
-                case "controversial":
-                    posts.OnControversialUpdated(args);
-                    break;
-                case "modqueue":
-                    posts.OnModQueueUpdated(args);
-                    break;
-                case "modqueuereports":
-                    posts.OnModQueueReportsUpdated(args);
-                    break;
-                case "modqueuespam":
-                    posts.OnModQueueSpamUpdated(args);
-                    break;
-                case "modqueueunmoderated":
-                    posts.OnModQueueUnmoderatedUpdated(args);
-                    break;
-                case "modqueueedited":
-                    posts.OnModQueueEditedUpdated(args);
-                    break;
-            }
-        }
-
-        protected void TriggerUpdate(Comments comments, CommentsUpdateEventArgs args, string type)
-        {
-            switch (type)
-            {
-                case "confidence":
-                    comments.OnConfidenceUpdated(args);
-                    break;
-                case "top":
-                    comments.OnTopUpdated(args);
-                    break;
-                case "new":
-                    comments.OnNewUpdated(args);
-                    break;
-                case "controversial":
-                    comments.OnControversialUpdated(args);
-                    break;
-                case "old":
-                    comments.OnOldUpdated(args);
-                    break;
-                case "random":
-                    comments.OnRandomUpdated(args);
-                    break;
-                case "qa":
-                    comments.OnQAUpdated(args);
-                    break;
-                case "live":
-                    comments.OnLiveUpdated(args);
-                    break;
-            }
-        }
-
-        private Thread CreateMonitoringThread(string key, string subKey, Comments comments, int startDelayMs = 0)
-        {
-            switch (key)
-            {
-                default:
-                    throw new RedditControllerException("Unrecognized key.");
-                case "ConfidenceComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "confidence", comments.SubKey, startDelayMs));
-                case "TopComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "top", comments.SubKey, startDelayMs));
-                case "NewComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "new", comments.SubKey, startDelayMs));
-                case "ControversialComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "controversial", comments.SubKey, startDelayMs));
-                case "OldComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "old", comments.SubKey, startDelayMs));
-                case "RandomComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "random", comments.SubKey, startDelayMs));
-                case "QAComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "qa", comments.SubKey, startDelayMs));
-                case "LiveComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, comments, key, "live", comments.SubKey, startDelayMs));
-            }
-        }
-
-        private Thread CreateMonitoringThread(string key, string subKey, SubredditPosts posts, int startDelayMs = 0)
-        {
-            switch (key)
-            {
-                default:
-                    throw new RedditControllerException("Unrecognized key.");
-                case "BestPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "best", posts.Subreddit.Name, startDelayMs));
-                case "HotPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "hot", posts.Subreddit.Name, startDelayMs));
-                case "NewPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "new", posts.Subreddit.Name, startDelayMs));
-                case "RisingPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "rising", posts.Subreddit.Name, startDelayMs));
-                case "TopPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "top", posts.Subreddit.Name, startDelayMs));
-                case "ControversialPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "controversial", posts.Subreddit.Name, startDelayMs));
-                case "ModQueuePosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueue", posts.Subreddit.Name, startDelayMs));
-                case "ModQueueReportsPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueuereports", posts.Subreddit.Name, startDelayMs));
-                case "ModQueueSpamPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueuespam", posts.Subreddit.Name, startDelayMs));
-                case "ModQueueUnmoderatedPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueueunmoderated", posts.Subreddit.Name, startDelayMs));
-                case "ModQueueEditedPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, posts, key, "modqueueedited", posts.Subreddit.Name, startDelayMs));
-            }
+            return res;
         }
 
         protected void LaunchThreadIfNotNull(string key, Thread thread)
@@ -546,26 +372,6 @@ namespace Reddit.NET.Controllers
                 Threads[key].Start();
                 while (!Threads[key].IsAlive) { }
             }
-        }
-
-        internal bool Monitor(string key, Thread thread, string subKey, SubredditPosts posts)
-        {
-            bool res = Monitor(key, thread, subKey, out Thread newThread);
-
-            RebuildThreads(posts);
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
-        }
-
-        internal bool Monitor(string key, Thread thread, string subKey, Comments comments)
-        {
-            bool res = Monitor(key, thread, subKey, out Thread newThread);
-
-            RebuildThreads(comments);
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
         }
 
         internal bool Monitor(string key, Thread thread, string subKey, out Thread newThread)
@@ -592,43 +398,22 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        protected void KillThreads(Dictionary<string, Thread> oldThreads)
+        protected void KillThreads(List<string> oldThreads)
         {
             TerminateThread();
 
-            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            foreach (string key in oldThreads)
             {
-                pair.Value.Join();
-                Threads.Remove(pair.Key);
+                try
+                {
+                    Threads[key].Join();
+                }
+                catch (Exception) { }
+
+                Threads.Remove(key);
             }
 
-            Terminate = false;
-        }
-
-        internal void RebuildThreads(SubredditPosts posts)
-        {
-            Dictionary<string, Thread> oldThreads = Threads;
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (KeyValuePair<string, Thread> pair in oldThreads)
-            {
-                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, posts.Subreddit.Name, posts, (i * MonitoringWaitDelayMS)));
-                i++;
-            }
-        }
-
-        internal void RebuildThreads(Comments comments)
-        {
-            Dictionary<string, Thread> oldThreads = Threads;
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (KeyValuePair<string, Thread> pair in oldThreads)
-            {
-                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, comments.SubKey, comments, (i * MonitoringWaitDelayMS)));
-                i++;
-            }
+            ReviveThread();
         }
 
         protected List<T> GetAboutChildren<T>(RedditThings.DynamicShortListingContainer dynamicShortListingContainer)
@@ -675,6 +460,9 @@ namespace Reddit.NET.Controllers
                             throw (RedditRateLimitException)BuildException(new RedditRateLimitException("Reddit ratelimit exceeded."), new List<List<string>> { errors });
                         case "SUBREDDIT_EXISTS":
                             throw (RedditSubredditExistsException)BuildException(new RedditSubredditExistsException("That subreddit already exists."),
+                                new List<List<string>> { errors });
+                        case "INVALID_PERMISSION_TYPE":
+                            throw (RedditInvalidPermissionTypeException)BuildException(new RedditInvalidPermissionTypeException(errors[1]),
                                 new List<List<string>> { errors });
                     }
                 }
@@ -737,6 +525,41 @@ namespace Reddit.NET.Controllers
             CheckErrors(imageUploadResult.Errors);
 
             return imageUploadResult;
+        }
+
+        public RedditThings.LiveUpdateEventContainer Validate(RedditThings.LiveUpdateEventContainer liveUpdateEventContainer)
+        {
+            CheckNull(liveUpdateEventContainer);
+            CheckNull(liveUpdateEventContainer.Data);
+
+            return liveUpdateEventContainer;
+        }
+
+        public RedditThings.LiveThreadCreateResultContainer Validate(RedditThings.LiveThreadCreateResultContainer liveThreadCreateResultContainer)
+        {
+            CheckNull(liveThreadCreateResultContainer);
+            CheckNull(liveThreadCreateResultContainer.JSON);
+            CheckErrors(liveThreadCreateResultContainer.JSON.Errors);
+            CheckNull(liveThreadCreateResultContainer.JSON.Data);
+            CheckNull(liveThreadCreateResultContainer.JSON.Data.Id);
+
+            return liveThreadCreateResultContainer;
+        }
+
+        public RedditThings.LiveUpdateContainer Validate(RedditThings.LiveUpdateContainer liveUpdateContainer, int? minChildren = null)
+        {
+            CheckNull(liveUpdateContainer);
+            CheckNull(liveUpdateContainer.Data);
+            if (minChildren.HasValue)
+            {
+                CheckNull(liveUpdateContainer.Data.Children);
+                if (liveUpdateContainer.Data.Children.Count < minChildren.Value)
+                {
+                    throw new RedditControllerException("Expected number of results not returned.");
+                }
+            }
+
+            return liveUpdateContainer;
         }
 
         public RedditThings.SubredditSettingsContainer Validate(RedditThings.SubredditSettingsContainer subredditSettingsContainer)

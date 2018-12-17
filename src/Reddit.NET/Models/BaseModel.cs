@@ -53,9 +53,9 @@ namespace Reddit.NET.Models
             Requests = requests;
         }
 
-        private bool RequestReady()
+        internal bool RequestReady(int maxRequests = 60)
         {
-            if (Requests.Count < 60)
+            if (Requests.Count < maxRequests)
             {
                 return true;
             }
@@ -80,7 +80,7 @@ namespace Reddit.NET.Models
                 };
                 OnRequestsUpdated(args);
 
-                return (Requests.Count < 60);
+                return (Requests.Count < maxRequests);
             }
         }
 
@@ -201,6 +201,8 @@ namespace Reddit.NET.Models
                             new RedditServiceUnavailableException("Reddit API returned Service Unavailable (503) response."), res);
                     case HttpStatusCode.Unauthorized:
                         throw (RedditUnauthorizedException)BuildException(new RedditUnauthorizedException("Reddit API returned Unauthorized (401) response."), res);
+                    case HttpStatusCode.UnprocessableEntity:
+                        throw (RedditUnprocessableEntityException)BuildException(new RedditUnprocessableEntityException("Reddit API returned Unprocessable Entity (422) response."), res);
                 }
             }
             else

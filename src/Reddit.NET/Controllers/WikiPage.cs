@@ -1,7 +1,10 @@
 ﻿using Reddit.NET.Controllers.Structures;
+using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
@@ -17,8 +20,10 @@ namespace Reddit.NET.Controllers
         public string Name;
         public string Subreddit;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
+        public event EventHandler<WikiPageUpdateEventArgs> PageUpdated;
+
+        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         internal readonly Dispatch Dispatch;
 
@@ -79,7 +84,7 @@ namespace Reddit.NET.Controllers
         /// Asynchronously allow username to edit this wiki page.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
-        public async void AllowEditorAsync(string username)
+        public async Task AllowEditorAsync(string username)
         {
             await Task.Run(() =>
             {
@@ -100,12 +105,25 @@ namespace Reddit.NET.Controllers
         /// Asynchronously deny username to edit this wiki page.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
-        public async void DenyEditorAsync(string username)
+        public async Task DenyEditorAsync(string username)
         {
             await Task.Run(() =>
             {
                 DenyEditor(username);
             });
+        }
+
+        /// <summary>
+        /// Edit a wiki page and return an instance with the updated data.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="content">The page content</param>
+        /// <param name="previous">the starting point revision for this edit</param>
+        /// <returns>The updated WikiPage.</returns>
+        public WikiPage EditAndReturn(string reason, string content = null, string previous = "")
+        {
+            Edit(reason, content, previous);
+            return About();
         }
 
         /// <summary>
@@ -125,11 +143,45 @@ namespace Reddit.NET.Controllers
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="content">The page content</param>
         /// <param name="previous">the starting point revision for this edit</param>
-        public async void EditAsync(string reason, string content = null, string previous = "")
+        public async Task EditAsync(string reason, string content = null, string previous = "")
         {
             await Task.Run(() =>
             {
                 Edit(reason, content, previous);
+            });
+        }
+
+        /// <summary>
+        /// Create a new wiki page and return an instance with the updated data.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="content">The page content</param>
+        public WikiPage CreateAndReturn(string reason, string content = null)
+        {
+            Create(reason, content);
+            return new WikiPage(Dispatch, Dispatch.Wiki.Page(Name.ToLower(), "", "", Subreddit).Data, Subreddit, Name);
+        }
+
+        /// <summary>
+        /// Create a new wiki page.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="content">The page content</param>
+        public void Create(string reason, string content = null)
+        {
+            Dispatch.Wiki.Create(content, Name, reason, Subreddit);
+        }
+
+        /// <summary>
+        /// Create a new wiki page asynchronously.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="content">The page content</param>
+        public async Task CreateAsync(string reason, string content = null)
+        {
+            await Task.Run(() =>
+            {
+                Create(reason, content);
             });
         }
 
@@ -147,7 +199,7 @@ namespace Reddit.NET.Controllers
         /// Toggle the public visibility of a wiki page revision asynchronously.
         /// </summary>
         /// <param name="revision">a wiki revision ID</param>
-        public async void HideAsync(string revision)
+        public async Task HideAsync(string revision)
         {
             await Task.Run(() =>
             {
@@ -165,10 +217,21 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Revert a wiki page to revision and return an instance with the updated data.
+        /// </summary>
+        /// <param name="revision">a wiki revision ID</param>
+        /// <returns>The updated WikiPage.</returns>
+        public WikiPage RevertAndReturn(string revision)
+        {
+            Revert(revision);
+            return About();
+        }
+
+        /// <summary>
         /// Revert a wiki page to revision asynchronously.
         /// </summary>
         /// <param name="revision">a wiki revision ID</param>
-        public async void RevertAsync(string revision)
+        public async Task RevertAsync(string revision)
         {
             await Task.Run(() =>
             {
@@ -217,7 +280,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="listed">boolean value (true = appear in /wiki/pages, false = don't appear in /wiki/pages)</param>
         /// <param name="permLevel">an integer (0 = use wiki perms, 1 = only approved users may edit, 2 = only mods may edit or view)</param>
-        public async void UpdatePermissionsAsync(bool listed, int permLevel)
+        public async Task UpdatePermissionsAsync(bool listed, int permLevel)
         {
             await Task.Run(() =>
             {
@@ -239,7 +302,7 @@ namespace Reddit.NET.Controllers
         /// Update the permissions and visibility of wiki page asynchronously.
         /// </summary>
         /// <param name="wikiPageSettings">A valid instance of WikiPageSettings</param>
-        public async void UpdatePermissionsAsync(RedditThings.WikiPageSettings wikiPageSettings)
+        public async Task UpdatePermissionsAsync(RedditThings.WikiPageSettings wikiPageSettings)
         {
             await Task.Run(() =>
             {
@@ -254,9 +317,81 @@ namespace Reddit.NET.Controllers
         /// <param name="v">a wiki revision ID</param>
         /// <param name="v2">a wiki revision ID</param>
         /// <returns>An instance of this class populated with the retrieved data.</returns>
-        public WikiPage About(string v, string v2)
+        public WikiPage About(string v = "", string v2 = "")
         {
             return new WikiPage(Dispatch, ((RedditThings.WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, v, v2, Subreddit))).Data, Subreddit, Name);
+        }
+
+        internal virtual void OnPagesUpdated(WikiPageUpdateEventArgs e)
+        {
+            PageUpdated?.Invoke(this, e);
+        }
+
+        public bool MonitorPage()
+        {
+            string key = "WikiPage";
+            return Monitor(key, new Thread(() => MonitorPageThread(key)));
+        }
+
+        private bool Monitor(string key, Thread thread)
+        {
+            bool res = Monitor(key, thread, Name, out Thread newThread);
+
+            RebuildThreads();
+            LaunchThreadIfNotNull(key, newThread);
+
+            return res;
+        }
+
+        private void RebuildThreads()
+        {
+            List<string> oldThreads = new List<string>(Threads.Keys);
+            KillThreads(oldThreads);
+
+            int i = 0;
+            foreach (string key in oldThreads)
+            {
+                Threads.Add(key, CreateMonitoringThread(key, (i * MonitoringWaitDelayMS)));
+                i++;
+            }
+        }
+
+        private Thread CreateMonitoringThread(string key, int startDelayMs = 0)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "WikiPage":
+                    return new Thread(() => MonitorPageThread(key, startDelayMs));
+            }
+        }
+
+        private void MonitorPageThread(string key, int startDelayMs = 0)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(Name))
+            {
+                WikiPage newPage = About();
+
+                if (!newPage.RevisionDate.Equals(RevisionDate))
+                {
+                    // Event handler to alert the calling app that the list has changed.  --Kris
+                    WikiPageUpdateEventArgs args = new WikiPageUpdateEventArgs
+                    {
+                        NewPage = newPage, 
+                        OldPage = this
+                    };
+                    OnPagesUpdated(args);
+                }
+
+                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+            }
         }
     }
 }

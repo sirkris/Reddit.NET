@@ -28,6 +28,7 @@ namespace Reddit.NET.Controllers
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
         public PrivateMessages Messages;
+        public Modmail Modmail;
 
         public Dispatch Dispatch;
 
@@ -35,6 +36,7 @@ namespace Reddit.NET.Controllers
         {
             Dispatch = dispatch;
             Messages = new PrivateMessages(Dispatch);
+            Modmail = new Modmail(Dispatch);
         }
 
         /// <summary>
@@ -78,7 +80,7 @@ namespace Reddit.NET.Controllers
         /// Update preferences asynchronously.
         /// </summary>
         /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
-        public async void UpdatePrefsAsync(RedditThings.AccountPrefsSubmit accountPrefs)
+        public async Task UpdatePrefsAsync(RedditThings.AccountPrefsSubmit accountPrefs)
         {
             await Task.Run(() =>
             {
@@ -202,7 +204,7 @@ namespace Reddit.NET.Controllers
         /// Asynchronously stop being friends with a user.
         /// </summary>
         /// <param name="username">A valid, existing reddit username</param>
-        public async void DeleteFriendAsync(string username)
+        public async Task DeleteFriendAsync(string username)
         {
             await Task.Run(() =>
             {
@@ -246,7 +248,7 @@ namespace Reddit.NET.Controllers
         /// "name": A valid, existing reddit username
         /// "note": a string no longer than 300 characters
         /// }</param>
-        public async void UpdateFriendAsync(string username, string json = "{}")
+        public async Task UpdateFriendAsync(string username, string json = "{}")
         {
             await Task.Run(() =>
             {
@@ -359,6 +361,48 @@ namespace Reddit.NET.Controllers
         public RedditThings.ModmailUnreadCount ModmailUnreadCount()
         {
             return Validate(Dispatch.Modmail.UnreadCount());
+        }
+
+        /// <summary>
+        /// Accept a pending invitation to contribute to a live thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public void AcceptLiveThreadInvite(string thread)
+        {
+            Validate(Dispatch.LiveThreads.AcceptContributorInvite(thread));
+        }
+
+        /// <summary>
+        /// Asynchronously accept a pending invitation to contribute to a live thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public async Task AcceptLiveThreadInviteAsync(string thread)
+        {
+            await Task.Run(() =>
+            {
+                AcceptLiveThreadInvite(thread);
+            });
+        }
+
+        /// <summary>
+        /// Abdicate contributorship of the thread.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public void AbandonLiveThread(string thread)
+        {
+            Validate(Dispatch.LiveThreads.LeaveContributor(thread));
+        }
+
+        /// <summary>
+        /// Abdicate contributorship of the thread asynchronously.
+        /// </summary>
+        /// <param name="thread">id</param>
+        public async Task AbandonLiveThreadAsync(string thread)
+        {
+            await Task.Run(() =>
+            {
+                AbandonLiveThread(thread);
+            });
         }
     }
 }

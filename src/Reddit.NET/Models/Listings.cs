@@ -82,7 +82,7 @@ namespace Reddit.NET.Models
         public List<(PostContainer, CommentContainer)> GetComments(string article, int context, bool showEdits, bool showMore, string sort, bool threaded, int truncate,
             string subreddit = null, string comment = null, int? depth = null, int? limit = null, bool srDetail = false)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "comments/" + article);
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "comments/" + article + (!string.IsNullOrWhiteSpace(comment) ? "/_/" + comment : ""));
 
             restRequest.AddParameter("context", context);
             restRequest.AddParameter("showedits", showEdits);
@@ -212,6 +212,7 @@ namespace Reddit.NET.Models
         /// <returns>A random listing.</returns>
         public List<PostContainer> Random(string subreddit = null)
         {
+            string blah = ExecuteRequest(Sr(subreddit) + "random");
             return JsonConvert.DeserializeObject<List<PostContainer>>(ExecuteRequest(Sr(subreddit) + "random"));
         }
 

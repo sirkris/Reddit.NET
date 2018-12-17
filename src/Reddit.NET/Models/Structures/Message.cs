@@ -25,6 +25,8 @@ namespace Reddit.NET.Models.Structures
         [JsonProperty("id")]
         public string Id;
 
+        public string Fullname => "t4_" + Id;
+
         [JsonProperty("subject")]
         public string Subject;
 

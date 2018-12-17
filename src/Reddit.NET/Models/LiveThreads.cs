@@ -71,21 +71,19 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject(ExecuteRequest("api/live/happening_now"));
         }
 
-        // TODO - Needs testing.
-        // TODO - Find another Reddit account old enough and with enough karma to create a live event, then invite myself and test this.  --Kris
         /// <summary>
         /// Accept a pending invitation to contribute to the thread.
         /// See also: /api/live/thread/leave_contributor.
         /// </summary>
         /// <param name="thread">id</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object AcceptContributorInvite(string thread)
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer AcceptContributorInvite(string thread)
         {
             RestRequest restRequest = PrepareRequest("api/live/" + thread + "/accept_contributor_invite", Method.POST);
 
             restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -188,7 +186,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to unit tests.  --Kris
         /// <summary>
         /// Abdicate contributorship of the thread.
         /// See also: /api/live/thread/accept_contributor_invite, and /api/live/thread/invite_contributor.
@@ -221,7 +218,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Add to unit tests.  --Kris
         /// <summary>
         /// Revoke another user's contributorship.
         /// Requires the manage permission for this thread.

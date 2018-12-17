@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Newtonsoft.Json;
 using Reddit.NET;
 using Controllers = Reddit.NET.Controllers;
 using Reddit.NET.Models.Structures;
+using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,20 +28,27 @@ namespace Reddit.NETTests
 
         protected readonly Dictionary<string, string> testData;
         protected readonly RedditAPI reddit;
+        protected readonly RedditAPI reddit2;
 
         public BaseTests()
         {
             testData = GetData();
             reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+
+            try
+            {
+                reddit2 = new RedditAPI(testData["AppId"], testData["RefreshToken2"]);
+            }
+            catch (Exception) { }
         }
 
         public Dictionary<string, string> GetData()
         {
             // Begin .NET Core workaround.  --Kris
             string xmlData;
-            using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Reddit.NETTestsData.xml"))
+            using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("Reddit.NETTests.Reddit.NETTestsData.xml"))
             {
-                using (System.IO.StreamReader streamReader = new System.IO.StreamReader(stream))
+                using (StreamReader streamReader = new StreamReader(stream))
                 {
                     xmlData = streamReader.ReadToEnd();
                 }
@@ -52,6 +61,7 @@ namespace Reddit.NETTests
             {
                 { "AppId", xmlDocument.GetElementsByTagName("AppId")[0].InnerText },
                 { "RefreshToken", xmlDocument.GetElementsByTagName("RefreshToken")[0].InnerText },
+                { "RefreshToken2", xmlDocument.GetElementsByTagName("RefreshToken2")[0].InnerText },
                 { "Subreddit", xmlDocument.GetElementsByTagName("Subreddit")[0].InnerText }
             };
             // End .NET Core workaround.  --Kris
@@ -77,6 +87,23 @@ namespace Reddit.NETTests
             }
         }
 
+        public PostResultShortContainer TestPost()
+        {
+            return reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
+                    "link", false, true, null, true, false, testData["Subreddit"], "",
+                    "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
+        }
+
+        public CommentResultContainer TestComment(string parentFullname)
+        {
+            return reddit.Models.LinksAndComments.Comment(false, "", "This is a test comment.  So there.", parentFullname);
+        }
+
+        public CommentResultContainer TestCommentReply(string parentFullname)
+        {
+            return reddit.Models.LinksAndComments.Comment(false, "", "This is a reply to a test comment.", parentFullname);
+        }
+
         /// <summary>
         /// Retrieves your test subreddit.  It is assumed that the subreddit already exists at this point.
         /// </summary>
@@ -87,9 +114,64 @@ namespace Reddit.NETTests
             return subreddit;
         }
 
+        /// <summary>
+        /// Retrieves your secondary test user.
+        /// </summary>
+        /// <returns>The populated User data.</returns>
+        protected Controllers.User GetTargetUser()
+        {
+            return reddit2.Account.Me;
+        }
+
+        /// <summary>
+        /// Retrieves your secondary test user.
+        /// </summary>
+        /// <returns>The populated User model structure data.</returns>
+        protected User GetTargetUserModel()
+        {
+            return reddit2.Models.Account.Me();
+        }
+
+        protected void CheckBadRequest(string reason, string message, Exception ex)
+        {
+            BadRequest badRequest = null;
+            try
+            {
+                badRequest = JsonConvert.DeserializeObject<BadRequest>(((RestResponse)ex.Data["res"]).Content);
+            }
+            catch (Exception) { }
+
+            if (badRequest == null
+                || !badRequest.Reason.Equals(reason))
+            {
+                throw ex;
+            }
+            else
+            {
+                Assert.Inconclusive(message);
+            }
+        }
+
         public void Validate(dynamic dynamic)
         {
             Assert.IsNotNull(dynamic);
+        }
+
+        public Controllers.LiveThread Validate(Controllers.LiveThread liveThread)
+        {
+            Assert.IsNotNull(liveThread);
+            Assert.IsNotNull(liveThread.Id);
+
+            return liveThread;
+        }
+
+        public void Validate(ModmailConversationContainer modmailConversationContainer)
+        {
+            Assert.IsNotNull(modmailConversationContainer);
+            Assert.IsNotNull(modmailConversationContainer.Conversation);
+            Assert.IsFalse(modmailConversationContainer.Conversation.LastUpdated.Equals(default(DateTime)));
+            Assert.IsNotNull(modmailConversationContainer.Messages);
+            Assert.IsTrue(modmailConversationContainer.Messages.Count > 0);
         }
 
         public void Validate(User user)

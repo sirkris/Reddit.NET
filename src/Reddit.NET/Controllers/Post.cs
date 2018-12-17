@@ -52,22 +52,43 @@ namespace Reddit.NET.Controllers
 
         public Post(Dispatch dispatch, RedditThings.Post listing)
         {
-            Import(listing);
             Dispatch = dispatch;
+            Import(listing);
         }
 
-        public Post(Dispatch dispatch, string subreddit, string title, string author, string id = null, string name = null, string permalink = null,
+        public Post(Dispatch dispatch, string subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
-            Import(subreddit, title, author, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
             Dispatch = dispatch;
+            Import(subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
         }
 
-        public Post(Dispatch dispatch, string name)
+        public Post(Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
-            Fullname = name;
+            Fullname = fullname;
+        }
+
+        public Post(Dispatch dispatch, string fullname, Subreddit subreddit)
+        {
+            Dispatch = dispatch;
+            Fullname = fullname;
+            Subreddit = subreddit.Name;
+        }
+
+        public Post(Dispatch dispatch, Subreddit subreddit)
+        {
+            Dispatch = dispatch;
+            Subreddit = subreddit.Name;
+        }
+
+        public Post(Dispatch dispatch, Subreddit subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
+            DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
+            int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
+        {
+            Dispatch = dispatch;
+            Import(subreddit.Name, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
         }
 
         public Post(Dispatch dispatch)
@@ -101,7 +122,7 @@ namespace Reddit.NET.Controllers
             Listing = listing;
         }
 
-        internal void Import(string subreddit, string title, string author, string id = null, string name = null, string permalink = null,
+        internal void Import(string subreddit, string title, string author, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
@@ -109,7 +130,7 @@ namespace Reddit.NET.Controllers
             Title = title;
             Author = author;
             Id = id;
-            Fullname = name;
+            Fullname = fullname;
             Permalink = permalink;
             Created = created;
             Edited = edited;
@@ -123,14 +144,14 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
-        public Comment Comment(string author, string body, string bodyHtml = null,
+        public Comment Comment(string body, string bodyHtml = null, string author = null, 
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
             return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
-                depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
         public Comment Comment()
@@ -155,7 +176,43 @@ namespace Reddit.NET.Controllers
 
             return new Post(Dispatch, info.Posts[0]);
         }
-        
+
+        /// <summary>
+        /// Distinguish a post's author with a sigil.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a link of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish. depends on user.
+        /// </summary>
+        /// <param name="how">one of (yes, no, admin, special)</param>
+        /// <returns>The distinguished post object.</returns>
+        public Post Distinguish(string how)
+        {
+            return GetPosts(Validate(Dispatch.Moderation.DistinguishPost(how, Fullname)), Dispatch)[0];
+        }
+
+        /// <summary>
+        /// Remove this post from all subreddit listings.
+        /// </summary>
+        /// <param name="spam">boolean value</param>
+        public void Remove(bool spam = false)
+        {
+            Dispatch.Moderation.Remove(Fullname, spam);
+        }
+
+        /// <summary>
+        /// Asynchronously remove this post from all subreddit listings.
+        /// </summary>
+        public async Task RemoveAsync(bool spam = false)
+        {
+            await Task.Run(() =>
+            {
+                Remove(spam);
+            });
+        }
+
         /// <summary>
         /// Delete this post.
         /// </summary>
@@ -167,7 +224,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Delete this post asynchronously.
         /// </summary>
-        public async void DeleteAsync()
+        public async Task DeleteAsync()
         {
             await Task.Run(() =>
             {
@@ -188,7 +245,7 @@ namespace Reddit.NET.Controllers
         /// Hide this post asynchronously.
         /// This removes it from the user's default view of subreddit listings.
         /// </summary>
-        public async void HideAsync()
+        public async Task HideAsync()
         {
             await Task.Run(() =>
             {
@@ -209,7 +266,7 @@ namespace Reddit.NET.Controllers
         /// Lock this post asynchronously.
         /// Prevents a post from receiving new comments.
         /// </summary>
-        public async void LockAsync()
+        public async Task LockAsync()
         {
             await Task.Run(() =>
             {
@@ -228,7 +285,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Mark this post as NSFW asynchronously.
         /// </summary>
-        public async void MarkNSFWAsync()
+        public async Task MarkNSFWAsync()
         {
             await Task.Run(() =>
             {
@@ -288,7 +345,7 @@ namespace Reddit.NET.Controllers
         /// <param name="ruleReason">a string no longer than 100 characters</param>
         /// <param name="siteReason">a string no longer than 100 characters</param>
         /// <param name="violatorUsername">A valid Reddit username</param>
-        public async void ReportAsync(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
+        public async Task ReportAsync(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string violatorUsername)
         {
             await Task.Run(() =>
@@ -312,7 +369,7 @@ namespace Reddit.NET.Controllers
         /// Saved things are kept in the user's saved listing for later perusal.
         /// </summary>
         /// <param name="category">a category name</param>
-        public async void SaveAsync(string category)
+        public async Task SaveAsync(string category)
         {
             await Task.Run(() =>
             {
@@ -331,7 +388,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Enable inbox replies for this post asynchronously.
         /// </summary>
-        public async void EnableSendRepliesAsync()
+        public async Task EnableSendRepliesAsync()
         {
             await Task.Run(() =>
             {
@@ -350,7 +407,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Disable inbox replies for this post asynchronously.
         /// </summary>
-        public async void DisableSendRepliesAsync()
+        public async Task DisableSendRepliesAsync()
         {
             await Task.Run(() =>
             {
@@ -369,7 +426,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Enable contest mode for this post asynchronously.
         /// </summary>
-        public async void EnableContestModeAsync()
+        public async Task EnableContestModeAsync()
         {
             await Task.Run(() =>
             {
@@ -388,7 +445,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Disable contest mode for this post asynchronously.
         /// </summary>
-        public async void DisableContestModeAsync()
+        public async Task DisableContestModeAsync()
         {
             await Task.Run(() =>
             {
@@ -417,7 +474,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="num">an integer between 1 and 4</param>
         /// <param name="toProfile">boolean value</param>
-        public async void SetSubredditStickyAsync(int num, bool toProfile)
+        public async Task SetSubredditStickyAsync(int num, bool toProfile)
         {
             await Task.Run(() =>
             {
@@ -446,7 +503,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="num">an integer between 1 and 4</param>
         /// <param name="toProfile">boolean value</param>
-        public async void UnsetSubredditStickyAsync(int num, bool toProfile)
+        public async Task UnsetSubredditStickyAsync(int num, bool toProfile)
         {
             await Task.Run(() =>
             {
@@ -473,7 +530,7 @@ namespace Reddit.NET.Controllers
         /// A sort of an empty string clears the default sort.
         /// </summary>
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live, blank)</param>
-        public async void SetSuggestedSortAsync(string sort)
+        public async Task SetSuggestedSortAsync(string sort)
         {
             await Task.Run(() =>
             {
@@ -492,7 +549,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Mark this post as containing spoilers asynchronously.
         /// </summary>
-        public async void SpoilerAsync()
+        public async Task SpoilerAsync()
         {
             await Task.Run(() =>
             {
@@ -511,7 +568,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Unhide this post asynchronously.
         /// </summary>
-        public async void UnhideAsync()
+        public async Task UnhideAsync()
         {
             await Task.Run(() =>
             {
@@ -532,7 +589,7 @@ namespace Reddit.NET.Controllers
         /// Unlock this post asynchronously.
         /// Allows this post to receive new comments.
         /// </summary>
-        public async void UnlockAsync()
+        public async Task UnlockAsync()
         {
             await Task.Run(() =>
             {
@@ -551,7 +608,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove the NSFW marking from this post asynchronously.
         /// </summary>
-        public async void UnmarkNSFWAsync()
+        public async Task UnmarkNSFWAsync()
         {
             await Task.Run(() =>
             {
@@ -572,7 +629,7 @@ namespace Reddit.NET.Controllers
         /// Unsave this post asynchronously.
         /// This removes the thing from the user's saved listings as well.
         /// </summary>
-        public async void UnsaveAsync()
+        public async Task UnsaveAsync()
         {
             await Task.Run(() =>
             {
@@ -591,7 +648,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove spoiler asynchronously.
         /// </summary>
-        public async void UnspoilerAsync()
+        public async Task UnspoilerAsync()
         {
             await Task.Run(() =>
             {
@@ -599,7 +656,80 @@ namespace Reddit.NET.Controllers
             });
         }
 
-        // TODO - Add vote methods (up/down) once Model tested.  --Kris
+        /// <summary>
+        /// Upvote this post.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public void Upvote()
+        {
+            Dispatch.LinksAndComments.Vote(1, Fullname, 2);
+        }
+
+        /// <summary>
+        /// Upvote this post asynchronously.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public async Task UpvoteAsync()
+        {
+            await Task.Run(() =>
+            {
+                Upvote();
+            });
+        }
+
+        /// <summary>
+        /// Downvote this post.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public void Downvote()
+        {
+            Dispatch.LinksAndComments.Vote(-1, Fullname, 2);
+        }
+
+        /// <summary>
+        /// Downvote this post asynchronously.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public async Task DownvoteAsync()
+        {
+            await Task.Run(() =>
+            {
+                Downvote();
+            });
+        }
+
+        /// <summary>
+        /// Unvote this post.  This is equivalent to "un-voting" by clicking again on a highlighted arrow.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public void Unvote()
+        {
+            Dispatch.LinksAndComments.Vote(0, Fullname, 2);
+        }
+
+        /// <summary>
+        /// Unvote this post asynchronously.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public async Task UnvoteAsync()
+        {
+            await Task.Run(() =>
+            {
+                Unvote();
+            });
+        }
 
         /// <summary>
         /// Approve this post.

@@ -82,20 +82,5 @@ namespace Reddit.NETTests.ModelTests
 
             Assert.IsNotNull(css);
         }
-
-        // Requires existing subreddit with mod privilages.  --Kris
-        // TODO - Move this to workflow tests since it hits non-moderation endpoints.  --Kris
-        [TestMethod]
-        public void Approve()
-        {
-            Post post = reddit.Models.Listings.New(null, null, true, testData["Subreddit"]).Data.Children[0].Data;
-
-            reddit.Models.Moderation.Approve(post.Name);
-
-            post = reddit.Models.LinksAndComments.Info(post.Name).Posts[0];
-
-            Assert.IsNotNull(post);
-            Assert.IsTrue(post.Approved);
-        }
     }
 }

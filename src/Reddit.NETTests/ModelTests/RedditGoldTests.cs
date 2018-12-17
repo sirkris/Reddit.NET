@@ -6,7 +6,5 @@ namespace Reddit.NETTests.ModelTests
     public class RedditGoldTests : BaseTests
     {
         public RedditGoldTests() : base() { }
-
-
     }
 }

@@ -38,5 +38,7 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("id")]
         public string Id;
+
+        public string Fullname => "LiveUpdate_" + Id;
     }
 }

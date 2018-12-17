@@ -15,5 +15,7 @@ namespace Reddit.NET.Models.Structures
 
         [JsonProperty("name")]
         public string Name;
+
+        public string Fullname => "t2_" + Id;
     }
 }

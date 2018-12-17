@@ -187,6 +187,134 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Queue up marking all messages for a user as read.
+        /// This may take some time, and returns 202 to acknowledge acceptance of the request.
+        /// </summary>
+        /// <param name="filterTypes">A comma-separated list of items</param>
+        public void MarkAllRead(string filterTypes = "")
+        {
+            Dispatch.PrivateMessages.ReadAllMessages(filterTypes);
+        }
+
+        /// <summary>
+        /// Asynchronously queue up marking all messages for a user as read.
+        /// This may take some time, and returns 202 to acknowledge acceptance of the request.
+        /// </summary>
+        /// <param name="filterTypes">A comma-separated list of items</param>
+        public async Task MarkAllReadAsync(string filterTypes = "")
+        {
+            await Task.Run(() =>
+            {
+                MarkAllRead(filterTypes);
+            });
+        }
+
+        /// <summary>
+        /// Collapse a message.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public void CollapseMessage(string ids)
+        {
+            Dispatch.PrivateMessages.CollapseMessage(ids);
+        }
+
+        /// <summary>
+        /// Collapse a message asynchronously.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public async Task CollapseMessageAsync(string ids)
+        {
+            await Task.Run(() =>
+            {
+                CollapseMessage(ids);
+            });
+        }
+
+        /// <summary>
+        /// Delete messages from the recipient's view of their inbox.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public void DeleteMessage(string id)
+        {
+            Dispatch.PrivateMessages.DelMsg(id);
+        }
+
+        /// <summary>
+        /// Delete messages from the recipient's view of their inbox asynchronously.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public async Task DeleteMessageAsync(string id)
+        {
+            await Task.Run(() =>
+            {
+                DeleteMessage(id);
+            });
+        }
+
+        /// <summary>
+        /// Mark a message as read.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public void ReadMessage(string ids)
+        {
+            Dispatch.PrivateMessages.ReadMessage(ids);
+        }
+
+        /// <summary>
+        /// Mark a message as read asynchronously.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public async Task ReadMessageAsync(string ids)
+        {
+            await Task.Run(() =>
+            {
+                ReadMessage(ids);
+            });
+        }
+
+        /// <summary>
+        /// Uncollapse a message.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public void UncollapseMessage(string ids)
+        {
+            Dispatch.PrivateMessages.UncollapseMessage(ids);
+        }
+
+        /// <summary>
+        /// Uncollapse a message asynchronously.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public async Task UncollapseMessageAsync(string ids)
+        {
+            await Task.Run(() =>
+            {
+                UncollapseMessage(ids);
+            });
+        }
+
+        /// <summary>
+        /// Mark a message as unread.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public void UnreadMessage(string ids)
+        {
+            Dispatch.PrivateMessages.UnreadMessage(ids);
+        }
+
+        /// <summary>
+        /// Mark a message as unread asynchronously.
+        /// </summary>
+        /// <param name="ids">A comma-separated list of thing fullnames</param>
+        public async Task UnreadMessageAsync(string ids)
+        {
+            await Task.Run(() =>
+            {
+                UnreadMessage(ids);
+            });
+        }
+
+        /// <summary>
         /// Send a private message.
         /// </summary>
         /// <param name="to">the name of an existing user</param>
@@ -207,7 +335,7 @@ namespace Reddit.NET.Controllers
         /// <param name="text">raw markdown text</param>
         /// <param name="fromSr">subreddit name</param>
         /// <param name="gRecaptchaResponse"></param>
-        public async void ComposeAsync(string to, string subject, string text, string fromSr = "", string gRecaptchaResponse = "")
+        public async Task ComposeAsync(string to, string subject, string text, string fromSr = "", string gRecaptchaResponse = "")
         {
             await Task.Run(() =>
             {
@@ -215,17 +343,17 @@ namespace Reddit.NET.Controllers
             });
         }
 
-        internal virtual void OnInboxUpdated(MessagesUpdateEventArgs e)
+        protected virtual void OnInboxUpdated(MessagesUpdateEventArgs e)
         {
             InboxUpdated?.Invoke(this, e);
         }
 
-        internal virtual void OnUnreadUpdated(MessagesUpdateEventArgs e)
+        protected virtual void OnUnreadUpdated(MessagesUpdateEventArgs e)
         {
             UnreadUpdated?.Invoke(this, e);
         }
 
-        internal virtual void OnSentUpdated(MessagesUpdateEventArgs e)
+        protected virtual void OnSentUpdated(MessagesUpdateEventArgs e)
         {
             SentUpdated?.Invoke(this, e);
         }
@@ -263,7 +391,7 @@ namespace Reddit.NET.Controllers
             MonitorPrivateMessagesThread(key, "sent");
         }
 
-        internal void MonitorPrivateMessagesThread(string key, string type, int startDelayMs = 0)
+        private void MonitorPrivateMessagesThread(string key, string type, int startDelayMs = 0)
         {
             if (startDelayMs > 0)
             {
@@ -343,13 +471,13 @@ namespace Reddit.NET.Controllers
 
         internal void RebuildThreads()
         {
-            Dictionary<string, Thread> oldThreads = Threads;
+            List<string> oldThreads = new List<string>(Threads.Keys);
             KillThreads(oldThreads);
 
             int i = 0;
-            foreach (KeyValuePair<string, Thread> pair in oldThreads)
+            foreach (string key in oldThreads)
             {
-                Threads.Add(pair.Key, CreateMonitoringThread(pair.Key, "PrivateMessages", (i * MonitoringWaitDelayMS)));
+                Threads.Add(key, CreateMonitoringThread(key, "PrivateMessages", (i * MonitoringWaitDelayMS)));
                 i++;
             }
         }

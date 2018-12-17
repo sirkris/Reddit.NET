@@ -27,6 +27,7 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<UserActionResult>(ExecuteRequest(restRequest));
         }
 
+        // TODO - Specifying "friend" as type causes API to return 400 no matter what I try.  Did Reddit deprecate this??  --Kris
         /// <summary>
         /// Create a relationship between a user and another user or subreddit.
         /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
@@ -59,10 +60,11 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("ban_context", banContext);
             restRequest.AddParameter("ban_message", banMessage);
             restRequest.AddParameter("ban_reason", banReason);
-            restRequest.AddParameter("container", container);
             restRequest.AddParameter("duration", duration);
-            restRequest.AddParameter("name", name);
             restRequest.AddParameter("permissions", permissions);
+
+            restRequest.AddParameter("container", container);
+            restRequest.AddParameter("name", name);
             restRequest.AddParameter("type", type);
             restRequest.AddParameter("api_type", "json");
 
@@ -107,8 +109,6 @@ namespace Reddit.NET.Models
             return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
         }
 
-        // TODO - Needs testing.
-        // TODO - Requires subreddit with mod access for most types so will put them in controller tests.  --Kris
         /// <summary>
         /// Remove a relationship between a user and another user or subreddit.
         /// The user can either be passed in by name (nuser) or by fullname (iuser).
@@ -130,8 +130,7 @@ namespace Reddit.NET.Models
         /// <param name="name">the name of an existing user</param>
         /// <param name="type">one of (friend, enemy, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
         /// <param name="subreddit">A subreddit</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object Unfriend(string container, string id, string name, string type, string subreddit = null)
+        public void Unfriend(string container, string id, string name, string type, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/unfriend", Method.POST);
 
@@ -140,7 +139,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("name", name);
             restRequest.AddParameter("type", type);
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            ExecuteRequest(restRequest);
         }
 
         /// <summary>
@@ -301,7 +300,7 @@ namespace Reddit.NET.Models
             restRequest.AddParameter("count", count);
             restRequest.AddParameter("limit", limit);
             restRequest.AddParameter("sr_detail", srDetail);
-
+            string blah = ExecuteRequest(restRequest);
             return JsonConvert.DeserializeObject<CommentContainer>(ExecuteRequest(restRequest));
         }
     }

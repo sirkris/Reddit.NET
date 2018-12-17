@@ -196,43 +196,44 @@ namespace Reddit.NET.Controllers
             List<Comment> comments = GetComments(Post.Dispatch.Listings.GetComments(Post.Id, context, showEdits, showMore, sort, threaded, truncate, Post.Subreddit, Comment?.Id,
                 depth, limit, srDetail), Post.Dispatch);
 
+            List<Comment> replies = (Comment != null ? comments[0].Replies : comments);
             switch (sort)
             {
                 case "confidence":
                     ConfidenceLastUpdated = DateTime.Now;
-                    Confidence = comments;
+                    Confidence = replies;
                     break;
                 case "top":
                     TopLastUpdated = DateTime.Now;
-                    Top = comments;
+                    Top = replies;
                     break;
                 case "new":
                     NewLastUpdated = DateTime.Now;
-                    New = comments;
+                    New = replies;
                     break;
                 case "controversial":
                     ControversialLastUpdated = DateTime.Now;
-                    Controversial = comments;
+                    Controversial = replies;
                     break;
                 case "old":
                     OldLastUpdated = DateTime.Now;
-                    Old = comments;
+                    Old = replies;
                     break;
                 case "random":
                     RandomLastUpdated = DateTime.Now;
-                    Random = comments;
+                    Random = replies;
                     break;
                 case "qa":
                     QALastUpdated = DateTime.Now;
-                    QA = comments;
+                    QA = replies;
                     break;
                 case "live":
                     LiveLastUpdated = DateTime.Now;
-                    Live = comments;
+                    Live = replies;
                     break;
             }
 
-            return comments;
+            return replies;
         }
 
         public List<Comment> GetConfidence(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
@@ -290,12 +291,12 @@ namespace Reddit.NET.Controllers
         public bool MonitorConfidence()
         {
             string key = "ConfidenceComments";
-            return Monitor(key, new Thread(() => MonitorConfidenceThread(key)), SubKey, this);
+            return Monitor(key, new Thread(() => MonitorConfidenceThread(key)), SubKey);
         }
 
         private void MonitorConfidenceThread(string key)
         {
-            MonitorCommentsThread(Monitoring, this, key, "confidence", SubKey);
+            MonitorCommentsThread(Monitoring, key, "confidence", SubKey);
         }
 
         internal virtual void OnConfidenceUpdated(CommentsUpdateEventArgs e)
@@ -310,12 +311,12 @@ namespace Reddit.NET.Controllers
         public bool MonitorTop()
         {
             string key = "TopComments";
-            return Monitor(key, new Thread(() => MonitorTopThread(key)), SubKey, this);
+            return Monitor(key, new Thread(() => MonitorTopThread(key)), SubKey);
         }
 
         private void MonitorTopThread(string key)
         {
-            MonitorCommentsThread(Monitoring, this, key, "confidence", SubKey);
+            MonitorCommentsThread(Monitoring, key, "confidence", SubKey);
         }
 
         internal virtual void OnTopUpdated(CommentsUpdateEventArgs e)
@@ -330,12 +331,12 @@ namespace Reddit.NET.Controllers
         public bool MonitorNew()
         {
             string key = "NewComments";
-            return Monitor(key, new Thread(() => MonitorNewThread(key)), SubKey, this);
+            return Monitor(key, new Thread(() => MonitorNewThread(key)), SubKey);
         }
 
         private void MonitorNewThread(string key)
         {
-            MonitorCommentsThread(Monitoring, this, key, "new", SubKey);
+            MonitorCommentsThread(Monitoring, key, "new", SubKey);
         }
 
         internal virtual void OnNewUpdated(CommentsUpdateEventArgs e)
@@ -350,12 +351,12 @@ namespace Reddit.NET.Controllers
         public bool MonitorControversial()
         {
             string key = "ControversialComments";
-            return Monitor(key, new Thread(() => MonitorControversialThread(key)), SubKey, this);
+            return Monitor(key, new Thread(() => MonitorControversialThread(key)), SubKey);
         }
 
         private void MonitorControversialThread(string key)
         {
-            MonitorCommentsThread(Monitoring, this, key, "controversial", SubKey);
+            MonitorCommentsThread(Monitoring, key, "controversial", SubKey);
         }
 
         internal virtual void OnControversialUpdated(CommentsUpdateEventArgs e)
@@ -370,12 +371,12 @@ namespace Reddit.NET.Controllers
         public bool MonitorOld()
         {
             string key = "OldComments";
-            return Monitor(key, new Thread(() => MonitorOldThread(key)), SubKey, this);
+            return Monitor(key, new Thread(() => MonitorOldThread(key)), SubKey);
         }
 
         private void MonitorOldThread(string key)
         {
-            MonitorCommentsThread(Monitoring, this, key, "old", SubKey);
+            MonitorCommentsThread(Monitoring, key, "old", SubKey);
         }
 
         internal virtual void OnOldUpdated(CommentsUpdateEventArgs e)
@@ -390,12 +391,12 @@ namespace Reddit.NET.Controllers
         public bool MonitorRandom()
         {
             string key = "RandomComments";
-            return Monitor(key, new Thread(() => MonitorRandomThread(key)), SubKey, this);
+            return Monitor(key, new Thread(() => MonitorRandomThread(key)), SubKey);
         }
 
         private void MonitorRandomThread(string key)
         {
-            MonitorCommentsThread(Monitoring, this, key, "random", SubKey);
+            MonitorCommentsThread(Monitoring, key, "random", SubKey);
         }
 
         internal virtual void OnRandomUpdated(CommentsUpdateEventArgs e)
@@ -410,12 +411,12 @@ namespace Reddit.NET.Controllers
         public bool MonitorQA()
         {
             string key = "QAComments";
-            return Monitor(key, new Thread(() => MonitorQAThread(key)), SubKey, this);
+            return Monitor(key, new Thread(() => MonitorQAThread(key)), SubKey);
         }
 
         private void MonitorQAThread(string key)
         {
-            MonitorCommentsThread(Monitoring, this, key, "qa", SubKey);
+            MonitorCommentsThread(Monitoring, key, "qa", SubKey);
         }
 
         internal virtual void OnQAUpdated(CommentsUpdateEventArgs e)
@@ -430,17 +431,163 @@ namespace Reddit.NET.Controllers
         public bool MonitorLive()
         {
             string key = "LiveComments";
-            return Monitor(key, new Thread(() => MonitorLiveThread(key)), SubKey, this);
+            return Monitor(key, new Thread(() => MonitorLiveThread(key)), SubKey);
         }
 
         private void MonitorLiveThread(string key)
         {
-            MonitorCommentsThread(Monitoring, this, key, "live", SubKey);
+            MonitorCommentsThread(Monitoring, key, "live", SubKey);
         }
 
         internal virtual void OnLiveUpdated(CommentsUpdateEventArgs e)
         {
             LiveUpdated?.Invoke(this, e);
+        }
+
+        private void MonitorCommentsThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(subKey))
+            {
+                List<Comment> oldList;
+                List<Comment> newList;
+                switch (type)
+                {
+                    default:
+                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                    case "confidence":
+                        oldList = confidence;
+                        newList = GetConfidence();
+                        break;
+                    case "top":
+                        oldList = top;
+                        newList = GetTop();
+                        break;
+                    case "new":
+                        oldList = newComments;
+                        newList = GetNew();
+                        break;
+                    case "controversial":
+                        oldList = controversial;
+                        newList = GetControversial();
+                        break;
+                    case "old":
+                        oldList = old;
+                        newList = GetOld();
+                        break;
+                    case "random":
+                        oldList = random;
+                        newList = GetRandom();
+                        break;
+                    case "qa":
+                        oldList = qa;
+                        newList = GetQA();
+                        break;
+                    case "live":
+                        oldList = live;
+                        newList = GetLive();
+                        break;
+                }
+
+                if (ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
+                {
+                    // Event handler to alert the calling app that the list has changed.  --Kris
+                    CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
+                    {
+                        NewComments = newList,
+                        OldComments = oldList,
+                        Added = added,
+                        Removed = removed
+                    };
+                    TriggerUpdate(args, type);
+                }
+
+                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+            }
+        }
+
+        protected void TriggerUpdate(CommentsUpdateEventArgs args, string type)
+        {
+            switch (type)
+            {
+                case "confidence":
+                    OnConfidenceUpdated(args);
+                    break;
+                case "top":
+                    OnTopUpdated(args);
+                    break;
+                case "new":
+                    OnNewUpdated(args);
+                    break;
+                case "controversial":
+                    OnControversialUpdated(args);
+                    break;
+                case "old":
+                    OnOldUpdated(args);
+                    break;
+                case "random":
+                    OnRandomUpdated(args);
+                    break;
+                case "qa":
+                    OnQAUpdated(args);
+                    break;
+                case "live":
+                    OnLiveUpdated(args);
+                    break;
+            }
+        }
+
+        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "ConfidenceComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "confidence", SubKey, startDelayMs));
+                case "TopComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "top", SubKey, startDelayMs));
+                case "NewComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "new", SubKey, startDelayMs));
+                case "ControversialComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "controversial", SubKey, startDelayMs));
+                case "OldComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "old", SubKey, startDelayMs));
+                case "RandomComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "random", SubKey, startDelayMs));
+                case "QAComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "qa", SubKey, startDelayMs));
+                case "LiveComments":
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "live", SubKey, startDelayMs));
+            }
+        }
+
+        private bool Monitor(string key, Thread thread, string subKey)
+        {
+            bool res = Monitor(key, thread, subKey, out Thread newThread);
+
+            RebuildThreads();
+            LaunchThreadIfNotNull(key, newThread);
+
+            return res;
+        }
+
+        private void RebuildThreads()
+        {
+            List<string> oldThreads = new List<string>(Threads.Keys);
+            KillThreads(oldThreads);
+
+            int i = 0;
+            foreach (string key in oldThreads)
+            {
+                Threads.Add(key, CreateMonitoringThread(key, SubKey, (i * MonitoringWaitDelayMS)));
+                i++;
+            }
         }
     }
 }

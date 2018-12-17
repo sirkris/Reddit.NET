@@ -16,7 +16,18 @@ namespace Reddit.NET
             private set;
         }
 
-        public Account Account;
+        public Account Account
+        {
+            get
+            {
+                return account ?? GetAccount();
+            }
+            private set
+            {
+                account = value;
+            }
+        }
+        private Account account;
 
         public RedditAPI(string appId, string refreshToken, string accessToken = null)
         {
@@ -31,15 +42,27 @@ namespace Reddit.NET
             {
                 // Passing "null" instead of null forces the Reddit API to return a non-200 status code on auth failure, freeing us from having to parse the content string.  --Kris
                 Models = new Dispatch(appId, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
-
-                // Autoload the Account controller as a singleton.  --Kris
-                Account = new Account(Models);
             }
             else
             {
                 // TODO - Support for app-only authentication.  --Kris
                 throw new ArgumentException("Refresh token and access token can't both be empty.");
             }
+        }
+
+        private Account GetAccount()
+        {
+            Account = new Account(Models);
+            return Account;
+        }
+
+        /// <summary>
+        /// Wait until the requests queue is either empty or down to the specified number of remaining requests.
+        /// </summary>
+        /// <param name="waitUntilRequestsAt">The wait ends when the number of requests count goes down to less than or equal to this value</param>
+        public void WaitForRequestQueue(int waitUntilRequestsAt = 0)
+        {
+            while (!Models.Account.RequestReady((waitUntilRequestsAt + 1))) { }
         }
 
         public Comment Comment(RedditThings.Comment listing)
@@ -171,7 +194,35 @@ namespace Reddit.NET
             return new Post(Models);
         }
 
+        public LiveThread LiveThread(RedditThings.LiveUpdateEvent liveUpdateEvent)
+        {
+            return new LiveThread(Models, liveUpdateEvent);
+        }
+
+        public LiveThread LiveThread(LiveThread liveThread)
+        {
+            return new LiveThread(Models, liveThread);
+        }
+
+        public LiveThread LiveThread(string title = null, string description = null, bool nsfw = false, string resources = null,
+            string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
+            string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
+        {
+            return new LiveThread(Models, title, description, nsfw, resources, id, name, websocketUrl, announcementUrl, state,
+                icon, totalViews, viewerCount, created);
+        }
+
+        public LiveThread LiveThread(string id)
+        {
+            return new LiveThread(Models, id);
+        }
+
         public User User(RedditThings.User user)
+        {
+            return new User(Models, user);
+        }
+
+        public User User(User user)
         {
             return new User(Models, user);
         }
@@ -190,6 +241,11 @@ namespace Reddit.NET
             return new User(Models);
         }
 
+        public Subreddit Subreddit(Subreddit subreddit)
+        {
+            return new Subreddit(Models, subreddit);
+        }
+
         public Subreddit Subreddit(RedditThings.Subreddit subreddit)
         {
             return new Subreddit(Models, subreddit);
@@ -200,21 +256,17 @@ namespace Reddit.NET
             return new Subreddit(Models, subredditChild);
         }
 
-        public Subreddit Subreddit(string name, string title, string description, string sidebar,
+        public Subreddit Subreddit(string name, string title = "", string description = "", string sidebar = "",
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            string fullname = null)
         {
             return new Subreddit(Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
-                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
-        }
-
-        public Subreddit Subreddit(string name, string title = "", string description = "", string sidebar = "")
-        {
-            return new Subreddit(Models, name, title, description, sidebar);
+                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
         }
 
         public Subreddit Subreddit()

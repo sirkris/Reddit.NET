@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
@@ -110,9 +111,9 @@ namespace Reddit.NET.Controllers
         public Subreddit(Dispatch dispatch, RedditThings.Subreddit subreddit)
             : base()
         {
+            Dispatch = dispatch;
             ImportFromModel(subreddit);
 
-            Dispatch = dispatch;
             SubredditData = subreddit;
             Posts = new SubredditPosts(this);
             Flairs = new Flairs(this, Dispatch);
@@ -122,40 +123,39 @@ namespace Reddit.NET.Controllers
         public Subreddit(Dispatch dispatch, RedditThings.SubredditChild subredditChild)
             : base()
         {
+            Dispatch = dispatch;
             ImportFromModel(subredditChild.Data);
 
-            Dispatch = dispatch;
             SubredditData = subredditChild.Data;
             Posts = new SubredditPosts(this);
             Flairs = new Flairs(this, Dispatch);
             Wiki = new Wiki(Dispatch, Name);
         }
 
-        public Subreddit(Dispatch dispatch, string name, string title, string description, string sidebar,
+        public Subreddit(Dispatch dispatch, Subreddit subreddit)
+        {
+            Dispatch = dispatch;
+
+            Import(subreddit, true);
+
+            SubredditData = subreddit.SubredditData;
+        }
+
+        public Subreddit(Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "",
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            string fullname = null)
             : base()
         {
+            Dispatch = dispatch;
+
             SetValues(name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
-                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor);
+                suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
 
-            Dispatch = dispatch;
-            UpdateSubredditData();
-            Posts = new SubredditPosts(this);
-            Flairs = new Flairs(this, Dispatch);
-            Wiki = new Wiki(Dispatch, Name);
-        }
-
-        public Subreddit(Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "")
-            : base()
-        {
-            SetValues(name, title, description, sidebar);
-
-            Dispatch = dispatch;
             UpdateSubredditData();
             Posts = new SubredditPosts(this);
             Flairs = new Flairs(this, Dispatch);
@@ -239,7 +239,8 @@ namespace Reddit.NET.Controllers
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null)
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            string fullname = null)
         {
             Name = name;
             Title = title;
@@ -266,6 +267,7 @@ namespace Reddit.NET.Controllers
             IconImg = iconImage;
             PrimaryColor = primaryColor;
             KeyColor = keyColor;
+            Fullname = fullname;
         }
 
         /// <summary>
@@ -279,6 +281,72 @@ namespace Reddit.NET.Controllers
             return SubredditData;
         }
 
+        /// <summary>
+        /// Create a new LinkPost object attached to this subreddit.
+        /// </summary>
+        /// <returns>A new LinkPost object attached to this subreddit.</returns>
+        public LinkPost LinkPost(string title = null, string url = null, string author = null,
+            string thumbnail = null, int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
+            string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
+            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
+            bool removed = false, bool spam = false)
+        {
+            return new LinkPost(Dispatch, this, title, url, author, thumbnail, thumbnailHeight, thumbnailWidth, preview,
+                id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        /// <summary>
+        /// Create a new LinkPost object with the specified fullname attached to this subreddit.
+        /// </summary>
+        /// <param name="fullname">The fullname of an existing LinkPost.</param>
+        /// <returns>A new LinkPost object attached to this subreddit.</returns>
+        public LinkPost LinkPost(string fullname)
+        {
+            return new LinkPost(Dispatch, fullname, this);
+        }
+
+        /// <summary>
+        /// Create a new SelfPost object attached to this subreddit.
+        /// </summary>
+        /// <returns>A new SelfPost object attached to this subreddit.</returns>
+        public SelfPost SelfPost(string title = null, string selfText = null, string selfTextHtml = null, string author = null,
+            string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
+            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
+            bool removed = false, bool spam = false)
+        {
+            return new SelfPost(Dispatch, this, title, selfText, selfTextHtml, author, id, fullname, permalink, created, 
+                edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        /// <summary>
+        /// Create a new SelfPost object with the specified fullname attached to this subreddit.
+        /// </summary>
+        /// <param name="fullname">The fullname of an existing SelfPost.</param>
+        /// <returns>A new SelfPost object attached to this subreddit.</returns>
+        public SelfPost SelfPost(string fullname)
+        {
+            return new SelfPost(Dispatch, fullname, this);
+        }
+
+        /// <summary>
+        /// Create a new generic Post object attached to this subreddit.
+        /// </summary>
+        /// <returns>A new generic Post object attached to this subreddit.</returns>
+        public Post Post()
+        {
+            return new Post(Dispatch, this);
+        }
+
+        /// <summary>
+        /// Create a new generic Post object with the specified fullname attached to this subreddit.
+        /// </summary>
+        /// <param name="fullname">The fullname of an existing Post.</param>
+        /// <returns>A new generic Post object attached to this subreddit.</returns>
+        public Post Post(string fullname)
+        {
+            return new Post(Dispatch, fullname, this);
+        }
+
         // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();
         // Equivalent to:  Subreddit sub = reddit.Subreddit(reddit.Models.Subreddits.About("facepalm"));
         /// <summary>
@@ -288,6 +356,31 @@ namespace Reddit.NET.Controllers
         public Subreddit About()
         {
             return new Subreddit(Dispatch, Dispatch.Subreddits.About(Name));
+        }
+
+        /// <summary>
+        /// Accept an invite to moderate the specified subreddit.
+        /// The authenticated user must have been invited to moderate the subreddit by one of its current moderators.
+        /// </summary>
+        public void AcceptModeratorInvite()
+        {
+            Validate(Dispatch.Moderation.AcceptModeratorInvite(Name));
+        }
+
+        /// <summary>
+        /// Abdicate moderator status in a subreddit.
+        /// </summary>
+        public void LeaveModerator()
+        {
+            Dispatch.Moderation.LeaveModerator(Fullname);
+        }
+
+        /// <summary>
+        /// Abdicate approved submitter status in a subreddit.
+        /// </summary>
+        public void LeaveContributor()
+        {
+            Dispatch.Moderation.LeaveContributor(Fullname);
         }
 
         /// <summary>
@@ -413,7 +506,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="stylesheetContents">the new stylesheet content</param>
-        public async void UpdateStylesheetAsync(string reason, string stylesheetContents)
+        public async Task UpdateStylesheetAsync(string reason, string stylesheetContents)
         {
             await Task.Run(() =>
             {
@@ -434,7 +527,7 @@ namespace Reddit.NET.Controllers
         /// Subscribe to a subreddit asynchronously.
         /// </summary>
         /// <param name="skipInitialDefaults">boolean value</param>
-        public async void SubscribeAsync(bool skipInitialDefaults = false)
+        public async Task SubscribeAsync(bool skipInitialDefaults = false)
         {
             await Task.Run(() =>
             {
@@ -453,7 +546,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Unsubscribe from a subreddit asynchronously.
         /// </summary>
-        public async void UnsubscribeAsync()
+        public async Task UnsubscribeAsync()
         {
             await Task.Run(() =>
             {
@@ -472,7 +565,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove the subreddit's custom mobile banner asynchronously.
         /// </summary>
-        public async void DeleteBannerAsync()
+        public async Task DeleteBannerAsync()
         {
             await Task.Run(() =>
             {
@@ -492,7 +585,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove the subreddit's custom header image asynchronously.
         /// </summary>
-        public async void DeleteHeaderAsync()
+        public async Task DeleteHeaderAsync()
         {
             await Task.Run(() =>
             {
@@ -511,7 +604,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Remove the subreddit's custom mobile icon asynchronously.
         /// </summary>
-        public async void DeleteIconAsync()
+        public async Task DeleteIconAsync()
         {
             await Task.Run(() =>
             {
@@ -536,7 +629,7 @@ namespace Reddit.NET.Controllers
         /// If the image is currently referenced by the subreddit's stylesheet, that stylesheet will no longer validate and won't be editable until the image reference is removed.
         /// </summary>
         /// <param name="imgName">a valid subreddit image name</param>
-        public async void DeleteImgAsync(string imgName)
+        public async Task DeleteImgAsync(string imgName)
         {
             await Task.Run(() =>
             {
@@ -562,7 +655,7 @@ namespace Reddit.NET.Controllers
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgName">a valid subreddit image name</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async void UploadImgAsync(byte[] imgData, string imgName, string imgType = "png")
+        public async Task UploadImgAsync(byte[] imgData, string imgName, string imgType = "png")
         {
             await Task.Run(() =>
             {
@@ -586,7 +679,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async void UploadHeaderAsync(byte[] imgData, string imgType = "png")
+        public async Task UploadHeaderAsync(byte[] imgData, string imgType = "png")
         {
             await Task.Run(() =>
             {
@@ -610,7 +703,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async void UploadIconAsync(byte[] imgData, string imgType = "png")
+        public async Task UploadIconAsync(byte[] imgData, string imgType = "png")
         {
             await Task.Run(() =>
             {
@@ -634,7 +727,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async void UploadBannerAsync(byte[] imgData, string imgType = "png")
+        public async Task UploadBannerAsync(byte[] imgData, string imgType = "png")
         {
             await Task.Run(() =>
             {
@@ -731,7 +824,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="username">the name of an existing user</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
-        public async void ModeratorInviteAsync(string username, string permissions)
+        public async Task ModeratorInviteAsync(string username, string permissions)
         {
             await Task.Run(() =>
             {
@@ -756,7 +849,7 @@ namespace Reddit.NET.Controllers
         /// <param name="username">the name of an existing user</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
-        public async void SetUserPermissionsAsync(string username, string permissions, string type)
+        public async Task SetUserPermissionsAsync(string username, string permissions, string type)
         {
             await Task.Run(() =>
             {
@@ -1000,7 +1093,7 @@ namespace Reddit.NET.Controllers
         /// <param name="commentScoreHideMins">an integer between 0 and 1440 (default: 0)</param>
         /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
-        public async void UpdateAsync(bool manualUpdate = false, bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
+        public async Task UpdateAsync(bool manualUpdate = false, bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
             bool? allowTop = null, bool? allowVideos = null, bool? collapseDeletedComments = null, string description = null, bool? excludeBannedModqueue = null,
             bool? freeFormReports = null, string gRecaptchaResponse = null, string headerTitle = null, bool? hideAds = null, string keyColor = null, string lang = null,
             string linkType = null, string name = null, bool? originalContentTagEnabled = null, bool? over18 = null, string publicDescription = null, bool? showMedia = null,

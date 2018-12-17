@@ -29,6 +29,14 @@ namespace Reddit.NET.Controllers.Structures
         public List<string> QAComments;
         public List<string> LiveComments;
         public List<string> WikiPages;
+        public List<string> WikiPage;
+        public List<string> ModmailMessagesRecent;
+        public List<string> ModmailMessagesMod;
+        public List<string> ModmailMessagesUser;
+        public List<string> ModmailMessagesUnread;
+        public List<string> LiveThread;
+        public List<string> LiveThreadContributors;
+        public List<string> LiveThreadUpdates;
 
         public MonitoringSnapshot(List<string> bestPosts = null, List<string> hotPosts = null, List<string> newPosts = null, List<string> risingPosts = null, 
             List<string> topPosts = null, List<string> controversialPosts = null, List<string> modQueuePosts = null, List<string> modQueueReportsPosts = null, 
@@ -36,31 +44,41 @@ namespace Reddit.NET.Controllers.Structures
             List<string> privateMessagesInbox = null, List<string> privateMessagesUnread = null, List<string> privateMessagesSent = null, 
             List<string> confidenceComments = null, List<string> topComments = null, List<string> newComments = null, List<string> controversialComments = null, 
             List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null, 
-            List<string> wikiPages = null)
+            List<string> wikiPages = null, List<string> wikiPage = null, List<string> modmailMessagesRecent = null, List<string> modmailMessagesMod = null, 
+            List<string> modmailMessagesUser = null, List<string> modmailMessagesUnread = null, List<string> liveThread = null, List<string> liveThreadContributors = null, 
+            List<string> liveThreadUpdates = null)
         {
-            BestPosts = (bestPosts ?? new List<string>());
-            HotPosts = (hotPosts ?? new List<string>());
-            NewPosts = (newPosts ?? new List<string>());
-            RisingPosts = (risingPosts ?? new List<string>());
-            TopPosts = (topPosts ?? new List<string>());
-            ControversialPosts = (controversialPosts ?? new List<string>());
-            ModQueuePosts = (modQueuePosts ?? new List<string>());
-            ModQueueReportsPosts = (modQueueReportsPosts ?? new List<string>());
-            ModQueueSpamPosts = (modQueueSpamPosts ?? new List<string>());
-            ModQueueUnmoderatedPosts = (modQueueUnmoderatedPosts ?? new List<string>());
-            ModQueueEditedPosts = (modQueueEditedPosts ?? new List<string>());
-            PrivateMessagesInbox = (privateMessagesInbox ?? new List<string>());
-            PrivateMessagesUnread = (privateMessagesUnread ?? new List<string>());
-            PrivateMessagesSent = (privateMessagesSent ?? new List<string>());
-            ConfidenceComments = (confidenceComments ?? new List<string>());
-            TopComments = (topComments ?? new List<string>());
-            NewComments = (newComments ?? new List<string>());
-            ControversialComments = (controversialComments ?? new List<string>());
-            OldComments = (oldComments ?? new List<string>());
-            RandomComments = (randomComments ?? new List<string>());
-            QAComments = (qaComments ?? new List<string>());
-            LiveComments = (liveComments ?? new List<string>());
-            WikiPages = (wikiPages ?? new List<string>());
+            BestPosts = bestPosts ?? new List<string>();
+            HotPosts = hotPosts ?? new List<string>();
+            NewPosts = newPosts ?? new List<string>();
+            RisingPosts = risingPosts ?? new List<string>();
+            TopPosts = topPosts ?? new List<string>();
+            ControversialPosts = controversialPosts ?? new List<string>();
+            ModQueuePosts = modQueuePosts ?? new List<string>();
+            ModQueueReportsPosts = modQueueReportsPosts ?? new List<string>();
+            ModQueueSpamPosts = modQueueSpamPosts ?? new List<string>();
+            ModQueueUnmoderatedPosts = modQueueUnmoderatedPosts ?? new List<string>();
+            ModQueueEditedPosts = modQueueEditedPosts ?? new List<string>();
+            PrivateMessagesInbox = privateMessagesInbox ?? new List<string>();
+            PrivateMessagesUnread = privateMessagesUnread ?? new List<string>();
+            PrivateMessagesSent = privateMessagesSent ?? new List<string>();
+            ConfidenceComments = confidenceComments ?? new List<string>();
+            TopComments = topComments ?? new List<string>();
+            NewComments = newComments ?? new List<string>();
+            ControversialComments = controversialComments ?? new List<string>();
+            OldComments = oldComments ?? new List<string>();
+            RandomComments = randomComments ?? new List<string>();
+            QAComments = qaComments ?? new List<string>();
+            LiveComments = liveComments ?? new List<string>();
+            WikiPages = wikiPages ?? new List<string>();
+            WikiPage = wikiPage ?? new List<string>();
+            ModmailMessagesRecent = modmailMessagesRecent ?? new List<string>();
+            ModmailMessagesMod = modmailMessagesMod ?? new List<string>();
+            ModmailMessagesUser = modmailMessagesUser ?? new List<string>();
+            ModmailMessagesUnread = modmailMessagesUnread ?? new List<string>();
+            LiveThread = liveThread ?? new List<string>();
+            LiveThreadContributors = liveThreadContributors ?? new List<string>();
+            LiveThreadUpdates = liveThreadUpdates ?? new List<string>();
         }
 
         public ref List<string> Get(string key)
@@ -115,9 +133,25 @@ namespace Reddit.NET.Controllers.Structures
                     return ref LiveComments;
                 case "WikiPages":
                     return ref WikiPages;
+                case "WikiPage":
+                    return ref WikiPage;
+                case "ModmailMessagesRecent":
+                    return ref ModmailMessagesRecent;
+                case "ModmailMessagesMod":
+                    return ref ModmailMessagesMod;
+                case "ModmailMessagesUser":
+                    return ref ModmailMessagesUser;
+                case "ModmailMessagesUnread":
+                    return ref ModmailMessagesUnread;
+                case "LiveThread":
+                    return ref LiveThread;
+                case "LiveThreadContributors":
+                    return ref LiveThreadContributors;
+                case "LiveThreadUpdates":
+                    return ref LiveThreadUpdates;
             }
         }
-
+        
         public void Add(MonitoringSnapshot monitoringSnapshot)
         {
             if (monitoringSnapshot != null)
@@ -145,6 +179,14 @@ namespace Reddit.NET.Controllers.Structures
                 Add(monitoringSnapshot.QAComments, ref QAComments);
                 Add(monitoringSnapshot.LiveComments, ref LiveComments);
                 Add(monitoringSnapshot.WikiPages, ref WikiPages);
+                Add(monitoringSnapshot.WikiPage, ref WikiPage);
+                Add(monitoringSnapshot.ModmailMessagesRecent, ref ModmailMessagesRecent);
+                Add(monitoringSnapshot.ModmailMessagesMod, ref ModmailMessagesMod);
+                Add(monitoringSnapshot.ModmailMessagesUser, ref ModmailMessagesUser);
+                Add(monitoringSnapshot.ModmailMessagesUnread, ref ModmailMessagesUnread);
+                Add(monitoringSnapshot.LiveThread, ref LiveThread);
+                Add(monitoringSnapshot.LiveThreadContributors, ref LiveThreadContributors);
+                Add(monitoringSnapshot.LiveThreadUpdates, ref LiveThreadUpdates);
             }
         }
 
@@ -186,6 +228,14 @@ namespace Reddit.NET.Controllers.Structures
                 Remove(monitoringSnapshot.QAComments, ref QAComments);
                 Remove(monitoringSnapshot.LiveComments, ref LiveComments);
                 Remove(monitoringSnapshot.WikiPages, ref WikiPages);
+                Remove(monitoringSnapshot.WikiPage, ref WikiPage);
+                Remove(monitoringSnapshot.ModmailMessagesRecent, ref ModmailMessagesRecent);
+                Remove(monitoringSnapshot.ModmailMessagesMod, ref ModmailMessagesMod);
+                Remove(monitoringSnapshot.ModmailMessagesUser, ref ModmailMessagesUser);
+                Remove(monitoringSnapshot.ModmailMessagesUnread, ref ModmailMessagesUnread);
+                Remove(monitoringSnapshot.LiveThread, ref LiveThread);
+                Remove(monitoringSnapshot.LiveThreadContributors, ref LiveThreadContributors);
+                Remove(monitoringSnapshot.LiveThreadUpdates, ref LiveThreadUpdates);
             }
         }
 
@@ -222,8 +272,16 @@ namespace Reddit.NET.Controllers.Structures
                 + OldComments.Count
                 + RandomComments.Count
                 + QAComments.Count
-                + LiveComments.Count 
-                + WikiPages.Count);
+                + LiveComments.Count
+                + WikiPages.Count
+                + WikiPage.Count
+                + ModmailMessagesRecent.Count
+                + ModmailMessagesMod.Count
+                + ModmailMessagesUser.Count
+                + ModmailMessagesUnread.Count
+                + LiveThread.Count
+                + LiveThreadContributors.Count
+                + LiveThreadUpdates.Count);
         }
     }
 }

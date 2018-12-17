@@ -63,7 +63,7 @@ namespace Reddit.NET.Controllers
         }
         private Comments comments = null;
 
-        internal readonly Dispatch Dispatch;
+        private readonly Dispatch Dispatch;
 
         public Comment(Dispatch dispatch, RedditThings.Comment listing)
         {
@@ -73,19 +73,19 @@ namespace Reddit.NET.Controllers
         
         public Comment(Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null, 
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
             Dispatch = dispatch;
             Import(subreddit, author, body, bodyHtml, parentFullname, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
-                depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
-        public Comment(Dispatch dispatch, string name)
+        public Comment(Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
-            Fullname = name;
+            Fullname = fullname;
         }
 
         public Comment(Dispatch dispatch)
@@ -129,7 +129,7 @@ namespace Reddit.NET.Controllers
 
         private void Import(string subreddit, string author, string body, string bodyHtml,
             string parentFullname = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
@@ -146,7 +146,7 @@ namespace Reddit.NET.Controllers
             ScoreHidden = scoreHidden;
             Depth = depth;
             Id = id;
-            Fullname = name;
+            Fullname = fullname;
             Permalink = permalink;
             Created = created;
             Edited = edited;
@@ -191,11 +191,54 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Submit this comment to Reddit.
         /// </summary>
-        /// <param name="body">raw markdown text</param>
         /// <returns>An instance of this class populated with the return data.</returns>
-        public Comment Submit(string body)
+        public Comment Submit()
         {
-            return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, body, Fullname)).JSON.Data.Things[0].Data);
+            return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, Body, ParentFullname)).JSON.Data.Things[0].Data);
+        }
+
+        public Comment Reply(string body, string bodyHtml = null, string author = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            return BuildReply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).Submit();
+        }
+
+        public async Task ReplyAsync(string body, string bodyHtml = null, string author = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            await Task.Run(() =>
+            {
+                Reply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                    depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+            });
+        }
+
+        public Comment BuildReply(string body, string bodyHtml = null, string author = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+        }
+
+        /// <summary>
+        /// Submit this comment to Reddit asynchronously.
+        /// </summary>
+        public async Task SubmitAsync()
+        {
+            await Task.Run(() =>
+            {
+                Submit();
+            });
         }
 
         /// <summary>
@@ -217,6 +260,45 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Distinguish a comment's author with a sigil.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a comment of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish.depends on user.
+        /// The first time a top-level comment is moderator distinguished, the author of the link the comment is in reply to will get a notification in their inbox.
+        /// sticky is a boolean flag for comments, which will stick the distingushed comment to the top of all comments threads.
+        /// If a comment is marked sticky, it will override any other stickied comment for that link (as only one comment may be stickied at a time). Only top-level comments may be stickied.
+        /// </summary>
+        /// <param name="how">one of (yes, no, admin, special)</param>
+        /// <param name="sticky">boolean value</param>
+        /// <returns>The distinguished comment object.</returns>
+        public Comment Distinguish(string how, bool? sticky = null)
+        {
+            return GetComments(Validate(Dispatch.Moderation.DistinguishComment(how, Fullname, sticky)), Dispatch)[0];
+        }
+
+        /// <summary>
+        /// Redact and remove this comment from all subreddit comment listings.
+        /// </summary>
+        public void Remove(bool spam = false)
+        {
+            Dispatch.Moderation.Remove(Fullname, spam);
+        }
+
+        /// <summary>
+        /// Asynchronously redact and remove this comment from all subreddit comment listings.
+        /// </summary>
+        public async Task RemoveAsync(bool spam = false)
+        {
+            await Task.Run(() =>
+            {
+                Remove(spam);
+            });
+        }
+
+        /// <summary>
         /// Delete this comment.
         /// </summary>
         public void Delete()
@@ -227,7 +309,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Delete this comment asynchronously.
         /// </summary>
-        public async void DeleteAsync()
+        public async Task DeleteAsync()
         {
             await Task.Run(() =>
             {
@@ -266,7 +348,7 @@ namespace Reddit.NET.Controllers
         /// <param name="ruleReason">a string no longer than 100 characters</param>
         /// <param name="siteReason">a string no longer than 100 characters</param>
         /// <param name="violatorUsername">A valid Reddit username</param>
-        public async void ReportAsync(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
+        public async Task ReportAsync(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string violatorUsername)
         {
             await Task.Run(() =>
@@ -290,7 +372,7 @@ namespace Reddit.NET.Controllers
         /// Saved things are kept in the user's saved listing for later perusal.
         /// </summary>
         /// <param name="category">a category name</param>
-        public async void SaveAsync(string category)
+        public async Task SaveAsync(string category)
         {
             await Task.Run(() =>
             {
@@ -309,7 +391,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Enable inbox replies for this comment asynchronously.
         /// </summary>
-        public async void EnableSendRepliesAsync()
+        public async Task EnableSendRepliesAsync()
         {
             await Task.Run(() =>
             {
@@ -328,7 +410,7 @@ namespace Reddit.NET.Controllers
         /// <summary>
         /// Disable inbox replies for this comment asynchronously.
         /// </summary>
-        public async void DisableSendRepliesAsync()
+        public async Task DisableSendRepliesAsync()
         {
             await Task.Run(() =>
             {
@@ -349,7 +431,7 @@ namespace Reddit.NET.Controllers
         /// Unsave this comment asynchronously.
         /// This removes the thing from the user's saved listings as well.
         /// </summary>
-        public async void UnsaveAsync()
+        public async Task UnsaveAsync()
         {
             await Task.Run(() =>
             {
@@ -373,7 +455,7 @@ namespace Reddit.NET.Controllers
         /// Edit the body text of this comment asynchronously.  This instance will be automatically updated with the return data.
         /// </summary>
         /// <param name="text">raw markdown text</param>
-        public async void EditAsync(string text)
+        public async Task EditAsync(string text)
         {
             await Task.Run(() =>
             {
@@ -402,6 +484,79 @@ namespace Reddit.NET.Controllers
             return Validate(Dispatch.LinksAndComments.MoreChildren(Id, limitChildren, ParentFullname, sort, id));
         }
 
-        // TODO - Vote methods.  --Kris
+        /// <summary>
+        /// Upvote this comment.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public void Upvote()
+        {
+            Dispatch.LinksAndComments.Vote(1, Fullname, 2);
+        }
+
+        /// <summary>
+        /// Upvote this comment asynchronously.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public async Task UpvoteAsync()
+        {
+            await Task.Run(() =>
+            {
+                Upvote();
+            });
+        }
+
+        /// <summary>
+        /// Downvote this comment.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public void Downvote()
+        {
+            Dispatch.LinksAndComments.Vote(-1, Fullname, 2);
+        }
+
+        /// <summary>
+        /// Downvote this comment asynchronously.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public async Task DownvoteAsync()
+        {
+            await Task.Run(() =>
+            {
+                Downvote();
+            });
+        }
+
+        /// <summary>
+        /// Unvote this comment.  This is equivalent to "un-voting" by clicking again on a highlighted arrow.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public void Unvote()
+        {
+            Dispatch.LinksAndComments.Vote(0, Fullname, 2);
+        }
+
+        /// <summary>
+        /// Unvote this comment asynchronously.
+        /// Please note that votes must be cast by humans.  Automated bot-voting violates Reddit's rules.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the Reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        public async Task UnvoteAsync()
+        {
+            await Task.Run(() =>
+            {
+                Unvote();
+            });
+        }
     }
 }
