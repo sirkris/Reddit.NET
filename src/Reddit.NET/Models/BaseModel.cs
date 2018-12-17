@@ -53,9 +53,9 @@ namespace Reddit.NET.Models
             Requests = requests;
         }
 
-        private bool RequestReady()
+        internal bool RequestReady(int maxRequests = 60)
         {
-            if (Requests.Count < 60)
+            if (Requests.Count < maxRequests)
             {
                 return true;
             }
@@ -80,7 +80,7 @@ namespace Reddit.NET.Models
                 };
                 OnRequestsUpdated(args);
 
-                return (Requests.Count < 60);
+                return (Requests.Count < maxRequests);
             }
         }
 

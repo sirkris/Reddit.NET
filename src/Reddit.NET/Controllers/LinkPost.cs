@@ -80,7 +80,7 @@ namespace Reddit.NET.Controllers
         public LinkPost(Dispatch dispatch) : base(dispatch) { }
 
         /// <summary>
-        /// Submit this link post to Reddit.  This instance will automatically be updated with the resulting fullname/id.
+        /// Submit this link post to Reddit.
         /// </summary>
         /// <param name="resubmit">boolean value</param>
         /// <param name="ad">boolean value</param>

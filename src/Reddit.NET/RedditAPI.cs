@@ -16,7 +16,18 @@ namespace Reddit.NET
             private set;
         }
 
-        public Account Account;
+        public Account Account
+        {
+            get
+            {
+                return account ?? GetAccount();
+            }
+            private set
+            {
+                account = value;
+            }
+        }
+        private Account account;
 
         public RedditAPI(string appId, string refreshToken, string accessToken = null)
         {
@@ -31,15 +42,27 @@ namespace Reddit.NET
             {
                 // Passing "null" instead of null forces the Reddit API to return a non-200 status code on auth failure, freeing us from having to parse the content string.  --Kris
                 Models = new Dispatch(appId, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
-
-                // Autoload the Account controller as a singleton.  --Kris
-                Account = new Account(Models);
             }
             else
             {
                 // TODO - Support for app-only authentication.  --Kris
                 throw new ArgumentException("Refresh token and access token can't both be empty.");
             }
+        }
+
+        private Account GetAccount()
+        {
+            Account = new Account(Models);
+            return Account;
+        }
+
+        /// <summary>
+        /// Wait until the requests queue is either empty or down to the specified number of remaining requests.
+        /// </summary>
+        /// <param name="waitUntilRequestsAt">The wait ends when the number of requests count goes down to less than or equal to this value</param>
+        public void WaitForRequestQueue(int waitUntilRequestsAt = 0)
+        {
+            while (!Models.Account.RequestReady((waitUntilRequestsAt + 1))) { }
         }
 
         public Comment Comment(RedditThings.Comment listing)
