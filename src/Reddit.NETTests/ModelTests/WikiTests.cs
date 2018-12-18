@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.NET;
+using Reddit.NET.Exceptions;
 using Reddit.NET.Models.Structures;
 using RestSharp;
 using System.Collections.Generic;
@@ -60,8 +61,12 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Edit()
         {
-            // Creates a new page or edits an existing page.  --Kris
-            reddit.Models.Wiki.Edit("Lorem ipsum dolor sit amet, motherfucker.", "index", "", "Because I can.", testData["Subreddit"]);
+            // Creates the index page if it doesn't already exist.  The edit endpoint for existing pages is tested in the corresponding workflow tests.  --Kris
+            try
+            {
+                reddit.Models.Wiki.Edit("Lorem ipsum dolor sit amet, motherfucker.", "index", "", "Because I can.", testData["Subreddit"]);
+            }
+            catch (RedditConflictException) { }
         }
     }
 }
