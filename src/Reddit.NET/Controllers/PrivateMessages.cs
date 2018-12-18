@@ -478,6 +478,7 @@ namespace Reddit.NET.Controllers
             foreach (string key in oldThreads)
             {
                 Threads.Add(key, CreateMonitoringThread(key, "PrivateMessages", (i * MonitoringWaitDelayMS)));
+                Threads[key].Start();
                 i++;
             }
         }

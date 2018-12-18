@@ -36,9 +36,9 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
             // In my tests, it took roughly 3 seconds to loop through all those async calls, so 10 should be more than enough.  --Kris
             Assert.IsTrue(start.AddSeconds(10) > end);
 
-            // Wait a bit, then see if all the comments were added.  --Kris
+            // Wait a bit, then see if all the comments were added.  We won't rely on monitoring for this one.  --Kris
             start = DateTime.Now;
-            while (start.AddMinutes(2) > DateTime.Now) { }
+            while (start.AddMinutes(5) > DateTime.Now) { }
 
             Assert.AreEqual(60, SelfPost.Comments.New.Count);
         }
@@ -98,7 +98,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
             DateTime start = DateTime.Now;
             while ((NewPosts.Count < 60
                 || NewComments.Count < 600)
-                && start.AddMinutes(15) > DateTime.Now) { }
+                && start.AddMinutes(30) > DateTime.Now) { }
 
             Assert.IsTrue(NewPosts.Count >= 60);
             Assert.IsTrue(NewComments.Count >= 600);
