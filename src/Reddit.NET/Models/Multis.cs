@@ -88,7 +88,7 @@ namespace Reddit.NET.Models
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath, Method.DELETE);
 
             restRequest.AddParameter("expand_srs", expandSrs);
-
+            
             ExecuteRequest(restRequest);
         }
 
