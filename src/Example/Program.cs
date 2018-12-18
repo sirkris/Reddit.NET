@@ -16,10 +16,13 @@ using System.Linq;
 /// </summary>
 namespace Example
 {
+    /// <summary>
+    /// The main class for the example application.
+    /// </summary>
     class Program
     {
         /// <summary>
-        /// The main class for the example application.
+        /// The main method for the example application.
         /// </summary>
         /// <param name="args">If you're using the VS debugger, go to the Example project properties and
         /// enter your args in the "Application Arguments" field under "Debug" as you would in the CLI</param>
