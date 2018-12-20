@@ -494,7 +494,7 @@ namespace Reddit.NET.Controllers
                         newList = GetLive();
                         break;
                 }
-
+                
                 if (ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris

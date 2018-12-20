@@ -82,10 +82,11 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
 
             // Create 50 posts, each with 10 comments.  --Kris
             List<LinkPost> posts = new List<LinkPost>();
-            for (int i = 1; i <= 50; i++)
+            for (int i = 1; i <= 60; i++)
             {
                 posts.Add(LinkPost.Submit(resubmit: true));  // Add .About() after the Submit call if you want more than just the fullname/id of the new post.  --Kris
 
+                posts[i - 1].Comments.GetNew();
                 posts[i - 1].Comments.MonitorNew();
                 posts[i - 1].Comments.NewUpdated += C_NewCommentsUpdated;
 
@@ -96,14 +97,30 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
                 }
             }
 
-            // We're deliberately flooding it with requests here (550 total, plus monitoring), so it may take awhile for the test to complete.  --Kris
+            // We're deliberately flooding it with requests here (660 total, plus monitoring), so it may take awhile for the test to complete.  --Kris
             DateTime start = DateTime.Now;
-            while ((NewPosts.Count < 50
-                || NewComments.Count < 500)
+            while ((NewPosts.Count < 60
+                || NewComments.Count < 600)
                 && start.AddHours(1) > DateTime.Now) { }
 
-            Assert.IsTrue(NewPosts.Count >= 50);
-            Assert.IsTrue(NewComments.Count >= 500);
+            Assert.IsTrue(NewPosts.Count >= 60);
+
+            /*
+             * Occasionally, the Reddit API will correctly report the number of comments in a thread but omit one or more of those comments in the actual results, 
+             * even though those comments have not been deleted/etc.  This phenomenon also seems to occur in the web UI (confirmed in both old and redesign), which 
+             * means the problem must be on Reddit's end.  My guess is it's related to the heavy query load that this particular stress test generates.
+             * 
+             * On one such thread (https://www.reddit.com/r/RedditDotNETBot/comments/a7wlfp/stress_test_link_post), only 1 comment was missing, even though 
+             * Reddit reported 10 comments (as you can see, there are only 9 comments showing; the first one is missing).  All 9 of those comments appeared in the 
+             * thread within a couple minutes of one another.  That was about an hour ago and it's still only showing 9 of the 10 comments.  Same result on other sorts.  
+             * Waiting/refreshing the results had no effect.
+             * 
+             * If I'm right, there's nothing we can do on this end other than adjust the assertion to allow for a certain number of lost comments.  In every test I ran, 
+             * over 95% of the comments were able to be retrieved, so we'll allow for up to 10% loss.
+             * 
+             * --Kris
+             */
+            Assert.IsTrue(NewComments.Count >= 540);
         }
 
         private void C_NewPostsUpdated(object sender, PostsUpdateEventArgs e)
@@ -124,12 +141,6 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
                 if (!NewComments.ContainsKey(comment.Fullname))
                 {
                     NewComments.Add(comment.Fullname, comment);
-
-                    /*if (!NewCommentsByThread.ContainsKey(comment.Root.Fullname))
-                    {
-                        NewCommentsByThread.Add(comment.Root.Fullname, new List<Comment>());
-                    }
-                    NewCommentsByThread[comment.Root.Fullname].Add(comment);*/
                 }
             }
         }
