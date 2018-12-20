@@ -15,7 +15,7 @@ namespace Reddit.NET.Controllers
         public int? ThumbnailHeight;
         public int? ThumbnailWidth;
 
-        public LinkPost(Dispatch dispatch, Models.Structures.Post listing) : base(dispatch, listing)
+        public LinkPost(ref Dispatch dispatch, Models.Structures.Post listing) : base(ref dispatch, listing)
         {
             Preview = listing.Preview;
             URL = listing.URL;
@@ -24,12 +24,12 @@ namespace Reddit.NET.Controllers
             ThumbnailWidth = listing.ThumbnailWidth;
         }
 
-        public LinkPost(Dispatch dispatch, string subreddit, string title, string author, string url, string thumbnail = null,
+        public LinkPost(ref Dispatch dispatch, string subreddit, string title, string author, string url, string thumbnail = null,
             int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
             string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false, bool nsfw = false)
-            : base(dispatch, subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes,
+            : base(ref dispatch, subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes,
                   removed, spam, nsfw)
         {
             Preview = preview;
@@ -41,17 +41,17 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
-        public LinkPost(Dispatch dispatch, string fullname) : base(dispatch, fullname) { }
+        public LinkPost(ref Dispatch dispatch, string fullname) : base(ref dispatch, fullname) { }
 
-        public LinkPost(Dispatch dispatch, string fullname, Subreddit subreddit) : base(dispatch, fullname, subreddit) { }
+        public LinkPost(ref Dispatch dispatch, string fullname, Subreddit subreddit) : base(ref dispatch, fullname, subreddit) { }
 
-        public LinkPost(Dispatch dispatch, Subreddit subreddit) : base(dispatch, subreddit) { }
-        public LinkPost(Dispatch dispatch, Subreddit subreddit, string title = null, string url = null, string author = null, 
+        public LinkPost(ref Dispatch dispatch, Subreddit subreddit) : base(ref dispatch, subreddit) { }
+        public LinkPost(ref Dispatch dispatch, Subreddit subreddit, string title = null, string url = null, string author = null, 
             string thumbnail = null, int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
             string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
-            : base(dispatch, subreddit, title, author, id, fullname, permalink, created,
+            : base(ref dispatch, subreddit, title, author, id, fullname, permalink, created,
                 edited, score, upVotes, downVotes, removed, spam)
         {
             Preview = preview;
@@ -63,8 +63,8 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
-        public LinkPost(Dispatch dispatch, RedditThings.PostResultShortData postResultShortData, LinkPost linkPost)
-            : base(dispatch, linkPost.Subreddit, linkPost.Title, linkPost.Author, postResultShortData.Id, postResultShortData.Name,
+        public LinkPost(ref Dispatch dispatch, RedditThings.PostResultShortData postResultShortData, LinkPost linkPost)
+            : base(ref dispatch, linkPost.Subreddit, linkPost.Title, linkPost.Author, postResultShortData.Id, postResultShortData.Name,
                   linkPost.Permalink, linkPost.Created, linkPost.Edited, linkPost.Score, linkPost.UpVotes, linkPost.DownVotes,
                   linkPost.Removed, linkPost.Spam, linkPost.NSFW)
         {
@@ -77,7 +77,7 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
-        public LinkPost(Dispatch dispatch) : base(dispatch) { }
+        public LinkPost(ref Dispatch dispatch) : base(ref dispatch) { }
 
         /// <summary>
         /// Submit this link post to Reddit.
@@ -97,7 +97,7 @@ namespace Reddit.NET.Controllers
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
-            return new LinkPost(Dispatch, Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
+            return new LinkPost(ref Dispatch, Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
                 gRecapthaResponse, "link", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, null, Title, URL, videoPosterUrl)).JSON.Data, this);
         }
 
@@ -139,7 +139,7 @@ namespace Reddit.NET.Controllers
                 throw new RedditControllerException("Unable to retrieve post data.");
             }
 
-            return new LinkPost(Dispatch, info.Posts[0]);
+            return new LinkPost(ref Dispatch, info.Posts[0]);
         }
 
         /// <summary>

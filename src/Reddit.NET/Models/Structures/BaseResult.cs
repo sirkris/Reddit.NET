@@ -9,5 +9,8 @@ namespace Reddit.NET.Models.Structures
     {
         [JsonProperty("errors")]
         public List<List<string>> Errors;
+
+        [JsonProperty("ratelimit")]
+        public double Ratelimit;
     }
 }

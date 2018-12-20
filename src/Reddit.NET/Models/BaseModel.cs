@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace Reddit.NET.Models
 {
@@ -151,25 +153,49 @@ namespace Reddit.NET.Models
 
             restRequest.AddHeader("User-Agent", "Reddit.NET");
 
-            IRestResponse res = RestClient.Execute(restRequest);
-            int retry = 3;
-            while ((res == null || !res.IsSuccessful)
-                && RefreshToken != null
-                && res.StatusCode == HttpStatusCode.Unauthorized
-                && retry > 0)
+            bool ratelimited;
+            int ratelimitRetry = 100;
+            IRestResponse res;
+            do
             {
-                /*
-                 * If it fails and we have a refresh token, request a new access token and retry.
-                 * Note that this workflow will not work if you pass an empty access token, as the Reddit API will still return 200 on those requests.
-                 * Therefore, if you just want to get a new access token from refresh, pass an arbitrary string value instead of null.
-                 * 
-                 * --Kris
-                 */
-                restRequest = RefreshAccessToken(restRequest);
                 res = RestClient.Execute(restRequest);
-                
-                retry--;
-            }
+
+                // If we're not authenticated or the API doesn't respond, grab a new access token and retry.  --Kris
+                int retry = 5;
+                while ((res == null || !res.IsSuccessful)
+                    && RefreshToken != null
+                    && (res.StatusCode == HttpStatusCode.Unauthorized
+                        || res.StatusCode == 0)  // On rare occasion, a valid request will return a status code of 0, particularly if under heavy load.  --Kris
+                    && retry > 0)
+                {
+                    /*
+                     * If it fails and we have a refresh token, request a new access token and retry.
+                     * Note that this workflow will not work if you pass an empty access token, as the Reddit API will still return 200 on those requests.
+                     * Therefore, if you just want to get a new access token from refresh, pass an arbitrary string value instead of null.
+                     * 
+                     * --Kris
+                     */
+                    restRequest = RefreshAccessToken(restRequest);
+                    res = RestClient.Execute(restRequest);
+
+                    retry--;
+                }
+
+                // If we hit a ratelimit of less than a minute, wait the specified time then retry.  --Kris
+                ratelimited = false;
+                if (!string.IsNullOrWhiteSpace(res.Content)
+                    && res.Content.Contains("you are doing that too much. try again in ")
+                    && res.Content.Contains("\"errors\":")
+                    && res.Content.Contains("\"ratelimit\":")
+                    && (res.Content.Contains("seconds.") || res.Content.Contains("second.")))
+                {
+                    // Confirm the errors JSON and extract the wait time.  --Kris
+                    Thread.Sleep(GetRateLimit(res.Content));
+
+                    ratelimited = true;
+                    ratelimitRetry--;
+                }
+            } while (ratelimited && ratelimitRetry > 0);
 
             if (res == null)
             {
@@ -180,35 +206,50 @@ namespace Reddit.NET.Models
                 switch (res.StatusCode)
                 {
                     default:
-                        throw (RedditException)BuildException(new RedditException("Reddit API returned non-success response."), res);
-                    case HttpStatusCode.BadGateway:
-                        throw (RedditBadGatewayException)BuildException(new RedditBadGatewayException("Reddit API returned Bad Gateway (502) response."), res);
+                        throw (RedditException)BuildException(new RedditException("Reddit API returned non-success (" + res.StatusCode.ToString() + ") response."), res);
+                    case 0:
+                        throw (RedditException)BuildException(new RedditException("Reddit API failed to return a response."), res);
                     case HttpStatusCode.BadRequest:
                         throw (RedditBadRequestException)BuildException(new RedditBadRequestException("Reddit API returned Bad Request (400) response."), res);
-                    case HttpStatusCode.Conflict:
-                        throw (RedditConflictException)BuildException(new RedditConflictException("Reddit API returned Conflict (409) response."), res);
+                    case HttpStatusCode.Unauthorized:
+                        throw (RedditUnauthorizedException)BuildException(new RedditUnauthorizedException("Reddit API returned Unauthorized (401) response."), res);
                     case HttpStatusCode.Forbidden:
                         throw (RedditForbiddenException)BuildException(new RedditForbiddenException("Reddit API returned Forbidden (403) response."), res);
-                    case HttpStatusCode.GatewayTimeout:
-                        throw (RedditGatewayTimeoutException)BuildException(new RedditGatewayTimeoutException("Reddit API returned Gateway Timeout (504) response."), res);
+                    case HttpStatusCode.NotFound:
+                        throw (RedditNotFoundException)BuildException(new RedditNotFoundException("Reddit API returned Not Found (404) response."), res);
+                    case HttpStatusCode.Conflict:
+                        throw (RedditConflictException)BuildException(new RedditConflictException("Reddit API returned Conflict (409) response."), res);
+                    case HttpStatusCode.UnprocessableEntity:
+                        throw (RedditUnprocessableEntityException)BuildException(new RedditUnprocessableEntityException("Reddit API returned Unprocessable Entity (422) response."), res);
                     case HttpStatusCode.InternalServerError:
                         throw (RedditInternalServerErrorException)BuildException(
                             new RedditInternalServerErrorException("Reddit API returned Internal Server Error (500) response."), res);
-                    case HttpStatusCode.NotFound:
-                        throw (RedditNotFoundException)BuildException(new RedditNotFoundException("Reddit API returned Not Found (404) response."), res);
+                    case HttpStatusCode.BadGateway:
+                        throw (RedditBadGatewayException)BuildException(new RedditBadGatewayException("Reddit API returned Bad Gateway (502) response."), res);
                     case HttpStatusCode.ServiceUnavailable:
                         throw (RedditServiceUnavailableException)BuildException(
                             new RedditServiceUnavailableException("Reddit API returned Service Unavailable (503) response."), res);
-                    case HttpStatusCode.Unauthorized:
-                        throw (RedditUnauthorizedException)BuildException(new RedditUnauthorizedException("Reddit API returned Unauthorized (401) response."), res);
-                    case HttpStatusCode.UnprocessableEntity:
-                        throw (RedditUnprocessableEntityException)BuildException(new RedditUnprocessableEntityException("Reddit API returned Unprocessable Entity (422) response."), res);
+                    case HttpStatusCode.GatewayTimeout:
+                        throw (RedditGatewayTimeoutException)BuildException(new RedditGatewayTimeoutException("Reddit API returned Gateway Timeout (504) response."), res);
                 }
             }
             else
             {
                 return res.Content;
             }
+        }
+
+        private int GetRateLimit(string content)
+        {
+            int? res = null;
+
+            try
+            {
+                res = Convert.ToInt32(JsonConvert.DeserializeObject<Structures.GenericContainer>(content).JSON.Ratelimit * 1000);
+            }
+            catch (Exception) { }
+
+            return res ?? 60000;
         }
 
         private Exception BuildException(Exception ex, IRestResponse res)

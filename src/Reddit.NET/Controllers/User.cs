@@ -38,21 +38,21 @@ namespace Reddit.NET.Controllers
 
         public RedditThings.User UserData;
 
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public User(Dispatch dispatch, RedditThings.User user)
+        public User(ref Dispatch dispatch, RedditThings.User user)
         {
             Import(user);
             Dispatch = dispatch;
         }
 
-        public User(Dispatch dispatch, User user)
+        public User(ref Dispatch dispatch, User user)
         {
             Import(user);
             Dispatch = dispatch;
         }
 
-        public User(Dispatch dispatch, string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
+        public User(ref Dispatch dispatch, string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
@@ -63,7 +63,7 @@ namespace Reddit.NET.Controllers
             Dispatch = dispatch;
         }
 
-        public User(Dispatch dispatch)
+        public User(ref Dispatch dispatch)
         {
             Dispatch = dispatch;
         }
@@ -306,7 +306,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A user listing.</returns>
         public User About()
         {
-            return new User(Dispatch, ((RedditThings.UserChild)Validate(Dispatch.Users.About(Name))).Data);
+            return new User(ref Dispatch, ((RedditThings.UserChild)Validate(Dispatch.Users.About(Name))).Data);
         }
 
         /// <summary>

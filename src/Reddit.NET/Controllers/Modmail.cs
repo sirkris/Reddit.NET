@@ -111,9 +111,9 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
-        public Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public Modmail(Dispatch dispatch) : base()
+        public Modmail(ref Dispatch dispatch) : base()
         {
             Dispatch = dispatch;
         }
@@ -123,7 +123,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         private User GetMe()
         {
-            Me = new User(Dispatch, Dispatch.Account.Me());
+            Me = new User(ref Dispatch, Dispatch.Account.Me());
             return Me;
         }
 

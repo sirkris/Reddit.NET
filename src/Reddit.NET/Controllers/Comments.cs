@@ -29,7 +29,7 @@ namespace Reddit.NET.Controllers
         private DateTime? QALastUpdated;
         private DateTime? LiveLastUpdated;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref Post.Dispatch.Monitor;
+        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         public List<Comment> Confidence
@@ -143,12 +143,6 @@ namespace Reddit.NET.Controllers
             }
         }
         internal List<Comment> live;
-        
-        public Post Post
-        {
-            get;
-            private set;
-        }
 
         public Comment Comment
         {
@@ -158,10 +152,18 @@ namespace Reddit.NET.Controllers
 
         public string SubKey;
 
-        public Comments(Post post = null, Comment comment = null, List<Comment> confidence = null, List<Comment> top = null, List<Comment> newComments = null, List<Comment> controversial = null,
-            List<Comment> old = null, List<Comment> random = null, List<Comment> qa = null, List<Comment> live = null) 
+        private Dispatch Dispatch;
+        private string Subreddit;
+        private string PostId;
+
+        public Comments(ref Dispatch dispatch, string postId = null, string subreddit = null, Comment comment = null, List<Comment> confidence = null, List<Comment> top = null, 
+            List<Comment> newComments = null, List<Comment> controversial = null, List<Comment> old = null, List<Comment> random = null, List<Comment> qa = null, List<Comment> live = null) 
             : base()
         {
+            Dispatch = dispatch;
+            Subreddit = subreddit;
+            PostId = postId;
+
             Confidence = confidence ?? new List<Comment>();
             Top = top ?? new List<Comment>();
             New = newComments ?? new List<Comment>();
@@ -171,10 +173,9 @@ namespace Reddit.NET.Controllers
             QA = qa ?? new List<Comment>();
             Live = live ?? new List<Comment>();
 
-            Post = post;
             Comment = comment;
 
-            SubKey = (comment?.Fullname != null ? comment.Fullname : post.Fullname);
+            SubKey = (comment?.Fullname != null ? comment.Fullname : "t3_" + PostId);
         }
 
         /// <summary>
@@ -193,8 +194,8 @@ namespace Reddit.NET.Controllers
         public List<Comment> GetComments(string sort = "new", int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
-            List<Comment> comments = GetComments(Post.Dispatch.Listings.GetComments(Post.Id, context, showEdits, showMore, sort, threaded, truncate, Post.Subreddit, Comment?.Id,
-                depth, limit, srDetail), Post.Dispatch);
+            List<Comment> comments = GetComments(Dispatch.Listings.GetComments(PostId, context, showEdits, showMore, sort, threaded, truncate, Subreddit, Comment?.Id,
+                depth, limit, srDetail), Dispatch);
 
             List<Comment> replies = (Comment != null ? comments[0].Replies : comments);
             switch (sort)

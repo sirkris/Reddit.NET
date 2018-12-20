@@ -66,9 +66,9 @@ namespace Reddit.NET.Controllers
         private DateTime? UnreadLastUpdated;
         private DateTime? SentLastUpdated;
 
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public PrivateMessages(Dispatch dispatch, List<RedditThings.Message> inbox = null, List<RedditThings.Message> unread = null,
+        public PrivateMessages(ref Dispatch dispatch, List<RedditThings.Message> inbox = null, List<RedditThings.Message> unread = null,
             List<RedditThings.Message> sent = null) 
             : base()
         {

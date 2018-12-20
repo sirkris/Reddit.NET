@@ -63,15 +63,15 @@ namespace Reddit.NET.Controllers
         }
         private Comments comments = null;
 
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public Comment(Dispatch dispatch, RedditThings.Comment listing)
+        public Comment(ref Dispatch dispatch, RedditThings.Comment listing)
         {
             Dispatch = dispatch;
             Import(listing);
         }
         
-        public Comment(Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
+        public Comment(ref Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
@@ -82,20 +82,20 @@ namespace Reddit.NET.Controllers
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
-        public Comment(Dispatch dispatch, string fullname)
+        public Comment(ref Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
             Fullname = fullname;
         }
 
-        public Comment(Dispatch dispatch)
+        public Comment(ref Dispatch dispatch)
         {
             Dispatch = dispatch;
         }
 
         private Comments InitComments()
         {
-            Comments = new Comments(new Post(Dispatch, Root.Fullname).About(), this);
+            Comments = new Comments(ref Dispatch, Root.Id, Subreddit, this);
             return Comments;
         }
 
@@ -175,7 +175,7 @@ namespace Reddit.NET.Controllers
             } while (info != null && info.Comments != null && info.Comments.Count > 0
                 && !string.IsNullOrWhiteSpace(fullname) && !fullname.StartsWith("t3_"));
 
-            return new Post(Dispatch, fullname).About();
+            return new Post(ref Dispatch, fullname).About();
         }
 
         private string GetInfoPostOrCommentParentFullname(RedditThings.Info info)
@@ -194,7 +194,7 @@ namespace Reddit.NET.Controllers
         /// <returns>An instance of this class populated with the return data.</returns>
         public Comment Submit()
         {
-            return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, Body, ParentFullname)).JSON.Data.Things[0].Data);
+            return new Comment(ref Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, Body, ParentFullname)).JSON.Data.Things[0].Data);
         }
 
         public Comment Reply(string body, string bodyHtml = null, string author = null,
@@ -226,7 +226,7 @@ namespace Reddit.NET.Controllers
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return new Comment(ref Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -256,7 +256,7 @@ namespace Reddit.NET.Controllers
                 throw new RedditControllerException("Unable to retrieve comment data.");
             }
 
-            return new Comment(Dispatch, info.Comments[0]);
+            return new Comment(ref Dispatch, info.Comments[0]);
         }
 
         /// <summary>

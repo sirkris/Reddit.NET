@@ -32,11 +32,11 @@ namespace Reddit.NET.Controllers
 
         public Dispatch Dispatch;
 
-        public Account(Dispatch dispatch)
+        public Account(ref Dispatch dispatch)
         {
             Dispatch = dispatch;
-            Messages = new PrivateMessages(Dispatch);
-            Modmail = new Modmail(Dispatch);
+            Messages = new PrivateMessages(ref Dispatch);
+            Modmail = new Modmail(ref Dispatch);
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         public User GetMe()
         {
-            Me = new User(Dispatch, Dispatch.Account.Me());
+            Me = new User(ref Dispatch, Dispatch.Account.Me());
             return Me;
         }
 

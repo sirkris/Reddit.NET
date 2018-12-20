@@ -119,6 +119,9 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         [TestMethod]
         public void MonitorPage()
         {
+            // Initialize so the page will be different.  --Kris
+            Index.Edit("Initialization", "This page is about to be updated.", Index.Revisions()[0].Id);
+
             Index.MonitorPage();
             Index.PageUpdated += C_PageUpdated;
 

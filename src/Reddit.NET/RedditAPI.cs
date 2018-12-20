@@ -10,11 +10,7 @@ namespace Reddit.NET
 {
     public class RedditAPI
     {
-        public Dispatch Models
-        {
-            get;
-            private set;
-        }
+        public Dispatch Models;
 
         public Account Account
         {
@@ -52,7 +48,7 @@ namespace Reddit.NET
 
         private Account GetAccount()
         {
-            Account = new Account(Models);
+            Account = new Account(ref Models);
             return Account;
         }
 
@@ -67,7 +63,7 @@ namespace Reddit.NET
 
         public Comment Comment(RedditThings.Comment listing)
         {
-            return new Comment(Models, listing);
+            return new Comment(ref Models, listing);
         }
 
         public Comment Comment(string subreddit, string author, string body, string parentId, string bodyHtml = null,
@@ -76,23 +72,23 @@ namespace Reddit.NET
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(Models, subreddit, author, body, bodyHtml, parentId, collapsedReason, collapsed, isSubmitter,
+            return new Comment(ref Models, subreddit, author, body, bodyHtml, parentId, collapsedReason, collapsed, isSubmitter,
                 replies, scoreHidden, depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
         public Comment Comment(string name)
         {
-            return new Comment(Models, name);
+            return new Comment(ref Models, name);
         }
 
         public Comment Comment()
         {
-            return new Comment(Models);
+            return new Comment(ref Models);
         }
 
         public LinkPost LinkPost(RedditThings.Post listing)
         {
-            return new LinkPost(Models, listing);
+            return new LinkPost(ref Models, listing);
         }
 
         public LinkPost LinkPost(string subreddit, string title, string author, string url, string thumbnail = null,
@@ -101,23 +97,23 @@ namespace Reddit.NET
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new LinkPost(Models, subreddit, title, author, url, thumbnail, thumbnailHeight, thumbnailWidth, preview,
+            return new LinkPost(ref Models, subreddit, title, author, url, thumbnail, thumbnailHeight, thumbnailWidth, preview,
                 id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
         public LinkPost LinkPost(string name)
         {
-            return new LinkPost(Models, name);
+            return new LinkPost(ref Models, name);
         }
 
         public LinkPost LinkPost()
         {
-            return new LinkPost(Models);
+            return new LinkPost(ref Models);
         }
 
         public SelfPost SelfPost(RedditThings.Post listing)
         {
-            return new SelfPost(Models, listing);
+            return new SelfPost(ref Models, listing);
         }
 
         /// <summary>
@@ -144,18 +140,18 @@ namespace Reddit.NET
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new SelfPost(Models, subreddit, title, author, selfText, selfTextHtml, id, name, permalink, created,
+            return new SelfPost(ref Models, subreddit, title, author, selfText, selfTextHtml, id, name, permalink, created,
                 edited, score, upVotes, downVotes, removed, spam);
         }
 
         public SelfPost SelfPost(string name)
         {
-            return new SelfPost(Models, name);
+            return new SelfPost(ref Models, name);
         }
 
         public SelfPost SelfPost()
         {
-            return new SelfPost(Models);
+            return new SelfPost(ref Models);
         }
 
         /// <summary>
@@ -180,51 +176,51 @@ namespace Reddit.NET
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new Post(Models, subreddit, title, author, id, name, permalink, created,
+            return new Post(ref Models, subreddit, title, author, id, name, permalink, created,
                 edited, score, upVotes, downVotes, removed, spam);
         }
 
         public Post Post(string name)
         {
-            return new Post(Models, name);
+            return new Post(ref Models, name);
         }
 
         public Post Post()
         {
-            return new Post(Models);
+            return new Post(ref Models);
         }
 
         public LiveThread LiveThread(RedditThings.LiveUpdateEvent liveUpdateEvent)
         {
-            return new LiveThread(Models, liveUpdateEvent);
+            return new LiveThread(ref Models, liveUpdateEvent);
         }
 
         public LiveThread LiveThread(LiveThread liveThread)
         {
-            return new LiveThread(Models, liveThread);
+            return new LiveThread(ref Models, liveThread);
         }
 
         public LiveThread LiveThread(string title = null, string description = null, bool nsfw = false, string resources = null,
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
         {
-            return new LiveThread(Models, title, description, nsfw, resources, id, name, websocketUrl, announcementUrl, state,
+            return new LiveThread(ref Models, title, description, nsfw, resources, id, name, websocketUrl, announcementUrl, state,
                 icon, totalViews, viewerCount, created);
         }
 
         public LiveThread LiveThread(string id)
         {
-            return new LiveThread(Models, id);
+            return new LiveThread(ref Models, id);
         }
 
         public User User(RedditThings.User user)
         {
-            return new User(Models, user);
+            return new User(ref Models, user);
         }
 
         public User User(User user)
         {
-            return new User(Models, user);
+            return new User(ref Models, user);
         }
 
         public User User(string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
@@ -232,28 +228,28 @@ namespace Reddit.NET
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
         {
-            return new User(Models, name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
+            return new User(ref Models, name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
                 hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
         }
 
         public User User()
         {
-            return new User(Models);
+            return new User(ref Models);
         }
 
         public Subreddit Subreddit(Subreddit subreddit)
         {
-            return new Subreddit(Models, subreddit);
+            return new Subreddit(ref Models, subreddit);
         }
 
         public Subreddit Subreddit(RedditThings.Subreddit subreddit)
         {
-            return new Subreddit(Models, subreddit);
+            return new Subreddit(ref Models, subreddit);
         }
 
         public Subreddit Subreddit(RedditThings.SubredditChild subredditChild)
         {
-            return new Subreddit(Models, subredditChild);
+            return new Subreddit(ref Models, subredditChild);
         }
 
         public Subreddit Subreddit(string name, string title = "", string description = "", string sidebar = "",
@@ -264,14 +260,14 @@ namespace Reddit.NET
             int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
             string fullname = null)
         {
-            return new Subreddit(Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
+            return new Subreddit(ref Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
         }
 
         public Subreddit Subreddit()
         {
-            return new Subreddit(Models);
+            return new Subreddit(ref Models);
         }
 
         /// <summary>

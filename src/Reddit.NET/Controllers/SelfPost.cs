@@ -15,7 +15,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="listing">Listing returned by Reddit API.</param>
-        public SelfPost(Dispatch dispatch, RedditThings.Post listing) : base(dispatch, listing)
+        public SelfPost(ref Dispatch dispatch, RedditThings.Post listing) : base(ref dispatch, listing)
         {
             SelfText = listing.SelfText;
             SelfTextHTML = listing.SelfTextHTML;
@@ -40,11 +40,11 @@ namespace Reddit.NET.Controllers
         /// <param name="downVotes">Number of downvotes.</param>
         /// <param name="removed">Whether the post was removed.</param>
         /// <param name="spam">Whether the post was marked as spam.</param>
-        public SelfPost(Dispatch dispatch, string subreddit, string title, string author, string selfText, string selfTextHtml,
+        public SelfPost(ref Dispatch dispatch, string subreddit, string title, string author, string selfText, string selfTextHtml,
             string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
-            : base(dispatch, subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes,
+            : base(ref dispatch, subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes,
                   removed, spam)
         {
             SelfText = selfText;
@@ -59,7 +59,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="fullname">fullname of a thing</param>
-        public SelfPost(Dispatch dispatch, string fullname) : base(dispatch, fullname) { }
+        public SelfPost(ref Dispatch dispatch, string fullname) : base(ref dispatch, fullname) { }
 
         /// <summary>
         /// Create a new SelfPost instance populated with its Fullname and Subreddit.
@@ -67,14 +67,14 @@ namespace Reddit.NET.Controllers
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="fullname">fullname of a thing</param>
         /// <param name="subreddit">The subreddit where the post exists</param>
-        public SelfPost(Dispatch dispatch, string fullname, Subreddit subreddit) : base(dispatch, fullname, subreddit) { }
+        public SelfPost(ref Dispatch dispatch, string fullname, Subreddit subreddit) : base(ref dispatch, fullname, subreddit) { }
 
         /// <summary>
         /// Create a new SelfPost instance populated only with its Subreddit.
         /// </summary>
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="subreddit">The subreddit where the post exists</param>
-        public SelfPost(Dispatch dispatch, Subreddit subreddit) : base(dispatch, subreddit) { }
+        public SelfPost(ref Dispatch dispatch, Subreddit subreddit) : base(ref dispatch, subreddit) { }
 
         /// <summary>
         /// Create a new SelfPost instance populated with its Subreddit and other specified values.
@@ -95,10 +95,10 @@ namespace Reddit.NET.Controllers
         /// <param name="downVotes">Number of downvotes.</param>
         /// <param name="removed">Whether the post was removed.</param>
         /// <param name="spam">Whether the post was marked as spam.</param>
-        public SelfPost(Dispatch dispatch, Subreddit subreddit, string title = null, string selfText = null, string selfTextHtml = null, 
+        public SelfPost(ref Dispatch dispatch, Subreddit subreddit, string title = null, string selfText = null, string selfTextHtml = null, 
             string author = null, string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
-            : base(dispatch, subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam)
+            : base(ref dispatch, subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam)
         {
             SelfText = selfText;
             SelfTextHTML = selfTextHtml;
@@ -112,8 +112,8 @@ namespace Reddit.NET.Controllers
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="postResultShortData">Data returned by the Reddit API when creating a new post</param>
         /// <param name="selfPost">The SelfPost instance that executed the submission</param>
-        public SelfPost(Dispatch dispatch, RedditThings.PostResultShortData postResultShortData, SelfPost selfPost)
-            : base(dispatch, selfPost.Subreddit, selfPost.Title, selfPost.Author, postResultShortData.Id, postResultShortData.Name,
+        public SelfPost(ref Dispatch dispatch, RedditThings.PostResultShortData postResultShortData, SelfPost selfPost)
+            : base(ref dispatch, selfPost.Subreddit, selfPost.Title, selfPost.Author, postResultShortData.Id, postResultShortData.Name,
                   selfPost.Permalink, selfPost.Created, selfPost.Edited, selfPost.Score, selfPost.UpVotes, selfPost.DownVotes,
                   selfPost.Removed, selfPost.Spam, selfPost.NSFW)
         {
@@ -127,7 +127,7 @@ namespace Reddit.NET.Controllers
         /// Create an empty SelfPost instance.
         /// </summary>
         /// <param name="dispatch">An instance of the Dispatch controller</param>
-        public SelfPost(Dispatch dispatch) : base(dispatch) { }
+        public SelfPost(ref Dispatch dispatch) : base(ref dispatch) { }
 
         /// <summary>
         /// Submit this self post to Reddit.
@@ -146,7 +146,7 @@ namespace Reddit.NET.Controllers
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
-            return new SelfPost(Dispatch, Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
+            return new SelfPost(ref Dispatch, Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
                 gRecapthaResponse, "self", NSFW, false, null, sendReplies, spoiler, Subreddit, SelfText, Title, null, videoPosterUrl)).JSON.Data, this);
         }
 
@@ -211,7 +211,7 @@ namespace Reddit.NET.Controllers
                 throw new RedditControllerException("Unable to retrieve post data.");
             }
 
-            return new SelfPost(Dispatch, info.Posts[0]);
+            return new SelfPost(ref Dispatch, info.Posts[0]);
         }
     }
 }

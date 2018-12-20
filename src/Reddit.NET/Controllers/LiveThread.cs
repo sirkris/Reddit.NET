@@ -67,9 +67,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.UserListContainer> contributors;
         private DateTime? ContributorsLastUpdated;
 
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public LiveThread(Dispatch dispatch, LiveThread liveThread)
+        public LiveThread(ref Dispatch dispatch, LiveThread liveThread)
         {
             Dispatch = dispatch;
 
@@ -80,7 +80,7 @@ namespace Reddit.NET.Controllers
             EventData = liveThread.EventData;
         }
 
-        public LiveThread(Dispatch dispatch, RedditThings.LiveUpdateEvent liveUpdateEvent)
+        public LiveThread(ref Dispatch dispatch, RedditThings.LiveUpdateEvent liveUpdateEvent)
         {
             Dispatch = dispatch;
 
@@ -91,7 +91,7 @@ namespace Reddit.NET.Controllers
             EventData = liveUpdateEvent;
         }
 
-        public LiveThread(Dispatch dispatch, string title = null, string description = null, bool nsfw = false, string resources = null,
+        public LiveThread(ref Dispatch dispatch, string title = null, string description = null, bool nsfw = false, string resources = null,
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
         {
@@ -102,7 +102,7 @@ namespace Reddit.NET.Controllers
             EventData = new RedditThings.LiveUpdateEvent(this);
         }
 
-        public LiveThread(Dispatch dispatch, string id)
+        public LiveThread(ref Dispatch dispatch, string id)
         {
             Dispatch = dispatch;
             Id = id;
@@ -133,7 +133,7 @@ namespace Reddit.NET.Controllers
         /// <returns>An instance of this class populated with the returned data.</returns>
         public LiveThread About()
         {
-            return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.About(Id)).Data);
+            return new LiveThread(ref Dispatch, Validate(Dispatch.LiveThreads.About(Id)).Data);
         }
 
         /// <summary>
@@ -163,35 +163,7 @@ namespace Reddit.NET.Controllers
         /// <returns>An instance of this class populated with data from the new live thread.</returns>
         public LiveThread Create(string title = null, string description = null, bool? nsfw = null, string resources = null, bool retry = true)
         {
-            try
-            {
-                return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.Create(description ?? Description, nsfw ?? NSFW, resources ?? Resources, title ?? Title)).JSON.Data.Id).About();
-            }
-            catch (RedditRateLimitException ex)
-            {
-                List<string> errors = ((List<List<string>>)ex.Data["errors"])[0];
-
-                // TODO - Move this to where it'll work for all endpoints.  --Kris
-                // If the wait time is in seconds (i.e. less than a minute), just go ahead and wait then retry.  --Kris
-                int waitSeconds = 0;
-                if (errors[1].StartsWith("you are doing that too much. try again in ")
-                    && errors[1].EndsWith("seconds."))
-                {
-                    waitSeconds = Convert.ToInt32(Regex.Match(errors[1], @"\d+").Value);
-                }
-
-                if (retry
-                    && waitSeconds > 0
-                    && waitSeconds < 60)
-                {
-                    Thread.Sleep(waitSeconds * 1000);
-                    return Create(title, description, nsfw, resources, false);
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
+            return new LiveThread(ref Dispatch, Validate(Dispatch.LiveThreads.Create(description ?? Description, nsfw ?? NSFW, resources ?? Resources, title ?? Title)).JSON.Data.Id).About();
         }
 
         /// <summary>

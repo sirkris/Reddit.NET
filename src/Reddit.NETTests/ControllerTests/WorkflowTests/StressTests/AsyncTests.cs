@@ -17,10 +17,12 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
         {
             NewPosts = new Dictionary<string, LinkPost>();
             NewComments = new Dictionary<string, Comment>();
+            NewCommentsByThread = new Dictionary<string, List<Comment>>();
         }
 
         private Dictionary<string, LinkPost> NewPosts;
         private Dictionary<string, Comment> NewComments;
+        private Dictionary<string, List<Comment>> NewCommentsByThread;
 
         [TestMethod]
         public void Timing()
@@ -78,9 +80,9 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
             Subreddit.Posts.MonitorNew();
             Subreddit.Posts.NewUpdated += C_NewPostsUpdated;
 
-            // Create 60 posts, each with 10 comments.  --Kris
+            // Create 50 posts, each with 10 comments.  --Kris
             List<LinkPost> posts = new List<LinkPost>();
-            for (int i = 1; i <= 60; i++)
+            for (int i = 1; i <= 50; i++)
             {
                 posts.Add(LinkPost.Submit(resubmit: true));  // Add .About() after the Submit call if you want more than just the fullname/id of the new post.  --Kris
 
@@ -94,14 +96,14 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
                 }
             }
 
-            // We're deliberately flooding it with requests here (660 total, plus monitoring), so it may take awhile for the test to complete.  --Kris
+            // We're deliberately flooding it with requests here (550 total, plus monitoring), so it may take awhile for the test to complete.  --Kris
             DateTime start = DateTime.Now;
-            while ((NewPosts.Count < 60
-                || NewComments.Count < 600)
-                && start.AddMinutes(30) > DateTime.Now) { }
+            while ((NewPosts.Count < 50
+                || NewComments.Count < 500)
+                && start.AddHours(1) > DateTime.Now) { }
 
-            Assert.IsTrue(NewPosts.Count >= 60);
-            Assert.IsTrue(NewComments.Count >= 600);
+            Assert.IsTrue(NewPosts.Count >= 50);
+            Assert.IsTrue(NewComments.Count >= 500);
         }
 
         private void C_NewPostsUpdated(object sender, PostsUpdateEventArgs e)
@@ -122,6 +124,12 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
                 if (!NewComments.ContainsKey(comment.Fullname))
                 {
                     NewComments.Add(comment.Fullname, comment);
+
+                    /*if (!NewCommentsByThread.ContainsKey(comment.Root.Fullname))
+                    {
+                        NewCommentsByThread.Add(comment.Root.Fullname, new List<Comment>());
+                    }
+                    NewCommentsByThread[comment.Root.Fullname].Add(comment);*/
                 }
             }
         }

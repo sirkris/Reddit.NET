@@ -34,9 +34,9 @@ namespace Reddit.NET.Controllers
         private DateTime? PagesLastUpdated;
 
         private readonly string Subreddit;
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public Wiki(Dispatch dispatch, string subreddit)
+        public Wiki(ref Dispatch dispatch, string subreddit)
         {
             Dispatch = dispatch;
             Subreddit = subreddit;
@@ -67,7 +67,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new instance of the WikiPage controller.</returns>
         public WikiPage Page(string pageName, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd)
         {
-            return new WikiPage(Dispatch, mayRevise, revisionDate, contentHtml, revisionBy, contentMd, Subreddit, pageName);
+            return new WikiPage(ref Dispatch, mayRevise, revisionDate, contentHtml, revisionBy, contentMd, Subreddit, pageName);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new instance of the WikiPage controller.</returns>
         public WikiPage Page(string pageName, RedditThings.WikiPage wikiPage)
         {
-            return new WikiPage(Dispatch, wikiPage, Subreddit, pageName);
+            return new WikiPage(ref Dispatch, wikiPage, Subreddit, pageName);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new instance of the WikiPage controller.</returns>
         public WikiPage Page(string pageName)
         {
-            return new WikiPage(Dispatch, Subreddit, pageName);
+            return new WikiPage(ref Dispatch, Subreddit, pageName);
         }
 
         /// <summary>

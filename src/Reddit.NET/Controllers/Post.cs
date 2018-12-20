@@ -48,15 +48,15 @@ namespace Reddit.NET.Controllers
         }
         private Comments comments = null;
 
-        internal readonly Dispatch Dispatch;
+        internal Dispatch Dispatch;
 
-        public Post(Dispatch dispatch, RedditThings.Post listing)
+        public Post(ref Dispatch dispatch, RedditThings.Post listing)
         {
             Dispatch = dispatch;
             Import(listing);
         }
 
-        public Post(Dispatch dispatch, string subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
+        public Post(ref Dispatch dispatch, string subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
@@ -64,26 +64,26 @@ namespace Reddit.NET.Controllers
             Import(subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
         }
 
-        public Post(Dispatch dispatch, string fullname)
+        public Post(ref Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
             Fullname = fullname;
         }
 
-        public Post(Dispatch dispatch, string fullname, Subreddit subreddit)
+        public Post(ref Dispatch dispatch, string fullname, Subreddit subreddit)
         {
             Dispatch = dispatch;
             Fullname = fullname;
             Subreddit = subreddit.Name;
         }
 
-        public Post(Dispatch dispatch, Subreddit subreddit)
+        public Post(ref Dispatch dispatch, Subreddit subreddit)
         {
             Dispatch = dispatch;
             Subreddit = subreddit.Name;
         }
 
-        public Post(Dispatch dispatch, Subreddit subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
+        public Post(ref Dispatch dispatch, Subreddit subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
@@ -91,14 +91,14 @@ namespace Reddit.NET.Controllers
             Import(subreddit.Name, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
         }
 
-        public Post(Dispatch dispatch)
+        public Post(ref Dispatch dispatch)
         {
             Dispatch = dispatch;
         }
 
         private Comments InitComments()
         {
-            Comments = new Comments(this);
+            Comments = new Comments(ref Dispatch, Id, Subreddit);
             return Comments;
         }
 
@@ -150,13 +150,13 @@ namespace Reddit.NET.Controllers
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return new Comment(ref Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
         public Comment Comment()
         {
-            return new Comment(Dispatch, Subreddit, null, null, Fullname);
+            return new Comment(ref Dispatch, Subreddit, null, null, Fullname);
         }
 
         /// <summary>
@@ -174,7 +174,7 @@ namespace Reddit.NET.Controllers
                 throw new RedditControllerException("Unable to retrieve post data.");
             }
 
-            return new Post(Dispatch, info.Posts[0]);
+            return new Post(ref Dispatch, info.Posts[0]);
         }
 
         /// <summary>

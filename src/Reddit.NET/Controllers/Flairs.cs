@@ -92,7 +92,7 @@ namespace Reddit.NET.Controllers
         private readonly Subreddit Subreddit;
         private readonly Dispatch Dispatch;
 
-        public Flairs(Subreddit subreddit, Dispatch dispatch) : base()
+        public Flairs(Subreddit subreddit, ref Dispatch dispatch) : base()
         {
             Subreddit = subreddit;
             Dispatch = dispatch;
