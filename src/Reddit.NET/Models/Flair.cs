@@ -9,7 +9,8 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Flair(string appId, string refreshToken, string accessToken, ref RestClient restClient) : base(appId, refreshToken, accessToken, ref restClient) { }
+        public Flair(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
 
         /// <summary>
         /// Clear flair templates.

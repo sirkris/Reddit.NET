@@ -25,7 +25,7 @@ namespace Reddit.NET
         }
         private Account account;
 
-        public RedditAPI(string appId, string refreshToken, string accessToken = null)
+        public RedditAPI(string appId, string refreshToken = null, string accessToken = null)
         {
             /*
              * If refreshToken is supplied, the lib will automatically request a new access token when the current one expires (or if none was passed).
@@ -41,9 +41,27 @@ namespace Reddit.NET
             }
             else
             {
-                // TODO - Support for app-only authentication.  --Kris
-                throw new ArgumentException("Refresh token and access token can't both be empty.");
+                // App-only authentication.  --Kris
+                Models = new Dispatch(appId, null, null, new RestClient("https://oauth.reddit.com"), GenerateDeviceId());
             }
+        }
+
+        /// <summary>
+        /// Generates a unique Device ID required for app-only authentication.
+        /// </summary>
+        /// <returns>A random alphanumeric string of 30 characters.</returns>
+        private string GenerateDeviceId()
+        {
+            string salt = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";
+            Random rand = new Random();
+
+            char[] res = new char[30];
+            for (int i = 0; i < res.Length; i++)
+            {
+                res[i] = salt[rand.Next(res.Length)];
+            }
+
+            return new string(res);
         }
 
         private Account GetAccount()

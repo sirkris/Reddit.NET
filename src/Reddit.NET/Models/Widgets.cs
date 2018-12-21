@@ -9,7 +9,8 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Widgets(string appId, string refreshToken, string accessToken, ref RestClient restClient) : base(appId, refreshToken, accessToken, ref restClient) { }
+        public Widgets(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
 
         /// <summary>
         /// Add and return a widget to the specified subreddit.

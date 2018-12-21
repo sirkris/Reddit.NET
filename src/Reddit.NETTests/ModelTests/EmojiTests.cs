@@ -15,7 +15,7 @@ namespace Reddit.NETTests.ModelTests
         {
             SnoomojiContainer snoomojiContainer = reddit.Models.Emoji.All("WayOfTheBern");
 
-            Assert.IsNotNull(snoomojiContainer);
+            Validate(snoomojiContainer);
         }
     }
 }

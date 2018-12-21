@@ -18,6 +18,7 @@ namespace Reddit.NET.Models
         private readonly string AppId;
         internal string AccessToken;
         private readonly string RefreshToken;
+        private readonly string DeviceId;
 
         private List<DateTime> Requests;
 
@@ -26,12 +27,13 @@ namespace Reddit.NET.Models
         public event EventHandler<TokenUpdateEventArgs> TokenUpdated;
         public event EventHandler<RequestsUpdateEventArgs> RequestsUpdated;
 
-        public BaseModel(string appId, string refreshToken, string accessToken, ref RestClient restClient)
+        public BaseModel(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
         {
             AppId = appId;
             AccessToken = accessToken;
             RefreshToken = refreshToken;
             RestClient = restClient;
+            DeviceId = deviceId;
             Requests = new List<DateTime>();
         }
 
@@ -163,7 +165,7 @@ namespace Reddit.NET.Models
                 // If we're not authenticated or the API doesn't respond, grab a new access token and retry.  --Kris
                 int retry = 5;
                 while ((res == null || !res.IsSuccessful)
-                    && RefreshToken != null
+                    && (RefreshToken != null || DeviceId != null)
                     && (res.StatusCode == HttpStatusCode.Unauthorized  // This is returned if the access token needs to be refreshed or wasn't provided.  --Kris
                         || res.StatusCode == HttpStatusCode.InternalServerError  // On rare occasion, a valid request will return a status code of 500, particularly if under heavy load.  --Kris
                         || res.StatusCode == 0)  // On rare occasion, a valid request will return a status code of 0, particularly if under heavy load.  --Kris
@@ -180,6 +182,22 @@ namespace Reddit.NET.Models
                     res = RestClient.Execute(restRequest);
 
                     retry--;
+                }
+
+                // If we're using app-only authentication, handle any responses prompting for user login.  --Kris
+                if (!string.IsNullOrWhiteSpace(res.Content)
+                    && res.Content.Contains("Please log in to do that.")
+                    && res.Content.Contains("\"errors\":")
+                    && res.Content.Contains("USER_REQUIRED"))
+                {
+                    Structures.GenericContainer resObj = GetGenericResponse(res.Content);
+                    if (resObj != null
+                        && resObj.JSON != null
+                        && resObj.JSON.Errors != null
+                        && resObj.JSON.Errors.Count > 0)
+                    {
+                        throw new RedditUserRequiredException("This endpoint requires an authenticated user.");
+                    }
                 }
 
                 // If we hit a ratelimit of less than a minute, wait the specified time then retry.  --Kris
@@ -253,6 +271,19 @@ namespace Reddit.NET.Models
             return res ?? 60000;
         }
 
+        private Structures.GenericContainer GetGenericResponse(string content)
+        {
+            Structures.GenericContainer res = null;
+
+            try
+            {
+                res = JsonConvert.DeserializeObject<Structures.GenericContainer>(content);
+            }
+            catch (Exception) { }
+
+            return res;
+        }
+
         private Exception BuildException(Exception ex, IRestResponse res)
         {
             ex.Data.Add("StatusCode", res.StatusCode);
@@ -270,8 +301,20 @@ namespace Reddit.NET.Models
             keyReq.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(AppId + ":")));
             keyReq.AddHeader("Content-Type", "application/x-www-form-urlencoded");
 
-            keyReq.AddParameter("grant_type", "refresh_token");
-            keyReq.AddParameter("refresh_token", RefreshToken);
+            if (!string.IsNullOrEmpty(RefreshToken))
+            {
+                keyReq.AddParameter("grant_type", "refresh_token");
+                keyReq.AddParameter("refresh_token", RefreshToken);
+            }
+            else if (!string.IsNullOrEmpty(DeviceId))
+            {
+                keyReq.AddParameter("grant_type", "https://oauth.reddit.com/grants/installed_client");
+                keyReq.AddParameter("device_id", DeviceId);
+            }
+            else
+            {
+                throw new RedditException("Either a refresh token or device ID is required for authentication.");
+            }
 
             IRestResponse keyRes = keyCli.Execute(keyReq);
             if (keyRes != null && keyRes.IsSuccessful)
