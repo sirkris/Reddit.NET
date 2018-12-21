@@ -267,8 +267,6 @@ namespace Reddit.NET.Controllers
             });
         }
 
-        // TODO - Users.Unfriend method.  Model still needs testing; will come back to this one later.  --Kris
-
         /// <summary>
         /// Check whether this instance's username is available for registration.
         /// </summary>
