@@ -61,44 +61,9 @@ namespace Reddit.NET
             while (!Models.Account.RequestReady((waitUntilRequestsAt + 1))) { }
         }
 
-        public Comment Comment(RedditThings.Comment listing)
-        {
-            return new Comment(ref Models, listing);
-        }
-
-        public Comment Comment(string subreddit, string author, string body, string parentId, string bodyHtml = null,
-            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string name = null,
-            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
-            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
-        {
-            return new Comment(ref Models, subreddit, author, body, bodyHtml, parentId, collapsedReason, collapsed, isSubmitter,
-                replies, scoreHidden, depth, id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
-        }
-
         public Comment Comment(string name)
         {
             return new Comment(ref Models, name);
-        }
-
-        public Comment Comment()
-        {
-            return new Comment(ref Models);
-        }
-
-        public LinkPost LinkPost(RedditThings.Post listing)
-        {
-            return new LinkPost(ref Models, listing);
-        }
-
-        public LinkPost LinkPost(string subreddit, string title, string author, string url, string thumbnail = null,
-            int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
-            string id = null, string name = null, string permalink = null, DateTime created = default(DateTime),
-            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
-            bool removed = false, bool spam = false)
-        {
-            return new LinkPost(ref Models, subreddit, title, author, url, thumbnail, thumbnailHeight, thumbnailWidth, preview,
-                id, name, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
         public LinkPost LinkPost(string name)
@@ -106,88 +71,14 @@ namespace Reddit.NET
             return new LinkPost(ref Models, name);
         }
 
-        public LinkPost LinkPost()
-        {
-            return new LinkPost(ref Models);
-        }
-
-        public SelfPost SelfPost(RedditThings.Post listing)
-        {
-            return new SelfPost(ref Models, listing);
-        }
-
-        /// <summary>
-        /// Create a new Self Post instance and populate manually.
-        /// </summary>
-        /// <param name="subreddit">The subreddit the post belongs to.</param>
-        /// <param name="title">Post title.</param>
-        /// <param name="author">Reddit user who authored the post.</param>
-        /// <param name="selfText">The post body.</param>
-        /// <param name="selfTextHtml">The HTML-formateed post body.</param>
-        /// <param name="id">Post ID.</param>
-        /// <param name="name">Post name.</param>
-        /// <param name="permalink">Permalink of post.</param>
-        /// <param name="created">When the post was created.</param>
-        /// <param name="edited">When the post was last edited.</param>
-        /// <param name="score">Net vote score.</param>
-        /// <param name="upVotes">Number of upvotes.</param>
-        /// <param name="downVotes">Number of downvotes.</param>
-        /// <param name="removed">Whether the post was removed.</param>
-        /// <param name="spam">Whether the post was marked as spam.</param>
-        /// <returns>A populated SelfPost instance.</returns>
-        public SelfPost SelfPost(string subreddit, string title, string author, string selfText, string selfTextHtml,
-            string id = null, string name = null, string permalink = null, DateTime created = default(DateTime),
-            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
-            bool removed = false, bool spam = false)
-        {
-            return new SelfPost(ref Models, subreddit, title, author, selfText, selfTextHtml, id, name, permalink, created,
-                edited, score, upVotes, downVotes, removed, spam);
-        }
-
         public SelfPost SelfPost(string name)
         {
             return new SelfPost(ref Models, name);
         }
 
-        public SelfPost SelfPost()
-        {
-            return new SelfPost(ref Models);
-        }
-
-        /// <summary>
-        /// Create a new generic Post instance and populate manually.
-        /// Post is the base class of LinkPost and SelfPost and is recommended when the post type is not known or is variable.
-        /// </summary>
-        /// <param name="subreddit">The subreddit the post belongs to.</param>
-        /// <param name="title">Post title.</param>
-        /// <param name="author">Reddit user who authored the post.</param>
-        /// <param name="id">Post ID.</param>
-        /// <param name="name">Post name.</param>
-        /// <param name="permalink">Permalink of post.</param>
-        /// <param name="created">When the post was created.</param>
-        /// <param name="edited">When the post was last edited.</param>
-        /// <param name="score">Net vote score.</param>
-        /// <param name="upVotes">Number of upvotes.</param>
-        /// <param name="downVotes">Number of downvotes.</param>
-        /// <param name="removed">Whether the post was removed.</param>
-        /// <param name="spam">Whether the post was marked as spam.</param>
-        /// <returns>A populated Post instance.</returns>
-        public Post Post(string subreddit, string title, string author, string id = null, string name = null, string permalink = null, 
-            DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
-            bool removed = false, bool spam = false)
-        {
-            return new Post(ref Models, subreddit, title, author, id, name, permalink, created,
-                edited, score, upVotes, downVotes, removed, spam);
-        }
-
         public Post Post(string name)
         {
             return new Post(ref Models, name);
-        }
-
-        public Post Post()
-        {
-            return new Post(ref Models);
         }
 
         public LiveThread LiveThread(RedditThings.LiveUpdateEvent liveUpdateEvent)
