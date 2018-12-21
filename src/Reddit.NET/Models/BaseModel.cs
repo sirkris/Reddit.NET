@@ -26,7 +26,7 @@ namespace Reddit.NET.Models
         public event EventHandler<TokenUpdateEventArgs> TokenUpdated;
         public event EventHandler<RequestsUpdateEventArgs> RequestsUpdated;
 
-        public BaseModel(string appId, string refreshToken, string accessToken, RestClient restClient)
+        public BaseModel(string appId, string refreshToken, string accessToken, ref RestClient restClient)
         {
             AppId = appId;
             AccessToken = accessToken;

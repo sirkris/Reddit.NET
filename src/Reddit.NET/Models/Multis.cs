@@ -9,7 +9,7 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Multis(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
+        public Multis(string appId, string refreshToken, string accessToken, ref RestClient restClient) : base(appId, refreshToken, accessToken, ref restClient) { }
 
         /// <summary>
         /// Copy a multi.

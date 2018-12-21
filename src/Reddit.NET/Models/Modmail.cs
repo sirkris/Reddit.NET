@@ -8,7 +8,7 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Modmail(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
+        public Modmail(string appId, string refreshToken, string accessToken, ref RestClient restClient) : base(appId, refreshToken, accessToken, ref restClient) { }
 
         // TODO - This endpoint keeps returning 404.  No idea why.  Tried with both DisplayName and fullname.  --Kris
         /// <summary>

@@ -34,24 +34,24 @@ namespace Reddit.NET.Controllers
         /// <param name="accessToken">The OAuth access token required to access the Reddit API.</param>
         public Dispatch(string appId, string refreshToken, string accessToken, RestClient restClient)
         {
-            Account = new API.Account(appId, refreshToken, accessToken, restClient);
-            Captcha = new API.Captcha(appId, refreshToken, accessToken, restClient);
-            Emoji = new API.Emoji(appId, refreshToken, accessToken, restClient);
-            Flair = new API.Flair(appId, refreshToken, accessToken, restClient);
-            LinksAndComments = new API.LinksAndComments(appId, refreshToken, accessToken, restClient);
-            Listings = new API.Listings(appId, refreshToken, accessToken, restClient);
-            LiveThreads = new API.LiveThreads(appId, refreshToken, accessToken, restClient);
-            Misc = new API.Misc(appId, refreshToken, accessToken, restClient);
-            Moderation = new API.Moderation(appId, refreshToken, accessToken, restClient);
-            Modmail = new API.Modmail(appId, refreshToken, accessToken, restClient);
-            Multis = new API.Multis(appId, refreshToken, accessToken, restClient);
-            PrivateMessages = new API.PrivateMessages(appId, refreshToken, accessToken, restClient);
-            RedditGold = new API.RedditGold(appId, refreshToken, accessToken, restClient);
-            Search = new API.Search(appId, refreshToken, accessToken, restClient);
-            Subreddits = new API.Subreddits(appId, refreshToken, accessToken, restClient);
-            Users = new API.Users(appId, refreshToken, accessToken, restClient);
-            Widgets = new API.Widgets(appId, refreshToken, accessToken, restClient);
-            Wiki = new API.Wiki(appId, refreshToken, accessToken, restClient);
+            Account = new API.Account(appId, refreshToken, accessToken, ref restClient);
+            Captcha = new API.Captcha(appId, refreshToken, accessToken, ref restClient);
+            Emoji = new API.Emoji(appId, refreshToken, accessToken, ref restClient);
+            Flair = new API.Flair(appId, refreshToken, accessToken, ref restClient);
+            LinksAndComments = new API.LinksAndComments(appId, refreshToken, accessToken, ref restClient);
+            Listings = new API.Listings(appId, refreshToken, accessToken, ref restClient);
+            LiveThreads = new API.LiveThreads(appId, refreshToken, accessToken, ref restClient);
+            Misc = new API.Misc(appId, refreshToken, accessToken, ref restClient);
+            Moderation = new API.Moderation(appId, refreshToken, accessToken, ref restClient);
+            Modmail = new API.Modmail(appId, refreshToken, accessToken, ref restClient);
+            Multis = new API.Multis(appId, refreshToken, accessToken, ref restClient);
+            PrivateMessages = new API.PrivateMessages(appId, refreshToken, accessToken, ref restClient);
+            RedditGold = new API.RedditGold(appId, refreshToken, accessToken, ref restClient);
+            Search = new API.Search(appId, refreshToken, accessToken, ref restClient);
+            Subreddits = new API.Subreddits(appId, refreshToken, accessToken, ref restClient);
+            Users = new API.Users(appId, refreshToken, accessToken, ref restClient);
+            Widgets = new API.Widgets(appId, refreshToken, accessToken, ref restClient);
+            Wiki = new API.Wiki(appId, refreshToken, accessToken, ref restClient);
 
             Monitor = new API.Internal.Monitor();
 
