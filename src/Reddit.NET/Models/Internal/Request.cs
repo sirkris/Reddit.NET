@@ -34,6 +34,8 @@ namespace Reddit.NET.Models.Internal
             RefreshToken = refreshToken;
             RestClient = restClient;
             DeviceId = deviceId;
+
+            Requests = new List<DateTime>();
         }
 
         public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")

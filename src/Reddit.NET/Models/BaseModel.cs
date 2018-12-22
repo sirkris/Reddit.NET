@@ -24,10 +24,7 @@ namespace Reddit.NET.Models
         internal override List<DateTime> Requests { get; set; }
 
         public BaseModel(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, refreshToken, accessToken, ref restClient, deviceId)
-        {
-            Requests = new List<DateTime>();
-        }
+            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
 
         public string Sr(string subreddit)
         {
