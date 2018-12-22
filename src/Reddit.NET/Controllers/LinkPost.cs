@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for link posts.
+    /// </summary>
     public class LinkPost : Post
     {
         public JObject Preview;
@@ -15,7 +18,12 @@ namespace Reddit.NET.Controllers
         public int? ThumbnailHeight;
         public int? ThumbnailWidth;
 
-        public LinkPost(ref Dispatch dispatch, Models.Structures.Post listing) : base(ref dispatch, listing)
+        /// <summary>
+        /// Create a new link post controller instance from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="listing"></param>
+        public LinkPost(ref Dispatch dispatch, RedditThings.Post listing) : base(ref dispatch, listing)
         {
             Preview = listing.Preview;
             URL = listing.URL;
@@ -24,6 +32,29 @@ namespace Reddit.NET.Controllers
             ThumbnailWidth = listing.ThumbnailWidth;
         }
 
+        /// <summary>
+        /// Create a new link post controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">The subreddit to which the post belongs</param>
+        /// <param name="title">The title of the post</param>
+        /// <param name="author">The post author's username</param>
+        /// <param name="url">The link post URL</param>
+        /// <param name="thumbnail"></param>
+        /// <param name="thumbnailHeight"></param>
+        /// <param name="thumbnailWidth"></param>
+        /// <param name="preview"></param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
+        /// <param name="nsfw"></param>
         public LinkPost(ref Dispatch dispatch, string subreddit, string title, string author, string url, string thumbnail = null,
             int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
             string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
@@ -41,11 +72,43 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
+        /// <summary>
+        /// Create a new link post controller instance, populated only with its fullname.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="fullname">Fullname of the post</param>
         public LinkPost(ref Dispatch dispatch, string fullname) : base(ref dispatch, fullname) { }
 
+        /// <summary>
+        /// Create a new link post controller instance, populated only with its fullname and subreddit.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="fullname">Fullname of the post</param>
+        /// <param name="subreddit">A valid subreddit instance</param>
         public LinkPost(ref Dispatch dispatch, string fullname, Subreddit subreddit) : base(ref dispatch, fullname, subreddit) { }
 
-        public LinkPost(ref Dispatch dispatch, Subreddit subreddit) : base(ref dispatch, subreddit) { }
+        /// <summary>
+        /// Create a new link post controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">A valid subreddit instance</param>
+        /// <param name="title">The title of the post</param>
+        /// <param name="url">The link post URL</param>
+        /// <param name="author">The post author's username</param>
+        /// <param name="thumbnail"></param>
+        /// <param name="thumbnailHeight"></param>
+        /// <param name="thumbnailWidth"></param>
+        /// <param name="preview"></param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
         public LinkPost(ref Dispatch dispatch, Subreddit subreddit, string title = null, string url = null, string author = null, 
             string thumbnail = null, int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
             string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
@@ -63,6 +126,12 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
+        /// <summary>
+        /// Create a new link post controller instance, populated from post result data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="postResultShortData"></param>
+        /// <param name="linkPost"></param>
         public LinkPost(ref Dispatch dispatch, RedditThings.PostResultShortData postResultShortData, LinkPost linkPost)
             : base(ref dispatch, linkPost.Subreddit, linkPost.Title, linkPost.Author, postResultShortData.Id, postResultShortData.Name,
                   linkPost.Permalink, linkPost.Created, linkPost.Edited, linkPost.Score, linkPost.UpVotes, linkPost.DownVotes,
@@ -77,6 +146,10 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
+        /// <summary>
+        /// Create an empty link post controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
         public LinkPost(ref Dispatch dispatch) : base(ref dispatch) { }
 
         /// <summary>

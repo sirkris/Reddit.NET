@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for a subreddit's wiki.
+    /// </summary>
     public class Wiki : BaseController
     {
         public event EventHandler<WikiPagesUpdateEventArgs> PagesUpdated;
@@ -18,6 +21,9 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
+        /// <summary>
+        /// List of pages on this wiki.
+        /// </summary>
         public List<string> Pages
         {
             get
@@ -36,6 +42,11 @@ namespace Reddit.NET.Controllers
         private readonly string Subreddit;
         private Dispatch Dispatch;
 
+        /// <summary>
+        /// Create a new instance of the wiki controller.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">The name of the subreddit to which this wiki belongs</param>
         public Wiki(ref Dispatch dispatch, string subreddit)
         {
             Dispatch = dispatch;
@@ -170,6 +181,10 @@ namespace Reddit.NET.Controllers
             PagesUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Monitor this wiki for added/removed pages.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorPages()
         {
             string key = "WikiPages";
@@ -186,7 +201,7 @@ namespace Reddit.NET.Controllers
             return res;
         }
 
-        internal void RebuildThreads()
+        private void RebuildThreads()
         {
             List<string> oldThreads = new List<string>(Threads.Keys);
             KillThreads(oldThreads);
@@ -210,7 +225,7 @@ namespace Reddit.NET.Controllers
             }
         }
         
-        internal void MonitorPagesThread(string key, int startDelayMs = 0)
+        private void MonitorPagesThread(string key, int startDelayMs = 0)
         {
             if (startDelayMs > 0)
             {

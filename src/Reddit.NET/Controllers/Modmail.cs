@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for modmail.
+    /// </summary>
     public class Modmail : BaseController
     {
         public event EventHandler<ModmailConversationsEventArgs> RecentUpdated;
@@ -33,6 +36,9 @@ namespace Reddit.NET.Controllers
         private User me;
         private DateTime? MeLastUpdated;
 
+        /// <summary>
+        /// Recent modmail conversations.
+        /// </summary>
         public RedditThings.ConversationContainer Recent
         {
             get
@@ -48,6 +54,9 @@ namespace Reddit.NET.Controllers
         private RedditThings.ConversationContainer recent;
         private DateTime? RecentLastUpdated;
 
+        /// <summary>
+        /// Mod modmail conversations.
+        /// </summary>
         public RedditThings.ConversationContainer Mod
         {
             get
@@ -63,6 +72,9 @@ namespace Reddit.NET.Controllers
         private RedditThings.ConversationContainer mod;
         private DateTime? ModLastUpdated;
 
+        /// <summary>
+        /// User modmail conversations.
+        /// </summary>
         public RedditThings.ConversationContainer User
         {
             get
@@ -78,6 +90,9 @@ namespace Reddit.NET.Controllers
         private RedditThings.ConversationContainer user;
         private DateTime? UserLastUpdated;
 
+        /// <summary>
+        /// Unread modmail conversations.
+        /// </summary>
         public RedditThings.ConversationContainer Unread
         {
             get
@@ -93,6 +108,9 @@ namespace Reddit.NET.Controllers
         private RedditThings.ConversationContainer unread;
         private DateTime? UnreadLastUpdated;
 
+        /// <summary>
+        /// Unread messages count.
+        /// </summary>
         public RedditThings.ModmailUnreadCount UnreadCount
         {
             get
@@ -113,6 +131,10 @@ namespace Reddit.NET.Controllers
 
         private Dispatch Dispatch;
 
+        /// <summary>
+        /// Create a new instance of the modmail controller.
+        /// </summary>
+        /// <param name="dispatch"></param>
         public Modmail(ref Dispatch dispatch) : base()
         {
             Dispatch = dispatch;
@@ -459,24 +481,40 @@ namespace Reddit.NET.Controllers
             return UnreadCount;
         }
 
+        /// <summary>
+        /// Monitor recent modmail messages as they arrive.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorRecent()
         {
             string key = "ModmailMessagesRecent";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent")));
         }
 
+        /// <summary>
+        /// Monitor mod modmail messages as they arrive.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorMod()
         {
             string key = "ModmailMessagesMod";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod")));
         }
 
+        /// <summary>
+        /// Monitor user modmail messages as they arrive.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUser()
         {
             string key = "ModmailMessagesUser";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user")));
         }
 
+        /// <summary>
+        /// Monitor unread modmail messages as they arrive.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUnread()
         {
             string key = "ModmailMessagesUnread";

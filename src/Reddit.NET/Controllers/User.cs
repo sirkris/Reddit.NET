@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for users.
+    /// </summary>
     public class User : BaseController
     {
         public bool IsFriend;
@@ -36,22 +39,60 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
+        /// <summary>
+        /// Full user data from the API.
+        /// </summary>
         public RedditThings.User UserData;
 
         private Dispatch Dispatch;
 
+        /// <summary>
+        /// Create a new user controller instance from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="user"></param>
         public User(ref Dispatch dispatch, RedditThings.User user)
         {
             Import(user);
             Dispatch = dispatch;
         }
 
+        /// <summary>
+        /// Copy another user controller instance onto this one.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="user"></param>
         public User(ref Dispatch dispatch, User user)
         {
             Import(user);
             Dispatch = dispatch;
         }
 
+        /// <summary>
+        /// Create a new user controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="name">A valid Reddit username</param>
+        /// <param name="id"></param>
+        /// <param name="isFriend"></param>
+        /// <param name="profanityFilter"></param>
+        /// <param name="isSuspended"></param>
+        /// <param name="hasGoldSubscription"></param>
+        /// <param name="numFriends"></param>
+        /// <param name="IsVerified"></param>
+        /// <param name="hasNewModmail"></param>
+        /// <param name="over18"></param>
+        /// <param name="isGold"></param>
+        /// <param name="isMod"></param>
+        /// <param name="hasVerifiedEmail"></param>
+        /// <param name="iconImg"></param>
+        /// <param name="hasModmail"></param>
+        /// <param name="linkKarma"></param>
+        /// <param name="inboxCount"></param>
+        /// <param name="hasMail"></param>
+        /// <param name="created"></param>
+        /// <param name="commentKarma"></param>
+        /// <param name="hasSubscribed"></param>
         public User(ref Dispatch dispatch, string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
@@ -63,6 +104,10 @@ namespace Reddit.NET.Controllers
             Dispatch = dispatch;
         }
 
+        /// <summary>
+        /// Create an empty user controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
         public User(ref Dispatch dispatch)
         {
             Dispatch = dispatch;

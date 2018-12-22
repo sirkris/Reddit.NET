@@ -11,6 +11,9 @@ using Reddit.NET.Models.Internal;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for private messages.
+    /// </summary>
     public class PrivateMessages : BaseController
     {
         public event EventHandler<MessagesUpdateEventArgs> InboxUpdated;
@@ -20,6 +23,9 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
+        /// <summary>
+        /// List of inbox messages.
+        /// </summary>
         public List<RedditThings.Message> Inbox
         {
             get
@@ -34,6 +40,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<RedditThings.Message> inbox;
 
+        /// <summary>
+        /// List of unread messages.
+        /// </summary>
         public List<RedditThings.Message> Unread
         {
             get
@@ -48,6 +57,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<RedditThings.Message> unread;
 
+        /// <summary>
+        /// List of sent messages.
+        /// </summary>
         public List<RedditThings.Message> Sent
         {
             get
@@ -68,6 +80,13 @@ namespace Reddit.NET.Controllers
 
         private Dispatch Dispatch;
 
+        /// <summary>
+        /// Create a new instance of the private messages controller.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="inbox"></param>
+        /// <param name="unread"></param>
+        /// <param name="sent"></param>
         public PrivateMessages(ref Dispatch dispatch, List<RedditThings.Message> inbox = null, List<RedditThings.Message> unread = null,
             List<RedditThings.Message> sent = null) 
             : base()
@@ -358,6 +377,10 @@ namespace Reddit.NET.Controllers
             SentUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Monitor inbox messages.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorInbox()
         {
             string key = "PrivateMessagesInbox";
@@ -369,6 +392,10 @@ namespace Reddit.NET.Controllers
             MonitorPrivateMessagesThread(key, "inbox");
         }
 
+        /// <summary>
+        /// Monitor unread messages.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUnread()
         {
             string key = "PrivateMessagesUnread";
@@ -380,6 +407,10 @@ namespace Reddit.NET.Controllers
             MonitorPrivateMessagesThread(key, "unread");
         }
 
+        /// <summary>
+        /// Monitor sent messages.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorSent()
         {
             string key = "PrivateMessagesSent";

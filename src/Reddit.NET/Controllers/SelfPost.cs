@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for self posts.
+    /// </summary>
     public class SelfPost : Post
     {
         public string SelfText;

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Reddit.NET.Controllers
 {
     /// <summary>
-    /// Base class for posts and comments.
+    /// Base controller for posts.
     /// </summary>
     public class Post : BaseController
     {
@@ -35,6 +35,9 @@ namespace Reddit.NET.Controllers
         /// </summary>
         public RedditThings.Post Listing;
 
+        /// <summary>
+        /// Comment replies to this post.
+        /// </summary>
         public Comments Comments
         {
             get
@@ -50,12 +53,35 @@ namespace Reddit.NET.Controllers
 
         internal Dispatch Dispatch;
 
+        /// <summary>
+        /// Create a new post controller instance from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="listing"></param>
         public Post(ref Dispatch dispatch, RedditThings.Post listing)
         {
             Dispatch = dispatch;
             Import(listing);
         }
 
+        /// <summary>
+        /// Create a new post controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">The subreddit to which the post belongs</param>
+        /// <param name="title">The title of the post</param>
+        /// <param name="author">The post author's username</param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
+        /// <param name="nsfw"></param>
         public Post(ref Dispatch dispatch, string subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
@@ -64,12 +90,23 @@ namespace Reddit.NET.Controllers
             Import(subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
         }
 
+        /// <summary>
+        /// Create a new post controller instance, populated with only its fullname.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="fullname">Fullname of the post</param>
         public Post(ref Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
             Fullname = fullname;
         }
 
+        /// <summary>
+        /// Create a new post controller instance, populated with only its fullname and subreddit.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="fullname">Fullname of the post</param>
+        /// <param name="subreddit">A valid subreddit instance</param>
         public Post(ref Dispatch dispatch, string fullname, Subreddit subreddit)
         {
             Dispatch = dispatch;
@@ -77,12 +114,35 @@ namespace Reddit.NET.Controllers
             Subreddit = subreddit.Name;
         }
 
+        /// <summary>
+        /// Create a new post controller instance, populated with only its subreddit.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">A valid subreddit instance</param>
         public Post(ref Dispatch dispatch, Subreddit subreddit)
         {
             Dispatch = dispatch;
             Subreddit = subreddit.Name;
         }
 
+        /// <summary>
+        /// Create a new post controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">The subreddit to which the post belongs</param>
+        /// <param name="title">The title of the post</param>
+        /// <param name="author">The post author's username</param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
+        /// <param name="nsfw"></param>
         public Post(ref Dispatch dispatch, Subreddit subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
@@ -91,6 +151,10 @@ namespace Reddit.NET.Controllers
             Import(subreddit.Name, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
         }
 
+        /// <summary>
+        /// Create an empty post controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
         public Post(ref Dispatch dispatch)
         {
             Dispatch = dispatch;
@@ -144,6 +208,29 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Post(this);
         }
 
+        /// <summary>
+        /// Create a new comment controller instance bound to this post, populated manually.
+        /// </summary>
+        /// <param name="body">The comment text</param>
+        /// <param name="bodyHtml"></param>
+        /// <param name="author">The username of the comment's author</param>
+        /// <param name="collapsedReason"></param>
+        /// <param name="collapsed"></param>
+        /// <param name="isSubmitter"></param>
+        /// <param name="replies"></param>
+        /// <param name="scoreHidden"></param>
+        /// <param name="depth"></param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
+        /// <returns></returns>
         public Comment Comment(string body, string bodyHtml = null, string author = null, 
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
@@ -154,6 +241,10 @@ namespace Reddit.NET.Controllers
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
+        /// <summary>
+        /// Create a new comment controller instance bound to this post.
+        /// </summary>
+        /// <returns></returns>
         public Comment Comment()
         {
             return new Comment(ref Dispatch, Subreddit, null, null, Fullname);

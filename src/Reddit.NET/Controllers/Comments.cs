@@ -9,6 +9,9 @@ using System.Threading;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for comment replies.
+    /// </summary>
     public class Comments : BaseController
     {
         public event EventHandler<CommentsUpdateEventArgs> ConfidenceUpdated;
@@ -32,6 +35,9 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
+        /// <summary>
+        /// A list of comments using "confidence" sort.
+        /// </summary>
         public List<Comment> Confidence
         {
             get
@@ -46,6 +52,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Comment> confidence;
 
+        /// <summary>
+        /// A list of comments using "top" sort.
+        /// </summary>
         public List<Comment> Top
         {
             get
@@ -60,6 +69,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Comment> top;
 
+        /// <summary>
+        /// A list of comments using "new" sort.
+        /// </summary>
         public List<Comment> New
         {
             get
@@ -74,6 +86,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Comment> newComments;
 
+        /// <summary>
+        /// A list of comments using "controversial" sort.
+        /// </summary>
         public List<Comment> Controversial
         {
             get
@@ -88,6 +103,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Comment> controversial;
 
+        /// <summary>
+        /// A list of comments using "old" sort.
+        /// </summary>
         public List<Comment> Old
         {
             get
@@ -102,6 +120,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Comment> old;
 
+        /// <summary>
+        /// A list of comments using "random" sort.
+        /// </summary>
         public List<Comment> Random
         {
             get
@@ -116,6 +137,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Comment> random;
 
+        /// <summary>
+        /// A list of comments using "qa" sort.
+        /// </summary>
         public List<Comment> QA
         {
             get
@@ -130,6 +154,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Comment> qa;
 
+        /// <summary>
+        /// A list of comments using "live" sort.
+        /// </summary>
         public List<Comment> Live
         {
             get
@@ -144,6 +171,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Comment> live;
 
+        /// <summary>
+        /// The parent comment (if one exists).
+        /// </summary>
         public Comment Comment
         {
             get;
@@ -151,11 +181,33 @@ namespace Reddit.NET.Controllers
         }
 
         public string SubKey;
-
         private Dispatch Dispatch;
-        private string Subreddit;
-        private string PostId;
 
+        /// <summary>
+        /// The name of the parent subreddit.
+        /// </summary>
+        private readonly string Subreddit;
+
+        /// <summary>
+        /// The ID36 of the parent post.
+        /// </summary>
+        private readonly string PostId;
+
+        /// <summary>
+        /// Create a new instance of the comments controller.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="postId">The ID36 of the parent post</param>
+        /// <param name="subreddit">The name of the parent subreddit</param>
+        /// <param name="comment">The parent comment instance</param>
+        /// <param name="confidence"></param>
+        /// <param name="top"></param>
+        /// <param name="newComments"></param>
+        /// <param name="controversial"></param>
+        /// <param name="old"></param>
+        /// <param name="random"></param>
+        /// <param name="qa"></param>
+        /// <param name="live"></param>
         public Comments(ref Dispatch dispatch, string postId = null, string subreddit = null, Comment comment = null, List<Comment> confidence = null, List<Comment> top = null, 
             List<Comment> newComments = null, List<Comment> controversial = null, List<Comment> old = null, List<Comment> random = null, List<Comment> qa = null, List<Comment> live = null) 
             : base()
@@ -237,48 +289,144 @@ namespace Reddit.NET.Controllers
             return replies;
         }
 
+        /// <summary>
+        /// Retrieve a list of comments using "confidence" sort.
+        /// </summary>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of comments.</returns>
         public List<Comment> GetConfidence(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
             return GetComments("confidence", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
         }
 
+        /// <summary>
+        /// Retrieve a list of comments using "top" sort.
+        /// </summary>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of comments.</returns>
         public List<Comment> GetTop(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
             return GetComments("top", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
         }
 
+        /// <summary>
+        /// Retrieve a list of comments using "new" sort.
+        /// </summary>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of comments.</returns>
         public List<Comment> GetNew(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
             return GetComments("new", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
         }
 
+        /// <summary>
+        /// Retrieve a list of comments using "controversial" sort.
+        /// </summary>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of comments.</returns>
         public List<Comment> GetControversial(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
             return GetComments("controversial", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
         }
 
+        /// <summary>
+        /// Retrieve a list of comments using "old" sort.
+        /// </summary>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of comments.</returns>
         public List<Comment> GetOld(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
             return GetComments("old", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
         }
 
+        /// <summary>
+        /// Retrieve a list of comments using "random" sort.
+        /// </summary>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of comments.</returns>
         public List<Comment> GetRandom(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
             return GetComments("random", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
         }
 
+        /// <summary>
+        /// Retrieve a list of comments using "qa" sort.
+        /// </summary>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of comments.</returns>
         public List<Comment> GetQA(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
             return GetComments("qa", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
         }
 
+        /// <summary>
+        /// Retrieve a list of comments using "live" sort.
+        /// </summary>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <returns>A list of comments.</returns>
         public List<Comment> GetLive(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {

@@ -6,12 +6,24 @@ using RestSharp;
 using System;
 using System.Collections.Generic;
 
+/// <summary>
+/// A Reddit API library for .NET Core with OAuth support.
+/// </summary>
 namespace Reddit.NET
 {
+    /// <summary>
+    /// The main Reddit API class.
+    /// </summary>
     public class RedditAPI
     {
+        /// <summary>
+        /// Endpoint wrapper classes/methods.
+        /// </summary>
         public Dispatch Models;
 
+        /// <summary>
+        /// Data/methods pertaining to the authenticated user.
+        /// </summary>
         public Account Account
         {
             get
@@ -25,6 +37,13 @@ namespace Reddit.NET
         }
         private Account account;
 
+        /// <summary>
+        /// Create a new instance of the Reddit.NET API library.
+        /// This instance will be bound to a single Reddit user.
+        /// </summary>
+        /// <param name="appId">The OAuth application ID</param>
+        /// <param name="refreshToken">The OAuth refresh token for the user we wish to authenticate</param>
+        /// <param name="accessToken">(optional) An OAuth access token; if not provided, one will be automatically obtained using the refresh token</param>
         public RedditAPI(string appId, string refreshToken = null, string accessToken = null)
         {
             /*
@@ -79,36 +98,83 @@ namespace Reddit.NET
             while (!Models.Account.RequestReady((waitUntilRequestsAt + 1))) { }
         }
 
+        /// <summary>
+        /// Create a new comment controller instance, populated only with its fullname.
+        /// </summary>
+        /// <param name="name">fullname of a thing</param>
+        /// <returns>A new comment controller instance.</returns>
         public Comment Comment(string name)
         {
             return new Comment(ref Models, name);
         }
 
+        /// <summary>
+        /// Create a new link post controller instance, populated only with its fullname.
+        /// </summary>
+        /// <param name="name">fullname of a thing</param>
+        /// <returns>A new link post controller instance.</returns>
         public LinkPost LinkPost(string name)
         {
             return new LinkPost(ref Models, name);
         }
 
+        /// <summary>
+        /// Create a new self post controller instance, populated only with its fullname.
+        /// </summary>
+        /// <param name="name">fullname of a thing</param>
+        /// <returns>A new self post controller instance.</returns>
         public SelfPost SelfPost(string name)
         {
             return new SelfPost(ref Models, name);
         }
 
+        /// <summary>
+        /// Create a new post controller instance, populated only with its fullname.
+        /// </summary>
+        /// <param name="name">fullname of a thing</param>
+        /// <returns>A new post controller instance.</returns>
         public Post Post(string name)
         {
             return new Post(ref Models, name);
         }
 
+        /// <summary>
+        /// Create a new live thread controller instance from API return data.
+        /// </summary>
+        /// <param name="liveUpdateEvent"></param>
+        /// <returns>A new live thread controller instance.</returns>
         public LiveThread LiveThread(RedditThings.LiveUpdateEvent liveUpdateEvent)
         {
             return new LiveThread(ref Models, liveUpdateEvent);
         }
 
+        /// <summary>
+        /// Create a copy of an existing live thread controller instance.
+        /// </summary>
+        /// <param name="liveThread">A valid live thread controller instance</param>
+        /// <returns>A new live thread controller instance.</returns>
         public LiveThread LiveThread(LiveThread liveThread)
         {
             return new LiveThread(ref Models, liveThread);
         }
 
+        /// <summary>
+        /// Create a new live thread controller instance, populated manually.
+        /// </summary>
+        /// <param name="title">Title of the live thread</param>
+        /// <param name="description">Description of the live thread</param>
+        /// <param name="nsfw">Whether the live thread is NSFW</param>
+        /// <param name="resources"></param>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="websocketUrl"></param>
+        /// <param name="announcementUrl"></param>
+        /// <param name="state"></param>
+        /// <param name="icon"></param>
+        /// <param name="totalViews"></param>
+        /// <param name="viewerCount"></param>
+        /// <param name="created"></param>
+        /// <returns>A new live thread controller instance.</returns>
         public LiveThread LiveThread(string title = null, string description = null, bool nsfw = false, string resources = null,
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
@@ -117,21 +183,61 @@ namespace Reddit.NET
                 icon, totalViews, viewerCount, created);
         }
 
+        /// <summary>
+        /// Create a new live thread controller instance, populated only with its ID.
+        /// </summary>
+        /// <param name="id">A valid live thread ID</param>
+        /// <returns>A new live thread controller instance.</returns>
         public LiveThread LiveThread(string id)
         {
             return new LiveThread(ref Models, id);
         }
 
+        /// <summary>
+        /// Create a new user controller instance from API return data.
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns>A new user controller instance.</returns>
         public User User(RedditThings.User user)
         {
             return new User(ref Models, user);
         }
 
+        /// <summary>
+        /// Create a copy of an existing user controller instance.
+        /// </summary>
+        /// <param name="user">A valid user controller instance.</param>
+        /// <returns>A new user controller instance.</returns>
         public User User(User user)
         {
             return new User(ref Models, user);
         }
 
+        /// <summary>
+        /// Create a new user controller instance, populated manually.
+        /// </summary>
+        /// <param name="name">A valid Reddit username</param>
+        /// <param name="id"></param>
+        /// <param name="isFriend"></param>
+        /// <param name="profanityFilter"></param>
+        /// <param name="isSuspended"></param>
+        /// <param name="hasGoldSubscription"></param>
+        /// <param name="numFriends"></param>
+        /// <param name="IsVerified"></param>
+        /// <param name="hasNewModmail"></param>
+        /// <param name="over18"></param>
+        /// <param name="isGold"></param>
+        /// <param name="isMod"></param>
+        /// <param name="hasVerifiedEmail"></param>
+        /// <param name="iconImg"></param>
+        /// <param name="hasModmail"></param>
+        /// <param name="linkKarma"></param>
+        /// <param name="inboxCount"></param>
+        /// <param name="hasMail"></param>
+        /// <param name="created"></param>
+        /// <param name="commentKarma"></param>
+        /// <param name="hasSubscribed"></param>
+        /// <returns>A new user controller instance.</returns>
         public User User(string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
@@ -141,26 +247,75 @@ namespace Reddit.NET
                 hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
         }
 
+        /// <summary>
+        /// Create an empty user controller instance.
+        /// </summary>
+        /// <returns>A new user controller instance.</returns>
         public User User()
         {
             return new User(ref Models);
         }
 
+        /// <summary>
+        /// Create a copy of an existing subreddit controller instance.
+        /// </summary>
+        /// <param name="subreddit">A valid subreddit controller instance</param>
+        /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit(Subreddit subreddit)
         {
             return new Subreddit(ref Models, subreddit);
         }
 
+        /// <summary>
+        /// Create a new subreddit instance from API return data.
+        /// </summary>
+        /// <param name="subreddit"></param>
+        /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit(RedditThings.Subreddit subreddit)
         {
             return new Subreddit(ref Models, subreddit);
         }
 
+        /// <summary>
+        /// Create a new subreddit instance from API return data.
+        /// </summary>
+        /// <param name="subredditChild"></param>
+        /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit(RedditThings.SubredditChild subredditChild)
         {
             return new Subreddit(ref Models, subredditChild);
         }
 
+        /// <summary>
+        /// Create a new subreddit controller instance, populated manually.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="title"></param>
+        /// <param name="description"></param>
+        /// <param name="sidebar"></param>
+        /// <param name="submissionText"></param>
+        /// <param name="lang"></param>
+        /// <param name="subredditType"></param>
+        /// <param name="submissionType"></param>
+        /// <param name="submitLinkLabel"></param>
+        /// <param name="submitTextLabel"></param>
+        /// <param name="wikiEnabled"></param>
+        /// <param name="over18"></param>
+        /// <param name="allowDiscovery"></param>
+        /// <param name="allowSpoilers"></param>
+        /// <param name="showMedia"></param>
+        /// <param name="showMediaPreview"></param>
+        /// <param name="allowImages"></param>
+        /// <param name="allowVideos"></param>
+        /// <param name="collapseDeletedComments"></param>
+        /// <param name="suggestedCommentSort"></param>
+        /// <param name="commentScoreHideMins"></param>
+        /// <param name="headerImage"></param>
+        /// <param name="iconImage"></param>
+        /// <param name="primaryColor"></param>
+        /// <param name="keyColor"></param>
+        /// <param name="fullname"></param>
+        /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit(string name, string title = "", string description = "", string sidebar = "",
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
@@ -174,6 +329,10 @@ namespace Reddit.NET
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
         }
 
+        /// <summary>
+        /// Create an empty subreddit controller instance.
+        /// </summary>
+        /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit()
         {
             return new Subreddit(ref Models);

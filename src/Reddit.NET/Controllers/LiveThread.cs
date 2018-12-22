@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for live threads.
+    /// </summary>
     public class LiveThread : BaseController
     {
         public event EventHandler<LiveThreadUpdateEventArgs> ThreadUpdated;
@@ -37,6 +40,9 @@ namespace Reddit.NET.Controllers
 
         public RedditThings.LiveUpdateEvent EventData;
 
+        /// <summary>
+        /// List of live thread updates.
+        /// </summary>
         public List<RedditThings.LiveUpdate> Updates
         {
             get
@@ -52,6 +58,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.LiveUpdate> updates;
         private DateTime? UpdatesLastUpdated;
 
+        /// <summary>
+        /// List of live thread contributors.
+        /// </summary>
         public List<RedditThings.UserListContainer> Contributors
         {
             get
@@ -69,6 +78,11 @@ namespace Reddit.NET.Controllers
 
         private Dispatch Dispatch;
 
+        /// <summary>
+        /// Create a new live thread controller instance from another live thread controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="liveThread">A valid instance of this class</param>
         public LiveThread(ref Dispatch dispatch, LiveThread liveThread)
         {
             Dispatch = dispatch;
@@ -80,6 +94,11 @@ namespace Reddit.NET.Controllers
             EventData = liveThread.EventData;
         }
 
+        /// <summary>
+        /// Create a new live thread controller instance from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="liveUpdateEvent"></param>
         public LiveThread(ref Dispatch dispatch, RedditThings.LiveUpdateEvent liveUpdateEvent)
         {
             Dispatch = dispatch;
@@ -91,6 +110,23 @@ namespace Reddit.NET.Controllers
             EventData = liveUpdateEvent;
         }
 
+        /// <summary>
+        /// Create a new live thread controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="title">Title of the thread</param>
+        /// <param name="description">Description of the thread</param>
+        /// <param name="nsfw">Whether the thread is NSFW</param>
+        /// <param name="resources"></param>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="websocketUrl"></param>
+        /// <param name="announcementUrl"></param>
+        /// <param name="state"></param>
+        /// <param name="icon"></param>
+        /// <param name="totalViews"></param>
+        /// <param name="viewerCount"></param>
+        /// <param name="created"></param>
         public LiveThread(ref Dispatch dispatch, string title = null, string description = null, bool nsfw = false, string resources = null,
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
@@ -102,6 +138,11 @@ namespace Reddit.NET.Controllers
             EventData = new RedditThings.LiveUpdateEvent(this);
         }
 
+        /// <summary>
+        /// Create a new live thread controller instance populated with only its id.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="id">A valid live thread ID</param>
         public LiveThread(ref Dispatch dispatch, string id)
         {
             Dispatch = dispatch;
@@ -523,18 +564,30 @@ namespace Reddit.NET.Controllers
             UpdatesUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Monitor this live thread for any configuration changes.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorThread()
         {
             string key = "LiveThread";
             return Monitor(key, new Thread(() => MonitorThreadThread(key)), Id);
         }
 
+        /// <summary>
+        /// Monitor this live thread for any new or removed contributors.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorContributors()
         {
             string key = "LiveThreadContributors";
             return Monitor(key, new Thread(() => MonitorContributorsThread(key)), Id);
         }
 
+        /// <summary>
+        /// Monitor this live thread for any new updates.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUpdates()
         {
             string key = "LiveThreadUpdates";

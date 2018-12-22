@@ -9,11 +9,17 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for flairs.
+    /// </summary>
     public class Flairs : BaseController
     {
         internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
+        /// <summary>
+        /// List of flairs.
+        /// </summary>
         public List<RedditThings.FlairListResult> FlairList
         {
             get
@@ -29,6 +35,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.FlairListResult> flairList;
         private DateTime? FlairListLastUpdated;
 
+        /// <summary>
+        /// List of link flairs.
+        /// </summary>
         public List<RedditThings.Flair> LinkFlair
         {
             get
@@ -44,6 +53,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.Flair> linkFlair;
         private DateTime? LinkFlairLastUpdated;
 
+        /// <summary>
+        /// List of link flairs.
+        /// </summary>
         public List<RedditThings.FlairV2> LinkFlairV2
         {
             get
@@ -59,6 +71,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.FlairV2> linkFlairV2;
         private DateTime? LinkFlairLastUpdatedV2;
 
+        /// <summary>
+        /// List of user flairs.
+        /// </summary>
         public List<RedditThings.Flair> UserFlair
         {
             get
@@ -74,6 +89,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.Flair> userFlair;
         private DateTime? UserFlairLastUpdated;
 
+        /// <summary>
+        /// List of user flairs.
+        /// </summary>
         public List<RedditThings.FlairV2> UserFlairV2
         {
             get
@@ -92,6 +110,11 @@ namespace Reddit.NET.Controllers
         private readonly Subreddit Subreddit;
         private readonly Dispatch Dispatch;
 
+        /// <summary>
+        /// Create a new instance of the flairs controller.
+        /// </summary>
+        /// <param name="subreddit">The name of the subreddit with the flairs</param>
+        /// <param name="dispatch"></param>
         public Flairs(Subreddit subreddit, ref Dispatch dispatch) : base()
         {
             Subreddit = subreddit;

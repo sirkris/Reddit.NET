@@ -10,6 +10,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for subreddits.
+    /// </summary>
     public class Subreddit : BaseController
     {
         // Subreddit data pertaining to the logged-in user can be found in SubredditData.  --Kris
@@ -57,14 +60,28 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
         internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
 
+        /// <summary>
+        /// Full subreddit data retrieved from the API.
+        /// </summary>
         public RedditThings.Subreddit SubredditData
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Posts belonging to this subreddit.
+        /// </summary>
         public SubredditPosts Posts;
+
+        /// <summary>
+        /// Flairs belonging to this subreddit.
+        /// </summary>
         public Flairs Flairs;
+
+        /// <summary>
+        /// The subreddit wiki controller.
+        /// </summary>
         public Wiki Wiki;
 
         internal Dispatch Dispatch;
@@ -108,6 +125,11 @@ namespace Reddit.NET.Controllers
         internal List<Moderator> moderators;
         private DateTime? ModeratorsLastUpdated;
 
+        /// <summary>
+        /// Create a new subreddit controller instance populated from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit"></param>
         public Subreddit(ref Dispatch dispatch, RedditThings.Subreddit subreddit)
             : base()
         {
@@ -120,6 +142,11 @@ namespace Reddit.NET.Controllers
             Wiki = new Wiki(ref Dispatch, Name);
         }
 
+        /// <summary>
+        /// Create a new subreddit controller instance populated from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subredditChild"></param>
         public Subreddit(ref Dispatch dispatch, RedditThings.SubredditChild subredditChild)
             : base()
         {
@@ -132,6 +159,11 @@ namespace Reddit.NET.Controllers
             Wiki = new Wiki(ref Dispatch, Name);
         }
 
+        /// <summary>
+        /// Copy another subreddit controller instance onto this one.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">A valid subreddit controller instance</param>
         public Subreddit(ref Dispatch dispatch, Subreddit subreddit)
         {
             Dispatch = dispatch;
@@ -141,6 +173,36 @@ namespace Reddit.NET.Controllers
             SubredditData = subreddit.SubredditData;
         }
 
+        /// <summary>
+        /// Create a new subreddit controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="name"></param>
+        /// <param name="title"></param>
+        /// <param name="description"></param>
+        /// <param name="sidebar"></param>
+        /// <param name="submissionText"></param>
+        /// <param name="lang"></param>
+        /// <param name="subredditType"></param>
+        /// <param name="submissionType"></param>
+        /// <param name="submitLinkLabel"></param>
+        /// <param name="submitTextLabel"></param>
+        /// <param name="wikiEnabled"></param>
+        /// <param name="over18"></param>
+        /// <param name="allowDiscovery"></param>
+        /// <param name="allowSpoilers"></param>
+        /// <param name="showMedia"></param>
+        /// <param name="showMediaPreview"></param>
+        /// <param name="allowImages"></param>
+        /// <param name="allowVideos"></param>
+        /// <param name="collapseDeletedComments"></param>
+        /// <param name="suggestedCommentSort"></param>
+        /// <param name="commentScoreHideMins"></param>
+        /// <param name="headerImage"></param>
+        /// <param name="iconImage"></param>
+        /// <param name="primaryColor"></param>
+        /// <param name="keyColor"></param>
+        /// <param name="fullname"></param>
         public Subreddit(ref Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "",
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
@@ -162,6 +224,10 @@ namespace Reddit.NET.Controllers
             Wiki = new Wiki(ref Dispatch, Name);
         }
 
+        /// <summary>
+        /// Create an empty subreddit controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
         public Subreddit(ref Dispatch dispatch)
             : base()
         {

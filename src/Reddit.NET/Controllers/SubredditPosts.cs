@@ -9,6 +9,9 @@ using System.Threading;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for subreddit post listings.
+    /// </summary>
     public class SubredditPosts : BaseController
     {
         public event EventHandler<PostsUpdateEventArgs> BestUpdated;
@@ -27,6 +30,9 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
+        /// <summary>
+        /// List of posts using "best" sort.
+        /// </summary>
         public List<Post> Best
         {
             get
@@ -41,6 +47,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> best;
 
+        /// <summary>
+        /// List of posts using "hot" sort.
+        /// </summary>
         public List<Post> Hot
         {
             get
@@ -55,6 +64,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> hot;
 
+        /// <summary>
+        /// List of posts using "new" sort.
+        /// </summary>
         public List<Post> New
         {
             get
@@ -69,6 +81,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> newPosts;
 
+        /// <summary>
+        /// List of posts using "rising" sort.
+        /// </summary>
         public List<Post> Rising
         {
             get
@@ -83,6 +98,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> rising;
 
+        /// <summary>
+        /// List of posts using "top" sort.
+        /// </summary>
         public List<Post> Top
         {
             get
@@ -97,6 +115,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> top;
 
+        /// <summary>
+        /// List of posts using "controversial" sort.
+        /// </summary>
         public List<Post> Controversial
         {
             get
@@ -111,6 +132,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> controversial;
 
+        /// <summary>
+        /// List of posts in the mod queue.
+        /// </summary>
         public List<Post> ModQueue
         {
             get
@@ -125,6 +149,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> modQueue;
 
+        /// <summary>
+        /// List of reported posts in the mod queue.
+        /// </summary>
         public List<Post> ModQueueReports
         {
             get
@@ -139,6 +166,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> modQueueReports;
 
+        /// <summary>
+        /// List of spammed posts in the mod queue.
+        /// </summary>
         public List<Post> ModQueueSpam
         {
             get
@@ -153,6 +183,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> modQueueSpam;
 
+        /// <summary>
+        /// List of unmoderated posts in the mod queue.
+        /// </summary>
         public List<Post> ModQueueUnmoderated
         {
             get
@@ -167,6 +200,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<Post> modQueueUnmoderated;
 
+        /// <summary>
+        /// List of edited posts in the mod queue.
+        /// </summary>
         public List<Post> ModQueueEdited
         {
             get
@@ -200,6 +236,22 @@ namespace Reddit.NET.Controllers
         private string TopT = "all";
         private string ControversialT = "all";
 
+        /// <summary>
+        /// Create a new instance of the subreddit posts controller.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">The name of the subreddit</param>
+        /// <param name="best"></param>
+        /// <param name="hot"></param>
+        /// <param name="newPosts"></param>
+        /// <param name="rising"></param>
+        /// <param name="top"></param>
+        /// <param name="controversial"></param>
+        /// <param name="modQueue"></param>
+        /// <param name="modQueueReports"></param>
+        /// <param name="modQueueSpam"></param>
+        /// <param name="modQueueUnmoderated"></param>
+        /// <param name="modQueueEdited"></param>
         public SubredditPosts(ref Dispatch dispatch, string subreddit, List<Post> best = null, List<Post> hot = null, List<Post> newPosts = null,
             List<Post> rising = null, List<Post> top = null, List<Post> controversial = null, List<Post> modQueue = null, 
             List<Post> modQueueReports = null, List<Post> modQueueSpam = null, List<Post> modQueueUnmoderated = null, 
@@ -223,7 +275,13 @@ namespace Reddit.NET.Controllers
             ModQueueEdited = modQueueEdited ?? new List<Post>();
         }
 
-        // Let's just pretend this one belongs to the "all" subreddit so we can put it here with the others.  --Kris
+        /// <summary>
+        /// Retrieve a list of posts using "best" sort.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetBest(string after = "", string before = "", int limit = 100)
         {
             List<Post> posts = Listings.GetPosts(Dispatch.Listings.Best(after, before, false, limit: limit), Dispatch);
@@ -234,6 +292,13 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        /// <summary>
+        /// Retrieve a list of posts using "hot" sort.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetHot(string g = "", string after = "", string before = "", int limit = 100)
         {
             List<Post> posts = Listings.GetPosts(Dispatch.Listings.Hot(g, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
@@ -244,6 +309,13 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        /// <summary>
+        /// Retrieve a list of posts using "new" sort.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetNew(string after = "", string before = "", int limit = 100)
         {
             List<Post> posts = Listings.GetPosts(Dispatch.Listings.New(after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
@@ -254,6 +326,13 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        /// <summary>
+        /// Retrieve a list of posts using "rising" sort.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetRising(string after = "", string before = "", int limit = 100)
         {
             List<Post> posts = Listings.GetPosts(Dispatch.Listings.Rising(after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
@@ -264,6 +343,13 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        /// <summary>
+        /// Retrieve a list of posts using "top" sort.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetTop(string t = "all", string after = "", string before = "", int limit = 100)
         {
             List<Post> posts = Listings.GetPosts(Dispatch.Listings.Top(t, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
@@ -275,6 +361,13 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        /// <summary>
+        /// Retrieve a list of posts using "controversial" sort.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetControversial(string t = "all", string after = "", string before = "", int limit = 100)
         {
             List<Post> posts = Listings.GetPosts(Dispatch.Listings.Controversial(t, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
@@ -286,12 +379,22 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
-        public List<Post> GetModQueuePosts(string location, string after = "", string before = "", int limit = 100, string show = "all",
+        private List<Post> GetModQueuePosts(string location, string after = "", string before = "", int limit = 100, string show = "all",
             bool srDetail = false, int count = 0)
         {
             return Listings.GetPosts(Dispatch.Moderation.ModQueue(location, after, before, "links", Subreddit, count, limit, show, srDetail), Dispatch);
         }
 
+        /// <summary>
+        /// Retrieve a list of posts in the mod queue.
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <param name="count"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetModQueue(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
             List<Post> posts = GetModQueuePosts("modqueue", after, before, limit, show, srDetail, count);
@@ -302,6 +405,16 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        /// <summary>
+        /// Retrieve a list of reported posts in the mod queue.
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <param name="count"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueReports(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
             List<Post> posts = GetModQueuePosts("reports", after, before, limit, show, srDetail, count);
@@ -312,6 +425,16 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        /// <summary>
+        /// Retrieve a list of spammed posts in the mod queue.
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <param name="count"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueSpam(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
             List<Post> posts = GetModQueuePosts("spam", after, before, limit, show, srDetail, count);
@@ -322,6 +445,16 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        /// <summary>
+        /// Retrieve a list of unmoderated posts in the mod queue.
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <param name="count"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueUnmoderated(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
             List<Post> posts = GetModQueuePosts("unmoderated", after, before, limit, show, srDetail, count);
@@ -332,6 +465,16 @@ namespace Reddit.NET.Controllers
             return posts;
         }
 
+        /// <summary>
+        /// Retrieve a list of edited posts in the mod queue.
+        /// </summary>
+        /// <param name="after"></param>
+        /// <param name="before"></param>
+        /// <param name="limit"></param>
+        /// <param name="show"></param>
+        /// <param name="srDetail"></param>
+        /// <param name="count"></param>
+        /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueEdited(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
             List<Post> posts = GetModQueuePosts("edited", after, before, limit, show, srDetail, count);
@@ -562,7 +705,7 @@ namespace Reddit.NET.Controllers
             ModQueueEditedUpdated?.Invoke(this, e);
         }
 
-        internal bool Monitor(string key, Thread thread, string subKey)
+        private bool Monitor(string key, Thread thread, string subKey)
         {
             bool res = Monitor(key, thread, subKey, out Thread newThread);
 
@@ -572,7 +715,7 @@ namespace Reddit.NET.Controllers
             return res;
         }
 
-        internal void RebuildThreads()
+        private void RebuildThreads()
         {
             List<string> oldThreads = new List<string>(Threads.Keys);
             KillThreads(oldThreads);

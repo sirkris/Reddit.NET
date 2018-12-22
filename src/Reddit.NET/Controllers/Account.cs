@@ -6,8 +6,14 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for tasks pertaining to the authenticated user.
+    /// </summary>
     public class Account : BaseController
     {
+        /// <summary>
+        /// The authenticated user's data.
+        /// </summary>
         public User Me
         {
             get
@@ -32,6 +38,10 @@ namespace Reddit.NET.Controllers
 
         public Dispatch Dispatch;
 
+        /// <summary>
+        /// Creates a new Account instance.  Note that this is already taken care of in the main class.
+        /// </summary>
+        /// <param name="dispatch"></param>
         public Account(ref Dispatch dispatch)
         {
             Dispatch = dispatch;

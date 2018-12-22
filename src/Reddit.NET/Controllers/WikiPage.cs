@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for wiki pages.
+    /// </summary>
     public class WikiPage : BaseController
     {
         public bool MayRevise;
@@ -27,6 +30,17 @@ namespace Reddit.NET.Controllers
 
         private Dispatch Dispatch;
 
+        /// <summary>
+        /// Create a new wiki page controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="mayRevise"></param>
+        /// <param name="revisionDate"></param>
+        /// <param name="contentHtml"></param>
+        /// <param name="revisionBy"></param>
+        /// <param name="contentMd"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="name"></param>
         public WikiPage(ref Dispatch dispatch, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd, 
             string subreddit = null, string name = null)
         {
@@ -42,6 +56,13 @@ namespace Reddit.NET.Controllers
             Name = name;
         }
 
+        /// <summary>
+        /// Create a new wiki page controller instance from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="wikiPage"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="name"></param>
         public WikiPage(ref Dispatch dispatch, RedditThings.WikiPage wikiPage, string subreddit = null, string name = null)
         {
             Dispatch = dispatch;
@@ -56,6 +77,12 @@ namespace Reddit.NET.Controllers
             Name = name;
         }
 
+        /// <summary>
+        /// Create a new wiki page controller instance, populated only with subreddit and name.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="name"></param>
         public WikiPage(ref Dispatch dispatch, string subreddit = null, string name = null)
         {
             Dispatch = dispatch;
@@ -63,13 +90,14 @@ namespace Reddit.NET.Controllers
             Name = name;
         }
 
-        public WikiPage(string subreddit, string name = null)
+        /// <summary>
+        /// Create an empty wiki page controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        public WikiPage(Dispatch dispatch)
         {
-            Subreddit = subreddit;
-            Name = name;
-        }
 
-        public WikiPage() { }
+        }
 
         /// <summary>
         /// Allow username to edit this wiki page.
@@ -350,6 +378,10 @@ namespace Reddit.NET.Controllers
             PageUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Monitor this wiki page for any changes.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorPage()
         {
             string key = "WikiPage";
