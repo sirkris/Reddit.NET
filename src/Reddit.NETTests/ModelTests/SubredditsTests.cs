@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.NET.Exceptions;
 using Reddit.NET.Models.Structures;
 
 namespace Reddit.NETTests.ModelTests
@@ -171,7 +172,12 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Subscribe()
         {
-            reddit.Models.Subreddits.Subscribe("unsub", false, testData["Subreddit"]);  // Unsubscribe
+            try
+            {
+                reddit.Models.Subreddits.Subscribe("unsub", false, testData["Subreddit"]);  // Unsubscribe
+            }
+            catch (RedditNotFoundException) { }
+
             reddit.Models.Subreddits.Subscribe("sub", false, testData["Subreddit"]);  // Subscribe
         }
 
