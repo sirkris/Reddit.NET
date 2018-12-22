@@ -1,12 +1,8 @@
-﻿using Newtonsoft.Json;
-using Reddit.NET;
+﻿using Reddit.NET;
 using Reddit.NET.Controllers;
 using Reddit.NET.Controllers.EventArgs;
-using Reddit.NET.Controllers.Structures;
 using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 
 /// <summary>
 /// A simple example application that demonstrates some of Reddit.NET's basic features.

@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET;
 using Reddit.NET.Models.Structures;
 using RestSharp;
-using System.Collections.Generic;
 
 namespace Reddit.NETTests.ModelTests.WorkflowTests
 {

@@ -1,13 +1,10 @@
-﻿using Newtonsoft.Json;
-using Reddit.NET.Controllers.EventArgs;
+﻿using Reddit.NET.Controllers.EventArgs;
 using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {

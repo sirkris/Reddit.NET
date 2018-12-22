@@ -1,7 +1,5 @@
 ﻿using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
-using Newtonsoft.Json.Linq;
 using RestSharp;
 using System;
 using System.Collections.Generic;

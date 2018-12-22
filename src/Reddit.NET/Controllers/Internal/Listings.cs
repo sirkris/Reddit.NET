@@ -1,14 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Exceptions;
-using Reddit.NET.Controllers.EventArgs;
-using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace Reddit.NET.Controllers.Internal
 {

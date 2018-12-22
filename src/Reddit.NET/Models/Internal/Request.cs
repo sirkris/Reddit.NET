@@ -3,12 +3,10 @@ using Newtonsoft.Json.Linq;
 using Reddit.NET.Exceptions;
 using Reddit.NET.Models.EventArgs;
 using RestSharp;
-using ControlStructures = Reddit.NET.Controllers.Structures;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Reddit.NET.Models.Internal
