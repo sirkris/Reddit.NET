@@ -110,7 +110,7 @@ namespace Reddit.NET.Controllers
             CollapsedReason = listing.CollapsedReason;
             Collapsed = listing.Collapsed;
             IsSubmitter = listing.IsSubmitter;
-            Replies = GetComments(listing.Replies, Dispatch);
+            Replies = Listings.GetComments(listing.Replies, Dispatch);
             ScoreHidden = listing.ScoreHidden;
             Depth = listing.Depth;
             Id = listing.Id;
@@ -276,7 +276,7 @@ namespace Reddit.NET.Controllers
         /// <returns>The distinguished comment object.</returns>
         public Comment Distinguish(string how, bool? sticky = null)
         {
-            return GetComments(Validate(Dispatch.Moderation.DistinguishComment(how, Fullname, sticky)), Dispatch)[0];
+            return Listings.GetComments(Validate(Dispatch.Moderation.DistinguishComment(how, Fullname, sticky)), Dispatch)[0];
         }
 
         /// <summary>

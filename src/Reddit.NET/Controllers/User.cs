@@ -328,12 +328,12 @@ namespace Reddit.NET.Controllers
         {
             if (sort.Equals("newForced", StringComparison.OrdinalIgnoreCase))
             {
-                return ForceNewSort(GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, "new", t, after, before, includeCategories, count, limit, srDetail)),
+                return Listings.ForceNewSort(Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, "new", t, after, before, includeCategories, count, limit, srDetail)),
                     Dispatch));
             }
             else
             {
-                return GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, sort, t, after, before, includeCategories, count, limit, srDetail)), Dispatch);
+                return Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, sort, t, after, before, includeCategories, count, limit, srDetail)), Dispatch);
             }
         }
 
@@ -355,7 +355,7 @@ namespace Reddit.NET.Controllers
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            return GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", context, show, sort, t, after, before, includeCategories, count, limit, 
+            return Listings.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", context, show, sort, t, after, before, includeCategories, count, limit, 
                 srDetail)), Dispatch);
         }
 

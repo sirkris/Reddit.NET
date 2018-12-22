@@ -291,7 +291,7 @@ namespace Reddit.NET.Controllers
         public List<Subreddit> MySubscribedSubreddits(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = true, bool includeCategories = false, int count = 0)
         {
-            return GetSubreddits(Dispatch.Subreddits.Mine("subscriber", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
+            return Listings.GetSubreddits(Dispatch.Subreddits.Mine("subscriber", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
         }
 
         /// <summary>
@@ -308,7 +308,7 @@ namespace Reddit.NET.Controllers
         public List<Subreddit> MyContributingSubreddits(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = true, bool includeCategories = false, int count = 0)
         {
-            return GetSubreddits(Dispatch.Subreddits.Mine("contributor", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
+            return Listings.GetSubreddits(Dispatch.Subreddits.Mine("contributor", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
         }
 
         /// <summary>
@@ -325,7 +325,7 @@ namespace Reddit.NET.Controllers
         public List<Subreddit> MyModeratorSubreddits(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = true, bool includeCategories = false, int count = 0)
         {
-            return GetSubreddits(Dispatch.Subreddits.Mine("moderator", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
+            return Listings.GetSubreddits(Dispatch.Subreddits.Mine("moderator", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
         }
 
         /// <summary>
@@ -342,7 +342,7 @@ namespace Reddit.NET.Controllers
         public List<Subreddit> MyStreamingSubreddits(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = true, bool includeCategories = false, int count = 0)
         {
-            return GetSubreddits(Dispatch.Subreddits.Mine("streams", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
+            return Listings.GetSubreddits(Dispatch.Subreddits.Mine("streams", after, before, includeCategories, count, limit, show, srDetail), Dispatch);
         }
 
         /// <summary>

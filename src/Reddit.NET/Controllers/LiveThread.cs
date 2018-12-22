@@ -147,7 +147,7 @@ namespace Reddit.NET.Controllers
         /// <returns>The requested live updates.</returns>
         public List<RedditThings.LiveUpdate> GetUpdates(string after = "", string before = "", string styleSr = "", int count = 0, int limit = 25)
         {
-            Updates = GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, after, before, styleSr, count, limit)));
+            Updates = Listings.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, after, before, styleSr, count, limit)));
             UpdatesLastUpdated = DateTime.Now;
 
             return Updates;
@@ -713,7 +713,7 @@ namespace Reddit.NET.Controllers
                 added.Add(new RedditThings.UserListContainer { Data = new RedditThings.UserListData { Children = new List<RedditThings.UserListChild>() } });
                 removed.Add(new RedditThings.UserListContainer { Data = new RedditThings.UserListData { Children = new List<RedditThings.UserListChild>() } });
 
-                if (ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<RedditThings.UserListChild> childrenAdded, out List<RedditThings.UserListChild> childrenRemoved))
+                if (Listings.ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<RedditThings.UserListChild> childrenAdded, out List<RedditThings.UserListChild> childrenRemoved))
                 {
                     added[i].Data.Children = childrenAdded;
                     removed[i].Data.Children = childrenRemoved;
@@ -729,7 +729,7 @@ namespace Reddit.NET.Controllers
             List<RedditThings.LiveUpdate> oldList = updates;
             List<RedditThings.LiveUpdate> newList = GetUpdates();
 
-            if (ListDiff(oldList, newList, out List<RedditThings.LiveUpdate> added, out List<RedditThings.LiveUpdate> removed))
+            if (Listings.ListDiff(oldList, newList, out List<RedditThings.LiveUpdate> added, out List<RedditThings.LiveUpdate> removed))
             {
                 // Event handler to alert the calling app that the list has changed.  --Kris
                 LiveThreadUpdatesUpdateEventArgs args = new LiveThreadUpdatesUpdateEventArgs

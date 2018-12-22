@@ -190,7 +190,7 @@ namespace Reddit.NET.Controllers
         /// <returns>The distinguished post object.</returns>
         public Post Distinguish(string how)
         {
-            return GetPosts(Validate(Dispatch.Moderation.DistinguishPost(how, Fullname)), Dispatch)[0];
+            return Listings.GetPosts(Validate(Dispatch.Moderation.DistinguishPost(how, Fullname)), Dispatch)[0];
         }
 
         /// <summary>

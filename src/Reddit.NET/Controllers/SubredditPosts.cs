@@ -226,7 +226,7 @@ namespace Reddit.NET.Controllers
         // Let's just pretend this one belongs to the "all" subreddit so we can put it here with the others.  --Kris
         public List<Post> GetBest(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Dispatch.Listings.Best(after, before, false, limit: limit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Best(after, before, false, limit: limit), Dispatch);
 
             BestLastUpdated = DateTime.Now;
 
@@ -236,7 +236,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetHot(string g = "", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Dispatch.Listings.Hot(g, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Hot(g, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
 
             HotLastUpdated = DateTime.Now;
 
@@ -246,7 +246,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetNew(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Dispatch.Listings.New(after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.New(after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
 
             NewLastUpdated = DateTime.Now;
 
@@ -256,7 +256,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetRising(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Dispatch.Listings.Rising(after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Rising(after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
 
             RisingLastUpdated = DateTime.Now;
 
@@ -266,7 +266,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetTop(string t = "all", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Dispatch.Listings.Top(t, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Top(t, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
 
             TopLastUpdated = DateTime.Now;
 
@@ -277,7 +277,7 @@ namespace Reddit.NET.Controllers
 
         public List<Post> GetControversial(string t = "all", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = GetPosts(Dispatch.Listings.Controversial(t, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Controversial(t, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
 
             ControversialLastUpdated = DateTime.Now;
 
@@ -289,7 +289,7 @@ namespace Reddit.NET.Controllers
         public List<Post> GetModQueuePosts(string location, string after = "", string before = "", int limit = 100, string show = "all",
             bool srDetail = false, int count = 0)
         {
-            return GetPosts(Dispatch.Moderation.ModQueue(location, after, before, "links", Subreddit, count, limit, show, srDetail), Dispatch);
+            return Listings.GetPosts(Dispatch.Moderation.ModQueue(location, after, before, "links", Subreddit, count, limit, show, srDetail), Dispatch);
         }
 
         public List<Post> GetModQueue(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
@@ -679,7 +679,7 @@ namespace Reddit.NET.Controllers
                         break;
                 }
 
-                if (ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
+                if (Listings.ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     PostsUpdateEventArgs args = new PostsUpdateEventArgs

@@ -186,7 +186,7 @@ namespace Reddit.NET
         /// <returns>A list of populated posts.</returns>
         public List<Post> GetPosts(List<string> fullnames)
         {
-            return Account.GetPosts(Account.Validate(Models.Listings.GetByNames(string.Join(",", fullnames))), Models);
+            return Account.Listings.GetPosts(Account.Validate(Models.Listings.GetByNames(string.Join(",", fullnames))), Models);
         }
 
         /// <summary>
@@ -267,7 +267,7 @@ namespace Reddit.NET
         public List<Subreddit> SearchSubreddits(string query, int limit = 25, bool showUsers = false, string after = "", string before = "", string sort = "relevance",
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Account.GetSubreddits(Account.Validate(Models.Subreddits.Search(after, before, query, showUsers, sort, count, limit, show, srDetail)), Models);
+            return Account.Listings.GetSubreddits(Account.Validate(Models.Subreddits.Search(after, before, query, showUsers, sort, count, limit, show, srDetail)), Models);
         }
 
         /// <summary>
@@ -295,7 +295,7 @@ namespace Reddit.NET
         /// <returns>Matching subreddits.</returns>
         public List<Subreddit> SubredditAutocompleteV2(string query, bool includeOver18 = true, bool includeProfiles = true, bool includeCategories = true, int limit = 5)
         {
-            return Account.GetSubreddits(Account.Validate(Models.Subreddits.SubredditAutocompleteV2(includeCategories, includeOver18, includeProfiles, query, limit)), Models);
+            return Account.Listings.GetSubreddits(Account.Validate(Models.Subreddits.SubredditAutocompleteV2(includeCategories, includeOver18, includeProfiles, query, limit)), Models);
         }
 
         // TODO - Split this up and maybe create a new Subreddits controller for these?  --Kris
@@ -317,7 +317,7 @@ namespace Reddit.NET
         public List<Subreddit> GetSubreddits(string where, int limit = 25, string after = "", string before = "", bool includeCategories = false,
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Account.GetSubreddits(Account.Validate(Models.Subreddits.Get(where, after, before, includeCategories, count, limit, show, srDetail)), Models);
+            return Account.Listings.GetSubreddits(Account.Validate(Models.Subreddits.Get(where, after, before, includeCategories, count, limit, show, srDetail)), Models);
         }
 
         // TODO - Split this up and maybe create a new Subreddits controller for these?  --Kris
@@ -339,7 +339,7 @@ namespace Reddit.NET
         public List<Subreddit> GetUserSubreddits(string where, int limit = 25, string after = "", string before = "", bool includeCategories = false,
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Account.GetSubreddits(Account.Validate(Models.Subreddits.GetUserSubreddits(where, after, before, includeCategories, count, limit, show, srDetail)), Models);
+            return Account.Listings.GetSubreddits(Account.Validate(Models.Subreddits.GetUserSubreddits(where, after, before, includeCategories, count, limit, show, srDetail)), Models);
         }
 
         /// <summary>

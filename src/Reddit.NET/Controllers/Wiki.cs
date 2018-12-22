@@ -111,7 +111,7 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            return GetAboutChildren<SubredditUser>(res);
+            return Listings.GetAboutChildren<SubredditUser>(res);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            return GetAboutChildren<BannedUser>(res);
+            return Listings.GetAboutChildren<BannedUser>(res);
         }
 
         /// <summary>
@@ -223,7 +223,7 @@ namespace Reddit.NET.Controllers
                 List<string> oldList = pages;
                 List<string> newList = GetPages();
 
-                if (ListDiff(oldList, newList, out List<string> added, out List<string> removed))
+                if (Listings.ListDiff(oldList, newList, out List<string> added, out List<string> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     WikiPagesUpdateEventArgs args = new WikiPagesUpdateEventArgs
