@@ -35,9 +35,6 @@ namespace Reddit.NET.Controllers
         public int CommentKarma;
         public bool HasSubscribed;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
         /// <summary>
         /// Full user data from the API.
         /// </summary>

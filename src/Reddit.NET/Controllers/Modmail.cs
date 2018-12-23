@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
 using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
@@ -13,7 +14,7 @@ namespace Reddit.NET.Controllers
     /// <summary>
     /// Controller class for modmail.
     /// </summary>
-    public class Modmail : BaseController
+    public class Modmail : Monitors
     {
         public event EventHandler<ModmailConversationsEventArgs> RecentUpdated;
         public event EventHandler<ModmailConversationsEventArgs> ModUpdated;
@@ -488,7 +489,7 @@ namespace Reddit.NET.Controllers
         public bool MonitorRecent()
         {
             string key = "ModmailMessagesRecent";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent")));
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent")), "ModmailMessages");
         }
 
         /// <summary>
@@ -498,7 +499,7 @@ namespace Reddit.NET.Controllers
         public bool MonitorMod()
         {
             string key = "ModmailMessagesMod";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod")));
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod")), "ModmailMessages");
         }
 
         /// <summary>
@@ -508,7 +509,7 @@ namespace Reddit.NET.Controllers
         public bool MonitorUser()
         {
             string key = "ModmailMessagesUser";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user")));
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user")), "ModmailMessages");
         }
 
         /// <summary>
@@ -518,7 +519,7 @@ namespace Reddit.NET.Controllers
         public bool MonitorUnread()
         {
             string key = "ModmailMessagesUnread";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread")));
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread")), "ModmailMessages");
         }
 
         protected virtual void OnRecentUpdated(ModmailConversationsEventArgs e)
@@ -659,7 +660,7 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
         {
             switch (key)
             {
@@ -674,30 +675,6 @@ namespace Reddit.NET.Controllers
                 case "ModmailMessagesUnread":
                     return new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", startDelayMs));
             }
-        }
-
-        internal void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, "ModmailMessages", (i * MonitoringWaitDelayMS)));
-                Threads[key].Start();
-                i++;
-            }
-        }
-
-        private bool Monitor(string key, Thread thread)
-        {
-            bool res = Monitor(key, thread, "ModmailMessages", out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
         }
     }
 }

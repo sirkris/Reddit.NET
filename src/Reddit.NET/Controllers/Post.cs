@@ -27,9 +27,6 @@ namespace Reddit.NET.Controllers
         public bool Spam;
         public bool NSFW;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
         /// <summary>
         /// The full Listing object returned by the Reddit API;
         /// </summary>

@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
 using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using System;
@@ -10,7 +11,7 @@ namespace Reddit.NET.Controllers
     /// <summary>
     /// Controller class for comment replies.
     /// </summary>
-    public class Comments : BaseController
+    public class Comments : Monitors
     {
         public event EventHandler<CommentsUpdateEventArgs> ConfidenceUpdated;
         public event EventHandler<CommentsUpdateEventArgs> TopUpdated;
@@ -689,7 +690,7 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
         {
             switch (key)
             {
@@ -711,30 +712,6 @@ namespace Reddit.NET.Controllers
                     return new Thread(() => MonitorCommentsThread(Monitoring, key, "qa", SubKey, startDelayMs));
                 case "LiveComments":
                     return new Thread(() => MonitorCommentsThread(Monitoring, key, "live", SubKey, startDelayMs));
-            }
-        }
-
-        private bool Monitor(string key, Thread thread, string subKey)
-        {
-            bool res = Monitor(key, thread, subKey, out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
-        }
-
-        private void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, SubKey, (i * MonitoringWaitDelayMS)));
-                Threads[key].Start();
-                i++;
             }
         }
     }

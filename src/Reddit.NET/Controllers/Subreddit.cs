@@ -56,9 +56,6 @@ namespace Reddit.NET.Controllers
         public bool ShowMediaPreview;
         public string SubmissionType;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
         /// <summary>
         /// Full subreddit data retrieved from the API.
         /// </summary>

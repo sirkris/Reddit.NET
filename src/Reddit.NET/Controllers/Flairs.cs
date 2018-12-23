@@ -11,9 +11,6 @@ namespace Reddit.NET.Controllers
     /// </summary>
     public class Flairs : BaseController
     {
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
         /// <summary>
         /// List of flairs.
         /// </summary>

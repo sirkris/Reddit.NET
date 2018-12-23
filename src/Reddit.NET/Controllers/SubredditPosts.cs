@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
 using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using System;
@@ -10,7 +11,7 @@ namespace Reddit.NET.Controllers
     /// <summary>
     /// Controller class for subreddit post listings.
     /// </summary>
-    public class SubredditPosts : BaseController
+    public class SubredditPosts : Monitors
     {
         public event EventHandler<PostsUpdateEventArgs> BestUpdated;
         public event EventHandler<PostsUpdateEventArgs> HotUpdated;
@@ -228,7 +229,7 @@ namespace Reddit.NET.Controllers
         private DateTime? ModQueueUnmoderatedLastUpdated;
         private DateTime? ModQueueEditedLastUpdated;
 
-        private string Subreddit;
+        private readonly string Subreddit;
         private Dispatch Dispatch;
 
         private string TopT = "all";
@@ -703,58 +704,34 @@ namespace Reddit.NET.Controllers
             ModQueueEditedUpdated?.Invoke(this, e);
         }
 
-        private bool Monitor(string key, Thread thread, string subKey)
-        {
-            bool res = Monitor(key, thread, subKey, out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
-        }
-
-        private void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, Subreddit, (i * MonitoringWaitDelayMS)));
-                Threads[key].Start();
-                i++;
-            }
-        }
-
-        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "BestPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "best", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "best", subKey, startDelayMs));
                 case "HotPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "hot", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "hot", subKey, startDelayMs));
                 case "NewPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "new", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "new", subKey, startDelayMs));
                 case "RisingPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "rising", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "rising", subKey, startDelayMs));
                 case "TopPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "top", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "top", subKey, startDelayMs));
                 case "ControversialPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "controversial", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "controversial", subKey, startDelayMs));
                 case "ModQueuePosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueue", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueue", subKey, startDelayMs));
                 case "ModQueueReportsPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuereports", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuereports", subKey, startDelayMs));
                 case "ModQueueSpamPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuespam", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuespam", subKey, startDelayMs));
                 case "ModQueueUnmoderatedPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueunmoderated", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueunmoderated", subKey, startDelayMs));
                 case "ModQueueEditedPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueedited", Subreddit, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueedited", subKey, startDelayMs));
             }
         }
 

@@ -51,9 +51,6 @@ namespace Reddit.NET.Controllers
         }
         private Post root = null;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
         /// <summary>
         /// Full comment data returned by the API.
         /// </summary>

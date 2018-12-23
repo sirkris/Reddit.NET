@@ -30,9 +30,6 @@ namespace Reddit.NET.Controllers
         private User me;
         private DateTime? MeLastUpdated;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
         public PrivateMessages Messages;
         public Modmail Modmail;
 

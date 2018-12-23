@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
 using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
@@ -12,7 +13,7 @@ namespace Reddit.NET.Controllers
     /// <summary>
     /// Controller class for live threads.
     /// </summary>
-    public class LiveThread : BaseController
+    public class LiveThread : Monitors
     {
         public event EventHandler<LiveThreadUpdateEventArgs> ThreadUpdated;
         public event EventHandler<LiveThreadContributorsUpdateEventArgs> ContributorsUpdated;
@@ -593,17 +594,7 @@ namespace Reddit.NET.Controllers
             return Monitor(key, new Thread(() => MonitorUpdatesThread(key)), Id);
         }
 
-        private bool Monitor(string key, Thread thread, string subKey)
-        {
-            bool res = Monitor(key, thread, subKey, out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
-        }
-
-        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
         {
             switch (key)
             {
@@ -615,20 +606,6 @@ namespace Reddit.NET.Controllers
                     return new Thread(() => MonitorLiveThread(key, "contributors", subKey, startDelayMs));
                 case "LiveThreadUpdates":
                     return new Thread(() => MonitorLiveThread(key, "updates", subKey, startDelayMs));
-            }
-        }
-
-        private void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, Id, (i * MonitoringWaitDelayMS)));
-                Threads[key].Start();
-                i++;
             }
         }
 

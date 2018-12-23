@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
 using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
@@ -12,7 +13,7 @@ namespace Reddit.NET.Controllers
     /// <summary>
     /// Controller class for private messages.
     /// </summary>
-    public class PrivateMessages : BaseController
+    public class PrivateMessages : Monitors
     {
         public event EventHandler<MessagesUpdateEventArgs> InboxUpdated;
         public event EventHandler<MessagesUpdateEventArgs> UnreadUpdated;
@@ -382,7 +383,7 @@ namespace Reddit.NET.Controllers
         public bool MonitorInbox()
         {
             string key = "PrivateMessagesInbox";
-            return Monitor(key, new Thread(() => MonitorInboxThread(key)));
+            return Monitor(key, new Thread(() => MonitorInboxThread(key)), "PrivateMessages");
         }
 
         private void MonitorInboxThread(string key)
@@ -397,7 +398,7 @@ namespace Reddit.NET.Controllers
         public bool MonitorUnread()
         {
             string key = "PrivateMessagesUnread";
-            return Monitor(key, new Thread(() => MonitorUnreadThread(key)));
+            return Monitor(key, new Thread(() => MonitorUnreadThread(key)), "PrivateMessages");
         }
 
         private void MonitorUnreadThread(string key)
@@ -412,7 +413,7 @@ namespace Reddit.NET.Controllers
         public bool MonitorSent()
         {
             string key = "PrivateMessagesSent";
-            return Monitor(key, new Thread(() => MonitorSentThread(key)));
+            return Monitor(key, new Thread(() => MonitorSentThread(key)), "PrivateMessages");
         }
 
         private void MonitorSentThread(string key)
@@ -483,7 +484,7 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
         {
             switch (key)
             {
@@ -496,30 +497,6 @@ namespace Reddit.NET.Controllers
                 case "PrivateMessagesSent":
                     return new Thread(() => MonitorPrivateMessagesThread(key, "sent", startDelayMs));
             }
-        }
-
-        internal void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, "PrivateMessages", (i * MonitoringWaitDelayMS)));
-                Threads[key].Start();
-                i++;
-            }
-        }
-
-        private bool Monitor(string key, Thread thread)
-        {
-            bool res = Monitor(key, thread, "PrivateMessages", out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
         }
     }
 }

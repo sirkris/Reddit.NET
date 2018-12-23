@@ -1,5 +1,6 @@
-﻿using Reddit.NET.Controllers.Structures;
-using Reddit.NET.Controllers.EventArgs;
+﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
+using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
@@ -12,7 +13,7 @@ namespace Reddit.NET.Controllers
     /// <summary>
     /// Controller class for wiki pages.
     /// </summary>
-    public class WikiPage : BaseController
+    public class WikiPage : Monitors
     {
         public bool MayRevise;
         public DateTime RevisionDate;
@@ -385,33 +386,10 @@ namespace Reddit.NET.Controllers
         public bool MonitorPage()
         {
             string key = "WikiPage";
-            return Monitor(key, new Thread(() => MonitorPageThread(key)));
+            return Monitor(key, new Thread(() => MonitorPageThread(key)), Name);
         }
 
-        private bool Monitor(string key, Thread thread)
-        {
-            bool res = Monitor(key, thread, Name, out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
-        }
-
-        private void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, (i * MonitoringWaitDelayMS)));
-                i++;
-            }
-        }
-
-        private Thread CreateMonitoringThread(string key, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subkey, int startDelayMs = 0)
         {
             switch (key)
             {
