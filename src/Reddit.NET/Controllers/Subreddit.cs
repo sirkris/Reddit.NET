@@ -134,7 +134,7 @@ namespace Reddit.NET.Controllers
 
             SubredditData = subreddit;
             Posts = new SubredditPosts(ref Dispatch, Name);
-            Flairs = new Flairs(this, ref Dispatch);
+            Flairs = new Flairs(ref Dispatch, Name);
             Wiki = new Wiki(ref Dispatch, Name);
         }
 
@@ -151,7 +151,7 @@ namespace Reddit.NET.Controllers
 
             SubredditData = subredditChild.Data;
             Posts = new SubredditPosts(ref Dispatch, Name);
-            Flairs = new Flairs(this, ref Dispatch);
+            Flairs = new Flairs(ref Dispatch, Name);
             Wiki = new Wiki(ref Dispatch, Name);
         }
 
@@ -216,7 +216,7 @@ namespace Reddit.NET.Controllers
 
             UpdateSubredditData();
             Posts = new SubredditPosts(ref Dispatch, Name);
-            Flairs = new Flairs(this, ref Dispatch);
+            Flairs = new Flairs(ref Dispatch, Name);
             Wiki = new Wiki(ref Dispatch, Name);
         }
 
@@ -229,7 +229,7 @@ namespace Reddit.NET.Controllers
         {
             Dispatch = dispatch;
             Posts = new SubredditPosts(ref Dispatch, Name);
-            Flairs = new Flairs(this, ref Dispatch);
+            Flairs = new Flairs(ref Dispatch, Name);
             Wiki = new Wiki(ref Dispatch, Name);
         }
 
@@ -241,7 +241,7 @@ namespace Reddit.NET.Controllers
             SubredditType = subreddit.SubredditType;
             CommunityIcon = subreddit.CommunityIcon;
             HeaderTitle = subreddit.HeaderTitle;
-            WikiEnabled = (subreddit.WikiEnabled.HasValue ? subreddit.WikiEnabled.Value : false);
+            WikiEnabled = subreddit.WikiEnabled ?? false;
             Over18 = subreddit.Over18;
             Sidebar = subreddit.Description;
             Name = subreddit.DisplayName;
@@ -353,7 +353,7 @@ namespace Reddit.NET.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new LinkPost(ref Dispatch, this, title, url, author, thumbnail, thumbnailHeight, thumbnailWidth, preview,
+            return new LinkPost(ref Dispatch, Name, title, url, author, thumbnail, thumbnailHeight, thumbnailWidth, preview,
                 id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -364,7 +364,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new LinkPost object attached to this subreddit.</returns>
         public LinkPost LinkPost(string fullname)
         {
-            return new LinkPost(ref Dispatch, fullname, this);
+            return new LinkPost(ref Dispatch, fullname, Name);
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace Reddit.NET.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new SelfPost(ref Dispatch, this, title, selfText, selfTextHtml, author, id, fullname, permalink, created, 
+            return new SelfPost(ref Dispatch, Name, title, selfText, selfTextHtml, author, id, fullname, permalink, created, 
                 edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -387,7 +387,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new SelfPost object attached to this subreddit.</returns>
         public SelfPost SelfPost(string fullname)
         {
-            return new SelfPost(ref Dispatch, fullname, this);
+            return new SelfPost(ref Dispatch, fullname, Name);
         }
 
         /// <summary>
@@ -396,7 +396,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new generic Post object attached to this subreddit.</returns>
         public Post Post()
         {
-            return new Post(ref Dispatch, this);
+            return new Post(ref Dispatch, Name);
         }
 
         /// <summary>
@@ -406,7 +406,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new generic Post object attached to this subreddit.</returns>
         public Post Post(string fullname)
         {
-            return new Post(ref Dispatch, fullname, this);
+            return new Post(ref Dispatch, fullname, Name);
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();

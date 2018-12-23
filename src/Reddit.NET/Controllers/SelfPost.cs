@@ -70,44 +70,7 @@ namespace Reddit.NET.Controllers
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="fullname">fullname of a thing</param>
         /// <param name="subreddit">The subreddit where the post exists</param>
-        public SelfPost(ref Dispatch dispatch, string fullname, Subreddit subreddit) : base(ref dispatch, fullname, subreddit) { }
-
-        /// <summary>
-        /// Create a new SelfPost instance populated only with its Subreddit.
-        /// </summary>
-        /// <param name="dispatch">An instance of the Dispatch controller</param>
-        /// <param name="subreddit">The subreddit where the post exists</param>
-        public SelfPost(ref Dispatch dispatch, Subreddit subreddit) : base(ref dispatch, subreddit) { }
-
-        /// <summary>
-        /// Create a new SelfPost instance populated with its Subreddit and other specified values.
-        /// </summary>
-        /// <param name="dispatch">An instance of the Dispatch controller</param>
-        /// <param name="subreddit">The subreddit where the post exists</param>
-        /// <param name="title">Post title.</param>
-        /// <param name="author">Reddit user who authored the post.</param>
-        /// <param name="selfText">The post body.</param>
-        /// <param name="selfTextHtml">The HTML-formateed post body.</param>
-        /// <param name="id">Post ID.</param>
-        /// <param name="fullname">Post fullname.</param>
-        /// <param name="permalink">Permalink of post.</param>
-        /// <param name="created">When the post was created.</param>
-        /// <param name="edited">When the post was last edited.</param>
-        /// <param name="score">Net vote score.</param>
-        /// <param name="upVotes">Number of upvotes.</param>
-        /// <param name="downVotes">Number of downvotes.</param>
-        /// <param name="removed">Whether the post was removed.</param>
-        /// <param name="spam">Whether the post was marked as spam.</param>
-        public SelfPost(ref Dispatch dispatch, Subreddit subreddit, string title = null, string selfText = null, string selfTextHtml = null, 
-            string author = null, string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
-            DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
-            : base(ref dispatch, subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam)
-        {
-            SelfText = selfText;
-            SelfTextHTML = selfTextHtml;
-
-            Listing = new RedditThings.Post(this);
-        }
+        public SelfPost(ref Dispatch dispatch, string fullname, string subreddit) : base(ref dispatch, fullname, subreddit) { }
 
         /// <summary>
         /// Create a new SelfPost instance populated with its Subreddit, an ID/Fullname returned by the API, and other specified values.

@@ -102,49 +102,12 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="fullname">Fullname of the post</param>
-        /// <param name="subreddit">A valid subreddit instance</param>
-        public Post(ref Dispatch dispatch, string fullname, Subreddit subreddit)
+        /// <param name="subreddit">A valid subreddit name</param>
+        public Post(ref Dispatch dispatch, string fullname, string subreddit)
         {
             Dispatch = dispatch;
             Fullname = fullname;
-            Subreddit = subreddit.Name;
-        }
-
-        /// <summary>
-        /// Create a new post controller instance, populated with only its subreddit.
-        /// </summary>
-        /// <param name="dispatch"></param>
-        /// <param name="subreddit">A valid subreddit instance</param>
-        public Post(ref Dispatch dispatch, Subreddit subreddit)
-        {
-            Dispatch = dispatch;
-            Subreddit = subreddit.Name;
-        }
-
-        /// <summary>
-        /// Create a new post controller instance, populated manually.
-        /// </summary>
-        /// <param name="dispatch"></param>
-        /// <param name="subreddit">The subreddit to which the post belongs</param>
-        /// <param name="title">The title of the post</param>
-        /// <param name="author">The post author's username</param>
-        /// <param name="id"></param>
-        /// <param name="fullname"></param>
-        /// <param name="permalink"></param>
-        /// <param name="created"></param>
-        /// <param name="edited"></param>
-        /// <param name="score"></param>
-        /// <param name="upVotes"></param>
-        /// <param name="downVotes"></param>
-        /// <param name="removed"></param>
-        /// <param name="spam"></param>
-        /// <param name="nsfw"></param>
-        public Post(ref Dispatch dispatch, Subreddit subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
-            DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
-            int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
-        {
-            Dispatch = dispatch;
-            Import(subreddit.Name, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
+            Subreddit = subreddit;
         }
 
         /// <summary>

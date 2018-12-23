@@ -85,7 +85,7 @@ namespace Reddit.NET.Controllers
         /// <param name="dispatch"></param>
         /// <param name="fullname">Fullname of the post</param>
         /// <param name="subreddit">A valid subreddit instance</param>
-        public LinkPost(ref Dispatch dispatch, string fullname, Subreddit subreddit) : base(ref dispatch, fullname, subreddit) { }
+        public LinkPost(ref Dispatch dispatch, string fullname, string subreddit) : base(ref dispatch, fullname, subreddit) { }
 
         /// <summary>
         /// Create a new link post controller instance, populated manually.
@@ -109,7 +109,7 @@ namespace Reddit.NET.Controllers
         /// <param name="downVotes"></param>
         /// <param name="removed"></param>
         /// <param name="spam"></param>
-        public LinkPost(ref Dispatch dispatch, Subreddit subreddit, string title = null, string url = null, string author = null, 
+        public LinkPost(ref Dispatch dispatch, string subreddit, string title = null, string url = null, string author = null, 
             string thumbnail = null, int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
             string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
