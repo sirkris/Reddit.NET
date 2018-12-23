@@ -210,6 +210,74 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Reply with a comment to this post.
+        /// </summary>
+        /// <param name="body">The comment reply text</param>
+        /// <param name="bodyHtml"></param>
+        /// <param name="author"></param>
+        /// <param name="collapsedReason"></param>
+        /// <param name="collapsed"></param>
+        /// <param name="isSubmitter"></param>
+        /// <param name="replies"></param>
+        /// <param name="scoreHidden"></param>
+        /// <param name="depth"></param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
+        /// <returns>The newly-created comment reply.</returns>
+        public Comment Reply(string body, string bodyHtml = null, string author = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            return Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).Submit();
+        }
+
+        /// <summary>
+        /// Reply with a comment to this post asynchronously.
+        /// </summary>
+        /// <param name="body">The comment reply text</param>
+        /// <param name="bodyHtml"></param>
+        /// <param name="author"></param>
+        /// <param name="collapsedReason"></param>
+        /// <param name="collapsed"></param>
+        /// <param name="isSubmitter"></param>
+        /// <param name="replies"></param>
+        /// <param name="scoreHidden"></param>
+        /// <param name="depth"></param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
+        public async Task ReplyAsync(string body, string bodyHtml = null, string author = null,
+            string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
+            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
+            int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
+        {
+            await Task.Run(() =>
+            {
+                Reply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                    depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
+            });
+        }
+
+        /// <summary>
         /// Return information about the current Post instance.
         /// </summary>
         /// <returns>An instance of this class populated with the retrieved data.</returns>

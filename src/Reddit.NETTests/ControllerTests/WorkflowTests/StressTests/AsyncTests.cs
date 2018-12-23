@@ -13,12 +13,10 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
         {
             NewPosts = new Dictionary<string, LinkPost>();
             NewComments = new Dictionary<string, Comment>();
-            NewCommentsByThread = new Dictionary<string, List<Comment>>();
         }
 
         private Dictionary<string, LinkPost> NewPosts;
         private Dictionary<string, Comment> NewComments;
-        private Dictionary<string, List<Comment>> NewCommentsByThread;
 
         [TestMethod]
         public void Timing()
@@ -27,7 +25,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
             for (int i = 1; i <= 60; i++)
             {
                 // Despite what VS says, we don't want to use await here.  --Kris
-                SelfPost.Comment("Stress test comment #" + i.ToString()).SubmitAsync();
+                SelfPost.ReplyAsync("Stress test comment #" + i.ToString());
             }
             DateTime end = DateTime.Now;
 
@@ -89,7 +87,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
                 for (int ii = 1; ii <= 10; ii++)
                 {
                     // Despite what VS says, we don't want to use await here.  --Kris
-                    posts[i - 1].Comment("Stress test comment #" + i.ToString() + "-" + ii.ToString()).SubmitAsync();
+                    posts[i - 1].ReplyAsync("Stress test comment #" + i.ToString() + "-" + ii.ToString());
                 }
             }
 
