@@ -10,7 +10,8 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Listings(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
+        public Listings(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
 
         // TODO - API returns 400.  No idea why.  --Kris
         /// <summary>

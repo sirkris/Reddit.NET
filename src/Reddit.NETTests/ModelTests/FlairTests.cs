@@ -1,5 +1,4 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET;
 using Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
@@ -16,7 +15,7 @@ namespace Reddit.NETTests.ModelTests
         {
             List<Flair> flairs = reddit.Models.Flair.UserFlair(testData["Subreddit"]);
 
-            Assert.IsNotNull(flairs);
+            Validate(flairs);
         }
 
         [TestMethod]
@@ -24,7 +23,7 @@ namespace Reddit.NETTests.ModelTests
         {
             List<FlairV2> flairs = reddit.Models.Flair.UserFlairV2(testData["Subreddit"]);
 
-            Assert.IsNotNull(flairs);
+            Validate(flairs);
         }
 
         [TestMethod]
@@ -79,7 +78,7 @@ namespace Reddit.NETTests.ModelTests
         {
             FlairListResultContainer res = reddit.Models.Flair.FlairList("", "", "", testData["Subreddit"]);
 
-            Assert.IsNotNull(res);
+            Validate(res);
         }
 
         [TestMethod]
@@ -89,9 +88,9 @@ namespace Reddit.NETTests.ModelTests
             FlairSelectorResultContainer resUser = reddit.Models.Flair.FlairSelector("KrisCraig", testData["Subreddit"]);
             FlairSelectorResultContainer resLink = reddit.Models.Flair.FlairSelector(null, "RedditDotNETBot", "t3_9rirb3");
 
-            Assert.IsNotNull(res);
-            Assert.IsNotNull(resUser);
-            Assert.IsNotNull(resLink);
+            Validate(res);
+            Validate(resUser);
+            Validate(resLink);
         }
 
         [TestMethod]
@@ -99,7 +98,7 @@ namespace Reddit.NETTests.ModelTests
         {
             List<Flair> flairs = reddit.Models.Flair.LinkFlair(testData["Subreddit"]);
 
-            Assert.IsNotNull(flairs);
+            Validate(flairs);
         }
 
         [TestMethod]
@@ -107,7 +106,7 @@ namespace Reddit.NETTests.ModelTests
         {
             List<FlairV2> flairs = reddit.Models.Flair.LinkFlairV2(testData["Subreddit"]);
 
-            Assert.IsNotNull(flairs);
+            Validate(flairs);
         }
 
         [TestMethod]

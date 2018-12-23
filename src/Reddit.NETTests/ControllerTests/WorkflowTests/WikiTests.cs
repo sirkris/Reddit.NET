@@ -1,8 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET;
 using Reddit.NET.Controllers;
 using Reddit.NET.Controllers.EventArgs;
-using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
@@ -119,6 +117,9 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         [TestMethod]
         public void MonitorPage()
         {
+            // Initialize so the page will be different.  --Kris
+            Index.Edit("Initialization", "This page is about to be updated.", Index.Revisions()[0].Id);
+
             Index.MonitorPage();
             Index.PageUpdated += C_PageUpdated;
 

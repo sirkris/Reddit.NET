@@ -1,19 +1,18 @@
-﻿using Newtonsoft.Json;
-using Reddit.NET.Controllers.Structures;
-using RedditThings = Reddit.NET.Models.Structures;
-using Reddit.NET.Exceptions;
+﻿using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for flairs.
+    /// </summary>
     public class Flairs : BaseController
     {
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
+        /// <summary>
+        /// List of flairs.
+        /// </summary>
         public List<RedditThings.FlairListResult> FlairList
         {
             get
@@ -29,6 +28,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.FlairListResult> flairList;
         private DateTime? FlairListLastUpdated;
 
+        /// <summary>
+        /// List of link flairs.
+        /// </summary>
         public List<RedditThings.Flair> LinkFlair
         {
             get
@@ -44,6 +46,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.Flair> linkFlair;
         private DateTime? LinkFlairLastUpdated;
 
+        /// <summary>
+        /// List of link flairs.
+        /// </summary>
         public List<RedditThings.FlairV2> LinkFlairV2
         {
             get
@@ -59,6 +64,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.FlairV2> linkFlairV2;
         private DateTime? LinkFlairLastUpdatedV2;
 
+        /// <summary>
+        /// List of user flairs.
+        /// </summary>
         public List<RedditThings.Flair> UserFlair
         {
             get
@@ -74,6 +82,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.Flair> userFlair;
         private DateTime? UserFlairLastUpdated;
 
+        /// <summary>
+        /// List of user flairs.
+        /// </summary>
         public List<RedditThings.FlairV2> UserFlairV2
         {
             get
@@ -89,13 +100,18 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.FlairV2> userFlairV2;
         private DateTime? UserFlairLastUpdatedV2;
         
-        private readonly Subreddit Subreddit;
+        private readonly string Subreddit;
         private readonly Dispatch Dispatch;
 
-        public Flairs(Subreddit subreddit, Dispatch dispatch) : base()
+        /// <summary>
+        /// Create a new instance of the flairs controller.
+        /// </summary>
+        /// <param name="subreddit">The name of the subreddit with the flairs</param>
+        /// <param name="dispatch"></param>
+        public Flairs(ref Dispatch dispatch, string subreddit) : base()
         {
-            Subreddit = subreddit;
             Dispatch = dispatch;
+            Subreddit = subreddit;
         }
 
         /// <summary>
@@ -103,7 +119,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         public void ClearLinkFlairTemplates()
         {
-            Validate(Dispatch.Flair.ClearFlairTemplates("LINK_FLAIR", Subreddit.Name));
+            Validate(Dispatch.Flair.ClearFlairTemplates("LINK_FLAIR", Subreddit));
         }
 
         /// <summary>
@@ -122,7 +138,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         public void ClearUserFlairTemplates()
         {
-            Validate(Dispatch.Flair.ClearFlairTemplates("USER_FLAIR", Subreddit.Name));
+            Validate(Dispatch.Flair.ClearFlairTemplates("USER_FLAIR", Subreddit));
         }
 
         /// <summary>
@@ -142,7 +158,7 @@ namespace Reddit.NET.Controllers
         /// <param name="username">The user whose flair we're removing</param>
         public void DeleteFlair(string username)
         {
-            Validate(Dispatch.Flair.DeleteFlair(username, Subreddit.Name));
+            Validate(Dispatch.Flair.DeleteFlair(username, Subreddit));
         }
 
         /// <summary>
@@ -163,7 +179,7 @@ namespace Reddit.NET.Controllers
         /// <param name="flairTemplateId">The ID of the flair template being deleted (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
         public void DeleteFlairTemplate(string flairTemplateId)
         {
-            Validate(Dispatch.Flair.DeleteFlairTemplate(flairTemplateId, Subreddit.Name));
+            Validate(Dispatch.Flair.DeleteFlairTemplate(flairTemplateId, Subreddit));
         }
 
         /// <summary>
@@ -186,7 +202,7 @@ namespace Reddit.NET.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateFlair(string username, string text, string cssClass = "")
         {
-            Validate(Dispatch.Flair.Create(cssClass, "", username, text, Subreddit.Name));
+            Validate(Dispatch.Flair.Create(cssClass, "", username, text, Subreddit));
         }
 
         /// <summary>
@@ -213,7 +229,7 @@ namespace Reddit.NET.Controllers
         /// <param name="linkFlairSelfAssignEnabled">boolean value</param>
         public void FlairConfig(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled)
         {
-            Validate(Dispatch.Flair.FlairConfig(flairEnabled, flairPosition, flairSelfAssignEnabled, linkFlairPosition, linkFlairSelfAssignEnabled, Subreddit.Name));
+            Validate(Dispatch.Flair.FlairConfig(flairEnabled, flairPosition, flairSelfAssignEnabled, linkFlairPosition, linkFlairSelfAssignEnabled, Subreddit));
         }
 
         /// <summary>
@@ -242,7 +258,7 @@ namespace Reddit.NET.Controllers
         /// <returns>Action results.</returns>
         public List<RedditThings.ActionResult> FlairCSV(string flairCsv)
         {
-            return Validate(Dispatch.Flair.FlairCSV(flairCsv, Subreddit.Name));
+            return Validate(Dispatch.Flair.FlairCSV(flairCsv, Subreddit));
         }
 
         /// <summary>
@@ -332,7 +348,7 @@ namespace Reddit.NET.Controllers
         public List<RedditThings.FlairListResult> GetFlairList(string username = "", int limit = 25, string after = "", string before = "", int count = 0,
             string show = "all", bool srDetail = false)
         {
-            FlairList = Validate(Dispatch.Flair.FlairList(after, before, username, Subreddit.Name, count, limit, show, srDetail)).Users;
+            FlairList = Validate(Dispatch.Flair.FlairList(after, before, username, Subreddit, count, limit, show, srDetail)).Users;
             FlairListLastUpdated = DateTime.Now;
             return FlairList;
         }
@@ -344,7 +360,7 @@ namespace Reddit.NET.Controllers
         /// <returns>Flair results.</returns>
         public RedditThings.FlairSelectorResultContainer FlairSelector(string username)
         {
-            return Validate(Dispatch.Flair.FlairSelector(username, Subreddit.Name));
+            return Validate(Dispatch.Flair.FlairSelector(username, Subreddit));
         }
 
         /// <summary>
@@ -355,7 +371,7 @@ namespace Reddit.NET.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateLinkFlairTemplate(string text, bool textEditable = false, string cssClass = "")
         {
-            Validate(Dispatch.Flair.FlairTemplate(cssClass, "", "LINK_FLAIR", text, textEditable, Subreddit.Name));
+            Validate(Dispatch.Flair.FlairTemplate(cssClass, "", "LINK_FLAIR", text, textEditable, Subreddit));
         }
 
         /// <summary>
@@ -380,7 +396,7 @@ namespace Reddit.NET.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateUserFlairTemplate(string text, bool textEditable = false, string cssClass = "")
         {
-            Validate(Dispatch.Flair.FlairTemplate(cssClass, "", "USER_FLAIR", text, textEditable, Subreddit.Name));
+            Validate(Dispatch.Flair.FlairTemplate(cssClass, "", "USER_FLAIR", text, textEditable, Subreddit));
         }
 
         /// <summary>
@@ -406,7 +422,7 @@ namespace Reddit.NET.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void UpdateLinkFlairTemplate(string flairTemplateId, string text = null, bool? textEditable = null, string cssClass = null)
         {
-            Validate(Dispatch.Flair.FlairTemplate(cssClass, flairTemplateId, "LINK_FLAIR", text, textEditable, Subreddit.Name));
+            Validate(Dispatch.Flair.FlairTemplate(cssClass, flairTemplateId, "LINK_FLAIR", text, textEditable, Subreddit));
         }
 
         /// <summary>
@@ -433,7 +449,7 @@ namespace Reddit.NET.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void UpdateUserFlairTemplate(string flairTemplateId, string text = null, bool? textEditable = null, string cssClass = null)
         {
-            Validate(Dispatch.Flair.FlairTemplate(cssClass, flairTemplateId, "USER_FLAIR", text, textEditable, Subreddit.Name));
+            Validate(Dispatch.Flair.FlairTemplate(cssClass, flairTemplateId, "USER_FLAIR", text, textEditable, Subreddit));
         }
 
         /// <summary>
@@ -464,7 +480,7 @@ namespace Reddit.NET.Controllers
         public RedditThings.FlairV2 CreateLinkFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "LINK_FLAIR", modOnly, text, textColor, textEditable, Subreddit.Name));
+            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "LINK_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
         }
 
         /// <summary>
@@ -498,7 +514,7 @@ namespace Reddit.NET.Controllers
         public RedditThings.FlairV2 CreateUserFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "USER_FLAIR", modOnly, text, textColor, textEditable, Subreddit.Name));
+            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "USER_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
         }
 
         /// <summary>
@@ -533,7 +549,7 @@ namespace Reddit.NET.Controllers
         public RedditThings.FlairV2 UpdateLinkFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "LINK_FLAIR", modOnly, text, textColor, textEditable, Subreddit.Name));
+            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "LINK_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
         }
 
         /// <summary>
@@ -569,7 +585,7 @@ namespace Reddit.NET.Controllers
         public RedditThings.FlairV2 UpdateUserFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "USER_FLAIR", modOnly, text, textColor, textEditable, Subreddit.Name));
+            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "USER_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
         }
 
         /// <summary>
@@ -597,7 +613,7 @@ namespace Reddit.NET.Controllers
         /// <param name="flairEnabled">boolean value</param>
         public void SetFlairEnabled(bool flairEnabled = true)
         {
-            Validate(Dispatch.Flair.SetFlairEnabled(flairEnabled, Subreddit.Name));
+            Validate(Dispatch.Flair.SetFlairEnabled(flairEnabled, Subreddit));
         }
 
         /// <summary>
@@ -619,7 +635,7 @@ namespace Reddit.NET.Controllers
         /// <returns>List of available link flairs.</returns>
         public List<RedditThings.Flair> GetLinkFlair()
         {
-            LinkFlair = Validate(Dispatch.Flair.LinkFlair(Subreddit.Name));
+            LinkFlair = Validate(Dispatch.Flair.LinkFlair(Subreddit));
             LinkFlairLastUpdated = DateTime.Now;
 
             return LinkFlair;
@@ -632,7 +648,7 @@ namespace Reddit.NET.Controllers
         /// <returns>List of available link flairs.</returns>
         public List<RedditThings.FlairV2> GetLinkFlairV2()
         {
-            LinkFlairV2 = Validate(Dispatch.Flair.LinkFlairV2(Subreddit.Name));
+            LinkFlairV2 = Validate(Dispatch.Flair.LinkFlairV2(Subreddit));
             LinkFlairLastUpdatedV2 = DateTime.Now;
 
             return LinkFlairV2;
@@ -645,7 +661,7 @@ namespace Reddit.NET.Controllers
         /// <returns>List of available user flairs.</returns>
         public List<RedditThings.Flair> GetUserFlair()
         {
-            UserFlair = Validate(Dispatch.Flair.UserFlair(Subreddit.Name));
+            UserFlair = Validate(Dispatch.Flair.UserFlair(Subreddit));
             UserFlairLastUpdated = DateTime.Now;
 
             return UserFlair;
@@ -658,7 +674,7 @@ namespace Reddit.NET.Controllers
         /// <returns>List of available user flairs.</returns>
         public List<RedditThings.FlairV2> GetUserFlairV2()
         {
-            UserFlairV2 = Validate(Dispatch.Flair.UserFlairV2(Subreddit.Name));
+            UserFlairV2 = Validate(Dispatch.Flair.UserFlairV2(Subreddit));
             UserFlairLastUpdatedV2 = DateTime.Now;
 
             return UserFlairV2;

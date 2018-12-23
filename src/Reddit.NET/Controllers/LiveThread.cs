@@ -1,16 +1,19 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
 using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
-    public class LiveThread : BaseController
+    /// <summary>
+    /// Controller class for live threads.
+    /// </summary>
+    public class LiveThread : Monitors
     {
         public event EventHandler<LiveThreadUpdateEventArgs> ThreadUpdated;
         public event EventHandler<LiveThreadContributorsUpdateEventArgs> ContributorsUpdated;
@@ -37,6 +40,9 @@ namespace Reddit.NET.Controllers
 
         public RedditThings.LiveUpdateEvent EventData;
 
+        /// <summary>
+        /// List of live thread updates.
+        /// </summary>
         public List<RedditThings.LiveUpdate> Updates
         {
             get
@@ -52,6 +58,9 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.LiveUpdate> updates;
         private DateTime? UpdatesLastUpdated;
 
+        /// <summary>
+        /// List of live thread contributors.
+        /// </summary>
         public List<RedditThings.UserListContainer> Contributors
         {
             get
@@ -67,9 +76,14 @@ namespace Reddit.NET.Controllers
         private List<RedditThings.UserListContainer> contributors;
         private DateTime? ContributorsLastUpdated;
 
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public LiveThread(Dispatch dispatch, LiveThread liveThread)
+        /// <summary>
+        /// Create a new live thread controller instance from another live thread controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="liveThread">A valid instance of this class</param>
+        public LiveThread(ref Dispatch dispatch, LiveThread liveThread)
         {
             Dispatch = dispatch;
 
@@ -80,7 +94,12 @@ namespace Reddit.NET.Controllers
             EventData = liveThread.EventData;
         }
 
-        public LiveThread(Dispatch dispatch, RedditThings.LiveUpdateEvent liveUpdateEvent)
+        /// <summary>
+        /// Create a new live thread controller instance from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="liveUpdateEvent"></param>
+        public LiveThread(ref Dispatch dispatch, RedditThings.LiveUpdateEvent liveUpdateEvent)
         {
             Dispatch = dispatch;
 
@@ -91,7 +110,24 @@ namespace Reddit.NET.Controllers
             EventData = liveUpdateEvent;
         }
 
-        public LiveThread(Dispatch dispatch, string title = null, string description = null, bool nsfw = false, string resources = null,
+        /// <summary>
+        /// Create a new live thread controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="title">Title of the thread</param>
+        /// <param name="description">Description of the thread</param>
+        /// <param name="nsfw">Whether the thread is NSFW</param>
+        /// <param name="resources"></param>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="websocketUrl"></param>
+        /// <param name="announcementUrl"></param>
+        /// <param name="state"></param>
+        /// <param name="icon"></param>
+        /// <param name="totalViews"></param>
+        /// <param name="viewerCount"></param>
+        /// <param name="created"></param>
+        public LiveThread(ref Dispatch dispatch, string title = null, string description = null, bool nsfw = false, string resources = null,
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
         {
@@ -102,7 +138,12 @@ namespace Reddit.NET.Controllers
             EventData = new RedditThings.LiveUpdateEvent(this);
         }
 
-        public LiveThread(Dispatch dispatch, string id)
+        /// <summary>
+        /// Create a new live thread controller instance populated with only its id.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="id">A valid live thread ID</param>
+        public LiveThread(ref Dispatch dispatch, string id)
         {
             Dispatch = dispatch;
             Id = id;
@@ -133,7 +174,7 @@ namespace Reddit.NET.Controllers
         /// <returns>An instance of this class populated with the returned data.</returns>
         public LiveThread About()
         {
-            return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.About(Id)).Data);
+            return new LiveThread(ref Dispatch, Validate(Dispatch.LiveThreads.About(Id)).Data);
         }
 
         /// <summary>
@@ -147,7 +188,7 @@ namespace Reddit.NET.Controllers
         /// <returns>The requested live updates.</returns>
         public List<RedditThings.LiveUpdate> GetUpdates(string after = "", string before = "", string styleSr = "", int count = 0, int limit = 25)
         {
-            Updates = GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, after, before, styleSr, count, limit)));
+            Updates = Listings.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, after, before, styleSr, count, limit)));
             UpdatesLastUpdated = DateTime.Now;
 
             return Updates;
@@ -163,35 +204,7 @@ namespace Reddit.NET.Controllers
         /// <returns>An instance of this class populated with data from the new live thread.</returns>
         public LiveThread Create(string title = null, string description = null, bool? nsfw = null, string resources = null, bool retry = true)
         {
-            try
-            {
-                return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.Create(description ?? Description, nsfw ?? NSFW, resources ?? Resources, title ?? Title)).JSON.Data.Id).About();
-            }
-            catch (RedditRateLimitException ex)
-            {
-                List<string> errors = ((List<List<string>>)ex.Data["errors"])[0];
-
-                // TODO - Move this to where it'll work for all endpoints.  --Kris
-                // If the wait time is in seconds (i.e. less than a minute), just go ahead and wait then retry.  --Kris
-                int waitSeconds = 0;
-                if (errors[1].StartsWith("you are doing that too much. try again in ")
-                    && errors[1].EndsWith("seconds."))
-                {
-                    waitSeconds = Convert.ToInt32(Regex.Match(errors[1], @"\d+").Value);
-                }
-
-                if (retry
-                    && waitSeconds > 0
-                    && waitSeconds < 60)
-                {
-                    Thread.Sleep(waitSeconds * 1000);
-                    return Create(title, description, nsfw, resources, false);
-                }
-                else
-                {
-                    throw ex;
-                }
-            }
+            return new LiveThread(ref Dispatch, Validate(Dispatch.LiveThreads.Create(description ?? Description, nsfw ?? NSFW, resources ?? Resources, title ?? Title)).JSON.Data.Id).About();
         }
 
         /// <summary>
@@ -551,35 +564,37 @@ namespace Reddit.NET.Controllers
             UpdatesUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Monitor this live thread for any configuration changes.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorThread()
         {
             string key = "LiveThread";
             return Monitor(key, new Thread(() => MonitorThreadThread(key)), Id);
         }
 
+        /// <summary>
+        /// Monitor this live thread for any new or removed contributors.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorContributors()
         {
             string key = "LiveThreadContributors";
             return Monitor(key, new Thread(() => MonitorContributorsThread(key)), Id);
         }
 
+        /// <summary>
+        /// Monitor this live thread for any new updates.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUpdates()
         {
             string key = "LiveThreadUpdates";
             return Monitor(key, new Thread(() => MonitorUpdatesThread(key)), Id);
         }
 
-        private bool Monitor(string key, Thread thread, string subKey)
-        {
-            bool res = Monitor(key, thread, subKey, out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
-        }
-
-        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
         {
             switch (key)
             {
@@ -591,20 +606,6 @@ namespace Reddit.NET.Controllers
                     return new Thread(() => MonitorLiveThread(key, "contributors", subKey, startDelayMs));
                 case "LiveThreadUpdates":
                     return new Thread(() => MonitorLiveThread(key, "updates", subKey, startDelayMs));
-            }
-        }
-
-        private void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, Id, (i * MonitoringWaitDelayMS)));
-                Threads[key].Start();
-                i++;
             }
         }
 
@@ -741,7 +742,7 @@ namespace Reddit.NET.Controllers
                 added.Add(new RedditThings.UserListContainer { Data = new RedditThings.UserListData { Children = new List<RedditThings.UserListChild>() } });
                 removed.Add(new RedditThings.UserListContainer { Data = new RedditThings.UserListData { Children = new List<RedditThings.UserListChild>() } });
 
-                if (ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<RedditThings.UserListChild> childrenAdded, out List<RedditThings.UserListChild> childrenRemoved))
+                if (Listings.ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<RedditThings.UserListChild> childrenAdded, out List<RedditThings.UserListChild> childrenRemoved))
                 {
                     added[i].Data.Children = childrenAdded;
                     removed[i].Data.Children = childrenRemoved;
@@ -757,7 +758,7 @@ namespace Reddit.NET.Controllers
             List<RedditThings.LiveUpdate> oldList = updates;
             List<RedditThings.LiveUpdate> newList = GetUpdates();
 
-            if (ListDiff(oldList, newList, out List<RedditThings.LiveUpdate> added, out List<RedditThings.LiveUpdate> removed))
+            if (Listings.ListDiff(oldList, newList, out List<RedditThings.LiveUpdate> added, out List<RedditThings.LiveUpdate> removed))
             {
                 // Event handler to alert the calling app that the list has changed.  --Kris
                 LiveThreadUpdatesUpdateEventArgs args = new LiveThreadUpdatesUpdateEventArgs

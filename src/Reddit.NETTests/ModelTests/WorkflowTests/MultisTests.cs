@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using Reddit.NET;
 using Reddit.NET.Exceptions;
 using Reddit.NET.Models.Structures;
-using RestSharp;
-using System;
 using System.Collections.Generic;
 
 namespace Reddit.NETTests.ModelTests.WorkflowTests
@@ -128,7 +124,6 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Validate(labeledMultiContainer.Data);
             Assert.AreEqual(multiPath, labeledMultiContainer.Data.Path);
             Assert.AreEqual(multiDescription, labeledMultiContainer.Data.DescriptionMd);
-            Assert.AreEqual("classic", labeledMultiContainer.Data.WeightingScheme);
 
             LabeledMultiContainer labeledMultiContainerCopy = Copy(multiPath, multiPathCopy, multiDisplayName);
 
@@ -149,7 +144,6 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Validate(labeledMultiContainerCopy);
             Validate(labeledMultiContainerCopy.Data);
             Assert.AreEqual(multiPathCopyRenamed, labeledMultiContainerCopy.Data.Path);
-            Assert.AreEqual("fresh", labeledMultiContainerCopy.Data.WeightingScheme);
 
             LabeledMultiDescriptionContainer labeledMultiDescriptionContainer = reddit.Models.Multis.UpdateDescription(multiPathCopyRenamed, multiDescription);
 

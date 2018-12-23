@@ -1,11 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Newtonsoft.Json;
-using Reddit.NET;
-using Reddit.NET.Exceptions;
 using Reddit.NET.Models.Structures;
-using RestSharp;
 using System;
-using System.Collections.Generic;
 
 namespace Reddit.NETTests.ModelTests.WorkflowTests
 {

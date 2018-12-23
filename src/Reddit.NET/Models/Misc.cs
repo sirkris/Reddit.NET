@@ -9,7 +9,8 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Misc(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
+        public Misc(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
 
         /// <summary>
         /// Retrieve the advisory text about saving media for relevant media links.

@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET;
+using Reddit.NET.Exceptions;
 using Reddit.NET.Models.Structures;
 using System.Collections.Generic;
 
@@ -145,7 +145,15 @@ namespace Reddit.NETTests.ModelTests
             // If there's a problem, Random() can pass on some and fail on others, so we'll do a short loop to better catch that on a single run.  --Kris
             for (int i = 1; i <= 5; i++)
             {
-                List<PostContainer> posts = reddit.Models.Listings.Random();
+                List<PostContainer> posts;
+                try
+                {
+                    posts = reddit.Models.Listings.Random();
+                }
+                catch (RedditForbiddenException)
+                {
+                    continue;
+                }
 
                 Assert.IsNotNull(posts);
                 Assert.IsTrue(posts.Count > 0);

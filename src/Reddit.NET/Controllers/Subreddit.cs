@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
@@ -10,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for subreddits.
+    /// </summary>
     public class Subreddit : BaseController
     {
         // Subreddit data pertaining to the logged-in user can be found in SubredditData.  --Kris
@@ -54,20 +56,31 @@ namespace Reddit.NET.Controllers
         public bool ShowMediaPreview;
         public string SubmissionType;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
+        /// <summary>
+        /// Full subreddit data retrieved from the API.
+        /// </summary>
         public RedditThings.Subreddit SubredditData
         {
             get;
             private set;
         }
 
+        /// <summary>
+        /// Posts belonging to this subreddit.
+        /// </summary>
         public SubredditPosts Posts;
+
+        /// <summary>
+        /// Flairs belonging to this subreddit.
+        /// </summary>
         public Flairs Flairs;
+
+        /// <summary>
+        /// The subreddit wiki controller.
+        /// </summary>
         public Wiki Wiki;
 
-        internal readonly Dispatch Dispatch;
+        internal Dispatch Dispatch;
 
         /// <summary>
         /// Get the submission text for the subreddit.
@@ -108,31 +121,46 @@ namespace Reddit.NET.Controllers
         internal List<Moderator> moderators;
         private DateTime? ModeratorsLastUpdated;
 
-        public Subreddit(Dispatch dispatch, RedditThings.Subreddit subreddit)
+        /// <summary>
+        /// Create a new subreddit controller instance populated from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit"></param>
+        public Subreddit(ref Dispatch dispatch, RedditThings.Subreddit subreddit)
             : base()
         {
             Dispatch = dispatch;
             ImportFromModel(subreddit);
 
             SubredditData = subreddit;
-            Posts = new SubredditPosts(this);
-            Flairs = new Flairs(this, Dispatch);
-            Wiki = new Wiki(Dispatch, Name);
+            Posts = new SubredditPosts(ref Dispatch, Name);
+            Flairs = new Flairs(ref Dispatch, Name);
+            Wiki = new Wiki(ref Dispatch, Name);
         }
 
-        public Subreddit(Dispatch dispatch, RedditThings.SubredditChild subredditChild)
+        /// <summary>
+        /// Create a new subreddit controller instance populated from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subredditChild"></param>
+        public Subreddit(ref Dispatch dispatch, RedditThings.SubredditChild subredditChild)
             : base()
         {
             Dispatch = dispatch;
             ImportFromModel(subredditChild.Data);
 
             SubredditData = subredditChild.Data;
-            Posts = new SubredditPosts(this);
-            Flairs = new Flairs(this, Dispatch);
-            Wiki = new Wiki(Dispatch, Name);
+            Posts = new SubredditPosts(ref Dispatch, Name);
+            Flairs = new Flairs(ref Dispatch, Name);
+            Wiki = new Wiki(ref Dispatch, Name);
         }
 
-        public Subreddit(Dispatch dispatch, Subreddit subreddit)
+        /// <summary>
+        /// Copy another subreddit controller instance onto this one.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">A valid subreddit controller instance</param>
+        public Subreddit(ref Dispatch dispatch, Subreddit subreddit)
         {
             Dispatch = dispatch;
 
@@ -141,7 +169,37 @@ namespace Reddit.NET.Controllers
             SubredditData = subreddit.SubredditData;
         }
 
-        public Subreddit(Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "",
+        /// <summary>
+        /// Create a new subreddit controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="name"></param>
+        /// <param name="title"></param>
+        /// <param name="description"></param>
+        /// <param name="sidebar"></param>
+        /// <param name="submissionText"></param>
+        /// <param name="lang"></param>
+        /// <param name="subredditType"></param>
+        /// <param name="submissionType"></param>
+        /// <param name="submitLinkLabel"></param>
+        /// <param name="submitTextLabel"></param>
+        /// <param name="wikiEnabled"></param>
+        /// <param name="over18"></param>
+        /// <param name="allowDiscovery"></param>
+        /// <param name="allowSpoilers"></param>
+        /// <param name="showMedia"></param>
+        /// <param name="showMediaPreview"></param>
+        /// <param name="allowImages"></param>
+        /// <param name="allowVideos"></param>
+        /// <param name="collapseDeletedComments"></param>
+        /// <param name="suggestedCommentSort"></param>
+        /// <param name="commentScoreHideMins"></param>
+        /// <param name="headerImage"></param>
+        /// <param name="iconImage"></param>
+        /// <param name="primaryColor"></param>
+        /// <param name="keyColor"></param>
+        /// <param name="fullname"></param>
+        public Subreddit(ref Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "",
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
@@ -157,18 +215,22 @@ namespace Reddit.NET.Controllers
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
 
             UpdateSubredditData();
-            Posts = new SubredditPosts(this);
-            Flairs = new Flairs(this, Dispatch);
-            Wiki = new Wiki(Dispatch, Name);
+            Posts = new SubredditPosts(ref Dispatch, Name);
+            Flairs = new Flairs(ref Dispatch, Name);
+            Wiki = new Wiki(ref Dispatch, Name);
         }
 
-        public Subreddit(Dispatch dispatch)
+        /// <summary>
+        /// Create an empty subreddit controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        public Subreddit(ref Dispatch dispatch)
             : base()
         {
             Dispatch = dispatch;
-            Posts = new SubredditPosts(this);
-            Flairs = new Flairs(this, Dispatch);
-            Wiki = new Wiki(Dispatch, Name);
+            Posts = new SubredditPosts(ref Dispatch, Name);
+            Flairs = new Flairs(ref Dispatch, Name);
+            Wiki = new Wiki(ref Dispatch, Name);
         }
 
         private void ImportFromModel(RedditThings.Subreddit subreddit)
@@ -179,7 +241,7 @@ namespace Reddit.NET.Controllers
             SubredditType = subreddit.SubredditType;
             CommunityIcon = subreddit.CommunityIcon;
             HeaderTitle = subreddit.HeaderTitle;
-            WikiEnabled = (subreddit.WikiEnabled.HasValue ? subreddit.WikiEnabled.Value : false);
+            WikiEnabled = subreddit.WikiEnabled ?? false;
             Over18 = subreddit.Over18;
             Sidebar = subreddit.Description;
             Name = subreddit.DisplayName;
@@ -291,7 +353,7 @@ namespace Reddit.NET.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new LinkPost(Dispatch, this, title, url, author, thumbnail, thumbnailHeight, thumbnailWidth, preview,
+            return new LinkPost(ref Dispatch, Name, title, url, author, thumbnail, thumbnailHeight, thumbnailWidth, preview,
                 id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -302,7 +364,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new LinkPost object attached to this subreddit.</returns>
         public LinkPost LinkPost(string fullname)
         {
-            return new LinkPost(Dispatch, fullname, this);
+            return new LinkPost(ref Dispatch, fullname, Name);
         }
 
         /// <summary>
@@ -314,7 +376,7 @@ namespace Reddit.NET.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new SelfPost(Dispatch, this, title, selfText, selfTextHtml, author, id, fullname, permalink, created, 
+            return new SelfPost(ref Dispatch, Name, title, selfText, selfTextHtml, author, id, fullname, permalink, created, 
                 edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -325,7 +387,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new SelfPost object attached to this subreddit.</returns>
         public SelfPost SelfPost(string fullname)
         {
-            return new SelfPost(Dispatch, fullname, this);
+            return new SelfPost(ref Dispatch, fullname, Name);
         }
 
         /// <summary>
@@ -334,7 +396,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new generic Post object attached to this subreddit.</returns>
         public Post Post()
         {
-            return new Post(Dispatch, this);
+            return new Post(ref Dispatch, Name);
         }
 
         /// <summary>
@@ -344,7 +406,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new generic Post object attached to this subreddit.</returns>
         public Post Post(string fullname)
         {
-            return new Post(Dispatch, fullname, this);
+            return new Post(ref Dispatch, fullname, Name);
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();
@@ -355,7 +417,7 @@ namespace Reddit.NET.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public Subreddit About()
         {
-            return new Subreddit(Dispatch, Dispatch.Subreddits.About(Name));
+            return new Subreddit(ref Dispatch, Dispatch.Subreddits.About(Name));
         }
 
         /// <summary>
@@ -403,7 +465,7 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            Moderators = GetAboutChildren<Moderator>(res);
+            Moderators = Listings.GetAboutChildren<Moderator>(res);
             return Moderators;
         }
 
@@ -427,7 +489,7 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            return GetAboutChildren<SubredditUser>(res);
+            return Listings.GetAboutChildren<SubredditUser>(res);
         }
 
         /// <summary>
@@ -450,7 +512,7 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            return GetAboutChildren<SubredditUser>(res);
+            return Listings.GetAboutChildren<SubredditUser>(res);
         }
 
         /// <summary>
@@ -473,7 +535,7 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            return GetAboutChildren<BannedUser>(res);
+            return Listings.GetAboutChildren<BannedUser>(res);
         }
 
         /// <summary>

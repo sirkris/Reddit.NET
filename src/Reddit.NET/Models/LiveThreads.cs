@@ -24,7 +24,8 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public LiveThreads(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
+        public LiveThreads(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
 
         // TODO - API returns 500 server error.  --Kris
         /// <summary>

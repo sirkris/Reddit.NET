@@ -1,17 +1,19 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
 using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Reddit.NET.Models.Internal;
 
 namespace Reddit.NET.Controllers
 {
-    public class PrivateMessages : BaseController
+    /// <summary>
+    /// Controller class for private messages.
+    /// </summary>
+    public class PrivateMessages : Monitors
     {
         public event EventHandler<MessagesUpdateEventArgs> InboxUpdated;
         public event EventHandler<MessagesUpdateEventArgs> UnreadUpdated;
@@ -20,6 +22,9 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
+        /// <summary>
+        /// List of inbox messages.
+        /// </summary>
         public List<RedditThings.Message> Inbox
         {
             get
@@ -34,6 +39,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<RedditThings.Message> inbox;
 
+        /// <summary>
+        /// List of unread messages.
+        /// </summary>
         public List<RedditThings.Message> Unread
         {
             get
@@ -48,6 +56,9 @@ namespace Reddit.NET.Controllers
         }
         internal List<RedditThings.Message> unread;
 
+        /// <summary>
+        /// List of sent messages.
+        /// </summary>
         public List<RedditThings.Message> Sent
         {
             get
@@ -66,9 +77,16 @@ namespace Reddit.NET.Controllers
         private DateTime? UnreadLastUpdated;
         private DateTime? SentLastUpdated;
 
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public PrivateMessages(Dispatch dispatch, List<RedditThings.Message> inbox = null, List<RedditThings.Message> unread = null,
+        /// <summary>
+        /// Create a new instance of the private messages controller.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="inbox"></param>
+        /// <param name="unread"></param>
+        /// <param name="sent"></param>
+        public PrivateMessages(ref Dispatch dispatch, List<RedditThings.Message> inbox = null, List<RedditThings.Message> unread = null,
             List<RedditThings.Message> sent = null) 
             : base()
         {
@@ -358,10 +376,14 @@ namespace Reddit.NET.Controllers
             SentUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Monitor inbox messages.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorInbox()
         {
             string key = "PrivateMessagesInbox";
-            return Monitor(key, new Thread(() => MonitorInboxThread(key)));
+            return Monitor(key, new Thread(() => MonitorInboxThread(key)), "PrivateMessages");
         }
 
         private void MonitorInboxThread(string key)
@@ -369,10 +391,14 @@ namespace Reddit.NET.Controllers
             MonitorPrivateMessagesThread(key, "inbox");
         }
 
+        /// <summary>
+        /// Monitor unread messages.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUnread()
         {
             string key = "PrivateMessagesUnread";
-            return Monitor(key, new Thread(() => MonitorUnreadThread(key)));
+            return Monitor(key, new Thread(() => MonitorUnreadThread(key)), "PrivateMessages");
         }
 
         private void MonitorUnreadThread(string key)
@@ -380,10 +406,14 @@ namespace Reddit.NET.Controllers
             MonitorPrivateMessagesThread(key, "unread");
         }
 
+        /// <summary>
+        /// Monitor sent messages.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorSent()
         {
             string key = "PrivateMessagesSent";
-            return Monitor(key, new Thread(() => MonitorSentThread(key)));
+            return Monitor(key, new Thread(() => MonitorSentThread(key)), "PrivateMessages");
         }
 
         private void MonitorSentThread(string key)
@@ -421,7 +451,7 @@ namespace Reddit.NET.Controllers
                         break;
                 }
 
-                if (ListDiff(oldList, newList, out List<RedditThings.Message> added, out List<RedditThings.Message> removed))
+                if (Listings.ListDiff(oldList, newList, out List<RedditThings.Message> added, out List<RedditThings.Message> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
@@ -454,7 +484,7 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
         {
             switch (key)
             {
@@ -467,29 +497,6 @@ namespace Reddit.NET.Controllers
                 case "PrivateMessagesSent":
                     return new Thread(() => MonitorPrivateMessagesThread(key, "sent", startDelayMs));
             }
-        }
-
-        internal void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, "PrivateMessages", (i * MonitoringWaitDelayMS)));
-                i++;
-            }
-        }
-
-        private bool Monitor(string key, Thread thread)
-        {
-            bool res = Monitor(key, thread, "PrivateMessages", out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
         }
     }
 }

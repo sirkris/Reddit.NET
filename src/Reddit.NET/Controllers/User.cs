@@ -1,13 +1,14 @@
-﻿using Reddit.NET.Controllers.Structures;
-using Reddit.NET.Exceptions;
+﻿using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for users.
+    /// </summary>
     public class User : BaseController
     {
         public bool IsFriend;
@@ -33,26 +34,61 @@ namespace Reddit.NET.Controllers
         public int CommentKarma;
         public bool HasSubscribed;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
+        /// <summary>
+        /// Full user data from the API.
+        /// </summary>
         public RedditThings.User UserData;
 
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public User(Dispatch dispatch, RedditThings.User user)
+        /// <summary>
+        /// Create a new user controller instance from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="user"></param>
+        public User(ref Dispatch dispatch, RedditThings.User user)
         {
             Import(user);
             Dispatch = dispatch;
         }
 
-        public User(Dispatch dispatch, User user)
+        /// <summary>
+        /// Copy another user controller instance onto this one.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="user"></param>
+        public User(ref Dispatch dispatch, User user)
         {
             Import(user);
             Dispatch = dispatch;
         }
 
-        public User(Dispatch dispatch, string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
+        /// <summary>
+        /// Create a new user controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="name">A valid Reddit username</param>
+        /// <param name="id"></param>
+        /// <param name="isFriend"></param>
+        /// <param name="profanityFilter"></param>
+        /// <param name="isSuspended"></param>
+        /// <param name="hasGoldSubscription"></param>
+        /// <param name="numFriends"></param>
+        /// <param name="IsVerified"></param>
+        /// <param name="hasNewModmail"></param>
+        /// <param name="over18"></param>
+        /// <param name="isGold"></param>
+        /// <param name="isMod"></param>
+        /// <param name="hasVerifiedEmail"></param>
+        /// <param name="iconImg"></param>
+        /// <param name="hasModmail"></param>
+        /// <param name="linkKarma"></param>
+        /// <param name="inboxCount"></param>
+        /// <param name="hasMail"></param>
+        /// <param name="created"></param>
+        /// <param name="commentKarma"></param>
+        /// <param name="hasSubscribed"></param>
+        public User(ref Dispatch dispatch, string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
@@ -63,7 +99,11 @@ namespace Reddit.NET.Controllers
             Dispatch = dispatch;
         }
 
-        public User(Dispatch dispatch)
+        /// <summary>
+        /// Create an empty user controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        public User(ref Dispatch dispatch)
         {
             Dispatch = dispatch;
         }
@@ -267,8 +307,6 @@ namespace Reddit.NET.Controllers
             });
         }
 
-        // TODO - Users.Unfriend method.  Model still needs testing; will come back to this one later.  --Kris
-
         /// <summary>
         /// Check whether this instance's username is available for registration.
         /// </summary>
@@ -306,7 +344,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A user listing.</returns>
         public User About()
         {
-            return new User(Dispatch, ((RedditThings.UserChild)Validate(Dispatch.Users.About(Name))).Data);
+            return new User(ref Dispatch, ((RedditThings.UserChild)Validate(Dispatch.Users.About(Name))).Data);
         }
 
         /// <summary>
@@ -330,12 +368,12 @@ namespace Reddit.NET.Controllers
         {
             if (sort.Equals("newForced", StringComparison.OrdinalIgnoreCase))
             {
-                return ForceNewSort(GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, "new", t, after, before, includeCategories, count, limit, srDetail)),
+                return Listings.ForceNewSort(Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, "new", t, after, before, includeCategories, count, limit, srDetail)),
                     Dispatch));
             }
             else
             {
-                return GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, sort, t, after, before, includeCategories, count, limit, srDetail)), Dispatch);
+                return Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, sort, t, after, before, includeCategories, count, limit, srDetail)), Dispatch);
             }
         }
 
@@ -357,7 +395,7 @@ namespace Reddit.NET.Controllers
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            return GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", context, show, sort, t, after, before, includeCategories, count, limit, 
+            return Listings.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", context, show, sort, t, after, before, includeCategories, count, limit, 
                 srDetail)), Dispatch);
         }
 

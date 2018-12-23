@@ -1,4 +1,5 @@
 ﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
 using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
@@ -10,7 +11,10 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
-    public class Modmail : BaseController
+    /// <summary>
+    /// Controller class for modmail.
+    /// </summary>
+    public class Modmail : Monitors
     {
         public event EventHandler<ModmailConversationsEventArgs> RecentUpdated;
         public event EventHandler<ModmailConversationsEventArgs> ModUpdated;
@@ -33,6 +37,9 @@ namespace Reddit.NET.Controllers
         private User me;
         private DateTime? MeLastUpdated;
 
+        /// <summary>
+        /// Recent modmail conversations.
+        /// </summary>
         public RedditThings.ConversationContainer Recent
         {
             get
@@ -48,6 +55,9 @@ namespace Reddit.NET.Controllers
         private RedditThings.ConversationContainer recent;
         private DateTime? RecentLastUpdated;
 
+        /// <summary>
+        /// Mod modmail conversations.
+        /// </summary>
         public RedditThings.ConversationContainer Mod
         {
             get
@@ -63,6 +73,9 @@ namespace Reddit.NET.Controllers
         private RedditThings.ConversationContainer mod;
         private DateTime? ModLastUpdated;
 
+        /// <summary>
+        /// User modmail conversations.
+        /// </summary>
         public RedditThings.ConversationContainer User
         {
             get
@@ -78,6 +91,9 @@ namespace Reddit.NET.Controllers
         private RedditThings.ConversationContainer user;
         private DateTime? UserLastUpdated;
 
+        /// <summary>
+        /// Unread modmail conversations.
+        /// </summary>
         public RedditThings.ConversationContainer Unread
         {
             get
@@ -93,6 +109,9 @@ namespace Reddit.NET.Controllers
         private RedditThings.ConversationContainer unread;
         private DateTime? UnreadLastUpdated;
 
+        /// <summary>
+        /// Unread messages count.
+        /// </summary>
         public RedditThings.ModmailUnreadCount UnreadCount
         {
             get
@@ -111,9 +130,13 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
-        public Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public Modmail(Dispatch dispatch) : base()
+        /// <summary>
+        /// Create a new instance of the modmail controller.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        public Modmail(ref Dispatch dispatch) : base()
         {
             Dispatch = dispatch;
         }
@@ -123,7 +146,7 @@ namespace Reddit.NET.Controllers
         /// </summary>
         private User GetMe()
         {
-            Me = new User(Dispatch, Dispatch.Account.Me());
+            Me = new User(ref Dispatch, Dispatch.Account.Me());
             return Me;
         }
 
@@ -459,28 +482,44 @@ namespace Reddit.NET.Controllers
             return UnreadCount;
         }
 
+        /// <summary>
+        /// Monitor recent modmail messages as they arrive.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorRecent()
         {
             string key = "ModmailMessagesRecent";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent")));
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent")), "ModmailMessages");
         }
 
+        /// <summary>
+        /// Monitor mod modmail messages as they arrive.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorMod()
         {
             string key = "ModmailMessagesMod";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod")));
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod")), "ModmailMessages");
         }
 
+        /// <summary>
+        /// Monitor user modmail messages as they arrive.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUser()
         {
             string key = "ModmailMessagesUser";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user")));
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user")), "ModmailMessages");
         }
 
+        /// <summary>
+        /// Monitor unread modmail messages as they arrive.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUnread()
         {
             string key = "ModmailMessagesUnread";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread")));
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread")), "ModmailMessages");
         }
 
         protected virtual void OnRecentUpdated(ModmailConversationsEventArgs e)
@@ -621,7 +660,7 @@ namespace Reddit.NET.Controllers
             }
         }
 
-        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
         {
             switch (key)
             {
@@ -636,29 +675,6 @@ namespace Reddit.NET.Controllers
                 case "ModmailMessagesUnread":
                     return new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", startDelayMs));
             }
-        }
-
-        internal void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, "ModmailMessages", (i * MonitoringWaitDelayMS)));
-                i++;
-            }
-        }
-
-        private bool Monitor(string key, Thread thread)
-        {
-            bool res = Monitor(key, thread, "ModmailMessages", out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
         }
     }
 }

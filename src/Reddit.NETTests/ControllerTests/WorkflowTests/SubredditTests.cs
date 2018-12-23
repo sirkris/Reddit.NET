@@ -1,9 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET;
 using Reddit.NET.Controllers;
 using Reddit.NET.Controllers.EventArgs;
-using Reddit.NET.Exceptions;
-using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 

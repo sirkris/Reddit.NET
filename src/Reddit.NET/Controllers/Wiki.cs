@@ -1,23 +1,27 @@
-﻿using Newtonsoft.Json;
-using Reddit.NET.Controllers.EventArgs;
+﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
 using Reddit.NET.Controllers.Structures;
 using RedditThings = Reddit.NET.Models.Structures;
 using Reddit.NET.Exceptions;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
-    public class Wiki : BaseController
+    /// <summary>
+    /// Controller class for a subreddit's wiki.
+    /// </summary>
+    public class Wiki : Monitors
     {
         public event EventHandler<WikiPagesUpdateEventArgs> PagesUpdated;
 
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
+        /// <summary>
+        /// List of pages on this wiki.
+        /// </summary>
         public List<string> Pages
         {
             get
@@ -34,9 +38,14 @@ namespace Reddit.NET.Controllers
         private DateTime? PagesLastUpdated;
 
         private readonly string Subreddit;
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public Wiki(Dispatch dispatch, string subreddit)
+        /// <summary>
+        /// Create a new instance of the wiki controller.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">The name of the subreddit to which this wiki belongs</param>
+        public Wiki(ref Dispatch dispatch, string subreddit)
         {
             Dispatch = dispatch;
             Subreddit = subreddit;
@@ -67,7 +76,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new instance of the WikiPage controller.</returns>
         public WikiPage Page(string pageName, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd)
         {
-            return new WikiPage(Dispatch, mayRevise, revisionDate, contentHtml, revisionBy, contentMd, Subreddit, pageName);
+            return new WikiPage(ref Dispatch, mayRevise, revisionDate, contentHtml, revisionBy, contentMd, Subreddit, pageName);
         }
 
         /// <summary>
@@ -78,7 +87,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new instance of the WikiPage controller.</returns>
         public WikiPage Page(string pageName, RedditThings.WikiPage wikiPage)
         {
-            return new WikiPage(Dispatch, wikiPage, Subreddit, pageName);
+            return new WikiPage(ref Dispatch, wikiPage, Subreddit, pageName);
         }
 
         /// <summary>
@@ -88,7 +97,7 @@ namespace Reddit.NET.Controllers
         /// <returns>A new instance of the WikiPage controller.</returns>
         public WikiPage Page(string pageName)
         {
-            return new WikiPage(Dispatch, Subreddit, pageName);
+            return new WikiPage(ref Dispatch, Subreddit, pageName);
         }
 
         /// <summary>
@@ -111,7 +120,7 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            return GetAboutChildren<SubredditUser>(res);
+            return Listings.GetAboutChildren<SubredditUser>(res);
         }
 
         /// <summary>
@@ -134,7 +143,7 @@ namespace Reddit.NET.Controllers
 
             Validate(res);
 
-            return GetAboutChildren<BannedUser>(res);
+            return Listings.GetAboutChildren<BannedUser>(res);
         }
 
         /// <summary>
@@ -170,36 +179,17 @@ namespace Reddit.NET.Controllers
             PagesUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Monitor this wiki for added/removed pages.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorPages()
         {
             string key = "WikiPages";
-            return Monitor(key, new Thread(() => MonitorPagesThread(key)));
+            return Monitor(key, new Thread(() => MonitorPagesThread(key)), Subreddit);
         }
 
-        private bool Monitor(string key, Thread thread)
-        {
-            bool res = Monitor(key, thread, Subreddit, out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
-        }
-
-        internal void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, Subreddit, (i * MonitoringWaitDelayMS)));
-                i++;
-            }
-        }
-
-        private Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
         {
             switch (key)
             {
@@ -210,7 +200,7 @@ namespace Reddit.NET.Controllers
             }
         }
         
-        internal void MonitorPagesThread(string key, int startDelayMs = 0)
+        private void MonitorPagesThread(string key, int startDelayMs = 0)
         {
             if (startDelayMs > 0)
             {
@@ -223,7 +213,7 @@ namespace Reddit.NET.Controllers
                 List<string> oldList = pages;
                 List<string> newList = GetPages();
 
-                if (ListDiff(oldList, newList, out List<string> added, out List<string> removed))
+                if (Listings.ListDiff(oldList, newList, out List<string> added, out List<string> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     WikiPagesUpdateEventArgs args = new WikiPagesUpdateEventArgs

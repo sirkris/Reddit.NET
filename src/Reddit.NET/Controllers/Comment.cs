@@ -1,5 +1,4 @@
-﻿using Reddit.NET.Controllers.Structures;
-using Reddit.NET.Exceptions;
+﻿using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
@@ -7,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
+    /// <summary>
+    /// Controller class for comment-related tasks.
+    /// </summary>
     public class Comment : BaseController
     {
         public string Subreddit;
@@ -32,6 +34,9 @@ namespace Reddit.NET.Controllers
         public bool ScoreHidden;
         public int Depth;
 
+        /// <summary>
+        /// The parent post.
+        /// </summary>
         public Post Root
         {
             get
@@ -45,11 +50,14 @@ namespace Reddit.NET.Controllers
         }
         private Post root = null;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref MonitorNull;
-        internal override ref MonitoringSnapshot Monitoring => ref MonitoringSnapshotNull;
-
+        /// <summary>
+        /// Full comment data returned by the API.
+        /// </summary>
         public RedditThings.Comment Listing;
 
+        /// <summary>
+        /// Comment replies to this comment.
+        /// </summary>
         public Comments Comments
         {
             get
@@ -63,15 +71,45 @@ namespace Reddit.NET.Controllers
         }
         private Comments comments = null;
 
-        private readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public Comment(Dispatch dispatch, RedditThings.Comment listing)
+        /// <summary>
+        /// Create a new comment controller instance from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="listing"></param>
+        public Comment(ref Dispatch dispatch, RedditThings.Comment listing)
         {
             Dispatch = dispatch;
             Import(listing);
         }
         
-        public Comment(Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
+        /// <summary>
+        /// Create a new comment controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit">The subreddit to which the comment belongs</param>
+        /// <param name="author">The username of the comment's author</param>
+        /// <param name="body">The comment text</param>
+        /// <param name="parentFullname">Fullname of the parent post or comment</param>
+        /// <param name="bodyHtml"></param>
+        /// <param name="collapsedReason"></param>
+        /// <param name="collapsed"></param>
+        /// <param name="isSubmitter"></param>
+        /// <param name="replies"></param>
+        /// <param name="scoreHidden"></param>
+        /// <param name="depth"></param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
+        public Comment(ref Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
@@ -82,20 +120,29 @@ namespace Reddit.NET.Controllers
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
-        public Comment(Dispatch dispatch, string fullname)
+        /// <summary>
+        /// Create a new comment controller instance, populated only with its fullname.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="fullname">Fullname of the comment</param>
+        public Comment(ref Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
             Fullname = fullname;
         }
 
-        public Comment(Dispatch dispatch)
+        /// <summary>
+        /// Create an empty comment controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        public Comment(ref Dispatch dispatch)
         {
             Dispatch = dispatch;
         }
 
         private Comments InitComments()
         {
-            Comments = new Comments(new Post(Dispatch, Root.Fullname).About(), this);
+            Comments = new Comments(ref Dispatch, Root.Id, Subreddit, this);
             return Comments;
         }
 
@@ -110,7 +157,7 @@ namespace Reddit.NET.Controllers
             CollapsedReason = listing.CollapsedReason;
             Collapsed = listing.Collapsed;
             IsSubmitter = listing.IsSubmitter;
-            Replies = GetComments(listing.Replies, Dispatch);
+            Replies = Listings.GetComments(listing.Replies, Dispatch);
             ScoreHidden = listing.ScoreHidden;
             Depth = listing.Depth;
             Id = listing.Id;
@@ -159,6 +206,11 @@ namespace Reddit.NET.Controllers
             Listing = new RedditThings.Comment(this);
         }
 
+        /// <summary>
+        /// Get the post to which this comment belongs.
+        /// </summary>
+        /// <param name="fullname">The fullname of the comment whose post data we're looking for</param>
+        /// <returns>The parent post of this comment.</returns>
         public Post GetRoot(string fullname = null)
         {
             fullname = fullname ?? ParentFullname;
@@ -175,7 +227,7 @@ namespace Reddit.NET.Controllers
             } while (info != null && info.Comments != null && info.Comments.Count > 0
                 && !string.IsNullOrWhiteSpace(fullname) && !fullname.StartsWith("t3_"));
 
-            return new Post(Dispatch, fullname).About();
+            return new Post(ref Dispatch, fullname).About();
         }
 
         private string GetInfoPostOrCommentParentFullname(RedditThings.Info info)
@@ -194,9 +246,32 @@ namespace Reddit.NET.Controllers
         /// <returns>An instance of this class populated with the return data.</returns>
         public Comment Submit()
         {
-            return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, Body, ParentFullname)).JSON.Data.Things[0].Data);
+            return new Comment(ref Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, Body, ParentFullname)).JSON.Data.Things[0].Data);
         }
 
+        /// <summary>
+        /// Reply to this comment.
+        /// </summary>
+        /// <param name="body">The comment reply text</param>
+        /// <param name="bodyHtml"></param>
+        /// <param name="author"></param>
+        /// <param name="collapsedReason"></param>
+        /// <param name="collapsed"></param>
+        /// <param name="isSubmitter"></param>
+        /// <param name="replies"></param>
+        /// <param name="scoreHidden"></param>
+        /// <param name="depth"></param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
+        /// <returns>The newly-created comment reply.</returns>
         public Comment Reply(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
@@ -207,6 +282,28 @@ namespace Reddit.NET.Controllers
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).Submit();
         }
 
+        /// <summary>
+        /// Reply to this comment asynchronously.
+        /// </summary>
+        /// <param name="body">The comment reply text</param>
+        /// <param name="bodyHtml"></param>
+        /// <param name="author"></param>
+        /// <param name="collapsedReason"></param>
+        /// <param name="collapsed"></param>
+        /// <param name="isSubmitter"></param>
+        /// <param name="replies"></param>
+        /// <param name="scoreHidden"></param>
+        /// <param name="depth"></param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
         public async Task ReplyAsync(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
@@ -220,13 +317,36 @@ namespace Reddit.NET.Controllers
             });
         }
 
+        /// <summary>
+        /// Create a comment reply object without submitting it to Reddit.
+        /// </summary>
+        /// <param name="body">The comment reply text</param>
+        /// <param name="bodyHtml"></param>
+        /// <param name="author"></param>
+        /// <param name="collapsedReason"></param>
+        /// <param name="collapsed"></param>
+        /// <param name="isSubmitter"></param>
+        /// <param name="replies"></param>
+        /// <param name="scoreHidden"></param>
+        /// <param name="depth"></param>
+        /// <param name="id"></param>
+        /// <param name="fullname"></param>
+        /// <param name="permalink"></param>
+        /// <param name="created"></param>
+        /// <param name="edited"></param>
+        /// <param name="score"></param>
+        /// <param name="upVotes"></param>
+        /// <param name="downVotes"></param>
+        /// <param name="removed"></param>
+        /// <param name="spam"></param>
+        /// <returns>The unsent comment reply instance.</returns>
         public Comment BuildReply(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return new Comment(ref Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -256,7 +376,7 @@ namespace Reddit.NET.Controllers
                 throw new RedditControllerException("Unable to retrieve comment data.");
             }
 
-            return new Comment(Dispatch, info.Comments[0]);
+            return new Comment(ref Dispatch, info.Comments[0]);
         }
 
         /// <summary>
@@ -276,7 +396,7 @@ namespace Reddit.NET.Controllers
         /// <returns>The distinguished comment object.</returns>
         public Comment Distinguish(string how, bool? sticky = null)
         {
-            return GetComments(Validate(Dispatch.Moderation.DistinguishComment(how, Fullname, sticky)), Dispatch)[0];
+            return Listings.GetComments(Validate(Dispatch.Moderation.DistinguishComment(how, Fullname, sticky)), Dispatch)[0];
         }
 
         /// <summary>

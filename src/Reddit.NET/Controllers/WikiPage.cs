@@ -1,5 +1,6 @@
-﻿using Reddit.NET.Controllers.Structures;
-using Reddit.NET.Controllers.EventArgs;
+﻿using Reddit.NET.Controllers.EventArgs;
+using Reddit.NET.Controllers.Internal;
+using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
@@ -9,7 +10,10 @@ using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers
 {
-    public class WikiPage : BaseController
+    /// <summary>
+    /// Controller class for wiki pages.
+    /// </summary>
+    public class WikiPage : Monitors
     {
         public bool MayRevise;
         public DateTime RevisionDate;
@@ -25,9 +29,20 @@ namespace Reddit.NET.Controllers
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
-        internal readonly Dispatch Dispatch;
+        private Dispatch Dispatch;
 
-        public WikiPage(Dispatch dispatch, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd, 
+        /// <summary>
+        /// Create a new wiki page controller instance, populated manually.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="mayRevise"></param>
+        /// <param name="revisionDate"></param>
+        /// <param name="contentHtml"></param>
+        /// <param name="revisionBy"></param>
+        /// <param name="contentMd"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="name"></param>
+        public WikiPage(ref Dispatch dispatch, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd, 
             string subreddit = null, string name = null)
         {
             Dispatch = dispatch;
@@ -42,34 +57,48 @@ namespace Reddit.NET.Controllers
             Name = name;
         }
 
-        public WikiPage(Dispatch dispatch, RedditThings.WikiPage wikiPage, string subreddit = null, string name = null)
+        /// <summary>
+        /// Create a new wiki page controller instance from API return data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="wikiPage"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="name"></param>
+        public WikiPage(ref Dispatch dispatch, RedditThings.WikiPage wikiPage, string subreddit = null, string name = null)
         {
             Dispatch = dispatch;
 
             MayRevise = wikiPage.MayRevise;
             RevisionDate = wikiPage.RevisionDate;
             ContentHTML = wikiPage.ContentHTML;
-            RevisionBy = new User(Dispatch, wikiPage.RevisionBy.Data);
+            RevisionBy = new User(ref Dispatch, wikiPage.RevisionBy.Data);
             ContentMd = wikiPage.ContentMd;
 
             Subreddit = subreddit;
             Name = name;
         }
 
-        public WikiPage(Dispatch dispatch, string subreddit = null, string name = null)
+        /// <summary>
+        /// Create a new wiki page controller instance, populated only with subreddit and name.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="subreddit"></param>
+        /// <param name="name"></param>
+        public WikiPage(ref Dispatch dispatch, string subreddit = null, string name = null)
         {
             Dispatch = dispatch;
             Subreddit = subreddit;
             Name = name;
         }
 
-        public WikiPage(string subreddit, string name = null)
+        /// <summary>
+        /// Create an empty wiki page controller instance.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        public WikiPage(Dispatch dispatch)
         {
-            Subreddit = subreddit;
-            Name = name;
-        }
 
-        public WikiPage() { }
+        }
 
         /// <summary>
         /// Allow username to edit this wiki page.
@@ -152,6 +181,29 @@ namespace Reddit.NET.Controllers
         }
 
         /// <summary>
+        /// Edit this wiki page.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="previous">the starting point revision for this edit</param>
+        public void SaveChanges(string reason, string previous = "")
+        {
+            Edit(reason, ContentMd);
+        }
+
+        /// <summary>
+        /// Edit this wiki page asynchronously.
+        /// </summary>
+        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="previous">the starting point revision for this edit</param>
+        public async Task SaveChangesAsync(string reason, string previous = "")
+        {
+            await Task.Run(() =>
+            {
+                SaveChanges(reason, previous);
+            });
+        }
+
+        /// <summary>
         /// Create a new wiki page and return an instance with the updated data.
         /// </summary>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
@@ -159,7 +211,7 @@ namespace Reddit.NET.Controllers
         public WikiPage CreateAndReturn(string reason, string content = null)
         {
             Create(reason, content);
-            return new WikiPage(Dispatch, Dispatch.Wiki.Page(Name.ToLower(), "", "", Subreddit).Data, Subreddit, Name);
+            return new WikiPage(ref Dispatch, Dispatch.Wiki.Page(Name.ToLower(), "", "", Subreddit).Data, Subreddit, Name);
         }
 
         /// <summary>
@@ -319,7 +371,7 @@ namespace Reddit.NET.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public WikiPage About(string v = "", string v2 = "")
         {
-            return new WikiPage(Dispatch, ((RedditThings.WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, v, v2, Subreddit))).Data, Subreddit, Name);
+            return new WikiPage(ref Dispatch, ((RedditThings.WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, v, v2, Subreddit))).Data, Subreddit, Name);
         }
 
         internal virtual void OnPagesUpdated(WikiPageUpdateEventArgs e)
@@ -327,36 +379,17 @@ namespace Reddit.NET.Controllers
             PageUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Monitor this wiki page for any changes.
+        /// </summary>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorPage()
         {
             string key = "WikiPage";
-            return Monitor(key, new Thread(() => MonitorPageThread(key)));
+            return Monitor(key, new Thread(() => MonitorPageThread(key)), Name);
         }
 
-        private bool Monitor(string key, Thread thread)
-        {
-            bool res = Monitor(key, thread, Name, out Thread newThread);
-
-            RebuildThreads();
-            LaunchThreadIfNotNull(key, newThread);
-
-            return res;
-        }
-
-        private void RebuildThreads()
-        {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
-
-            int i = 0;
-            foreach (string key in oldThreads)
-            {
-                Threads.Add(key, CreateMonitoringThread(key, (i * MonitoringWaitDelayMS)));
-                i++;
-            }
-        }
-
-        private Thread CreateMonitoringThread(string key, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subkey, int startDelayMs = 0)
         {
             switch (key)
             {

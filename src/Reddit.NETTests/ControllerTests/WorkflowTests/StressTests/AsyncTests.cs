@@ -1,12 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET;
 using Reddit.NET.Controllers;
 using Reddit.NET.Controllers.EventArgs;
-using Reddit.NET.Exceptions;
-using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
 {
@@ -29,16 +25,16 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
             for (int i = 1; i <= 60; i++)
             {
                 // Despite what VS says, we don't want to use await here.  --Kris
-                SelfPost.Comment("Stress test comment #" + i.ToString()).SubmitAsync();
+                SelfPost.ReplyAsync("Stress test comment #" + i.ToString());
             }
             DateTime end = DateTime.Now;
 
             // In my tests, it took roughly 3 seconds to loop through all those async calls, so 10 should be more than enough.  --Kris
             Assert.IsTrue(start.AddSeconds(10) > end);
 
-            // Wait a bit, then see if all the comments were added.  --Kris
+            // Wait a bit, then see if all the comments were added.  We won't rely on monitoring for this one.  --Kris
             start = DateTime.Now;
-            while (start.AddMinutes(2) > DateTime.Now) { }
+            while (start.AddMinutes(5) > DateTime.Now) { }
 
             Assert.AreEqual(60, SelfPost.Comments.New.Count);
         }
@@ -84,13 +80,14 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
             {
                 posts.Add(LinkPost.Submit(resubmit: true));  // Add .About() after the Submit call if you want more than just the fullname/id of the new post.  --Kris
 
+                posts[i - 1].Comments.GetNew();
                 posts[i - 1].Comments.MonitorNew();
                 posts[i - 1].Comments.NewUpdated += C_NewCommentsUpdated;
 
                 for (int ii = 1; ii <= 10; ii++)
                 {
                     // Despite what VS says, we don't want to use await here.  --Kris
-                    posts[i - 1].Comment("Stress test comment #" + i.ToString() + "-" + ii.ToString()).SubmitAsync();
+                    posts[i - 1].ReplyAsync("Stress test comment #" + i.ToString() + "-" + ii.ToString());
                 }
             }
 
@@ -98,10 +95,26 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
             DateTime start = DateTime.Now;
             while ((NewPosts.Count < 60
                 || NewComments.Count < 600)
-                && start.AddMinutes(15) > DateTime.Now) { }
+                && start.AddHours(1) > DateTime.Now) { }
 
             Assert.IsTrue(NewPosts.Count >= 60);
-            Assert.IsTrue(NewComments.Count >= 600);
+
+            /*
+             * Occasionally, the Reddit API will correctly report the number of comments in a thread but omit one or more of those comments in the actual results, 
+             * even though those comments have not been deleted/etc.  This phenomenon also seems to occur in the web UI (confirmed in both old and redesign), which 
+             * means the problem must be on Reddit's end.  My guess is it's related to the heavy query load that this particular stress test generates.
+             * 
+             * On one such thread (https://www.reddit.com/r/RedditDotNETBot/comments/a7wlfp/stress_test_link_post), only 1 comment was missing, even though 
+             * Reddit reported 10 comments (as you can see, there are only 9 comments showing; the first one is missing).  All 9 of those comments appeared in the 
+             * thread within a couple minutes of one another.  That was about an hour ago and it's still only showing 9 of the 10 comments.  Same result on other sorts.  
+             * Waiting/refreshing the results had no effect.
+             * 
+             * If I'm right, there's nothing we can do on this end other than adjust the assertion to allow for a certain number of lost comments.  In every test I ran, 
+             * over 95% of the comments were able to be retrieved, so we'll allow for up to 10% loss.
+             * 
+             * --Kris
+             */
+            Assert.IsTrue(NewComments.Count >= 540);
         }
 
         private void C_NewPostsUpdated(object sender, PostsUpdateEventArgs e)

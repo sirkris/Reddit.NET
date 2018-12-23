@@ -1,5 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET;
 using Reddit.NET.Models.Structures;
 using System.Collections.Generic;
 

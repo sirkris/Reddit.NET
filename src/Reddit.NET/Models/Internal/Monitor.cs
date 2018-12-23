@@ -1,10 +1,7 @@
-﻿using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.EventArgs;
-using ControlStructures = Reddit.NET.Controllers.Structures;
+﻿using ControlStructures = Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
 using Reddit.NET.Models.EventArgs;
 using System;
-using System.Collections.Generic;
 
 namespace Reddit.NET.Models.Internal
 {

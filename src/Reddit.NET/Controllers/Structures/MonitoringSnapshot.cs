@@ -1,5 +1,4 @@
 ﻿using Reddit.NET.Exceptions;
-using System;
 using System.Collections.Generic;
 
 namespace Reddit.NET.Controllers.Structures

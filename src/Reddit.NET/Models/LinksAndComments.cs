@@ -9,7 +9,8 @@ namespace Reddit.NET.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public LinksAndComments(string appId, string refreshToken, string accessToken, RestClient restClient) : base(appId, refreshToken, accessToken, restClient) { }
+        public LinksAndComments(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
 
         /// <summary>
         /// Submit a new comment or reply to a message.
@@ -120,7 +121,7 @@ namespace Reddit.NET.Models
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/info");
 
             restRequest.AddParameter("id", id);
-
+            
             DynamicListingContainer res = JsonConvert.DeserializeObject<DynamicListingContainer>(ExecuteRequest(restRequest));
 
             List<Post> posts = new List<Post>();
