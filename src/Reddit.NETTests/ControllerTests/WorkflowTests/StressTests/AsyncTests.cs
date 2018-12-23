@@ -74,7 +74,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
             Subreddit.Posts.MonitorNew();
             Subreddit.Posts.NewUpdated += C_NewPostsUpdated;
 
-            // Create 50 posts, each with 10 comments.  --Kris
+            // Create 60 posts, each with 10 comments.  --Kris
             List<LinkPost> posts = new List<LinkPost>();
             for (int i = 1; i <= 60; i++)
             {
