@@ -1,11 +1,8 @@
-﻿using Reddit.NET.Controllers.EventArgs;
-using Reddit.NET.Controllers.Structures;
+﻿using Reddit.NET.Controllers.Structures;
 using Reddit.NET.Exceptions;
-using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace Reddit.NET.Controllers.Internal
 {

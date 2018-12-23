@@ -1,5 +1,4 @@
-﻿using Reddit.NET.Controllers.Structures;
-using RedditThings = Reddit.NET.Models.Structures;
+﻿using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

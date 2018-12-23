@@ -1,5 +1,4 @@
-﻿using Reddit.NET.Controllers.Structures;
-using Reddit.NET.Exceptions;
+﻿using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;

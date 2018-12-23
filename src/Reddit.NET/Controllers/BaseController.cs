@@ -1,9 +1,4 @@
-﻿using Reddit.NET.Exceptions;
-using Reddit.NET.Controllers.Internal;
-using Reddit.NET.Controllers.Structures;
-using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using Reddit.NET.Controllers.Internal;
 
 namespace Reddit.NET.Controllers
 {

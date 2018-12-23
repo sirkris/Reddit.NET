@@ -50,6 +50,7 @@ POST /api/unlock
 POST /api/unmarknsfw  
 POST /api/unsave  
 POST /api/unspoiler  
+POST /api/vote  
 
 GET /best  
 GET /by_id/<names>  
@@ -186,8 +187,8 @@ GET [/r/<subreddit>]/wiki/settings/<page>
 POST [/r/<subreddit>]/wiki/settings/<page>  
 GET [/r/<subreddit>]/wiki/<page>  
 
-Total:  168 / 205 (82%)
+Total:  169 / 205 (82%)
 
-There are 37 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
+There are 36 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
 
-All 168 of the supported endpoints are covered by unit tests and all of those tests are passing.
+Virtually all of the supported endpoints are covered by unit tests (voting and admin-reporting were manually tested for obvious reasons) and all of those tests are passing.
