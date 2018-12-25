@@ -1,7 +1,247 @@
-# Reddit.NET
-A Reddit API library for .NET Core with OAuth support.  Written in C#.
+## Overview
 
-Currently Supported Endpoints:
+Reddit.NET is a .NET Core library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
+
+Currently, the library supports 169 of the 205 endpoints currently listed in the API documentation. All of them (except voting and admin-reporting, for obvious reasons) are covered by unit tests and all 327 of the tests are currently passing. All of the most commonly used endpoints are supported.
+
+Reddit.NET is FOSS (MIT license) and was written in C# by me over the last few months. It will be available on NuGet once I'm ready to put out the first stable release, which I expect to be very soon. You can check it out now on Github at:
+https://github.com/sirkris/Reddit.NET/tree/develop
+
+## Basic Architecture
+Reddit.NET follows a model-controller pattern, with each layer serving a distinct purpose. The model classes/methods (which can be accessed directly if for some reason you don't want to go through the controller) handle all the REST interactions and deserializations. The controller classes/methods organize these API features into a cleaner OO interface, with an emphasis on intuitive design and minimizing any need for messy boilerplate code.
+
+### Models
+You'll notice that each model class corresponds to a section in the API documentation. Each method represents one of those endpoints with their respective fields passed as method parameters.
+
+Here's a list of the model classes:
+
+* Account
+* Captcha (unused, possibly deprecated; will probably remove it entirely before release)
+* Emoji
+* Flair
+* LinksAndComments
+* Listings
+* LiveThreads
+* Misc
+* Moderation
+* Modmail
+* Multis
+* PrivateMessages
+* RedditGold (all untested so not currently supported)
+* Search
+* Subreddits
+* Users
+* Widgets
+* Wiki
+
+See https://github.com/sirkris/Reddit.NET/blob/develop/README.md for a list of all currently supported endpoints accessible via the models.
+Since all the supported models can be accessed via one or more controllers, it is unlikely that you will ever need to call the models directly, at least in any production application. But the option is there should the use case arise.
+
+Ratelimit handling also occurs in the model layer. If it's less than a minute, the library will automatically wait the specified number of seconds then retry. This can be easily tested using the LiveThread workflow tests. If it's more than a minute, an exception will bubble up and it'll be up to the app developer to decide what to do with it.
+Reddit.NET has a built-in limit of no more than 60 requests in any 1-minute period. This is a safety net designed to keep us from inadvertantly violating the API speed limit.
+
+JSON return data is automatically deserialized to its appropriate type. All 170 of these custom types (and yes, it did take fucking forever to write them all) can be found in Models.Structures.
+
+### Controllers
+These are the classes with which app developers will be doing all or most of their interactions. While the models are structured to closely mirror the API documentation, the controllers are structured to create an intuitive, object-oriented interface with the API, so you'll notice I took a lot more liberties in this layer.
+
+The controllers also provide other features, like asynchronous monitoring and automatic caching of certain data sets. I'll get into that stuff in more detail below.
+
+Each controller class corresponds to a Reddit object of some kind (subreddit, post, user, etc). Here's a list of the controller classes:
+
+#### Account
+Provides access to data and endpoints related to the authenticated user.
+
+#### Comment
+Represents a Reddit comment and provides access to comment-related data and endpoints.
+
+#### Comments
+Represents a set of comment replies to a post or comment. Provides access to all sorts and monitoring. Similar in purpose to SubredditPosts.
+
+#### Dispatch
+This is a special controller that provides direct access to the models and keeps them in sync.
+
+#### Flairs
+Provides access to data and endpoints related to a subreddit's flairs.
+
+#### LinkPost
+Represents a Reddit link post and provides access to related data and endpoints.
+
+#### SelfPost
+Represents a Reddit self post and provides access to related data and endpoints.
+
+#### Post
+Base class for LinkPost and SelfPost.
+
+#### LiveThread
+Represents a Reddit live event. It provides access to related data, endpoints, and monitoring.
+
+#### Modmail
+Provides access to data and endpoints related to the authenticated user's modmail.
+
+#### PrivateMessages
+Provides access to data and endpoints related to the authenticated user's private messages.
+
+#### Subreddit
+Represents a subreddit and provides access to related data and endpoints.
+
+#### SubredditPosts
+Represents a set of a subreddit's posts. Provides access to all sorts and monitoring. Similar in purpose to Comments.
+
+#### User
+Represents a Reddit user and provides access to related data and endpoints.
+
+#### Wiki
+Represents a subreddit's wiki and provides access to related data and endpoints.
+
+#### WikiPage
+Represents a wiki page and provides access to related data and endpoints.
+Many controller methods also have async counterparts.
+
+## Monitoring
+
+Reddit.NET allows for asynchronous, event-based monitoring of various things. For example, if you're monitoring a subreddit for new posts, the monitoring thread will do its API query once every 1.5 seconds times the total number of current monitoring threads (more on that below). When there's a change in the return data, the library identifies any posts that were added or removed since the last query and includes them in the eventargs. The app developer can then write a custom callback function that will be called whenever the event fires, at which point the dev can do whatever they want with it from there.
+
+Reddit.NET automatically scales the delay between each monitoring query depending on how many things are being monitored. This ensures that the library will average 1 monitoring query every 1.5 seconds, regardless of how many things are being monitored at once, leaving 25% of available bandwidth remaining for any non-monitoring queries you wish to run.
+There is theoretically no limit to how many things can be monitored at once, hardware and other considerations notwithstanding. In one of the stress tests, I have it simultaneously montioring 60 posts for new comments. In this case, the delay between each monitoring thread's query is 90 seconds (actually, it's 91.5 because it's also monitoring a subreddit for new posts at the same time).
+
+If you want to see how much load this can handle, check out the PoliceState() stress test. That one was especially fun to write.
+
+Here's a list of things that can currently be monitored by Reddit.NET:
+
+* Monitor a post for new comment replies (any sort).
+* Monitor a comment for new comment replies (any sort).
+* Monitor a live thread for new/removed updates.
+* Monitor a live thread for new/removed contributors.
+* Monitor a live thread for any configuration changes.
+* Monitor the authenticated user's modmail for new messages (any sort).
+* Monitor the authenticated user's modqueue for new items.
+* Monitor the authenticated user's inbox for new messages.
+* Monitor the authenticated user's unread queue for new messages.
+* Monitor the authenticated user's sent messages for new messages.
+* Monitor a subreddit for new posts (any sort).
+* Monitor a subreddit's wiki for any added/removed pages.
+* Monitor a wiki page for new revisions.
+* Each monitoring session occurs in its own thread.
+
+## Solution Projects
+
+There are 3 projects in the Reddit.NET solution:
+
+### Example
+
+A simple example console application that demonstrates some of Reddit.NET's functionality. If you have Visual Studio 2017, you can run it using debug. You'll need to set your application ID and refresh token in the debug arguments. Only passive operations are demonstrated in this example app; nothing is created or modified in any way.
+
+### Reddit.NET
+
+The main library. This is what the app dev includes in their project.
+
+### Reddit.NETTests
+
+This project contains unit, workflow, and stress tests using MSTest. There are currently 327 tests, all passing (at least, they all pass for me). All of the 169 supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
+
+
+## Running the Tests
+
+Running the tests is easy. All you need is an app ID and two refresh tokens (the second is used for things like accepting invitations and replying to messages). The first refresh token should belong to a well-established account that wouldn't run into any special ratelimits or restrictions that might make certain endpoints unavailable. The second refresh token's account does not have any special requirements, as it's only used in a handful of workflow tests.
+You will also need to specify a test subreddit. It should either be a non-existing subreddit (the tests will create it) or an existing subreddit in which the primary test user is a moderator with full privileges. If you're going with a non-existing subreddit, you'll need to run the test that creates it first; there's a special playlist just for that and obviously you'll only need to do it that first time. The same test subreddit should be reused on subsequent tests since there's no way to delete a subreddit once it's been created.
+To set these values, simply edit the Reddit.NETTestsData.xml file. Here's what it looks like:
+```xml
+<?xml version="1.0" encoding="utf-8" ?>
+<Rows>
+    <Row>
+        <AppId>Your_App_ID</AppId>
+        <RefreshToken>Primary_Test_User's_Token</RefreshToken>
+        <RefreshToken2>Secondary_Test_User's_Token</RefreshToken2>
+        <Subreddit>Your_Test_Subreddit</Subreddit>
+    </Row>
+</Rows>
+```
+
+As you can see, it's pretty intuitive in terms of what goes where. Once these values are set and you've created the test subreddit (either via the corresponding unit test or manually with the primary test user having full mod privs), you can run all the tests in any order and as many times as you want after that.
+
+Many tests take less than a second to complete. Others can take up to a few minutes, depending on what's being tested. The workflow tests tend to take longer than the unit tests and the stress tests take longer than the workflow tests. In fact, the stress tests take considerably longer; PoliceState() alone takes roughly 80 minutes to complete.
+
+## Code Examples
+```c#
+// Create a new Reddit.NET instance.
+var r = new RedditAPI("MyAppID", "MyRefreshToken");
+
+// Display the name and cake day of the authenticated user.
+Console.WriteLine("Username: " + r.Account.Me.Name);
+Console.WriteLine("Cake Day: " + r.Account.Me.Created.ToString("D"));
+
+// Retrieve the authenticated user's recent post history.
+// Change "new" to "newForced" if you don't want older stickied profile posts to appear first.
+var postHistory = r.Account.Me.PostHistory(sort: "new");
+
+// Retrieve the authenticated user's recent comment history.
+var commentHistory = r.Account.Me.CommentHistory(sort: "new");
+
+// Create a new subreddit.
+var mySub = r.Subreddit("MyNewSubreddit", "My subreddit's title", "Description", "Sidebar").Create();
+
+// Get info on another subreddit.
+var askReddit = r.Subreddit("AskReddit").About();
+
+// Get the top post from a subreddit.
+var topPost = askReddit.Posts.Top[0];
+
+// Create a new self post.
+var mySelfPost = mySub.SelfPost("Self Post Title", "Self post text.").Submit();
+
+// Create a new link post.
+// Use .Submit(resubmit: true) instead to force resubmission of duplicate links.
+var myLinkPost = mySub.LinkPost("Link Post Title", "http://www.google.com").Submit();  
+
+// Comment on a post.
+var myComment = myLinkPost.Reply("This is my comment.");
+
+// Reply to a comment.
+var myCommentReply = myComment.Reply("This is my comment reply.");
+
+// Create a new subreddit, then create a new link post on said subreddit,
+// then comment on said post, then reply to said comment, then delete said comment reply.
+// Because I said so.
+r.Subreddit("MySub", "Title", "Desc", "Sidebar")
+.Create()
+.SelfPost("MyPost")
+.Submit()
+.Reply("My comment.")
+.Reply("This comment will be deleted.")
+.Delete();
+
+// Asynchronously monitor r/AskReddit for new posts.
+askReddit.Posts.GetNew();
+askReddit.Posts.NewUpdated += C_NewPostsUpdated;
+askReddit.Posts.MonitorNew();
+
+public static void C_NewPostsUpdated(object sender, PostsUpdateEventArgs e)
+{
+	foreach (var post in e.Added)
+	{
+		Console.WriteLine("New Post by " + post.Author + ": " + post.Title);
+	}
+}
+
+// Stop monitoring r/AskReddit for new posts.
+askReddit.Posts.MonitorNew();
+askReddit.Posts.NewUpdated -= C_NewPostsUpdated;
+```
+
+For more examples, check out the Example and Reddit.NETTests projects.
+
+## How You Can Help
+
+At the moment, what I need more than anything is a fresh pair of eyes (preferably several). This project has grown rather large, so I imagine there are all kinds of little things here and there that could be improved upon. Please don't be afraid to speak-up! The feedback you give me will enable me to fix anything I might've missed, plan new features, etc.
+
+Code reviews would be helpful at this stage. I've been a software engineer for just about 25 years now, though I'm still wading into modern C# and .NET Core in particular, so there may be available optimizations/etc that I'm simply not aware of. This will be our opportunity to catch any of those.
+
+Once I've implemented any recommendations made here, we'll proceed to beta testing. That will be when I'll be needing people to help by running the tests and posting the results. You can do that now, if you like; they should all pass. Though I'm not seeking beta testers yet, if you do run the tests anyway, please post your results here! So far, I'm the only one who has tested this.
+
+I'm sure there's probably more that I'm forgetting to mention, but I think I've covered all the major points. I'll of course be happy to answer any questions you might have, as well. Thanks for reading!
+
+## Currently Supported Endpoints
 
 GET /api/v1/me  
 GET /api/v1/me/karma  
