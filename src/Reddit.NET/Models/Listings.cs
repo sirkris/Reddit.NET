@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Reddit.NET.Models.Structures;
+using Reddit.Models.Structures;
 using RestSharp;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Models
+namespace Reddit.Models
 {
     public class Listings : BaseModel
     {

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Reddit.NET.Exceptions;
-using Reddit.NET.Models.EventArgs;
+using Reddit.Exceptions;
+using Reddit.Models.EventArgs;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
-namespace Reddit.NET.Models.Internal
+namespace Reddit.Models.Internal
 {
     public abstract class Request
     {

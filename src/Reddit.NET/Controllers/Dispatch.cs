@@ -1,8 +1,8 @@
-﻿using API = Reddit.NET.Models;
-using Reddit.NET.Models.EventArgs;
+﻿using API = Reddit.Models;
+using Reddit.Models.EventArgs;
 using RestSharp;
 
-namespace Reddit.NET.Controllers
+namespace Reddit.Controllers
 {
     public class Dispatch
     {

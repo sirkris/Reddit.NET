@@ -1,14 +1,14 @@
-﻿using Reddit.NET.Controllers.EventArgs;
-using Reddit.NET.Controllers.Internal;
-using Reddit.NET.Controllers.Structures;
-using Reddit.NET.Exceptions;
-using RedditThings = Reddit.NET.Models.Structures;
+﻿using Reddit.Controllers.EventArgs;
+using Reddit.Controllers.Internal;
+using Reddit.Controllers.Structures;
+using Reddit.Exceptions;
+using RedditThings = Reddit.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Reddit.NET.Controllers
+namespace Reddit.Controllers
 {
     /// <summary>
     /// Controller class for live threads.

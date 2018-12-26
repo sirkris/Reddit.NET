@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Models.Converters;
+using Reddit.Models.Converters;
 using System;
 
-namespace Reddit.NET.Models.Structures
+namespace Reddit.Models.Structures
 {
     [Serializable]
     public class Rule : BaseContainer

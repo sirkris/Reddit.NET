@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
-using RedditThings = Reddit.NET.Models.Structures;
+using Reddit.Controllers;
+using RedditThings = Reddit.Models.Structures;
 
-namespace Reddit.NETTests.ControllerTests
+namespace RedditTests.ControllerTests
 {
     [TestClass]
     public class CommentTests : BaseTests

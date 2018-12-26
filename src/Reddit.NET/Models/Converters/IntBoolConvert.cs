@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Reddit.NET.Models.Converters
+namespace Reddit.Models.Converters
 {
     class IntBoolConvert : JsonConverter
     {

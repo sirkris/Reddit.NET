@@ -1,14 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using Reddit.NET;
-using Controllers = Reddit.NET.Controllers;
-using Reddit.NET.Models.Structures;
+using Reddit;
+using Controllers = Reddit.Controllers;
+using Reddit.Models.Structures;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Reddit.NETTests
+namespace RedditTests
 {
     public abstract class BaseTests
     {

@@ -1,6 +1,6 @@
-﻿using Reddit.NET.Controllers.Internal;
+﻿using Reddit.Controllers.Internal;
 
-namespace Reddit.NET.Controllers
+namespace Reddit.Controllers
 {
     public abstract class BaseController : Validators
     {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Reddit.NET.Controllers.EventArgs
+namespace Reddit.Controllers.EventArgs
 {
     public class PostsUpdateEventArgs
     {

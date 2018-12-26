@@ -1,9 +1,9 @@
-﻿using Reddit.NET.Models.Internal;
+﻿using Reddit.Models.Internal;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Models
+namespace Reddit.Models
 {
     public abstract class BaseModel : Request
     {

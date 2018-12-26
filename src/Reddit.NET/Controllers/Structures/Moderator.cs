@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Models.Converters;
+using Reddit.Models.Converters;
 using System;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Controllers.Structures
+namespace Reddit.Controllers.Structures
 {
     [Serializable]
     public class Moderator

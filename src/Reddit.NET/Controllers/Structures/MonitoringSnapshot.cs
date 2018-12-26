@@ -1,7 +1,7 @@
-﻿using Reddit.NET.Exceptions;
+﻿using Reddit.Exceptions;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Controllers.Structures
+namespace Reddit.Controllers.Structures
 {
     public class MonitoringSnapshot
     {

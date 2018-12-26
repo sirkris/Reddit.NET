@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Exceptions;
+using Reddit.Exceptions;
 
-namespace Reddit.NETTests.ModelTests
+namespace RedditTests.ModelTests
 {
     [TestClass]
     public class AppOnlyTests : BaseTests

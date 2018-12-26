@@ -1,9 +1,9 @@
-﻿using Reddit.NET.Exceptions;
-using RedditThings = Reddit.NET.Models.Structures;
+﻿using Reddit.Exceptions;
+using RedditThings = Reddit.Models.Structures;
 using System;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Controllers.Internal
+namespace Reddit.Controllers.Internal
 {
     public class Validators
     {

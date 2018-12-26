@@ -1,4 +1,4 @@
-﻿namespace Reddit.NET.Models.EventArgs
+﻿namespace Reddit.Models.EventArgs
 {
     public class TokenUpdateEventArgs
     {

@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Models.Structures;
+using Reddit.Models.Structures;
 using RestSharp;
 using System;
 using System.Linq;
 
-namespace Reddit.NET.Models
+namespace Reddit.Models
 {
     public class Emoji : BaseModel
     {

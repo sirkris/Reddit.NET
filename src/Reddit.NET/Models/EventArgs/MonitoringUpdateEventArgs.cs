@@ -1,6 +1,6 @@
-﻿using Reddit.NET.Controllers.Structures;
+﻿using Reddit.Controllers.Structures;
 
-namespace Reddit.NET.Models.EventArgs
+namespace Reddit.Models.EventArgs
 {
     public class MonitoringUpdateEventArgs
     {

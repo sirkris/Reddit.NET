@@ -1,6 +1,6 @@
-﻿using Reddit.NET;
-using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.EventArgs;
+﻿using Reddit;
+using Reddit.Controllers;
+using Reddit.Controllers.EventArgs;
 using System;
 using System.Collections.Generic;
 

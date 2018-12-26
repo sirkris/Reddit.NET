@@ -1,11 +1,11 @@
-﻿using Reddit.NET.Controllers.Internal;
-using Reddit.NET.Exceptions;
-using RedditThings = Reddit.NET.Models.Structures;
+﻿using Reddit.Controllers.Internal;
+using Reddit.Exceptions;
+using RedditThings = Reddit.Models.Structures;
 using System;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace Reddit.NET.Controllers
+namespace Reddit.Controllers
 {
     /// <summary>
     /// Controller class for self posts.

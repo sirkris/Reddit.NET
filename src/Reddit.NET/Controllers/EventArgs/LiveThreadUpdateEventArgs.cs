@@ -1,5 +1,5 @@
 ﻿
-namespace Reddit.NET.Controllers.EventArgs
+namespace Reddit.Controllers.EventArgs
 {
     public class LiveThreadUpdateEventArgs
     {

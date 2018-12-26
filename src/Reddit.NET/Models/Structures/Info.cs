@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Models.Structures
+namespace Reddit.Models.Structures
 {
     [Serializable]
     public class Info

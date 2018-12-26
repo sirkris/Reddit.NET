@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
-using RedditThings = Reddit.NET.Models.Structures;
+using Reddit.Controllers;
+using RedditThings = Reddit.Models.Structures;
 using System;
 
-namespace Reddit.NETTests.ControllerTests.WorkflowTests
+namespace RedditTests.ControllerTests.WorkflowTests
 {
     [TestClass]
     public class FlairsTests : BaseTests

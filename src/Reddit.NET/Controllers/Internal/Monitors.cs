@@ -1,10 +1,10 @@
-﻿using Reddit.NET.Controllers.Structures;
-using Reddit.NET.Exceptions;
+﻿using Reddit.Controllers.Structures;
+using Reddit.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Reddit.NET.Controllers.Internal
+namespace Reddit.Controllers.Internal
 {
     public abstract class Monitors : BaseController
     {

@@ -1,11 +1,11 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Reddit.NET.Controllers;
-using Reddit.NET.Models.Converters;
+using Reddit.Controllers;
+using Reddit.Models.Converters;
 using System;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Models.Structures
+namespace Reddit.Models.Structures
 {
     [Serializable]
     public class Post

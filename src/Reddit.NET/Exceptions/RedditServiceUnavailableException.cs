@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Reddit.NET.Exceptions
+namespace Reddit.Exceptions
 {
     public class RedditServiceUnavailableException : Exception
     {

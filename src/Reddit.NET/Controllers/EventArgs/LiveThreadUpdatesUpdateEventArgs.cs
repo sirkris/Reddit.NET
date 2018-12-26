@@ -1,7 +1,7 @@
-﻿using RedditThings = Reddit.NET.Models.Structures;
+﻿using RedditThings = Reddit.Models.Structures;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Controllers.EventArgs
+namespace Reddit.Controllers.EventArgs
 {
     public class LiveThreadUpdatesUpdateEventArgs
     {

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace Reddit.NET.Models.Structures
+namespace Reddit.Models.Structures
 {
     [Serializable]
     public class SubredditSubmitText

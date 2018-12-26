@@ -1,6 +1,6 @@
 ﻿using System.Web;
 
-namespace Reddit.NET.Controllers.Internal
+namespace Reddit.Controllers.Internal
 {
     public static class Parsing
     {

@@ -1,5 +1,5 @@
-﻿using Reddit.NET.Controllers;
-using RedditThings = Reddit.NET.Models.Structures;
+﻿using Reddit.Controllers;
+using RedditThings = Reddit.Models.Structures;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// A Reddit API library for .NET Core with OAuth support.
 /// </summary>
-namespace Reddit.NET
+namespace Reddit
 {
     /// <summary>
     /// The main Reddit API class.

@@ -1,10 +1,10 @@
 ﻿using Newtonsoft.Json;
-using RedditThings = Reddit.NET.Models.Structures;
+using RedditThings = Reddit.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Reddit.NET.Controllers.Internal
+namespace Reddit.Controllers.Internal
 {
     public class Listings
     {

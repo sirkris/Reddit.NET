@@ -1,9 +1,9 @@
-﻿using RedditThings = Reddit.NET.Models.Structures;
+﻿using RedditThings = Reddit.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Reddit.NET.Controllers
+namespace Reddit.Controllers
 {
     /// <summary>
     /// Controller class for tasks pertaining to the authenticated user.

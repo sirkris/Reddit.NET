@@ -1,12 +1,12 @@
-﻿using Reddit.NET.Controllers.EventArgs;
-using Reddit.NET.Controllers.Internal;
-using Reddit.NET.Controllers.Structures;
-using Reddit.NET.Exceptions;
+﻿using Reddit.Controllers.EventArgs;
+using Reddit.Controllers.Internal;
+using Reddit.Controllers.Structures;
+using Reddit.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace Reddit.NET.Controllers
+namespace Reddit.Controllers
 {
     /// <summary>
     /// Controller class for subreddit post listings.

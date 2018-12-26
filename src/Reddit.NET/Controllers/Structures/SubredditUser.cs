@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Models.Converters;
+using Reddit.Models.Converters;
 using System;
 
-namespace Reddit.NET.Controllers.Structures
+namespace Reddit.Controllers.Structures
 {
     [Serializable]
     public class SubredditUser
