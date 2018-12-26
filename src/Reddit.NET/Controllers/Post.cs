@@ -1,6 +1,6 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
-using RedditThings = Reddit.Models.Structures;
+using Reddit.Things;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -42,7 +42,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// The full Listing object returned by the Reddit API;
         /// </summary>
-        public RedditThings.Post Listing;
+        public Things.Post Listing;
 
         /// <summary>
         /// Comment replies to this post.
@@ -67,7 +67,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="listing"></param>
-        public Post(ref Dispatch dispatch, RedditThings.Post listing)
+        public Post(ref Dispatch dispatch, Things.Post listing)
         {
             Dispatch = dispatch;
             Import(listing);
@@ -138,7 +138,7 @@ namespace Reddit.Controllers
             return Comments;
         }
 
-        internal void Import(RedditThings.Post listing)
+        internal void Import(Things.Post listing)
         {
             Subreddit = listing.Subreddit;
             Title = listing.Title;
@@ -177,7 +177,7 @@ namespace Reddit.Controllers
             Spam = spam;
             NSFW = nsfw;
 
-            Listing = new RedditThings.Post(this);
+            Listing = new Things.Post(this);
         }
 
         /// <summary>
@@ -305,7 +305,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public Post About()
         {
-            RedditThings.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            Things.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
                 || info.Posts == null
                 || info.Posts.Count == 0
@@ -449,7 +449,7 @@ namespace Reddit.Controllers
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
         /// <param name="id">(optional) id of the associated MoreChildren object</param>
         /// <returns>The requested comments.</returns>
-        public RedditThings.MoreChildren MoreChildren(string children, bool limitChildren, string sort, string id = null)
+        public Things.MoreChildren MoreChildren(string children, bool limitChildren, string sort, string id = null)
         {
             return Validate(Dispatch.LinksAndComments.MoreChildren(children, limitChildren, Fullname, sort, id));
         }
@@ -886,7 +886,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="username">A valid Reddit username</param>
         /// <returns>Flair results.</returns>
-        public RedditThings.FlairSelectorResultContainer FlairSelector(string username)
+        public Things.FlairSelectorResultContainer FlairSelector(string username)
         {
             return Validate(Dispatch.Flair.FlairSelector(username, Subreddit, Fullname));
         }

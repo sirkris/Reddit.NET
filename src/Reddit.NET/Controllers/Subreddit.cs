@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using Reddit.Controllers.Structures;
-using RedditThings = Reddit.Models.Structures;
 using Reddit.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -59,7 +58,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// Full subreddit data retrieved from the API.
         /// </summary>
-        public RedditThings.Subreddit SubredditData
+        public Things.Subreddit SubredditData
         {
             get;
             private set;
@@ -86,7 +85,7 @@ namespace Reddit.Controllers
         /// Get the submission text for the subreddit.
         /// This text is set by the subreddit moderators and intended to be displayed on the submission form.
         /// </summary>
-        public RedditThings.SubredditSubmitText SubmitText
+        public Things.SubredditSubmitText SubmitText
         {
             get
             {
@@ -99,7 +98,7 @@ namespace Reddit.Controllers
                 SubmitTextLastUpdated = DateTime.Now;
             }
         }
-        internal RedditThings.SubredditSubmitText submitText;
+        internal Things.SubredditSubmitText submitText;
         private DateTime? SubmitTextLastUpdated;
 
         /// <summary>
@@ -126,7 +125,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="subreddit"></param>
-        public Subreddit(ref Dispatch dispatch, RedditThings.Subreddit subreddit)
+        public Subreddit(ref Dispatch dispatch, Things.Subreddit subreddit)
             : base()
         {
             Dispatch = dispatch;
@@ -143,7 +142,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="subredditChild"></param>
-        public Subreddit(ref Dispatch dispatch, RedditThings.SubredditChild subredditChild)
+        public Subreddit(ref Dispatch dispatch, Things.SubredditChild subredditChild)
             : base()
         {
             Dispatch = dispatch;
@@ -233,7 +232,7 @@ namespace Reddit.Controllers
             Wiki = new Wiki(ref Dispatch, Name);
         }
 
-        private void ImportFromModel(RedditThings.Subreddit subreddit)
+        private void ImportFromModel(Things.Subreddit subreddit)
         {
             BannerImg = subreddit.BannerImg;
             BannerBackgroundColor = subreddit.BannerBackgroundColor;
@@ -259,7 +258,7 @@ namespace Reddit.Controllers
             ActiveUserCount = subreddit.ActiveUserCount;
             IconImg = subreddit.IconImg;
             CanAssignLinkFlair = subreddit.CanAssignLinkFlair;
-            SubmitText = new RedditThings.SubredditSubmitText(subreddit.SubmitText);
+            SubmitText = new Things.SubredditSubmitText(subreddit.SubmitText);
             AllowVideoGifs = subreddit.AllowVideoGifs;
             Subscribers = subreddit.Subscribers;
             SubmitTextLabel = subreddit.SubmitTextLabel;
@@ -308,7 +307,7 @@ namespace Reddit.Controllers
             Title = title;
             Description = description;
             Sidebar = sidebar;
-            SubmitText = new RedditThings.SubredditSubmitText(submissionText);
+            SubmitText = new Things.SubredditSubmitText(submissionText);
             Lang = lang;
             SubredditType = subredditType;
             SubmissionType = submissionType;
@@ -336,9 +335,9 @@ namespace Reddit.Controllers
         /// Sync the subreddit model data to this and return the result.
         /// </summary>
         /// <returns>Updated subreddit model instance.</returns>
-        private RedditThings.Subreddit UpdateSubredditData()
+        private Things.Subreddit UpdateSubredditData()
         {
-            SubredditData = new RedditThings.Subreddit(this);
+            SubredditData = new Things.Subreddit(this);
 
             return SubredditData;
         }
@@ -460,7 +459,7 @@ namespace Reddit.Controllers
         public List<Moderator> GetModerators(string after = "", string before = "", int limit = 25, string user = "", 
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators", after, before, user, includeCategories, Name, count, limit, 
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators", after, before, user, includeCategories, Name, count, limit, 
                 show, srDetail);
 
             Validate(res);
@@ -484,7 +483,7 @@ namespace Reddit.Controllers
         public List<SubredditUser> GetContributors(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("contributors", after, before, user, includeCategories, Name, count, limit,
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("contributors", after, before, user, includeCategories, Name, count, limit,
                 show, srDetail);
 
             Validate(res);
@@ -507,7 +506,7 @@ namespace Reddit.Controllers
         public List<SubredditUser> GetMutedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("muted", after, before, user, includeCategories, Name, count, limit,
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("muted", after, before, user, includeCategories, Name, count, limit,
                 show, srDetail);
 
             Validate(res);
@@ -530,7 +529,7 @@ namespace Reddit.Controllers
         public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned", after, before, user, includeCategories, Name, count, limit,
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned", after, before, user, includeCategories, Name, count, limit,
                 show, srDetail);
 
             Validate(res);
@@ -543,9 +542,9 @@ namespace Reddit.Controllers
         /// This text is set by the subreddit moderators and intended to be displayed on the submission form.
         /// </summary>
         /// <returns>An object containing submission text.</returns>
-        public RedditThings.SubredditSubmitText GetSubmitText()
+        public Things.SubredditSubmitText GetSubmitText()
         {
-            RedditThings.SubredditSubmitText res = Dispatch.Subreddits.SubmitText(Name);
+            Things.SubredditSubmitText res = Dispatch.Subreddits.SubmitText(Name);
 
             SubmitTextLastUpdated = DateTime.Now;
 
@@ -706,7 +705,7 @@ namespace Reddit.Controllers
         /// <param name="imgName">a valid subreddit image name</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
         /// <returns>An object containing the resulting image URL and any errors.</returns>
-        public RedditThings.ImageUploadResult UploadImg(byte[] imgData, string imgName, string imgType = "png")
+        public Things.ImageUploadResult UploadImg(byte[] imgData, string imgName, string imgType = "png")
         {
             return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, imgName, "img", Name, imgType));
         }
@@ -731,7 +730,7 @@ namespace Reddit.Controllers
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
         /// <returns>An object containing the resulting image URL and any errors.</returns>
-        public RedditThings.ImageUploadResult UploadHeader(byte[] imgData, string imgType = "png")
+        public Things.ImageUploadResult UploadHeader(byte[] imgData, string imgType = "png")
         {
             return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 1, null, "header", Name, imgType));
         }
@@ -755,7 +754,7 @@ namespace Reddit.Controllers
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
         /// <returns>An object containing the resulting image URL and any errors.</returns>
-        public RedditThings.ImageUploadResult UploadIcon(byte[] imgData, string imgType = "png")
+        public Things.ImageUploadResult UploadIcon(byte[] imgData, string imgType = "png")
         {
             return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, null, "icon", Name, imgType));
         }
@@ -779,7 +778,7 @@ namespace Reddit.Controllers
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
         /// <returns>An object containing the resulting image URL and any errors.</returns>
-        public RedditThings.ImageUploadResult UploadBanner(byte[] imgData, string imgType = "png")
+        public Things.ImageUploadResult UploadBanner(byte[] imgData, string imgType = "png")
         {
             return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, null, "banner", Name, imgType));
         }
@@ -804,7 +803,7 @@ namespace Reddit.Controllers
         /// <param name="created">one of (true, false)</param>
         /// <param name="location"></param>
         /// <returns>Settings for the requested subreddit.</returns>
-        public RedditThings.SubredditSettingsContainer GetSettings(bool created = false, string location = "")
+        public Things.SubredditSettingsContainer GetSettings(bool created = false, string location = "")
         {
             return Validate(Dispatch.Subreddits.Edit(Name, created, location));
         }
@@ -813,7 +812,7 @@ namespace Reddit.Controllers
         /// Get the rules for the current subreddit.
         /// </summary>
         /// <returns>Subreddit rules.</returns>
-        public RedditThings.RulesContainer GetRules()
+        public Things.RulesContainer GetRules()
         {
             return Validate(Dispatch.Subreddits.Rules(Name));
         }
@@ -822,7 +821,7 @@ namespace Reddit.Controllers
         /// Get the traffic for the current subreddit.
         /// </summary>
         /// <returns>Subreddit traffic.</returns>
-        public RedditThings.Traffic GetTraffic()
+        public Things.Traffic GetTraffic()
         {
             return Validate(Dispatch.Subreddits.Traffic(Name));
         }
@@ -856,7 +855,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A listing of recent moderation actions.</returns>
-        public RedditThings.ModActionContainer GetLog(string type = null, int limit = 25, string after = "", string before = "", string mod = null,
+        public Things.ModActionContainer GetLog(string type = null, int limit = 25, string after = "", string before = "", string mod = null,
             string show = "all", bool srDetail = false, int count = 0)
         {
             return Validate(Dispatch.Moderation.GetLog(after, before, Name, count, limit, mod, show, srDetail, type));
@@ -947,7 +946,7 @@ namespace Reddit.Controllers
             string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
             string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
         {
-            RedditThings.GenericContainer res = Dispatch.Subreddits.SiteAdmin(UpdateSubredditData(), allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse,
+            Things.GenericContainer res = Dispatch.Subreddits.SiteAdmin(UpdateSubredditData(), allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse,
                 linkType, spamComments, spamLinks, spamSelfPosts, "", themeSr, themeSrUpdate, wikiMode, wikiEditAge, wikiEditKarma);
 
             Validate(res);
@@ -1090,7 +1089,7 @@ namespace Reddit.Controllers
             bool? themeSrUpdate = null, string title = null, string type = null, string wikiMode = null, int? commentScoreHideMins = null, int? wikiEditAge = null,
             int? wikiEditKarma = null)
         {
-            RedditThings.GenericContainer res;
+            Things.GenericContainer res;
             if (!manualUpdate)
             {
                 res = Dispatch.Subreddits.SiteAdmin(UpdateSubredditData(), allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports,

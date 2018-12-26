@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Reddit.Exceptions;
 using Reddit.Models.EventArgs;
+using Reddit.Things;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -127,7 +128,7 @@ namespace Reddit.Models.Internal
                     && res.Content.Contains("\"errors\":")
                     && res.Content.Contains("USER_REQUIRED"))
                 {
-                    Structures.GenericContainer resObj = GetGenericResponse(res.Content);
+                    GenericContainer resObj = GetGenericResponse(res.Content);
                     if (resObj != null
                         && resObj.JSON != null
                         && resObj.JSON.Errors != null
@@ -201,20 +202,20 @@ namespace Reddit.Models.Internal
 
             try
             {
-                res = Convert.ToInt32(JsonConvert.DeserializeObject<Structures.GenericContainer>(content).JSON.Ratelimit * 1000);
+                res = Convert.ToInt32(JsonConvert.DeserializeObject<GenericContainer>(content).JSON.Ratelimit * 1000);
             }
             catch (Exception) { }
 
             return res ?? 60000;
         }
 
-        private Structures.GenericContainer GetGenericResponse(string content)
+        private GenericContainer GetGenericResponse(string content)
         {
-            Structures.GenericContainer res = null;
+            GenericContainer res = null;
 
             try
             {
-                res = JsonConvert.DeserializeObject<Structures.GenericContainer>(content);
+                res = JsonConvert.DeserializeObject<GenericContainer>(content);
             }
             catch (Exception) { }
 

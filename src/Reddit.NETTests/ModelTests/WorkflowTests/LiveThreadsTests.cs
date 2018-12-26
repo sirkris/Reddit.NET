@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Structures;
+using Reddit.Things;
 using System.Collections.Generic;
 
 namespace RedditTests.ModelTests.WorkflowTests

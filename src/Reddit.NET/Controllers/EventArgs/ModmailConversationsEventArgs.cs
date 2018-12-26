@@ -1,18 +1,18 @@
-﻿using RedditThings = Reddit.Models.Structures;
+﻿using Reddit.Things;
 using System.Collections.Generic;
 
 namespace Reddit.Controllers.EventArgs
 {
     public class ModmailConversationsEventArgs
     {
-        public Dictionary<string, RedditThings.Conversation> OldConversations { get; set; }
-        public Dictionary<string, RedditThings.Conversation> NewConversations { get; set; }
-        public Dictionary<string, RedditThings.Conversation> AddedConversations { get; set; }
-        public Dictionary<string, RedditThings.Conversation> RemovedConversations { get; set; }
+        public Dictionary<string, Things.Conversation> OldConversations { get; set; }
+        public Dictionary<string, Things.Conversation> NewConversations { get; set; }
+        public Dictionary<string, Things.Conversation> AddedConversations { get; set; }
+        public Dictionary<string, Things.Conversation> RemovedConversations { get; set; }
 
-        public Dictionary<string, RedditThings.ConversationMessage> OldMessages { get; set; }
-        public Dictionary<string, RedditThings.ConversationMessage> NewMessages { get; set; }
-        public Dictionary<string, RedditThings.ConversationMessage> AddedMessages { get; set; }
-        public Dictionary<string, RedditThings.ConversationMessage> RemovedMessages { get; set; }
+        public Dictionary<string, Things.ConversationMessage> OldMessages { get; set; }
+        public Dictionary<string, Things.ConversationMessage> NewMessages { get; set; }
+        public Dictionary<string, Things.ConversationMessage> AddedMessages { get; set; }
+        public Dictionary<string, Things.ConversationMessage> RemovedMessages { get; set; }
     }
 }

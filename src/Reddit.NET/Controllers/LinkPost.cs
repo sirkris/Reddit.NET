@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using Reddit.Exceptions;
-using RedditThings = Reddit.Models.Structures;
+using Reddit.Things;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="listing"></param>
-        public LinkPost(ref Dispatch dispatch, RedditThings.Post listing) : base(ref dispatch, listing)
+        public LinkPost(ref Dispatch dispatch, Things.Post listing) : base(ref dispatch, listing)
         {
             Preview = listing.Preview;
             URL = listing.URL;
@@ -69,7 +69,7 @@ namespace Reddit.Controllers
             ThumbnailHeight = thumbnailHeight;
             ThumbnailWidth = thumbnailWidth;
 
-            Listing = new RedditThings.Post(this);
+            Listing = new Things.Post(this);
         }
 
         /// <summary>
@@ -123,7 +123,7 @@ namespace Reddit.Controllers
             ThumbnailHeight = thumbnailHeight;
             ThumbnailWidth = thumbnailWidth;
 
-            Listing = new RedditThings.Post(this);
+            Listing = new Things.Post(this);
         }
 
         /// <summary>
@@ -132,7 +132,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         /// <param name="postResultShortData"></param>
         /// <param name="linkPost"></param>
-        public LinkPost(ref Dispatch dispatch, RedditThings.PostResultShortData postResultShortData, LinkPost linkPost)
+        public LinkPost(ref Dispatch dispatch, Things.PostResultShortData postResultShortData, LinkPost linkPost)
             : base(ref dispatch, linkPost.Subreddit, linkPost.Title, linkPost.Author, postResultShortData.Id, postResultShortData.Name,
                   linkPost.Permalink, linkPost.Created, linkPost.Edited, linkPost.Score, linkPost.UpVotes, linkPost.DownVotes,
                   linkPost.Removed, linkPost.Spam, linkPost.NSFW)
@@ -143,7 +143,7 @@ namespace Reddit.Controllers
             ThumbnailHeight = linkPost.ThumbnailHeight;
             ThumbnailWidth = linkPost.ThumbnailWidth;
 
-            Listing = new RedditThings.Post(this);
+            Listing = new Things.Post(this);
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public new LinkPost About()
         {
-            RedditThings.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            Things.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
                 || info.Posts == null
                 || info.Posts.Count == 0

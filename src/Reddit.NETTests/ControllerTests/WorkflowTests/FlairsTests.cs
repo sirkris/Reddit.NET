@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
-using RedditThings = Reddit.Models.Structures;
 using System;
 
 namespace RedditTests.ControllerTests.WorkflowTests
@@ -26,8 +25,8 @@ namespace RedditTests.ControllerTests.WorkflowTests
         [TestMethod]
         public void CreateAndDeleteFlairTemplate()
         {
-            RedditThings.FlairV2 linkFlair = Subreddit.Flairs.CreateLinkFlairTemplateV2("V2-" + DateTime.Now.ToString("fffffff"));
-            RedditThings.FlairV2 userFlair = Subreddit.Flairs.CreateUserFlairTemplateV2("V2-" + DateTime.Now.ToString("fffffff"));
+            Reddit.Things.FlairV2 linkFlair = Subreddit.Flairs.CreateLinkFlairTemplateV2("V2-" + DateTime.Now.ToString("fffffff"));
+            Reddit.Things.FlairV2 userFlair = Subreddit.Flairs.CreateUserFlairTemplateV2("V2-" + DateTime.Now.ToString("fffffff"));
 
             Validate(linkFlair);
             Validate(userFlair);

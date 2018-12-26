@@ -1,5 +1,5 @@
 ﻿using Reddit.Exceptions;
-using RedditThings = Reddit.Models.Structures;
+using Reddit.Things;
 using System;
 using System.Collections.Generic;
 
@@ -64,7 +64,7 @@ namespace Reddit.Controllers.Internal
             return obj;
         }
 
-        public RedditThings.GenericContainer Validate(RedditThings.GenericContainer genericContainer)
+        public Things.GenericContainer Validate(Things.GenericContainer genericContainer)
         {
             CheckNull(genericContainer);
 
@@ -73,7 +73,7 @@ namespace Reddit.Controllers.Internal
             return genericContainer;
         }
 
-        public RedditThings.Generic Validate(RedditThings.Generic generic)
+        public Things.Generic Validate(Things.Generic generic)
         {
             CheckNull(generic, "Reddit API returned empty response container.");
 
@@ -82,7 +82,7 @@ namespace Reddit.Controllers.Internal
             return generic;
         }
 
-        public RedditThings.DynamicShortListingContainer Validate(RedditThings.DynamicShortListingContainer dynamicShortListingContainer)
+        public Things.DynamicShortListingContainer Validate(Things.DynamicShortListingContainer dynamicShortListingContainer)
         {
             CheckNull(dynamicShortListingContainer);
 
@@ -91,14 +91,14 @@ namespace Reddit.Controllers.Internal
             return dynamicShortListingContainer;
         }
 
-        public RedditThings.DynamicShortListingData Validate(RedditThings.DynamicShortListingData dynamicShortListingData)
+        public Things.DynamicShortListingData Validate(Things.DynamicShortListingData dynamicShortListingData)
         {
             CheckNull(dynamicShortListingData, "Reddit API returned empty response container.");
 
             return dynamicShortListingData;
         }
 
-        public RedditThings.ImageUploadResult Validate(RedditThings.ImageUploadResult imageUploadResult)
+        public Things.ImageUploadResult Validate(Things.ImageUploadResult imageUploadResult)
         {
             CheckNull(imageUploadResult);
 
@@ -107,7 +107,7 @@ namespace Reddit.Controllers.Internal
             return imageUploadResult;
         }
 
-        public RedditThings.LiveUpdateEventContainer Validate(RedditThings.LiveUpdateEventContainer liveUpdateEventContainer)
+        public Things.LiveUpdateEventContainer Validate(Things.LiveUpdateEventContainer liveUpdateEventContainer)
         {
             CheckNull(liveUpdateEventContainer);
             CheckNull(liveUpdateEventContainer.Data);
@@ -115,7 +115,7 @@ namespace Reddit.Controllers.Internal
             return liveUpdateEventContainer;
         }
 
-        public RedditThings.LiveThreadCreateResultContainer Validate(RedditThings.LiveThreadCreateResultContainer liveThreadCreateResultContainer)
+        public Things.LiveThreadCreateResultContainer Validate(Things.LiveThreadCreateResultContainer liveThreadCreateResultContainer)
         {
             CheckNull(liveThreadCreateResultContainer);
             CheckNull(liveThreadCreateResultContainer.JSON);
@@ -126,7 +126,7 @@ namespace Reddit.Controllers.Internal
             return liveThreadCreateResultContainer;
         }
 
-        public RedditThings.LiveUpdateContainer Validate(RedditThings.LiveUpdateContainer liveUpdateContainer, int? minChildren = null)
+        public Things.LiveUpdateContainer Validate(Things.LiveUpdateContainer liveUpdateContainer, int? minChildren = null)
         {
             CheckNull(liveUpdateContainer);
             CheckNull(liveUpdateContainer.Data);
@@ -142,7 +142,7 @@ namespace Reddit.Controllers.Internal
             return liveUpdateContainer;
         }
 
-        public RedditThings.SubredditSettingsContainer Validate(RedditThings.SubredditSettingsContainer subredditSettingsContainer)
+        public Things.SubredditSettingsContainer Validate(Things.SubredditSettingsContainer subredditSettingsContainer)
         {
             CheckNull(subredditSettingsContainer);
 
@@ -151,18 +151,18 @@ namespace Reddit.Controllers.Internal
             return subredditSettingsContainer;
         }
 
-        public RedditThings.SubredditSettings Validate(RedditThings.SubredditSettings subredditSettings)
+        public Things.SubredditSettings Validate(Things.SubredditSettings subredditSettings)
         {
             CheckNull(subredditSettings, "Reddit API returned empty response container.");
 
             return subredditSettings;
         }
 
-        public List<RedditThings.ActionResult> Validate(List<RedditThings.ActionResult> actionResults)
+        public List<Things.ActionResult> Validate(List<Things.ActionResult> actionResults)
         {
             CheckNull(actionResults);
 
-            foreach (RedditThings.ActionResult actionResult in actionResults)
+            foreach (Things.ActionResult actionResult in actionResults)
             {
                 Validate(actionResult);
             }
@@ -170,7 +170,7 @@ namespace Reddit.Controllers.Internal
             return actionResults;
         }
 
-        public RedditThings.ActionResult Validate(RedditThings.ActionResult actionResult)
+        public Things.ActionResult Validate(Things.ActionResult actionResult)
         {
             CheckNull(actionResult);
 
@@ -186,12 +186,12 @@ namespace Reddit.Controllers.Internal
             return actionResult;
         }
 
-        public RedditThings.FlairListResultContainer Validate(RedditThings.FlairListResultContainer flairListResultContainer)
+        public Things.FlairListResultContainer Validate(Things.FlairListResultContainer flairListResultContainer)
         {
             CheckNull(flairListResultContainer);
             CheckNull(flairListResultContainer.Users, "Reddit API returned empty response container.");
 
-            foreach (RedditThings.FlairListResult flairListResult in flairListResultContainer.Users)
+            foreach (Things.FlairListResult flairListResult in flairListResultContainer.Users)
             {
                 Validate(flairListResult);
             }
@@ -199,7 +199,7 @@ namespace Reddit.Controllers.Internal
             return flairListResultContainer;
         }
 
-        public RedditThings.Flair Validate(RedditThings.Flair flair)
+        public Things.Flair Validate(Things.Flair flair)
         {
             CheckNull(flair);
             CheckNull(flair.Id, "Reddit API returned flair object with no Id.");
@@ -207,7 +207,7 @@ namespace Reddit.Controllers.Internal
             return flair;
         }
 
-        public RedditThings.FlairV2 Validate(RedditThings.FlairV2 flairV2)
+        public Things.FlairV2 Validate(Things.FlairV2 flairV2)
         {
             CheckNull(flairV2);
             CheckNull(flairV2.Id, "Reddit API returned flair object with no Id.");
@@ -215,7 +215,7 @@ namespace Reddit.Controllers.Internal
             return flairV2;
         }
 
-        public RedditThings.ModActionContainer Validate(RedditThings.ModActionContainer modActionContainer)
+        public Things.ModActionContainer Validate(Things.ModActionContainer modActionContainer)
         {
             CheckNull(modActionContainer);
 
@@ -224,7 +224,7 @@ namespace Reddit.Controllers.Internal
             return modActionContainer;
         }
 
-        public RedditThings.ModActionData Validate(RedditThings.ModActionData modActionData)
+        public Things.ModActionData Validate(Things.ModActionData modActionData)
         {
             CheckNull(modActionData, "Reddit API returned empty response object.");
             CheckNull(modActionData.Children, "Reddit API returned response with null children.");
@@ -232,7 +232,7 @@ namespace Reddit.Controllers.Internal
             return modActionData;
         }
 
-        public RedditThings.WikiPageRevisionContainer Validate(RedditThings.WikiPageRevisionContainer wikiPageRevisionContainer)
+        public Things.WikiPageRevisionContainer Validate(Things.WikiPageRevisionContainer wikiPageRevisionContainer)
         {
             CheckNull(wikiPageRevisionContainer);
             CheckNull(wikiPageRevisionContainer.Data, "Reddit API returned empty response object.");
@@ -240,14 +240,14 @@ namespace Reddit.Controllers.Internal
             return wikiPageRevisionContainer;
         }
 
-        public RedditThings.WikiPageRevisionData Validate(RedditThings.WikiPageRevisionData wikiPageRevisionData)
+        public Things.WikiPageRevisionData Validate(Things.WikiPageRevisionData wikiPageRevisionData)
         {
             CheckNull(wikiPageRevisionData);
 
             return wikiPageRevisionData;
         }
 
-        public RedditThings.WikiPageSettingsContainer Validate(RedditThings.WikiPageSettingsContainer wikiPageSettingsContainer)
+        public Things.WikiPageSettingsContainer Validate(Things.WikiPageSettingsContainer wikiPageSettingsContainer)
         {
             CheckNull(wikiPageSettingsContainer);
             CheckNull(wikiPageSettingsContainer.Data, "Reddit API returned empty response object.");
@@ -255,18 +255,18 @@ namespace Reddit.Controllers.Internal
             return wikiPageSettingsContainer;
         }
 
-        public RedditThings.WikiPageSettings Validate(RedditThings.WikiPageSettings wikiPageSettings)
+        public Things.WikiPageSettings Validate(Things.WikiPageSettings wikiPageSettings)
         {
             CheckNull(wikiPageSettings);
 
             return wikiPageSettings;
         }
 
-        public List<RedditThings.UserPrefsContainer> Validate(List<RedditThings.UserPrefsContainer> userPrefsContainers)
+        public List<Things.UserPrefsContainer> Validate(List<Things.UserPrefsContainer> userPrefsContainers)
         {
             CheckNull(userPrefsContainers);
 
-            foreach (RedditThings.UserPrefsContainer userPrefsContainer in userPrefsContainers)
+            foreach (Things.UserPrefsContainer userPrefsContainer in userPrefsContainers)
             {
                 CheckNull(userPrefsContainer, "Reddit API returned a list with at least one null entry.");
                 CheckNull(userPrefsContainer.Data, "Reddit API returned a list with at least one entry that contains null data.");
@@ -275,7 +275,7 @@ namespace Reddit.Controllers.Internal
             return userPrefsContainers;
         }
 
-        public RedditThings.UserPrefsContainer Validate(RedditThings.UserPrefsContainer userPrefsContainer)
+        public Things.UserPrefsContainer Validate(Things.UserPrefsContainer userPrefsContainer)
         {
             CheckNull(userPrefsContainer);
             CheckNull(userPrefsContainer.Data, "Reddit API returned empty response object.");
@@ -283,14 +283,14 @@ namespace Reddit.Controllers.Internal
             return userPrefsContainer;
         }
 
-        public RedditThings.UserPrefsData Validate(RedditThings.UserPrefsData userPrefsData)
+        public Things.UserPrefsData Validate(Things.UserPrefsData userPrefsData)
         {
             CheckNull(userPrefsData);
 
             return userPrefsData;
         }
 
-        public RedditThings.PostResultShortContainer Validate(RedditThings.PostResultShortContainer postResultShortContainer)
+        public Things.PostResultShortContainer Validate(Things.PostResultShortContainer postResultShortContainer)
         {
             CheckNull(postResultShortContainer);
             CheckNull(postResultShortContainer.JSON, "Reddit API returned an empty response object.");
@@ -300,7 +300,7 @@ namespace Reddit.Controllers.Internal
             return postResultShortContainer;
         }
 
-        public RedditThings.PostResultShort Validate(RedditThings.PostResultShort postResultShort)
+        public Things.PostResultShort Validate(Things.PostResultShort postResultShort)
         {
             CheckNull(postResultShort);
             CheckErrors(postResultShort.Errors);
@@ -309,7 +309,7 @@ namespace Reddit.Controllers.Internal
             return postResultShort;
         }
 
-        public RedditThings.PostResultContainer Validate(RedditThings.PostResultContainer postResultContainer)
+        public Things.PostResultContainer Validate(Things.PostResultContainer postResultContainer)
         {
             CheckNull(postResultContainer);
             CheckNull(postResultContainer.JSON, "Reddit API returned an empty response object.");
@@ -325,7 +325,7 @@ namespace Reddit.Controllers.Internal
             return postResultContainer;
         }
 
-        public RedditThings.PostResult Validate(RedditThings.PostResult postResult)
+        public Things.PostResult Validate(Things.PostResult postResult)
         {
             CheckNull(postResult);
             CheckErrors(postResult.Errors);
@@ -340,7 +340,7 @@ namespace Reddit.Controllers.Internal
             return postResult;
         }
 
-        public RedditThings.JQueryReturn Validate(RedditThings.JQueryReturn jQueryReturn)
+        public Things.JQueryReturn Validate(Things.JQueryReturn jQueryReturn)
         {
             CheckNull(jQueryReturn);
 
@@ -352,7 +352,7 @@ namespace Reddit.Controllers.Internal
             return jQueryReturn;
         }
 
-        public List<(RedditThings.PostContainer, RedditThings.CommentContainer)> Validate(List<(RedditThings.PostContainer, RedditThings.CommentContainer)> ps)
+        public List<(Things.PostContainer, Things.CommentContainer)> Validate(List<(Things.PostContainer, Things.CommentContainer)> ps)
         {
             CheckNull(ps);
 
@@ -367,7 +367,7 @@ namespace Reddit.Controllers.Internal
             return ps;
         }
 
-        public RedditThings.CommentResultContainer Validate(RedditThings.CommentResultContainer commentResultContainer)
+        public Things.CommentResultContainer Validate(Things.CommentResultContainer commentResultContainer)
         {
             CheckNull(commentResultContainer);
             CheckNull(commentResultContainer.JSON, "Reddit API returned empty response object.");
@@ -387,7 +387,7 @@ namespace Reddit.Controllers.Internal
             return commentResultContainer;
         }
 
-        public RedditThings.SubredditContainer Validate(RedditThings.SubredditContainer subredditContainer)
+        public Things.SubredditContainer Validate(Things.SubredditContainer subredditContainer)
         {
             CheckNull(subredditContainer);
             CheckNull(subredditContainer.Data, "Reddit API returned empty response object.");

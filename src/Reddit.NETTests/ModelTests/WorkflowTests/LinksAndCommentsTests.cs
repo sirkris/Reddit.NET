@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Structures;
+using Reddit.Things;
 using System;
 using System.Threading;
 

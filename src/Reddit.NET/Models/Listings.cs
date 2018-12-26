@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Reddit.Models.Structures;
+using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
 

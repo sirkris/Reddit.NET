@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using Reddit;
 using Controllers = Reddit.Controllers;
-using Reddit.Models.Structures;
+using Reddit.Things;
 using RestSharp;
 using System;
 using System.Collections.Generic;

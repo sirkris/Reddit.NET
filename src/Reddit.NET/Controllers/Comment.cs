@@ -1,6 +1,5 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
-using RedditThings = Reddit.Models.Structures;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -78,7 +77,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// Full comment data returned by the API.
         /// </summary>
-        public RedditThings.Comment Listing;
+        public Things.Comment Listing;
 
         /// <summary>
         /// Comment replies to this comment.
@@ -103,7 +102,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="listing"></param>
-        public Comment(ref Dispatch dispatch, RedditThings.Comment listing)
+        public Comment(ref Dispatch dispatch, Things.Comment listing)
         {
             Dispatch = dispatch;
             Import(listing);
@@ -171,7 +170,7 @@ namespace Reddit.Controllers
             return Comments;
         }
 
-        private void Import(RedditThings.Comment listing)
+        private void Import(Things.Comment listing)
         {
             Subreddit = listing.Subreddit;
             Author = listing.Author;
@@ -228,7 +227,7 @@ namespace Reddit.Controllers
             Removed = removed;
             Spam = spam;
 
-            Listing = new RedditThings.Comment(this);
+            Listing = new Things.Comment(this);
         }
 
         /// <summary>
@@ -262,7 +261,7 @@ namespace Reddit.Controllers
                 return null;
             }
 
-            RedditThings.Info info = null;
+            Things.Info info = null;
             do
             {
                 info = Validate(Dispatch.LinksAndComments.Info(fullname, Subreddit));
@@ -273,7 +272,7 @@ namespace Reddit.Controllers
             return new Post(ref Dispatch, fullname).About();
         }
 
-        private string GetInfoPostOrCommentParentFullname(RedditThings.Info info)
+        private string GetInfoPostOrCommentParentFullname(Things.Info info)
         {
             if (info == null)
             {
@@ -410,7 +409,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public Comment About()
         {
-            RedditThings.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            Things.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
                 || info.Comments == null
                 || info.Comments.Count == 0
@@ -642,7 +641,7 @@ namespace Reddit.Controllers
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
         /// <param name="id">(optional) id of the associated MoreChildren object</param>
         /// <returns>The requested comments.</returns>
-        public RedditThings.MoreChildren MoreChildren(bool limitChildren, string sort, string id = null)
+        public Things.MoreChildren MoreChildren(bool limitChildren, string sort, string id = null)
         {
             return Validate(Dispatch.LinksAndComments.MoreChildren(Id, limitChildren, ParentFullname, sort, id));
         }

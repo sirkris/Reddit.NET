@@ -2,7 +2,6 @@
 using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
 using Reddit.Exceptions;
-using RedditThings = Reddit.Models.Structures;
 using System;
 using System.Collections.Generic;
 
@@ -31,7 +30,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             Validate(reddit2.Account.Modmail.NewConversation("This is a controller test.", "Test Message", testData["Subreddit"]));
 
             // If user is already muted, we can't continue because Unmute requires the ID of the conversation in which the user was originally muted.  --Kris
-            RedditThings.ModmailConversationContainer modmailConversationContainer = null;
+            Reddit.Things.ModmailConversationContainer modmailConversationContainer = null;
             try
             {
                 modmailConversationContainer = reddit2.Account.Modmail.NewConversation("This is a controller test.", "Test Message", testData["Subreddit"]);
@@ -44,7 +43,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             Validate(modmailConversationContainer);
             Assert.AreEqual(1, modmailConversationContainer.Messages.Count);
 
-            RedditThings.ModmailConversationContainer modmailConversationContainer2 = reddit.Account.Modmail.GetConversation(modmailConversationContainer.Conversation.Id);
+            Reddit.Things.ModmailConversationContainer modmailConversationContainer2 = reddit.Account.Modmail.GetConversation(modmailConversationContainer.Conversation.Id);
 
             Validate(modmailConversationContainer2);
             Assert.AreEqual(modmailConversationContainer.Conversation.Id, modmailConversationContainer2.Conversation.Id);
@@ -83,7 +82,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
             User patsy = GetTargetUser();
 
-            RedditThings.ModmailConversationContainer conversation = reddit2.Account.Modmail.NewConversation("This is a new modmail conversation.", "Test Message", testData["Subreddit"]);
+            Reddit.Things.ModmailConversationContainer conversation = reddit2.Account.Modmail.NewConversation("This is a new modmail conversation.", "Test Message", testData["Subreddit"]);
 
             for (int i = 1; i <= 10; i++)
             {
@@ -106,7 +105,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
         private void C_UnreadMessagesUpdated(object sender, ModmailConversationsEventArgs e)
         {
-            foreach (KeyValuePair<string, RedditThings.ConversationMessage> pair in e.AddedMessages)
+            foreach (KeyValuePair<string, Reddit.Things.ConversationMessage> pair in e.AddedMessages)
             {
                 NewMessages++;
             }

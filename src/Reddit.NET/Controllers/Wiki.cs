@@ -1,7 +1,7 @@
 ﻿using Reddit.Controllers.EventArgs;
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
-using RedditThings = Reddit.Models.Structures;
+using Reddit.Things;
 using Reddit.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -83,9 +83,9 @@ namespace Reddit.Controllers
         /// Return a new instance of the WikiPage controller.
         /// </summary>
         /// <param name="pageName">the name of an existing wiki page</param>
-        /// <param name="wikiPage">A valid instance of Models.Structures.WikiPage</param>
+        /// <param name="wikiPage">A valid instance of Things.WikiPage</param>
         /// <returns>A new instance of the WikiPage controller.</returns>
-        public WikiPage Page(string pageName, RedditThings.WikiPage wikiPage)
+        public WikiPage Page(string pageName, Things.WikiPage wikiPage)
         {
             return new WikiPage(ref Dispatch, wikiPage, Subreddit, pageName);
         }
@@ -115,7 +115,7 @@ namespace Reddit.Controllers
         public List<SubredditUser> GetContributors(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikicontributors", after, before, user, includeCategories, Subreddit, count, limit,
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikicontributors", after, before, user, includeCategories, Subreddit, count, limit,
                 show, srDetail);
 
             Validate(res);
@@ -138,7 +138,7 @@ namespace Reddit.Controllers
         public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            RedditThings.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikibanned", after, before, user, includeCategories, Subreddit, count, limit,
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikibanned", after, before, user, includeCategories, Subreddit, count, limit,
                 show, srDetail);
 
             Validate(res);
@@ -152,7 +152,7 @@ namespace Reddit.Controllers
         /// <returns>>A list of wiki pages.</returns>
         public List<string> GetPages()
         {
-            Pages = ((RedditThings.WikiPageListing)Validate(Dispatch.Wiki.Pages(Subreddit))).Data;
+            Pages = ((Things.WikiPageListing)Validate(Dispatch.Wiki.Pages(Subreddit))).Data;
             PagesLastUpdated = DateTime.Now;
 
             return Pages;
@@ -168,7 +168,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of wiki pages.</returns>
-        public List<RedditThings.WikiPageRevision> GetRecentPageRevisions(int limit = 25, string after = "", string before = "", string show = "all",
+        public List<Things.WikiPageRevision> GetRecentPageRevisions(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = false, int count = 0)
         {
             return Validate(Dispatch.Wiki.Revisions(after, before, Subreddit, count, limit, show, srDetail)).Data.Children;

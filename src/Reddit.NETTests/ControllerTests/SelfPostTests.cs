@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
-using RedditThings = Reddit.Models.Structures;
+using Reddit.Things;
 
 namespace RedditTests.ControllerTests
 {
@@ -41,7 +41,7 @@ namespace RedditTests.ControllerTests
         [TestMethod]
         public override void MoreChildren()
         {
-            RedditThings.MoreChildren moreChildren = Post.MoreChildren("e6doo53", false, "new");
+            MoreChildren moreChildren = Post.MoreChildren("e6doo53", false, "new");
 
             Validate(moreChildren);
             Assert.IsTrue(moreChildren.Comments.Count > 0);

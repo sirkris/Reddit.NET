@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Reddit.Models.Structures;
+using Reddit.Things;
 using RestSharp;
 
 namespace Reddit.Models

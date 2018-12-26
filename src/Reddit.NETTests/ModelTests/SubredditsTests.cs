@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
-using Reddit.Models.Structures;
+using Reddit.Things;
 
 namespace RedditTests.ModelTests
 {

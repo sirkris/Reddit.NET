@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
-using RedditThings = Reddit.Models.Structures;
 using System;
 using System.Collections.Generic;
 
@@ -72,9 +71,9 @@ namespace RedditTests.ControllerTests.WorkflowTests
             return res;
         }
 
-        private bool CheckMessages(List<RedditThings.Message> messages, string from, string subject, string body)
+        private bool CheckMessages(List<Reddit.Things.Message> messages, string from, string subject, string body)
         {
-            foreach (RedditThings.Message message in messages)
+            foreach (Reddit.Things.Message message in messages)
             {
                 if (CheckMessage(message, from, subject, body))
                 {
@@ -85,7 +84,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             return false;
         }
 
-        private bool CheckMessage(RedditThings.Message message, string from, string subject, string body)
+        private bool CheckMessage(Reddit.Things.Message message, string from, string subject, string body)
         {
             return (message.Author.Equals(from)
                 && message.Subject.Equals(subject)

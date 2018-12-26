@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
-using RedditThings = Reddit.Models.Structures;
 
 namespace RedditTests.ControllerTests
 {
@@ -31,7 +30,7 @@ namespace RedditTests.ControllerTests
         public void UpdatePrefs()
         {
             // This just grabs your existing preferences and sends them right back.  --Kris
-            Validate(reddit.Account.UpdatePrefs(new RedditThings.AccountPrefsSubmit(reddit.Account.Prefs(), "US", false, "")));
+            Validate(reddit.Account.UpdatePrefs(new Reddit.Things.AccountPrefsSubmit(reddit.Account.Prefs(), "US", false, "")));
         }
 
         [TestMethod]

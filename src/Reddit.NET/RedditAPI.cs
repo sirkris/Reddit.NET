@@ -1,5 +1,4 @@
 ﻿using Reddit.Controllers;
-using RedditThings = Reddit.Models.Structures;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -141,7 +140,7 @@ namespace Reddit
         /// </summary>
         /// <param name="liveUpdateEvent"></param>
         /// <returns>A new live thread controller instance.</returns>
-        public LiveThread LiveThread(RedditThings.LiveUpdateEvent liveUpdateEvent)
+        public LiveThread LiveThread(Things.LiveUpdateEvent liveUpdateEvent)
         {
             return new LiveThread(ref Models, liveUpdateEvent);
         }
@@ -196,7 +195,7 @@ namespace Reddit
         /// </summary>
         /// <param name="user"></param>
         /// <returns>A new user controller instance.</returns>
-        public User User(RedditThings.User user)
+        public User User(Things.User user)
         {
             return new User(ref Models, user);
         }
@@ -269,7 +268,7 @@ namespace Reddit
         /// </summary>
         /// <param name="subreddit"></param>
         /// <returns>A new subreddit controller instance.</returns>
-        public Subreddit Subreddit(RedditThings.Subreddit subreddit)
+        public Subreddit Subreddit(Things.Subreddit subreddit)
         {
             return new Subreddit(ref Models, subreddit);
         }
@@ -279,7 +278,7 @@ namespace Reddit
         /// </summary>
         /// <param name="subredditChild"></param>
         /// <returns>A new subreddit controller instance.</returns>
-        public Subreddit Subreddit(RedditThings.SubredditChild subredditChild)
+        public Subreddit Subreddit(Things.SubredditChild subredditChild)
         {
             return new Subreddit(ref Models, subredditChild);
         }
@@ -369,7 +368,7 @@ namespace Reddit
         /// </summary>
         /// <param name="scopes">(optional) An OAuth2 scope string</param>
         /// <returns>A list of scopes.</returns>
-        public Dictionary<string, RedditThings.Scope> Scopes(string scopes = null)
+        public Dictionary<string, Things.Scope> Scopes(string scopes = null)
         {
             return Account.Validate(Models.Misc.Scopes(scopes));
         }
@@ -388,7 +387,7 @@ namespace Reddit
         /// <returns>A list of subreddit names.</returns>
         public List<string> SearchRedditNames(string query, bool exact = false, bool includeOver18 = true, bool includeUnadvertisable = true)
         {
-            return ((RedditThings.SubredditNames)Account.Validate(Models.Subreddits.SearchRedditNames(exact, includeOver18, includeUnadvertisable, query))).Names;
+            return ((Things.SubredditNames)Account.Validate(Models.Subreddits.SearchRedditNames(exact, includeOver18, includeUnadvertisable, query))).Names;
         }
 
         /// <summary>
@@ -403,9 +402,9 @@ namespace Reddit
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeUnadvertisable">boolean value</param>
         /// <returns>A list of subreddit listings.</returns>
-        public List<RedditThings.SubSearchResult> SearchSubredditNames(string query, bool exact = false, bool includeOver18 = true, bool includeUnadvertisable = true)
+        public List<Things.SubSearchResult> SearchSubredditNames(string query, bool exact = false, bool includeOver18 = true, bool includeUnadvertisable = true)
         {
-            return ((RedditThings.SubSearch)Account.Validate(Models.Subreddits.SearchSubreddits(exact, includeOver18, includeUnadvertisable, query))).Subreddits;
+            return ((Things.SubSearch)Account.Validate(Models.Subreddits.SearchSubreddits(exact, includeOver18, includeUnadvertisable, query))).Subreddits;
         }
 
         /// <summary>
@@ -436,9 +435,9 @@ namespace Reddit
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeProfiles">boolean value</param>
         /// <returns>Matching subreddits.</returns>
-        public List<RedditThings.SubredditAutocompleteResult> SubredditAutocomplete(string query, bool includeOver18 = true, bool includeProfiles = true)
+        public List<Things.SubredditAutocompleteResult> SubredditAutocomplete(string query, bool includeOver18 = true, bool includeProfiles = true)
         {
-            return ((RedditThings.SubredditAutocompleteResultContainer)Account.Validate(Models.Subreddits.SubredditAutocomplete(includeOver18, includeProfiles, query))).Subreddits;
+            return ((Things.SubredditAutocompleteResultContainer)Account.Validate(Models.Subreddits.SubredditAutocomplete(includeOver18, includeProfiles, query))).Subreddits;
         }
 
         /// <summary>

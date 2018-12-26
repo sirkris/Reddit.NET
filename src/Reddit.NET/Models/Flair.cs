@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Reddit.Models.Structures;
+using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
 
@@ -91,14 +91,14 @@ namespace Reddit.Models
         /// <param name="flairType">one of (USER_FLAIR, LINK_FLAIR)</param>
         /// <param name="subreddit">subreddit name</param>
         /// <returns>(TODO - Untested)</returns>
-        public object FlairTemplateOrder(string flairType, List<Structures.Flair> flairs, string subreddit = null)
+        public object FlairTemplateOrder(string flairType, List<Things.Flair> flairs, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flair_template_order", Method.PATCH);
 
             restRequest.AddParameter("flair_type", flairType);
 
             List<string> flairIds = new List<string>();
-            foreach (Structures.Flair flair in flairs)
+            foreach (Things.Flair flair in flairs)
             {
                 flairIds.Add(flair.Id);
             }
@@ -302,9 +302,9 @@ namespace Reddit.Models
         /// </summary>
         /// <param name="subreddit">The subreddit with the flairs</param>
         /// <returns>A list of flairs.</returns>
-        public List<Structures.Flair> LinkFlair(string subreddit = null)
+        public List<Things.Flair> LinkFlair(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject<List<Structures.Flair>>(ExecuteRequest(Sr(subreddit) + "api/link_flair"));
+            return JsonConvert.DeserializeObject<List<Things.Flair>>(ExecuteRequest(Sr(subreddit) + "api/link_flair"));
         }
 
         /// <summary>
@@ -369,9 +369,9 @@ namespace Reddit.Models
         /// </summary>
         /// <param name="subreddit">The subreddit with the flairs</param>
         /// <returns>List of available user flairs.</returns>
-        public List<Structures.Flair> UserFlair(string subreddit = null)
+        public List<Things.Flair> UserFlair(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject<List<Structures.Flair>>(ExecuteRequest(Sr(subreddit) + "api/user_flair"));
+            return JsonConvert.DeserializeObject<List<Things.Flair>>(ExecuteRequest(Sr(subreddit) + "api/user_flair"));
         }
 
         /// <summary>

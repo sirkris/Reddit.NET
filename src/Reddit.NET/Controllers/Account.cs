@@ -1,4 +1,4 @@
-﻿using RedditThings = Reddit.Models.Structures;
+﻿using Reddit.Things;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -58,16 +58,16 @@ namespace Reddit.Controllers
         /// Return a breakdown of subreddit karma.
         /// </summary>
         /// <returns>A breakdown of subreddit karma.</returns>
-        public List<RedditThings.UserKarma> Karma()
+        public List<Things.UserKarma> Karma()
         {
-            return ((RedditThings.UserKarmaContainer)Validate(Dispatch.Account.Karma())).Data;
+            return ((Things.UserKarmaContainer)Validate(Dispatch.Account.Karma())).Data;
         }
 
         /// <summary>
         /// Return the preference settings of the logged in user.
         /// </summary>
         /// <returns>The preference settings of the logged in user.</returns>
-        public RedditThings.AccountPrefs Prefs()
+        public Things.AccountPrefs Prefs()
         {
             return Validate(Dispatch.Account.Prefs());
         }
@@ -77,7 +77,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
         /// <returns>The updated preference settings of the logged in user.</returns>
-        public RedditThings.AccountPrefs UpdatePrefs(RedditThings.AccountPrefsSubmit accountPrefs)
+        public Things.AccountPrefs UpdatePrefs(Things.AccountPrefsSubmit accountPrefs)
         {
             return Validate(Dispatch.Account.UpdatePrefs(accountPrefs));
         }
@@ -86,7 +86,7 @@ namespace Reddit.Controllers
         /// Update preferences asynchronously.
         /// </summary>
         /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
-        public async Task UpdatePrefsAsync(RedditThings.AccountPrefsSubmit accountPrefs)
+        public async Task UpdatePrefsAsync(Things.AccountPrefsSubmit accountPrefs)
         {
             await Task.Run(() =>
             {
@@ -98,16 +98,16 @@ namespace Reddit.Controllers
         /// Return a list of trophies for the current user.
         /// </summary>
         /// <returns>A list of trophies for the current user.</returns>
-        public List<RedditThings.Award> Trophies()
+        public List<Things.Award> Trophies()
         {
-            RedditThings.TrophyList trophyList = Dispatch.Account.Trophies();
+            Things.TrophyList trophyList = Dispatch.Account.Trophies();
             if (trophyList == null || trophyList.Data == null || trophyList.Data.Trophies == null)
             {
                 return null;
             }
 
-            List<RedditThings.Award> res = new List<RedditThings.Award>();
-            foreach (RedditThings.AwardContainer awardContainer in trophyList.Data.Trophies)
+            List<Things.Award> res = new List<Things.Award>();
+            foreach (Things.AwardContainer awardContainer in trophyList.Data.Trophies)
             {
                 res.Add(awardContainer.Data);
             }
@@ -126,11 +126,11 @@ namespace Reddit.Controllers
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of users.</returns>
-        public List<RedditThings.UserPrefs> Friends(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
+        public List<Things.UserPrefs> Friends(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
             bool includeCategories = false, int count = 0)
         {
-            List<RedditThings.UserPrefs> res = new List<RedditThings.UserPrefs>();
-            foreach (RedditThings.UserPrefsContainer userPrefsContainer in Validate(Dispatch.Account.PrefsList("friends", after, before, count, limit,
+            List<Things.UserPrefs> res = new List<Things.UserPrefs>();
+            foreach (Things.UserPrefsContainer userPrefsContainer in Validate(Dispatch.Account.PrefsList("friends", after, before, count, limit,
                 show, srDetail, includeCategories)))
             {
                 res.AddRange(userPrefsContainer.Data.Children);
@@ -150,11 +150,11 @@ namespace Reddit.Controllers
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of users.</returns>
-        public List<RedditThings.UserPrefs> Messaging(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
+        public List<Things.UserPrefs> Messaging(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
             bool includeCategories = false, int count = 0)
         {
-            List<RedditThings.UserPrefs> res = new List<RedditThings.UserPrefs>();
-            foreach (RedditThings.UserPrefsContainer userPrefsContainer in Validate(Dispatch.Account.PrefsList("messaging", after, before, count, limit,
+            List<Things.UserPrefs> res = new List<Things.UserPrefs>();
+            foreach (Things.UserPrefsContainer userPrefsContainer in Validate(Dispatch.Account.PrefsList("messaging", after, before, count, limit,
                 show, srDetail, includeCategories)))
             {
                 res.AddRange(userPrefsContainer.Data.Children);
@@ -174,7 +174,7 @@ namespace Reddit.Controllers
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of users.</returns>
-        public List<RedditThings.UserPrefs> Blocked(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
+        public List<Things.UserPrefs> Blocked(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
             bool includeCategories = false, int count = 0)
         {
             return Validate(Dispatch.Account.PrefsSingle("blocked", after, before, count, limit, show, srDetail, includeCategories)).Data.Children;
@@ -191,7 +191,7 @@ namespace Reddit.Controllers
         /// <param name="includeCategories">boolean value</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of users.</returns>
-        public List<RedditThings.UserPrefs> Trusted(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
+        public List<Things.UserPrefs> Trusted(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
             bool includeCategories = false, int count = 0)
         {
             return Validate(Dispatch.Account.PrefsSingle("trusted", after, before, count, limit, show, srDetail, includeCategories)).Data.Children;
@@ -223,7 +223,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="username">A valid, existing reddit username</param>
         /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
-        public RedditThings.UserActionResult GetFriend(string username)
+        public Things.UserActionResult GetFriend(string username)
         {
             return Validate(Dispatch.Users.GetFriend(username));
         }
@@ -239,7 +239,7 @@ namespace Reddit.Controllers
         /// "note": a string no longer than 300 characters
         /// }</param>
         /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
-        public RedditThings.UserActionResult UpdateFriend(string username, string json = "{}")
+        public Things.UserActionResult UpdateFriend(string username, string json = "{}")
         {
             return Validate(Dispatch.Users.UpdateFriend(username, json));
         }
@@ -267,14 +267,14 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="expandSrs">boolean value</param>
         /// <returns>A list of multis.</returns>
-        public List<RedditThings.LabeledMulti> Multis(bool expandSrs = false)
+        public List<Things.LabeledMulti> Multis(bool expandSrs = false)
         {
-            List<RedditThings.LabeledMultiContainer> labeledMultiContainers = Dispatch.Multis.Mine(expandSrs);
+            List<Things.LabeledMultiContainer> labeledMultiContainers = Dispatch.Multis.Mine(expandSrs);
 
-            List<RedditThings.LabeledMulti> res = new List<RedditThings.LabeledMulti>();
+            List<Things.LabeledMulti> res = new List<Things.LabeledMulti>();
             if (labeledMultiContainers != null)
             {
-                foreach (RedditThings.LabeledMultiContainer labeledMultiContainer in labeledMultiContainers)
+                foreach (Things.LabeledMultiContainer labeledMultiContainer in labeledMultiContainers)
                 {
                     res.Add(labeledMultiContainer.Data);
                 }
@@ -355,16 +355,16 @@ namespace Reddit.Controllers
         /// Returns a list of srs that the user moderates that are also enrolled in the new modmail.
         /// </summary>
         /// <returns>A list of subreddits.</returns>
-        public Dictionary<string, RedditThings.ModmailSubreddit> ModmailSubreddits()
+        public Dictionary<string, Things.ModmailSubreddit> ModmailSubreddits()
         {
-            return ((RedditThings.ModmailSubredditContainer)Validate(Dispatch.Modmail.Subreddits())).Subreddits;
+            return ((Things.ModmailSubredditContainer)Validate(Dispatch.Modmail.Subreddits())).Subreddits;
         }
 
         /// <summary>
         /// Endpoint to retrieve the unread conversation count by conversation state.
         /// </summary>
         /// <returns>An object with the int properties: highlighted, notifications, archived, new, inprogress, and mod.</returns>
-        public RedditThings.ModmailUnreadCount ModmailUnreadCount()
+        public Things.ModmailUnreadCount ModmailUnreadCount()
         {
             return Validate(Dispatch.Modmail.UnreadCount());
         }

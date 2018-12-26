@@ -1,5 +1,5 @@
 ﻿using Reddit.Exceptions;
-using RedditThings = Reddit.Models.Structures;
+using Reddit.Things;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -37,7 +37,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// Full user data from the API.
         /// </summary>
-        public RedditThings.User UserData;
+        public Things.User UserData;
 
         private Dispatch Dispatch;
 
@@ -46,7 +46,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="user"></param>
-        public User(ref Dispatch dispatch, RedditThings.User user)
+        public User(ref Dispatch dispatch, Things.User user)
         {
             Import(user);
             Dispatch = dispatch;
@@ -108,7 +108,7 @@ namespace Reddit.Controllers
             Dispatch = dispatch;
         }
 
-        private void Import(RedditThings.User user)
+        private void Import(Things.User user)
         {
             Import(user.Name, user.Id, user.IsFriend, user.PrefNoProfanity, user.IsSuspended, user.HasGoldSubscription, user.NumFriends,
                 user.Verified, user.NewModmailExists, user.Over18, user.IsGold, user.IsMod, user.HasVerifiedEmail, user.IconImg, user.HasModMail,
@@ -154,7 +154,7 @@ namespace Reddit.Controllers
             CommentKarma = commentKarma;
             HasSubscribed = hasSubscribed;
 
-            UserData = new RedditThings.User(this);
+            UserData = new Things.User(this);
         }
 
         /// <summary>
@@ -321,16 +321,16 @@ namespace Reddit.Controllers
         /// Return a list of trophies for the given user.
         /// </summary>
         /// <returns>A list of trophies.</returns>
-        public List<RedditThings.Award> Trophies()
+        public List<Things.Award> Trophies()
         {
-            RedditThings.TrophyList trophyList = Dispatch.Users.Trophies(Name);
+            Things.TrophyList trophyList = Dispatch.Users.Trophies(Name);
             if (trophyList == null || trophyList.Data == null || trophyList.Data.Trophies == null)
             {
                 return null;
             }
 
-            List<RedditThings.Award> res = new List<RedditThings.Award>();
-            foreach (RedditThings.AwardContainer awardContainer in trophyList.Data.Trophies)
+            List<Things.Award> res = new List<Things.Award>();
+            foreach (Things.AwardContainer awardContainer in trophyList.Data.Trophies)
             {
                 res.Add(awardContainer.Data);
             }
@@ -344,7 +344,7 @@ namespace Reddit.Controllers
         /// <returns>A user listing.</returns>
         public User About()
         {
-            return new User(ref Dispatch, ((RedditThings.UserChild)Validate(Dispatch.Users.About(Name))).Data);
+            return new User(ref Dispatch, ((Things.UserChild)Validate(Dispatch.Users.About(Name))).Data);
         }
 
         /// <summary>
@@ -456,7 +456,7 @@ namespace Reddit.Controllers
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>Flair list results.</returns>
-        public List<RedditThings.FlairListResult> FlairList(string subreddit = "", int limit = 25, string after = "", string before = "", int count = 0,
+        public List<Things.FlairListResult> FlairList(string subreddit = "", int limit = 25, string after = "", string before = "", int count = 0,
             string show = "all", bool srDetail = false)
         {
             return Validate(Dispatch.Flair.FlairList(after, before, Name, subreddit, count, limit, show, srDetail)).Users;
@@ -467,7 +467,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="subreddit">The subreddit with the flairs</param>
         /// <returns>Flair results.</returns>
-        public RedditThings.FlairSelectorResultContainer FlairSelector(string subreddit)
+        public Things.FlairSelectorResultContainer FlairSelector(string subreddit)
         {
             return Validate(Dispatch.Flair.FlairSelector(Name, subreddit));
         }
@@ -629,14 +629,14 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="expandSrs">boolean value</param>
         /// <returns>A list of multis.</returns>
-        public List<RedditThings.LabeledMulti> Multis(bool expandSrs = false)
+        public List<Things.LabeledMulti> Multis(bool expandSrs = false)
         {
-            List<RedditThings.LabeledMultiContainer> labeledMultiContainers = Dispatch.Multis.User(Name, expandSrs);
+            List<Things.LabeledMultiContainer> labeledMultiContainers = Dispatch.Multis.User(Name, expandSrs);
 
-            List<RedditThings.LabeledMulti> res = new List<RedditThings.LabeledMulti>();
+            List<Things.LabeledMulti> res = new List<Things.LabeledMulti>();
             if (labeledMultiContainers != null)
             {
-                foreach (RedditThings.LabeledMultiContainer labeledMultiContainer in labeledMultiContainers)
+                foreach (Things.LabeledMultiContainer labeledMultiContainer in labeledMultiContainers)
                 {
                     res.Add(labeledMultiContainer.Data);
                 }

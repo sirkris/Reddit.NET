@@ -1,6 +1,6 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
-using RedditThings = Reddit.Models.Structures;
+using Reddit.Things;
 using System;
 using System.Threading.Tasks;
 using System.Web;
@@ -43,7 +43,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="listing">Listing returned by Reddit API.</param>
-        public SelfPost(ref Dispatch dispatch, RedditThings.Post listing) : base(ref dispatch, listing)
+        public SelfPost(ref Dispatch dispatch, Things.Post listing) : base(ref dispatch, listing)
         {
             SelfText = listing.SelfText;
             SelfTextHTML = listing.SelfTextHTML;
@@ -78,7 +78,7 @@ namespace Reddit.Controllers
             SelfText = selfText;
             SelfTextHTML = selfTextHtml;
 
-            Listing = new RedditThings.Post(this);
+            Listing = new Things.Post(this);
         }
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="postResultShortData">Data returned by the Reddit API when creating a new post</param>
         /// <param name="selfPost">The SelfPost instance that executed the submission</param>
-        public SelfPost(ref Dispatch dispatch, RedditThings.PostResultShortData postResultShortData, SelfPost selfPost)
+        public SelfPost(ref Dispatch dispatch, Things.PostResultShortData postResultShortData, SelfPost selfPost)
             : base(ref dispatch, selfPost.Subreddit, selfPost.Title, selfPost.Author, postResultShortData.Id, postResultShortData.Name,
                   selfPost.Permalink, selfPost.Created, selfPost.Edited, selfPost.Score, selfPost.UpVotes, selfPost.DownVotes,
                   selfPost.Removed, selfPost.Spam, selfPost.NSFW)
@@ -111,7 +111,7 @@ namespace Reddit.Controllers
             SelfText = selfPost.SelfText;
             SelfTextHTML = selfPost.SelfTextHTML;
 
-            Listing = new RedditThings.Post(this);
+            Listing = new Things.Post(this);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public new SelfPost About()
         {
-            RedditThings.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            Things.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
                 || info.Posts == null
                 || info.Posts.Count == 0
