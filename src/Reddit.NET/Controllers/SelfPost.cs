@@ -1,7 +1,9 @@
-﻿using Reddit.NET.Exceptions;
+﻿using Reddit.NET.Controllers.Internal;
+using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Reddit.NET.Controllers
 {
@@ -10,8 +12,31 @@ namespace Reddit.NET.Controllers
     /// </summary>
     public class SelfPost : Post
     {
-        public string SelfText;
-        public string SelfTextHTML;
+        public string SelfText
+        {
+            get
+            {
+                return selfText;
+            }
+            set
+            {
+                selfText = Parsing.HtmlDecode(value);
+            }
+        }
+        private string selfText;
+
+        public string SelfTextHTML
+        {
+            get
+            {
+                return selfTextHtml;
+            }
+            set
+            {
+                selfTextHtml = Parsing.HtmlDecode(value);
+            }
+        }
+        private string selfTextHtml;
 
         /// <summary>
         /// Create new SelfPost instance from Reddit API listing.
@@ -94,6 +119,24 @@ namespace Reddit.NET.Controllers
         /// </summary>
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         public SelfPost(ref Dispatch dispatch) : base(ref dispatch) { }
+
+        /// <summary>
+        /// Set the self text manually without any automatic decoding.
+        /// </summary>
+        /// <param name="value">The self text value you wish to set</param>
+        public void SetSelfText(string value)
+        {
+            selfText = value;
+        }
+
+        /// <summary>
+        /// Set the self text HTML manually without any automatic decoding.
+        /// </summary>
+        /// <param name="value">The self text HTML value you wish to set</param>
+        public void SetSelfTextHTML(string value)
+        {
+            selfTextHtml = value;
+        }
 
         /// <summary>
         /// Submit this self post to Reddit.

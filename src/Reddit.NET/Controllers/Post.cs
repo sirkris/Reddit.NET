@@ -1,4 +1,5 @@
-﻿using Reddit.NET.Exceptions;
+﻿using Reddit.NET.Controllers.Internal;
+using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,6 @@ namespace Reddit.NET.Controllers
     public class Post : BaseController
     {
         public string Subreddit;
-        public string Title;
         public string Author;
         public string Id;
         public string Fullname;
@@ -25,6 +25,19 @@ namespace Reddit.NET.Controllers
         public bool Removed;
         public bool Spam;
         public bool NSFW;
+
+        public string Title
+        {
+            get
+            {
+                return title;
+            }
+            set
+            {
+                title = Parsing.HtmlDecode(value);
+            }
+        }
+        private string title;
 
         /// <summary>
         /// The full Listing object returned by the Reddit API;
@@ -165,6 +178,15 @@ namespace Reddit.NET.Controllers
             NSFW = nsfw;
 
             Listing = new RedditThings.Post(this);
+        }
+
+        /// <summary>
+        /// Set the title manually without any automatic decoding.
+        /// </summary>
+        /// <param name="value">The title value you wish to set</param>
+        public void SetTitle(string value)
+        {
+            title = value;
         }
 
         /// <summary>

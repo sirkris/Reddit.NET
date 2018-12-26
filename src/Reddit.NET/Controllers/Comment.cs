@@ -1,4 +1,5 @@
-﻿using Reddit.NET.Exceptions;
+﻿using Reddit.NET.Controllers.Internal;
+using Reddit.NET.Exceptions;
 using RedditThings = Reddit.NET.Models.Structures;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,6 @@ namespace Reddit.NET.Controllers
         public bool Removed;
         public bool Spam;
         public List<Comment> Replies;
-        public string Body;
-        public string BodyHTML;
         public string ParentId;
         public string ParentFullname;
         public string CollapsedReason;
@@ -33,6 +32,32 @@ namespace Reddit.NET.Controllers
         public bool IsSubmitter;
         public bool ScoreHidden;
         public int Depth;
+
+        public string Body
+        {
+            get
+            {
+                return body;
+            }
+            set
+            {
+                body = Parsing.HtmlDecode(value);
+            }
+        }
+        private string body;
+
+        public string BodyHTML
+        {
+            get
+            {
+                return bodyHtml;
+            }
+            set
+            {
+                bodyHtml = Parsing.HtmlDecode(value);
+            }
+        }
+        private string bodyHtml;
 
         /// <summary>
         /// The parent post.
@@ -204,6 +229,24 @@ namespace Reddit.NET.Controllers
             Spam = spam;
 
             Listing = new RedditThings.Comment(this);
+        }
+
+        /// <summary>
+        /// Set the body manually without any automatic decoding.
+        /// </summary>
+        /// <param name="value">The body value you wish to set</param>
+        public void SetBody(string value)
+        {
+            body = value;
+        }
+
+        /// <summary>
+        /// Set the body HTML manually without any automatic decoding.
+        /// </summary>
+        /// <param name="value">The body HTML value you wish to set</param>
+        public void SetBodyHTML(string value)
+        {
+            bodyHtml = value;
         }
 
         /// <summary>

@@ -376,7 +376,7 @@ namespace Reddit.NET.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new SelfPost(ref Dispatch, Name, title, selfText, selfTextHtml, author, id, fullname, permalink, created, 
+            return new SelfPost(ref Dispatch, Name, title, author, selfText, selfTextHtml, id, fullname, permalink, created, 
                 edited, score, upVotes, downVotes, removed, spam);
         }
 
