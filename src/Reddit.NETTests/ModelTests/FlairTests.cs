@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.Models.Inputs.Flair;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -55,7 +56,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void FlairConfig()
         {
-            GenericContainer res = reddit.Models.Flair.FlairConfig(true, "right", true, "right", true, testData["Subreddit"]);
+            GenericContainer res = reddit.Models.Flair.FlairConfig(new FlairConfigInput(true, true, "right", true, "right", testData["Subreddit"]));
 
             Validate(res);
         }

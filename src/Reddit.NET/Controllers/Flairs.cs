@@ -1,4 +1,5 @@
-﻿using Reddit.Things;
+﻿using Reddit.Models.Inputs.Flair;
+using Reddit.Things;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -222,29 +223,21 @@ namespace Reddit.Controllers
         /// <summary>
         /// Update the flair configuration settings for this subreddit.
         /// </summary>
-        /// <param name="flairEnabled">boolean value</param>
-        /// <param name="flairPosition">one of (left, right)</param>
-        /// <param name="flairSelfAssignEnabled">boolean value</param>
-        /// <param name="linkFlairPosition">one of (left, right)</param>
-        /// <param name="linkFlairSelfAssignEnabled">boolean value</param>
-        public void FlairConfig(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled)
+        /// <param name="flairConfigInput">A valid FlairConfigInput instance</param>
+        public void FlairConfig(FlairConfigInput flairConfigInput)
         {
-            Validate(Dispatch.Flair.FlairConfig(flairEnabled, flairPosition, flairSelfAssignEnabled, linkFlairPosition, linkFlairSelfAssignEnabled, Subreddit));
+            Validate(Dispatch.Flair.FlairConfig(flairConfigInput, Subreddit));
         }
 
         /// <summary>
         /// Update the flair configuration settings for this subreddit asynchronously.
         /// </summary>
-        /// <param name="flairEnabled">boolean value</param>
-        /// <param name="flairPosition">one of (left, right)</param>
-        /// <param name="flairSelfAssignEnabled">boolean value</param>
-        /// <param name="linkFlairPosition">one of (left, right)</param>
-        /// <param name="linkFlairSelfAssignEnabled">boolean value</param>
-        public async Task FlairConfigAsync(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled)
+        /// <param name="flairConfigInput">A valid FlairConfigInput instance</param>
+        public async Task FlairConfigAsync(FlairConfigInput flairConfigInput)
         {
             await Task.Run(() =>
             {
-                FlairConfig(flairEnabled, flairPosition, flairSelfAssignEnabled, linkFlairPosition, linkFlairSelfAssignEnabled);
+                FlairConfig(flairConfigInput);
             });
         }
 

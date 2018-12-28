@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Reddit.Models.Inputs.Flair;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
@@ -111,23 +112,18 @@ namespace Reddit.Models
         /// <summary>
         /// Flair config.
         /// </summary>
-        /// <param name="flairEnabled">boolean value</param>
-        /// <param name="flairPosition">one of (left, right)</param>
-        /// <param name="flairSelfAssignEnabled">boolean value</param>
-        /// <param name="linkFlairPosition">one of (left, right)</param>
-        /// <param name="linkFlairSelfAssignEnabled">boolean value</param>
+        /// <param name="flairConfigInput">A valid FlairConfigInput instance</param>
         /// <param name="subreddit">The subreddit with the flairs</param>
         /// <returns>A generic response object indicating any errors.</returns>
-        public GenericContainer FlairConfig(bool flairEnabled, string flairPosition, bool flairSelfAssignEnabled, string linkFlairPosition, bool linkFlairSelfAssignEnabled,
-            string subreddit = null)
+        public GenericContainer FlairConfig(FlairConfigInput flairConfigInput, string subreddit = null)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairconfig", Method.POST);
 
-            restRequest.AddParameter("flair_enabled", flairEnabled);
-            restRequest.AddParameter("flair_position", flairPosition);
-            restRequest.AddParameter("flair_self_assign_enabled", flairSelfAssignEnabled);
-            restRequest.AddParameter("link_flair_position", linkFlairPosition);
-            restRequest.AddParameter("link_flair_self_assign_enabled", linkFlairSelfAssignEnabled);
+            restRequest.AddParameter("flair_enabled", flairConfigInput.FlairEnabled);
+            restRequest.AddParameter("flair_position", flairConfigInput.FlairPosition);
+            restRequest.AddParameter("flair_self_assign_enabled", flairConfigInput.FlairSelfAssignEnabled);
+            restRequest.AddParameter("link_flair_position", flairConfigInput.LinkFlairPosition);
+            restRequest.AddParameter("link_flair_self_assign_enabled", flairConfigInput.LinkFlairSelfAssignEnabled);
             restRequest.AddParameter("api_type", "json");
 
             return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
