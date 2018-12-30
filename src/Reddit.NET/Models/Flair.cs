@@ -150,28 +150,12 @@ namespace Reddit.Models
         /// <summary>
         /// List of flairs.
         /// </summary>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="name">a user by name</param>
+        /// <param name="flairNameListingInput">A valid FlairNameListingInput instance</param>
         /// <param name="subreddit">The subreddit with the flairs</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 1000)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>Flair list results.</returns>
-        public FlairListResultContainer FlairList(string after, string before, string name, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        public FlairListResultContainer FlairList(FlairNameListingInput flairNameListingInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairlist");
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("name", name);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-
-            return JsonConvert.DeserializeObject<FlairListResultContainer>(ExecuteRequest(restRequest));
+            return SendRequest<FlairListResultContainer>(Sr(subreddit) + "api/flairlist", flairNameListingInput);
         }
 
         // In the controllers, link can be specified from Post.  Otherwise, call from Subreddit or User (no practical difference).  --Kris

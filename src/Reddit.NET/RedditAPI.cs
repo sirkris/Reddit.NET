@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// A Reddit API library for .NET Core with OAuth support.
+/// A Reddit API library for .NET Standard with OAuth support.
 /// </summary>
 namespace Reddit
 {

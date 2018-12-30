@@ -77,7 +77,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void FlairList()
         {
-            FlairListResultContainer res = reddit.Models.Flair.FlairList("", "", "", testData["Subreddit"]);
+            FlairListResultContainer res = reddit.Models.Flair.FlairList(new FlairNameListingInput(), testData["Subreddit"]);
 
             Validate(res);
         }

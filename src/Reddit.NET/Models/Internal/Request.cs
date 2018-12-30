@@ -39,6 +39,20 @@ namespace Reddit.Models.Internal
             Requests = new List<DateTime>();
         }
 
+        public T SendRequest<T>(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded", bool asAsync = false)
+        {
+            return JsonConvert.DeserializeObject<T>(ExecuteRequest(PrepareRequest(url, method, contentType), asAsync));
+        }
+
+        public T SendRequest<T>(string url, dynamic parameters, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded", bool asAsync = false)
+        {
+            RestRequest restRequest = PrepareRequest(url, method, contentType);
+
+            restRequest.AddObject(parameters);
+
+            return JsonConvert.DeserializeObject<T>(ExecuteRequest(restRequest, asAsync));
+        }
+
         public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded", bool asAsync = false)
         {
             RestRequest restRequest = new RestRequest(url, method);

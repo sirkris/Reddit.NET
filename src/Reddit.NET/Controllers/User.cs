@@ -1,4 +1,5 @@
 ﻿using Reddit.Exceptions;
+using Reddit.Models.Inputs.Flair;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -321,16 +322,16 @@ namespace Reddit.Controllers
         /// Return a list of trophies for the given user.
         /// </summary>
         /// <returns>A list of trophies.</returns>
-        public List<Things.Award> Trophies()
+        public List<Award> Trophies()
         {
-            Things.TrophyList trophyList = Dispatch.Users.Trophies(Name);
+            TrophyList trophyList = Dispatch.Users.Trophies(Name);
             if (trophyList == null || trophyList.Data == null || trophyList.Data.Trophies == null)
             {
                 return null;
             }
 
-            List<Things.Award> res = new List<Things.Award>();
-            foreach (Things.AwardContainer awardContainer in trophyList.Data.Trophies)
+            List<Award> res = new List<Award>();
+            foreach (AwardContainer awardContainer in trophyList.Data.Trophies)
             {
                 res.Add(awardContainer.Data);
             }
@@ -344,7 +345,7 @@ namespace Reddit.Controllers
         /// <returns>A user listing.</returns>
         public User About()
         {
-            return new User(ref Dispatch, ((Things.UserChild)Validate(Dispatch.Users.About(Name))).Data);
+            return new User(ref Dispatch, ((UserChild)Validate(Dispatch.Users.About(Name))).Data);
         }
 
         /// <summary>
@@ -456,10 +457,10 @@ namespace Reddit.Controllers
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>Flair list results.</returns>
-        public List<Things.FlairListResult> FlairList(string subreddit = "", int limit = 25, string after = "", string before = "", int count = 0,
+        public List<FlairListResult> FlairList(string subreddit = "", int limit = 25, string after = "", string before = "", int count = 0,
             string show = "all", bool srDetail = false)
         {
-            return Validate(Dispatch.Flair.FlairList(after, before, Name, subreddit, count, limit, show, srDetail)).Users;
+            return Validate(Dispatch.Flair.FlairList(new FlairNameListingInput(Name, after, before, limit, count, show, srDetail), subreddit)).Users;
         }
 
         /// <summary>
@@ -467,7 +468,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="subreddit">The subreddit with the flairs</param>
         /// <returns>Flair results.</returns>
-        public Things.FlairSelectorResultContainer FlairSelector(string subreddit)
+        public FlairSelectorResultContainer FlairSelector(string subreddit)
         {
             return Validate(Dispatch.Flair.FlairSelector(Name, subreddit));
         }
@@ -629,14 +630,14 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="expandSrs">boolean value</param>
         /// <returns>A list of multis.</returns>
-        public List<Things.LabeledMulti> Multis(bool expandSrs = false)
+        public List<LabeledMulti> Multis(bool expandSrs = false)
         {
-            List<Things.LabeledMultiContainer> labeledMultiContainers = Dispatch.Multis.User(Name, expandSrs);
+            List<LabeledMultiContainer> labeledMultiContainers = Dispatch.Multis.User(Name, expandSrs);
 
-            List<Things.LabeledMulti> res = new List<Things.LabeledMulti>();
+            List<LabeledMulti> res = new List<LabeledMulti>();
             if (labeledMultiContainers != null)
             {
-                foreach (Things.LabeledMultiContainer labeledMultiContainer in labeledMultiContainers)
+                foreach (LabeledMultiContainer labeledMultiContainer in labeledMultiContainers)
                 {
                     res.Add(labeledMultiContainer.Data);
                 }

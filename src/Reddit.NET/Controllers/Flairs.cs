@@ -14,7 +14,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of flairs.
         /// </summary>
-        public List<Things.FlairListResult> FlairList
+        public List<FlairListResult> FlairList
         {
             get
             {
@@ -26,13 +26,13 @@ namespace Reddit.Controllers
                 flairList = value;
             }
         }
-        private List<Things.FlairListResult> flairList;
+        private List<FlairListResult> flairList;
         private DateTime? FlairListLastUpdated;
 
         /// <summary>
         /// List of link flairs.
         /// </summary>
-        public List<Things.Flair> LinkFlair
+        public List<Flair> LinkFlair
         {
             get
             {
@@ -44,13 +44,13 @@ namespace Reddit.Controllers
                 linkFlair = value;
             }
         }
-        private List<Things.Flair> linkFlair;
+        private List<Flair> linkFlair;
         private DateTime? LinkFlairLastUpdated;
 
         /// <summary>
         /// List of link flairs.
         /// </summary>
-        public List<Things.FlairV2> LinkFlairV2
+        public List<FlairV2> LinkFlairV2
         {
             get
             {
@@ -62,13 +62,13 @@ namespace Reddit.Controllers
                 linkFlairV2 = value;
             }
         }
-        private List<Things.FlairV2> linkFlairV2;
+        private List<FlairV2> linkFlairV2;
         private DateTime? LinkFlairLastUpdatedV2;
 
         /// <summary>
         /// List of user flairs.
         /// </summary>
-        public List<Things.Flair> UserFlair
+        public List<Flair> UserFlair
         {
             get
             {
@@ -80,13 +80,13 @@ namespace Reddit.Controllers
                 userFlair = value;
             }
         }
-        private List<Things.Flair> userFlair;
+        private List<Flair> userFlair;
         private DateTime? UserFlairLastUpdated;
 
         /// <summary>
         /// List of user flairs.
         /// </summary>
-        public List<Things.FlairV2> UserFlairV2
+        public List<FlairV2> UserFlairV2
         {
             get
             {
@@ -98,7 +98,7 @@ namespace Reddit.Controllers
                 userFlairV2 = value;
             }
         }
-        private List<Things.FlairV2> userFlairV2;
+        private List<FlairV2> userFlairV2;
         private DateTime? UserFlairLastUpdatedV2;
         
         private readonly string Subreddit;
@@ -249,7 +249,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="flairCsv">comma-seperated flair information</param>
         /// <returns>Action results.</returns>
-        public List<Things.ActionResult> FlairCSV(string flairCsv)
+        public List<ActionResult> FlairCSV(string flairCsv)
         {
             return Validate(Dispatch.Flair.FlairCSV(flairCsv, Subreddit));
         }
@@ -276,7 +276,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="flairCsv">A valid FlairListResultContainer object</param>
         /// <returns>Action results.</returns>
-        public List<Things.ActionResult> FlairCSV(Things.FlairListResultContainer flairCsv)
+        public List<ActionResult> FlairCSV(FlairListResultContainer flairCsv)
         {
             return FlairCSV(flairCsv.Users);
         }
@@ -287,7 +287,7 @@ namespace Reddit.Controllers
         /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
         /// </summary>
         /// <param name="flairCsv">A valid FlairListResultContainer object</param>
-        public async Task FlairCSVAsync(Things.FlairListResultContainer flairCsv)
+        public async Task FlairCSVAsync(FlairListResultContainer flairCsv)
         {
             await Task.Run(() =>
             {
@@ -302,10 +302,10 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="flairCsv">A list of valid FlairListResult objects</param>
         /// <returns>Action results.</returns>
-        public List<Things.ActionResult> FlairCSV(List<Things.FlairListResult> flairCsv)
+        public List<ActionResult> FlairCSV(List<FlairListResult> flairCsv)
         {
             string arg = "";
-            foreach (Things.FlairListResult flairListResult in flairCsv)
+            foreach (FlairListResult flairListResult in flairCsv)
             {
                 arg += flairListResult.ToCSV();
             }
@@ -319,7 +319,7 @@ namespace Reddit.Controllers
         /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
         /// </summary>
         /// <param name="flairCsv">A list of valid FlairListResult objects</param>
-        public async Task FlairCSVAsync(List<Things.FlairListResult> flairCsv)
+        public async Task FlairCSVAsync(List<FlairListResult> flairCsv)
         {
             await Task.Run(() =>
             {
@@ -338,10 +338,10 @@ namespace Reddit.Controllers
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>Flair list results.</returns>
-        public List<Things.FlairListResult> GetFlairList(string username = "", int limit = 25, string after = "", string before = "", int count = 0,
+        public List<FlairListResult> GetFlairList(string username = "", int limit = 25, string after = "", string before = "", int count = 0,
             string show = "all", bool srDetail = false)
         {
-            FlairList = Validate(Dispatch.Flair.FlairList(after, before, username, Subreddit, count, limit, show, srDetail)).Users;
+            FlairList = Validate(Dispatch.Flair.FlairList(new FlairNameListingInput(username, after, before, limit, count, show, srDetail), Subreddit)).Users;
             FlairListLastUpdated = DateTime.Now;
             return FlairList;
         }
@@ -351,7 +351,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="username">A valid Reddit username</param>
         /// <returns>Flair results.</returns>
-        public Things.FlairSelectorResultContainer FlairSelector(string username)
+        public FlairSelectorResultContainer FlairSelector(string username)
         {
             return Validate(Dispatch.Flair.FlairSelector(username, Subreddit));
         }
@@ -470,7 +470,7 @@ namespace Reddit.Controllers
         /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
         /// <param name="modOnly">boolean value</param>
         /// <returns>The created flair object.</returns>
-        public Things.FlairV2 CreateLinkFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
+        public FlairV2 CreateLinkFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
             return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "LINK_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
@@ -504,7 +504,7 @@ namespace Reddit.Controllers
         /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
         /// <param name="modOnly">boolean value</param>
         /// <returns>The created flair object.</returns>
-        public Things.FlairV2 CreateUserFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
+        public FlairV2 CreateUserFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
             return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "USER_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
@@ -539,7 +539,7 @@ namespace Reddit.Controllers
         /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
         /// <param name="modOnly">boolean value</param>
         /// <returns>The updated flair object.</returns>
-        public Things.FlairV2 UpdateLinkFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
+        public FlairV2 UpdateLinkFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
             return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "LINK_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
@@ -575,7 +575,7 @@ namespace Reddit.Controllers
         /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
         /// <param name="modOnly">boolean value</param>
         /// <returns>The updated flair object.</returns>
-        public Things.FlairV2 UpdateUserFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
+        public FlairV2 UpdateUserFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
             return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "USER_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
@@ -626,7 +626,7 @@ namespace Reddit.Controllers
         /// Will not return flair if the user cannot set their own link flair and they are not a moderator that can set flair.
         /// </summary>
         /// <returns>List of available link flairs.</returns>
-        public List<Things.Flair> GetLinkFlair()
+        public List<Flair> GetLinkFlair()
         {
             LinkFlair = Validate(Dispatch.Flair.LinkFlair(Subreddit));
             LinkFlairLastUpdated = DateTime.Now;
@@ -639,7 +639,7 @@ namespace Reddit.Controllers
         /// Will not return flair if the user cannot set their own link flair and they are not a moderator that can set flair.
         /// </summary>
         /// <returns>List of available link flairs.</returns>
-        public List<Things.FlairV2> GetLinkFlairV2()
+        public List<FlairV2> GetLinkFlairV2()
         {
             LinkFlairV2 = Validate(Dispatch.Flair.LinkFlairV2(Subreddit));
             LinkFlairLastUpdatedV2 = DateTime.Now;
@@ -652,7 +652,7 @@ namespace Reddit.Controllers
         /// Will not return flair if flair is disabled on the subreddit, the user cannot set their own flair, or they are not a moderator that can set flair.
         /// </summary>
         /// <returns>List of available user flairs.</returns>
-        public List<Things.Flair> GetUserFlair()
+        public List<Flair> GetUserFlair()
         {
             UserFlair = Validate(Dispatch.Flair.UserFlair(Subreddit));
             UserFlairLastUpdated = DateTime.Now;
@@ -665,7 +665,7 @@ namespace Reddit.Controllers
         /// Will not return flair if flair is disabled on the subreddit, the user cannot set their own flair, or they are not a moderator that can set flair.
         /// </summary>
         /// <returns>List of available user flairs.</returns>
-        public List<Things.FlairV2> GetUserFlairV2()
+        public List<FlairV2> GetUserFlairV2()
         {
             UserFlairV2 = Validate(Dispatch.Flair.UserFlairV2(Subreddit));
             UserFlairLastUpdatedV2 = DateTime.Now;
