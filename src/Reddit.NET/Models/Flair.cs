@@ -119,11 +119,11 @@ namespace Reddit.Models
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flairconfig", Method.POST);
 
-            restRequest.AddParameter("flair_enabled", flairConfigInput.FlairEnabled);
-            restRequest.AddParameter("flair_position", flairConfigInput.FlairPosition);
-            restRequest.AddParameter("flair_self_assign_enabled", flairConfigInput.FlairSelfAssignEnabled);
-            restRequest.AddParameter("link_flair_position", flairConfigInput.LinkFlairPosition);
-            restRequest.AddParameter("link_flair_self_assign_enabled", flairConfigInput.LinkFlairSelfAssignEnabled);
+            restRequest.AddParameter("flair_enabled", flairConfigInput.flair_enabled);
+            restRequest.AddParameter("flair_position", flairConfigInput.flair_position);
+            restRequest.AddParameter("flair_self_assign_enabled", flairConfigInput.flair_self_assign_enabled);
+            restRequest.AddParameter("link_flair_position", flairConfigInput.link_flair_position);
+            restRequest.AddParameter("link_flair_self_assign_enabled", flairConfigInput.link_flair_self_assign_enabled);
             restRequest.AddParameter("api_type", "json");
 
             return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));

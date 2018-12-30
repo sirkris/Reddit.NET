@@ -10,6 +10,6 @@ namespace Reddit.Models.Inputs.Flair
         /// a string no longer than 64 characters
         /// </summary>
         [JsonProperty("text")]
-        public string Text;
+        public string text { get; set; }
     }
 }

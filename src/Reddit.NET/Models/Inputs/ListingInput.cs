@@ -10,24 +10,24 @@ namespace Reddit.Models.Inputs
         /// fullname of a thing
         /// </summary>
         [JsonProperty("after")]
-        public string After { get; set; }
+        public string after { get; set; }
 
         /// <summary>
         /// fullname of a thing
         /// </summary>
         [JsonProperty("before")]
-        public string Before { get; set; }
+        public string before { get; set; }
 
         /// <summary>
         /// the maximum number of items desired
         /// </summary>
         [JsonProperty("limit")]
-        public int Limit { get; set; }
+        public int limit { get; set; }
 
         /// <summary>
         /// a positive integer (default: 0)
         /// </summary>
         [JsonProperty("count")]
-        public int Count { get; set; }
+        public int count { get; set; }
     }
 }

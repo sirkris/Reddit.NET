@@ -10,25 +10,25 @@ namespace Reddit.Models.Inputs.Flair
         /// one of (left, right)
         /// </summary>
         [JsonProperty("flair_position")]
-        public string FlairPosition;
+        public string flair_position { get; set; }
 
         /// <summary>
         /// boolean value
         /// </summary>
         [JsonProperty("flair_self_assign_enabled")]
-        public bool FlairSelfAssignEnabled;
+        public bool flair_self_assign_enabled { get; set; }
 
         /// <summary>
         /// one of (left, right)
         /// </summary>
         [JsonProperty("link_flair_position")]
-        public string LinkFlairPosition;
+        public string link_flair_position { get; set; }
 
         /// <summary>
         /// boolean value
         /// </summary>
         [JsonProperty("link_flair_self_assign_enabled")]
-        public bool LinkFlairSelfAssignEnabled;
+        public bool link_flair_self_assign_enabled { get; set; }
 
         /// <summary>
         /// Flair config inputs.
@@ -42,11 +42,11 @@ namespace Reddit.Models.Inputs.Flair
         public FlairConfigInput(bool flairEnabled = true, bool flairSelfAssignEnabled = true, string flairPosition = "right",
             bool linkFlairSelfAssignEnabled = true, string linkFlairPosition = "left")
         {
-            FlairEnabled = flairEnabled;
-            FlairPosition = flairPosition;
-            FlairSelfAssignEnabled = flairSelfAssignEnabled;
-            LinkFlairPosition = linkFlairPosition;
-            LinkFlairSelfAssignEnabled = linkFlairSelfAssignEnabled;
+            flair_enabled = flairEnabled;
+            flair_position = flairPosition;
+            flair_self_assign_enabled = flairSelfAssignEnabled;
+            link_flair_position = linkFlairPosition;
+            link_flair_self_assign_enabled = linkFlairSelfAssignEnabled;
         }
     }
 }

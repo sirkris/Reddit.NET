@@ -10,6 +10,6 @@ namespace Reddit.Models.Inputs.Flair
         /// a user by name
         /// </summary>
         [JsonProperty("name")]
-        public string Name;
+        public string name { get; set; }
     }
 }

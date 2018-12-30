@@ -10,7 +10,7 @@ namespace Reddit.Models.Inputs.Flair
         /// a user by name
         /// </summary>
         [JsonProperty("name")]
-        public string Name { get; set; }
+        public string name { get; set; }
 
         /// <summary>
         /// List of flairs.
@@ -25,13 +25,13 @@ namespace Reddit.Models.Inputs.Flair
         public FlairNameListingInput(string name = "", string after = "", string before = "", int limit = 25, int count = 0,
             string show = "all", bool srDetail = false)
         {
-            Name = name;
-            After = after;
-            Before = before;
-            Limit = limit;
-            Count = count;
-            Show = show;
-            SrDetail = srDetail;
+            this.name = name;
+            this.after = after;
+            this.before = before;
+            this.limit = limit;
+            this.count = count;
+            this.show = show;
+            sr_detail = srDetail;
         }
     }
 }

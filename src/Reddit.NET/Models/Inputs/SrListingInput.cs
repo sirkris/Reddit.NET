@@ -10,12 +10,12 @@ namespace Reddit.Models.Inputs
         /// (optional) the string all
         /// </summary>
         [JsonProperty("show")]
-        public string Show { get; set; }
+        public string show { get; set; }
 
         /// <summary>
         /// (optional) expand subreddits
         /// </summary>
         [JsonProperty("sr_detail")]
-        public bool SrDetail { get; set; }
+        public bool sr_detail { get; set; }
     }
 }

@@ -10,6 +10,6 @@ namespace Reddit.Models.Inputs.Flair
         /// a fullname of a link
         /// </summary>
         [JsonProperty("link")]
-        public string Link;
+        public string link { get; set; }
     }
 }

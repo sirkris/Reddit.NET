@@ -10,6 +10,6 @@ namespace Reddit.Models.Inputs.Flair
         /// boolean value
         /// </summary>
         [JsonProperty("flair_enabled")]
-        public bool FlairEnabled;
+        public bool flair_enabled { get; set; }
     }
 }

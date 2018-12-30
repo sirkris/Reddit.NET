@@ -10,6 +10,6 @@ namespace Reddit.Models.Inputs.Flair
         /// a valid subreddit image name
         /// </summary>
         [JsonProperty("css_class")]
-        public string CSSClass;
+        public string css_class { get; set; }
     }
 }

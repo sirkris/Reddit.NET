@@ -10,6 +10,6 @@ namespace Reddit.Models.Inputs.Flair
         /// one of (USER_FLAIR, LINK_FLAIR)
         /// </summary>
         [JsonProperty("flair_type")]
-        public string FlairType;
+        public string flair_type { get; set; }
     }
 }
