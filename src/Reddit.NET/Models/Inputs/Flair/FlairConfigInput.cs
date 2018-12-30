@@ -40,14 +40,13 @@ namespace Reddit.Models.Inputs.Flair
         /// <param name="linkFlairPosition">one of (left, right)</param>
         /// <param name="subreddit">The subreddit with the flairs</param>
         public FlairConfigInput(bool flairEnabled = true, bool flairSelfAssignEnabled = true, string flairPosition = "right",
-            bool linkFlairSelfAssignEnabled = true, string linkFlairPosition = "left", string subreddit = null)
+            bool linkFlairSelfAssignEnabled = true, string linkFlairPosition = "left")
         {
             FlairEnabled = flairEnabled;
             FlairPosition = flairPosition;
             FlairSelfAssignEnabled = flairSelfAssignEnabled;
             LinkFlairPosition = linkFlairPosition;
             LinkFlairSelfAssignEnabled = linkFlairSelfAssignEnabled;
-            Subreddit = subreddit;
         }
     }
 }

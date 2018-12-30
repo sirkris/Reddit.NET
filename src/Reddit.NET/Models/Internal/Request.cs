@@ -6,7 +6,9 @@ using Reddit.Things;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
@@ -37,17 +39,17 @@ namespace Reddit.Models.Internal
             Requests = new List<DateTime>();
         }
 
-        public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
+        public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded", bool asAsync = false)
         {
             RestRequest restRequest = new RestRequest(url, method);
 
-            return PrepareRequest(restRequest, contentType);
+            return PrepareRequest(restRequest, contentType, asAsync);
         }
         
         public RestRequest PrepareRequest(string url, Method method, List<Parameter> parameters, List<FileParameter> files,
-            string contentType = "application/x-www-form-urlencoded")
+            string contentType = "application/x-www-form-urlencoded", bool asAsync = false)
         {
-            RestRequest restRequest = PrepareRequest(url, method, contentType);
+            RestRequest restRequest = PrepareRequest(url, method, contentType, asAsync);
 
             foreach (Parameter param in parameters)
             {
@@ -66,7 +68,7 @@ namespace Reddit.Models.Internal
             return restRequest;
         }
 
-        public RestRequest PrepareRequest(RestRequest restRequest, string contentType = "application/x-www-form-urlencoded")
+        public RestRequest PrepareRequest(RestRequest restRequest, string contentType = "application/x-www-form-urlencoded", bool asAsync = false)
         {
             restRequest.AddHeader("Authorization", "bearer " + AccessToken);
 
@@ -75,15 +77,20 @@ namespace Reddit.Models.Internal
                 restRequest.AddHeader("Content-Type", contentType);
             }
 
+            if (asAsync)
+            {
+                restRequest.AddHeader("rdnAsAsync", "");
+            }
+
             return restRequest;
         }
 
-        public string ExecuteRequest(string url, Method method = Method.GET)
+        public string ExecuteRequest(string url, Method method = Method.GET, bool asAsync = false)
         {
-            return ExecuteRequest(PrepareRequest(url, method));
+            return ExecuteRequest(PrepareRequest(url, method), asAsync);
         }
 
-        public string ExecuteRequest(RestRequest restRequest)
+        public string ExecuteRequest(RestRequest restRequest, bool asAsync = false)
         {
             // If we've reached the speed limit, hold until we're clear to proceed.  --Kris
             while (!RequestReady()) { }
@@ -98,7 +105,19 @@ namespace Reddit.Models.Internal
             IRestResponse res;
             do
             {
-                res = RestClient.Execute(restRequest);
+                List<Parameter> fakeParam = restRequest.Parameters.Where(p => p.Name.Equals("rdnAsAsync")).ToList();
+                if (asAsync || fakeParam.Count > 0)
+                {
+                    restRequest.Parameters.Remove(fakeParam[0]);
+
+                    // TODO - Write callback method, then do async call.  Callback method should validate return and throw exception on failure.  --Kris
+
+                    return null;
+                }
+                else
+                {
+                    res = RestClient.Execute(restRequest);
+                }
 
                 // If we're not authenticated or the API doesn't respond, grab a new access token and retry.  --Kris
                 int retry = 5;
@@ -116,7 +135,7 @@ namespace Reddit.Models.Internal
                      * 
                      * --Kris
                      */
-                    restRequest = RefreshAccessToken(restRequest);
+                    restRequest = RefreshAccessToken(restRequest, asAsync);
                     res = RestClient.Execute(restRequest);
 
                     retry--;
@@ -176,7 +195,7 @@ namespace Reddit.Models.Internal
                         throw (RedditNotFoundException)BuildException(new RedditNotFoundException("Reddit API returned Not Found (404) response."), res);
                     case HttpStatusCode.Conflict:
                         throw (RedditConflictException)BuildException(new RedditConflictException("Reddit API returned Conflict (409) response."), res);
-                    case HttpStatusCode.UnprocessableEntity:
+                    case (HttpStatusCode)422:
                         throw (RedditUnprocessableEntityException)BuildException(new RedditUnprocessableEntityException("Reddit API returned Unprocessable Entity (422) response."), res);
                     case HttpStatusCode.InternalServerError:
                         throw (RedditInternalServerErrorException)BuildException(
@@ -293,7 +312,7 @@ namespace Reddit.Models.Internal
             OnRequestsUpdated(args);
         }
 
-        private RestRequest RefreshAccessToken(RestRequest restRequest)
+        private RestRequest RefreshAccessToken(RestRequest restRequest, bool asAsync = false)
         {
             RestClient keyCli = new RestClient("https://www.reddit.com");
             RestRequest keyReq = new RestRequest("/api/v1/access_token", Method.POST);
@@ -338,7 +357,7 @@ namespace Reddit.Models.Internal
                     }
                 }
 
-                return PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters, restRequest.Files, contentType);
+                return PrepareRequest(restRequest.Resource, restRequest.Method, restRequest.Parameters, restRequest.Files, contentType, asAsync);
             }
             else
             {
