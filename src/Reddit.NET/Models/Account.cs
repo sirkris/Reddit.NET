@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Reddit.Models.Inputs.Account;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
@@ -76,56 +77,22 @@ namespace Reddit.Models
         /// Get users with whom the current user has friended, blocked, or trusted.
         /// </summary>
         /// <param name="where">One of (friends, messaging)</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <param name="includeCategories">boolean value</param>
+        /// <param name="accountPrefsInput">A valid AccountPrefsInput instance</param>
         /// <returns>A listing of users.</returns>
-        public List<UserPrefsContainer> PrefsList(string where, string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
-            bool srDetail = false, bool includeCategories = false)
+        public List<UserPrefsContainer> PrefsList(string where, AccountPrefsInput accountPrefsInput)
         {
-            RestRequest restRequest = PrepareRequest("prefs/" + where);
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-            restRequest.AddParameter("include_categories", includeCategories);
-
-            return JsonConvert.DeserializeObject<List<UserPrefsContainer>>(ExecuteRequest(restRequest));
+            return SendRequest<List<UserPrefsContainer>>("prefs/" + where, accountPrefsInput);
         }
 
         /// <summary>
         /// Get users with whom the current user has friended, blocked, or trusted.
         /// </summary>
-        /// <param name="where">One of (blocked, trusted)</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <param name="includeCategories">boolean value</param>
+        /// <param name="where">One of (friends, messaging)</param>
+        /// <param name="accountPrefsInput">A valid AccountPrefsInput instance</param>
         /// <returns>A listing of users.</returns>
-        public UserPrefsContainer PrefsSingle(string where, string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
-            bool srDetail = false, bool includeCategories = false)
+        public UserPrefsContainer PrefsSingle(string where, AccountPrefsInput accountPrefsInput)
         {
-            RestRequest restRequest = PrepareRequest("prefs/" + where);
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-            restRequest.AddParameter("include_categories", includeCategories);
-
-            return JsonConvert.DeserializeObject<UserPrefsContainer>(ExecuteRequest(restRequest));
+            return SendRequest<UserPrefsContainer>("prefs/" + where, accountPrefsInput);
         }
     }
 }
