@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 
 namespace Reddit.Models.Inputs.Flair
 {
@@ -9,7 +8,6 @@ namespace Reddit.Models.Inputs.Flair
         /// <summary>
         /// one of (USER_FLAIR, LINK_FLAIR)
         /// </summary>
-        [JsonProperty("flair_type")]
         public string flair_type { get; set; }
     }
 }

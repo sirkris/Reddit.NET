@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 
 namespace Reddit.Models.Inputs.Flair
 {
@@ -9,7 +8,6 @@ namespace Reddit.Models.Inputs.Flair
         /// <summary>
         /// a valid subreddit image name
         /// </summary>
-        [JsonProperty("css_class")]
         public string css_class { get; set; }
     }
 }

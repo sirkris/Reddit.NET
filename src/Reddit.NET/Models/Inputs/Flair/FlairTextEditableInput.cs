@@ -3,11 +3,11 @@
 namespace Reddit.Models.Inputs.Flair
 {
     [Serializable]
-    public class FlairEnabledInput
+    public class FlairTextEditableInput : FlairTextInput
     {
         /// <summary>
         /// boolean value
         /// </summary>
-        public bool flair_enabled { get; set; }
+        public bool? text_editable { get; set; }
     }
 }

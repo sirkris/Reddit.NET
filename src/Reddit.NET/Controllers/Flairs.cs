@@ -203,7 +203,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateFlair(string username, string text, string cssClass = "")
         {
-            Validate(Dispatch.Flair.Create(cssClass, "", username, text, Subreddit));
+            Validate(Dispatch.Flair.Create(new FlairCreateInput(text, "", username, cssClass), Subreddit));
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace Reddit.Controllers
         /// <returns>Flair results.</returns>
         public FlairSelectorResultContainer FlairSelector(string username)
         {
-            return Validate(Dispatch.Flair.FlairSelector(username, Subreddit));
+            return Validate(Dispatch.Flair.FlairSelector(new FlairLinkInput(name: username), Subreddit));
         }
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateLinkFlairTemplate(string text, bool textEditable = false, string cssClass = "")
         {
-            Validate(Dispatch.Flair.FlairTemplate(cssClass, "", "LINK_FLAIR", text, textEditable, Subreddit));
+            Validate(Dispatch.Flair.FlairTemplate(new FlairTemplateInput(text, "LINK_FLAIR", textEditable, cssClass), Subreddit));
         }
 
         /// <summary>
@@ -389,7 +389,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateUserFlairTemplate(string text, bool textEditable = false, string cssClass = "")
         {
-            Validate(Dispatch.Flair.FlairTemplate(cssClass, "", "USER_FLAIR", text, textEditable, Subreddit));
+            Validate(Dispatch.Flair.FlairTemplate(new FlairTemplateInput(text, "USER_FLAIR", textEditable, cssClass), Subreddit));
         }
 
         /// <summary>
@@ -415,7 +415,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void UpdateLinkFlairTemplate(string flairTemplateId, string text = null, bool? textEditable = null, string cssClass = null)
         {
-            Validate(Dispatch.Flair.FlairTemplate(cssClass, flairTemplateId, "LINK_FLAIR", text, textEditable, Subreddit));
+            Validate(Dispatch.Flair.FlairTemplate(new FlairTemplateInput(text, "LINK_FLAIR", textEditable, cssClass, flairTemplateId), Subreddit));
         }
 
         /// <summary>
@@ -442,7 +442,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void UpdateUserFlairTemplate(string flairTemplateId, string text = null, bool? textEditable = null, string cssClass = null)
         {
-            Validate(Dispatch.Flair.FlairTemplate(cssClass, flairTemplateId, "USER_FLAIR", text, textEditable, Subreddit));
+            Validate(Dispatch.Flair.FlairTemplate(new FlairTemplateInput(text, "USER_FLAIR", textEditable, cssClass, flairTemplateId), Subreddit));
         }
 
         /// <summary>
@@ -473,7 +473,7 @@ namespace Reddit.Controllers
         public FlairV2 CreateLinkFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "LINK_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
+            return Validate(Dispatch.Flair.FlairTemplateV2(new FlairTemplateV2Input(text, "LINK_FLAIR", textEditable, textColor, backgroundColor, "", modOnly), Subreddit));
         }
 
         /// <summary>
@@ -507,7 +507,7 @@ namespace Reddit.Controllers
         public FlairV2 CreateUserFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, "", "USER_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
+            return Validate(Dispatch.Flair.FlairTemplateV2(new FlairTemplateV2Input(text, "USER_FLAIR", textEditable, textColor, backgroundColor, "", modOnly), Subreddit));
         }
 
         /// <summary>
@@ -542,7 +542,7 @@ namespace Reddit.Controllers
         public FlairV2 UpdateLinkFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "LINK_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
+            return Validate(Dispatch.Flair.FlairTemplateV2(new FlairTemplateV2Input(text, "LINK_FLAIR", textEditable, textColor, backgroundColor, flairTemplateId, modOnly), Subreddit));
         }
 
         /// <summary>
@@ -578,7 +578,7 @@ namespace Reddit.Controllers
         public FlairV2 UpdateUserFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(backgroundColor, flairTemplateId, "USER_FLAIR", modOnly, text, textColor, textEditable, Subreddit));
+            return Validate(Dispatch.Flair.FlairTemplateV2(new FlairTemplateV2Input(text, "USER_FLAIR", textEditable, textColor, backgroundColor, flairTemplateId, modOnly), Subreddit));
         }
 
         /// <summary>

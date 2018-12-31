@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 
 namespace Reddit.Models.Inputs.Flair
 {
@@ -9,7 +8,6 @@ namespace Reddit.Models.Inputs.Flair
         /// <summary>
         /// a string no longer than 64 characters
         /// </summary>
-        [JsonProperty("text")]
         public string text { get; set; }
     }
 }

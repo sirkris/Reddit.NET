@@ -1,5 +1,6 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.Flair;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -305,7 +306,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public Post About()
         {
-            Things.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
                 || info.Posts == null
                 || info.Posts.Count == 0
@@ -449,7 +450,7 @@ namespace Reddit.Controllers
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
         /// <param name="id">(optional) id of the associated MoreChildren object</param>
         /// <returns>The requested comments.</returns>
-        public Things.MoreChildren MoreChildren(string children, bool limitChildren, string sort, string id = null)
+        public MoreChildren MoreChildren(string children, bool limitChildren, string sort, string id = null)
         {
             return Validate(Dispatch.LinksAndComments.MoreChildren(children, limitChildren, Fullname, sort, id));
         }
@@ -886,9 +887,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="username">A valid Reddit username</param>
         /// <returns>Flair results.</returns>
-        public Things.FlairSelectorResultContainer FlairSelector(string username)
+        public FlairSelectorResultContainer FlairSelector(string username)
         {
-            return Validate(Dispatch.Flair.FlairSelector(username, Subreddit, Fullname));
+            return Validate(Dispatch.Flair.FlairSelector(new FlairLinkInput(Fullname, username), Subreddit));
         }
     }
 }

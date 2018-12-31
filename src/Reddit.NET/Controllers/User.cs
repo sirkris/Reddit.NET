@@ -429,7 +429,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateFlair(string subreddit, string text, string cssClass = "")
         {
-            Validate(Dispatch.Flair.Create(cssClass, "", Name, text, subreddit));
+            Validate(Dispatch.Flair.Create(new FlairCreateInput(text, "", Name, cssClass), subreddit));
         }
 
         /// <summary>
@@ -470,7 +470,7 @@ namespace Reddit.Controllers
         /// <returns>Flair results.</returns>
         public FlairSelectorResultContainer FlairSelector(string subreddit)
         {
-            return Validate(Dispatch.Flair.FlairSelector(Name, subreddit));
+            return Validate(Dispatch.Flair.FlairSelector(new FlairLinkInput(name: Name), subreddit));
         }
 
         /// <summary>

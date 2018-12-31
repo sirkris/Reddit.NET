@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 
 namespace Reddit.Models.Inputs.Flair
 {
@@ -9,7 +8,6 @@ namespace Reddit.Models.Inputs.Flair
         /// <summary>
         /// a user by name
         /// </summary>
-        [JsonProperty("name")]
         public string name { get; set; }
     }
 }
