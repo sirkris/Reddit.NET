@@ -56,7 +56,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void FlairConfig()
         {
-            GenericContainer res = reddit.Models.Flair.FlairConfig(new FlairConfigInput(true, true, "right", true, "right"));
+            GenericContainer res = reddit.Models.Flair.FlairConfig(new FlairConfigInput(true, true, "right", true, "right"), testData["Subreddit"]);
 
             Validate(res);
         }
