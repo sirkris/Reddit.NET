@@ -3,8 +3,13 @@
 namespace Reddit.Models.Inputs.LinksAndComments
 {
     [Serializable]
-    public class LinksAndCommentsSuggestedSortInput : LinksAndCommentsIdInput
+    public class LinksAndCommentsSuggestedSortInput : APITypeInput
     {
+        /// <summary>
+        /// fullname of a thing
+        /// </summary>
+        public string id { get; set; }
+
         /// <summary>
         /// one of (confidence, top, new, controversial, old, random, qa, live, blank)
         /// </summary>
@@ -16,6 +21,7 @@ namespace Reddit.Models.Inputs.LinksAndComments
         /// <param name="id">fullname of a thing</param>
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live, blank)</param>
         public LinksAndCommentsSuggestedSortInput(string id = "", string sort = "new")
+            : base()
         {
             this.id = id;
             this.sort = sort;
