@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.LinksAndComments;
 
 namespace RedditTests.ModelTests
 {
@@ -36,7 +37,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void LinksAndComments()
         {
-            Validate(reddit3.Models.LinksAndComments.MoreChildren("dlpnw9j", false, "t3_6tyfna", "new"));
+            Validate(reddit3.Models.LinksAndComments.MoreChildren(new LinksAndCommentsMoreChildrenInput("dlpnw9j", false, "t3_6tyfna", "new")));
         }
 
         [TestMethod]

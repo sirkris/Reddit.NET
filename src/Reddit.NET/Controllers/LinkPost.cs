@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.LinksAndComments;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -170,8 +171,8 @@ namespace Reddit.Controllers
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
-            return new LinkPost(ref Dispatch, Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
-                gRecapthaResponse, "link", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, null, Title, URL, videoPosterUrl)).JSON.Data, this);
+            return new LinkPost(ref Dispatch, Validate(Dispatch.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(ad, app, extension, flairId, flairText,
+                "link", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, null, Title, URL, videoPosterUrl), gRecapthaResponse)).JSON.Data, this);
         }
 
         /// <summary>

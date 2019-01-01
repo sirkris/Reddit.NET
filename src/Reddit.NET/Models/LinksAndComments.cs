@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Reddit.Models.Inputs.LinksAndComments;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
@@ -20,23 +21,13 @@ namespace Reddit.Models
         /// the fullname of a Message: a message reply to that message. (requires privatemessages scope)
         /// text should be the raw markdown body of the comment or message.
         /// To start a new message thread, use /api/compose.
+        /// the thing_id is the fullname of the parent thing.
         /// </summary>
-        /// <param name="returnRtjson">boolean value</param>
-        /// <param name="richtextJson">JSON data</param>
-        /// <param name="text">raw markdown text</param>
-        /// <param name="thingId">fullname of parent thing</param>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
         /// <returns>A Reddit comment.</returns>
-        public CommentResultContainer Comment(bool returnRtjson, string richtextJson, string text, string thingId)
+        public CommentResultContainer Comment(LinksAndCommentsThingInput linksAndCommentsThingInput)
         {
-            RestRequest restRequest = PrepareRequest("api/comment", Method.POST);
-
-            restRequest.AddParameter("return_rtjson", returnRtjson);
-            restRequest.AddParameter("richtext_json", richtextJson);
-            restRequest.AddParameter("text", text);
-            restRequest.AddParameter("thing_id", thingId);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<CommentResultContainer>(ExecuteRequest(restRequest));
+            return SendRequest<CommentResultContainer>("api/comment", linksAndCommentsThingInput, Method.POST);
         }
 
         /// <summary>
@@ -54,44 +45,24 @@ namespace Reddit.Models
 
         /// <summary>
         /// Edit the body text of a self-post.
+        /// the thing_id is the fullname of a self post.
         /// </summary>
-        /// <param name="returnRtjson">boolean value</param>
-        /// <param name="richtextJson">JSON data</param>
-        /// <param name="text">raw markdown text</param>
-        /// <param name="thingId">fullname of a self post</param>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
         /// <returns>The modified post data.</returns>
-        public PostResultContainer EditUserText(bool returnRtjson, string richtextJson, string text, string thingId)
+        public PostResultContainer EditUserText(LinksAndCommentsThingInput linksAndCommentsThingInput)
         {
-            RestRequest restRequest = PrepareRequest("api/editusertext", Method.POST);
-
-            restRequest.AddParameter("return_rtjson", returnRtjson);
-            restRequest.AddParameter("richtext_json", richtextJson);
-            restRequest.AddParameter("text", text);
-            restRequest.AddParameter("thing_id", thingId);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<PostResultContainer>(ExecuteRequest(restRequest));
+            return SendRequest<PostResultContainer>("api/editusertext", linksAndCommentsThingInput, Method.POST);
         }
 
         /// <summary>
         /// Edit the body text of a comment.
+        /// the thing_id is the fullname of a comment.
         /// </summary>
-        /// <param name="returnRtjson">boolean value</param>
-        /// <param name="richtextJson">JSON data</param>
-        /// <param name="text">raw markdown text</param>
-        /// <param name="thingId">fullname of a comment</param>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
         /// <returns>The modified comment data.</returns>
-        public CommentResultContainer EditUserTextComment(bool returnRtjson, string richtextJson, string text, string thingId)
+        public CommentResultContainer EditUserTextComment(LinksAndCommentsThingInput linksAndCommentsThingInput)
         {
-            RestRequest restRequest = PrepareRequest("api/editusertext", Method.POST);
-
-            restRequest.AddParameter("return_rtjson", returnRtjson);
-            restRequest.AddParameter("richtext_json", richtextJson);
-            restRequest.AddParameter("text", text);
-            restRequest.AddParameter("thing_id", thingId);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<CommentResultContainer>(ExecuteRequest(restRequest));
+            return SendRequest<CommentResultContainer>("api/editusertext", linksAndCommentsThingInput, Method.POST);
         }
 
         /// <summary>
@@ -187,24 +158,11 @@ namespace Reddit.Models
         /// NOTE: you may only make one request at a time to this API endpoint. Higher concurrency will result in an error being returned.
         /// If limit_children is True, only return the children requested.
         /// </summary>
-        /// <param name="children">a comma-delimited list of comment ID36s</param>
-        /// <param name="limitChildren">boolean value</param>
-        /// <param name="linkId">fullname of a link</param>
-        /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
-        /// <param name="id">(optional) id of the associated MoreChildren object</param>
+        /// <param name="linksAndCommentsMoreChildrenInput">A valid LinksAndCommentsMoreChildrenInput instance</param>
         /// <returns>The requested comments.</returns>
-        public MoreChildren MoreChildren(string children, bool limitChildren, string linkId, string sort, string id = null)
+        public MoreChildren MoreChildren(LinksAndCommentsMoreChildrenInput linksAndCommentsMoreChildrenInput)
         {
-            RestRequest restRequest = PrepareRequest("api/morechildren");
-
-            restRequest.AddParameter("children", children);
-            restRequest.AddParameter("limit_children", limitChildren);
-            restRequest.AddParameter("link_id", linkId);
-            restRequest.AddParameter("sort", sort);
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("api_type", "json");
-
-            MultipleResponseContainer res = JsonConvert.DeserializeObject<MultipleResponseContainer>(ExecuteRequest(restRequest));
+            MultipleResponseContainer res = SendRequest<MultipleResponseContainer>("api/morechildren", linksAndCommentsMoreChildrenInput);
 
             MoreChildren moreChildren = new MoreChildren();
             foreach (DynamicListingChild child in res.JSON.Data.Things)
@@ -229,37 +187,11 @@ namespace Reddit.Models
         /// Reporting a message sends it to a system for admin review.
         /// For links and comments, the thing is implicitly hidden as well (see /api/hide for details).
         /// </summary>
-        /// <param name="additionalInfo">a string no longer than 2000 characters</param>
-        /// <param name="banEvadingAccountsNames">a string no longer than 1000 characters</param>
-        /// <param name="customText">a string no longer than 250 characters</param>
-        /// <param name="fromHelpCenter">boolean value</param>
-        /// <param name="otherReason">a string no longer than 100 characters</param>
-        /// <param name="reason">a string no longer than 100 characters</param>
-        /// <param name="ruleReason">a string no longer than 100 characters</param>
-        /// <param name="siteReason">a string no longer than 100 characters</param>
-        /// <param name="srName">a string no longer than 1000 characters</param>
-        /// <param name="thingId">fullname of a thing</param>
-        /// <param name="violatorUsername">A valid Reddit username</param>
+        /// <param name="linksAndCommentsReportInput">A valid LinksAndCommentsReportInput instance</param>
         /// <returns>A return object indicating success.</returns>
-        public JQueryReturn Report(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
-            string otherReason, string reason, string ruleReason, string siteReason, string srName, string thingId,
-            string violatorUsername)
+        public JQueryReturn Report(LinksAndCommentsReportInput linksAndCommentsReportInput)
         {
-            RestRequest restRequest = PrepareRequest("api/report", Method.POST);
-
-            restRequest.AddParameter("additional_info", additionalInfo);
-            restRequest.AddParameter("ban_evading_accounts_names", banEvadingAccountsNames);
-            restRequest.AddParameter("custom_text", customText);
-            restRequest.AddParameter("from_help_center", fromHelpCenter);
-            restRequest.AddParameter("other_reason", otherReason);
-            restRequest.AddParameter("reason", reason);
-            restRequest.AddParameter("rule_reason", ruleReason);
-            restRequest.AddParameter("site_reason", siteReason);
-            restRequest.AddParameter("sr_name", srName);
-            restRequest.AddParameter("thing_id", thingId);
-            restRequest.AddParameter("violator_username", violatorUsername);
-
-            return JsonConvert.DeserializeObject<JQueryReturn>(ExecuteRequest(restRequest));
+            return SendRequest<JQueryReturn>("api/report", linksAndCommentsReportInput, Method.POST);
         }
 
         /// <summary>
@@ -267,16 +199,10 @@ namespace Reddit.Models
         /// Saved things are kept in the user's saved listing for later perusal.
         /// See also: /api/unsave.
         /// </summary>
-        /// <param name="category">a category name</param>
-        /// <param name="id">fullname of a thing</param>
-        public void Save(string category, string id)
+        /// <param name="linksAndCommentsSaveInput">A valid LinksAndCommentsSaveInput instance</param>
+        public void Save(LinksAndCommentsSaveInput linksAndCommentsSaveInput)
         {
-            RestRequest restRequest = PrepareRequest("api/save", Method.POST);
-
-            restRequest.AddParameter("category", category);
-            restRequest.AddParameter("id", id);
-
-            ExecuteRequest(restRequest);
+            SendRequest<object>("api/save", linksAndCommentsSaveInput, Method.POST);
         }
 
         // TODO - API returns 403 whenever I try to hit this endpoint.  No idea why.  --Kris
@@ -293,35 +219,23 @@ namespace Reddit.Models
         /// <summary>
         /// Enable or disable inbox replies for a link or comment.
         /// state is a boolean that indicates whether you are enabling or disabling inbox replies - true to enable, false to disable.
+        /// id is the fullname of a thing created by the user.
         /// </summary>
-        /// <param name="id">fullname of a thing created by the user</param>
-        /// <param name="state">boolean value</param>
-        public void SendReplies(string id, bool state)
+        /// <param name="linksAndCommentsStateInput">a valid LinksAndCommentsStateInput instance</param>
+        public void SendReplies(LinksAndCommentsStateInput linksAndCommentsStateInput)
         {
-            RestRequest restRequest = PrepareRequest("api/sendreplies", Method.POST);
-
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("state", state);
-
-            ExecuteRequest(restRequest);
+            SendRequest<object>("api/sendreplies", linksAndCommentsStateInput, Method.POST);
         }
 
         /// <summary>
         /// Set or unset "contest mode" for a link's comments.
         /// state is a boolean that indicates whether you are enabling or disabling contest mode - true to enable, false to disable.
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="state">boolean value</param>
+        /// <param name="linksAndCommentsStateInput">a valid LinksAndCommentsStateInput instance</param>
         /// <returns>A generic response object indicating any errors.</returns>
-        public GenericContainer SetContestMode(string id, bool state)
+        public GenericContainer SetContestMode(LinksAndCommentsStateInput linksAndCommentsStateInput)
         {
-            RestRequest restRequest = PrepareRequest("api/set_contest_mode", Method.POST);
-
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("state", state);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return SendRequest<GenericContainer>("api/set_contest_mode", linksAndCommentsStateInput, Method.POST);
         }
 
         /// <summary>
@@ -331,22 +245,11 @@ namespace Reddit.Models
         /// It allows specifying a particular "slot" to sticky the post into, and if there is already a post stickied in that slot it will be replaced.
         /// If there is no post in the specified slot to replace, or num is None, the bottom-most slot will be used.
         /// </summary>
-        /// <param name="id">fullname of a link</param>
-        /// <param name="num">an integer between 1 and 4</param>
-        /// <param name="state">boolean value</param>
-        /// <param name="toProfile">boolean value</param>
+        /// <param name="linksAndCommentsStickyInput">A valid LinksAndCommentsStickyInput instance</param>
         /// <returns>A generic response object indicating any errors.</returns>
-        public GenericContainer SetSubredditSticky(string id, int num, bool state, bool toProfile)
+        public GenericContainer SetSubredditSticky(LinksAndCommentsStickyInput linksAndCommentsStickyInput)
         {
-            RestRequest restRequest = PrepareRequest("api/set_subreddit_sticky", Method.POST);
-
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("num", num);
-            restRequest.AddParameter("state", state);
-            restRequest.AddParameter("to_profile", toProfile);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return SendRequest<GenericContainer>("api/set_subreddit_sticky", linksAndCommentsStickyInput, Method.POST);
         }
 
         /// <summary>
@@ -355,18 +258,11 @@ namespace Reddit.Models
         /// For example, casual conversation may be better sorted by new by default, or AMAs may be sorted by Q&A.
         /// A sort of an empty string clears the default sort.
         /// </summary>
-        /// <param name="id">fullname of a link</param>
-        /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live, blank)</param>
+        /// <param name="linksAndCommentsSuggestedSortInput">A valid LinksAndCommentsSuggestedSortInput instance</param>
         /// <returns>A generic response object indicating any errors.</returns>
-        public GenericContainer SetSuggestedSort(string id, string sort)
+        public GenericContainer SetSuggestedSort(LinksAndCommentsSuggestedSortInput linksAndCommentsSuggestedSortInput)
         {
-            RestRequest restRequest = PrepareRequest("api/set_suggested_sort", Method.POST);
-
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("sort", sort);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return SendRequest<GenericContainer>("api/set_suggested_sort", linksAndCommentsSuggestedSortInput, Method.POST);
         }
 
         /// <summary>
@@ -425,30 +321,12 @@ namespace Reddit.Models
         /// <param name="url">a valid URL</param>
         /// <param name="videoPosterUrl">a valid URL</param>
         /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
-        public PostResultShortContainer Submit(bool ad, string app, string extension, string flairId, string flairText, string gRecaptchaResponse,
-            string kind, bool nsfw, bool resubmit, string richtextJson, bool sendReplies, bool spoiler, string sr, string text,
-            string title, string url, string videoPosterUrl)
+        public PostResultShortContainer Submit(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecaptchaResponse = "")
         {
             RestRequest restRequest = PrepareRequest("api/submit", Method.POST);
 
-            restRequest.AddParameter("ad", ad);
-            restRequest.AddParameter("app", app);
-            restRequest.AddParameter("extension", extension);
-            restRequest.AddParameter("flair_id", flairId);
-            restRequest.AddParameter("flair_text", flairText);
+            restRequest.AddObject(linksAndCommentsSubmitInput);
             restRequest.AddParameter("g-recaptcha-response", gRecaptchaResponse);
-            restRequest.AddParameter("kind", kind);
-            restRequest.AddParameter("nsfw", nsfw);
-            restRequest.AddParameter("resubmit", resubmit);
-            restRequest.AddParameter("richtext_json", richtextJson);
-            restRequest.AddParameter("sendreplies", sendReplies);
-            restRequest.AddParameter("spoiler", spoiler);
-            restRequest.AddParameter("sr", sr);
-            restRequest.AddParameter("text", text);
-            restRequest.AddParameter("title", title);
-            restRequest.AddParameter("url", url);
-            restRequest.AddParameter("video_poster_url", videoPosterUrl);
-            restRequest.AddParameter("api_type", "json");
 
             return JsonConvert.DeserializeObject<PostResultShortContainer>(ExecuteRequest(restRequest));
         }
@@ -532,18 +410,10 @@ namespace Reddit.Models
         /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
         /// See the reddit rules for more details on what constitutes vote cheating.
         /// </summary>
-        /// <param name="dir">vote direction. one of (1, 0, -1)</param>
-        /// <param name="id">fullname of a thing</param>
-        /// <param name="rank">an integer greater than 1</param>
-        public void Vote(int dir, string id, int rank)
+        /// <param name="linksAndCommentsVoteInput">A valid LinksAndCommentsVoteInput instance</param>
+        public void Vote(LinksAndCommentsVoteInput linksAndCommentsVoteInput)
         {
-            RestRequest restRequest = PrepareRequest("api/vote", Method.POST);
-
-            restRequest.AddParameter("dir", dir);
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("rank", rank);
-            
-            ExecuteRequest(restRequest);
+            SendRequest<object>("api/vote", linksAndCommentsVoteInput, Method.POST);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.LinksAndComments;
 using Reddit.Things;
 using System;
 using System.Threading.Tasks;
@@ -155,8 +156,8 @@ namespace Reddit.Controllers
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
-            return new SelfPost(ref Dispatch, Validate(Dispatch.LinksAndComments.Submit(ad, app, extension, flairId, flairText,
-                gRecapthaResponse, "self", NSFW, false, null, sendReplies, spoiler, Subreddit, SelfText, Title, null, videoPosterUrl)).JSON.Data, this);
+            return new SelfPost(ref Dispatch, Validate(Dispatch.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(ad, app, extension, flairId, flairText,
+                "self", NSFW, false, null, sendReplies, spoiler, Subreddit, SelfText, Title, null, videoPosterUrl), gRecapthaResponse)).JSON.Data, this);
         }
 
         /// <summary>
@@ -188,7 +189,7 @@ namespace Reddit.Controllers
         /// <returns>This instance populated with the modified post data returned by the API.</returns>
         public SelfPost Edit(string text)
         {
-            Import(Validate(Dispatch.LinksAndComments.EditUserText(false, null, text, Fullname)).JSON.Data.Things[0].Data);
+            Import(Validate(Dispatch.LinksAndComments.EditUserText(new LinksAndCommentsThingInput(text, Fullname))).JSON.Data.Things[0].Data);
 
             return this;
         }

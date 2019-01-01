@@ -26,11 +26,6 @@ namespace Reddit.Models.Inputs.Flair
         public bool link_flair_self_assign_enabled { get; set; }
 
         /// <summary>
-        /// Required by the API.
-        /// </summary>
-        public string api_type { get; set; }
-
-        /// <summary>
         /// Flair config inputs.
         /// </summary>
         /// <param name="flairEnabled">boolean value</param>
@@ -40,14 +35,13 @@ namespace Reddit.Models.Inputs.Flair
         /// <param name="linkFlairPosition">one of (left, right)</param>
         /// <param name="subreddit">The subreddit with the flairs</param>
         public FlairConfigInput(bool flairEnabled = true, bool flairSelfAssignEnabled = true, string flairPosition = "right",
-            bool linkFlairSelfAssignEnabled = true, string linkFlairPosition = "left")
+            bool linkFlairSelfAssignEnabled = true, string linkFlairPosition = "left") 
+            : base(flairEnabled)
         {
-            flair_enabled = flairEnabled;
             flair_position = flairPosition;
             flair_self_assign_enabled = flairSelfAssignEnabled;
             link_flair_position = linkFlairPosition;
             link_flair_self_assign_enabled = linkFlairSelfAssignEnabled;
-            api_type = "json";
         }
     }
 }

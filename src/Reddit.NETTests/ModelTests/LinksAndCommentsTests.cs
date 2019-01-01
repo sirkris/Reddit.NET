@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.Models.Inputs.LinksAndComments;
 using Reddit.Things;
 using System;
 
@@ -15,9 +16,9 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void SubmitLinkPost()
         {
-            PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
+            PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(false, "", "", "", "",
                     "link", false, true, null, true, false, testData["Subreddit"], "",
-                    "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
+                    "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null));
 
             Validate(postResult);
         }
@@ -25,9 +26,9 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void SubmitSelfPost()
         {
-            PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "", "self", false, true, null, true, false, 
+            PostResultShortContainer postResult = reddit.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(false, "", "", "", "", "self", false, true, null, true, false,
                 testData["Subreddit"], "The Lizard People are coming and only super-intelligent robots like me can stop them.  Just saying.",
-                "We bots are your protectors!", null, null);
+                "We bots are your protectors!", null, null));
 
             Validate(postResult);
         }
@@ -72,7 +73,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void MoreChildren()
         {
-            MoreChildren moreChildren = reddit.Models.LinksAndComments.MoreChildren("dlpnw9j", false, "t3_6tyfna", "new");
+            MoreChildren moreChildren = reddit.Models.LinksAndComments.MoreChildren(new LinksAndCommentsMoreChildrenInput("dlpnw9j", false, "t3_6tyfna", "new"));
 
             Validate(moreChildren);
         }

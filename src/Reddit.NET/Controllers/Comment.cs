@@ -1,5 +1,6 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.LinksAndComments;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -288,7 +289,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the return data.</returns>
         public Comment Submit()
         {
-            return new Comment(ref Dispatch, Validate(Dispatch.LinksAndComments.Comment(false, null, Body, ParentFullname)).JSON.Data.Things[0].Data);
+            return new Comment(ref Dispatch, Validate(Dispatch.LinksAndComments.Comment(new LinksAndCommentsThingInput(Body, ParentFullname))).JSON.Data.Things[0].Data);
         }
 
         /// <summary>
@@ -494,8 +495,8 @@ namespace Reddit.Controllers
         public void Report(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string violatorUsername)
         {
-            Validate(Dispatch.LinksAndComments.Report(additionalInfo, banEvadingAccountsNames, customText, fromHelpCenter, otherReason, reason,
-                ruleReason, siteReason, Subreddit, Fullname, violatorUsername));
+            Validate(Dispatch.LinksAndComments.Report(new LinksAndCommentsReportInput(additionalInfo, banEvadingAccountsNames, customText, fromHelpCenter, otherReason, reason,
+                ruleReason, siteReason, Subreddit, Fullname, violatorUsername)));
         }
 
         /// <summary>
@@ -526,7 +527,7 @@ namespace Reddit.Controllers
         /// <param name="category">a category name</param>
         public void Save(string category)
         {
-            Dispatch.LinksAndComments.Save(category, Fullname);
+            Dispatch.LinksAndComments.Save(new LinksAndCommentsSaveInput(Fullname, category));
         }
 
         /// <summary>
@@ -547,7 +548,7 @@ namespace Reddit.Controllers
         /// </summary>
         public void EnableSendReplies()
         {
-            Dispatch.LinksAndComments.SendReplies(Fullname, true);
+            Dispatch.LinksAndComments.SendReplies(new LinksAndCommentsStateInput(Fullname, true));
         }
 
         /// <summary>
@@ -566,7 +567,7 @@ namespace Reddit.Controllers
         /// </summary>
         public void DisableSendReplies()
         {
-            Dispatch.LinksAndComments.SendReplies(Fullname, false);
+            Dispatch.LinksAndComments.SendReplies(new LinksAndCommentsStateInput(Fullname, false));
         }
 
         /// <summary>
@@ -608,7 +609,7 @@ namespace Reddit.Controllers
         /// <returns>This instance populated with the modified post data returned by the API.</returns>
         public Comment Edit(string text)
         {
-            Import(Validate(Dispatch.LinksAndComments.EditUserTextComment(false, null, text, Fullname)).JSON.Data.Things[0].Data);
+            Import(Validate(Dispatch.LinksAndComments.EditUserTextComment(new LinksAndCommentsThingInput(text, Fullname))).JSON.Data.Things[0].Data);
 
             return this;
         }
@@ -643,7 +644,7 @@ namespace Reddit.Controllers
         /// <returns>The requested comments.</returns>
         public Things.MoreChildren MoreChildren(bool limitChildren, string sort, string id = null)
         {
-            return Validate(Dispatch.LinksAndComments.MoreChildren(Id, limitChildren, ParentFullname, sort, id));
+            return Validate(Dispatch.LinksAndComments.MoreChildren(new LinksAndCommentsMoreChildrenInput(Id, limitChildren, ParentFullname, sort, id)));
         }
 
         /// <summary>
@@ -654,7 +655,7 @@ namespace Reddit.Controllers
         /// </summary>
         public void Upvote()
         {
-            Dispatch.LinksAndComments.Vote(1, Fullname, 2);
+            Dispatch.LinksAndComments.Vote(new LinksAndCommentsVoteInput(Fullname, 1));
         }
 
         /// <summary>
@@ -679,7 +680,7 @@ namespace Reddit.Controllers
         /// </summary>
         public void Downvote()
         {
-            Dispatch.LinksAndComments.Vote(-1, Fullname, 2);
+            Dispatch.LinksAndComments.Vote(new LinksAndCommentsVoteInput(Fullname, -1));
         }
 
         /// <summary>
@@ -704,7 +705,7 @@ namespace Reddit.Controllers
         /// </summary>
         public void Unvote()
         {
-            Dispatch.LinksAndComments.Vote(0, Fullname, 2);
+            Dispatch.LinksAndComments.Vote(new LinksAndCommentsVoteInput(Fullname, 0));
         }
 
         /// <summary>
