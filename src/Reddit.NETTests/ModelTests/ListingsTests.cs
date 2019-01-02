@@ -31,7 +31,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void BestWithSrDetail()
         {
-            PostContainer posts = reddit.Models.Listings.Best(new CategorizedSrListingInput());
+            PostContainer posts = reddit.Models.Listings.Best(new CategorizedSrListingInput(srDetail: true));
 
             Validate(posts);
             Assert.IsNotNull(posts.Data.Children[0].Data.SrDetail);
