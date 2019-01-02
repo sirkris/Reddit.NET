@@ -1,4 +1,4 @@
-﻿using Reddit.Models.Inputs.Account;
+﻿using Reddit.Models.Inputs;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -131,7 +131,7 @@ namespace Reddit.Controllers
             bool includeCategories = false, int count = 0)
         {
             List<UserPrefs> res = new List<UserPrefs>();
-            foreach (UserPrefsContainer userPrefsContainer in Validate(Dispatch.Account.PrefsList("friends", new AccountPrefsInput(after, before, count, limit,
+            foreach (UserPrefsContainer userPrefsContainer in Validate(Dispatch.Account.PrefsList("friends", new CategorizedSrListingInput(after, before, count, limit,
                 show, srDetail, includeCategories))))
             {
                 res.AddRange(userPrefsContainer.Data.Children);
@@ -155,7 +155,7 @@ namespace Reddit.Controllers
             bool includeCategories = false, int count = 0)
         {
             List<UserPrefs> res = new List<UserPrefs>();
-            foreach (UserPrefsContainer userPrefsContainer in Validate(Dispatch.Account.PrefsList("messaging", new AccountPrefsInput(after, before, count, limit,
+            foreach (UserPrefsContainer userPrefsContainer in Validate(Dispatch.Account.PrefsList("messaging", new CategorizedSrListingInput(after, before, count, limit,
                 show, srDetail, includeCategories))))
             {
                 res.AddRange(userPrefsContainer.Data.Children);
@@ -178,7 +178,7 @@ namespace Reddit.Controllers
         public List<UserPrefs> Blocked(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
             bool includeCategories = false, int count = 0)
         {
-            return Validate(Dispatch.Account.PrefsSingle("blocked", new AccountPrefsInput(after, before, count, limit, show, srDetail, includeCategories))).Data.Children;
+            return Validate(Dispatch.Account.PrefsSingle("blocked", new CategorizedSrListingInput(after, before, count, limit, show, srDetail, includeCategories))).Data.Children;
         }
 
         /// <summary>
@@ -195,7 +195,7 @@ namespace Reddit.Controllers
         public List<UserPrefs> Trusted(int limit = 25, string after = "", string before = "", string show = "all", bool srDetail = false,
             bool includeCategories = false, int count = 0)
         {
-            return Validate(Dispatch.Account.PrefsSingle("trusted", new AccountPrefsInput(after, before, count, limit, show, srDetail, includeCategories))).Data.Children;
+            return Validate(Dispatch.Account.PrefsSingle("trusted", new CategorizedSrListingInput(after, before, count, limit, show, srDetail, includeCategories))).Data.Children;
         }
 
         /// <summary>

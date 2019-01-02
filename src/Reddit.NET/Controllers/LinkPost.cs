@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Reddit.Exceptions;
 using Reddit.Models.Inputs.LinksAndComments;
+using Reddit.Models.Inputs.Listings;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -232,7 +233,7 @@ namespace Reddit.Controllers
         public List<LinkPost> GetDuplicates(string after = "", string before = "", bool crosspostsOnly = false, string sort = "new", string sr = "",
             int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
-            Listings.GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, after, before, crosspostsOnly, sort, sr, count, limit, show, srDetail)), Dispatch, 
+            Listings.GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, new ListingsGetDuplicatesInput(sr, after, before, crosspostsOnly, sort, count, limit, show, srDetail))), Dispatch,
                 out List<LinkPost> linkPosts);
 
             return linkPosts;

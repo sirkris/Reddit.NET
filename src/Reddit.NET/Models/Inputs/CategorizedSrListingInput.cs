@@ -1,9 +1,9 @@
 ﻿using System;
 
-namespace Reddit.Models.Inputs.Account
+namespace Reddit.Models.Inputs
 {
     [Serializable]
-    public class AccountPrefsInput : SrListingInput
+    public class CategorizedSrListingInput : SrListingInput
     {
         /// <summary>
         /// boolean value
@@ -11,7 +11,7 @@ namespace Reddit.Models.Inputs.Account
         public bool include_categories;
 
         /// <summary>
-        /// Get users with whom the current user has friended, blocked, or trusted.
+        /// Input data for a categorized SR listing.
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
@@ -20,7 +20,7 @@ namespace Reddit.Models.Inputs.Account
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="includeCategories">boolean value</param>
-        public AccountPrefsInput(string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
+        public CategorizedSrListingInput(string after = null, string before = null, int count = 0, int limit = 25, string show = "all",
             bool srDetail = false, bool includeCategories = false)
         {
             this.after = after;

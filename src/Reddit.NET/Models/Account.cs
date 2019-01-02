@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Reddit.Models.Inputs.Account;
+using Reddit.Models.Inputs;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
@@ -79,7 +79,7 @@ namespace Reddit.Models
         /// <param name="where">One of (friends, messaging)</param>
         /// <param name="accountPrefsInput">A valid AccountPrefsInput instance</param>
         /// <returns>A listing of users.</returns>
-        public List<UserPrefsContainer> PrefsList(string where, AccountPrefsInput accountPrefsInput)
+        public List<UserPrefsContainer> PrefsList(string where, CategorizedSrListingInput accountPrefsInput)
         {
             return SendRequest<List<UserPrefsContainer>>("prefs/" + where, accountPrefsInput);
         }
@@ -90,7 +90,7 @@ namespace Reddit.Models
         /// <param name="where">One of (friends, messaging)</param>
         /// <param name="accountPrefsInput">A valid AccountPrefsInput instance</param>
         /// <returns>A listing of users.</returns>
-        public UserPrefsContainer PrefsSingle(string where, AccountPrefsInput accountPrefsInput)
+        public UserPrefsContainer PrefsSingle(string where, CategorizedSrListingInput accountPrefsInput)
         {
             return SendRequest<UserPrefsContainer>("prefs/" + where, accountPrefsInput);
         }

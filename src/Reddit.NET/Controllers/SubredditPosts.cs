@@ -2,6 +2,8 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs;
+using Reddit.Models.Inputs.Listings;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -283,7 +285,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetBest(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Best(after, before, false, limit: limit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Best(new CategorizedSrListingInput(after, before, limit: limit)), Dispatch);
 
             BestLastUpdated = DateTime.Now;
 
@@ -300,7 +302,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetHot(string g = "", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Hot(g, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Hot(new ListingsHotInput(g, after, before, limit: limit), Subreddit), Dispatch);
 
             HotLastUpdated = DateTime.Now;
 
@@ -317,7 +319,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetNew(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.New(after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.New(new CategorizedSrListingInput(after, before, limit: limit), Subreddit), Dispatch);
 
             NewLastUpdated = DateTime.Now;
 
@@ -334,7 +336,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetRising(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Rising(after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Rising(new CategorizedSrListingInput(after, before, limit: limit), Subreddit), Dispatch);
 
             RisingLastUpdated = DateTime.Now;
 
@@ -351,7 +353,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetTop(string t = "all", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Top(t, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Top(new TimedCatSrListingInput(t, after, before, limit: limit), Subreddit), Dispatch);
 
             TopLastUpdated = DateTime.Now;
 
@@ -369,7 +371,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetControversial(string t = "all", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Controversial(t, after, before, false, limit: limit, subreddit: Subreddit), Dispatch);
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Controversial(new TimedCatSrListingInput(t, after, before, limit: limit), Subreddit), Dispatch);
 
             ControversialLastUpdated = DateTime.Now;
 

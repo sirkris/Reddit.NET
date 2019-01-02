@@ -2,6 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.Listings;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -245,8 +246,8 @@ namespace Reddit.Controllers
         public List<Comment> GetComments(string sort = "new", int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
-            List<Comment> comments = Listings.GetComments(Dispatch.Listings.GetComments(PostId, context, showEdits, showMore, sort, threaded, truncate, Subreddit, Comment?.Id,
-                depth, limit, srDetail), Dispatch);
+            List<Comment> comments = Listings.GetComments(Dispatch.Listings.GetComments(PostId, new ListingsGetCommentsInput(context, showEdits, showMore, sort, threaded, truncate, Comment?.Id,
+                depth, limit, srDetail), Subreddit), Dispatch);
 
             List<Comment> replies = (Comment != null ? comments[0].Replies : comments);
             switch (sort)

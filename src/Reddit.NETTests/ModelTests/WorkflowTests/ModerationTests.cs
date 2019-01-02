@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.Models.Inputs;
 using Reddit.Things;
 
 namespace RedditTests.ModelTests.WorkflowTests
@@ -12,7 +13,7 @@ namespace RedditTests.ModelTests.WorkflowTests
         [TestMethod]
         public void Approve()
         {
-            Post post = reddit.Models.Listings.New(null, null, true, testData["Subreddit"]).Data.Children[0].Data;
+            Post post = reddit.Models.Listings.New(new CategorizedSrListingInput(includeCategories: true), testData["Subreddit"]).Data.Children[0].Data;
 
             reddit.Models.Moderation.Approve(post.Name);
 
