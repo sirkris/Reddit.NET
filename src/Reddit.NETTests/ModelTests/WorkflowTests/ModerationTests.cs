@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Models.Inputs;
+using Reddit.Models.Inputs.Moderation;
 using Reddit.Things;
 
 namespace RedditTests.ModelTests.WorkflowTests
@@ -108,8 +109,8 @@ namespace RedditTests.ModelTests.WorkflowTests
 
             Validate(commentResult);
 
-            reddit.Models.Moderation.Remove(postResult.JSON.Data.Name, false);
-            reddit.Models.Moderation.Remove(commentResult.JSON.Data.Things[0].Data.Name, false);
+            reddit.Models.Moderation.Remove(new ModerationRemoveInput(postResult.JSON.Data.Name));
+            reddit.Models.Moderation.Remove(new ModerationRemoveInput(commentResult.JSON.Data.Things[0].Data.Name));
         }
     }
 }

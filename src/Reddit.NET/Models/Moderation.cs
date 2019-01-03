@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Reddit.Models.Inputs.Moderation;
 using Reddit.Things;
 using RestSharp;
 
@@ -18,34 +19,12 @@ namespace Reddit.Models
         /// The type parameter is optional and if sent limits the log entries returned to only those of the type specified.
         /// This endpoint is a listing.
         /// </summary>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
+        /// <param name="moderationGetLogInput">A valid ModerationGetLogInput instance</param>
         /// <param name="subreddit">The subreddit being moderated</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 500)</param>
-        /// <param name="mod">(optional) a moderator filter</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <param name="type">one of (banuser, unbanuser, spamlink, removelink, approvelink, spamcomment, removecomment, approvecomment, addmoderator, invitemoderator, uninvitemoderator, 
-        /// acceptmoderatorinvite, removemoderator, addcontributor, removecontributor, editsettings, editflair, distinguish, marknsfw, wikibanned, wikicontributor, wikiunbanned, wikipagelisted, 
-        /// removewikicontributor, wikirevise, wikipermlevel, ignorereports, unignorereports, setpermissions, setsuggestedsort, sticky, unsticky, setcontestmode, unsetcontestmode, lock, unlock, 
-        /// muteuser, unmuteuser, createrule, editrule, deleterule, spoiler, unspoiler, modmail_enrollment, community_styling, community_widgets, markoriginalcontent)</param>
         /// <returns>A listing of recent moderation actions.</returns>
-        public ModActionContainer GetLog(string after, string before, string subreddit = null, int count = 0, int limit = 25, string mod = null, string show = "all",
-            bool srDetail = false, string type = null)
+        public ModActionContainer GetLog(ModerationGetLogInput moderationGetLogInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "about/log");
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("mod", mod);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-            restRequest.AddParameter("type", type);
-
-            return JsonConvert.DeserializeObject<ModActionContainer>(ExecuteRequest(restRequest));
+            return SendRequest<ModActionContainer>(Sr(subreddit) + "about/log", moderationGetLogInput);
         }
 
         // TODO - Split into two functions (only = links, only = comments).  Comments return not supported yet.  --Kris
@@ -60,29 +39,12 @@ namespace Reddit.Models
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="location">One of (reports, spam, modqueue, unmoderated, edited)</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="only">one of (links, comments)</param>
+        /// <param name="moderationModQueueInput">A valid ModerationModQueueInput instance</param>
         /// <param name="subreddit">The subreddit being moderated</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 500)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A listing of posts relevant to moderators.</returns>
-        public PostContainer ModQueue(string location, string after, string before, string only, string subreddit = null, int count = 0, int limit = 25,
-            string show = "all", bool srDetail = false)
+        public PostContainer ModQueue(ModerationModQueueInput moderationModQueueInput, string location = "modqueue", string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "about/" + location);
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("only", only);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-
-            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
+            return SendRequest<PostContainer>(Sr(subreddit) + "about/" + location, moderationModQueueInput);
         }
 
         /// <summary>
@@ -129,23 +91,11 @@ namespace Reddit.Models
         /// sticky is a boolean flag for comments, which will stick the distingushed comment to the top of all comments threads.
         /// If a comment is marked sticky, it will override any other stickied comment for that link (as only one comment may be stickied at a time). Only top-level comments may be stickied.
         /// </summary>
-        /// <param name="how">one of (yes, no, admin, special)</param>
-        /// <param name="id">fullname of a thing</param>
-        /// <param name="sticky">boolean value</param>
+        /// <param name="moderationDistinguishInput">A valid ModerationDistinguishInput instance</param>
         /// <returns>The distinguished post or comment object.</returns>
-        public T Distinguish<T>(string how, string id, bool? sticky = null)
+        public T Distinguish<T>(ModerationDistinguishInput moderationDistinguishInput)
         {
-            RestRequest restRequest = PrepareRequest("api/distinguish", Method.POST);
-
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("how", how);
-            if (sticky.HasValue)
-            {
-                restRequest.AddParameter("sticky", sticky.Value);
-            }
-            restRequest.AddParameter("api_type", "json");
-            
-            return JsonConvert.DeserializeObject<T>(ExecuteRequest(restRequest));
+            return SendRequest<T>("api/distinguish", moderationDistinguishInput, Method.POST);
         }
 
         /// <summary>
@@ -162,7 +112,7 @@ namespace Reddit.Models
         /// <returns>The distinguished post object.</returns>
         public PostResultContainer DistinguishPost(string how, string id)
         {
-            return Distinguish<PostResultContainer>(how, id);
+            return Distinguish<PostResultContainer>(new ModerationDistinguishInput(id, how));
         }
 
         /// <summary>
@@ -183,7 +133,7 @@ namespace Reddit.Models
         /// <returns>The distinguished comment object.</returns>
         public CommentResultContainer DistinguishComment(string how, string id, bool? sticky = null)
         {
-            return Distinguish<CommentResultContainer>(how, id, sticky);
+            return Distinguish<CommentResultContainer>(new ModerationDistinguishInput(id, how, sticky));
         }
 
         /// <summary>
@@ -250,16 +200,10 @@ namespace Reddit.Models
         /// If the thing is a link, it will be removed from all subreddit listings. If the thing is a comment, it will be redacted and removed from all subreddit comment listings.
         /// See also: /api/approve.
         /// </summary>
-        /// <param name="id">fullname of a thing</param>
-        /// <param name="spam">boolean value</param>
-        public void Remove(string id, bool spam)
+        /// <param name="moderationRemoveInput">A valid ModerationRemoveInput instance</param>
+        public void Remove(ModerationRemoveInput moderationRemoveInput)
         {
-            RestRequest restRequest = PrepareRequest("api/remove", Method.POST);
-
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("spam", spam);
-
-            ExecuteRequest(restRequest);
+            SendRequest<object>("api/remove", moderationRemoveInput, Method.POST);
         }
 
         /// <summary>

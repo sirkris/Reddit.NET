@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.Moderation;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -858,7 +859,7 @@ namespace Reddit.Controllers
         public Things.ModActionContainer GetLog(string type = null, int limit = 25, string after = "", string before = "", string mod = null,
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Validate(Dispatch.Moderation.GetLog(after, before, Name, count, limit, mod, show, srDetail, type));
+            return Validate(Dispatch.Moderation.GetLog(new ModerationGetLogInput(type, mod, after, before, limit, count, srDetail, show), Name));
         }
 
         /// <summary>

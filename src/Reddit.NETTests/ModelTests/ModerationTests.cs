@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.Models.Inputs.Moderation;
 using Reddit.Things;
 using RestSharp;
 
@@ -12,7 +13,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void GetLog()
         {
-            ModActionContainer log = reddit.Models.Moderation.GetLog(null, null, testData["Subreddit"]);
+            ModActionContainer log = reddit.Models.Moderation.GetLog(new ModerationGetLogInput(), testData["Subreddit"]);
 
             Assert.IsNotNull(log);
         }
@@ -20,7 +21,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void ModQueueReports()
         {
-            PostContainer modQueue = reddit.Models.Moderation.ModQueue("reports", null, null, "links", testData["Subreddit"]);
+            PostContainer modQueue = reddit.Models.Moderation.ModQueue(new ModerationModQueueInput(), "reports", testData["Subreddit"]);
 
             Validate(modQueue, true);
         }
@@ -28,7 +29,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void ModQueueSpam()
         {
-            PostContainer modQueue = reddit.Models.Moderation.ModQueue("spam", null, null, "comments", testData["Subreddit"]);
+            PostContainer modQueue = reddit.Models.Moderation.ModQueue(new ModerationModQueueInput("comments"), "spam", testData["Subreddit"]);
 
             Validate(modQueue, true);
         }
@@ -36,7 +37,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void ModQueue()
         {
-            PostContainer modQueue = reddit.Models.Moderation.ModQueue("modqueue", null, null, "links", testData["Subreddit"]);
+            PostContainer modQueue = reddit.Models.Moderation.ModQueue(new ModerationModQueueInput(), "modqueue", testData["Subreddit"]);
 
             Validate(modQueue, true);
         }
@@ -44,7 +45,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void ModQueueUnmoderated()
         {
-            PostContainer modQueue = reddit.Models.Moderation.ModQueue("unmoderated", null, null, "links", testData["Subreddit"]);
+            PostContainer modQueue = reddit.Models.Moderation.ModQueue(new ModerationModQueueInput(), "unmoderated", testData["Subreddit"]);
 
             Validate(modQueue, true);
         }
@@ -52,7 +53,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void ModQueueEdited()
         {
-            PostContainer modQueue = reddit.Models.Moderation.ModQueue("edited", null, null, "links", testData["Subreddit"]);
+            PostContainer modQueue = reddit.Models.Moderation.ModQueue(new ModerationModQueueInput(), "edited", testData["Subreddit"]);
 
             Validate(modQueue, true);
         }

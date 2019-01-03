@@ -2,6 +2,7 @@
 using Reddit.Exceptions;
 using Reddit.Models.Inputs.Flair;
 using Reddit.Models.Inputs.LinksAndComments;
+using Reddit.Models.Inputs.Moderation;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -341,7 +342,7 @@ namespace Reddit.Controllers
         /// <param name="spam">boolean value</param>
         public void Remove(bool spam = false)
         {
-            Dispatch.Moderation.Remove(Fullname, spam);
+            Dispatch.Moderation.Remove(new ModerationRemoveInput(Fullname, spam));
         }
 
         /// <summary>

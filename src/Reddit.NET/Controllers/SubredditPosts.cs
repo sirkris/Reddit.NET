@@ -4,6 +4,7 @@ using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Models.Inputs;
 using Reddit.Models.Inputs.Listings;
+using Reddit.Models.Inputs.Moderation;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -383,7 +384,7 @@ namespace Reddit.Controllers
         private List<Post> GetModQueuePosts(string location, string after = "", string before = "", int limit = 100, string show = "all",
             bool srDetail = false, int count = 0)
         {
-            return Listings.GetPosts(Dispatch.Moderation.ModQueue(location, after, before, "links", Subreddit, count, limit, show, srDetail), Dispatch);
+            return Listings.GetPosts(Dispatch.Moderation.ModQueue(new ModerationModQueueInput("links", after, before, limit, count, srDetail, show), location, Subreddit), Dispatch);
         }
 
         /// <summary>

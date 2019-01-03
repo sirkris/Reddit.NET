@@ -1,6 +1,7 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
 using Reddit.Models.Inputs.LinksAndComments;
+using Reddit.Models.Inputs.Moderation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -447,7 +448,7 @@ namespace Reddit.Controllers
         /// </summary>
         public void Remove(bool spam = false)
         {
-            Dispatch.Moderation.Remove(Fullname, spam);
+            Dispatch.Moderation.Remove(new ModerationRemoveInput(Fullname, spam));
         }
 
         /// <summary>
