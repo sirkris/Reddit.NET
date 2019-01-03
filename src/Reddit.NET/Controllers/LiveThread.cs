@@ -2,6 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.LiveThreads;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -38,12 +39,12 @@ namespace Reddit.Controllers
         public int ViewerCount;
         public string Icon;
 
-        public Things.LiveUpdateEvent EventData;
+        public LiveUpdateEvent EventData;
 
         /// <summary>
         /// List of live thread updates.
         /// </summary>
-        public List<Things.LiveUpdate> Updates
+        public List<LiveUpdate> Updates
         {
             get
             {
@@ -55,13 +56,13 @@ namespace Reddit.Controllers
                 updates = value;
             }
         }
-        private List<Things.LiveUpdate> updates;
+        private List<LiveUpdate> updates;
         private DateTime? UpdatesLastUpdated;
 
         /// <summary>
         /// List of live thread contributors.
         /// </summary>
-        public List<Things.UserListContainer> Contributors
+        public List<UserListContainer> Contributors
         {
             get
             {
@@ -73,7 +74,7 @@ namespace Reddit.Controllers
                 contributors = value;
             }
         }
-        private List<Things.UserListContainer> contributors;
+        private List<UserListContainer> contributors;
         private DateTime? ContributorsLastUpdated;
 
         private Dispatch Dispatch;
@@ -99,7 +100,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="liveUpdateEvent"></param>
-        public LiveThread(ref Dispatch dispatch, Things.LiveUpdateEvent liveUpdateEvent)
+        public LiveThread(ref Dispatch dispatch, LiveUpdateEvent liveUpdateEvent)
         {
             Dispatch = dispatch;
 
@@ -135,7 +136,7 @@ namespace Reddit.Controllers
 
             Import(id, description, nsfw, resources, title, totalViews, created, name, websocketUrl, announcementUrl, state, viewerCount, icon);
 
-            EventData = new Things.LiveUpdateEvent(this);
+            EventData = new LiveUpdateEvent(this);
         }
 
         /// <summary>
@@ -186,9 +187,9 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
         /// <returns>The requested live updates.</returns>
-        public List<Things.LiveUpdate> GetUpdates(string after = "", string before = "", string styleSr = "", int count = 0, int limit = 25)
+        public List<LiveUpdate> GetUpdates(string after = "", string before = "", string styleSr = "", int count = 0, int limit = 25)
         {
-            Updates = Listings.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, after, before, styleSr, count, limit)));
+            Updates = Listings.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, new LiveThreadsGetUpdatesInput(styleSr, after, before, count, limit))));
             UpdatesLastUpdated = DateTime.Now;
 
             return Updates;
@@ -202,9 +203,10 @@ namespace Reddit.Controllers
         /// <param name="nsfw">boolean value</param>
         /// <param name="resources">raw markdown text</param>
         /// <returns>An instance of this class populated with data from the new live thread.</returns>
-        public LiveThread Create(string title = null, string description = null, bool? nsfw = null, string resources = null, bool retry = true)
+        public LiveThread Create(string title = null, string description = null, bool? nsfw = null, string resources = null)
         {
-            return new LiveThread(ref Dispatch, Validate(Dispatch.LiveThreads.Create(description ?? Description, nsfw ?? NSFW, resources ?? Resources, title ?? Title)).JSON.Data.Id).About();
+            return new LiveThread(ref Dispatch, Validate(Dispatch.LiveThreads.Create(
+                new LiveThreadsConfigInput(title ?? Title, description ?? Description, nsfw ?? NSFW, resources ?? Resources))).JSON.Data.Id).About();
         }
 
         /// <summary>
@@ -319,7 +321,7 @@ namespace Reddit.Controllers
         /// <param name="resources">raw markdown text</param>
         public void Edit(string title, string description, bool nsfw, string resources)
         {
-            Validate(Dispatch.LiveThreads.Edit(Id, description, nsfw, resources, title));
+            Validate(Dispatch.LiveThreads.Edit(Id, new LiveThreadsConfigInput(title, description, nsfw, resources)));
         }
 
         /// <summary>
@@ -347,7 +349,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public void InviteContributor(string name, string permissions, string type)
         {
-            Validate(Dispatch.LiveThreads.InviteContributor(Id, name, permissions, type));
+            Validate(Dispatch.LiveThreads.InviteContributor(Id, new LiveThreadsContributorInput(name, permissions, type)));
         }
 
         /// <summary>
@@ -461,7 +463,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public void SetContributorPermissions(string name, string permissions, string type)
         {
-            Validate(Dispatch.LiveThreads.SetContributorPermissions(Id, name, permissions, type));
+            Validate(Dispatch.LiveThreads.SetContributorPermissions(Id, new LiveThreadsContributorInput(name, permissions, type)));
         }
 
         /// <summary>
@@ -531,7 +533,7 @@ namespace Reddit.Controllers
         /// Note that this includes users who were invited but have not yet accepted.
         /// </summary>
         /// <returns>A list of users (0 => Active contributors, 1 => Invited/pending contributors).</returns>
-        public List<Things.UserListContainer> GetContributors()
+        public List<UserListContainer> GetContributors()
         {
             Contributors = Validate(Dispatch.LiveThreads.Contributors(Id));
             ContributorsLastUpdated = DateTime.Now;
@@ -544,7 +546,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="updateId">Update Id (not the Name; i.e. without the "LiveUpdate_" prefix)</param>
         /// <returns>The requested update.</returns>
-        public Things.LiveUpdate GetUpdate(string updateId)
+        public LiveUpdate GetUpdate(string updateId)
         {
             return Validate(Dispatch.LiveThreads.GetUpdate(Id, updateId), 1).Data.Children[0].Data;
         }
@@ -699,10 +701,10 @@ namespace Reddit.Controllers
 
         private void CheckContributors()
         {
-            List<Things.UserListContainer> oldList = contributors;
-            List<Things.UserListContainer> newList = GetContributors();
+            List<UserListContainer> oldList = contributors;
+            List<UserListContainer> newList = GetContributors();
 
-            if (UserListDiff(oldList, newList, out List<Things.UserListContainer> added, out List<Things.UserListContainer> removed))
+            if (UserListDiff(oldList, newList, out List<UserListContainer> added, out List<UserListContainer> removed))
             {
                 // Event handler to alert the calling app that the list has changed.  --Kris
                 LiveThreadContributorsUpdateEventArgs args = new LiveThreadContributorsUpdateEventArgs
@@ -716,11 +718,11 @@ namespace Reddit.Controllers
             }
         }
 
-        private bool UserListDiff(List<Things.UserListContainer> oldList, List<Things.UserListContainer> newList, out List<Things.UserListContainer> added,
-            out List<Things.UserListContainer> removed)
+        private bool UserListDiff(List<UserListContainer> oldList, List<UserListContainer> newList, out List<UserListContainer> added,
+            out List<UserListContainer> removed)
         {
-            added = new List<Things.UserListContainer>();
-            removed = new List<Things.UserListContainer>();
+            added = new List<UserListContainer>();
+            removed = new List<UserListContainer>();
 
             if (oldList == null && newList == null)
             {
@@ -739,10 +741,10 @@ namespace Reddit.Controllers
 
             for (int i = 0; i <= 1; i++)
             {
-                added.Add(new Things.UserListContainer { Data = new Things.UserListData { Children = new List<Things.UserListChild>() } });
-                removed.Add(new Things.UserListContainer { Data = new Things.UserListData { Children = new List<Things.UserListChild>() } });
+                added.Add(new UserListContainer { Data = new UserListData { Children = new List<UserListChild>() } });
+                removed.Add(new UserListContainer { Data = new UserListData { Children = new List<UserListChild>() } });
 
-                if (Listings.ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<Things.UserListChild> childrenAdded, out List<Things.UserListChild> childrenRemoved))
+                if (Listings.ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<UserListChild> childrenAdded, out List<UserListChild> childrenRemoved))
                 {
                     added[i].Data.Children = childrenAdded;
                     removed[i].Data.Children = childrenRemoved;
@@ -755,10 +757,10 @@ namespace Reddit.Controllers
 
         private void CheckUpdates()
         {
-            List<Things.LiveUpdate> oldList = updates;
-            List<Things.LiveUpdate> newList = GetUpdates();
+            List<LiveUpdate> oldList = updates;
+            List<LiveUpdate> newList = GetUpdates();
 
-            if (Listings.ListDiff(oldList, newList, out List<Things.LiveUpdate> added, out List<Things.LiveUpdate> removed))
+            if (Listings.ListDiff(oldList, newList, out List<LiveUpdate> added, out List<LiveUpdate> removed))
             {
                 // Event handler to alert the calling app that the list has changed.  --Kris
                 LiveThreadUpdatesUpdateEventArgs args = new LiveThreadUpdatesUpdateEventArgs

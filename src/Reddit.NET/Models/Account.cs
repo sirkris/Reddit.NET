@@ -45,7 +45,7 @@ namespace Reddit.Models
         /// </summary>
         /// <param name="json">See https://www.reddit.com/dev/api/#PATCH_api_v1_me_prefs for required format</param>
         /// <returns>The updated preference settings of the logged in user.</returns>
-        public AccountPrefs UpdatePrefs(string json)
+        private AccountPrefs UpdatePrefs(string json)
         {
             RestRequest restRequest = PrepareRequest("api/v1/me/prefs", Method.PATCH);
 

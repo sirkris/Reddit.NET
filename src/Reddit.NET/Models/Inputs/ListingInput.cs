@@ -21,8 +21,23 @@ namespace Reddit.Models.Inputs
         public int limit { get; set; }
 
         /// <summary>
-        /// a positive integer (default: 0)
+        /// a positive integer
         /// </summary>
         public int count { get; set; }
+
+        /// <summary>
+        /// Populate a new listing input.
+        /// </summary>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">the maximum number of items desired (default: 25)</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        public ListingInput(string after = "", string before = "", int limit = 25, int count = 0)
+        {
+            this.after = after;
+            this.before = before;
+            this.limit = limit;
+            this.count = count;
+        }
     }
 }

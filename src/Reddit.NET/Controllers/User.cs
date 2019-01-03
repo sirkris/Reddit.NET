@@ -1,5 +1,6 @@
 ﻿using Reddit.Exceptions;
 using Reddit.Models.Inputs.Flair;
+using Reddit.Models.Inputs.LiveThreads;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -482,7 +483,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public void InviteToLiveThread(string thread, string permissions, string type)
         {
-            Validate(Dispatch.LiveThreads.InviteContributor(thread, Name, permissions, type));
+            Validate(Dispatch.LiveThreads.InviteContributor(thread, new LiveThreadsContributorInput(Name, permissions, type)));
         }
 
         /// <summary>
@@ -560,7 +561,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public void SetLiveThreadPermissions(string thread, string permissions, string type)
         {
-            Validate(Dispatch.LiveThreads.SetContributorPermissions(thread, Name, permissions, type));
+            Validate(Dispatch.LiveThreads.SetContributorPermissions(thread, new LiveThreadsContributorInput(Name, permissions, type)));
         }
 
         /// <summary>
