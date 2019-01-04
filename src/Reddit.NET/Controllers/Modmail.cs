@@ -2,6 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.Modmail;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -40,7 +41,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// Recent modmail conversations.
         /// </summary>
-        public Things.ConversationContainer Recent
+        public ConversationContainer Recent
         {
             get
             {
@@ -52,13 +53,13 @@ namespace Reddit.Controllers
                 recent = value;
             }
         }
-        private Things.ConversationContainer recent;
+        private ConversationContainer recent;
         private DateTime? RecentLastUpdated;
 
         /// <summary>
         /// Mod modmail conversations.
         /// </summary>
-        public Things.ConversationContainer Mod
+        public ConversationContainer Mod
         {
             get
             {
@@ -70,13 +71,13 @@ namespace Reddit.Controllers
                 mod = value;
             }
         }
-        private Things.ConversationContainer mod;
+        private ConversationContainer mod;
         private DateTime? ModLastUpdated;
 
         /// <summary>
         /// User modmail conversations.
         /// </summary>
-        public Things.ConversationContainer User
+        public ConversationContainer User
         {
             get
             {
@@ -88,13 +89,13 @@ namespace Reddit.Controllers
                 user = value;
             }
         }
-        private Things.ConversationContainer user;
+        private ConversationContainer user;
         private DateTime? UserLastUpdated;
 
         /// <summary>
         /// Unread modmail conversations.
         /// </summary>
-        public Things.ConversationContainer Unread
+        public ConversationContainer Unread
         {
             get
             {
@@ -106,13 +107,13 @@ namespace Reddit.Controllers
                 unread = value;
             }
         }
-        private Things.ConversationContainer unread;
+        private ConversationContainer unread;
         private DateTime? UnreadLastUpdated;
 
         /// <summary>
         /// Unread messages count.
         /// </summary>
-        public Things.ModmailUnreadCount UnreadCount
+        public ModmailUnreadCount UnreadCount
         {
             get
             {
@@ -124,7 +125,7 @@ namespace Reddit.Controllers
                 unreadCount = value;
             }
         }
-        private Things.ModmailUnreadCount unreadCount;
+        private ModmailUnreadCount unreadCount;
         private DateTime? UnreadCountLastUpdated;
 
         internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
@@ -159,9 +160,9 @@ namespace Reddit.Controllers
         /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
         /// <param name="limit">an integer (default: 25)</param>
         /// <returns>The requested conversations.</returns>
-        public Things.ConversationContainer GetConversations(string after = "", string entity = "", string sort = "unread", string state = "all", int limit = 25)
+        public ConversationContainer GetConversations(string after = "", string entity = "", string sort = "unread", string state = "all", int limit = 25)
         {
-            return Validate(Dispatch.Modmail.GetConversations(after, entity, sort, state, limit));
+            return Validate(Dispatch.Modmail.GetConversations(new ModmailGetConversationsInput(after, entity, sort, state, limit)));
         }
 
         /// <summary>
@@ -172,7 +173,7 @@ namespace Reddit.Controllers
         /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
         /// <param name="limit">an integer (default: 25)</param>
         /// <returns>The requested conversations.</returns>
-        public Things.ConversationContainer GetRecentConversations(string after = "", string entity = "", string state = "all", int limit = 25)
+        public ConversationContainer GetRecentConversations(string after = "", string entity = "", string state = "all", int limit = 25)
         {
             Recent = GetConversations(after, entity, "recent", state, limit);
             RecentLastUpdated = DateTime.Now;
@@ -188,7 +189,7 @@ namespace Reddit.Controllers
         /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
         /// <param name="limit">an integer (default: 25)</param>
         /// <returns>The requested conversations.</returns>
-        public Things.ConversationContainer GetModConversations(string after = "", string entity = "", string state = "all", int limit = 25)
+        public ConversationContainer GetModConversations(string after = "", string entity = "", string state = "all", int limit = 25)
         {
             Mod = GetConversations(after, entity, "mod", state, limit);
             ModLastUpdated = DateTime.Now;
@@ -204,7 +205,7 @@ namespace Reddit.Controllers
         /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
         /// <param name="limit">an integer (default: 25)</param>
         /// <returns>The requested conversations.</returns>
-        public Things.ConversationContainer GetUserConversations(string after = "", string entity = "", string state = "all", int limit = 25)
+        public ConversationContainer GetUserConversations(string after = "", string entity = "", string state = "all", int limit = 25)
         {
             User = GetConversations(after, entity, "user", state, limit);
             UserLastUpdated = DateTime.Now;
@@ -220,7 +221,7 @@ namespace Reddit.Controllers
         /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
         /// <param name="limit">an integer (default: 25)</param>
         /// <returns>The requested conversations.</returns>
-        public Things.ConversationContainer GetUnreadConversations(string after = "", string entity = "", string state = "all", int limit = 25)
+        public ConversationContainer GetUnreadConversations(string after = "", string entity = "", string state = "all", int limit = 25)
         {
             Unread = GetConversations(after, entity, "unread", state, limit);
             UnreadLastUpdated = DateTime.Now;
@@ -254,9 +255,9 @@ namespace Reddit.Controllers
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="srName">subreddit name</param>
         /// <returns>An object containing the conversation data.</returns>
-        public Things.ModmailConversationContainer NewConversation(string body, string subject, string srName, string to = "", bool isAuthorHidden = false)
+        public ModmailConversationContainer NewConversation(string body = "", string subject = "", string srName = "", string to = "", bool isAuthorHidden = false)
         {
-            return Validate(Dispatch.Modmail.NewConversation(body, isAuthorHidden, srName, subject, to));
+            return Validate(Dispatch.Modmail.NewConversation(new ModmailNewConversationInput(body, isAuthorHidden, srName, subject, to)));
         }
 
         /// <summary>
@@ -269,7 +270,7 @@ namespace Reddit.Controllers
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="srName">subreddit name</param>
         /// <returns>An object containing the conversation data.</returns>
-        public async Task NewConversationAsync(string body, string subject, string srName, string to = "", bool isAuthorHidden = false)
+        public async Task NewConversationAsync(string body = "", string subject = "", string srName = "", string to = "", bool isAuthorHidden = false)
         {
             await Task.Run(() =>
             {
@@ -283,7 +284,7 @@ namespace Reddit.Controllers
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <param name="markRead">boolean value</param>
         /// <returns>An object containing the conversation data.</returns>
-        public Things.ModmailConversationContainer GetConversation(string conversationId, bool markRead = false)
+        public ModmailConversationContainer GetConversation(string conversationId, bool markRead = false)
         {
             return Validate(Dispatch.Modmail.GetConversation(conversationId, markRead));
         }
@@ -296,9 +297,9 @@ namespace Reddit.Controllers
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="isInternal">boolean value</param>
         /// <returns>An object containing the conversation data.</returns>
-        public Things.ModmailConversationContainer NewMessage(string conversationId, string body, bool isAuthorHidden = false, bool isInternal = false)
+        public ModmailConversationContainer NewMessage(string conversationId, string body = "", bool isAuthorHidden = false, bool isInternal = false)
         {
-            return Validate(Dispatch.Modmail.NewMessage(conversationId, body, isAuthorHidden, isInternal));
+            return Validate(Dispatch.Modmail.NewMessage(conversationId, new ModmailNewMessageInput(body, isAuthorHidden, isInternal)));
         }
 
         /// <summary>
@@ -309,7 +310,7 @@ namespace Reddit.Controllers
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="isInternal">boolean value</param>
         /// <returns>An object containing the conversation data.</returns>
-        public async Task NewMessageAsync(string conversationId, string body, bool isAuthorHidden = false, bool isInternal = false)
+        public async Task NewMessageAsync(string conversationId, string body = "", bool isAuthorHidden = false, bool isInternal = false)
         {
             await Task.Run(() =>
             {
@@ -322,7 +323,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the conversation data.</returns>
-        public Things.ModmailConversationContainer MarkHighlighted(string conversationId)
+        public ModmailConversationContainer MarkHighlighted(string conversationId)
         {
             return Validate(Dispatch.Modmail.MarkHighlighted(conversationId));
         }
@@ -345,7 +346,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the conversation data.</returns>
-        public Things.ModmailConversationContainer RemoveHighlight(string conversationId)
+        public ModmailConversationContainer RemoveHighlight(string conversationId)
         {
             return Validate(Dispatch.Modmail.RemoveHighlight(conversationId));
         }
@@ -368,7 +369,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the conversation data.</returns>
-        public Things.ModmailConversationContainer Mute(string conversationId)
+        public ModmailConversationContainer Mute(string conversationId)
         {
             return Validate(Dispatch.Modmail.Mute(conversationId));
         }
@@ -391,7 +392,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the conversation data.</returns>
-        public Things.ModmailConversationContainer Unmute(string conversationId)
+        public ModmailConversationContainer Unmute(string conversationId)
         {
             return Validate(Dispatch.Modmail.UnMute(conversationId));
         }
@@ -414,7 +415,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the user data.</returns>
-        public Things.ModmailUser UserHistory(string conversationId)
+        public ModmailUser UserHistory(string conversationId)
         {
             return Validate(Dispatch.Modmail.User(conversationId));
         }
@@ -465,7 +466,7 @@ namespace Reddit.Controllers
         /// Returns a list of srs that the user moderates that are also enrolled in the new modmail.
         /// </summary>
         /// <returns>A list of subreddits.</returns>
-        public Things.ModmailSubredditContainer Subreddits()
+        public ModmailSubredditContainer Subreddits()
         {
             return Validate(Dispatch.Modmail.Subreddits());
         }
@@ -474,7 +475,7 @@ namespace Reddit.Controllers
         /// Endpoint to retrieve the unread conversation count by conversation state.
         /// </summary>
         /// <returns>An object with the int properties: highlighted, notifications, archived, new, inprogress, and mod.</returns>
-        public Things.ModmailUnreadCount GetUnreadCount()
+        public ModmailUnreadCount GetUnreadCount()
         {
             UnreadCount = Validate(Dispatch.Modmail.UnreadCount());
             UnreadCountLastUpdated = DateTime.Now;
@@ -542,7 +543,7 @@ namespace Reddit.Controllers
             UnreadUpdated?.Invoke(this, e);
         }
 
-        private void MonitorModmailMessagesThread(Things.ConversationContainer conversationContainer, string key, string type, int startDelayMs = 0)
+        private void MonitorModmailMessagesThread(ConversationContainer conversationContainer, string key, string type, int startDelayMs = 0)
         {
             if (startDelayMs > 0)
             {
@@ -552,12 +553,12 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains("ModmailMessages"))
             {
-                Dictionary<string, Things.Conversation> oldConversationList;
-                Dictionary<string, Things.Conversation> newConversationList;
-                Dictionary<string, Things.ConversationMessage> oldMessageList;
-                Dictionary<string, Things.ConversationMessage> newMessageList;
+                Dictionary<string, Conversation> oldConversationList;
+                Dictionary<string, Conversation> newConversationList;
+                Dictionary<string, ConversationMessage> oldMessageList;
+                Dictionary<string, ConversationMessage> newMessageList;
 
-                Things.ConversationContainer res;
+                ConversationContainer res;
                 switch (type)
                 {
                     default:
@@ -581,9 +582,9 @@ namespace Reddit.Controllers
                 oldMessageList = conversationContainer?.Messages;
                 newMessageList = res.Messages;
 
-                if (Diff(oldConversationList, newConversationList, out Dictionary<string, Things.Conversation> addedC, out Dictionary<string, Things.Conversation> removedC))
+                if (Diff(oldConversationList, newConversationList, out Dictionary<string, Conversation> addedC, out Dictionary<string, Conversation> removedC))
                 {
-                    if (Diff(oldMessageList, newMessageList, out Dictionary<string, Things.ConversationMessage> addedM, out Dictionary<string, Things.ConversationMessage> removedM))
+                    if (Diff(oldMessageList, newMessageList, out Dictionary<string, ConversationMessage> addedM, out Dictionary<string, ConversationMessage> removedM))
                     {
                         // Event handler to alert the calling app that the list has changed.  --Kris
                         ModmailConversationsEventArgs args = new ModmailConversationsEventArgs
@@ -629,16 +630,16 @@ namespace Reddit.Controllers
             return !(addedKeys.Count == 0 && removedKeys.Count == 0);
         }
 
-        private bool Diff(Dictionary<string, Things.Conversation> oldList, Dictionary<string, Things.Conversation> newList,
-            out Dictionary<string, Things.Conversation> added, out Dictionary<string, Things.Conversation> removed)
+        private bool Diff(Dictionary<string, Conversation> oldList, Dictionary<string, Conversation> newList,
+            out Dictionary<string, Conversation> added, out Dictionary<string, Conversation> removed)
         {
-            return Diff<Things.Conversation>(oldList, newList, out added, out removed);
+            return Diff<Conversation>(oldList, newList, out added, out removed);
         }
 
-        private bool Diff(Dictionary<string, Things.ConversationMessage> oldList, Dictionary<string, Things.ConversationMessage> newList,
-            out Dictionary<string, Things.ConversationMessage> added, out Dictionary<string, Things.ConversationMessage> removed)
+        private bool Diff(Dictionary<string, ConversationMessage> oldList, Dictionary<string, ConversationMessage> newList,
+            out Dictionary<string, ConversationMessage> added, out Dictionary<string, ConversationMessage> removed)
         {
-            return Diff<Things.ConversationMessage>(oldList, newList, out added, out removed);
+            return Diff<ConversationMessage>(oldList, newList, out added, out removed);
         }
 
         protected void TriggerUpdate(ModmailConversationsEventArgs args, string type)

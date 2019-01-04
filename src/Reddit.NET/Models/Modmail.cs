@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Reddit.Models.Inputs.Modmail;
 using Reddit.Things;
 using RestSharp;
 
@@ -15,62 +16,32 @@ namespace Reddit.Models
         /// <summary>
         /// Marks all conversations read for a particular conversation state within the passed list of subreddits.
         /// </summary>
-        /// <param name="entity">comma-delimited list of subreddit names</param>
-        /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
+        /// <param name="modmailBulkReadInput">A valid ModmailBulkReadInput instance</param>
         /// <returns>(TODO - Untested)</returns>
-        public object BulkRead(string entity, string state)
+        public object BulkRead(ModmailBulkReadInput modmailBulkReadInput)
         {
-            RestRequest restRequest = PrepareRequest("api/mod/bulk_read", Method.POST);
-
-            restRequest.AddParameter("entity", entity);
-            restRequest.AddParameter("state", state);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return SendRequest<object>("api/mod/bulk_read", modmailBulkReadInput, Method.POST);
         }
 
         /// <summary>
         /// Get conversations for a logged in user or subreddits.
         /// </summary>
-        /// <param name="after">base36 modmail conversation id</param>
-        /// <param name="entity">comma-delimited list of subreddit names</param>
-        /// <param name="sort">one of (recent, mod, user, unread)</param>
-        /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
-        /// <param name="limit">an integer (default: 25)</param>
+        /// <param name="modmailGetConversationsInput">A valid ModmailGetConversationsInput instance</param>
         /// <returns>The requested conversations.</returns>
-        public ConversationContainer GetConversations(string after, string entity, string sort, string state, int limit = 25)
+        public ConversationContainer GetConversations(ModmailGetConversationsInput modmailGetConversationsInput)
         {
-            RestRequest restRequest = PrepareRequest("api/mod/conversations");
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("entity", entity);
-            restRequest.AddParameter("sort", sort);
-            restRequest.AddParameter("state", state);
-            restRequest.AddParameter("limit", limit);
-
-            return JsonConvert.DeserializeObject<ConversationContainer>(ExecuteRequest(restRequest));
+            return SendRequest<ConversationContainer>("api/mod/conversations", modmailGetConversationsInput);
         }
 
         /// <summary>
         /// Creates a new conversation for a particular SR.
         /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
         /// </summary>
-        /// <param name="body">raw markdown text</param>
-        /// <param name="isAuthorHidden">boolean value</param>
-        /// <param name="srName">subreddit name</param>
-        /// <param name="subject">a string no longer than 100 characters</param>
-        /// <param name="to">Modmail conversation recipient username</param>
+        /// <param name="modmailNewConversationInput">A valid ModmailNewConversationInput instance</param>
         /// <returns>An object containing the conversation data.</returns>
-        public ModmailConversationContainer NewConversation(string body, bool isAuthorHidden, string srName, string subject, string to)
+        public ModmailConversationContainer NewConversation(ModmailNewConversationInput modmailNewConversationInput)
         {
-            RestRequest restRequest = PrepareRequest("api/mod/conversations", Method.POST);
-
-            restRequest.AddParameter("body", body);
-            restRequest.AddParameter("isAuthorHidden", isAuthorHidden);
-            restRequest.AddParameter("srName", srName);
-            restRequest.AddParameter("subject", subject);
-            restRequest.AddParameter("to", to);
-            
-            return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest(restRequest));
+            return SendRequest<ModmailConversationContainer>("api/mod/conversations", modmailNewConversationInput, Method.POST);
         }
 
         /// <summary>
@@ -92,19 +63,11 @@ namespace Reddit.Models
         /// Creates a new message for a particular conversation.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
-        /// <param name="body">raw markdown text</param>
-        /// <param name="isAuthorHidden">boolean value</param>
-        /// <param name="isInternal">boolean value</param>
+        /// <param name="modmailNewMessageInput">A valid ModmailNewMessageInput instance</param>
         /// <returns>An object containing the conversation data.</returns>
-        public ModmailConversationContainer NewMessage(string conversationId, string body, bool isAuthorHidden, bool isInternal)
+        public ModmailConversationContainer NewMessage(string conversationId, ModmailNewMessageInput modmailNewMessageInput)
         {
-            RestRequest restRequest = PrepareRequest("api/mod/conversations/" + conversationId, Method.POST);
-
-            restRequest.AddParameter("body", body);
-            restRequest.AddParameter("isAuthorHidden", isAuthorHidden);
-            restRequest.AddParameter("isInternal", isInternal);
-            
-            return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest(restRequest));
+            return SendRequest<ModmailConversationContainer>("api/mod/conversations/" + conversationId, modmailNewMessageInput, Method.POST);
         }
 
         // TODO - Keeps returning 422, saying the conversation is not archivable without any indication as to why.  --Kris
