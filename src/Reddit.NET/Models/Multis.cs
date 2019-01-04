@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Reddit.Models.Inputs.Multis;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
@@ -17,19 +18,11 @@ namespace Reddit.Models
         /// Responds with 409 Conflict if the target already exists.
         /// A "copied from ..." line will automatically be appended to the description.
         /// </summary>
-        /// <param name="displayName">a string no longer than 50 characters</param>
-        /// <param name="from">multireddit url path</param>
-        /// <param name="to">destination multireddit url path</param>
+        /// <param name="multiURLInput">A valid MultiURLInput instance</param>
         /// <returns>An object containing the multireddit data.</returns>
-        public LabeledMultiContainer Copy(string displayName, string from, string to)
+        public LabeledMultiContainer Copy(MultiURLInput multiURLInput)
         {
-            RestRequest restRequest = PrepareRequest("api/multi/copy", Method.POST);
-
-            restRequest.AddParameter("display_name", displayName);
-            restRequest.AddParameter("from", from);
-            restRequest.AddParameter("to", to);
-            
-            return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
+            return SendRequest<LabeledMultiContainer>("api/multi/copy", multiURLInput, Method.POST);
         }
 
         /// <summary>
@@ -49,19 +42,11 @@ namespace Reddit.Models
         /// <summary>
         /// Rename a multi.
         /// </summary>
-        /// <param name="displayName">a string no longer than 50 characters</param>
-        /// <param name="from">multireddit url path</param>
-        /// <param name="to">destination multireddit url path</param>
+        /// <param name="multiURLInput">A valid MultiURLInput instance</param>
         /// <returns>An object containing the multireddit data.</returns>
-        public LabeledMultiContainer Rename(string displayName, string from, string to)
+        public LabeledMultiContainer Rename(MultiURLInput multiURLInput)
         {
-            RestRequest restRequest = PrepareRequest("api/multi/rename", Method.POST);
-
-            restRequest.AddParameter("display_name", displayName);
-            restRequest.AddParameter("from", from);
-            restRequest.AddParameter("to", to);
-            
-            return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
+            return SendRequest<LabeledMultiContainer>("api/multi/rename", multiURLInput, Method.POST);
         }
 
         /// <summary>
