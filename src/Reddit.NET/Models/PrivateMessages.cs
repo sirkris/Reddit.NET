@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Reddit.Models.Inputs.PrivateMessages;
 using Reddit.Things;
 using RestSharp;
 
@@ -42,24 +43,12 @@ namespace Reddit.Models
         /// <summary>
         /// Handles message composition under /message/compose.
         /// </summary>
-        /// <param name="fromSr">subreddit name</param>
+        /// <param name="privateMessagesComposeInput">A valid PrivateMessagesComposeInput instance</param>
         /// <param name="gRecaptchaResponse"></param>
-        /// <param name="subject">a string no longer than 100 characters</param>
-        /// <param name="text">raw markdown text</param>
-        /// <param name="to">the name of an existing user</param>
         /// <returns>A generic response object containing any errors.</returns>
-        public GenericContainer Compose(string fromSr, string gRecaptchaResponse, string subject, string text, string to)
+        public GenericContainer Compose(PrivateMessagesComposeInput privateMessagesComposeInput, string gRecaptchaResponse = "")
         {
-            RestRequest restRequest = PrepareRequest("api/compose", Method.POST);
-
-            restRequest.AddParameter("from_sr", fromSr);
-            restRequest.AddParameter("g-recaptcha-response", gRecaptchaResponse);
-            restRequest.AddParameter("subject", subject);
-            restRequest.AddParameter("text", text);
-            restRequest.AddParameter("to", to);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return SendRequest<GenericContainer>("api/compose", privateMessagesComposeInput, Method.POST);
         }
 
         /// <summary>
@@ -147,32 +136,11 @@ namespace Reddit.Models
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="where">One of (inbox, unread, sent)</param>
-        /// <param name="mark">one of (true, false)</param>
-        /// <param name="mid"></param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="includeCategories">boolean value</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="privateMessagesGetMessagesInput">A valid PrivateMessagesGetMessagesInput instance</param>
         /// <returns>A list of messages.</returns>
-        public MessageContainer GetMessages(string where, bool mark, string mid, string after, string before, bool includeCategories, int count = 0,
-            int limit = 25, string show = "all", bool srDetail = false)
+        public MessageContainer GetMessages(string where, PrivateMessagesGetMessagesInput privateMessagesGetMessagesInput)
         {
-            RestRequest restRequest = PrepareRequest("message/" + where);
-
-            restRequest.AddParameter("mark", mark);
-            restRequest.AddParameter("mid", mid);
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("include_categories", includeCategories);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-
-            return JsonConvert.DeserializeObject<MessageContainer>(ExecuteRequest(restRequest));
+            return SendRequest<MessageContainer>("message/" + where, privateMessagesGetMessagesInput);
         }
     }
 }

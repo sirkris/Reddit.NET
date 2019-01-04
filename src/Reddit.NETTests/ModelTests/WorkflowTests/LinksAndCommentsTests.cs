@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Models.Inputs.LinksAndComments;
+using Reddit.Models.Inputs.PrivateMessages;
 using Reddit.Things;
 using System;
 using System.Threading;
@@ -34,7 +35,7 @@ namespace RedditTests.ModelTests.WorkflowTests
             User patsy = GetTargetUserModel();
 
             // Create the initial message.  --Kris
-            reddit.Models.PrivateMessages.Compose("", "", "Test Message", "This is a test.  So there.", patsy.Name);
+            reddit.Models.PrivateMessages.Compose(new PrivateMessagesComposeInput(subject: "Test Message", text: "This is a test.  So there.", to: patsy.Name));
 
             // Wait until the message arrives, then grab it.  The message ID is not returned by the Compose endpoint.  --Kris
             DateTime start = DateTime.Now;
@@ -57,7 +58,7 @@ namespace RedditTests.ModelTests.WorkflowTests
 
         private Message GetTestMessage(out MessageContainer messages, string sender, string subject = "Test Message")
         {
-            messages = reddit2.Models.PrivateMessages.GetMessages("unread", true, "", "", "", false);
+            messages = reddit2.Models.PrivateMessages.GetMessages("unread", new PrivateMessagesGetMessagesInput(true));
 
             return GetTestMessage(messages, sender, subject);
         }

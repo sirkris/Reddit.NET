@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.Models.Inputs.PrivateMessages;
 using Reddit.Things;
 using System;
 
@@ -36,7 +37,7 @@ namespace RedditTests.ModelTests.WorkflowTests
             bool res = false;
             do
             {
-                res = MessageExists(reddit.Models.PrivateMessages.GetMessages("unread", false, "", "", "", false), author, subject, body, out message);
+                res = MessageExists(reddit.Models.PrivateMessages.GetMessages("unread", new PrivateMessagesGetMessagesInput()), author, subject, body, out message);
             } while (!res && start.AddMilliseconds(waitMs) > DateTime.Now);
 
             return res;
@@ -51,7 +52,7 @@ namespace RedditTests.ModelTests.WorkflowTests
             string subject = "Test Message: " + DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
             string body = "This is a test message sent by Reddit.NET.";
 
-            Validate(reddit2.Models.PrivateMessages.Compose("", "", subject, body, me.Name));
+            Validate(reddit2.Models.PrivateMessages.Compose(new PrivateMessagesComposeInput(subject: subject, text: body, to: me.Name)));
             Assert.IsTrue(MessageExists(patsy.Name, subject, body, out Message message));
 
             reddit.Models.PrivateMessages.CollapseMessage(message.Name);

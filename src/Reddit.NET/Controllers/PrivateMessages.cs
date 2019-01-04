@@ -2,6 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.PrivateMessages;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -116,8 +117,8 @@ namespace Reddit.Controllers
         public List<Things.Message> GetMessages(string where, bool mark = true, int limit = 25, string after = "", string before = "",
             string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
         {
-            Things.MessageContainer messageContainer = Dispatch.PrivateMessages.GetMessages(where, mark, mid, after, before, includeCategories,
-                count, limit, show, srDetail);
+            Things.MessageContainer messageContainer = Dispatch.PrivateMessages.GetMessages(where, new PrivateMessagesGetMessagesInput(mark, mid, after, before, includeCategories,
+                count, limit, show, srDetail));
 
             List<Things.Message> res = new List<Things.Message>();
             if (messageContainer != null && messageContainer.Data != null && messageContainer.Data.Children != null)
@@ -342,7 +343,7 @@ namespace Reddit.Controllers
         /// <param name="gRecaptchaResponse"></param>
         public void Compose(string to, string subject, string text, string fromSr = "", string gRecaptchaResponse = "")
         {
-            Validate(Dispatch.PrivateMessages.Compose(fromSr, gRecaptchaResponse, subject, text, to));
+            Validate(Dispatch.PrivateMessages.Compose(new PrivateMessagesComposeInput(fromSr, subject, text, to), gRecaptchaResponse));
         }
 
         /// <summary>
