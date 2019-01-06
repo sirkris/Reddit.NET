@@ -49,7 +49,7 @@ namespace Reddit.Models.Internal
             RestRequest restRequest = PrepareRequest(url, method, contentType);
 
             restRequest.AddObject(parameters);
-
+            
             return JsonConvert.DeserializeObject<T>(ExecuteRequest(restRequest, asAsync));
         }
 

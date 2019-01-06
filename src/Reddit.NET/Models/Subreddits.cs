@@ -272,7 +272,13 @@ namespace Reddit.Models
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public ImageUploadResult UploadSrImg(SubredditsUploadSrImgInput subredditsUploadSrImgInput, string subreddit = null)
         {
-            return SendRequest<ImageUploadResult>(Sr(subreddit) + "api/upload_sr_img", subredditsUploadSrImgInput, Method.POST, "multipart/form-data");
+            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/upload_sr_img", Method.POST, "multipart/form-data");
+
+            restRequest.AddFileBytes("file", subredditsUploadSrImgInput.file, 
+                (!string.IsNullOrWhiteSpace(subredditsUploadSrImgInput.name) ? subredditsUploadSrImgInput.name : "image") + "." + subredditsUploadSrImgInput.img_type);
+            restRequest.AddObject(subredditsUploadSrImgInput);
+
+            return JsonConvert.DeserializeObject<ImageUploadResult>(ExecuteRequest(restRequest));
         }
 
         // TODO - API returns 400 (after/before == "", q == "KrisCraig" or "t2_6vsit", sort == "relevance").  No idea why.  --Kris

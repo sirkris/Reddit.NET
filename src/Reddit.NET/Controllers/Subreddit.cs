@@ -23,25 +23,25 @@ namespace Reddit.Controllers
         public string CommunityIcon;
         public string HeaderTitle;
         public bool WikiEnabled;
-        public bool Over18;
+        public bool? Over18;
         public string Sidebar;
         public string Name;
         public object HeaderImg;
         public string Title;
-        public bool CollapseDeletedComments;
+        public bool? CollapseDeletedComments;
         public string Id;
         public bool EmojisEnabled;
-        public bool ShowMedia;
+        public bool? ShowMedia;
         public bool AllowVideos;
         public bool CanAssignUserFlair;
-        public bool SpoilersEnabled;
+        public bool? SpoilersEnabled;
         public string PrimaryColor;
         public string SuggestedCommentSort;
         public int? ActiveUserCount;
         public object IconImg;
         public bool CanAssignLinkFlair;
         public bool AllowVideoGifs;
-        public int Subscribers;
+        public int? Subscribers;
         public string SubmitTextLabel;
         public string KeyColor;
         public string Lang;
@@ -49,12 +49,12 @@ namespace Reddit.Controllers
         public DateTime Created;
         public string URL;
         public string SubmitLinkLabel;
-        public bool AllowDiscovery;
+        public bool? AllowDiscovery;
         public string Description;
-        public bool LinkFlairEnabled;
-        public bool AllowImages;
-        public int CommentScoreHideMins;
-        public bool ShowMediaPreview;
+        public bool? LinkFlairEnabled;
+        public bool? AllowImages;
+        public int? CommentScoreHideMins;
+        public bool? ShowMediaPreview;
         public string SubmissionType;
 
         /// <summary>
@@ -709,7 +709,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public Things.ImageUploadResult UploadImg(byte[] imgData, string imgName, string imgType = "png")
         {
-            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 0, imgName, "img", Name, imgType)));
+            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 0, imgName, "img", imgType), Name));
         }
 
         /// <summary>
@@ -734,7 +734,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public Things.ImageUploadResult UploadHeader(byte[] imgData, string imgType = "png")
         {
-            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 1, null, "header", Name, imgType)));
+            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 1, null, "header", imgType), Name));
         }
 
         /// <summary>
@@ -758,7 +758,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public Things.ImageUploadResult UploadIcon(byte[] imgData, string imgType = "png")
         {
-            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 0, null, "icon", Name, imgType)));
+            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 0, null, "icon", imgType), Name));
         }
 
         /// <summary>
@@ -782,7 +782,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public Things.ImageUploadResult UploadBanner(byte[] imgData, string imgType = "png")
         {
-            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 0, null, "banner", Name, imgType)));
+            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 0, null, "banner", imgType), Name));
         }
 
         /// <summary>

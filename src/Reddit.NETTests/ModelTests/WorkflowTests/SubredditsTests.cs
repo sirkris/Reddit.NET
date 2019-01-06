@@ -18,10 +18,10 @@ namespace RedditTests.ModelTests.WorkflowTests
             byte[] imageIconData = GetResourceFile("birdie256.jpg");
 
             // Add the images (two succeed, two fail due to size constraints).  --Kris
-            ImageUploadResult resHeader = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageData, 1, "birdie", "header", testData["Subreddit"], "png"));
-            ImageUploadResult resImg = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageData, 0, "birdie", "img", testData["Subreddit"], "png"));
-            ImageUploadResult resIcon = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageData, 0, "birdie", "icon", testData["Subreddit"], "png"));
-            ImageUploadResult resBanner = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageData, 0, "birdie", "banner", testData["Subreddit"], "png"));
+            ImageUploadResult resHeader = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageData, 1, "birdie", "header", "png"), testData["Subreddit"]);
+            ImageUploadResult resImg = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageData, 0, "birdie", "img", "png"), testData["Subreddit"]);
+            ImageUploadResult resIcon = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageData, 0, "birdie", "icon", "png"), testData["Subreddit"]);
+            ImageUploadResult resBanner = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageData, 0, "birdie", "banner", "png"), testData["Subreddit"]);
 
             Validate(resHeader);
             Validate(resImg);
@@ -41,8 +41,8 @@ namespace RedditTests.ModelTests.WorkflowTests
             Assert.IsTrue(string.IsNullOrWhiteSpace(resBanner.ImgSrc));
 
             // Add the remaining two images (both succeed).  --Kris
-            resIcon = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageIconData, 0, "birdieIcon", "icon", testData["Subreddit"], "jpg"));
-            resBanner = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageBannerData, 0, "birdieBanner", "banner", testData["Subreddit"], "jpg"));
+            resIcon = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageIconData, 0, "birdieIcon", "icon", "jpg"), testData["Subreddit"]);
+            resBanner = reddit.Models.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imageBannerData, 0, "birdieBanner", "banner", "jpg"), testData["Subreddit"]);
 
             Validate(resIcon);
             Validate(resBanner);

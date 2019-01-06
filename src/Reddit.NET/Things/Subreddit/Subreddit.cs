@@ -21,7 +21,7 @@ namespace Reddit.Things
         public string BannerImg;
 
         [JsonProperty("user_sr_theme_enabled")]
-        public bool UserSrThemeEnabled;
+        public bool? UserSrThemeEnabled;
 
         [JsonProperty("user_sr_flair_enabled")]
         public bool? UserSrFlairEnabled;
@@ -39,7 +39,7 @@ namespace Reddit.Things
         public string UserFlairTemplateId;
 
         [JsonProperty("user_is_banned")]
-        public bool UserIsBanned;
+        public bool? UserIsBanned;
 
         [JsonProperty("subreddit_type")]
         public string SubredditType;
@@ -57,10 +57,10 @@ namespace Reddit.Things
         public bool? WikiEnabled;
 
         [JsonProperty("over18")]
-        public bool Over18;
+        public bool? Over18;
 
         [JsonProperty("show_media")]
-        public bool ShowMedia;
+        public bool? ShowMedia;
 
         [JsonProperty("banner_background_color")]
         public string BannerBackgroundColor;
@@ -69,7 +69,7 @@ namespace Reddit.Things
         public string Description;
 
         [JsonProperty("user_is_muted")]
-        public bool UserIsMuted;
+        public bool? UserIsMuted;
 
         [JsonProperty("user_flair_type")]
         public string UserFlairType;
@@ -90,10 +90,10 @@ namespace Reddit.Things
         public string Title;
 
         [JsonProperty("collapse_deleted_comments")]
-        public bool CollapseDeletedComments;
+        public bool? CollapseDeletedComments;
 
         [JsonProperty("user_has_favorited")]
-        public bool UserHasFavorited;
+        public bool? UserHasFavorited;
 
         [JsonProperty("emojis_custom_size")]
         public object EmojisCustomSize;
@@ -114,7 +114,7 @@ namespace Reddit.Things
         public bool AllowVideos;
 
         [JsonProperty("spoilers_enabled")]
-        public bool SpoilersEnabled;
+        public bool? SpoilersEnabled;
 
         [JsonProperty("icon_size")]
         public List<int> IconSize;
@@ -123,7 +123,7 @@ namespace Reddit.Things
         public string PrimaryColor;
 
         [JsonProperty("user_is_contributor")]
-        public bool UserIsContributor;
+        public bool? UserIsContributor;
 
         [JsonProperty("audience_target")]
         public string AudienceTarget;
@@ -138,7 +138,7 @@ namespace Reddit.Things
         public object IconImg;
 
         [JsonProperty("original_content_tag_enabled")]
-        public bool OriginalContentTagEnabled;
+        public bool? OriginalContentTagEnabled;
 
         [JsonProperty("display_name_prefixed")]
         public string DisplayNamePrefixed;
@@ -159,13 +159,13 @@ namespace Reddit.Things
         public int? AccountsActive;
 
         [JsonProperty("public_traffic")]
-        public bool PublicTraffic;
+        public bool? PublicTraffic;
 
         [JsonProperty("header_size")]
         public List<int> HeaderSize;
 
         [JsonProperty("subscribers")]
-        public int Subscribers;
+        public int? Subscribers;
 
         [JsonProperty("user_flair_position")]
         public string UserFlairPosition;
@@ -183,7 +183,7 @@ namespace Reddit.Things
         public object UserFlairRichtext;
 
         [JsonProperty("all_original_content")]
-        public bool AllOriginalContent;
+        public bool? AllOriginalContent;
 
         [JsonProperty("lang")]
         public string Lang;
@@ -201,7 +201,7 @@ namespace Reddit.Things
         public string Name;
 
         [JsonProperty("user_flair_enabled_in_sr")]
-        public bool UserFlairEnabledInSr;
+        public bool? UserFlairEnabledInSr;
 
         [JsonProperty("created")]
         [JsonConverter(typeof(TimestampConvert))]
@@ -211,10 +211,10 @@ namespace Reddit.Things
         public string URL;
 
         [JsonProperty("quarantine")]
-        public bool Quarantine;
+        public bool? Quarantine;
 
         [JsonProperty("hide_ads")]
-        public bool HideAds;
+        public bool? HideAds;
 
         [JsonProperty("created_utc")]
         [JsonConverter(typeof(TimestampConvert))]
@@ -224,16 +224,16 @@ namespace Reddit.Things
         public List<int> BannerSize;
 
         [JsonProperty("user_is_moderator")]
-        public bool UserIsModerator;
+        public bool? UserIsModerator;
 
         [JsonProperty("submit_link_label")]
         public string SubmitLinkLabel;
 
         [JsonProperty("allow_discovery")]
-        public bool AllowDiscovery;
+        public bool? AllowDiscovery;
 
         [JsonProperty("accounts_active_is_fuzzed")]
-        public bool AccountsActiveIsFuzzed;
+        public bool? AccountsActiveIsFuzzed;
 
         [JsonProperty("advertiser_category")]
         public string AdvertiserCategory;
@@ -242,25 +242,25 @@ namespace Reddit.Things
         public string PublicDescription;
 
         [JsonProperty("link_flair_enabled")]
-        public bool LinkFlairEnabled;
+        public bool? LinkFlairEnabled;
 
         [JsonProperty("allow_images")]
-        public bool AllowImages;
+        public bool? AllowImages;
 
         [JsonProperty("videostream_links_count")]
         public int VideoStreamLinksCount;
 
         [JsonProperty("comment_score_hide_mins")]
-        public int CommentScoreHideMins;
+        public int? CommentScoreHideMins;
 
         [JsonProperty("show_media_preview")]
-        public bool ShowMediaPreview;
+        public bool? ShowMediaPreview;
 
         [JsonProperty("submission_type")]
         public string SubmissionType;
 
         [JsonProperty("user_is_subscriber")]
-        public bool UserIsSubscriber;
+        public bool? UserIsSubscriber;
 
         public Subreddit(Controllers.Subreddit subreddit)
         {
