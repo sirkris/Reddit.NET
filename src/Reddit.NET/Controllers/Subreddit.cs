@@ -2,6 +2,7 @@
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Models.Inputs.Moderation;
+using Reddit.Models.Inputs.Subreddits;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -460,8 +461,8 @@ namespace Reddit.Controllers
         public List<Moderator> GetModerators(string after = "", string before = "", int limit = 25, string user = "", 
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators", after, before, user, includeCategories, Name, count, limit, 
-                show, srDetail);
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators",
+                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Name);
 
             Validate(res);
 
@@ -484,8 +485,8 @@ namespace Reddit.Controllers
         public List<SubredditUser> GetContributors(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("contributors", after, before, user, includeCategories, Name, count, limit,
-                show, srDetail);
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("contributors",
+                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Name);
 
             Validate(res);
 
@@ -507,8 +508,8 @@ namespace Reddit.Controllers
         public List<SubredditUser> GetMutedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("muted", after, before, user, includeCategories, Name, count, limit,
-                show, srDetail);
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("muted",
+                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Name);
 
             Validate(res);
 
@@ -530,8 +531,8 @@ namespace Reddit.Controllers
         public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned", after, before, user, includeCategories, Name, count, limit,
-                show, srDetail);
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned",
+                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Name);
 
             Validate(res);
 
@@ -560,7 +561,7 @@ namespace Reddit.Controllers
         /// <param name="stylesheetContents">the new stylesheet content</param>
         public void UpdateStylesheet(string reason, string stylesheetContents)
         {
-            Validate(Dispatch.Subreddits.SubredditStylesheet("save", reason, stylesheetContents, Name));
+            Validate(Dispatch.Subreddits.SubredditStylesheet(new SubredditsSubredditStylesheetInput(stylesheetContents, reason), Name));
         }
 
         /// <summary>
@@ -582,7 +583,7 @@ namespace Reddit.Controllers
         /// <param name="skipInitialDefaults">boolean value</param>
         public void Subscribe(bool skipInitialDefaults = false)
         {
-            Dispatch.Subreddits.Subscribe("sub", skipInitialDefaults, Name);
+            Dispatch.Subreddits.Subscribe(new SubredditsSubByNameInput(Name, skipInitialDefaults: skipInitialDefaults));
         }
 
         /// <summary>
@@ -602,7 +603,7 @@ namespace Reddit.Controllers
         /// </summary>
         public void Unsubscribe()
         {
-            Dispatch.Subreddits.Subscribe("unsub", false, Name);
+            Dispatch.Subreddits.Subscribe(new SubredditsSubByNameInput(Name, "unsub"));
         }
 
         /// <summary>
@@ -682,7 +683,7 @@ namespace Reddit.Controllers
         /// <param name="imgName">a valid subreddit image name</param>
         public void DeleteImg(string imgName)
         {
-            Validate(Dispatch.Subreddits.DeleteSrImg(imgName, Name));
+            Validate(Dispatch.Subreddits.DeleteSrImg(new SubredditsDeleteSrImgInput(imgName), Name));
         }
 
         /// <summary>
@@ -708,7 +709,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public Things.ImageUploadResult UploadImg(byte[] imgData, string imgName, string imgType = "png")
         {
-            return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, imgName, "img", Name, imgType));
+            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 0, imgName, "img", Name, imgType)));
         }
 
         /// <summary>
@@ -733,7 +734,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public Things.ImageUploadResult UploadHeader(byte[] imgData, string imgType = "png")
         {
-            return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 1, null, "header", Name, imgType));
+            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 1, null, "header", Name, imgType)));
         }
 
         /// <summary>
@@ -757,7 +758,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public Things.ImageUploadResult UploadIcon(byte[] imgData, string imgType = "png")
         {
-            return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, null, "icon", Name, imgType));
+            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 0, null, "icon", Name, imgType)));
         }
 
         /// <summary>
@@ -781,7 +782,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public Things.ImageUploadResult UploadBanner(byte[] imgData, string imgType = "png")
         {
-            return Validate(Dispatch.Subreddits.UploadSrImg(imgData, 0, null, "banner", Name, imgType));
+            return Validate(Dispatch.Subreddits.UploadSrImg(new SubredditsUploadSrImgInput(imgData, 0, null, "banner", Name, imgType)));
         }
 
         /// <summary>
@@ -806,7 +807,7 @@ namespace Reddit.Controllers
         /// <returns>Settings for the requested subreddit.</returns>
         public Things.SubredditSettingsContainer GetSettings(bool created = false, string location = "")
         {
-            return Validate(Dispatch.Subreddits.Edit(Name, created, location));
+            return Validate(Dispatch.Subreddits.Edit(Name, new SubredditsEditInput(created, location)));
         }
 
         /// <summary>
@@ -1098,13 +1099,12 @@ namespace Reddit.Controllers
             }
             else
             {
-                res = Dispatch.Subreddits.SiteAdmin(allOriginalContent, allowDiscovery, allowImages, allowPostCrossposts, allowTop,
-                    allowVideos, collapseDeletedComments, description, excludeBannedModqueue, freeFormReports,
-                    gRecaptchaResponse, headerTitle, hideAds, keyColor, lang, linkType, name, originalContentTagEnabled,
+                res = Dispatch.Subreddits.SiteAdmin(new SubredditsSiteAdminInput(allOriginalContent, allowDiscovery, allowImages, allowPostCrossposts, allowTop,
+                    allowVideos, collapseDeletedComments, description, excludeBannedModqueue, freeFormReports, hideAds, keyColor, lang, linkType, name, originalContentTagEnabled,
                     over18, publicDescription, showMedia, showMediaPreview, spamComments, spamLinks, spamSelfPosts,
                     spoilersEnabled, sr, submitLinkLabel, submitText, submitTextLabel, suggestedCommentSort,
                     themeSr, themeSrUpdate, title, type, wikiMode, commentScoreHideMins, wikiEditAge,
-                    wikiEditKarma);
+                    wikiEditKarma), gRecaptchaResponse, headerTitle);
             }
 
             Validate(res);

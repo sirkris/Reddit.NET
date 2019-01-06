@@ -1,8 +1,8 @@
 ﻿using Reddit.Controllers.EventArgs;
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
-using Reddit.Things;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs.Subreddits;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -115,8 +115,8 @@ namespace Reddit.Controllers
         public List<SubredditUser> GetContributors(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikicontributors", after, before, user, includeCategories, Subreddit, count, limit,
-                show, srDetail);
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikicontributors",
+                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Subreddit);
 
             Validate(res);
 
@@ -138,8 +138,8 @@ namespace Reddit.Controllers
         public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikibanned", after, before, user, includeCategories, Subreddit, count, limit,
-                show, srDetail);
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikibanned",
+                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Subreddit);
 
             Validate(res);
 
