@@ -103,14 +103,7 @@ namespace Reddit.Models.Internal
         public string GetVersion()
         {
             string res = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            if (string.IsNullOrWhiteSpace(res) || !res.Contains("."))
-            {
-                return res;
-            }
-
-            string ver = res.Substring(0, res.LastIndexOf("."));
-
-            return ver + (res.EndsWith(".1") ? "-develop" : "");
+            return (string.IsNullOrWhiteSpace(res) || !res.Contains(".") ? res : res.Substring(0, res.LastIndexOf(".")) + (res.EndsWith(".1") ? "-develop" : ""));
         }
 
         public string ExecuteRequest(string url, Method method = Method.GET, bool asAsync = false)
