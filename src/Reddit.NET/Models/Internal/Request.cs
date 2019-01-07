@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Runtime.CompilerServices;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 
@@ -99,6 +100,19 @@ namespace Reddit.Models.Internal
             return restRequest;
         }
 
+        public string GetVersion()
+        {
+            string res = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            if (string.IsNullOrWhiteSpace(res) || !res.Contains("."))
+            {
+                return res;
+            }
+
+            string ver = res.Substring(0, res.LastIndexOf("."));
+
+            return ver + (res.EndsWith(".1") ? "-develop" : "");
+        }
+
         public string ExecuteRequest(string url, Method method = Method.GET, bool asAsync = false)
         {
             return ExecuteRequest(PrepareRequest(url, method), asAsync);
@@ -112,7 +126,7 @@ namespace Reddit.Models.Internal
             // Add to recent request history (used for ratelimiting purposes).  --Kris
             AddRequest();
 
-            restRequest.AddHeader("User-Agent", "Reddit.NET");
+            restRequest.AddHeader("User-Agent", "Reddit.NET v" + GetVersion());
 
             bool ratelimited;
             int ratelimitRetry = 100;
