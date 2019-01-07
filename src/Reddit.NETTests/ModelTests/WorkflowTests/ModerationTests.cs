@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Models.Inputs;
 using Reddit.Models.Inputs.Moderation;
+using Reddit.Models.Inputs.Users;
 using Reddit.Things;
 
 namespace RedditTests.ModelTests.WorkflowTests
@@ -31,7 +32,7 @@ namespace RedditTests.ModelTests.WorkflowTests
 
             Validate(patsy);
 
-            GenericContainer res = reddit.Models.Users.Friend(null, null, null, null, 999, patsy.Name, "+mail", "moderator_invite", testData["Subreddit"]);
+            GenericContainer res = reddit.Models.Users.Friend(new UsersFriendInput(patsy.Name, "moderator_invite"), testData["Subreddit"]);
 
             Validate(res);
 
@@ -91,7 +92,7 @@ namespace RedditTests.ModelTests.WorkflowTests
 
             Validate(patsy);
 
-            GenericContainer res = reddit.Models.Users.Friend(null, null, null, null, 999, patsy.Name, "", "contributor", testData["Subreddit"]);
+            GenericContainer res = reddit.Models.Users.Friend(new UsersFriendInput(patsy.Name, "contributor", permissions: ""), testData["Subreddit"]);
 
             Validate(res);
 

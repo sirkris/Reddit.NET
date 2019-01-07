@@ -3,6 +3,7 @@ using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Models.Inputs.Moderation;
 using Reddit.Models.Inputs.Subreddits;
+using Reddit.Models.Inputs.Users;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -877,9 +878,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="username">the name of an existing user</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
-        public void ModeratorInvite(string username, string permissions)
+        public void ModeratorInvite(string username, string permissions, int duration = 999)
         {
-            Validate(Dispatch.Users.Friend(null, null, null, null, 999, username, permissions, "moderator_invite", Name));
+            Validate(Dispatch.Users.Friend(new UsersFriendInput(username, "moderator_invite", duration, permissions), Name));
         }
 
         /// <summary>
@@ -887,11 +888,11 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="username">the name of an existing user</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
-        public async Task ModeratorInviteAsync(string username, string permissions)
+        public async Task ModeratorInviteAsync(string username, string permissions, int duration = 999)
         {
             await Task.Run(() =>
             {
-                ModeratorInvite(username, permissions);
+                ModeratorInvite(username, permissions, duration);
             });
         }
 
@@ -903,7 +904,7 @@ namespace Reddit.Controllers
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
         public void SetUserPermissions(string username, string permissions, string type)
         {
-            Validate(Dispatch.Users.SetPermissions(username, permissions, type, Name));
+            Validate(Dispatch.Users.SetPermissions(new UsersSetPermissionsInput(username, permissions, type), Name));
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             User patsy = reddit.User(GetTargetUserModel());
 
             patsy.AddRelationship("", "", "", "", 999, "+mail", "moderator_invite", testData["Subreddit"]);
-            patsy.RemoveRelationship("", "moderator_invite", testData["Subreddit"]);
+            patsy.RemoveRelationship("moderator_invite", "", testData["Subreddit"]);
         }
     }
 }

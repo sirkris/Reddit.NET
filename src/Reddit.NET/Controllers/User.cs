@@ -1,6 +1,7 @@
 ﻿using Reddit.Exceptions;
 using Reddit.Models.Inputs.Flair;
 using Reddit.Models.Inputs.LiveThreads;
+using Reddit.Models.Inputs.Users;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -201,7 +202,7 @@ namespace Reddit.Controllers
         public void AddRelationship(string banContext, string banMessage, string banReason, string container, int duration,
             string permissions, string type, string subreddit = null)
         {
-            Validate(Dispatch.Users.Friend(banContext, banMessage, banReason, container, duration, Name, permissions, type, subreddit));
+            Validate(Dispatch.Users.Friend(new UsersFriendInput(Name, type, duration, permissions, banContext, banMessage, banReason, container), subreddit));
         }
 
         // TODO - Break this fucker up into multiple methods.  --Kris
@@ -252,12 +253,12 @@ namespace Reddit.Controllers
         /// enemy: Use /api/block
         /// Complement to POST_friend
         /// </summary>
-        /// <param name="container"></param>
         /// <param name="type">one of (friend, enemy, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
+        /// <param name="container"></param>
         /// <param name="subreddit">A subreddit</param>
-        public void RemoveRelationship(string container, string type, string subreddit = null)
+        public void RemoveRelationship(string type, string container = "", string subreddit = null)
         {
-            Dispatch.Users.Unfriend(container, Fullname, Name, type, subreddit);
+            Dispatch.Users.Unfriend(new UsersUnfriendInput(Name, Fullname, type, container), subreddit);
         }
 
         // Note - I tested this one manually.  Leaving out of automated tests so as not to spam the Reddit admins.  --Kris
@@ -266,9 +267,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="details">JSON data</param>
         /// <param name="reason">a string no longer than 100 characters</param>
-        public void Report(string details, string reason)
+        public void Report(string reason, string details = "{}")
         {
-            Dispatch.Users.ReportUser(details, reason, Name);
+            Dispatch.Users.ReportUser(new UsersReportUserInput(Name, reason, details));
         }
 
         /// <summary>
@@ -276,7 +277,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="details">JSON data</param>
         /// <param name="reason">a string no longer than 100 characters</param>
-        public async Task ReportAsync(string details, string reason)
+        public async Task ReportAsync(string reason, string details = "{}")
         {
             await Task.Run(() =>
             {
@@ -292,7 +293,7 @@ namespace Reddit.Controllers
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
         public void SetPermissions(string subreddit, string permissions, string type)
         {
-            Validate(Dispatch.Users.SetPermissions(Name, permissions, type, subreddit));
+            Validate(Dispatch.Users.SetPermissions(new UsersSetPermissionsInput(Name, permissions, type), subreddit));
         }
 
         /// <summary>
@@ -370,12 +371,14 @@ namespace Reddit.Controllers
         {
             if (sort.Equals("newForced", StringComparison.OrdinalIgnoreCase))
             {
-                return Listings.ForceNewSort(Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, "new", t, after, before, includeCategories, count, limit, srDetail)),
+                return Listings.ForceNewSort(Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where,
+                    new UsersHistoryInput(t, "new", context, after, before, count, limit, show, srDetail, includeCategories))),
                     Dispatch));
             }
             else
             {
-                return Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, context, show, sort, t, after, before, includeCategories, count, limit, srDetail)), Dispatch);
+                return Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where,
+                    new UsersHistoryInput(t, sort, context, after, before, count, limit, show, srDetail, includeCategories))), Dispatch);
             }
         }
 
@@ -397,8 +400,8 @@ namespace Reddit.Controllers
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            return Listings.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", context, show, sort, t, after, before, includeCategories, count, limit, 
-                srDetail)), Dispatch);
+            return Listings.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments",
+                    new UsersHistoryInput(t, sort, context, after, before, count, limit, show, srDetail, includeCategories))), Dispatch);
         }
 
         /// <summary>
@@ -698,7 +701,7 @@ namespace Reddit.Controllers
         /// </summary>
         public void Block()
         {
-            Validate(Dispatch.Users.BlockUser(Fullname ?? null, Name ?? null));
+            Validate(Dispatch.Users.BlockUser(new UsersBlockUserInput(Fullname ?? null, Name ?? null)));
         }
 
         /// <summary>

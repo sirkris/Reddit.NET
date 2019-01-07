@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.Models.Inputs.Users;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -71,10 +72,10 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void FriendInviteMod()
         {
-            GenericContainer res = reddit.Models.Users.Friend(null, null, null, null, 999, "RedditDotNetBot", "+mail", "moderator_invite", testData["Subreddit"]);
+            GenericContainer res = reddit.Models.Users.Friend(new UsersFriendInput("RedditDotNetBot", "moderator_invite"), testData["Subreddit"]);
 
             // While we're at it, let's use this opportunity to test the SetPermissions endpoint.  --Kris
-            GenericContainer res2 = reddit.Models.Users.SetPermissions("RedditDotNetBot", "+wiki", "moderator_invite", testData["Subreddit"]);
+            GenericContainer res2 = reddit.Models.Users.SetPermissions(new UsersSetPermissionsInput("RedditDotNetBot", "+wiki", "moderator_invite"), testData["Subreddit"]);
 
             Validate(res);
             Validate(res2);
@@ -83,7 +84,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void PostHistoryOverview()
         {
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "overview", 10, "all", "", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "overview", new UsersHistoryInput(context: 10));
 
             Validate(history);
         }
@@ -91,7 +92,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void PostHistorySubmitted()
         {
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "submitted", 10, "all", null, "all", "", "", false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "submitted", new UsersHistoryInput(context: 10));
 
             Validate(history);
         }
@@ -99,7 +100,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void PostHistoryUpvoted()
         {
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "upvoted", 10, "all", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "upvoted", new UsersHistoryInput(sort: "top", context: 10));
 
             Validate(history);
         }
@@ -107,7 +108,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void PostHistoryDownvoted()
         {
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "downvoted", 10, "all", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "downvoted", new UsersHistoryInput(sort: "top", context: 10));
 
             Validate(history);
         }
@@ -115,7 +116,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void PostHistoryHidden()
         {
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "hidden", 10, "all", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "hidden", new UsersHistoryInput(sort: "top", context: 10));
 
             Validate(history);
         }
@@ -123,7 +124,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void PostHistorySaved()
         {
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "saved", 10, "all", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "saved", new UsersHistoryInput(sort: "top", context: 10));
 
             Validate(history);
         }
@@ -131,7 +132,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void PostHistoryGilded()
         {
-            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "gilded", 10, "all", "top", "all", null, null, false);
+            PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "gilded", new UsersHistoryInput(sort: "top", context: 10));
 
             Validate(history, true);
         }
@@ -139,7 +140,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void CommentHistoryComments()
         {
-            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "comments", 10, "all", "top", "all", null, null, false);
+            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "comments", new UsersHistoryInput(sort: "top", context: 10));
 
             Validate(history);
         }
@@ -147,7 +148,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void CommentHistorySaved()
         {
-            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "saved", 10, "all", "top", "all", null, null, false);
+            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "saved", new UsersHistoryInput(sort: "top", context: 10));
 
             Validate(history);
         }
@@ -155,7 +156,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void CommentHistoryGilded()
         {
-            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "gilded", 10, "all", "top", "all", null, null, false);
+            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "gilded", new UsersHistoryInput(sort: "top", context: 10));
 
             Validate(history, true);
         }
@@ -164,10 +165,10 @@ namespace RedditTests.ModelTests
         public void BlockAndUnblock()
         {
             // Block user.
-            UserActionResult res = reddit.Models.Users.BlockUser("", "RedditDotNetBot");
+            UserActionResult res = reddit.Models.Users.BlockUser(new UsersBlockUserInput(name: "RedditDotNetBot"));
 
             // Unblock user (returns empty JSON).
-            reddit.Models.Users.Unfriend("t2_6vsit", "", "RedditDotNetBot", "enemy");
+            reddit.Models.Users.Unfriend(new UsersUnfriendInput("RedditDotNetBot", "t2_6vsit", "enemy"));
 
             Assert.IsNotNull(res);
         }
