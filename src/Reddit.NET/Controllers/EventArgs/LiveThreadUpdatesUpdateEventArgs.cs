@@ -5,9 +5,9 @@ namespace Reddit.Controllers.EventArgs
 {
     public class LiveThreadUpdatesUpdateEventArgs
     {
-        public List<Things.LiveUpdate> OldUpdates { get; set; }
-        public List<Things.LiveUpdate> NewUpdates { get; set; }
-        public List<Things.LiveUpdate> Added { get; set; }
-        public List<Things.LiveUpdate> Removed { get; set; }
+        public List<LiveUpdate> OldUpdates { get; set; }
+        public List<LiveUpdate> NewUpdates { get; set; }
+        public List<LiveUpdate> Added { get; set; }
+        public List<LiveUpdate> Removed { get; set; }
     }
 }

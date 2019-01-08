@@ -104,7 +104,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch">An instance of the Dispatch controller</param>
         /// <param name="postResultShortData">Data returned by the Reddit API when creating a new post</param>
         /// <param name="selfPost">The SelfPost instance that executed the submission</param>
-        public SelfPost(ref Dispatch dispatch, Things.PostResultShortData postResultShortData, SelfPost selfPost)
+        public SelfPost(ref Dispatch dispatch, PostResultShortData postResultShortData, SelfPost selfPost)
             : base(ref dispatch, selfPost.Subreddit, selfPost.Title, selfPost.Author, postResultShortData.Id, postResultShortData.Name,
                   selfPost.Permalink, selfPost.Created, selfPost.Edited, selfPost.Score, selfPost.UpVotes, selfPost.DownVotes,
                   selfPost.Removed, selfPost.Spam, selfPost.NSFW)
@@ -212,7 +212,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public new SelfPost About()
         {
-            Things.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
                 || info.Posts == null
                 || info.Posts.Count == 0

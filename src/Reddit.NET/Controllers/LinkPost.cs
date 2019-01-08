@@ -134,7 +134,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         /// <param name="postResultShortData"></param>
         /// <param name="linkPost"></param>
-        public LinkPost(ref Dispatch dispatch, Things.PostResultShortData postResultShortData, LinkPost linkPost)
+        public LinkPost(ref Dispatch dispatch, PostResultShortData postResultShortData, LinkPost linkPost)
             : base(ref dispatch, linkPost.Subreddit, linkPost.Title, linkPost.Author, postResultShortData.Id, postResultShortData.Name,
                   linkPost.Permalink, linkPost.Created, linkPost.Edited, linkPost.Score, linkPost.UpVotes, linkPost.DownVotes,
                   linkPost.Removed, linkPost.Spam, linkPost.NSFW)
@@ -205,7 +205,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public new LinkPost About()
         {
-            Things.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
+            Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
                 || info.Posts == null
                 || info.Posts.Count == 0

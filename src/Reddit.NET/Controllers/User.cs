@@ -2,6 +2,7 @@
 using Reddit.Models.Inputs.Flair;
 using Reddit.Models.Inputs.LiveThreads;
 using Reddit.Models.Inputs.Users;
+using Reddit.Models.Inputs.Wiki;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -657,7 +658,7 @@ namespace Reddit.Controllers
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         public void AllowWikiEdit(string page, string subreddit = null)
         {
-            Dispatch.Wiki.AllowEditor(page, Name, subreddit);
+            Dispatch.Wiki.AllowEditor(new WikiPageEditorInput(page, Name), subreddit);
         }
 
         /// <summary>
@@ -680,7 +681,7 @@ namespace Reddit.Controllers
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         public void DenyWikiEdit(string page, string subreddit = null)
         {
-            Dispatch.Wiki.DenyEditor(page, Name, subreddit);
+            Dispatch.Wiki.DenyEditor(new WikiPageEditorInput(page, Name), subreddit);
         }
 
         /// <summary>

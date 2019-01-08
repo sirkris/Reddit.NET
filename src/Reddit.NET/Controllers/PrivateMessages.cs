@@ -26,7 +26,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of inbox messages.
         /// </summary>
-        public List<Things.Message> Inbox
+        public List<Message> Inbox
         {
             get
             {
@@ -38,12 +38,12 @@ namespace Reddit.Controllers
                 inbox = value;
             }
         }
-        internal List<Things.Message> inbox;
+        internal List<Message> inbox;
 
         /// <summary>
         /// List of unread messages.
         /// </summary>
-        public List<Things.Message> Unread
+        public List<Message> Unread
         {
             get
             {
@@ -55,12 +55,12 @@ namespace Reddit.Controllers
                 unread = value;
             }
         }
-        internal List<Things.Message> unread;
+        internal List<Message> unread;
 
         /// <summary>
         /// List of sent messages.
         /// </summary>
-        public List<Things.Message> Sent
+        public List<Message> Sent
         {
             get
             {
@@ -72,7 +72,7 @@ namespace Reddit.Controllers
                 sent = value;
             }
         }
-        internal List<Things.Message> sent;
+        internal List<Message> sent;
 
         private DateTime? InboxLastUpdated;
         private DateTime? UnreadLastUpdated;
@@ -87,13 +87,13 @@ namespace Reddit.Controllers
         /// <param name="inbox"></param>
         /// <param name="unread"></param>
         /// <param name="sent"></param>
-        public PrivateMessages(ref Dispatch dispatch, List<Things.Message> inbox = null, List<Things.Message> unread = null,
-            List<Things.Message> sent = null) 
+        public PrivateMessages(ref Dispatch dispatch, List<Message> inbox = null, List<Message> unread = null,
+            List<Message> sent = null) 
             : base()
         {
-            Inbox = inbox ?? new List<Things.Message>();
-            Unread = unread ?? new List<Things.Message>();
-            Sent = sent ?? new List<Things.Message>();
+            Inbox = inbox ?? new List<Message>();
+            Unread = unread ?? new List<Message>();
+            Sent = sent ?? new List<Message>();
 
             Threads = new Dictionary<string, Thread>();
 
@@ -114,16 +114,16 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="mid"></param>
         /// <returns>A list of messages.</returns>
-        public List<Things.Message> GetMessages(string where, bool mark = true, int limit = 25, string after = "", string before = "",
+        public List<Message> GetMessages(string where, bool mark = true, int limit = 25, string after = "", string before = "",
             string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
         {
-            Things.MessageContainer messageContainer = Dispatch.PrivateMessages.GetMessages(where, new PrivateMessagesGetMessagesInput(mark, mid, after, before, includeCategories,
+            MessageContainer messageContainer = Dispatch.PrivateMessages.GetMessages(where, new PrivateMessagesGetMessagesInput(mark, mid, after, before, includeCategories,
                 count, limit, show, srDetail));
 
-            List<Things.Message> res = new List<Things.Message>();
+            List<Message> res = new List<Message>();
             if (messageContainer != null && messageContainer.Data != null && messageContainer.Data.Children != null)
             {
-                foreach (Things.MessageChild messageChild in messageContainer.Data.Children)
+                foreach (MessageChild messageChild in messageContainer.Data.Children)
                 {
                     res.Add(messageChild.Data);
                 }
@@ -161,7 +161,7 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="mid"></param>
         /// <returns>A list of messages.</returns>
-        public List<Things.Message> GetMessagesInbox(bool mark = true, int limit = 25, string after = "", string before = "",
+        public List<Message> GetMessagesInbox(bool mark = true, int limit = 25, string after = "", string before = "",
             string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
         {
             return GetMessages("inbox", mark, limit, after, before, show, srDetail, includeCategories, count, mid);
@@ -180,7 +180,7 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="mid"></param>
         /// <returns>A list of messages.</returns>
-        public List<Things.Message> GetMessagesUnread(bool mark = true, int limit = 25, string after = "", string before = "",
+        public List<Message> GetMessagesUnread(bool mark = true, int limit = 25, string after = "", string before = "",
             string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
         {
             return GetMessages("unread", mark, limit, after, before, show, srDetail, includeCategories, count, mid);
@@ -199,7 +199,7 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="mid"></param>
         /// <returns>A list of messages.</returns>
-        public List<Things.Message> GetMessagesSent(bool mark = true, int limit = 25, string after = "", string before = "",
+        public List<Message> GetMessagesSent(bool mark = true, int limit = 25, string after = "", string before = "",
             string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
         {
             return GetMessages("sent", mark, limit, after, before, show, srDetail, includeCategories, count, mid);
@@ -432,8 +432,8 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains("PrivateMessages"))
             {
-                List<Things.Message> oldList;
-                List<Things.Message> newList;
+                List<Message> oldList;
+                List<Message> newList;
                 switch (type)
                 {
                     default:
@@ -452,7 +452,7 @@ namespace Reddit.Controllers
                         break;
                 }
 
-                if (Listings.ListDiff(oldList, newList, out List<Things.Message> added, out List<Things.Message> removed))
+                if (Listings.ListDiff(oldList, newList, out List<Message> added, out List<Message> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     MessagesUpdateEventArgs args = new MessagesUpdateEventArgs

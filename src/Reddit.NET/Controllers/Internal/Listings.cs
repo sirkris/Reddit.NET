@@ -120,22 +120,22 @@ namespace Reddit.Controllers.Internal
             }
         }
 
-        public List<Post> GetPosts(Things.PostResultContainer postContainer, Dispatch dispatch)
+        public List<Post> GetPosts(PostResultContainer postContainer, Dispatch dispatch)
         {
             return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts);
         }
 
-        public List<Post> GetPosts(Things.PostResultContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts)
+        public List<Post> GetPosts(PostResultContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts)
         {
             return GetPosts(postContainer, dispatch, out linkPosts, out List<SelfPost> selfPosts);
         }
 
-        public List<Post> GetPosts(Things.PostResultContainer postContainer, Dispatch dispatch, out List<SelfPost> selfPosts)
+        public List<Post> GetPosts(PostResultContainer postContainer, Dispatch dispatch, out List<SelfPost> selfPosts)
         {
             return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out selfPosts);
         }
 
-        public List<Post> GetPosts(Things.PostResultContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
+        public List<Post> GetPosts(PostResultContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
         {
             linkPosts = new List<LinkPost>();
             selfPosts = new List<SelfPost>();
@@ -146,7 +146,7 @@ namespace Reddit.Controllers.Internal
             }
 
             List<Post> posts = new List<Post>();
-            foreach (Things.PostChild postChild in postContainer.JSON.Data.Things)
+            foreach (PostChild postChild in postContainer.JSON.Data.Things)
             {
                 if (postChild.Data != null)
                 {
@@ -168,22 +168,22 @@ namespace Reddit.Controllers.Internal
             return posts;
         }
 
-        public List<Post> GetPosts(Things.PostContainer postContainer, Dispatch dispatch)
+        public List<Post> GetPosts(PostContainer postContainer, Dispatch dispatch)
         {
             return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts);
         }
 
-        public List<Post> GetPosts(Things.PostContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts)
+        public List<Post> GetPosts(PostContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts)
         {
             return GetPosts(postContainer, dispatch, out linkPosts, out List<SelfPost> selfPosts);
         }
 
-        public List<Post> GetPosts(Things.PostContainer postContainer, Dispatch dispatch, out List<SelfPost> selfPosts)
+        public List<Post> GetPosts(PostContainer postContainer, Dispatch dispatch, out List<SelfPost> selfPosts)
         {
             return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out selfPosts);
         }
 
-        public List<Post> GetPosts(Things.PostContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
+        public List<Post> GetPosts(PostContainer postContainer, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
         {
             linkPosts = new List<LinkPost>();
             selfPosts = new List<SelfPost>();
@@ -194,7 +194,7 @@ namespace Reddit.Controllers.Internal
             }
 
             List<Post> posts = new List<Post>();
-            foreach (Things.PostChild postChild in postContainer.Data.Children)
+            foreach (PostChild postChild in postContainer.Data.Children)
             {
                 if (postChild.Data != null)
                 {
@@ -216,22 +216,22 @@ namespace Reddit.Controllers.Internal
             return posts;
         }
 
-        public List<Post> GetPosts(List<Things.PostContainer> postContainers, Dispatch dispatch)
+        public List<Post> GetPosts(List<PostContainer> postContainers, Dispatch dispatch)
         {
             return GetPosts(postContainers, dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts);
         }
 
-        public List<Post> GetPosts(List<Things.PostContainer> postContainers, Dispatch dispatch, out List<LinkPost> linkPosts)
+        public List<Post> GetPosts(List<PostContainer> postContainers, Dispatch dispatch, out List<LinkPost> linkPosts)
         {
             return GetPosts(postContainers, dispatch, out linkPosts, out List<SelfPost> selfPosts);
         }
 
-        public List<Post> GetPosts(List<Things.PostContainer> postContainers, Dispatch dispatch, out List<SelfPost> selfPosts)
+        public List<Post> GetPosts(List<PostContainer> postContainers, Dispatch dispatch, out List<SelfPost> selfPosts)
         {
             return GetPosts(postContainers, dispatch, out List<LinkPost> linkPosts, out selfPosts);
         }
 
-        public List<Post> GetPosts(List<Things.PostContainer> postContainers, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
+        public List<Post> GetPosts(List<PostContainer> postContainers, Dispatch dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts)
         {
             linkPosts = new List<LinkPost>();
             selfPosts = new List<SelfPost>();
@@ -242,7 +242,7 @@ namespace Reddit.Controllers.Internal
             }
 
             List<Post> posts = new List<Post>();
-            foreach (Things.PostContainer postContainer in postContainers)
+            foreach (PostContainer postContainer in postContainers)
             {
                 posts.AddRange(GetPosts(postContainer, dispatch, out linkPosts, out selfPosts));
             }
@@ -250,7 +250,7 @@ namespace Reddit.Controllers.Internal
             return posts;
         }
 
-        public List<Comment> GetComments(Things.CommentResultContainer commentContainer, Dispatch dispatch)
+        public List<Comment> GetComments(CommentResultContainer commentContainer, Dispatch dispatch)
         {
             if (commentContainer == null || commentContainer.JSON == null || commentContainer.JSON.Data == null || commentContainer.JSON.Data.Things == null)
             {
@@ -258,7 +258,7 @@ namespace Reddit.Controllers.Internal
             }
 
             List<Comment> comments = new List<Comment>();
-            foreach (Things.CommentChild commentChild in commentContainer.JSON.Data.Things)
+            foreach (CommentChild commentChild in commentContainer.JSON.Data.Things)
             {
                 if (commentChild.Data != null)
                 {
@@ -269,7 +269,7 @@ namespace Reddit.Controllers.Internal
             return comments;
         }
 
-        public List<Comment> GetComments(Things.CommentContainer commentContainer, Dispatch dispatch)
+        public List<Comment> GetComments(CommentContainer commentContainer, Dispatch dispatch)
         {
             if (commentContainer == null || commentContainer.Data == null || commentContainer.Data.Children == null)
             {
@@ -277,7 +277,7 @@ namespace Reddit.Controllers.Internal
             }
 
             List<Comment> comments = new List<Comment>();
-            foreach (Things.CommentChild commentChild in commentContainer.Data.Children)
+            foreach (CommentChild commentChild in commentContainer.Data.Children)
             {
                 if (commentChild.Data != null)
                 {
@@ -288,15 +288,15 @@ namespace Reddit.Controllers.Internal
             return comments;
         }
 
-        public List<Comment> GetComments(List<(Things.PostContainer, Things.CommentContainer)> ps, Dispatch dispatch)
+        public List<Comment> GetComments(List<(PostContainer, CommentContainer)> ps, Dispatch dispatch)
         {
             return GetComments(ps[0].Item2, dispatch);
         }
 
-        public List<Subreddit> GetSubreddits(Things.SubredditContainer subredditContainer, Dispatch dispatch)
+        public List<Subreddit> GetSubreddits(SubredditContainer subredditContainer, Dispatch dispatch)
         {
             List<Subreddit> subreddits = new List<Subreddit>();
-            foreach (Things.SubredditChild subredditChild in subredditContainer.Data.Children)
+            foreach (SubredditChild subredditChild in subredditContainer.Data.Children)
             {
                 if (subredditChild.Data != null)
                 {
@@ -307,10 +307,10 @@ namespace Reddit.Controllers.Internal
             return subreddits;
         }
 
-        public List<Things.LiveUpdate> GetLiveUpdates(Things.LiveUpdateContainer liveUpdateContainer)
+        public List<LiveUpdate> GetLiveUpdates(LiveUpdateContainer liveUpdateContainer)
         {
-            List<Things.LiveUpdate> res = new List<Things.LiveUpdate>();
-            foreach (Things.LiveUpdateChild liveUpdateChild in liveUpdateContainer.Data.Children)
+            List<LiveUpdate> res = new List<LiveUpdate>();
+            foreach (LiveUpdateChild liveUpdateChild in liveUpdateContainer.Data.Children)
             {
                 res.Add(liveUpdateChild.Data);
             }
@@ -318,7 +318,7 @@ namespace Reddit.Controllers.Internal
             return res;
         }
 
-        public List<T> GetAboutChildren<T>(Things.DynamicShortListingContainer dynamicShortListingContainer)
+        public List<T> GetAboutChildren<T>(DynamicShortListingContainer dynamicShortListingContainer)
         {
             List<T> res = new List<T>();
             if (dynamicShortListingContainer.Data.Children != null)

@@ -1,5 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs;
+using Reddit.Models.Inputs.Wiki;
 using Reddit.Things;
 
 namespace RedditTests.ModelTests
@@ -21,7 +23,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void Revisions()
         {
-            WikiPageRevisionContainer revisions = reddit.Models.Wiki.Revisions(null, null, "ShittyEmails");
+            WikiPageRevisionContainer revisions = reddit.Models.Wiki.Revisions(new SrListingInput(), "ShittyEmails");
 
             Assert.IsNotNull(revisions);
         }
@@ -29,7 +31,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void PageRevisions()
         {
-            WikiPageRevisionContainer pageRevisions = reddit.Models.Wiki.PageRevisions("index", null, null, "ShittyEmails");
+            WikiPageRevisionContainer pageRevisions = reddit.Models.Wiki.PageRevisions("index", new SrListingInput(), "ShittyEmails");
 
             Assert.IsNotNull(pageRevisions);
             Assert.IsTrue(pageRevisions.Data.Children.Count > 0);
@@ -46,9 +48,10 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void Page()
         {
-            WikiPageContainer page = reddit.Models.Wiki.Page("index", null, null, "ShittyEmails");
-            WikiPageContainer pageWithV = reddit.Models.Wiki.Page("index", "51c412fc-6b26-11e8-a963-0e7fba92da48", null, "ShittyEmails");
-            WikiPageContainer pageWithV2 = reddit.Models.Wiki.Page("index", "51c412fc-6b26-11e8-a963-0e7fba92da48", "483f05ca-6b26-11e8-b04f-0e02e061d980", "ShittyEmails");
+            WikiPageContainer page = reddit.Models.Wiki.Page("index", new WikiPageContentInput(), "ShittyEmails");
+            WikiPageContainer pageWithV = reddit.Models.Wiki.Page("index", new WikiPageContentInput("51c412fc-6b26-11e8-a963-0e7fba92da48"), "ShittyEmails");
+            WikiPageContainer pageWithV2 = reddit.Models.Wiki.Page("index", 
+                new WikiPageContentInput("51c412fc-6b26-11e8-a963-0e7fba92da48", "483f05ca-6b26-11e8-b04f-0e02e061d980"), "ShittyEmails");
 
             Validate(page);
             Validate(pageWithV);
@@ -61,7 +64,7 @@ namespace RedditTests.ModelTests
             // Creates the index page if it doesn't already exist.  The edit endpoint for existing pages is tested in the corresponding workflow tests.  --Kris
             try
             {
-                reddit.Models.Wiki.Edit("Lorem ipsum dolor sit amet, motherfucker.", "index", "", "Because I can.", testData["Subreddit"]);
+                reddit.Models.Wiki.Edit(new WikiEditPageInput("Lorem ipsum dolor sit amet, motherfucker.", "index", "Because I can."), testData["Subreddit"]);
             }
             catch (RedditConflictException) { }
         }

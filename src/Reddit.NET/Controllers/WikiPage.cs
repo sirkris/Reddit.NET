@@ -2,6 +2,8 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs;
+using Reddit.Models.Inputs.Wiki;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -106,7 +108,7 @@ namespace Reddit.Controllers
         /// <param name="username">the name of an existing user</param>
         public void AllowEditor(string username)
         {
-            Dispatch.Wiki.AllowEditor(Name, username, Subreddit);
+            Dispatch.Wiki.AllowEditor(new WikiPageEditorInput(Name, username), Subreddit);
         }
 
         /// <summary>
@@ -127,7 +129,7 @@ namespace Reddit.Controllers
         /// <param name="username">the name of an existing user</param>
         public void DenyEditor(string username)
         {
-            Dispatch.Wiki.DenyEditor(Name, username, Subreddit);
+            Dispatch.Wiki.DenyEditor(new WikiPageEditorInput(Name, username), Subreddit);
         }
 
         /// <summary>
@@ -163,7 +165,7 @@ namespace Reddit.Controllers
         /// <param name="previous">the starting point revision for this edit</param>
         public void Edit(string reason, string content = null, string previous = "")
         {
-            Dispatch.Wiki.Edit(content, Name, previous, reason, Subreddit);
+            Dispatch.Wiki.Edit(new WikiEditPageInput(content, Name, previous, reason), Subreddit);
         }
 
         /// <summary>
@@ -211,7 +213,7 @@ namespace Reddit.Controllers
         public WikiPage CreateAndReturn(string reason, string content = null)
         {
             Create(reason, content);
-            return new WikiPage(ref Dispatch, Dispatch.Wiki.Page(Name.ToLower(), "", "", Subreddit).Data, Subreddit, Name);
+            return new WikiPage(ref Dispatch, Dispatch.Wiki.Page(Name.ToLower(), new WikiPageContentInput(), Subreddit).Data, Subreddit, Name);
         }
 
         /// <summary>
@@ -221,7 +223,7 @@ namespace Reddit.Controllers
         /// <param name="content">The page content</param>
         public void Create(string reason, string content = null)
         {
-            Dispatch.Wiki.Create(content, Name, reason, Subreddit);
+            Dispatch.Wiki.Create(new WikiCreatePageInput(content, Name, reason), Subreddit);
         }
 
         /// <summary>
@@ -244,7 +246,7 @@ namespace Reddit.Controllers
         /// <returns>A boolean indicating true if page was hidden, false if page was unhidden.</returns>
         public bool Hide(string revision)
         {
-            return ((Things.StatusResult)Validate(Dispatch.Wiki.Hide(Name, revision, Subreddit))).Status;
+            return ((StatusResult)Validate(Dispatch.Wiki.Hide(new WikiPageRevisionInput(Name, revision), Subreddit))).Status;
         }
 
         /// <summary>
@@ -265,7 +267,7 @@ namespace Reddit.Controllers
         /// <param name="revision">a wiki revision ID</param>
         public void Revert(string revision)
         {
-            Dispatch.Wiki.Revert(Name, revision, Subreddit);
+            Dispatch.Wiki.Revert(new WikiPageRevisionInput(Name, revision), Subreddit);
         }
 
         /// <summary>
@@ -301,17 +303,17 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of revisions.</returns>
-        public List<Things.WikiPageRevision> Revisions(int limit = 25, string after = "", string before = "", string show = "all",
+        public List<WikiPageRevision> Revisions(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = false, int count = 0)
         {
-            return Validate(Dispatch.Wiki.PageRevisions(Name, after, before, Subreddit, count, limit, show, srDetail)).Data.Children;
+            return Validate(Dispatch.Wiki.PageRevisions(Name, new SrListingInput(after, before, count, limit, srDetail, show), Subreddit)).Data.Children;
         }
 
         /// <summary>
         /// Retrieve the current permission settings for page.
         /// </summary>
         /// <returns>An object containing wiki page settings.</returns>
-        public Things.WikiPageSettings GetPermissions()
+        public WikiPageSettings GetPermissions()
         {
             return Validate(Dispatch.Wiki.GetPermissions(Name, Subreddit)).Data;
         }
@@ -322,9 +324,9 @@ namespace Reddit.Controllers
         /// <param name="listed">boolean value (true = appear in /wiki/pages, false = don't appear in /wiki/pages)</param>
         /// <param name="permLevel">an integer (0 = use wiki perms, 1 = only approved users may edit, 2 = only mods may edit or view)</param>
         /// <returns>An object containing wiki page settings.</returns>
-        public Things.WikiPageSettings UpdatePermissions(bool listed, int permLevel)
+        public WikiPageSettings UpdatePermissions(bool listed, int permLevel)
         {
-            return Validate(Dispatch.Wiki.UpdatePermissions(Name, listed, permLevel, Subreddit)).Data;
+            return Validate(Dispatch.Wiki.UpdatePermissions(Name, new WikiUpdatePermissionsInput(listed, permLevel), Subreddit)).Data;
         }
 
         /// <summary>
@@ -345,7 +347,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="wikiPageSettings">A valid instance of WikiPageSettings</param>
         /// <returns>An object containing wiki page settings.</returns>
-        public Things.WikiPageSettings UpdatePermissions(Things.WikiPageSettings wikiPageSettings)
+        public WikiPageSettings UpdatePermissions(WikiPageSettings wikiPageSettings)
         {
             return Validate(Dispatch.Wiki.UpdatePermissions(Name, wikiPageSettings, Subreddit)).Data;
         }
@@ -354,7 +356,7 @@ namespace Reddit.Controllers
         /// Update the permissions and visibility of wiki page asynchronously.
         /// </summary>
         /// <param name="wikiPageSettings">A valid instance of WikiPageSettings</param>
-        public async Task UpdatePermissionsAsync(Things.WikiPageSettings wikiPageSettings)
+        public async Task UpdatePermissionsAsync(WikiPageSettings wikiPageSettings)
         {
             await Task.Run(() =>
             {
@@ -371,7 +373,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public WikiPage About(string v = "", string v2 = "")
         {
-            return new WikiPage(ref Dispatch, ((Things.WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, v, v2, Subreddit))).Data, Subreddit, Name);
+            return new WikiPage(ref Dispatch, ((WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, new WikiPageContentInput(v, v2), Subreddit))).Data, Subreddit, Name);
         }
 
         internal virtual void OnPagesUpdated(WikiPageUpdateEventArgs e)

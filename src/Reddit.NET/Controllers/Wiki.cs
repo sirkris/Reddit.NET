@@ -2,6 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Models.Inputs;
 using Reddit.Models.Inputs.Subreddits;
 using System;
 using System.Collections.Generic;
@@ -171,7 +172,7 @@ namespace Reddit.Controllers
         public List<Things.WikiPageRevision> GetRecentPageRevisions(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = false, int count = 0)
         {
-            return Validate(Dispatch.Wiki.Revisions(after, before, Subreddit, count, limit, show, srDetail)).Data.Children;
+            return Validate(Dispatch.Wiki.Revisions(new SrListingInput(after, before, count, limit, srDetail, show), Subreddit)).Data.Children;
         }
 
         internal virtual void OnPagesUpdated(WikiPagesUpdateEventArgs e)

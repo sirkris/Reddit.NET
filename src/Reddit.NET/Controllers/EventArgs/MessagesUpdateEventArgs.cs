@@ -5,9 +5,9 @@ namespace Reddit.Controllers.EventArgs
 {
     public class MessagesUpdateEventArgs
     {
-        public List<Things.Message> OldMessages { get; set; }
-        public List<Things.Message> NewMessages { get; set; }
-        public List<Things.Message> Added { get; set; }
-        public List<Things.Message> Removed { get; set; }
+        public List<Message> OldMessages { get; set; }
+        public List<Message> NewMessages { get; set; }
+        public List<Message> Added { get; set; }
+        public List<Message> Removed { get; set; }
     }
 }
