@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Reddit.Models.Inputs.Moderation;
+using Reddit.Models.Inputs.Users;
 using Reddit.Things;
 using RestSharp;
 
@@ -169,14 +170,11 @@ namespace Reddit.Models
         /// Abdicate moderator status in a subreddit.
         /// See also: /api/friend.
         /// </summary>
-        /// <param name="id">fullname of a thing</param>
-        public void LeaveModerator(string id)
+        /// <param name="fullname">fullname of the abdicating user</param>
+        /// <param name="subreddit">The name of the subreddit being abdicated</param>
+        public void LeaveModerator(string id, string subreddit)
         {
-            RestRequest restRequest = PrepareRequest("api/leavemoderator", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            ExecuteRequest(restRequest);
+            SendRequest<object>(Sr(subreddit) + "api/unfriend", new UsersUnfriendInput(null, id, "moderator"), Method.POST);
         }
 
         // TODO - Reddit API returns 500 server error when passing a user fullname (t2_2cclzaxt).  Maybe it expects a thread id, instead?  --Kris

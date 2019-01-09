@@ -72,7 +72,7 @@ namespace Reddit.Models
         /// The user can either be passed in by name (nuser) or by fullname (iuser).
         /// If type is friend or enemy, 'container' MUST be the current user's fullname; for other types, the subreddit must be set via URL (e.g., /r/funny/api/unfriend).
         /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
-        /// moderator: Use "moderator_invite"
+        /// moderator: modothers
         /// moderator_invite: modothers
         /// contributor: modcontributors
         /// banned: modcontributors

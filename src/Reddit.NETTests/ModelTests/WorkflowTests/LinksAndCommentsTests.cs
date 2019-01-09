@@ -48,7 +48,7 @@ namespace RedditTests.ModelTests.WorkflowTests
 
             Message message = GetTestMessage(messages, me.Name);
 
-            Assert.IsNotNull(message);  // If this fails, it likely means that the test message has not yet arrived.  --Kris
+            Assert.IsNotNull(message);  // If this fails, it likely means that the test message has not yet arrived or one test user is blocking the other.  --Kris
 
             // Now that we have our initial test message, let's reply to it.  --Kris
             CommentResultContainer commentResultContainer = reddit2.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("Message received.", message.Name));

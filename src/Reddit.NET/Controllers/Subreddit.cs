@@ -436,7 +436,7 @@ namespace Reddit.Controllers
         /// </summary>
         public void LeaveModerator()
         {
-            Dispatch.Moderation.LeaveModerator(Fullname);
+            Dispatch.Moderation.LeaveModerator("t2_" + Dispatch.Account.Me().Id, Name);
         }
 
         /// <summary>

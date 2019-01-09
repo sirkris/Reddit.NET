@@ -56,7 +56,7 @@ namespace RedditTests.ModelTests.WorkflowTests
                 }
             }
 
-            reddit2.Models.Moderation.LeaveModerator(reddit2.Models.Subreddits.About(testData["Subreddit"]).Data.Name);
+            reddit2.Models.Moderation.LeaveModerator("t2_" + patsy.Id, testData["Subreddit"]);
         }
 
         [TestMethod]
