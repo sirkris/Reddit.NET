@@ -203,7 +203,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateFlair(string username, string text, string cssClass = "")
         {
-            Validate(Dispatch.Flair.Create(new FlairCreateInput(text, "", username, cssClass), Subreddit));
+            CreateFlair(new FlairCreateInput(text, "", username, cssClass));
         }
 
         /// <summary>
@@ -217,6 +217,27 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 CreateFlair(username, text, cssClass);
+            });
+        }
+
+        /// <summary>
+        /// Create a new user flair.
+        /// </summary>
+        /// <param name="flairCreateInput">A valid FlairCreateInput instance</param>
+        public void CreateFlair(FlairCreateInput flairCreateInput)
+        {
+            Validate(Dispatch.Flair.Create(flairCreateInput, Subreddit));
+        }
+
+        /// <summary>
+        /// Create a new user flair asynchronously.
+        /// </summary>
+        /// <param name="flairCreateInput">A valid FlairCreateInput instance</param>
+        public async Task CreateFlairAsync(FlairCreateInput flairCreateInput)
+        {
+            await Task.Run(() =>
+            {
+                CreateFlair(flairCreateInput);
             });
         }
 
@@ -341,7 +362,18 @@ namespace Reddit.Controllers
         public List<FlairListResult> GetFlairList(string username = "", int limit = 25, string after = "", string before = "", int count = 0,
             string show = "all", bool srDetail = false)
         {
-            FlairList = Validate(Dispatch.Flair.FlairList(new FlairNameListingInput(username, after, before, limit, count, show, srDetail), Subreddit)).Users;
+            FlairList = GetFlairList(new FlairNameListingInput(username, after, before, limit, count, show, srDetail));
+            return FlairList;
+        }
+
+        /// <summary>
+        /// List of flairs.
+        /// </summary>
+        /// <param name="flairNameListingInput">A valid FlairNameListingInput instance</param>
+        /// <returns>Flair list results.</returns>
+        public List<FlairListResult> GetFlairList(FlairNameListingInput flairNameListingInput)
+        {
+            FlairList = Validate(Dispatch.Flair.FlairList(flairNameListingInput, Subreddit)).Users;
             FlairListLastUpdated = DateTime.Now;
             return FlairList;
         }
@@ -364,7 +396,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateLinkFlairTemplate(string text, bool textEditable = false, string cssClass = "")
         {
-            Validate(Dispatch.Flair.FlairTemplate(new FlairTemplateInput(text, "LINK_FLAIR", textEditable, cssClass), Subreddit));
+            CreateLinkFlairTemplate(new FlairTemplateInput(text, "LINK_FLAIR", textEditable, cssClass));
         }
 
         /// <summary>
@@ -382,6 +414,27 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Create a new link flair template.
+        /// </summary>
+        /// <param name="flairTemplateInput">A valid FlairTemplateInput instance</param>
+        public void CreateLinkFlairTemplate(FlairTemplateInput flairTemplateInput)
+        {
+            Validate(Dispatch.Flair.FlairTemplate(flairTemplateInput, Subreddit));
+        }
+
+        /// <summary>
+        /// Create a new link flair template asynchronously.
+        /// </summary>
+        /// <param name="flairTemplateInput">A valid FlairTemplateInput instance</param>
+        public async Task CreateLinkFlairTemplateAsync(FlairTemplateInput flairTemplateInput)
+        {
+            await Task.Run(() =>
+            {
+                CreateLinkFlairTemplate(flairTemplateInput);
+            });
+        }
+
+        /// <summary>
         /// Create a new user flair template.
         /// </summary>
         /// <param name="text">a string no longer than 64 characters</param>
@@ -389,7 +442,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateUserFlairTemplate(string text, bool textEditable = false, string cssClass = "")
         {
-            Validate(Dispatch.Flair.FlairTemplate(new FlairTemplateInput(text, "USER_FLAIR", textEditable, cssClass), Subreddit));
+            CreateUserFlairTemplate(new FlairTemplateInput(text, "USER_FLAIR", textEditable, cssClass));
         }
 
         /// <summary>
@@ -407,6 +460,27 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Create a new user flair template.
+        /// </summary>
+        /// <param name="flairTemplateInput">A valid FlairTemplateInput instance</param>
+        public void CreateUserFlairTemplate(FlairTemplateInput flairTemplateInput)
+        {
+            Validate(Dispatch.Flair.FlairTemplate(flairTemplateInput, Subreddit));
+        }
+
+        /// <summary>
+        /// Create a new user flair template asynchronously.
+        /// </summary>
+        /// <param name="flairTemplateInput">A valid FlairTemplateInput instance</param>
+        public async Task CreateUserFlairTemplateAsync(FlairTemplateInput flairTemplateInput)
+        {
+            await Task.Run(() =>
+            {
+                CreateUserFlairTemplate(flairTemplateInput);
+            });
+        }
+
+        /// <summary>
         /// Update an existing link flair template.
         /// </summary>
         /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
@@ -415,7 +489,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void UpdateLinkFlairTemplate(string flairTemplateId, string text = null, bool? textEditable = null, string cssClass = null)
         {
-            Validate(Dispatch.Flair.FlairTemplate(new FlairTemplateInput(text, "LINK_FLAIR", textEditable, cssClass, flairTemplateId), Subreddit));
+            UpdateLinkFlairTemplate(new FlairTemplateInput(text, "LINK_FLAIR", textEditable, cssClass, flairTemplateId));
         }
 
         /// <summary>
@@ -434,6 +508,27 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Update an existing link flair template.
+        /// </summary>
+        /// <param name="flairTemplateInput">A valid FlairTemplateInput instance</param>
+        public void UpdateLinkFlairTemplate(FlairTemplateInput flairTemplateInput)
+        {
+            Validate(Dispatch.Flair.FlairTemplate(flairTemplateInput, Subreddit));
+        }
+
+        /// <summary>
+        /// Update an existing link flair template asynchronously.
+        /// </summary>
+        /// <param name="flairTemplateInput">A valid FlairTemplateInput instance</param>
+        public async Task UpdateLinkFlairTemplateAsync(FlairTemplateInput flairTemplateInput)
+        {
+            await Task.Run(() =>
+            {
+                UpdateLinkFlairTemplate(flairTemplateInput);
+            });
+        }
+
+        /// <summary>
         /// Update an existing user flair template.
         /// </summary>
         /// <param name="flairTemplateId">The ID of the flair template being updated (e.g. "0778d5ec-db43-11e8-9258-0e3a02270976")</param>
@@ -442,7 +537,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void UpdateUserFlairTemplate(string flairTemplateId, string text = null, bool? textEditable = null, string cssClass = null)
         {
-            Validate(Dispatch.Flair.FlairTemplate(new FlairTemplateInput(text, "USER_FLAIR", textEditable, cssClass, flairTemplateId), Subreddit));
+            UpdateUserFlairTemplate(new FlairTemplateInput(text, "USER_FLAIR", textEditable, cssClass, flairTemplateId));
         }
 
         /// <summary>
@@ -461,6 +556,27 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Update an existing user flair template.
+        /// </summary>
+        /// <param name="flairTemplateInput">A valid FlairTemplateInput instance</param>
+        public void UpdateUserFlairTemplate(FlairTemplateInput flairTemplateInput)
+        {
+            Validate(Dispatch.Flair.FlairTemplate(flairTemplateInput, Subreddit));
+        }
+
+        /// <summary>
+        /// Update an existing user flair template asynchronously.
+        /// </summary>
+        /// <param name="flairTemplateInput">A valid FlairTemplateInput instance</param>
+        public async Task UpdateUserFlairTemplateAsync(FlairTemplateInput flairTemplateInput)
+        {
+            await Task.Run(() =>
+            {
+                UpdateUserFlairTemplate(flairTemplateInput);
+            });
+        }
+
+        /// <summary>
         /// Create a new link flair template.
         /// This new endpoint is primarily used for the redesign.
         /// </summary>
@@ -473,7 +589,7 @@ namespace Reddit.Controllers
         public FlairV2 CreateLinkFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(new FlairTemplateV2Input(text, "LINK_FLAIR", textEditable, textColor, backgroundColor, "", modOnly), Subreddit));
+            return CreateLinkFlairTemplateV2(new FlairTemplateV2Input(text, "LINK_FLAIR", textEditable, textColor, backgroundColor, "", modOnly));
         }
 
         /// <summary>
@@ -495,6 +611,30 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Create a new link flair template.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateV2Input">A valid FlairTemplateV2Input instance</param>
+        /// <returns>The created flair object.</returns>
+        public FlairV2 CreateLinkFlairTemplateV2(FlairTemplateV2Input flairTemplateV2Input)
+        {
+            return Validate(Dispatch.Flair.FlairTemplateV2(flairTemplateV2Input, Subreddit));
+        }
+
+        /// <summary>
+        /// Create a new link flair template asynchronously.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateV2Input">A valid FlairTemplateV2Input instance</param>
+        public async Task CreateLinkFlairTemplateV2Async(FlairTemplateV2Input flairTemplateV2Input)
+        {
+            await Task.Run(() =>
+            {
+                CreateLinkFlairTemplateV2(flairTemplateV2Input);
+            });
+        }
+
+        /// <summary>
         /// Create a new user flair template.
         /// This new endpoint is primarily used for the redesign.
         /// </summary>
@@ -507,7 +647,7 @@ namespace Reddit.Controllers
         public FlairV2 CreateUserFlairTemplateV2(string text, bool textEditable = false, string textColor = "dark",
             string backgroundColor = "#EEEEFF", bool modOnly = false)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(new FlairTemplateV2Input(text, "USER_FLAIR", textEditable, textColor, backgroundColor, "", modOnly), Subreddit));
+            return CreateUserFlairTemplateV2(new FlairTemplateV2Input(text, "USER_FLAIR", textEditable, textColor, backgroundColor, "", modOnly));
         }
 
         /// <summary>
@@ -529,6 +669,30 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Create a new user flair template asynchronously.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateV2Input">A valid FlairTemplateV2Input instance</param>
+        /// <returns>The created flair object.</returns>
+        public FlairV2 CreateUserFlairTemplateV2(FlairTemplateV2Input flairTemplateV2Input)
+        {
+            return Validate(Dispatch.Flair.FlairTemplateV2(flairTemplateV2Input, Subreddit));
+        }
+
+        /// <summary>
+        /// Create a new user flair template asynchronously.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateV2Input">A valid FlairTemplateV2Input instance</param>
+        public async Task CreateUserFlairTemplateV2Async(FlairTemplateV2Input flairTemplateV2Input)
+        {
+            await Task.Run(() =>
+            {
+                CreateUserFlairTemplateV2(flairTemplateV2Input);
+            });
+        }
+
+        /// <summary>
         /// Update an existing link flair template.
         /// This new endpoint is primarily used for the redesign.
         /// </summary>
@@ -542,7 +706,7 @@ namespace Reddit.Controllers
         public FlairV2 UpdateLinkFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(new FlairTemplateV2Input(text, "LINK_FLAIR", textEditable, textColor, backgroundColor, flairTemplateId, modOnly), Subreddit));
+            return UpdateLinkFlairTemplateV2(new FlairTemplateV2Input(text, "LINK_FLAIR", textEditable, textColor, backgroundColor, flairTemplateId, modOnly));
         }
 
         /// <summary>
@@ -565,6 +729,30 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Update an existing link flair template.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateV2Input">A valid FlairTemplateV2Input instance</param>
+        /// <returns>The updated flair object.</returns>
+        public FlairV2 UpdateLinkFlairTemplateV2(FlairTemplateV2Input flairTemplateV2Input)
+        {
+            return Validate(Dispatch.Flair.FlairTemplateV2(flairTemplateV2Input, Subreddit));
+        }
+
+        /// <summary>
+        /// Update an existing link flair template asynchronously.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateV2Input">A valid FlairTemplateV2Input instance</param>
+        public async Task UpdateLinkFlairTemplateV2Async(FlairTemplateV2Input flairTemplateV2Input)
+        {
+            await Task.Run(() =>
+            {
+                UpdateLinkFlairTemplateV2(flairTemplateV2Input);
+            });
+        }
+
+        /// <summary>
         /// Update an existing user flair template.
         /// This new endpoint is primarily used for the redesign.
         /// </summary>
@@ -578,7 +766,7 @@ namespace Reddit.Controllers
         public FlairV2 UpdateUserFlairTemplateV2(string flairTemplateId, string text = null, bool? textEditable = null, string textColor = null,
             string backgroundColor = null, bool? modOnly = null)
         {
-            return Validate(Dispatch.Flair.FlairTemplateV2(new FlairTemplateV2Input(text, "USER_FLAIR", textEditable, textColor, backgroundColor, flairTemplateId, modOnly), Subreddit));
+            return UpdateUserFlairTemplateV2(new FlairTemplateV2Input(text, "USER_FLAIR", textEditable, textColor, backgroundColor, flairTemplateId, modOnly));
         }
 
         /// <summary>
@@ -597,6 +785,30 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 UpdateUserFlairTemplateV2(flairTemplateId, text, textEditable, textColor, backgroundColor, modOnly);
+            });
+        }
+
+        /// <summary>
+        /// Update an existing user flair template.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateV2Input">A valid FlairTemplateV2Input instance</param>
+        /// <returns>The updated flair object.</returns>
+        public FlairV2 UpdateUserFlairTemplateV2(FlairTemplateV2Input flairTemplateV2Input)
+        {
+            return Validate(Dispatch.Flair.FlairTemplateV2(flairTemplateV2Input, Subreddit));
+        }
+
+        /// <summary>
+        /// Update an existing user flair template asynchronously.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateV2Input">A valid FlairTemplateV2Input instance</param>
+        public async Task UpdateUserFlairTemplateV2Async(FlairTemplateV2Input flairTemplateV2Input)
+        {
+            await Task.Run(() =>
+            {
+                UpdateUserFlairTemplateV2(flairTemplateV2Input);
             });
         }
 
@@ -672,6 +884,5 @@ namespace Reddit.Controllers
 
             return UserFlairV2;
         }
-
     }
 }
