@@ -29,7 +29,7 @@ namespace Reddit.Controllers
         public event EventHandler<PostsUpdateEventArgs> ModQueueUnmoderatedUpdated;
         public event EventHandler<PostsUpdateEventArgs> ModQueueEditedUpdated;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         /// <summary>
@@ -254,7 +254,7 @@ namespace Reddit.Controllers
         /// <param name="modQueueSpam"></param>
         /// <param name="modQueueUnmoderated"></param>
         /// <param name="modQueueEdited"></param>
-        public SubredditPosts(ref Dispatch dispatch, string subreddit, List<Post> best = null, List<Post> hot = null, List<Post> newPosts = null,
+        public SubredditPosts(Dispatch dispatch, string subreddit, List<Post> best = null, List<Post> hot = null, List<Post> newPosts = null,
             List<Post> rising = null, List<Post> top = null, List<Post> controversial = null, List<Post> modQueue = null, 
             List<Post> modQueueReports = null, List<Post> modQueueSpam = null, List<Post> modQueueUnmoderated = null, 
             List<Post> modQueueEdited = null) 

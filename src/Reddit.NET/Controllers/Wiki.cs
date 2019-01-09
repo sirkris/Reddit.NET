@@ -17,7 +17,7 @@ namespace Reddit.Controllers
     {
         public event EventHandler<WikiPagesUpdateEventArgs> PagesUpdated;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="subreddit">The name of the subreddit to which this wiki belongs</param>
-        public Wiki(ref Dispatch dispatch, string subreddit)
+        public Wiki(Dispatch dispatch, string subreddit)
         {
             Dispatch = dispatch;
             Subreddit = subreddit;
@@ -77,7 +77,7 @@ namespace Reddit.Controllers
         /// <returns>A new instance of the WikiPage controller.</returns>
         public WikiPage Page(string pageName, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd)
         {
-            return new WikiPage(ref Dispatch, mayRevise, revisionDate, contentHtml, revisionBy, contentMd, Subreddit, pageName);
+            return new WikiPage(Dispatch, mayRevise, revisionDate, contentHtml, revisionBy, contentMd, Subreddit, pageName);
         }
 
         /// <summary>
@@ -88,7 +88,7 @@ namespace Reddit.Controllers
         /// <returns>A new instance of the WikiPage controller.</returns>
         public WikiPage Page(string pageName, Things.WikiPage wikiPage)
         {
-            return new WikiPage(ref Dispatch, wikiPage, Subreddit, pageName);
+            return new WikiPage(Dispatch, wikiPage, Subreddit, pageName);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Reddit.Controllers
         /// <returns>A new instance of the WikiPage controller.</returns>
         public WikiPage Page(string pageName)
         {
-            return new WikiPage(ref Dispatch, Subreddit, pageName);
+            return new WikiPage(Dispatch, Subreddit, pageName);
         }
 
         /// <summary>

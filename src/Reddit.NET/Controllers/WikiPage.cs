@@ -28,7 +28,7 @@ namespace Reddit.Controllers
 
         public event EventHandler<WikiPageUpdateEventArgs> PageUpdated;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         private Dispatch Dispatch;
@@ -44,7 +44,7 @@ namespace Reddit.Controllers
         /// <param name="contentMd"></param>
         /// <param name="subreddit"></param>
         /// <param name="name"></param>
-        public WikiPage(ref Dispatch dispatch, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd, 
+        public WikiPage(Dispatch dispatch, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd, 
             string subreddit = null, string name = null)
         {
             Dispatch = dispatch;
@@ -66,14 +66,14 @@ namespace Reddit.Controllers
         /// <param name="wikiPage"></param>
         /// <param name="subreddit"></param>
         /// <param name="name"></param>
-        public WikiPage(ref Dispatch dispatch, Things.WikiPage wikiPage, string subreddit = null, string name = null)
+        public WikiPage(Dispatch dispatch, Things.WikiPage wikiPage, string subreddit = null, string name = null)
         {
             Dispatch = dispatch;
 
             MayRevise = wikiPage.MayRevise;
             RevisionDate = wikiPage.RevisionDate;
             ContentHTML = wikiPage.ContentHTML;
-            RevisionBy = new User(ref Dispatch, wikiPage.RevisionBy.Data);
+            RevisionBy = new User(Dispatch, wikiPage.RevisionBy.Data);
             ContentMd = wikiPage.ContentMd;
 
             Subreddit = subreddit;
@@ -86,7 +86,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         /// <param name="subreddit"></param>
         /// <param name="name"></param>
-        public WikiPage(ref Dispatch dispatch, string subreddit = null, string name = null)
+        public WikiPage(Dispatch dispatch, string subreddit = null, string name = null)
         {
             Dispatch = dispatch;
             Subreddit = subreddit;
@@ -213,7 +213,7 @@ namespace Reddit.Controllers
         public WikiPage CreateAndReturn(string reason, string content = null)
         {
             Create(reason, content);
-            return new WikiPage(ref Dispatch, Dispatch.Wiki.Page(Name.ToLower(), new WikiPageContentInput(), Subreddit).Data, Subreddit, Name);
+            return new WikiPage(Dispatch, Dispatch.Wiki.Page(Name.ToLower(), new WikiPageContentInput(), Subreddit).Data, Subreddit, Name);
         }
 
         /// <summary>
@@ -373,7 +373,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public WikiPage About(string v = "", string v2 = "")
         {
-            return new WikiPage(ref Dispatch, ((WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, new WikiPageContentInput(v, v2), Subreddit))).Data, Subreddit, Name);
+            return new WikiPage(Dispatch, ((WikiPageContainer)Validate(Dispatch.Wiki.Page(Name, new WikiPageContentInput(v, v2), Subreddit))).Data, Subreddit, Name);
         }
 
         internal virtual void OnPagesUpdated(WikiPageUpdateEventArgs e)

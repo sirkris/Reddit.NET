@@ -104,7 +104,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="listing"></param>
-        public Comment(ref Dispatch dispatch, Things.Comment listing)
+        public Comment(Dispatch dispatch, Things.Comment listing)
         {
             Dispatch = dispatch;
             Import(listing);
@@ -135,7 +135,7 @@ namespace Reddit.Controllers
         /// <param name="downVotes"></param>
         /// <param name="removed"></param>
         /// <param name="spam"></param>
-        public Comment(ref Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
+        public Comment(Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
@@ -151,7 +151,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="fullname">Fullname of the comment</param>
-        public Comment(ref Dispatch dispatch, string fullname)
+        public Comment(Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
             Fullname = fullname;
@@ -161,14 +161,14 @@ namespace Reddit.Controllers
         /// Create an empty comment controller instance.
         /// </summary>
         /// <param name="dispatch"></param>
-        public Comment(ref Dispatch dispatch)
+        public Comment(Dispatch dispatch)
         {
             Dispatch = dispatch;
         }
 
         private Comments InitComments()
         {
-            Comments = new Comments(ref Dispatch, Root.Id, Subreddit, this);
+            Comments = new Comments(Dispatch, Root.Id, Subreddit, this);
             return Comments;
         }
 
@@ -271,7 +271,7 @@ namespace Reddit.Controllers
             } while (info != null && info.Comments != null && info.Comments.Count > 0
                 && !string.IsNullOrWhiteSpace(fullname) && !fullname.StartsWith("t3_"));
 
-            return new Post(ref Dispatch, fullname).About();
+            return new Post(Dispatch, fullname).About();
         }
 
         private string GetInfoPostOrCommentParentFullname(Things.Info info)
@@ -290,7 +290,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the return data.</returns>
         public Comment Submit()
         {
-            return new Comment(ref Dispatch, Validate(Dispatch.LinksAndComments.Comment(new LinksAndCommentsThingInput(Body, ParentFullname))).JSON.Data.Things[0].Data);
+            return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment(new LinksAndCommentsThingInput(Body, ParentFullname))).JSON.Data.Things[0].Data);
         }
 
         /// <summary>
@@ -390,7 +390,7 @@ namespace Reddit.Controllers
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(ref Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -420,7 +420,7 @@ namespace Reddit.Controllers
                 throw new RedditControllerException("Unable to retrieve comment data.");
             }
 
-            return new Comment(ref Dispatch, info.Comments[0]);
+            return new Comment(Dispatch, info.Comments[0]);
         }
 
         /// <summary>

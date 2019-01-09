@@ -70,7 +70,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="listing"></param>
-        public Post(ref Dispatch dispatch, Things.Post listing)
+        public Post(Dispatch dispatch, Things.Post listing)
         {
             Dispatch = dispatch;
             Import(listing);
@@ -94,7 +94,7 @@ namespace Reddit.Controllers
         /// <param name="removed"></param>
         /// <param name="spam"></param>
         /// <param name="nsfw"></param>
-        public Post(ref Dispatch dispatch, string subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
+        public Post(Dispatch dispatch, string subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
@@ -107,7 +107,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="fullname">Fullname of the post</param>
-        public Post(ref Dispatch dispatch, string fullname)
+        public Post(Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
             Fullname = fullname;
@@ -119,7 +119,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         /// <param name="fullname">Fullname of the post</param>
         /// <param name="subreddit">A valid subreddit name</param>
-        public Post(ref Dispatch dispatch, string fullname, string subreddit)
+        public Post(Dispatch dispatch, string fullname, string subreddit)
         {
             Dispatch = dispatch;
             Fullname = fullname;
@@ -130,14 +130,14 @@ namespace Reddit.Controllers
         /// Create an empty post controller instance.
         /// </summary>
         /// <param name="dispatch"></param>
-        public Post(ref Dispatch dispatch)
+        public Post(Dispatch dispatch)
         {
             Dispatch = dispatch;
         }
 
         private Comments InitComments()
         {
-            Comments = new Comments(ref Dispatch, Id, Subreddit);
+            Comments = new Comments(Dispatch, Id, Subreddit);
             return Comments;
         }
 
@@ -221,7 +221,7 @@ namespace Reddit.Controllers
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(ref Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -231,7 +231,7 @@ namespace Reddit.Controllers
         /// <returns></returns>
         public Comment Comment()
         {
-            return new Comment(ref Dispatch, Subreddit, null, null, Fullname);
+            return new Comment(Dispatch, Subreddit, null, null, Fullname);
         }
 
         /// <summary>
@@ -317,7 +317,7 @@ namespace Reddit.Controllers
                 throw new RedditControllerException("Unable to retrieve post data.");
             }
 
-            return new Post(ref Dispatch, info.Posts[0]);
+            return new Post(Dispatch, info.Posts[0]);
         }
 
         /// <summary>

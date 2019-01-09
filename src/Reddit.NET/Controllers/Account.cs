@@ -39,11 +39,11 @@ namespace Reddit.Controllers
         /// Creates a new Account instance.  Note that this is already taken care of in the main class.
         /// </summary>
         /// <param name="dispatch"></param>
-        public Account(ref Dispatch dispatch)
+        public Account(Dispatch dispatch)
         {
             Dispatch = dispatch;
-            Messages = new PrivateMessages(ref Dispatch);
-            Modmail = new Modmail(ref Dispatch);
+            Messages = new PrivateMessages(Dispatch);
+            Modmail = new Modmail(Dispatch);
         }
 
         /// <summary>
@@ -51,7 +51,7 @@ namespace Reddit.Controllers
         /// </summary>
         public User GetMe()
         {
-            Me = new User(ref Dispatch, Dispatch.Account.Me());
+            Me = new User(Dispatch, Dispatch.Account.Me());
             return Me;
         }
 

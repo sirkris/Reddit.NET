@@ -14,7 +14,7 @@ namespace Reddit.Controllers.Internal
 
         protected volatile bool Terminate = false;
 
-        internal abstract ref Models.Internal.Monitor MonitorModel { get; }
+        internal abstract Models.Internal.Monitor MonitorModel { get; }
         internal abstract ref MonitoringSnapshot Monitoring { get; }
 
         public Monitors() : base()

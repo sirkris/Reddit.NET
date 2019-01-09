@@ -20,7 +20,7 @@ namespace Reddit.Controllers
         public event EventHandler<LiveThreadContributorsUpdateEventArgs> ContributorsUpdated;
         public event EventHandler<LiveThreadUpdatesUpdateEventArgs> UpdatesUpdated;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         public string Id;
@@ -84,7 +84,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="liveThread">A valid instance of this class</param>
-        public LiveThread(ref Dispatch dispatch, LiveThread liveThread)
+        public LiveThread(Dispatch dispatch, LiveThread liveThread)
         {
             Dispatch = dispatch;
 
@@ -100,7 +100,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="liveUpdateEvent"></param>
-        public LiveThread(ref Dispatch dispatch, LiveUpdateEvent liveUpdateEvent)
+        public LiveThread(Dispatch dispatch, LiveUpdateEvent liveUpdateEvent)
         {
             Dispatch = dispatch;
 
@@ -128,7 +128,7 @@ namespace Reddit.Controllers
         /// <param name="totalViews"></param>
         /// <param name="viewerCount"></param>
         /// <param name="created"></param>
-        public LiveThread(ref Dispatch dispatch, string title = null, string description = null, bool nsfw = false, string resources = null,
+        public LiveThread(Dispatch dispatch, string title = null, string description = null, bool nsfw = false, string resources = null,
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
         {
@@ -144,7 +144,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="id">A valid live thread ID</param>
-        public LiveThread(ref Dispatch dispatch, string id)
+        public LiveThread(Dispatch dispatch, string id)
         {
             Dispatch = dispatch;
             Id = id;
@@ -175,7 +175,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the returned data.</returns>
         public LiveThread About()
         {
-            return new LiveThread(ref Dispatch, Validate(Dispatch.LiveThreads.About(Id)).Data);
+            return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.About(Id)).Data);
         }
 
         /// <summary>
@@ -205,7 +205,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with data from the new live thread.</returns>
         public LiveThread Create(string title = null, string description = null, bool? nsfw = null, string resources = null)
         {
-            return new LiveThread(ref Dispatch, Validate(Dispatch.LiveThreads.Create(
+            return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.Create(
                 new LiveThreadsConfigInput(title ?? Title, description ?? Description, nsfw ?? NSFW, resources ?? Resources))).JSON.Data.Id).About();
         }
 

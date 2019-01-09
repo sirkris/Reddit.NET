@@ -84,7 +84,7 @@ namespace Reddit
 
         private Account GetAccount()
         {
-            Account = new Account(ref Models);
+            Account = new Account(Models);
             return Account;
         }
 
@@ -104,7 +104,7 @@ namespace Reddit
         /// <returns>A new comment controller instance.</returns>
         public Comment Comment(string name)
         {
-            return new Comment(ref Models, name);
+            return new Comment(Models, name);
         }
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Reddit
         /// <returns>A new link post controller instance.</returns>
         public LinkPost LinkPost(string name)
         {
-            return new LinkPost(ref Models, name);
+            return new LinkPost(Models, name);
         }
 
         /// <summary>
@@ -124,7 +124,7 @@ namespace Reddit
         /// <returns>A new self post controller instance.</returns>
         public SelfPost SelfPost(string name)
         {
-            return new SelfPost(ref Models, name);
+            return new SelfPost(Models, name);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Reddit
         /// <returns>A new post controller instance.</returns>
         public Post Post(string name)
         {
-            return new Post(ref Models, name);
+            return new Post(Models, name);
         }
 
         /// <summary>
@@ -144,7 +144,7 @@ namespace Reddit
         /// <returns>A new live thread controller instance.</returns>
         public LiveThread LiveThread(Things.LiveUpdateEvent liveUpdateEvent)
         {
-            return new LiveThread(ref Models, liveUpdateEvent);
+            return new LiveThread(Models, liveUpdateEvent);
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Reddit
         /// <returns>A new live thread controller instance.</returns>
         public LiveThread LiveThread(LiveThread liveThread)
         {
-            return new LiveThread(ref Models, liveThread);
+            return new LiveThread(Models, liveThread);
         }
 
         /// <summary>
@@ -178,7 +178,7 @@ namespace Reddit
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
         {
-            return new LiveThread(ref Models, title, description, nsfw, resources, id, name, websocketUrl, announcementUrl, state,
+            return new LiveThread(Models, title, description, nsfw, resources, id, name, websocketUrl, announcementUrl, state,
                 icon, totalViews, viewerCount, created);
         }
 
@@ -189,7 +189,7 @@ namespace Reddit
         /// <returns>A new live thread controller instance.</returns>
         public LiveThread LiveThread(string id)
         {
-            return new LiveThread(ref Models, id);
+            return new LiveThread(Models, id);
         }
 
         /// <summary>
@@ -199,7 +199,7 @@ namespace Reddit
         /// <returns>A new user controller instance.</returns>
         public User User(Things.User user)
         {
-            return new User(ref Models, user);
+            return new User(Models, user);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Reddit
         /// <returns>A new user controller instance.</returns>
         public User User(User user)
         {
-            return new User(ref Models, user);
+            return new User(Models, user);
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace Reddit
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
         {
-            return new User(ref Models, name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
+            return new User(Models, name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
                 hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
         }
 
@@ -252,7 +252,7 @@ namespace Reddit
         /// <returns>A new user controller instance.</returns>
         public User User()
         {
-            return new User(ref Models);
+            return new User(Models);
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace Reddit
         /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit(Subreddit subreddit)
         {
-            return new Subreddit(ref Models, subreddit);
+            return new Subreddit(Models, subreddit);
         }
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace Reddit
         /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit(Things.Subreddit subreddit)
         {
-            return new Subreddit(ref Models, subreddit);
+            return new Subreddit(Models, subreddit);
         }
 
         /// <summary>
@@ -282,7 +282,7 @@ namespace Reddit
         /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit(Things.SubredditChild subredditChild)
         {
-            return new Subreddit(ref Models, subredditChild);
+            return new Subreddit(Models, subredditChild);
         }
 
         /// <summary>
@@ -323,7 +323,7 @@ namespace Reddit
             int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
             string fullname = null)
         {
-            return new Subreddit(ref Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
+            return new Subreddit(Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
         }
@@ -334,7 +334,7 @@ namespace Reddit
         /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit()
         {
-            return new Subreddit(ref Models);
+            return new Subreddit(Models);
         }
 
         /// <summary>

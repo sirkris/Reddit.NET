@@ -109,7 +109,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="subreddit">The name of the subreddit with the flairs</param>
         /// <param name="dispatch"></param>
-        public Flairs(ref Dispatch dispatch, string subreddit) : base()
+        public Flairs(Dispatch dispatch, string subreddit) : base()
         {
             Dispatch = dispatch;
             Subreddit = subreddit;

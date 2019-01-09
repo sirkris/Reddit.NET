@@ -20,7 +20,7 @@ namespace Reddit.Controllers
         public event EventHandler<MessagesUpdateEventArgs> UnreadUpdated;
         public event EventHandler<MessagesUpdateEventArgs> SentUpdated;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         /// <summary>
@@ -87,7 +87,7 @@ namespace Reddit.Controllers
         /// <param name="inbox"></param>
         /// <param name="unread"></param>
         /// <param name="sent"></param>
-        public PrivateMessages(ref Dispatch dispatch, List<Message> inbox = null, List<Message> unread = null,
+        public PrivateMessages(Dispatch dispatch, List<Message> inbox = null, List<Message> unread = null,
             List<Message> sent = null) 
             : base()
         {

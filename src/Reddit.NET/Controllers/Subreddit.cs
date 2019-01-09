@@ -128,16 +128,16 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="subreddit"></param>
-        public Subreddit(ref Dispatch dispatch, Things.Subreddit subreddit)
+        public Subreddit(Dispatch dispatch, Things.Subreddit subreddit)
             : base()
         {
             Dispatch = dispatch;
             ImportFromModel(subreddit);
 
             SubredditData = subreddit;
-            Posts = new SubredditPosts(ref Dispatch, Name);
-            Flairs = new Flairs(ref Dispatch, Name);
-            Wiki = new Wiki(ref Dispatch, Name);
+            Posts = new SubredditPosts(Dispatch, Name);
+            Flairs = new Flairs(Dispatch, Name);
+            Wiki = new Wiki(Dispatch, Name);
         }
 
         /// <summary>
@@ -145,16 +145,16 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="subredditChild"></param>
-        public Subreddit(ref Dispatch dispatch, Things.SubredditChild subredditChild)
+        public Subreddit(Dispatch dispatch, Things.SubredditChild subredditChild)
             : base()
         {
             Dispatch = dispatch;
             ImportFromModel(subredditChild.Data);
 
             SubredditData = subredditChild.Data;
-            Posts = new SubredditPosts(ref Dispatch, Name);
-            Flairs = new Flairs(ref Dispatch, Name);
-            Wiki = new Wiki(ref Dispatch, Name);
+            Posts = new SubredditPosts(Dispatch, Name);
+            Flairs = new Flairs(Dispatch, Name);
+            Wiki = new Wiki(Dispatch, Name);
         }
 
         /// <summary>
@@ -162,7 +162,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="subreddit">A valid subreddit controller instance</param>
-        public Subreddit(ref Dispatch dispatch, Subreddit subreddit)
+        public Subreddit(Dispatch dispatch, Subreddit subreddit)
         {
             Dispatch = dispatch;
 
@@ -201,7 +201,7 @@ namespace Reddit.Controllers
         /// <param name="primaryColor"></param>
         /// <param name="keyColor"></param>
         /// <param name="fullname"></param>
-        public Subreddit(ref Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "",
+        public Subreddit(Dispatch dispatch, string name, string title = "", string description = "", string sidebar = "",
             string submissionText = null, string lang = "en", string subredditType = "public", string submissionType = "any",
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
@@ -217,22 +217,22 @@ namespace Reddit.Controllers
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
 
             UpdateSubredditData();
-            Posts = new SubredditPosts(ref Dispatch, Name);
-            Flairs = new Flairs(ref Dispatch, Name);
-            Wiki = new Wiki(ref Dispatch, Name);
+            Posts = new SubredditPosts(Dispatch, Name);
+            Flairs = new Flairs(Dispatch, Name);
+            Wiki = new Wiki(Dispatch, Name);
         }
 
         /// <summary>
         /// Create an empty subreddit controller instance.
         /// </summary>
         /// <param name="dispatch"></param>
-        public Subreddit(ref Dispatch dispatch)
+        public Subreddit(Dispatch dispatch)
             : base()
         {
             Dispatch = dispatch;
-            Posts = new SubredditPosts(ref Dispatch, Name);
-            Flairs = new Flairs(ref Dispatch, Name);
-            Wiki = new Wiki(ref Dispatch, Name);
+            Posts = new SubredditPosts(Dispatch, Name);
+            Flairs = new Flairs(Dispatch, Name);
+            Wiki = new Wiki(Dispatch, Name);
         }
 
         private void ImportFromModel(Things.Subreddit subreddit)
@@ -355,7 +355,7 @@ namespace Reddit.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new LinkPost(ref Dispatch, Name, title, url, author, thumbnail, thumbnailHeight, thumbnailWidth, preview,
+            return new LinkPost(Dispatch, Name, title, url, author, thumbnail, thumbnailHeight, thumbnailWidth, preview,
                 id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -366,7 +366,7 @@ namespace Reddit.Controllers
         /// <returns>A new LinkPost object attached to this subreddit.</returns>
         public LinkPost LinkPost(string fullname)
         {
-            return new LinkPost(ref Dispatch, fullname, Name);
+            return new LinkPost(Dispatch, fullname, Name);
         }
 
         /// <summary>
@@ -378,7 +378,7 @@ namespace Reddit.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new SelfPost(ref Dispatch, Name, title, author, selfText, selfTextHtml, id, fullname, permalink, created, 
+            return new SelfPost(Dispatch, Name, title, author, selfText, selfTextHtml, id, fullname, permalink, created, 
                 edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -389,7 +389,7 @@ namespace Reddit.Controllers
         /// <returns>A new SelfPost object attached to this subreddit.</returns>
         public SelfPost SelfPost(string fullname)
         {
-            return new SelfPost(ref Dispatch, fullname, Name);
+            return new SelfPost(Dispatch, fullname, Name);
         }
 
         /// <summary>
@@ -398,7 +398,7 @@ namespace Reddit.Controllers
         /// <returns>A new generic Post object attached to this subreddit.</returns>
         public Post Post()
         {
-            return new Post(ref Dispatch, Name);
+            return new Post(Dispatch, Name);
         }
 
         /// <summary>
@@ -408,7 +408,7 @@ namespace Reddit.Controllers
         /// <returns>A new generic Post object attached to this subreddit.</returns>
         public Post Post(string fullname)
         {
-            return new Post(ref Dispatch, fullname, Name);
+            return new Post(Dispatch, fullname, Name);
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("facepalm").About();
@@ -419,7 +419,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public Subreddit About()
         {
-            return new Subreddit(ref Dispatch, Dispatch.Subreddits.About(Name));
+            return new Subreddit(Dispatch, Dispatch.Subreddits.About(Name));
         }
 
         /// <summary>

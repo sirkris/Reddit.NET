@@ -32,7 +32,7 @@ namespace Reddit.Controllers
         private DateTime? QALastUpdated;
         private DateTime? LiveLastUpdated;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         /// <summary>
@@ -208,7 +208,7 @@ namespace Reddit.Controllers
         /// <param name="random"></param>
         /// <param name="qa"></param>
         /// <param name="live"></param>
-        public Comments(ref Dispatch dispatch, string postId = null, string subreddit = null, Comment comment = null, List<Comment> confidence = null, List<Comment> top = null, 
+        public Comments(Dispatch dispatch, string postId = null, string subreddit = null, Comment comment = null, List<Comment> confidence = null, List<Comment> top = null, 
             List<Comment> newComments = null, List<Comment> controversial = null, List<Comment> old = null, List<Comment> random = null, List<Comment> qa = null, List<Comment> live = null) 
             : base()
         {

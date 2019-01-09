@@ -50,7 +50,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="user"></param>
-        public User(ref Dispatch dispatch, Things.User user)
+        public User(Dispatch dispatch, Things.User user)
         {
             Import(user);
             Dispatch = dispatch;
@@ -61,7 +61,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="user"></param>
-        public User(ref Dispatch dispatch, User user)
+        public User(Dispatch dispatch, User user)
         {
             Import(user);
             Dispatch = dispatch;
@@ -92,7 +92,7 @@ namespace Reddit.Controllers
         /// <param name="created"></param>
         /// <param name="commentKarma"></param>
         /// <param name="hasSubscribed"></param>
-        public User(ref Dispatch dispatch, string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
+        public User(Dispatch dispatch, string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
@@ -107,7 +107,7 @@ namespace Reddit.Controllers
         /// Create an empty user controller instance.
         /// </summary>
         /// <param name="dispatch"></param>
-        public User(ref Dispatch dispatch)
+        public User(Dispatch dispatch)
         {
             Dispatch = dispatch;
         }
@@ -348,7 +348,7 @@ namespace Reddit.Controllers
         /// <returns>A user listing.</returns>
         public User About()
         {
-            return new User(ref Dispatch, ((UserChild)Validate(Dispatch.Users.About(Name))).Data);
+            return new User(Dispatch, ((UserChild)Validate(Dispatch.Users.About(Name))).Data);
         }
 
         /// <summary>

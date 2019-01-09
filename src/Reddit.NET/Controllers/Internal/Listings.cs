@@ -152,13 +152,13 @@ namespace Reddit.Controllers.Internal
                 {
                     if (postChild.Data.IsSelf)
                     {
-                        SelfPost selfPost = new SelfPost(ref dispatch, postChild.Data);
+                        SelfPost selfPost = new SelfPost(dispatch, postChild.Data);
                         posts.Add(selfPost);
                         selfPosts.Add(selfPost);
                     }
                     else
                     {
-                        LinkPost linkPost = new LinkPost(ref dispatch, postChild.Data);
+                        LinkPost linkPost = new LinkPost(dispatch, postChild.Data);
                         posts.Add(linkPost);
                         linkPosts.Add(linkPost);
                     }
@@ -200,13 +200,13 @@ namespace Reddit.Controllers.Internal
                 {
                     if (postChild.Data.IsSelf)
                     {
-                        SelfPost selfPost = new SelfPost(ref dispatch, postChild.Data);
+                        SelfPost selfPost = new SelfPost(dispatch, postChild.Data);
                         posts.Add(selfPost);
                         selfPosts.Add(selfPost);
                     }
                     else
                     {
-                        LinkPost linkPost = new LinkPost(ref dispatch, postChild.Data);
+                        LinkPost linkPost = new LinkPost(dispatch, postChild.Data);
                         posts.Add(linkPost);
                         linkPosts.Add(linkPost);
                     }
@@ -262,7 +262,7 @@ namespace Reddit.Controllers.Internal
             {
                 if (commentChild.Data != null)
                 {
-                    comments.Add(new Comment(ref dispatch, commentChild.Data));
+                    comments.Add(new Comment(dispatch, commentChild.Data));
                 }
             }
 
@@ -281,7 +281,7 @@ namespace Reddit.Controllers.Internal
             {
                 if (commentChild.Data != null)
                 {
-                    comments.Add(new Comment(ref dispatch, commentChild.Data));
+                    comments.Add(new Comment(dispatch, commentChild.Data));
                 }
             }
 
@@ -300,7 +300,7 @@ namespace Reddit.Controllers.Internal
             {
                 if (subredditChild.Data != null)
                 {
-                    subreddits.Add(new Subreddit(ref dispatch, subredditChild.Data));
+                    subreddits.Add(new Subreddit(dispatch, subredditChild.Data));
                 }
             }
 

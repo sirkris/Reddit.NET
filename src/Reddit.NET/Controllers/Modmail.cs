@@ -128,7 +128,7 @@ namespace Reddit.Controllers
         private ModmailUnreadCount unreadCount;
         private DateTime? UnreadCountLastUpdated;
 
-        internal override ref Models.Internal.Monitor MonitorModel => ref Dispatch.Monitor;
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
 
         private Dispatch Dispatch;
@@ -137,7 +137,7 @@ namespace Reddit.Controllers
         /// Create a new instance of the modmail controller.
         /// </summary>
         /// <param name="dispatch"></param>
-        public Modmail(ref Dispatch dispatch) : base()
+        public Modmail(Dispatch dispatch) : base()
         {
             Dispatch = dispatch;
         }
@@ -147,7 +147,7 @@ namespace Reddit.Controllers
         /// </summary>
         private User GetMe()
         {
-            Me = new User(ref Dispatch, Dispatch.Account.Me());
+            Me = new User(Dispatch, Dispatch.Account.Me());
             return Me;
         }
 
