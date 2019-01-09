@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Reddit;
 using Controllers = Reddit.Controllers;
+using Reddit.Exceptions;
 using Reddit.Models.Inputs.LinksAndComments;
 using Reddit.Things;
 using RestSharp;
@@ -65,7 +66,7 @@ namespace RedditTests
             System.Xml.XmlDocument xmlDocument = new System.Xml.XmlDocument();
             xmlDocument.LoadXml(xmlData);
 
-            return new Dictionary<string, string>
+            Dictionary<string, string> res = new Dictionary<string, string>
             {
                 { "AppId", xmlDocument.GetElementsByTagName("AppId")[0].InnerText },
                 { "RefreshToken", xmlDocument.GetElementsByTagName("RefreshToken")[0].InnerText },
@@ -73,6 +74,16 @@ namespace RedditTests
                 { "Subreddit", xmlDocument.GetElementsByTagName("Subreddit")[0].InnerText }
             };
             // End .NET Core workaround.  --Kris
+
+            if (res["AppId"].Equals("Paste Reddit App ID here")
+                || res["RefreshToken"].Equals("Paste Reddit Refresh Token here")
+                || res["RefreshToken2"].Equals("Paste second account's Reddit Refresh Token here (required for WorkflowTests)")
+                || res["Subreddit"].Equals("Paste test subreddit (new or existing with full mod privs) here"))
+            {
+                throw new RedditException("You must replace all default values in Reddit.NETTestsData.xml before running the tests.");
+            }
+
+            return res;
 
             // TODO - Replace above workaround with commented code below for all test classes after .NET Core adds support for DataSourceAttribute.  --Kris
             // https://github.com/Microsoft/testfx/issues/233
