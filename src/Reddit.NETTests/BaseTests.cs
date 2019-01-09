@@ -80,7 +80,7 @@ namespace RedditTests
                 || res["RefreshToken2"].Equals("Paste second account's Reddit Refresh Token here (required for WorkflowTests)")
                 || res["Subreddit"].Equals("Paste test subreddit (new or existing with full mod privs) here"))
             {
-                throw new RedditException("You must replace all default values in Reddit.NETTestsData.xml before running the tests.");
+                Assert.Inconclusive("You must replace all default values in Reddit.NETTestsData.xml before running the tests.");
             }
 
             return res;
