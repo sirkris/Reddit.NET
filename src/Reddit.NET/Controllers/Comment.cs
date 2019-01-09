@@ -496,8 +496,8 @@ namespace Reddit.Controllers
         public void Report(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string violatorUsername)
         {
-            Validate(Dispatch.LinksAndComments.Report(new LinksAndCommentsReportInput(additionalInfo, banEvadingAccountsNames, customText, fromHelpCenter, otherReason, reason,
-                ruleReason, siteReason, Subreddit, Fullname, violatorUsername)));
+            Report(new LinksAndCommentsReportInput(additionalInfo, banEvadingAccountsNames, customText, fromHelpCenter, otherReason, reason,
+                ruleReason, siteReason, Subreddit, Fullname, violatorUsername));
         }
 
         /// <summary>
@@ -518,6 +518,27 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 Report(additionalInfo, banEvadingAccountsNames, customText, fromHelpCenter, otherReason, reason, ruleReason, siteReason, violatorUsername);
+            });
+        }
+
+        /// <summary>
+        /// Report this comment to the subreddit moderators.  The comment then becomes implicitly hidden, as well.
+        /// </summary>
+        /// <param name="linksAndCommentsReportInput">A valid LinksAndCommentsReportInput instance</param>
+        public void Report(LinksAndCommentsReportInput linksAndCommentsReportInput)
+        {
+            Validate(Dispatch.LinksAndComments.Report(linksAndCommentsReportInput));
+        }
+
+        /// <summary>
+        /// Report this comment to the subreddit moderators asynchronously.  The comment then becomes implicitly hidden, as well.
+        /// </summary>
+        /// <param name = "linksAndCommentsReportInput" > A valid LinksAndCommentsReportInput instance</param>
+        public async Task ReportAsync(LinksAndCommentsReportInput linksAndCommentsReportInput)
+        {
+            await Task.Run(() =>
+            {
+                Report(linksAndCommentsReportInput);
             });
         }
 
@@ -645,7 +666,25 @@ namespace Reddit.Controllers
         /// <returns>The requested comments.</returns>
         public Things.MoreChildren MoreChildren(bool limitChildren, string sort, string id = null)
         {
-            return Validate(Dispatch.LinksAndComments.MoreChildren(new LinksAndCommentsMoreChildrenInput(Id, limitChildren, ParentFullname, sort, id)));
+            return MoreChildren(new LinksAndCommentsMoreChildrenInput(Id, limitChildren, ParentFullname, sort, id));
+        }
+
+        /// <summary>
+        /// Retrieve additional comments omitted from a base comment tree.
+        /// When a comment tree is rendered, the most relevant comments are selected for display first.
+        /// Remaining comments are stubbed out with "MoreComments" links. 
+        /// This API call is used to retrieve the additional comments represented by those stubs, up to 100 at a time.
+        /// The two core parameters required are link and children. link is the fullname of the link whose comments are being fetched. 
+        /// children is a comma-delimited list of comment ID36s that need to be fetched.
+        /// If id is passed, it should be the ID of the MoreComments object this call is replacing. This is needed only for the HTML UI's purposes and is optional otherwise.
+        /// NOTE: you may only make one request at a time to this API endpoint. Higher concurrency will result in an error being returned.
+        /// If limit_children is True, only return the children requested.
+        /// </summary>
+        /// <param name="linksAndCommentsMoreChildrenInput">A valid LinksAndCommentsMoreChildrenInput instance</param>
+        /// <returns>The requested comments.</returns>
+        public Things.MoreChildren MoreChildren(LinksAndCommentsMoreChildrenInput linksAndCommentsMoreChildrenInput)
+        {
+            return Validate(Dispatch.LinksAndComments.MoreChildren(linksAndCommentsMoreChildrenInput));
         }
 
         /// <summary>
