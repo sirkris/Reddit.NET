@@ -53,6 +53,8 @@ namespace RedditTests.ModelTests.WorkflowTests
             string body = "This is a test message sent by Reddit.NET.";
 
             Validate(reddit2.Models.PrivateMessages.Compose(new PrivateMessagesComposeInput(subject: subject, text: body, to: me.Name)));
+
+            // Note that this will fail if the primary test user is blocking the secondary test user.  You can confirm by running the corresponding controller test.  --Kris
             Assert.IsTrue(MessageExists(patsy.Name, subject, body, out Message message));
 
             reddit.Models.PrivateMessages.CollapseMessage(message.Name);

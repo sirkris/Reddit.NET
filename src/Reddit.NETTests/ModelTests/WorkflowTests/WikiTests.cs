@@ -44,7 +44,7 @@ namespace RedditTests.ModelTests.WorkflowTests
 
             // Edit an existing page.  --Kris
             reddit.Models.Wiki.Edit(new WikiEditPageInput("There are only 10 types of people in this world:  Those who understand binary and those who don't.", "index",
-                revisions.Data.Children[0].Id, "Because I said so."), testData["Subreddit"]);
+                "Because I said so.", revisions.Data.Children[0].Id), testData["Subreddit"]);
 
             // Hide the page.  --Kris
             StatusResult hideRes = reddit.Models.Wiki.Hide(new WikiPageRevisionInput("index", revisions.Data.Children[0].Id), testData["Subreddit"]);

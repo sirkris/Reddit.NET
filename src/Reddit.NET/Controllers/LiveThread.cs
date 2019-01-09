@@ -189,7 +189,7 @@ namespace Reddit.Controllers
         /// <returns>The requested live updates.</returns>
         public List<LiveUpdate> GetUpdates(string after = "", string before = "", string styleSr = "", int count = 0, int limit = 25)
         {
-            Updates = Listings.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, new LiveThreadsGetUpdatesInput(styleSr, after, before, count, limit))));
+            Updates = Listings.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, new LiveThreadsGetUpdatesInput(styleSr, after, before, limit, count))));
             UpdatesLastUpdated = DateTime.Now;
 
             return Updates;

@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
+using Reddit.Exceptions;
 using System;
 using System.Collections.Generic;
 
@@ -25,8 +26,23 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
             reddit2.Account.Messages.MarkAllRead();
 
-            reddit.Account.Messages.Compose(patsy.Name, subject, body);
-            reddit2.Account.Messages.Compose(me.Name, subject, bodyReply);
+            try
+            {
+                reddit.Account.Messages.Compose(patsy.Name, subject, body);
+            }
+            catch (RedditUserBlockedException)
+            {
+                Assert.Inconclusive("The primary test user is blocking the secondary test user.  Please unblock then try again.");
+            }
+
+            try
+            {
+                reddit2.Account.Messages.Compose(me.Name, subject, bodyReply);
+            }
+            catch (RedditUserBlockedException)
+            {
+                Assert.Inconclusive("The secondary test user is blocking the primary test user.  Please unblock then try again.");
+            }
 
             Assert.IsTrue(MonitorForMessage(reddit2.Account.Messages, me.Name, subject, body));
             Assert.IsTrue(MonitorForMessage(reddit.Account.Messages, patsy.Name, subject, bodyReply));

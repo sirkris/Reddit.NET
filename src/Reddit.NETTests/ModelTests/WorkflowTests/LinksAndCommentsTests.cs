@@ -67,7 +67,10 @@ namespace RedditTests.ModelTests.WorkflowTests
         {
             foreach (MessageChild messageChild in messages.Data.Children)
             {
-                if (messageChild.Data.Author.Equals(sender)
+                if (messageChild != null
+                    && messageChild.Data != null
+                    && messageChild.Data.Author != null
+                    && messageChild.Data.Author.Equals(sender)
                     && messageChild.Data.Subject.Equals(subject))
                 {
                     return messageChild.Data;

@@ -32,13 +32,29 @@ namespace RedditTests.ModelTests.WorkflowTests
 
             Validate(patsy);
 
-            GenericContainer res = reddit.Models.Users.Friend(new UsersFriendInput(patsy.Name, "moderator_invite"), testData["Subreddit"]);
+            GenericContainer res = null;
+            try
+            {
+                res = reddit.Models.Users.Friend(new UsersFriendInput(patsy.Name, "moderator_invite"), testData["Subreddit"]);
 
-            Validate(res);
+                Validate(res);
 
-            res = reddit2.Models.Moderation.AcceptModeratorInvite(testData["Subreddit"]);
+                res = reddit2.Models.Moderation.AcceptModeratorInvite(testData["Subreddit"]);
 
-            Validate(res);
+                Validate(res);
+            }
+            catch (AssertFailedException ex)
+            {
+                if (res == null
+                    || res.JSON == null
+                    || res.JSON.Errors == null
+                    || res.JSON.Errors.Count == 0
+                    || res.JSON.Errors[0].Count == 0
+                    || !res.JSON.Errors[0][0].Equals("ALREADY_MODERATOR"))
+                {
+                    throw ex;
+                }
+            }
 
             reddit2.Models.Moderation.LeaveModerator(reddit2.Models.Subreddits.About(testData["Subreddit"]).Data.Name);
         }

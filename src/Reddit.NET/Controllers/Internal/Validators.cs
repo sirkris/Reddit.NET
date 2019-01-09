@@ -35,7 +35,7 @@ namespace Reddit.Controllers.Internal
                     switch (error)
                     {
                         default:
-                            throw (RedditControllerException)BuildException(new RedditControllerException("Reddit API returned errors."), new List<List<string>> { errors });
+                            throw (RedditControllerException)BuildException(new RedditControllerException("Reddit API returned errors : " + errors[1]), new List<List<string>> { errors });
                         case "RATELIMIT":
                             throw (RedditRateLimitException)BuildException(new RedditRateLimitException("Reddit ratelimit exceeded."), new List<List<string>> { errors });
                         case "SUBREDDIT_EXISTS":
@@ -43,6 +43,12 @@ namespace Reddit.Controllers.Internal
                                 new List<List<string>> { errors });
                         case "INVALID_PERMISSION_TYPE":
                             throw (RedditInvalidPermissionTypeException)BuildException(new RedditInvalidPermissionTypeException(errors[1]),
+                                new List<List<string>> { errors });
+                        case "USER_BLOCKED":
+                            throw (RedditUserBlockedException)BuildException(new RedditUserBlockedException(errors[1]),
+                                new List<List<string>> { errors });
+                        case "ALREADY_MODERATOR":
+                            throw (RedditAlreadyModeratorException)BuildException(new RedditAlreadyModeratorException(errors[1]),
                                 new List<List<string>> { errors });
                     }
                 }

@@ -165,7 +165,7 @@ namespace Reddit.Controllers
         /// <param name="previous">the starting point revision for this edit</param>
         public void Edit(string reason, string content = null, string previous = "")
         {
-            Dispatch.Wiki.Edit(new WikiEditPageInput(content, Name, previous, reason), Subreddit);
+            Dispatch.Wiki.Edit(new WikiEditPageInput(content, Name, reason, previous), Subreddit);
         }
 
         /// <summary>
