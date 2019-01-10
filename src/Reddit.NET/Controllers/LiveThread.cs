@@ -189,7 +189,17 @@ namespace Reddit.Controllers
         /// <returns>The requested live updates.</returns>
         public List<LiveUpdate> GetUpdates(string after = "", string before = "", string styleSr = "", int count = 0, int limit = 25)
         {
-            Updates = Listings.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, new LiveThreadsGetUpdatesInput(styleSr, after, before, limit, count))));
+            return GetUpdates(new LiveThreadsGetUpdatesInput(styleSr, after, before, limit, count));
+        }
+
+        /// <summary>
+        /// Get a list of updates posted in this thread.
+        /// </summary>
+        /// <param name="liveThreadsGetUpdatesInput">A valid LiveThreadsGetUpdatesInput instance</param>
+        /// <returns>The requested live updates.</returns>
+        public List<LiveUpdate> GetUpdates(LiveThreadsGetUpdatesInput liveThreadsGetUpdatesInput)
+        {
+            Updates = Listings.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, liveThreadsGetUpdatesInput)));
             UpdatesLastUpdated = DateTime.Now;
 
             return Updates;
@@ -205,8 +215,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with data from the new live thread.</returns>
         public LiveThread Create(string title = null, string description = null, bool? nsfw = null, string resources = null)
         {
-            return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.Create(
-                new LiveThreadsConfigInput(title ?? Title, description ?? Description, nsfw ?? NSFW, resources ?? Resources))).JSON.Data.Id).About();
+            return Create(new LiveThreadsConfigInput(title ?? Title, description ?? Description, nsfw ?? NSFW, resources ?? Resources));
         }
 
         /// <summary>
@@ -216,12 +225,33 @@ namespace Reddit.Controllers
         /// <param name="description">raw markdown text</param>
         /// <param name="nsfw">boolean value</param>
         /// <param name="resources">raw markdown text</param>
-        /// <returns>An instance of this class populated with data from the new live thread.</returns>
         public async Task CreateAsync(string title = null, string description = null, bool? nsfw = null, string resources = null)
         {
             await Task.Run(() =>
             {
                 Create(title, description, nsfw, resources);
+            });
+        }
+
+        /// <summary>
+        /// Create a new live thread.
+        /// </summary>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
+        /// <returns>An instance of this class populated with data from the new live thread.</returns>
+        public LiveThread Create(LiveThreadsConfigInput liveThreadsConfigInput)
+        {
+            return new LiveThread(Dispatch, Validate(Dispatch.LiveThreads.Create(liveThreadsConfigInput)).JSON.Data.Id).About();
+        }
+
+        /// <summary>
+        /// Create a new live thread asynchronously.
+        /// </summary>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
+        public async Task CreateAsync(LiveThreadsConfigInput liveThreadsConfigInput)
+        {
+            await Task.Run(() =>
+            {
+                Create(liveThreadsConfigInput);
             });
         }
 
@@ -321,7 +351,7 @@ namespace Reddit.Controllers
         /// <param name="resources">raw markdown text</param>
         public void Edit(string title, string description, bool nsfw, string resources)
         {
-            Validate(Dispatch.LiveThreads.Edit(Id, new LiveThreadsConfigInput(title, description, nsfw, resources)));
+            Edit(new LiveThreadsConfigInput(title, description, nsfw, resources));
         }
 
         /// <summary>
@@ -341,6 +371,29 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Configure the thread.
+        /// Requires the settings permission for this thread.
+        /// </summary>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
+        public void Edit(LiveThreadsConfigInput liveThreadsConfigInput)
+        {
+            Validate(Dispatch.LiveThreads.Edit(Id, liveThreadsConfigInput));
+        }
+
+        /// <summary>
+        /// Configure the thread asynchronously.
+        /// Requires the settings permission for this thread.
+        /// </summary>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
+        public async Task EditAsync(LiveThreadsConfigInput liveThreadsConfigInput)
+        {
+            await Task.Run(() =>
+            {
+                Edit(liveThreadsConfigInput);
+            });
+        }
+
+        /// <summary>
         /// Invite another user to contribute to the thread.
         /// Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified.
         /// </summary>
@@ -349,7 +402,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public void InviteContributor(string name, string permissions, string type)
         {
-            Validate(Dispatch.LiveThreads.InviteContributor(Id, new LiveThreadsContributorInput(name, permissions, type)));
+            InviteContributor(new LiveThreadsContributorInput(name, permissions, type));
         }
 
         /// <summary>
@@ -364,6 +417,29 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 InviteContributor(name, permissions, type);
+            });
+        }
+
+        /// <summary>
+        /// Invite another user to contribute to the thread.
+        /// Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified.
+        /// </summary>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        public void InviteContributor(LiveThreadsContributorInput liveThreadsContributorInput)
+        {
+            Validate(Dispatch.LiveThreads.InviteContributor(Id, liveThreadsContributorInput));
+        }
+
+        /// <summary>
+        /// Asynchronously invite another user to contribute to the thread.
+        /// Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified.
+        /// </summary>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        public async Task InviteContributorAsync(LiveThreadsContributorInput liveThreadsContributorInput)
+        {
+            await Task.Run(() =>
+            {
+                InviteContributor(liveThreadsContributorInput);
             });
         }
 
@@ -463,7 +539,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public void SetContributorPermissions(string name, string permissions, string type)
         {
-            Validate(Dispatch.LiveThreads.SetContributorPermissions(Id, new LiveThreadsContributorInput(name, permissions, type)));
+            SetContributorPermissions(new LiveThreadsContributorInput(name, permissions, type));
         }
 
         /// <summary>
@@ -479,6 +555,31 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 SetContributorPermissions(name, permissions, type);
+            });
+        }
+
+        /// <summary>
+        /// Change a contributor or contributor invite's permissions.
+        /// Requires the manage permission for this thread.
+        /// Note that permissions overrides the previous value completely.
+        /// </summary>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        public void SetContributorPermissions(LiveThreadsContributorInput liveThreadsContributorInput)
+        {
+            Validate(Dispatch.LiveThreads.SetContributorPermissions(Id, liveThreadsContributorInput));
+        }
+
+        /// <summary>
+        /// Change a contributor or contributor invite's permissions asynchronously.
+        /// Requires the manage permission for this thread.
+        /// Note that permissions overrides the previous value completely.
+        /// </summary>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        public async Task SetContributorPermissionsAsync(LiveThreadsContributorInput liveThreadsContributorInput)
+        {
+            await Task.Run(() =>
+            {
+                SetContributorPermissions(liveThreadsContributorInput);
             });
         }
 
