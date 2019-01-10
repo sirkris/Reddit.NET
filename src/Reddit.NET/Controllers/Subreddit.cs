@@ -462,8 +462,17 @@ namespace Reddit.Controllers
         public List<Moderator> GetModerators(string after = "", string before = "", int limit = 25, string user = "", 
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators",
-                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Name);
+            return GetModerators(new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories));
+        }
+
+        /// <summary>
+        /// Get the moderators of this subreddit.
+        /// </summary>
+        /// <param name="subredditsAboutInput">A valid SubredditsAboutInput instance</param>
+        /// <returns>A list of subreddit moderators.</returns>
+        public List<Moderator> GetModerators(SubredditsAboutInput subredditsAboutInput)
+        {
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("moderators", subredditsAboutInput, Name);
 
             Validate(res);
 
@@ -486,8 +495,17 @@ namespace Reddit.Controllers
         public List<SubredditUser> GetContributors(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("contributors",
-                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Name);
+            return GetContributors(new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories));
+        }
+
+        /// <summary>
+        /// Get the approved submitters of this subreddit.
+        /// </summary>
+        /// <param name="subredditsAboutInput">A valid SubredditsAboutInput instance</param>
+        /// <returns>A list of subreddit contributors.</returns>
+        public List<SubredditUser> GetContributors(SubredditsAboutInput subredditsAboutInput)
+        {
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("contributors", subredditsAboutInput, Name);
 
             Validate(res);
 
@@ -509,13 +527,23 @@ namespace Reddit.Controllers
         public List<SubredditUser> GetMutedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("muted",
-                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Name);
+            return GetMutedUsers(new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories));
+        }
+
+        /// <summary>
+        /// Get the muted users of this subreddit.
+        /// </summary>
+        /// <param name="subredditsAboutInput">A valid SubredditsAboutInput instance</param>
+        /// <returns>A list of muted users.</returns>
+        public List<SubredditUser> GetMutedUsers(SubredditsAboutInput subredditsAboutInput)
+        {
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("muted", subredditsAboutInput, Name);
 
             Validate(res);
 
             return Listings.GetAboutChildren<SubredditUser>(res);
         }
+
 
         /// <summary>
         /// Get a list of users who were banned from this subreddit.
@@ -532,8 +560,17 @@ namespace Reddit.Controllers
         public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned",
-                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Name);
+            return GetBannedUsers(new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories));
+        }
+
+        /// <summary>
+        /// Get a list of users who were banned from this subreddit.
+        /// </summary>
+        /// <param name="subredditsAboutInput">A valid SubredditsAboutInput instance</param>
+        /// <returns>A list of banned users.</returns>
+        public List<BannedUser> GetBannedUsers(SubredditsAboutInput subredditsAboutInput)
+        {
+            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("banned", subredditsAboutInput, Name);
 
             Validate(res);
 
@@ -861,7 +898,20 @@ namespace Reddit.Controllers
         public Things.ModActionContainer GetLog(string type = null, int limit = 25, string after = "", string before = "", string mod = null,
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Validate(Dispatch.Moderation.GetLog(new ModerationGetLogInput(type, mod, after, before, limit, count, srDetail, show), Name));
+            return GetLog(new ModerationGetLogInput(type, mod, after, before, limit, count, srDetail, show));
+        }
+
+        /// <summary>
+        /// Get a list of recent moderation actions.
+        /// Moderator actions taken within a subreddit are logged. This listing is a view of that log with various filters to aid in analyzing the information.
+        /// The optional mod parameter can be a comma-delimited list of moderator names to restrict the results to, or the string a to restrict the results to admin actions taken within the subreddit.
+        /// The type parameter is optional and if sent limits the log entries returned to only those of the type specified.
+        /// </summary>
+        /// <param name="moderationGetLogInput">A valid ModerationGetLogInput instance</param>
+        /// <returns>A listing of recent moderation actions.</returns>
+        public Things.ModActionContainer GetLog(ModerationGetLogInput moderationGetLogInput)
+        {
+            return Validate(Dispatch.Moderation.GetLog(moderationGetLogInput, Name));
         }
 
         /// <summary>
@@ -880,7 +930,7 @@ namespace Reddit.Controllers
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
         public void ModeratorInvite(string username, string permissions, int duration = 999)
         {
-            Validate(Dispatch.Users.Friend(new UsersFriendInput(username, "moderator_invite", duration, permissions), Name));
+            ModeratorInvite(new UsersFriendInput(username, "moderator_invite", duration, permissions));
         }
 
         /// <summary>
@@ -897,6 +947,29 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Invite a user to become a moderator of this subreddit.
+        /// </summary>
+        /// <param name="usersFriendInput">A valid UsersFriendInput instance</param>
+        public void ModeratorInvite(UsersFriendInput usersFriendInput)
+        {
+            usersFriendInput.type = "moderator_invite";
+
+            Validate(Dispatch.Users.Friend(usersFriendInput, Name));
+        }
+
+        /// <summary>
+        /// Asynchronously invite a user to become a moderator of this subreddit.
+        /// </summary>
+        /// <param name="usersFriendInput">A valid UsersFriendInput instance</param>
+        public async Task ModeratorInviteAsync(UsersFriendInput usersFriendInput)
+        {
+            await Task.Run(() =>
+            {
+                ModeratorInvite(usersFriendInput);
+            });
+        }
+
+        /// <summary>
         /// Set permissions.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
@@ -904,7 +977,7 @@ namespace Reddit.Controllers
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
         public void SetUserPermissions(string username, string permissions, string type)
         {
-            Validate(Dispatch.Users.SetPermissions(new UsersSetPermissionsInput(username, permissions, type), Name));
+            SetUserPermissions(new UsersSetPermissionsInput(username, permissions, type));
         }
 
         /// <summary>
@@ -918,6 +991,27 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 SetUserPermissions(username, permissions, type);
+            });
+        }
+
+        /// <summary>
+        /// Set permissions.
+        /// </summary>
+        /// <param name="usersSetPermissionsInput">A valid UsersSetPermissionsInput instance</param>
+        public void SetUserPermissions(UsersSetPermissionsInput usersSetPermissionsInput)
+        {
+            Validate(Dispatch.Users.SetPermissions(usersSetPermissionsInput, Name));
+        }
+
+        /// <summary>
+        /// Set permissions asynchronously.
+        /// </summary>
+        /// <param name="usersSetPermissionsInput">A valid UsersSetPermissionsInput instance</param>
+        public async Task SetUserPermissionsAsync(UsersSetPermissionsInput usersSetPermissionsInput)
+        {
+            await Task.Run(() =>
+            {
+                SetUserPermissions(usersSetPermissionsInput);
             });
         }
 
@@ -959,6 +1053,23 @@ namespace Reddit.Controllers
 
         /// <summary>
         /// Create a new subreddit and return the created result.
+        /// If a subreddit by that name already exists, an exception is thrown.
+        /// </summary>
+        /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle"></param>
+        /// <returns>An instance of this class populated with the newly created subreddit.</returns>
+        public Subreddit Create(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
+        {
+            Things.GenericContainer res = Dispatch.Subreddits.SiteAdmin(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
+
+            Validate(res);
+
+            return About();
+        }
+
+        /// <summary>
+        /// Create a new subreddit and return the created result.
         /// If a subreddit by that name already exists, retrieve that existing subreddit and return the result.
         /// If the subreddit already exists, the parameters passed to this method will be ignored.
         /// </summary>
@@ -981,10 +1092,23 @@ namespace Reddit.Controllers
             string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
             string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
         {
+            return CreateIfNotExists(new SubredditsSiteAdminInput(allowPostCrossposts: allowPostCrossposts, allowTop: allowTop, excludeBannedModqueue: excludeBannedModqueue,
+                freeFormReports: freeFormReports, linkType: linkType, spamComments: spamComments, spamLinks: spamLinks, spamSelfPosts: spamSelfPosts,
+                themeSr: themeSr, themeSrUpdate: themeSrUpdate, wikiMode: wikiMode, wikiEditAge: wikiEditAge, wikiEditKarma: wikiEditKarma), gRecaptchaResponse);
+        }
+
+        /// <summary>
+        /// Create a new subreddit and return the created result.
+        /// If a subreddit by that name already exists, retrieve that existing subreddit and return the result.
+        /// If the subreddit already exists, the parameters passed to this method will be ignored.
+        /// </summary>
+        /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <returns>An instance of this class populated with the newly created or existing subreddit.</returns>
+        public Subreddit CreateIfNotExists(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
+        {
             try
             {
-                return Create(allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse, linkType, spamComments,
-                    spamLinks, spamSelfPosts, themeSr, themeSrUpdate, wikiMode, wikiEditAge, wikiEditKarma);
+                return Create(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
             }
             catch (RedditSubredditExistsException) { }
 
@@ -1031,6 +1155,31 @@ namespace Reddit.Controllers
                 freeFormReports: freeFormReports, gRecaptchaResponse: gRecaptchaResponse, linkType: linkType, spamComments: spamComments,
                 spamLinks: spamLinks, spamSelfPosts: spamSelfPosts, themeSr: themeSr, themeSrUpdate: themeSrUpdate, wikiMode: wikiMode,
                 wikiEditAge: wikiEditAge, wikiEditKarma: wikiEditKarma);
+        }
+
+        /// <summary>
+        /// Create a new subreddit and return the created result.
+        /// If a subreddit by that name already exists, update that existing subreddit and return the result.
+        /// </summary>
+        /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle"></param>
+        /// <returns>An instance of this class populated with the newly created or updated subreddit.</returns>
+        public Subreddit CreateOrUpdate(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
+        {
+            try
+            {
+                return Create(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
+            }
+            catch (RedditSubredditExistsException) { }
+
+            // If subreddit already exists, import its data to this instance so we can get the fullname.  --Kris
+            if (string.IsNullOrWhiteSpace(Fullname))
+            {
+                Import(About(), false);
+            }
+
+            return Update(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit").About();
@@ -1171,6 +1320,36 @@ namespace Reddit.Controllers
                     excludeBannedModqueue, freeFormReports, gRecaptchaResponse, headerTitle, hideAds, keyColor, lang, linkType, name, originalContentTagEnabled,
                     over18, publicDescription, showMedia, showMediaPreview, spamComments, spamLinks, spamSelfPosts, spoilersEnabled, sr, submitLinkLabel, submitText,
                     submitTextLabel, suggestedCommentSort, themeSr, themeSrUpdate, title, type, wikiMode, commentScoreHideMins, wikiEditAge, wikiEditKarma);
+            });
+        }
+
+        /// <summary>
+        /// Update an existing subreddit.
+        /// </summary>
+        /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle"></param>
+        /// <returns>An instance of this class populated with the newly created or updated subreddit.</returns>
+        public Subreddit Update(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
+        {
+            Things.GenericContainer res = Dispatch.Subreddits.SiteAdmin(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
+
+            Validate(res);
+
+            return About();
+        }
+
+        /// <summary>
+        /// Update an existing subreddit asynchronously.
+        /// </summary>
+        /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle"></param>
+        public async Task UpdateAsync(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
+        {
+            await Task.Run(() =>
+            {
+                Update(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
             });
         }
     }
