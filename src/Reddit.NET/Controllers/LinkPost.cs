@@ -172,8 +172,8 @@ namespace Reddit.Controllers
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
-            return new LinkPost(Dispatch, Validate(Dispatch.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(ad, app, extension, flairId, flairText,
-                "link", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, null, Title, URL, videoPosterUrl), gRecapthaResponse)).JSON.Data, this);
+            return Submit(new LinksAndCommentsSubmitInput(ad, app, extension, flairId, flairText,
+                "link", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, null, Title, URL, videoPosterUrl), gRecapthaResponse);
         }
 
         /// <summary>
@@ -196,6 +196,30 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 Submit(resubmit, ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
+            });
+        }
+
+        /// <summary>
+        /// Submit this link post to Reddit.
+        /// </summary>
+        /// <param name="linksAndCommentsSubmitInput">A valid LinksAndCommentsSubmitInput instance</param>
+        /// <param name="gRecapthaResponse"></param>
+        /// <returns>A copy of this instance populated with the ID and Fullname returned by the API.</returns>
+        public LinkPost Submit(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecapthaResponse = "")
+        {
+            return new LinkPost(Dispatch, Validate(Dispatch.LinksAndComments.Submit(linksAndCommentsSubmitInput, gRecapthaResponse)).JSON.Data, this);
+        }
+
+        /// <summary>
+        /// Submit this link post to Reddit asynchronously.  This instance will automatically be updated with the resulting fullname/id.
+        /// </summary>
+        /// <param name="linksAndCommentsSubmitInput">A valid LinksAndCommentsSubmitInput instance</param>
+        /// <param name="gRecapthaResponse"></param>
+        public async Task SubmitAsync(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecapthaResponse = "")
+        {
+            await Task.Run(() =>
+            {
+                Submit(linksAndCommentsSubmitInput, gRecapthaResponse);
             });
         }
 
@@ -233,7 +257,17 @@ namespace Reddit.Controllers
         public List<LinkPost> GetDuplicates(string after = "", string before = "", bool crosspostsOnly = false, string sort = "new", string sr = "",
             int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
-            Listings.GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, new ListingsGetDuplicatesInput(sr, after, before, crosspostsOnly, sort, count, limit, show, srDetail))), Dispatch,
+            return GetDuplicates(new ListingsGetDuplicatesInput(sr, after, before, crosspostsOnly, sort, count, limit, show, srDetail));
+        }
+
+        /// <summary>
+        /// Return a list of other submissions of the same URL.
+        /// </summary>
+        /// <param name="listingsGetDuplicatesInput">A valid ListingsGetDuplicatesInput instance</param>
+        /// <returns>A list of matching posts.</returns>
+        public List<LinkPost> GetDuplicates(ListingsGetDuplicatesInput listingsGetDuplicatesInput)
+        {
+            Listings.GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, listingsGetDuplicatesInput)), Dispatch,
                 out List<LinkPost> linkPosts);
 
             return linkPosts;
@@ -255,6 +289,18 @@ namespace Reddit.Controllers
             int count = 0, int limit = 25, string show = "all", bool srDetail = false)
         {
             return GetDuplicates(after, before, true, sort, sr, count, limit, show, srDetail);
+        }
+
+        /// <summary>
+        /// Return a list of crossposts.
+        /// </summary>
+        /// <param name="listingsGetDuplicatesInput">A valid ListingsGetDuplicatesInput instance</param>
+        /// <returns>A list of matching posts.</returns>
+        public List<LinkPost> GetCrossPosts(ListingsGetDuplicatesInput listingsGetDuplicatesInput)
+        {
+            listingsGetDuplicatesInput.crossposts_only = true;
+
+            return GetDuplicates(listingsGetDuplicatesInput);
         }
     }
 }
