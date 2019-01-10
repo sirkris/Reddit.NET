@@ -117,8 +117,19 @@ namespace Reddit.Controllers
         public List<Message> GetMessages(string where, bool mark = true, int limit = 25, string after = "", string before = "",
             string show = "all", bool srDetail = false, bool includeCategories = false, int count = 0, string mid = "")
         {
-            MessageContainer messageContainer = Dispatch.PrivateMessages.GetMessages(where, new PrivateMessagesGetMessagesInput(mark, mid, after, before, includeCategories,
+            return GetMessages(where, new PrivateMessagesGetMessagesInput(mark, mid, after, before, includeCategories,
                 count, limit, show, srDetail));
+        }
+
+        /// <summary>
+        /// Retrieve private messages for the current user.
+        /// </summary>
+        /// <param name="where">One of (inbox, unread, sent)</param>
+        /// <param name="privateMessagesGetMessagesInput">A valid PrivateMessagesGetMessagesInput instance</param>
+        /// <returns>A list of messages.</returns>
+        public List<Message> GetMessages(string where, PrivateMessagesGetMessagesInput privateMessagesGetMessagesInput)
+        {
+            MessageContainer messageContainer = Dispatch.PrivateMessages.GetMessages(where, privateMessagesGetMessagesInput);
 
             List<Message> res = new List<Message>();
             if (messageContainer != null && messageContainer.Data != null && messageContainer.Data.Children != null)
@@ -359,6 +370,29 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 Compose(to, subject, text, fromSr, gRecaptchaResponse);
+            });
+        }
+
+        /// <summary>
+        /// Send a private message.
+        /// </summary>
+        /// <param name="privateMessagesComposeInput">A valid PrivateMessagesComposeInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        public void Compose(PrivateMessagesComposeInput privateMessagesComposeInput, string gRecaptchaResponse = "")
+        {
+            Validate(Dispatch.PrivateMessages.Compose(privateMessagesComposeInput, gRecaptchaResponse));
+        }
+
+        /// <summary>
+        /// Send a private message asynchronously.
+        /// </summary>
+        /// <param name="privateMessagesComposeInput">A valid PrivateMessagesComposeInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        public async Task ComposeAsync(PrivateMessagesComposeInput privateMessagesComposeInput, string gRecaptchaResponse = "")
+        {
+            await Task.Run(() =>
+            {
+                Compose(privateMessagesComposeInput, gRecaptchaResponse);
             });
         }
 
