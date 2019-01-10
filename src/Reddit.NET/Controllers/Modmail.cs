@@ -162,7 +162,17 @@ namespace Reddit.Controllers
         /// <returns>The requested conversations.</returns>
         public ConversationContainer GetConversations(string after = "", string entity = "", string sort = "unread", string state = "all", int limit = 25)
         {
-            return Validate(Dispatch.Modmail.GetConversations(new ModmailGetConversationsInput(after, entity, sort, state, limit)));
+            return GetConversations(new ModmailGetConversationsInput(after, entity, sort, state, limit));
+        }
+
+        /// <summary>
+        /// Get conversations for a logged in user or subreddits.
+        /// </summary>
+        /// <param name="modmailGetConversationsInput">A valid ModmailGetConversationsInput instance</param>
+        /// <returns>The requested conversations.</returns>
+        public ConversationContainer GetConversations(ModmailGetConversationsInput modmailGetConversationsInput)
+        {
+            return Validate(Dispatch.Modmail.GetConversations(modmailGetConversationsInput));
         }
 
         /// <summary>
@@ -175,7 +185,19 @@ namespace Reddit.Controllers
         /// <returns>The requested conversations.</returns>
         public ConversationContainer GetRecentConversations(string after = "", string entity = "", string state = "all", int limit = 25)
         {
-            Recent = GetConversations(after, entity, "recent", state, limit);
+            return GetRecentConversations(new ModmailGetConversationsInput(after, entity, "recent", state, limit));
+        }
+
+        /// <summary>
+        /// Get recent conversations for a logged in user or subreddits.
+        /// </summary>
+        /// <param name="modmailGetConversationsInput">A valid ModmailGetConversationsInput instance</param>
+        /// <returns>The requested conversations.</returns>
+        public ConversationContainer GetRecentConversations(ModmailGetConversationsInput modmailGetConversationsInput)
+        {
+            modmailGetConversationsInput.sort = "recent";
+
+            Recent = GetConversations(modmailGetConversationsInput);
             RecentLastUpdated = DateTime.Now;
 
             return Recent;
@@ -191,7 +213,19 @@ namespace Reddit.Controllers
         /// <returns>The requested conversations.</returns>
         public ConversationContainer GetModConversations(string after = "", string entity = "", string state = "all", int limit = 25)
         {
-            Mod = GetConversations(after, entity, "mod", state, limit);
+            return GetModConversations(new ModmailGetConversationsInput(after, entity, "mod", state, limit));
+        }
+
+        /// <summary>
+        /// Get mod conversations for a logged in user or subreddits.
+        /// </summary>
+        /// <param name="modmailGetConversationsInput">A valid ModmailGetConversationsInput instance</param>
+        /// <returns>The requested conversations.</returns>
+        public ConversationContainer GetModConversations(ModmailGetConversationsInput modmailGetConversationsInput)
+        {
+            modmailGetConversationsInput.sort = "mod";
+
+            Mod = GetConversations(modmailGetConversationsInput);
             ModLastUpdated = DateTime.Now;
 
             return Mod;
@@ -207,7 +241,19 @@ namespace Reddit.Controllers
         /// <returns>The requested conversations.</returns>
         public ConversationContainer GetUserConversations(string after = "", string entity = "", string state = "all", int limit = 25)
         {
-            User = GetConversations(after, entity, "user", state, limit);
+            return GetUserConversations(new ModmailGetConversationsInput(after, entity, "user", state, limit));
+        }
+
+        /// <summary>
+        /// Get user conversations for a logged in user or subreddits.
+        /// </summary>
+        /// <param name="modmailGetConversationsInput">A valid ModmailGetConversationsInput instance</param>
+        /// <returns>The requested conversations.</returns>
+        public ConversationContainer GetUserConversations(ModmailGetConversationsInput modmailGetConversationsInput)
+        {
+            modmailGetConversationsInput.sort = "user";
+
+            User = GetConversations(modmailGetConversationsInput);
             UserLastUpdated = DateTime.Now;
 
             return User;
@@ -223,7 +269,19 @@ namespace Reddit.Controllers
         /// <returns>The requested conversations.</returns>
         public ConversationContainer GetUnreadConversations(string after = "", string entity = "", string state = "all", int limit = 25)
         {
-            Unread = GetConversations(after, entity, "unread", state, limit);
+            return GetUnreadConversations(new ModmailGetConversationsInput(after, entity, "unread", state, limit));
+        }
+
+        /// <summary>
+        /// Get user conversations for a logged in user or subreddits.
+        /// </summary>
+        /// <param name="modmailGetConversationsInput">A valid ModmailGetConversationsInput instance</param>
+        /// <returns>The requested conversations.</returns>
+        public ConversationContainer GetUnreadConversations(ModmailGetConversationsInput modmailGetConversationsInput)
+        {
+            modmailGetConversationsInput.sort = "unread";
+
+            Unread = GetConversations(modmailGetConversationsInput);
             UnreadLastUpdated = DateTime.Now;
 
             return Unread;
@@ -257,7 +315,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the conversation data.</returns>
         public ModmailConversationContainer NewConversation(string body = "", string subject = "", string srName = "", string to = "", bool isAuthorHidden = false)
         {
-            return Validate(Dispatch.Modmail.NewConversation(new ModmailNewConversationInput(body, isAuthorHidden, srName, subject, to)));
+            return NewConversation(new ModmailNewConversationInput(body, isAuthorHidden, srName, subject, to));
         }
 
         /// <summary>
@@ -269,12 +327,35 @@ namespace Reddit.Controllers
         /// <param name="to">Modmail conversation recipient username</param>
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="srName">subreddit name</param>
-        /// <returns>An object containing the conversation data.</returns>
         public async Task NewConversationAsync(string body = "", string subject = "", string srName = "", string to = "", bool isAuthorHidden = false)
         {
             await Task.Run(() =>
             {
                 NewConversation(body, subject, srName, to, isAuthorHidden);
+            });
+        }
+
+        /// <summary>
+        /// Creates a new conversation for a particular SR.
+        /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
+        /// </summary>
+        /// <param name="modmailNewConversationInput">A valid ModmailNewConversationInput instance</param>
+        /// <returns>An object containing the conversation data.</returns>
+        public ModmailConversationContainer NewConversation(ModmailNewConversationInput modmailNewConversationInput)
+        {
+            return Validate(Dispatch.Modmail.NewConversation(modmailNewConversationInput));
+        }
+
+        /// <summary>
+        /// Creates a new conversation for a particular SR asynchronously.
+        /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
+        /// </summary>
+        /// <param name="modmailNewConversationInput">A valid ModmailNewConversationInput instance</param>
+        public async Task NewConversationAsync(ModmailNewConversationInput modmailNewConversationInput)
+        {
+            await Task.Run(() =>
+            {
+                NewConversation(modmailNewConversationInput);
             });
         }
 
@@ -299,7 +380,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing the conversation data.</returns>
         public ModmailConversationContainer NewMessage(string conversationId, string body = "", bool isAuthorHidden = false, bool isInternal = false)
         {
-            return Validate(Dispatch.Modmail.NewMessage(conversationId, new ModmailNewMessageInput(body, isAuthorHidden, isInternal)));
+            return NewMessage(conversationId, new ModmailNewMessageInput(body, isAuthorHidden, isInternal));
         }
 
         /// <summary>
@@ -309,12 +390,35 @@ namespace Reddit.Controllers
         /// <param name="body">raw markdown text</param>
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="isInternal">boolean value</param>
-        /// <returns>An object containing the conversation data.</returns>
         public async Task NewMessageAsync(string conversationId, string body = "", bool isAuthorHidden = false, bool isInternal = false)
         {
             await Task.Run(() =>
             {
                 NewMessage(conversationId, body, isAuthorHidden, isInternal);
+            });
+        }
+
+        /// <summary>
+        /// Creates a new message for a particular conversation.
+        /// </summary>
+        /// <param name="conversationId">base36 modmail conversation id</param>
+        /// <param name="modmailNewMessageInput">A valid ModmailNewMessageInput instance</param>
+        /// <returns></returns>
+        public ModmailConversationContainer NewMessage(string conversationId, ModmailNewMessageInput modmailNewMessageInput)
+        {
+            return Validate(Dispatch.Modmail.NewMessage(conversationId, modmailNewMessageInput));
+        }
+
+        /// <summary>
+        /// Creates a new message for a particular conversation asynchronously.
+        /// </summary>
+        /// <param name="conversationId">base36 modmail conversation id</param>
+        /// <param name="modmailNewMessageInput">A valid ModmailNewMessageInput instance</param>
+        public async Task NewMessageAsync(string conversationId, ModmailNewMessageInput modmailNewMessageInput)
+        {
+            await Task.Run(() =>
+            {
+                NewMessage(conversationId, modmailNewMessageInput);
             });
         }
 
