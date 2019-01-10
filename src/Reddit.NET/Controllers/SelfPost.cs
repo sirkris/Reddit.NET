@@ -152,7 +152,7 @@ namespace Reddit.Controllers
         /// <param name="spoiler">boolean value</param>
         /// <param name="videoPosterUrl">a valid URL</param>
         /// <returns>A copy of this instance populated with the ID and Fullname returned by the API.</returns>
-        public SelfPost Submit( bool ad = false, string app = "", string extension = "",
+        public SelfPost Submit(bool ad = false, string app = "", string extension = "",
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
@@ -179,6 +179,30 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 Submit(ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
+            });
+        }
+
+        /// <summary>
+        /// Submit this self post to Reddit.
+        /// </summary>
+        /// <param name="linksAndCommentsSubmitInput">A valid LinksAndCommentsSubmitInput instance</param>
+        /// <param name="gRecapthaResponse"></param>
+        /// <returns>A copy of this instance populated with the ID and Fullname returned by the API.</returns>
+        public SelfPost Submit(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecapthaResponse = "")
+        {
+            return new SelfPost(Dispatch, Validate(Dispatch.LinksAndComments.Submit(linksAndCommentsSubmitInput, gRecapthaResponse)).JSON.Data, this);
+        }
+
+        /// <summary>
+        /// Submit this self post to Reddit asynchronously.  This instance will automatically be updated with the resulting fullname/id.
+        /// </summary>
+        /// <param name="linksAndCommentsSubmitInput">A valid LinksAndCommentsSubmitInput instance</param>
+        /// <param name="gRecapthaResponse"></param>
+        public async Task SubmitAsync(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecapthaResponse = "")
+        {
+            await Task.Run(() =>
+            {
+                Submit(linksAndCommentsSubmitInput, gRecapthaResponse);
             });
         }
 
