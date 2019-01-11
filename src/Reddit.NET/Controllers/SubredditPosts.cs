@@ -286,7 +286,17 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetBest(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Best(new CategorizedSrListingInput(after, before, limit: limit)), Dispatch);
+            return GetBest(new CategorizedSrListingInput(after, before, limit: limit));
+        }
+
+        /// <summary>
+        /// Retrieve a list of posts using "best" sort.
+        /// </summary>
+        /// <param name="categorizedSrListingInput">A valid CategorizedSrListingInput instance</param>
+        /// <returns>A list of posts.</returns>
+        public List<Post> GetBest(CategorizedSrListingInput categorizedSrListingInput)
+        {
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Best(categorizedSrListingInput), Dispatch);
 
             BestLastUpdated = DateTime.Now;
 
@@ -303,7 +313,17 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetHot(string g = "", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Hot(new ListingsHotInput(g, after, before, limit: limit), Subreddit), Dispatch);
+            return GetHot(new ListingsHotInput(g, after, before, limit: limit));
+        }
+
+        /// <summary>
+        /// Retrieve a list of posts using "hot" sort.
+        /// </summary>
+        /// <param name="listingsHotInput">A valid ListingsHotInput instance</param>
+        /// <returns>A list of posts.</returns>
+        public List<Post> GetHot(ListingsHotInput listingsHotInput)
+        {
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Hot(listingsHotInput), Dispatch);
 
             HotLastUpdated = DateTime.Now;
 
@@ -320,7 +340,17 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetNew(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.New(new CategorizedSrListingInput(after, before, limit: limit), Subreddit), Dispatch);
+            return GetNew(new CategorizedSrListingInput(after, before, limit: limit));
+        }
+
+        /// <summary>
+        /// Retrieve a list of posts using "new" sort.
+        /// </summary>
+        /// <param name="categorizedSrListingInput">A valid CategorizedSrListingInput instance</param>
+        /// <returns>A list of posts.</returns>
+        public List<Post> GetNew(CategorizedSrListingInput categorizedSrListingInput)
+        {
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.New(categorizedSrListingInput), Dispatch);
 
             NewLastUpdated = DateTime.Now;
 
@@ -337,7 +367,17 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetRising(string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Rising(new CategorizedSrListingInput(after, before, limit: limit), Subreddit), Dispatch);
+            return GetRising(new CategorizedSrListingInput(after, before, limit: limit));
+        }
+
+        /// <summary>
+        /// Retrieve a list of posts using "rising" sort.
+        /// </summary>
+        /// <param name="categorizedSrListingInput">A valid CategorizedSrListingInput instance</param>
+        /// <returns>A list of posts.</returns>
+        public List<Post> GetRising(CategorizedSrListingInput categorizedSrListingInput)
+        {
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Rising(categorizedSrListingInput), Dispatch);
 
             RisingLastUpdated = DateTime.Now;
 
@@ -354,12 +394,22 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetTop(string t = "all", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Top(new TimedCatSrListingInput(t, after, before, limit: limit), Subreddit), Dispatch);
+            return GetTop(new TimedCatSrListingInput(t, after, before, limit: limit));
+        }
+
+        /// <summary>
+        /// Retrieve a list of posts using "top" sort.
+        /// </summary>
+        /// <param name="timedCatSrListingInput">A valid TimedCatSrListingInput instance</param>
+        /// <returns>A list of posts.</returns>
+        public List<Post> GetTop(TimedCatSrListingInput timedCatSrListingInput)
+        {
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Top(timedCatSrListingInput), Dispatch);
 
             TopLastUpdated = DateTime.Now;
 
             Top = posts;
-            TopT = t;
+            TopT = timedCatSrListingInput.t;
             return posts;
         }
 
@@ -372,12 +422,22 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetControversial(string t = "all", string after = "", string before = "", int limit = 100)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Controversial(new TimedCatSrListingInput(t, after, before, limit: limit), Subreddit), Dispatch);
+            return GetControversial(new TimedCatSrListingInput(t, after, before, limit: limit));
+        }
+
+        /// <summary>
+        /// Retrieve a list of posts using "controversial" sort.
+        /// </summary>
+        /// <param name="timedCatSrListingInput">A valid TimedCatSrListingInput instance</param>
+        /// <returns>A list of posts.</returns>
+        public List<Post> GetControversial(TimedCatSrListingInput timedCatSrListingInput)
+        {
+            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Controversial(timedCatSrListingInput), Dispatch);
 
             ControversialLastUpdated = DateTime.Now;
 
             Controversial = posts;
-            ControversialT = t;
+            ControversialT = timedCatSrListingInput.t;
             return posts;
         }
 
