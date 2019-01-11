@@ -153,23 +153,33 @@ namespace Reddit.Controllers
         /// <returns>The updated WikiPage.</returns>
         public WikiPage EditAndReturn(string reason, string content = null, string previous = "")
         {
-            Edit(reason, content, previous);
+            return EditAndReturn(new WikiEditPageInput(reason, content, previous));
+        }
+
+        /// <summary>
+        /// Edit a wiki page and return an instance with the updated data.
+        /// </summary>
+        /// <param name="wikiEditPageInput">A valid WikiEditPageInput instance</param>
+        /// <returns>The updated WikiPage.</returns>
+        public WikiPage EditAndReturn(WikiEditPageInput wikiEditPageInput)
+        {
+            Edit(wikiEditPageInput);
             return About();
         }
 
         /// <summary>
-        /// Edit a wiki page.
+        /// Edit this wiki page.
         /// </summary>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="content">The page content</param>
         /// <param name="previous">the starting point revision for this edit</param>
         public void Edit(string reason, string content = null, string previous = "")
         {
-            Dispatch.Wiki.Edit(new WikiEditPageInput(content, Name, reason, previous), Subreddit);
+            Edit(new WikiEditPageInput(content, Name, reason, previous));
         }
 
         /// <summary>
-        /// Edit a wiki page asynchronously.
+        /// Edit this wiki page asynchronously.
         /// </summary>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="content">The page content</param>
@@ -185,6 +195,29 @@ namespace Reddit.Controllers
         /// <summary>
         /// Edit this wiki page.
         /// </summary>
+        /// <param name="wikiEditPageInput">A valid WikiEditPageInput instance</param>
+        public void Edit(WikiEditPageInput wikiEditPageInput)
+        {
+            wikiEditPageInput.page = Name;
+
+            Dispatch.Wiki.Edit(wikiEditPageInput, Subreddit);
+        }
+
+        /// <summary>
+        /// Edit this wiki page asynchronously.
+        /// </summary>
+        /// <param name="wikiEditPageInput">A valid WikiEditPageInput instance</param>
+        public async Task EditAsync(WikiEditPageInput wikiEditPageInput)
+        {
+            await Task.Run(() =>
+            {
+                Edit(wikiEditPageInput);
+            });
+        }
+
+        /// <summary>
+        /// Edit this wiki page with the current values of this instance.
+        /// </summary>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="previous">the starting point revision for this edit</param>
         public void SaveChanges(string reason, string previous = "")
@@ -193,7 +226,7 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
-        /// Edit this wiki page asynchronously.
+        /// Edit this wiki page with the current values of this instance asynchronously.
         /// </summary>
         /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
         /// <param name="previous">the starting point revision for this edit</param>
@@ -306,7 +339,17 @@ namespace Reddit.Controllers
         public List<WikiPageRevision> Revisions(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = false, int count = 0)
         {
-            return Validate(Dispatch.Wiki.PageRevisions(Name, new SrListingInput(after, before, count, limit, srDetail, show), Subreddit)).Data.Children;
+            return Revisions(new SrListingInput(after, before, count, limit, srDetail, show));
+        }
+
+        /// <summary>
+        /// Retrieve a list of revisions of this wiki page.
+        /// </summary>
+        /// <param name="srListingInput">A valid SrListingInput instance</param>
+        /// <returns>A list of revisions.</returns>
+        public List<WikiPageRevision> Revisions(SrListingInput srListingInput)
+        {
+            return Validate(Dispatch.Wiki.PageRevisions(Name, srListingInput, Subreddit)).Data.Children;
         }
 
         /// <summary>
@@ -326,7 +369,7 @@ namespace Reddit.Controllers
         /// <returns>An object containing wiki page settings.</returns>
         public WikiPageSettings UpdatePermissions(bool listed, int permLevel)
         {
-            return Validate(Dispatch.Wiki.UpdatePermissions(Name, new WikiUpdatePermissionsInput(listed, permLevel), Subreddit)).Data;
+            return UpdatePermissions(new WikiUpdatePermissionsInput(listed, permLevel));
         }
 
         /// <summary>
@@ -339,6 +382,28 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 UpdatePermissions(listed, permLevel);
+            });
+        }
+
+        /// <summary>
+        /// Update the permissions and visibility of wiki page.
+        /// </summary>
+        /// <param name="wikiUpdatePermissionsInput">A valid WikiUpdatePermissionsInput instance</param>
+        /// <returns>An object containing wiki page settings.</returns>
+        public WikiPageSettings UpdatePermissions(WikiUpdatePermissionsInput wikiUpdatePermissionsInput)
+        {
+            return Validate(Dispatch.Wiki.UpdatePermissions(Name, wikiUpdatePermissionsInput, Subreddit)).Data;
+        }
+
+        /// <summary>
+        /// Update the permissions and visibility of wiki page asynchronously.
+        /// </summary>
+        /// <param name="wikiUpdatePermissionsInput">A valid WikiUpdatePermissionsInput instance</param>
+        public async Task UpdatePermissionsAsync(WikiUpdatePermissionsInput wikiUpdatePermissionsInput)
+        {
+            await Task.Run(() =>
+            {
+                UpdatePermissions(wikiUpdatePermissionsInput);
             });
         }
 
