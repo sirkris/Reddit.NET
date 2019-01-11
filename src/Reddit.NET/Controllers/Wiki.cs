@@ -116,12 +116,17 @@ namespace Reddit.Controllers
         public List<SubredditUser> GetContributors(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikicontributors",
-                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Subreddit);
+            return GetContributors(new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories));
+        }
 
-            Validate(res);
-
-            return Listings.GetAboutChildren<SubredditUser>(res);
+        /// <summary>
+        /// Get the approved submitters of this subreddit's wiki.
+        /// </summary>
+        /// <param name="subredditsAboutInput">A valid SubredditsAboutInput instance</param>
+        /// <returns>A list of subreddit contributors.</returns>
+        public List<SubredditUser> GetContributors(SubredditsAboutInput subredditsAboutInput)
+        {
+            return Listings.GetAboutChildren<SubredditUser>(Validate(Dispatch.Subreddits.About("wikicontributors", subredditsAboutInput, Subreddit)));
         }
 
         /// <summary>
@@ -139,12 +144,17 @@ namespace Reddit.Controllers
         public List<BannedUser> GetBannedUsers(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
-            Things.DynamicShortListingContainer res = Dispatch.Subreddits.About("wikibanned",
-                new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories), Subreddit);
+            return GetBannedUsers(new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories));
+        }
 
-            Validate(res);
-
-            return Listings.GetAboutChildren<BannedUser>(res);
+        /// <summary>
+        /// Get the approved submitters of this subreddit's wiki.
+        /// </summary>
+        /// <param name="subredditsAboutInput">A valid SubredditsAboutInput instance</param>
+        /// <returns>A list of subreddit contributors.</returns>
+        public List<BannedUser> GetBannedUsers(SubredditsAboutInput subredditsAboutInput)
+        {
+            return Listings.GetAboutChildren<BannedUser>(Validate(Dispatch.Subreddits.About("wikibanned", subredditsAboutInput, Subreddit)));
         }
 
         /// <summary>
@@ -172,7 +182,17 @@ namespace Reddit.Controllers
         public List<Things.WikiPageRevision> GetRecentPageRevisions(int limit = 25, string after = "", string before = "", string show = "all",
             bool srDetail = false, int count = 0)
         {
-            return Validate(Dispatch.Wiki.Revisions(new SrListingInput(after, before, count, limit, srDetail, show), Subreddit)).Data.Children;
+            return GetRecentPageRevisions(new SrListingInput(after, before, count, limit, srDetail, show));
+        }
+
+        /// <summary>
+        /// Retrieve a list of recently changed wiki pages in this subreddit.
+        /// </summary>
+        /// <param name="srListingInput">A valid SrListingInput instance</param>
+        /// <returns>A list of wiki pages.</returns>
+        public List<Things.WikiPageRevision> GetRecentPageRevisions(SrListingInput srListingInput)
+        {
+            return Validate(Dispatch.Wiki.Revisions(srListingInput, Subreddit)).Data.Children;
         }
 
         internal virtual void OnPagesUpdated(WikiPagesUpdateEventArgs e)
