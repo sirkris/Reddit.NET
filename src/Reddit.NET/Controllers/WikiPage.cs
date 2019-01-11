@@ -153,7 +153,7 @@ namespace Reddit.Controllers
         /// <returns>The updated WikiPage.</returns>
         public WikiPage EditAndReturn(string reason, string content = null, string previous = "")
         {
-            return EditAndReturn(new WikiEditPageInput(reason, content, previous));
+            return EditAndReturn(new WikiEditPageInput(content, Name, reason, previous));
         }
 
         /// <summary>
