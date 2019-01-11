@@ -2,6 +2,7 @@
 using Reddit.Models.Inputs.Users;
 using Reddit.Things;
 using RestSharp;
+using System;
 using System.Collections.Generic;
 
 namespace Reddit.Models
@@ -190,6 +191,8 @@ namespace Reddit.Models
         public PostContainer PostHistory(string username, string where, UsersHistoryInput usersHistoryInput)
         {
             RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
+
+            usersHistoryInput.sort = (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase) ? "new" : usersHistoryInput.sort);
 
             restRequest.AddObject(usersHistoryInput);
             restRequest.AddParameter("type", "links");

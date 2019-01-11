@@ -203,7 +203,7 @@ namespace Reddit.Controllers
         public void AddRelationship(string banContext, string banMessage, string banReason, string container, int duration,
             string permissions, string type, string subreddit = null)
         {
-            Validate(Dispatch.Users.Friend(new UsersFriendInput(Name, type, duration, permissions, banContext, banMessage, banReason, container), subreddit));
+            AddRelationship(new UsersFriendInput(Name, type, duration, permissions, banContext, banMessage, banReason, container), subreddit);
         }
 
         // TODO - Break this fucker up into multiple methods.  --Kris
@@ -238,6 +238,53 @@ namespace Reddit.Controllers
             });
         }
 
+        /// <summary>
+        /// Create a relationship between a user and another user or subreddit.
+        /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
+        /// moderator: Use "moderator_invite"
+        /// moderator_invite: modothers
+        /// contributor: modcontributors
+        /// banned: modcontributors
+        /// muted: modcontributors
+        /// wikibanned: modcontributors and modwiki
+        /// wikicontributor: modcontributors and modwiki
+        /// friend: Use /api/v1/me/friends/{username}
+        /// enemy: Use /api/block
+        /// Complement to POST_unfriend
+        /// </summary>
+        /// <param name="usersFriendInput">A valid UsersFriendInput instance</param>
+        /// <param name="subreddit">A subreddit</param>
+        public void AddRelationship(UsersFriendInput usersFriendInput, string subreddit = null)
+        {
+            usersFriendInput.name = Name;
+
+            Validate(Dispatch.Users.Friend(usersFriendInput, subreddit));
+        }
+
+        /// <summary>
+        /// Asynchronously create a relationship between a user and another user or subreddit.
+        /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
+        /// moderator: Use "moderator_invite"
+        /// moderator_invite: modothers
+        /// contributor: modcontributors
+        /// banned: modcontributors
+        /// muted: modcontributors
+        /// wikibanned: modcontributors and modwiki
+        /// wikicontributor: modcontributors and modwiki
+        /// friend: Use /api/v1/me/friends/{username}
+        /// enemy: Use /api/block
+        /// Complement to POST_unfriend
+        /// </summary>
+        /// <param name="usersFriendInput">A valid UsersFriendInput instance</param>
+        /// <param name="subreddit">A subreddit</param>
+        public async Task AddRelationshipAsync(UsersFriendInput usersFriendInput, string subreddit = null)
+        {
+            await Task.Run(() =>
+            {
+                AddRelationship(usersFriendInput, subreddit);
+            });
+        }
+
         // TODO - Break this fucker up into multiple methods.  --Kris
         /// <summary>
         /// Remove a relationship between a user and another user or subreddit.
@@ -259,7 +306,81 @@ namespace Reddit.Controllers
         /// <param name="subreddit">A subreddit</param>
         public void RemoveRelationship(string type, string container = "", string subreddit = null)
         {
-            Dispatch.Users.Unfriend(new UsersUnfriendInput(Name, Fullname, type, container), subreddit);
+            RemoveRelationship(new UsersUnfriendInput(Name, Fullname, type, container), subreddit);
+        }
+
+        // TODO - Break this fucker up into multiple methods.  --Kris
+        /// <summary>
+        /// Asynchronously remove a relationship between a user and another user or subreddit.
+        /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
+        /// moderator: Use "moderator_invite"
+        /// moderator_invite: modothers
+        /// contributor: modcontributors
+        /// banned: modcontributors
+        /// muted: modcontributors
+        /// wikibanned: modcontributors and modwiki
+        /// wikicontributor: modcontributors and modwiki
+        /// friend: Use /api/v1/me/friends/{username}
+        /// enemy: Use /api/block
+        /// Complement to POST_friend
+        /// </summary>
+        /// <param name="type">one of (friend, enemy, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
+        /// <param name="container"></param>
+        /// <param name="subreddit">A subreddit</param>
+        public async Task RemoveRelationshipAsync(string type, string container = "", string subreddit = null)
+        {
+            await Task.Run(() =>
+            {
+                RemoveRelationship(new UsersUnfriendInput(Name, Fullname, type, container), subreddit);
+            });
+        }
+
+        /// <summary>
+        /// Remove a relationship between a user and another user or subreddit.
+        /// If type is friend or enemy, 'container' MUST be the current user's fullname; for other types, the subreddit must be set via URL (e.g., /r/funny/api/unfriend).
+        /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
+        /// moderator: Use "moderator_invite"
+        /// moderator_invite: modothers
+        /// contributor: modcontributors
+        /// banned: modcontributors
+        /// muted: modcontributors
+        /// wikibanned: modcontributors and modwiki
+        /// wikicontributor: modcontributors and modwiki
+        /// friend: Use /api/v1/me/friends/{username}
+        /// enemy: Use /api/block
+        /// Complement to POST_friend
+        /// </summary>
+        /// <param name="usersUnfriendInput">A valid UsersUnfriendInput instance</param>
+        /// <param name="subreddit">A subreddit</param>
+        public void RemoveRelationship(UsersUnfriendInput usersUnfriendInput, string subreddit = null)
+        {
+            usersUnfriendInput.name = Name;
+
+            Dispatch.Users.Unfriend(usersUnfriendInput, subreddit);
+        }
+
+        /// <summary>
+        /// Asynchronously remove a relationship between a user and another user or subreddit.
+        /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
+        /// moderator: Use "moderator_invite"
+        /// moderator_invite: modothers
+        /// contributor: modcontributors
+        /// banned: modcontributors
+        /// muted: modcontributors
+        /// wikibanned: modcontributors and modwiki
+        /// wikicontributor: modcontributors and modwiki
+        /// friend: Use /api/v1/me/friends/{username}
+        /// enemy: Use /api/block
+        /// Complement to POST_friend
+        /// </summary>
+        /// <param name="usersUnfriendInput">A valid UsersUnfriendInput instance</param>
+        /// <param name="subreddit">A subreddit</param>
+        public async Task RemoveRelationshipAsync(UsersUnfriendInput usersUnfriendInput, string subreddit = null)
+        {
+            await Task.Run(() =>
+            {
+                RemoveRelationship(usersUnfriendInput, subreddit);
+            });
         }
 
         // Note - I tested this one manually.  Leaving out of automated tests so as not to spam the Reddit admins.  --Kris
@@ -294,13 +415,13 @@ namespace Reddit.Controllers
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
         public void SetPermissions(string subreddit, string permissions, string type)
         {
-            Validate(Dispatch.Users.SetPermissions(new UsersSetPermissionsInput(Name, permissions, type), subreddit));
+            SetPermissions(new UsersSetPermissionsInput(Name, permissions, type), subreddit);
         }
 
         /// <summary>
         /// Set permissions asynchronously.
         /// </summary>
-        /// <param name="usernsubredditame">the name of an existing subreddit</param>
+        /// <param name="subreddit">the name of an existing subreddit</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
         public async Task SetPermissionsAsync(string subreddit, string permissions, string type)
@@ -308,6 +429,31 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 SetPermissions(subreddit, permissions, type);
+            });
+        }
+
+        /// <summary>
+        /// Set permissions.
+        /// </summary>
+        /// <param name="usersSetPermissionsInput">A valid UsersSetPermissionsInput instance</param>
+        /// <param name="subreddit">the name of an existing subreddit</param>
+        public void SetPermissions(UsersSetPermissionsInput usersSetPermissionsInput, string subreddit = null)
+        {
+            usersSetPermissionsInput.name = Name;
+
+            Validate(Dispatch.Users.SetPermissions(usersSetPermissionsInput, subreddit));
+        }
+
+        /// <summary>
+        /// Set permissions asynchronously.
+        /// </summary>
+        /// <param name="usersSetPermissionsInput">A valid UsersSetPermissionsInput instance</param>
+        /// <param name="subreddit">the name of an existing subreddit</param>
+        public async Task SetPermissionsAsync(UsersSetPermissionsInput usersSetPermissionsInput, string subreddit = null)
+        {
+            await Task.Run(() =>
+            {
+                SetPermissions(usersSetPermissionsInput, subreddit);
             });
         }
 
@@ -370,17 +516,21 @@ namespace Reddit.Controllers
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            if (sort.Equals("newForced", StringComparison.OrdinalIgnoreCase))
-            {
-                return Listings.ForceNewSort(Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where,
-                    new UsersHistoryInput(t, "new", context, after, before, count, limit, show, srDetail, includeCategories))),
-                    Dispatch));
-            }
-            else
-            {
-                return Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where,
-                    new UsersHistoryInput(t, sort, context, after, before, count, limit, show, srDetail, includeCategories))), Dispatch);
-            }
+            return PostHistory(new UsersHistoryInput(t, sort, context, after, before, count, limit, show, srDetail, includeCategories), where);
+        }
+
+        /// <summary>
+        /// Retrieve the user's post history.
+        /// </summary>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <param name="where">One of (overview, submitted, upvotes, downvoted, hidden, saved, gilded)</param>
+        /// <returns>A list of posts.</returns>
+        public List<Post> PostHistory(UsersHistoryInput usersHistoryInput, string where = "overview")
+        {
+            return (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase)
+                ? Listings.ForceNewSort(Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)),
+                    Dispatch))
+                : Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)), Dispatch));
         }
 
         /// <summary>
@@ -401,8 +551,17 @@ namespace Reddit.Controllers
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            return Listings.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments",
-                    new UsersHistoryInput(t, sort, context, after, before, count, limit, show, srDetail, includeCategories))), Dispatch);
+            return CommentHistory(new UsersHistoryInput(t, sort, context, after, before, count, limit, show, srDetail, includeCategories));
+        }
+
+        /// <summary>
+        /// Retrieve the user's comment history.
+        /// </summary>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <returns>A list of comments.</returns>
+        public List<Comment> CommentHistory(UsersHistoryInput usersHistoryInput)
+        {
+            return Listings.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", usersHistoryInput)), Dispatch);
         }
 
         /// <summary>
@@ -434,7 +593,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public void CreateFlair(string subreddit, string text, string cssClass = "")
         {
-            Validate(Dispatch.Flair.Create(new FlairCreateInput(text, "", Name, cssClass), subreddit));
+            CreateFlair(new FlairCreateInput(text, "", Name, cssClass), subreddit);
         }
 
         /// <summary>
@@ -452,6 +611,29 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Create a new user flair.
+        /// </summary>
+        /// <param name="flairCreateInput">A valid FlairCreateInput instance</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        public void CreateFlair(FlairCreateInput flairCreateInput, string subreddit = null)
+        {
+            Validate(Dispatch.Flair.Create(flairCreateInput, subreddit));
+        }
+
+        /// <summary>
+        /// Create a new user flair asynchronously.
+        /// </summary>
+        /// <param name="flairCreateInput">A valid FlairCreateInput instance</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        public async Task CreateFlairAsync(FlairCreateInput flairCreateInput, string subreddit = null)
+        {
+            await Task.Run(() =>
+            {
+                CreateFlair(flairCreateInput, subreddit);
+            });
+        }
+
+        /// <summary>
         /// List of flairs.
         /// </summary>
         /// <param name="subreddit">The subreddit with the flairs</param>
@@ -465,7 +647,20 @@ namespace Reddit.Controllers
         public List<FlairListResult> FlairList(string subreddit = "", int limit = 25, string after = "", string before = "", int count = 0,
             string show = "all", bool srDetail = false)
         {
-            return Validate(Dispatch.Flair.FlairList(new FlairNameListingInput(Name, after, before, limit, count, show, srDetail), subreddit)).Users;
+            return FlairList(new FlairNameListingInput(Name, after, before, limit, count, show, srDetail), subreddit);
+        }
+
+        /// <summary>
+        /// List of flairs.
+        /// </summary>
+        /// <param name="flairNameListingInput">A valid FlairNameListingInput instance</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>Flair list results.</returns>
+        public List<FlairListResult> FlairList(FlairNameListingInput flairNameListingInput, string subreddit = "")
+        {
+            flairNameListingInput.name = Name;
+
+            return Validate(Dispatch.Flair.FlairList(flairNameListingInput, subreddit)).Users;
         }
 
         /// <summary>
@@ -487,7 +682,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public void InviteToLiveThread(string thread, string permissions, string type)
         {
-            Validate(Dispatch.LiveThreads.InviteContributor(thread, new LiveThreadsContributorInput(Name, permissions, type)));
+            InviteToLiveThread(new LiveThreadsContributorInput(Name, permissions, type), thread);
         }
 
         /// <summary>
@@ -502,6 +697,33 @@ namespace Reddit.Controllers
             await Task.Run(() =>
             {
                 InviteToLiveThread(thread, permissions, type);
+            });
+        }
+
+        /// <summary>
+        /// Invite another user to contribute to a live thread.
+        /// Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified.
+        /// </summary>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        /// <param name="thread">id</param>
+        public void InviteToLiveThread(LiveThreadsContributorInput liveThreadsContributorInput, string thread = "")
+        {
+            liveThreadsContributorInput.name = Name;
+
+            Validate(Dispatch.LiveThreads.InviteContributor(thread, liveThreadsContributorInput));
+        }
+
+        /// <summary>
+        /// Asynchronously invite another user to contribute to a live thread.
+        /// Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified.
+        /// </summary>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        /// <param name="thread">id</param>
+        public async Task InviteToLiveThreadAsync(LiveThreadsContributorInput liveThreadsContributorInput, string thread = "")
+        {
+            await Task.Run(() =>
+            {
+                InviteToLiveThread(liveThreadsContributorInput, thread);
             });
         }
 
@@ -585,12 +807,39 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Change a contributor or contributor invite's permissions.
+        /// Requires the manage permission for this thread.
+        /// Note that permissions overrides the previous value completely.
+        /// </summary>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        /// <param name="thread">id</param>
+        public void SetLiveThreadPermissions(LiveThreadsContributorInput liveThreadsContributorInput, string thread = "")
+        {
+            SetLiveThreadPermissions(liveThreadsContributorInput, thread);
+        }
+
+        /// <summary>
+        /// Change a contributor or contributor invite's permissions asynchronously.
+        /// Requires the manage permission for this thread.
+        /// Note that permissions overrides the previous value completely.
+        /// </summary>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        /// <param name="thread">id</param>
+        public async Task SetLiveThreadPermissionsAsync(LiveThreadsContributorInput liveThreadsContributorInput, string thread = "")
+        {
+            await Task.Run(() =>
+            {
+                SetLiveThreadPermissions(liveThreadsContributorInput, thread);
+            });
+        }
+
+        /// <summary>
         /// Post an update to a live thread.
         /// Requires the update permission for this thread.
         /// </summary>
         /// <param name="id">The ID of the live thread</param>
         /// <param name="body">raw markdown text</param>
-        public void UpdateLiveThread(string id, string body)
+        public void UpdateLiveThread(string id = "", string body = "")
         {
             Validate(Dispatch.LiveThreads.Update(id, body));
         }
@@ -601,7 +850,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="id">The ID of the live thread</param>
         /// <param name="body">raw markdown text</param>
-        public async Task UpdateLiveThreadAsync(string id, string body)
+        public async Task UpdateLiveThreadAsync(string id = "", string body = "")
         {
             await Task.Run(() =>
             {
