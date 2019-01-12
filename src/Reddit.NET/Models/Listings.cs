@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Reddit.Models.Inputs;
-using Reddit.Models.Inputs.Listings;
+using Reddit.Inputs;
+using Reddit.Inputs.Listings;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;

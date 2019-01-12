@@ -1,4 +1,4 @@
-﻿using Reddit.Models.Inputs.Flair;
+﻿using Reddit.Inputs.Flair;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;

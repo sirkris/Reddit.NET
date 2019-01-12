@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Inputs.LinksAndComments;
-using Reddit.Models.Inputs.PrivateMessages;
+using Reddit.Inputs.LinksAndComments;
+using Reddit.Inputs.PrivateMessages;
 using Reddit.Things;
 using System;
 using System.Threading;

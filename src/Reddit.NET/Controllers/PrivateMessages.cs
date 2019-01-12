@@ -2,7 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.PrivateMessages;
+using Reddit.Inputs.PrivateMessages;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;

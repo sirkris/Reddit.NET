@@ -2,9 +2,9 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs;
-using Reddit.Models.Inputs.Listings;
-using Reddit.Models.Inputs.Moderation;
+using Reddit.Inputs;
+using Reddit.Inputs.Listings;
+using Reddit.Inputs.Moderation;
 using System;
 using System.Collections.Generic;
 using System.Threading;

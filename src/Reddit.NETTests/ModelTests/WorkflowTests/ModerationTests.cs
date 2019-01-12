@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Inputs;
-using Reddit.Models.Inputs.Moderation;
-using Reddit.Models.Inputs.Users;
+using Reddit.Inputs;
+using Reddit.Inputs.Moderation;
+using Reddit.Inputs.Users;
 using Reddit.Things;
 
 namespace RedditTests.ModelTests.WorkflowTests

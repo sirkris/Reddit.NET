@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.Modmail;
+using Reddit.Inputs.Modmail;
 using Reddit.Things;
 
 namespace RedditTests.ModelTests.WorkflowTests

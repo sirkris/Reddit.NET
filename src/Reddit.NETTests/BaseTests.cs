@@ -3,7 +3,7 @@ using Newtonsoft.Json;
 using Reddit;
 using Controllers = Reddit.Controllers;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.LinksAndComments;
+using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
 using RestSharp;
 using System;

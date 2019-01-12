@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Inputs.Users;
+using Reddit.Inputs.Users;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;

@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.Moderation;
-using Reddit.Models.Inputs.Subreddits;
-using Reddit.Models.Inputs.Users;
+using Reddit.Inputs.Moderation;
+using Reddit.Inputs.Subreddits;
+using Reddit.Inputs.Users;
 using System;
 using System.Collections.Generic;
 using System.Reflection;

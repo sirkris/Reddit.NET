@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Inputs.Subreddits;
+using Reddit.Inputs.Subreddits;
 using Reddit.Things;
 
 namespace RedditTests.ModelTests.WorkflowTests

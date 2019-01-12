@@ -2,7 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.Modmail;
+using Reddit.Inputs.Modmail;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;

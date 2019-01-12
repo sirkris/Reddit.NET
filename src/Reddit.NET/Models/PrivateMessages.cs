@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Reddit.Models.Inputs.PrivateMessages;
+using Reddit.Inputs.PrivateMessages;
 using Reddit.Things;
 using RestSharp;
 

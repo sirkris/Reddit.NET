@@ -1,6 +1,6 @@
 ﻿using Reddit.Controllers;
-using Reddit.Models.Inputs;
-using Reddit.Models.Inputs.Subreddits;
+using Reddit.Inputs;
+using Reddit.Inputs.Subreddits;
 using RestSharp;
 using System;
 using System.Collections.Generic;

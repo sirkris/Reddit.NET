@@ -2,7 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.Listings;
+using Reddit.Inputs.Listings;
 using System;
 using System.Collections.Generic;
 using System.Threading;

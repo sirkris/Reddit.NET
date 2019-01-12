@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Inputs.LiveThreads;
+using Reddit.Inputs.LiveThreads;
 using Reddit.Things;
 using System.Collections.Generic;
 

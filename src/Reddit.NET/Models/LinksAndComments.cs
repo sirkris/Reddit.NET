@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Reddit.Models.Inputs.LinksAndComments;
+using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;

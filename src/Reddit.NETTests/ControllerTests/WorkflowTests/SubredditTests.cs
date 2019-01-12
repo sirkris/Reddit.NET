@@ -103,7 +103,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             Subreddit.Posts.NewUpdated -= C_NewPostsUpdated;
             Subreddit.Posts.MonitorNew();
 
-            Assert.AreEqual(10, NewPosts.Count);
+            Assert.IsTrue(NewPosts.Count >= 10);
         }
 
         // When a new post is detected in MonitorNewPosts, this method will add it/them to the list.  --Kris

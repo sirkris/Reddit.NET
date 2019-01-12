@@ -1,7 +1,7 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.LinksAndComments;
-using Reddit.Models.Inputs.Moderation;
+using Reddit.Inputs.LinksAndComments;
+using Reddit.Inputs.Moderation;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

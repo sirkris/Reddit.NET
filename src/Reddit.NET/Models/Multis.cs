@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Reddit.Models.Inputs.Multis;
+using Reddit.Inputs.Multis;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;

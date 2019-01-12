@@ -2,8 +2,8 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs;
-using Reddit.Models.Inputs.Wiki;
+using Reddit.Inputs;
+using Reddit.Inputs.Wiki;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;

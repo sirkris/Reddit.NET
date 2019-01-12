@@ -1,6 +1,6 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.LinksAndComments;
+using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
 using System;
 using System.Threading.Tasks;

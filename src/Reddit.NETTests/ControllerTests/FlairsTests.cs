@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
-using Reddit.Models.Inputs.Flair;
+using Reddit.Inputs.Flair;
 using System;
 
 namespace RedditTests.ControllerTests

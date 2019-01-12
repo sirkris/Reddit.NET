@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs;
-using Reddit.Models.Inputs.Listings;
+using Reddit.Inputs;
+using Reddit.Inputs.Listings;
 using Reddit.Things;
 using System.Collections.Generic;
 

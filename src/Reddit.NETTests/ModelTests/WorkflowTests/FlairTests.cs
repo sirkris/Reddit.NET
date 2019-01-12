@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Inputs.Flair;
+using Reddit.Inputs.Flair;
 using Reddit.Things;
 using System;
 

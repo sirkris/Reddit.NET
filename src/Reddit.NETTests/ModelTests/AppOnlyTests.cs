@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.LinksAndComments;
+using Reddit.Inputs.LinksAndComments;
 
 namespace RedditTests.ModelTests
 {

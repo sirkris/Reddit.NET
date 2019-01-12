@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
-using Reddit.Models.Inputs;
-using Reddit.Models.Inputs.Subreddits;
+using Reddit.Inputs;
+using Reddit.Inputs.Subreddits;
 using Reddit.Things;
 using RestSharp;
 using System;

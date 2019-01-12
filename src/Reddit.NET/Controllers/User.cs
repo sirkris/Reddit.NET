@@ -1,8 +1,8 @@
 ﻿using Reddit.Exceptions;
-using Reddit.Models.Inputs.Flair;
-using Reddit.Models.Inputs.LiveThreads;
-using Reddit.Models.Inputs.Users;
-using Reddit.Models.Inputs.Wiki;
+using Reddit.Inputs.Flair;
+using Reddit.Inputs.LiveThreads;
+using Reddit.Inputs.Users;
+using Reddit.Inputs.Wiki;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;

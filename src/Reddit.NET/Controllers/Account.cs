@@ -1,4 +1,4 @@
-﻿using Reddit.Models.Inputs;
+﻿using Reddit.Inputs;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;

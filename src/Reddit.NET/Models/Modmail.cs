@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using Reddit.Models.Inputs.Modmail;
+using Reddit.Inputs.Modmail;
 using Reddit.Things;
 using RestSharp;
 

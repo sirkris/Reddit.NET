@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs;
-using Reddit.Models.Inputs.Wiki;
+using Reddit.Inputs;
+using Reddit.Inputs.Wiki;
 using Reddit.Things;
 
 namespace RedditTests.ModelTests

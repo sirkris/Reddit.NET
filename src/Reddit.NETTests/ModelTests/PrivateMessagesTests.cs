@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Inputs.PrivateMessages;
+using Reddit.Inputs.PrivateMessages;
 using Reddit.Things;
 
 namespace RedditTests.ModelTests

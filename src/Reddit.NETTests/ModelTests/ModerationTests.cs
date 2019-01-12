@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Inputs.Moderation;
+using Reddit.Inputs.Moderation;
 using Reddit.Things;
 using RestSharp;
 

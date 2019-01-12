@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Models.Inputs.LinksAndComments;
+using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
 using System;
 

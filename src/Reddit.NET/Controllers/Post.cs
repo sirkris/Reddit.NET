@@ -1,8 +1,8 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.Flair;
-using Reddit.Models.Inputs.LinksAndComments;
-using Reddit.Models.Inputs.Moderation;
+using Reddit.Inputs.Flair;
+using Reddit.Inputs.LinksAndComments;
+using Reddit.Inputs.Moderation;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;

@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using Reddit.Exceptions;
-using Reddit.Models.Inputs.LinksAndComments;
-using Reddit.Models.Inputs.Listings;
+using Reddit.Inputs.LinksAndComments;
+using Reddit.Inputs.Listings;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
