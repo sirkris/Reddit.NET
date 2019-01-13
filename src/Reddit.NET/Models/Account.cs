@@ -3,6 +3,7 @@ using Reddit.Inputs;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Reddit.Models
 {
@@ -43,15 +44,11 @@ namespace Reddit.Models
         /// <summary>
         /// Update preferences.
         /// </summary>
-        /// <param name="json">See https://www.reddit.com/dev/api/#PATCH_api_v1_me_prefs for required format</param>
+        /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
         /// <returns>The updated preference settings of the logged in user.</returns>
-        private AccountPrefs UpdatePrefs(string json)
+        public AccountPrefs UpdatePrefs(AccountPrefsSubmit accountPrefs)
         {
-            RestRequest restRequest = PrepareRequest("api/v1/me/prefs", Method.PATCH);
-
-            restRequest.AddParameter("json", json);
-
-            return JsonConvert.DeserializeObject<AccountPrefs>(ExecuteRequest(restRequest));
+            return UpdatePrefsAsync(accountPrefs, true).Result;
         }
 
         /// <summary>
@@ -59,9 +56,25 @@ namespace Reddit.Models
         /// </summary>
         /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
         /// <returns>The updated preference settings of the logged in user.</returns>
-        public AccountPrefs UpdatePrefs(AccountPrefsSubmit accountPrefs)
+        public async Task<AccountPrefs> UpdatePrefsAsync(AccountPrefsSubmit accountPrefs, bool awaitReturn = false)
         {
-            return UpdatePrefs(JsonConvert.SerializeObject(accountPrefs));
+            RestRequest restRequest = null;
+            await Task.Run(() =>
+            {
+                restRequest = PrepareRequest("api/v1/me/prefs", Method.PATCH);
+
+                restRequest.AddParameter("json", JsonConvert.SerializeObject(accountPrefs));
+            });
+
+            if (awaitReturn)
+            {
+                return JsonConvert.DeserializeObject<AccountPrefs>(ExecuteRequestAsync(restRequest, true).Result);
+            }
+            else
+            {
+                Task<string> nobodyCares = ExecuteRequestAsync(restRequest);
+                return null;
+            }
         }
 
         /// <summary>
