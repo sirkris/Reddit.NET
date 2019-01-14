@@ -149,7 +149,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             Comment.Comments.NewUpdated -= C_NewCommentsUpdated;
             Comment.Comments.MonitorNew();
 
-            Assert.AreEqual(10, NewComments.Count);
+            Assert.IsTrue(NewComments.Count >= 7);
         }
 
         // When a new comment is detected in MonitorNewComments, this method will add it/them to the list.  --Kris

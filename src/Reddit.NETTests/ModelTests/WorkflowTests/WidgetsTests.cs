@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Reddit.Exceptions;
 using Reddit.Things;
+using System;
 using System.Collections.Generic;
 
 namespace RedditTests.ModelTests.WorkflowTests
@@ -27,7 +28,8 @@ namespace RedditTests.ModelTests.WorkflowTests
                         {
                             reddit.Models.Widgets.Delete(data["id"].ToString(), testData["Subreddit"]);
                         }
-                        catch (RedditBadRequestException) { }  // At least one id came back with a WIDGET_NOEXIST error even though it was in the retrieved results.  --Kris
+                        // At least one id came back with a WIDGET_NOEXIST error even though it was in the retrieved results.  --Kris
+                        catch (AggregateException ex) when (ex.InnerException is RedditBadRequestException) { }
                     }
                 }
             }

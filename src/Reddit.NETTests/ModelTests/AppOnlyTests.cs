@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
 using Reddit.Inputs.LinksAndComments;
+using System;
 
 namespace RedditTests.ModelTests
 {
@@ -15,7 +16,7 @@ namespace RedditTests.ModelTests
             {
                 Validate(reddit3.Models.Emoji.All("WayOfTheBern"));
             }
-            catch (RedditUserRequiredException) { }
+            catch (AggregateException ex) when (ex.InnerException is RedditUserRequiredException) { }
         }
 
         [TestMethod]
@@ -27,7 +28,7 @@ namespace RedditTests.ModelTests
                 // This will fail because the UserFlair endpoint requires an authenticated user.  --Kris
                 Validate(reddit3.Models.Flair.UserFlair(testData["Subreddit"]));
             }
-            catch (RedditUserRequiredException)
+            catch (AggregateException ex) when (ex.InnerException is RedditUserRequiredException)
             {
                 caught = true;
             }
