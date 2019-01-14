@@ -4,6 +4,7 @@ using Reddit.Inputs.LiveThreads;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Reddit.Models
 {
@@ -72,6 +73,18 @@ namespace Reddit.Models
         public GenericContainer AcceptContributorInvite(string thread)
         {
             return SendRequest<GenericContainer>("api/live/" + thread + "/accept_contributor_invite", new APITypeInput(), Method.POST);
+        }
+
+        /// <summary>
+        /// Accept a pending invitation to contribute to the thread asynchronously.
+        /// See also: /api/live/thread/leave_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> AcceptContributorInviteAsync(string thread)
+        {
+            GenericContainer res = await SendRequestAsync<GenericContainer>("api/live/" + thread + "/accept_contributor_invite", new APITypeInput(), Method.POST);
+            return res;
         }
 
         /// <summary>
@@ -167,6 +180,18 @@ namespace Reddit.Models
         public GenericContainer LeaveContributor(string thread)
         {
             return SendRequest<GenericContainer>("api/live/" + thread + "/leave_contributor", new APITypeInput(), Method.POST);
+        }
+
+        /// <summary>
+        /// Abdicate contributorship of the thread asynchronously.
+        /// See also: /api/live/thread/accept_contributor_invite, and /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> LeaveContributorAsync(string thread)
+        {
+            GenericContainer res = await SendRequestAsync<GenericContainer>("api/live/" + thread + "/leave_contributor", new APITypeInput(), Method.POST);
+            return res;
         }
 
         // Note - I tested this one manually.  Will leave out of automated tests so as not to spam the Reddit admins.  --Kris

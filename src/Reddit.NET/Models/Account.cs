@@ -48,33 +48,22 @@ namespace Reddit.Models
         /// <returns>The updated preference settings of the logged in user.</returns>
         public AccountPrefs UpdatePrefs(AccountPrefsSubmit accountPrefs)
         {
-            return UpdatePrefsAsync(accountPrefs, true).Result;
+            return UpdatePrefsAsync(accountPrefs).Result;
         }
 
         /// <summary>
-        /// Update preferences.
+        /// Update preferences asynchronously.
         /// </summary>
         /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
         /// <returns>The updated preference settings of the logged in user.</returns>
-        public async Task<AccountPrefs> UpdatePrefsAsync(AccountPrefsSubmit accountPrefs, bool awaitReturn = false)
+        public async Task<AccountPrefs> UpdatePrefsAsync(AccountPrefsSubmit accountPrefs)
         {
-            RestRequest restRequest = null;
-            await Task.Run(() =>
-            {
-                restRequest = PrepareRequest("api/v1/me/prefs", Method.PATCH);
+            RestRequest restRequest = PrepareRequest("api/v1/me/prefs", Method.PATCH);
 
-                restRequest.AddParameter("json", JsonConvert.SerializeObject(accountPrefs));
-            });
+            restRequest.AddParameter("json", JsonConvert.SerializeObject(accountPrefs));
 
-            if (awaitReturn)
-            {
-                return JsonConvert.DeserializeObject<AccountPrefs>(ExecuteRequestAsync(restRequest, true).Result);
-            }
-            else
-            {
-                Task<string> nobodyCares = ExecuteRequestAsync(restRequest);
-                return null;
-            }
+            string res = await ExecuteRequestAsync(restRequest);
+            return JsonConvert.DeserializeObject<AccountPrefs>(res);
         }
 
         /// <summary>

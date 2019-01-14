@@ -4,6 +4,7 @@ using Reddit.Things;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Reddit.Models
 {
@@ -130,6 +131,15 @@ namespace Reddit.Models
             ExecuteRequest("api/v1/me/friends/" + username, Method.DELETE);
         }
 
+        /// <summary>
+        /// Stop being friends with a user asynchronously.
+        /// </summary>
+        /// <param name="username">A valid, existing reddit username</param>
+        public async Task DeleteFriendAsync(string username)
+        {
+            await ExecuteRequestAsync("api/v1/me/friends/" + username, Method.DELETE);
+        }
+
         // Note - Returns 400 if you are not friends with the specified user.  --Kris
         /// <summary>
         /// Get information about a specific 'friend', such as notes.
@@ -160,7 +170,27 @@ namespace Reddit.Models
 
             return JsonConvert.DeserializeObject<UserActionResult>(ExecuteRequest(restRequest));
         }
-        
+
+        /// <summary>
+        /// Create or update a "friend" relationship asynchronously.
+        /// This operation is idempotent. It can be used to add a new friend, or update an existing friend (e.g., add/change the note on that friend).
+        /// </summary>
+        /// <param name="username">A valid, existing reddit username</param>
+        /// <param name="json">{
+        /// "name": A valid, existing reddit username
+        /// "note": a string no longer than 300 characters
+        /// }</param>
+        /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
+        public async Task<UserActionResult> UpdateFriendAsync(string username, string json = "{}")
+        {
+            RestRequest restRequest = PrepareRequest("api/v1/me/friends/" + username, Method.PUT);
+
+            restRequest.AddParameter("json", json);
+
+            string res = await ExecuteRequestAsync(restRequest);
+            return JsonConvert.DeserializeObject<UserActionResult>(res);
+        }
+
         /// <summary>
         /// Return a list of trophies for the given user.
         /// </summary>

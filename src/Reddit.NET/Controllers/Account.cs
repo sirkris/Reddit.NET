@@ -87,12 +87,10 @@ namespace Reddit.Controllers
         /// Update preferences asynchronously.
         /// </summary>
         /// <param name="accountPrefs">A valid AccountPrefs instance.</param>
-        public async Task UpdatePrefsAsync(AccountPrefsSubmit accountPrefs)
+        public async Task<AccountPrefs> UpdatePrefsAsync(AccountPrefsSubmit accountPrefs)
         {
-            await Task.Run(() =>
-            {
-                UpdatePrefs(accountPrefs);
-            });
+            AccountPrefs res = await Dispatch.Account.UpdatePrefsAsync(accountPrefs);
+            return res;
         }
 
         /// <summary>
@@ -213,10 +211,7 @@ namespace Reddit.Controllers
         /// <param name="username">A valid, existing reddit username</param>
         public async Task DeleteFriendAsync(string username)
         {
-            await Task.Run(() =>
-            {
-                DeleteFriend(username);
-            });
+            await Dispatch.Users.DeleteFriendAsync(username);
         }
 
         /// <summary>
@@ -257,10 +252,7 @@ namespace Reddit.Controllers
         /// }</param>
         public async Task UpdateFriendAsync(string username, string json = "{}")
         {
-            await Task.Run(() =>
-            {
-                UpdateFriend(username, json);
-            });
+            await Validate(Dispatch.Users.UpdateFriendAsync(username, json));
         }
 
         /// <summary>
@@ -385,10 +377,7 @@ namespace Reddit.Controllers
         /// <param name="thread">id</param>
         public async Task AcceptLiveThreadInviteAsync(string thread)
         {
-            await Task.Run(() =>
-            {
-                AcceptLiveThreadInvite(thread);
-            });
+            await Validate(Dispatch.LiveThreads.AcceptContributorInviteAsync(thread));
         }
 
         /// <summary>
@@ -406,10 +395,7 @@ namespace Reddit.Controllers
         /// <param name="thread">id</param>
         public async Task AbandonLiveThreadAsync(string thread)
         {
-            await Task.Run(() =>
-            {
-                AbandonLiveThread(thread);
-            });
+            await Validate(Dispatch.LiveThreads.LeaveContributorAsync(thread));
         }
     }
 }

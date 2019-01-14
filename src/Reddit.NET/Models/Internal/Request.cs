@@ -48,22 +48,25 @@ namespace Reddit.Models.Internal
 
         public T SendRequest<T>(string url, dynamic parameters, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
         {
-            RestRequest restRequest = PrepareRequest(url, method, contentType);
+            return SendRequestAsync<T>(url, parameters, method, contentType).Result;
+        }
+
+        public async Task<T> SendRequestAsync<T>(string url, dynamic parameters, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
+        {
+            RestRequest restRequest = new RestRequest(url, method);
+
+            restRequest.AddHeader("Authorization", "bearer " + AccessToken);
+
+            if (restRequest.Method == Method.POST || restRequest.Method == Method.PUT)
+            {
+                restRequest.AddHeader("Content-Type", contentType);
+            }
 
             restRequest.AddObject(parameters);
-            
-            return JsonConvert.DeserializeObject<T>(ExecuteRequest(restRequest));
-        }
-        public async void SendRequestAsync(string url, dynamic parameters, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
-        {
-            RestRequest restRequest = null;
-            await Task.Run(() =>
-            {
-                restRequest = PrepareRequest(url, method, contentType);
-                restRequest.AddObject(parameters);
-            });
 
-            Task<string> nobodyCares = ExecuteRequestAsync(restRequest);
+            string json = await ExecuteRequestAsync(restRequest);
+
+            return (json != null ? JsonConvert.DeserializeObject<T>(json) : default(T));
         }
 
         public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
@@ -118,12 +121,18 @@ namespace Reddit.Models.Internal
             return ExecuteRequest(PrepareRequest(url, method));
         }
 
-        public string ExecuteRequest(RestRequest restRequest)
+        public async Task<string> ExecuteRequestAsync(string url, Method method = Method.GET)
         {
-            return Task.Run(() => ExecuteRequestAsync(restRequest, true)).Result;
+            string res = await ExecuteRequestAsync(PrepareRequest(url, method));
+            return res;
         }
 
-        public async Task<string> ExecuteRequestAsync(RestRequest restRequest, bool awaitReturn = false)
+        public string ExecuteRequest(RestRequest restRequest)
+        {
+            return Task.Run(() => ExecuteRequestAsync(restRequest)).Result;
+        }
+
+        public async Task<string> ExecuteRequestAsync(RestRequest restRequest, bool awaitReturn = true)
         {
             // If we've reached the speed limit, hold until we're clear to proceed.  --Kris
             while (!RequestReady()) { }
