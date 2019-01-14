@@ -53,14 +53,7 @@ namespace Reddit.Models.Internal
 
         public async Task<T> SendRequestAsync<T>(string url, dynamic parameters, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
         {
-            RestRequest restRequest = new RestRequest(url, method);
-
-            restRequest.AddHeader("Authorization", "bearer " + AccessToken);
-
-            if (restRequest.Method == Method.POST || restRequest.Method == Method.PUT)
-            {
-                restRequest.AddHeader("Content-Type", contentType);
-            }
+            RestRequest restRequest = PrepareRequest(url, method, contentType);
 
             restRequest.AddObject(parameters);
 
