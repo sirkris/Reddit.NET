@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Exceptions;
+using System;
 
 namespace RedditTests.ControllerTests
 {
@@ -94,7 +95,7 @@ namespace RedditTests.ControllerTests
             {
                 Validate(reddit.Account.MyStreamingSubreddits());
             }
-            catch (RedditForbiddenException) { }
+            catch (AggregateException ex) when (ex.InnerException is RedditForbiddenException) { }
         }
 
         [TestMethod]
