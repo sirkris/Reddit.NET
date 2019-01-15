@@ -3,6 +3,7 @@ using Reddit.Inputs.Flair;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Reddit.Models
 {
@@ -21,12 +22,32 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer ClearFlairTemplates(string flairType, string subreddit = null)
         {
+            RestRequest restRequest = PrepareClearFlairTemplates(flairType, subreddit);
+
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Clear flair templates asynchronously.
+        /// </summary>
+        /// <param name="flairType">one of (USER_FLAIR, LINK_FLAIR)</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> ClearFlairTemplatesAsync(string flairType, string subreddit = null)
+        {
+            RestRequest restRequest = PrepareClearFlairTemplates(flairType, subreddit);
+
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(restRequest));
+        }
+
+        private RestRequest PrepareClearFlairTemplates(string flairType, string subreddit = null)
+        {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/clearflairtemplates", Method.POST);
 
             restRequest.AddParameter("flair_type", flairType);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return restRequest;
         }
 
         /// <summary>
@@ -37,12 +58,32 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer DeleteFlair(string name, string subreddit = null)
         {
+            RestRequest restRequest = PrepareDeleteFlair(name, subreddit);
+
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Delete flair asynchronously.
+        /// </summary>
+        /// <param name="name">a user by name</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteFlairAsync(string name, string subreddit = null)
+        {
+            RestRequest restRequest = PrepareDeleteFlair(name, subreddit);
+
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(restRequest));
+        }
+
+        private RestRequest PrepareDeleteFlair(string name, string subreddit = null)
+        {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/deleteflair", Method.POST);
 
             restRequest.AddParameter("name", name);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return restRequest;
         }
 
         /// <summary>
@@ -53,12 +94,32 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer DeleteFlairTemplate(string flairTemplateId, string subreddit = null)
         {
+            RestRequest restRequest = PrepareDeleteFlairTemplate(flairTemplateId, subreddit);
+
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Delete flair template asynchronously.
+        /// </summary>
+        /// <param name="flairTemplateId"></param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteFlairTemplateAsync(string flairTemplateId, string subreddit = null)
+        {
+            RestRequest restRequest = PrepareDeleteFlairTemplate(flairTemplateId, subreddit);
+
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(restRequest));
+        }
+
+        private RestRequest PrepareDeleteFlairTemplate(string flairTemplateId, string subreddit = null)
+        {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/deleteflairtemplate", Method.POST);
 
             restRequest.AddParameter("flair_template_id", flairTemplateId);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return restRequest;
         }
 
         // In the controllers, link flair can be created from Post.  User flair can be created from Subreddit or User (no practical difference).  --Kris
@@ -71,6 +132,17 @@ namespace Reddit.Models
         public GenericContainer Create(FlairCreateInput flairCreateInput, string subreddit = null)
         {
             return SendRequest<GenericContainer>(Sr(subreddit) + "api/flair", flairCreateInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Create a new flair asynchronously.
+        /// </summary>
+        /// <param name="flairCreateInput">a valid FlairCreateInput instance</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> CreateAsync(FlairCreateInput flairCreateInput, string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/flair", flairCreateInput, Method.POST);
         }
 
         // TODO - Docs neglect to mention exactly *how* to send the flair IDs.  All my guesses came up 400.  Skipped for now.  --Kris
@@ -110,6 +182,17 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Asynchronous flair config.
+        /// </summary>
+        /// <param name="flairConfigInput">A valid FlairConfigInput instance</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> FlairConfigAsync(FlairConfigInput flairConfigInput, string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/flairconfig", flairConfigInput, Method.POST);
+        }
+
+        /// <summary>
         /// Change the flair of multiple users in the same subreddit with a single API call.
         /// Requires a string 'flair_csv' which has up to 100 lines of the form 'user,flairtext,cssclass' (Lines beyond the 100th are ignored).
         /// If both cssclass and flairtext are the empty string for a given user, instead clears that user's flair.
@@ -120,11 +203,34 @@ namespace Reddit.Models
         /// <returns>Action results.</returns>
         public List<ActionResult> FlairCSV(string flairCsv, string subreddit = null)
         {
+            RestRequest restRequest = PrepareFlairCSV(flairCsv, subreddit);
+
+            return JsonConvert.DeserializeObject<List<ActionResult>>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Asynchronously change the flair of multiple users in the same subreddit with a single API call.
+        /// Requires a string 'flair_csv' which has up to 100 lines of the form 'user,flairtext,cssclass' (Lines beyond the 100th are ignored).
+        /// If both cssclass and flairtext are the empty string for a given user, instead clears that user's flair.
+        /// Returns an array of objects indicating if each flair setting was applied, or a reason for the failure.
+        /// </summary>
+        /// <param name="flairCsv">comma-seperated flair information</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>Action results.</returns>
+        public async Task<List<ActionResult>> FlairCSVAsync(string flairCsv, string subreddit = null)
+        {
+            RestRequest restRequest = PrepareFlairCSV(flairCsv, subreddit);
+
+            return JsonConvert.DeserializeObject<List<ActionResult>>(await ExecuteRequestAsync(restRequest));
+        }
+
+        private RestRequest PrepareFlairCSV(string flairCsv, string subreddit = null)
+        {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/flaircsv", Method.POST);
 
             restRequest.AddParameter("flair_csv", flairCsv);
 
-            return JsonConvert.DeserializeObject<List<ActionResult>>(ExecuteRequest(restRequest));
+            return restRequest;
         }
 
         /// <summary>
@@ -164,7 +270,18 @@ namespace Reddit.Models
         }
 
         /// <summary>
-        /// Create or update a flair template.  Null values are ignored.
+        /// Create or update a flair template asynchronously.
+        /// </summary>
+        /// <param name="flairTemplateInput">a valid FlairTemplateInput instance</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> FlairTemplateAsync(FlairTemplateInput flairTemplateInput, string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/flairtemplate", flairTemplateInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Create or update a flair template asynchronously.  Null values are ignored.
         /// This new endpoint is primarily used for the redesign.
         /// </summary>
         /// <param name="flairTemplateV2Input">a valid FlairTemplateV2Input instance</param>
@@ -173,6 +290,18 @@ namespace Reddit.Models
         public FlairV2 FlairTemplateV2(FlairTemplateV2Input flairTemplateV2Input, string subreddit = null)
         {
             return SendRequest<FlairV2>(Sr(subreddit) + "api/flairtemplate_v2", flairTemplateV2Input, Method.POST);
+        }
+
+        /// <summary>
+        /// Create or update a flair template.  Null values are ignored.
+        /// This new endpoint is primarily used for the redesign.
+        /// </summary>
+        /// <param name="flairTemplateV2Input">a valid FlairTemplateV2Input instance</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>The created flair object.</returns>
+        public async Task<FlairV2> FlairTemplateV2Async(FlairTemplateV2Input flairTemplateV2Input, string subreddit = null)
+        {
+            return await SendRequestAsync<FlairV2>(Sr(subreddit) + "api/flairtemplate_v2", flairTemplateV2Input, Method.POST);
         }
 
         /// <summary>
@@ -234,12 +363,32 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer SetFlairEnabled(bool flairEnabled, string subreddit = null)
         {
+            RestRequest restRequest = PrepareSetFlairEnabled(flairEnabled, subreddit);
+
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Set flair enabled asynchronously.
+        /// </summary>
+        /// <param name="flairEnabled">boolean value</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> SetFlairEnabledAsync(bool flairEnabled, string subreddit = null)
+        {
+            RestRequest restRequest = PrepareSetFlairEnabled(flairEnabled, subreddit);
+
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(restRequest));
+        }
+
+        private RestRequest PrepareSetFlairEnabled(bool flairEnabled, string subreddit = null)
+        {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/setflairenabled", Method.POST);
 
             restRequest.AddParameter("flair_enabled", flairEnabled);
             restRequest.AddParameter("api_type", "json");
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return restRequest;
         }
 
         /// <summary>

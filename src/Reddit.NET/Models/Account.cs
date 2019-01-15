@@ -48,7 +48,9 @@ namespace Reddit.Models
         /// <returns>The updated preference settings of the logged in user.</returns>
         public AccountPrefs UpdatePrefs(AccountPrefsSubmit accountPrefs)
         {
-            return UpdatePrefsAsync(accountPrefs).Result;
+            RestRequest restRequest = PrepareUpdatePrefs(accountPrefs);
+
+            return JsonConvert.DeserializeObject<AccountPrefs>(ExecuteRequest(restRequest));
         }
 
         /// <summary>
@@ -58,12 +60,18 @@ namespace Reddit.Models
         /// <returns>The updated preference settings of the logged in user.</returns>
         public async Task<AccountPrefs> UpdatePrefsAsync(AccountPrefsSubmit accountPrefs)
         {
+            RestRequest restRequest = PrepareUpdatePrefs(accountPrefs);
+
+            return JsonConvert.DeserializeObject<AccountPrefs>(await ExecuteRequestAsync(restRequest));
+        }
+
+        private RestRequest PrepareUpdatePrefs(AccountPrefsSubmit accountPrefs)
+        {
             RestRequest restRequest = PrepareRequest("api/v1/me/prefs", Method.PATCH);
 
             restRequest.AddParameter("json", JsonConvert.SerializeObject(accountPrefs));
 
-            string res = await ExecuteRequestAsync(restRequest);
-            return JsonConvert.DeserializeObject<AccountPrefs>(res);
+            return restRequest;
         }
 
         /// <summary>
