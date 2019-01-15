@@ -83,8 +83,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public async Task<GenericContainer> AcceptContributorInviteAsync(string thread)
         {
-            GenericContainer res = await SendRequestAsync<GenericContainer>("api/live/" + thread + "/accept_contributor_invite", new APITypeInput(), Method.POST);
-            return res;
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/accept_contributor_invite", new APITypeInput(), Method.POST);
         }
 
         /// <summary>
@@ -190,8 +189,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public async Task<GenericContainer> LeaveContributorAsync(string thread)
         {
-            GenericContainer res = await SendRequestAsync<GenericContainer>("api/live/" + thread + "/leave_contributor", new APITypeInput(), Method.POST);
-            return res;
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/leave_contributor", new APITypeInput(), Method.POST);
         }
 
         // Note - I tested this one manually.  Will leave out of automated tests so as not to spam the Reddit admins.  --Kris

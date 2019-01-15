@@ -3,6 +3,7 @@ using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Reddit.Models
 {
@@ -31,16 +32,51 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Asynchronously submit a new comment or reply to a message.
+        /// parent is the fullname of the thing being replied to. Its value changes the kind of object created by this request:
+        /// the fullname of a Link: a top-level comment in that Link's thread. (requires submit scope)
+        /// the fullname of a Comment: a comment reply to that comment. (requires submit scope)
+        /// the fullname of a Message: a message reply to that message. (requires privatemessages scope)
+        /// text should be the raw markdown body of the comment or message.
+        /// To start a new message thread, use /api/compose.
+        /// the thing_id is the fullname of the parent thing.
+        /// </summary>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
+        /// <returns>A Reddit comment.</returns>
+        public async Task<CommentResultContainer> CommentAsync(LinksAndCommentsThingInput linksAndCommentsThingInput)
+        {
+            return await SendRequestAsync<CommentResultContainer>("api/comment", linksAndCommentsThingInput, Method.POST);
+        }
+
+        /// <summary>
         /// Delete a Link or Comment.
         /// </summary>
         /// <param name="id">fullname of a thing created by the user</param>
         public void Delete(string id)
         {
+            RestRequest restRequest = PrepareDelete(id);
+
+            ExecuteRequest(restRequest);
+        }
+
+        /// <summary>
+        /// Delete a Link or Comment asynchronously.
+        /// </summary>
+        /// <param name="id">fullname of a thing created by the user</param>
+        public async Task DeleteAsync(string id)
+        {
+            RestRequest restRequest = PrepareDelete(id);
+
+            await ExecuteRequestAsync(restRequest);
+        }
+
+        private RestRequest PrepareDelete(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/del", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
@@ -63,6 +99,17 @@ namespace Reddit.Models
         public CommentResultContainer EditUserTextComment(LinksAndCommentsThingInput linksAndCommentsThingInput)
         {
             return SendRequest<CommentResultContainer>("api/editusertext", linksAndCommentsThingInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Edit the body text of a comment asynchronously.
+        /// the thing_id is the fullname of a comment.
+        /// </summary>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
+        /// <returns>The modified comment data.</returns>
+        public async Task<CommentResultContainer> EditUserTextCommentAsync(LinksAndCommentsThingInput linksAndCommentsThingInput)
+        {
+            return await SendRequestAsync<CommentResultContainer>("api/editusertext", linksAndCommentsThingInput, Method.POST);
         }
 
         /// <summary>
@@ -195,6 +242,19 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Report a link, comment or message asynchronously.
+        /// Reporting a thing brings it to the attention of the subreddit's moderators.
+        /// Reporting a message sends it to a system for admin review.
+        /// For links and comments, the thing is implicitly hidden as well (see /api/hide for details).
+        /// </summary>
+        /// <param name="linksAndCommentsReportInput">A valid LinksAndCommentsReportInput instance</param>
+        /// <returns>A return object indicating success.</returns>
+        public async Task<JQueryReturn> ReportAsync(LinksAndCommentsReportInput linksAndCommentsReportInput)
+        {
+            return await SendRequestAsync<JQueryReturn>("api/report", linksAndCommentsReportInput, Method.POST);
+        }
+
+        /// <summary>
         /// Save a link or comment.
         /// Saved things are kept in the user's saved listing for later perusal.
         /// See also: /api/unsave.
@@ -203,6 +263,17 @@ namespace Reddit.Models
         public void Save(LinksAndCommentsSaveInput linksAndCommentsSaveInput)
         {
             SendRequest<object>("api/save", linksAndCommentsSaveInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Save a link or comment asynchronously.
+        /// Saved things are kept in the user's saved listing for later perusal.
+        /// See also: /api/unsave.
+        /// </summary>
+        /// <param name="linksAndCommentsSaveInput">A valid LinksAndCommentsSaveInput instance</param>
+        public async Task SaveAsync(LinksAndCommentsSaveInput linksAndCommentsSaveInput)
+        {
+            await SendRequestAsync<object>("api/save", linksAndCommentsSaveInput, Method.POST);
         }
 
         // TODO - API returns 403 whenever I try to hit this endpoint.  No idea why.  --Kris
@@ -225,6 +296,17 @@ namespace Reddit.Models
         public void SendReplies(LinksAndCommentsStateInput linksAndCommentsStateInput)
         {
             SendRequest<object>("api/sendreplies", linksAndCommentsStateInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Enable or disable inbox replies for a link or comment asynchronously.
+        /// state is a boolean that indicates whether you are enabling or disabling inbox replies - true to enable, false to disable.
+        /// id is the fullname of a thing created by the user.
+        /// </summary>
+        /// <param name="linksAndCommentsStateInput">a valid LinksAndCommentsStateInput instance</param>
+        public async Task SendRepliesAsync(LinksAndCommentsStateInput linksAndCommentsStateInput)
+        {
+            await SendRequestAsync<object>("api/sendreplies", linksAndCommentsStateInput, Method.POST);
         }
 
         /// <summary>
@@ -381,11 +463,31 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void Unsave(string id)
         {
+            RestRequest restRequest = PrepareUnsave(id);
+
+            ExecuteRequest(restRequest);
+        }
+
+        /// <summary>
+        /// Unsave a link or comment asynchronously.
+        /// This removes the thing from the user's saved listings as well.
+        /// See also: /api/save.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public async Task UnsaveAsync(string id)
+        {
+            RestRequest restRequest = PrepareUnsave(id);
+
+            await ExecuteRequestAsync(restRequest);
+        }
+
+        private RestRequest PrepareUnsave(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/unsave", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
@@ -414,6 +516,21 @@ namespace Reddit.Models
         public void Vote(LinksAndCommentsVoteInput linksAndCommentsVoteInput)
         {
             SendRequest<object>("api/vote", linksAndCommentsVoteInput, Method.POST);
+        }
+
+        // WARNING:  Automated bot-voting violates Reddit's rules.  --Kris
+        /// <summary>
+        /// Cast a vote on a thing asynchronously.
+        /// id should be the fullname of the Link or Comment to vote on.
+        /// dir indicates the direction of the vote. Voting 1 is an upvote, -1 is a downvote, and 0 is equivalent to "un-voting" by clicking again on a highlighted arrow.
+        /// Note: votes must be cast by humans.
+        /// That is, API clients proxying a human's action one-for-one are OK, but bots deciding how to vote on content or amplifying a human's vote are not.
+        /// See the reddit rules for more details on what constitutes vote cheating.
+        /// </summary>
+        /// <param name="linksAndCommentsVoteInput">A valid LinksAndCommentsVoteInput instance</param>
+        public async Task VoteAsync(LinksAndCommentsVoteInput linksAndCommentsVoteInput)
+        {
+            await SendRequestAsync<object>("api/vote", linksAndCommentsVoteInput, Method.POST);
         }
     }
 }

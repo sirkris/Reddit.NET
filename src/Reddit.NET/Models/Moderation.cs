@@ -3,6 +3,7 @@ using Reddit.Inputs.Moderation;
 using Reddit.Inputs.Users;
 using Reddit.Things;
 using RestSharp;
+using System.Threading.Tasks;
 
 namespace Reddit.Models
 {
@@ -202,6 +203,17 @@ namespace Reddit.Models
         public void Remove(ModerationRemoveInput moderationRemoveInput)
         {
             SendRequest<object>("api/remove", moderationRemoveInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Remove a link, comment, or modmail message asynchronously.
+        /// If the thing is a link, it will be removed from all subreddit listings. If the thing is a comment, it will be redacted and removed from all subreddit comment listings.
+        /// See also: /api/approve.
+        /// </summary>
+        /// <param name="moderationRemoveInput">A valid ModerationRemoveInput instance</param>
+        public async Task RemoveAsync(ModerationRemoveInput moderationRemoveInput)
+        {
+            await SendRequestAsync<object>("api/remove", moderationRemoveInput, Method.POST);
         }
 
         /// <summary>

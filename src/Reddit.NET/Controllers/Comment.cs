@@ -294,6 +294,15 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Submit this comment to Reddit asynchronously.
+        /// </summary>
+        /// <returns>An instance of this class populated with the return data.</returns>
+        public async Task<Comment> SubmitAsync()
+        {
+            return new Comment(Dispatch, Validate(await Dispatch.LinksAndComments.CommentAsync(new LinksAndCommentsThingInput(Body, ParentFullname))).JSON.Data.Things[0].Data);
+        }
+
+        /// <summary>
         /// Reply to this comment.
         /// </summary>
         /// <param name="body">The comment reply text</param>
@@ -348,17 +357,14 @@ namespace Reddit.Controllers
         /// <param name="downVotes"></param>
         /// <param name="removed"></param>
         /// <param name="spam"></param>
-        public async Task ReplyAsync(string body, string bodyHtml = null, string author = null,
+        public async Task<Comment> ReplyAsync(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            await Task.Run(() =>
-            {
-                Reply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
-                    depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
-            });
+            return await BuildReply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).SubmitAsync();
         }
 
         /// <summary>
@@ -392,17 +398,6 @@ namespace Reddit.Controllers
         {
             return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
-        }
-
-        /// <summary>
-        /// Submit this comment to Reddit asynchronously.
-        /// </summary>
-        public async Task SubmitAsync()
-        {
-            await Task.Run(() =>
-            {
-                Submit();
-            });
         }
 
         /// <summary>
@@ -456,10 +451,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task RemoveAsync(bool spam = false)
         {
-            await Task.Run(() =>
-            {
-                Remove(spam);
-            });
+            await Dispatch.Moderation.RemoveAsync(new ModerationRemoveInput(Fullname, spam));
         }
 
         /// <summary>
@@ -475,10 +467,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DeleteAsync()
         {
-            await Task.Run(() =>
-            {
-                Delete();
-            });
+            await Dispatch.LinksAndComments.DeleteAsync(Fullname);
         }
 
         /// <summary>
@@ -533,13 +522,10 @@ namespace Reddit.Controllers
         /// <summary>
         /// Report this comment to the subreddit moderators asynchronously.  The comment then becomes implicitly hidden, as well.
         /// </summary>
-        /// <param name = "linksAndCommentsReportInput" > A valid LinksAndCommentsReportInput instance</param>
+        /// <param name="linksAndCommentsReportInput">A valid LinksAndCommentsReportInput instance</param>
         public async Task ReportAsync(LinksAndCommentsReportInput linksAndCommentsReportInput)
         {
-            await Task.Run(() =>
-            {
-                Report(linksAndCommentsReportInput);
-            });
+            Validate(await Dispatch.LinksAndComments.ReportAsync(linksAndCommentsReportInput));
         }
 
         /// <summary>
@@ -559,10 +545,7 @@ namespace Reddit.Controllers
         /// <param name="category">a category name</param>
         public async Task SaveAsync(string category)
         {
-            await Task.Run(() =>
-            {
-                Save(category);
-            });
+            await Dispatch.LinksAndComments.SaveAsync(new LinksAndCommentsSaveInput(Fullname, category));
         }
 
         /// <summary>
@@ -578,10 +561,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task EnableSendRepliesAsync()
         {
-            await Task.Run(() =>
-            {
-                EnableSendReplies();
-            });
+            await Dispatch.LinksAndComments.SendRepliesAsync(new LinksAndCommentsStateInput(Fullname, true));
         }
 
         /// <summary>
@@ -597,10 +577,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DisableSendRepliesAsync()
         {
-            await Task.Run(() =>
-            {
-                DisableSendReplies();
-            });
+            await Dispatch.LinksAndComments.SendRepliesAsync(new LinksAndCommentsStateInput(Fullname, false));
         }
 
         /// <summary>
@@ -618,10 +595,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UnsaveAsync()
         {
-            await Task.Run(() =>
-            {
-                Unsave();
-            });
+            await Dispatch.LinksAndComments.UnsaveAsync(Fullname);
         }
 
         /// <summary>
@@ -640,12 +614,11 @@ namespace Reddit.Controllers
         /// Edit the body text of this comment asynchronously.  This instance will be automatically updated with the return data.
         /// </summary>
         /// <param name="text">raw markdown text</param>
-        public async Task EditAsync(string text)
+        public async Task<Comment> EditAsync(string text)
         {
-            await Task.Run(() =>
-            {
-                Edit(text);
-            });
+            Import(Validate(await Dispatch.LinksAndComments.EditUserTextCommentAsync(new LinksAndCommentsThingInput(text, Fullname))).JSON.Data.Things[0].Data);
+
+            return this;
         }
 
         /// <summary>
@@ -706,10 +679,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UpvoteAsync()
         {
-            await Task.Run(() =>
-            {
-                Upvote();
-            });
+            await Dispatch.LinksAndComments.VoteAsync(new LinksAndCommentsVoteInput(Fullname, 1));
         }
 
         /// <summary>
@@ -731,10 +701,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DownvoteAsync()
         {
-            await Task.Run(() =>
-            {
-                Downvote();
-            });
+            await Dispatch.LinksAndComments.VoteAsync(new LinksAndCommentsVoteInput(Fullname, -1));
         }
 
         /// <summary>
@@ -756,10 +723,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UnvoteAsync()
         {
-            await Task.Run(() =>
-            {
-                Unvote();
-            });
+            await Dispatch.LinksAndComments.VoteAsync(new LinksAndCommentsVoteInput(Fullname, 0));
         }
     }
 }
