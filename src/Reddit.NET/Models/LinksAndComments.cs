@@ -502,12 +502,49 @@ namespace Reddit.Models
         /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
         public PostResultShortContainer Submit(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecaptchaResponse = "")
         {
+            return JsonConvert.DeserializeObject<PostResultShortContainer>(ExecuteRequest(PrepareSubmit(linksAndCommentsSubmitInput, gRecaptchaResponse)));
+        }
+
+        /// <summary>
+        /// Submit a link to a subreddit asynchronously.
+        /// Submit will create a link or self-post in the subreddit sr with the title title.
+        /// If kind is "link", then url is expected to be a valid URL to link to.
+        /// Otherwise, text, if present, will be the body of the self-post unless richtext_json is present, in which case it will be converted into the body of the self-post.
+        /// An error is thrown if both text and richtext_json are present.
+        /// If a link with the same URL has already been submitted to the specified subreddit an error will be returned unless resubmit is true.
+        /// extension is used for determining which view-type (e.g.json, compact etc.) to use for the redirect that is generated if the resubmit error occurs.
+        /// </summary>
+        /// <param name="ad">boolean value</param>
+        /// <param name="app"></param>
+        /// <param name="extension">extension used for redirects</param>
+        /// <param name="flairId">a string no longer than 36 characters</param>
+        /// <param name="flairText">a string no longer than 64 characters</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="kind">one of (link, self, image, video, videogif)</param>
+        /// <param name="nsfw">boolean value</param>
+        /// <param name="resubmit">boolean value</param>
+        /// <param name="richtextJson">JSON data</param>
+        /// <param name="sendReplies">boolean value</param>
+        /// <param name="spoiler">boolean value</param>
+        /// <param name="sr">name of a subreddit</param>
+        /// <param name="text">raw markdown text</param>
+        /// <param name="title">title of the submission. up to 300 characters long</param>
+        /// <param name="url">a valid URL</param>
+        /// <param name="videoPosterUrl">a valid URL</param>
+        /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
+        public async Task<PostResultShortContainer> SubmitAsync(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecaptchaResponse = "")
+        {
+            return JsonConvert.DeserializeObject<PostResultShortContainer>(await ExecuteRequestAsync(PrepareSubmit(linksAndCommentsSubmitInput, gRecaptchaResponse)));
+        }
+
+        private RestRequest PrepareSubmit(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecaptchaResponse = "")
+        {
             RestRequest restRequest = PrepareRequest("api/submit", Method.POST);
 
             restRequest.AddObject(linksAndCommentsSubmitInput);
             restRequest.AddParameter("g-recaptcha-response", gRecaptchaResponse);
 
-            return JsonConvert.DeserializeObject<PostResultShortContainer>(ExecuteRequest(restRequest));
+            return restRequest;
         }
 
         /// <summary>

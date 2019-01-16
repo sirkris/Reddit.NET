@@ -189,14 +189,12 @@ namespace Reddit.Controllers
         /// <param name="sendReplies">boolean value</param>
         /// <param name="spoiler">boolean value</param>
         /// <param name="videoPosterUrl">a valid URL</param>
-        public async Task SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
+        public async Task<LinkPost> SubmitAsync(bool resubmit = false, bool ad = false, string app = "", string extension = "",
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
-            await Task.Run(() =>
-            {
-                Submit(resubmit, ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
-            });
+            return await SubmitAsync(new LinksAndCommentsSubmitInput(ad, app, extension, flairId, flairText,
+                "link", NSFW, resubmit, null, sendReplies, spoiler, Subreddit, null, Title, URL, videoPosterUrl), gRecapthaResponse);
         }
 
         /// <summary>
@@ -211,16 +209,13 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
-        /// Submit this link post to Reddit asynchronously.  This instance will automatically be updated with the resulting fullname/id.
+        /// Submit this link post to Reddit asynchronously.
         /// </summary>
         /// <param name="linksAndCommentsSubmitInput">A valid LinksAndCommentsSubmitInput instance</param>
         /// <param name="gRecapthaResponse"></param>
-        public async Task SubmitAsync(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecapthaResponse = "")
+        public async Task<LinkPost> SubmitAsync(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecapthaResponse = "")
         {
-            await Task.Run(() =>
-            {
-                Submit(linksAndCommentsSubmitInput, gRecapthaResponse);
-            });
+            return new LinkPost(Dispatch, Validate(await Dispatch.LinksAndComments.SubmitAsync(linksAndCommentsSubmitInput, gRecapthaResponse)).JSON.Data, this);
         }
 
         /// <summary>
