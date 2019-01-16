@@ -327,12 +327,9 @@ namespace Reddit.Controllers
         /// <param name="to">Modmail conversation recipient username</param>
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="srName">subreddit name</param>
-        public async Task NewConversationAsync(string body = "", string subject = "", string srName = "", string to = "", bool isAuthorHidden = false)
+        public async Task<ModmailConversationContainer> NewConversationAsync(string body = "", string subject = "", string srName = "", string to = "", bool isAuthorHidden = false)
         {
-            await Task.Run(() =>
-            {
-                NewConversation(body, subject, srName, to, isAuthorHidden);
-            });
+            return await NewConversationAsync(new ModmailNewConversationInput(body, isAuthorHidden, srName, subject, to));
         }
 
         /// <summary>
@@ -351,12 +348,9 @@ namespace Reddit.Controllers
         /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
         /// </summary>
         /// <param name="modmailNewConversationInput">A valid ModmailNewConversationInput instance</param>
-        public async Task NewConversationAsync(ModmailNewConversationInput modmailNewConversationInput)
+        public async Task<ModmailConversationContainer> NewConversationAsync(ModmailNewConversationInput modmailNewConversationInput)
         {
-            await Task.Run(() =>
-            {
-                NewConversation(modmailNewConversationInput);
-            });
+            return Validate(await Dispatch.Modmail.NewConversationAsync(modmailNewConversationInput));
         }
 
         /// <summary>
@@ -390,12 +384,9 @@ namespace Reddit.Controllers
         /// <param name="body">raw markdown text</param>
         /// <param name="isAuthorHidden">boolean value</param>
         /// <param name="isInternal">boolean value</param>
-        public async Task NewMessageAsync(string conversationId, string body = "", bool isAuthorHidden = false, bool isInternal = false)
+        public async Task<ModmailConversationContainer> NewMessageAsync(string conversationId, string body = "", bool isAuthorHidden = false, bool isInternal = false)
         {
-            await Task.Run(() =>
-            {
-                NewMessage(conversationId, body, isAuthorHidden, isInternal);
-            });
+            return await NewMessageAsync(conversationId, new ModmailNewMessageInput(body, isAuthorHidden, isInternal));
         }
 
         /// <summary>
@@ -403,7 +394,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <param name="modmailNewMessageInput">A valid ModmailNewMessageInput instance</param>
-        /// <returns></returns>
+        /// <returns>An object containing the conversation data.</returns>
         public ModmailConversationContainer NewMessage(string conversationId, ModmailNewMessageInput modmailNewMessageInput)
         {
             return Validate(Dispatch.Modmail.NewMessage(conversationId, modmailNewMessageInput));
@@ -414,12 +405,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <param name="modmailNewMessageInput">A valid ModmailNewMessageInput instance</param>
-        public async Task NewMessageAsync(string conversationId, ModmailNewMessageInput modmailNewMessageInput)
+        public async Task<ModmailConversationContainer> NewMessageAsync(string conversationId, ModmailNewMessageInput modmailNewMessageInput)
         {
-            await Task.Run(() =>
-            {
-                NewMessage(conversationId, modmailNewMessageInput);
-            });
+            return Validate(await Dispatch.Modmail.NewMessageAsync(conversationId, modmailNewMessageInput));
         }
 
         /// <summary>
@@ -437,12 +425,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the conversation data.</returns>
-        public async Task MarkHighlightedAsync(string conversationId)
+        public async Task<ModmailConversationContainer> MarkHighlightedAsync(string conversationId)
         {
-            await Task.Run(() =>
-            {
-                MarkHighlighted(conversationId);
-            });
+            return Validate(await Dispatch.Modmail.MarkHighlightedAsync(conversationId));
         }
 
         /// <summary>
@@ -460,12 +445,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the conversation data.</returns>
-        public async Task RemoveHighlightAsync(string conversationId)
+        public async Task<ModmailConversationContainer> RemoveHighlightAsync(string conversationId)
         {
-            await Task.Run(() =>
-            {
-                RemoveHighlight(conversationId);
-            });
+            return Validate(await Dispatch.Modmail.RemoveHighlightAsync(conversationId));
         }
 
         /// <summary>
@@ -483,12 +465,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the conversation data.</returns>
-        public async Task MuteAsync(string conversationId)
+        public async Task<ModmailConversationContainer> MuteAsync(string conversationId)
         {
-            await Task.Run(() =>
-            {
-                Mute(conversationId);
-            });
+            return Validate(await Dispatch.Modmail.MuteAsync(conversationId));
         }
 
         /// <summary>
@@ -506,12 +485,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
         /// <returns>An object containing the conversation data.</returns>
-        public async Task UnmuteAsync(string conversationId)
+        public async Task<ModmailConversationContainer> UnmuteAsync(string conversationId)
         {
-            await Task.Run(() =>
-            {
-                Unmute(conversationId);
-            });
+            return Validate(await Dispatch.Modmail.UnMuteAsync(conversationId));
         }
 
         /// <summary>
@@ -539,10 +515,7 @@ namespace Reddit.Controllers
         /// <param name="conversationIds">A comma-separated list of items</param>
         public async Task MarkReadAsync(string conversationIds)
         {
-            await Task.Run(() =>
-            {
-                MarkRead(conversationIds);
-            });
+            await Dispatch.Modmail.MarkReadAsync(conversationIds);
         }
 
         /// <summary>
@@ -560,10 +533,7 @@ namespace Reddit.Controllers
         /// <param name="conversationIds">A comma-separated list of items</param>
         public async Task MarkUnreadAsync(string conversationIds)
         {
-            await Task.Run(() =>
-            {
-                MarkUnread(conversationIds);
-            });
+            await Dispatch.Modmail.MarkUnreadAsync(conversationIds);
         }
 
         /// <summary>

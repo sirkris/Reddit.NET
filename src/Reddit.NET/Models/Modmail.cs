@@ -2,6 +2,7 @@
 using Reddit.Inputs.Modmail;
 using Reddit.Things;
 using RestSharp;
+using System.Threading.Tasks;
 
 namespace Reddit.Models
 {
@@ -45,6 +46,17 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Creates a new conversation for a particular SR asynchronously.
+        /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
+        /// </summary>
+        /// <param name="modmailNewConversationInput">A valid ModmailNewConversationInput instance</param>
+        /// <returns>An object containing the conversation data.</returns>
+        public async Task<ModmailConversationContainer> NewConversationAsync(ModmailNewConversationInput modmailNewConversationInput)
+        {
+            return await SendRequestAsync<ModmailConversationContainer>("api/mod/conversations", modmailNewConversationInput, Method.POST);
+        }
+
+        /// <summary>
         /// Returns all messages, mod actions and conversation metadata for a given conversation id.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
@@ -70,6 +82,17 @@ namespace Reddit.Models
             return SendRequest<ModmailConversationContainer>("api/mod/conversations/" + conversationId, modmailNewMessageInput, Method.POST);
         }
 
+        /// <summary>
+        /// Creates a new message for a particular conversation asynchronously.
+        /// </summary>
+        /// <param name="conversationId">base36 modmail conversation id</param>
+        /// <param name="modmailNewMessageInput">A valid ModmailNewMessageInput instance</param>
+        /// <returns>An object containing the conversation data.</returns>
+        public async Task<ModmailConversationContainer> NewMessageAsync(string conversationId, ModmailNewMessageInput modmailNewMessageInput)
+        {
+            return await SendRequestAsync<ModmailConversationContainer>("api/mod/conversations/" + conversationId, modmailNewMessageInput, Method.POST);
+        }
+
         // TODO - Keeps returning 422, saying the conversation is not archivable without any indication as to why.  --Kris
         /// <summary>
         /// Marks a conversation as archived.
@@ -92,6 +115,16 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Removes a highlight from a conversation asynchronously.
+        /// </summary>
+        /// <param name="conversationId">base36 modmail conversation id</param>
+        /// <returns>An object containing the conversation data.</returns>
+        public async Task<ModmailConversationContainer> RemoveHighlightAsync(string conversationId)
+        {
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(await ExecuteRequestAsync("api/mod/conversations/" + conversationId + "/highlight", Method.DELETE));
+        }
+
+        /// <summary>
         /// Marks a conversation as highlighted.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
@@ -102,6 +135,16 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Marks a conversation as highlighted asynchronously.
+        /// </summary>
+        /// <param name="conversationId">base36 modmail conversation id</param>
+        /// <returns>An object containing the conversation data.</returns>
+        public async Task<ModmailConversationContainer> MarkHighlightedAsync(string conversationId)
+        {
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(await ExecuteRequestAsync("api/mod/conversations/" + conversationId + "/highlight", Method.POST));
+        }
+
+        /// <summary>
         /// Mutes the non-mod user associated with a particular conversation.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
@@ -109,6 +152,16 @@ namespace Reddit.Models
         public ModmailConversationContainer Mute(string conversationId)
         {
             return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest("api/mod/conversations/" + conversationId + "/mute", Method.POST));
+        }
+
+        /// <summary>
+        /// Asynchronously mutes the non-mod user associated with a particular conversation.
+        /// </summary>
+        /// <param name="conversationId">base36 modmail conversation id</param>
+        /// <returns>An object containing the conversation data.</returns>
+        public async Task<ModmailConversationContainer> MuteAsync(string conversationId)
+        {
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(await ExecuteRequestAsync("api/mod/conversations/" + conversationId + "/mute", Method.POST));
         }
 
         // TODO - Will test when I can get the archive endpoint to work.  --Kris
@@ -133,6 +186,16 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Asynchronously unmutes the non mod user associated with a particular conversation.
+        /// </summary>
+        /// <param name="conversationId">base36 modmail conversation id</param>
+        /// <returns>An object containing the conversation data.</returns>
+        public async Task<ModmailConversationContainer> UnMuteAsync(string conversationId)
+        {
+            return JsonConvert.DeserializeObject<ModmailConversationContainer>(await ExecuteRequestAsync("api/mod/conversations/" + conversationId + "/unmute", Method.POST));
+        }
+
+        /// <summary>
         /// Returns recent posts, comments and modmail conversations for the user that started this conversation.
         /// </summary>
         /// <param name="conversationId">base36 modmail conversation id</param>
@@ -148,11 +211,25 @@ namespace Reddit.Models
         /// <param name="conversationIds">A comma-separated list of items</param>
         public void MarkRead(string conversationIds)
         {
+            ExecuteRequest(PrepareMarkRead(conversationIds));
+        }
+
+        /// <summary>
+        /// Asynchronously marks conversations as read for the user.
+        /// </summary>
+        /// <param name="conversationIds">A comma-separated list of items</param>
+        public async Task MarkReadAsync(string conversationIds)
+        {
+            await ExecuteRequestAsync(PrepareMarkRead(conversationIds));
+        }
+
+        private RestRequest PrepareMarkRead(string conversationIds)
+        {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/read", Method.POST);
 
             restRequest.AddParameter("conversationIds", conversationIds);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
@@ -170,11 +247,25 @@ namespace Reddit.Models
         /// <param name="conversationIds">A comma-separated list of items</param>
         public void MarkUnread(string conversationIds)
         {
+            ExecuteRequest(PrepareMarkUnread(conversationIds));
+        }
+
+        /// <summary>
+        /// Asynchronously marks conversations as unread for the user.
+        /// </summary>
+        /// <param name="conversationIds">A comma-separated list of items</param>
+        public async Task MarkUnreadAsync(string conversationIds)
+        {
+            await ExecuteRequestAsync(PrepareMarkUnread(conversationIds));
+        }
+
+        private RestRequest PrepareMarkUnread(string conversationIds)
+        {
             RestRequest restRequest = PrepareRequest("api/mod/conversations/unread", Method.POST);
 
             restRequest.AddParameter("conversationIds", conversationIds);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
