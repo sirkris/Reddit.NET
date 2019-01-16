@@ -225,12 +225,9 @@ namespace Reddit.Controllers
         /// <param name="description">raw markdown text</param>
         /// <param name="nsfw">boolean value</param>
         /// <param name="resources">raw markdown text</param>
-        public async Task CreateAsync(string title = null, string description = null, bool? nsfw = null, string resources = null)
+        public async Task<LiveThread> CreateAsync(string title = null, string description = null, bool? nsfw = null, string resources = null)
         {
-            await Task.Run(() =>
-            {
-                Create(title, description, nsfw, resources);
-            });
+            return await CreateAsync(new LiveThreadsConfigInput(title ?? Title, description ?? Description, nsfw ?? NSFW, resources ?? Resources));
         }
 
         /// <summary>
@@ -247,12 +244,9 @@ namespace Reddit.Controllers
         /// Create a new live thread asynchronously.
         /// </summary>
         /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
-        public async Task CreateAsync(LiveThreadsConfigInput liveThreadsConfigInput)
+        public async Task<LiveThread> CreateAsync(LiveThreadsConfigInput liveThreadsConfigInput)
         {
-            await Task.Run(() =>
-            {
-                Create(liveThreadsConfigInput);
-            });
+            return new LiveThread(Dispatch, Validate(await Dispatch.LiveThreads.CreateAsync(liveThreadsConfigInput)).JSON.Data.Id).About();
         }
 
         /// <summary>
@@ -268,10 +262,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task AcceptContributorInviteAsync()
         {
-            await Task.Run(() =>
-            {
-                AcceptContributorInvite();
-            });
+            Validate(await Dispatch.LiveThreads.AcceptContributorInviteAsync(Id));
         }
 
         /// <summary>
@@ -291,10 +282,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task CloseAsync()
         {
-            await Task.Run(() =>
-            {
-                Close();
-            });
+            Validate(await Dispatch.LiveThreads.CloseThreadAsync(Id));
         }
 
         /// <summary>
@@ -314,10 +302,7 @@ namespace Reddit.Controllers
         /// <param name="updateName">the Name of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
         public async Task DeleteUpdateAsync(string updateId)
         {
-            await Task.Run(() =>
-            {
-                DeleteUpdate(updateId);
-            });
+            Validate(await Dispatch.LiveThreads.DeleteUpdateAsync(Id, updateId));
         }
 
         /// <summary>
@@ -335,10 +320,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task SaveChangesAsync()
         {
-            await Task.Run(() =>
-            {
-                SaveChanges();
-            });
+            await EditAsync(Title, Description, NSFW, Resources);
         }
 
         /// <summary>
@@ -364,10 +346,7 @@ namespace Reddit.Controllers
         /// <param name="resources">raw markdown text</param>
         public async Task EditAsync(string title, string description, bool nsfw, string resources)
         {
-            await Task.Run(() =>
-            {
-                Edit(title, description, nsfw, resources);
-            });
+            await EditAsync(new LiveThreadsConfigInput(title, description, nsfw, resources));
         }
 
         /// <summary>
@@ -387,10 +366,7 @@ namespace Reddit.Controllers
         /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
         public async Task EditAsync(LiveThreadsConfigInput liveThreadsConfigInput)
         {
-            await Task.Run(() =>
-            {
-                Edit(liveThreadsConfigInput);
-            });
+            Validate(await Dispatch.LiveThreads.EditAsync(Id, liveThreadsConfigInput));
         }
 
         /// <summary>
@@ -414,10 +390,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public async Task InviteContributorAsync(string name, string permissions, string type)
         {
-            await Task.Run(() =>
-            {
-                InviteContributor(name, permissions, type);
-            });
+            await InviteContributorAsync(new LiveThreadsContributorInput(name, permissions, type));
         }
 
         /// <summary>
@@ -437,10 +410,7 @@ namespace Reddit.Controllers
         /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
         public async Task InviteContributorAsync(LiveThreadsContributorInput liveThreadsContributorInput)
         {
-            await Task.Run(() =>
-            {
-                InviteContributor(liveThreadsContributorInput);
-            });
+            Validate(await Dispatch.LiveThreads.InviteContributorAsync(Id, liveThreadsContributorInput));
         }
 
         /// <summary>
@@ -456,10 +426,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task AbandonAsync()
         {
-            await Task.Run(() =>
-            {
-                Abandon();
-            });
+            Validate(await Dispatch.LiveThreads.LeaveContributorAsync(Id));
         }
 
         /// <summary>
@@ -477,10 +444,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (spam, vote-manipulation, personal-information, sexualizing-minors, site-breaking)</param>
         public async Task ReportAsync(string type)
         {
-            await Task.Run(() =>
-            {
-                Report(type);
-            });
+            Validate(await Dispatch.LiveThreads.ReportAsync(Id, type));
         }
 
         /// <summary>
@@ -500,10 +464,7 @@ namespace Reddit.Controllers
         /// <param name="user">fullname of an account</param>
         public async Task RemoveContributorAsync(string user)
         {
-            await Task.Run(() =>
-            {
-                RemoveContributor(user);
-            });
+            Validate(await Dispatch.LiveThreads.RemoveContributorAsync(Id, user));
         }
 
         /// <summary>
@@ -523,10 +484,7 @@ namespace Reddit.Controllers
         /// <param name="user">fullname of an account</param>
         public async Task RemoveContributorInviteAsync(string user)
         {
-            await Task.Run(() =>
-            {
-                RemoveContributorInvite(user);
-            });
+            Validate(await Dispatch.LiveThreads.RemoveContributorInviteAsync(Id, user));
         }
 
         /// <summary>
@@ -552,10 +510,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public async Task SetContributorPermissionsAsync(string name, string permissions, string type)
         {
-            await Task.Run(() =>
-            {
-                SetContributorPermissions(name, permissions, type);
-            });
+            await SetContributorPermissionsAsync(new LiveThreadsContributorInput(name, permissions, type));
         }
 
         /// <summary>
@@ -577,10 +532,7 @@ namespace Reddit.Controllers
         /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
         public async Task SetContributorPermissionsAsync(LiveThreadsContributorInput liveThreadsContributorInput)
         {
-            await Task.Run(() =>
-            {
-                SetContributorPermissions(liveThreadsContributorInput);
-            });
+            Validate(await Dispatch.LiveThreads.SetContributorPermissionsAsync(Id, liveThreadsContributorInput));
         }
 
         /// <summary>
@@ -600,10 +552,7 @@ namespace Reddit.Controllers
         /// <param name="updateId">the ID (Name) of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
         public async Task StrikeUpdateAsync(string updateId)
         {
-            await Task.Run(() =>
-            {
-                StrikeUpdate(updateId);
-            });
+            Validate(await Dispatch.LiveThreads.StrikeUpdateAsync(Id, updateId));
         }
 
         /// <summary>
@@ -623,10 +572,7 @@ namespace Reddit.Controllers
         /// <param name="body">raw markdown text</param>
         public async Task UpdateAsync(string body)
         {
-            await Task.Run(() =>
-            {
-                Update(body);
-            });
+            Validate(await Dispatch.LiveThreads.UpdateAsync(Id, body));
         }
 
         /// <summary>

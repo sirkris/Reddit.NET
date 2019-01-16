@@ -52,6 +52,17 @@ namespace Reddit.Models
             return SendRequest<LiveThreadCreateResultContainer>("api/live/create", liveThreadsConfigInput, Method.POST);
         }
 
+        /// <summary>
+        /// Create a new live thread asynchronously.
+        /// Once created, the initial settings can be modified with /api/live/thread/edit and new updates can be posted with /api/live/thread/update.
+        /// </summary>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
+        /// <returns>A response object containing the ID of the newly-created live thread.</returns>
+        public async Task<LiveThreadCreateResultContainer> CreateAsync(LiveThreadsConfigInput liveThreadsConfigInput)
+        {
+            return await SendRequestAsync<LiveThreadCreateResultContainer>("api/live/create", liveThreadsConfigInput, Method.POST);
+        }
+
         // TODO - Returned empty 204 response on my tests.  Need to test when there's a featured live thread.  --Kris
         /// <summary>
         /// Get some basic information about the currently featured live thread.
@@ -99,6 +110,18 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Permanently close the thread asynchronously, disallowing future updates.
+        /// Requires the close permission for this thread.
+        /// Returns forbidden response if the thread has already been closed.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> CloseThreadAsync(string thread)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/close_thread", new APITypeInput(), Method.POST);
+        }
+
+        /// <summary>
         /// Delete an update from the thread.
         /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
         /// See also: /api/live/thread/update.
@@ -109,6 +132,19 @@ namespace Reddit.Models
         public GenericContainer DeleteUpdate(string thread, string id)
         {
             return DeleteUpdate(thread, new LiveThreadsIdInput(id));
+        }
+
+        /// <summary>
+        /// Delete an update from the thread asynchronously.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="id">the ID of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteUpdateAsync(string thread, string id)
+        {
+            return await DeleteUpdateAsync(thread, new LiveThreadsIdInput(id));
         }
 
         /// <summary>
@@ -125,6 +161,19 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Delete an update from the thread asynchronously.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteUpdateAsync(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/delete_update", liveThreadsIdInput, Method.POST);
+        }
+
+        /// <summary>
         /// Configure the thread.
         /// Requires the settings permission for this thread.
         /// See also: /live/thread/about.json.
@@ -135,6 +184,19 @@ namespace Reddit.Models
         public GenericContainer Edit(string thread, LiveThreadsConfigInput liveThreadsConfigInput)
         {
             return SendRequest<GenericContainer>("api/live/" + thread + "/edit", liveThreadsConfigInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Configure the thread asynchronously.
+        /// Requires the settings permission for this thread.
+        /// See also: /live/thread/about.json.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> EditAsync(string thread, LiveThreadsConfigInput liveThreadsConfigInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/edit", liveThreadsConfigInput, Method.POST);
         }
 
         // TODO - Needs testing.
@@ -168,6 +230,19 @@ namespace Reddit.Models
         public GenericContainer InviteContributor(string thread, LiveThreadsContributorInput liveThreadsContributorInput)
         {
             return SendRequest<GenericContainer>("api/live/" + thread + "/invite_contributor", liveThreadsContributorInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Asynchronously invite another user to contribute to the thread.
+        /// Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified.
+        /// See also: /api/live/thread/accept_contributor_invite, and /api/live/thread/rm_contributor_invite.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> InviteContributorAsync(string thread, LiveThreadsContributorInput liveThreadsContributorInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/invite_contributor", liveThreadsContributorInput, Method.POST);
         }
 
         /// <summary>
@@ -205,6 +280,17 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Asynchronously report the thread for violating the rules of reddit.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="type">one of (spam, vote-manipulation, personal-information, sexualizing-minors, site-breaking)</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> ReportAsync(string thread, string type)
+        {
+            return await ReportAsync(thread, new LiveThreadsReportTypeInput(type));
+        }
+
+        /// <summary>
         /// Report the thread for violating the rules of reddit.
         /// </summary>
         /// <param name="thread">id</param>
@@ -213,6 +299,17 @@ namespace Reddit.Models
         public GenericContainer Report(string thread, LiveThreadsReportTypeInput liveThreadsReportTypeInput)
         {
             return SendRequest<GenericContainer>("api/live/" + thread + "/report", liveThreadsReportTypeInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Asynchronously report the thread for violating the rules of reddit.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsReportTypeInput">A valid LiveThreadsReportTypeInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> ReportAsync(string thread, LiveThreadsReportTypeInput liveThreadsReportTypeInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/report", liveThreadsReportTypeInput, Method.POST);
         }
 
         /// <summary>
@@ -229,6 +326,19 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Revoke another user's contributorship asynchronously.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="id">fullname of an account</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> RemoveContributorAsync(string thread, string id)
+        {
+            return await RemoveContributorAsync(thread, new LiveThreadsIdInput(id));
+        }
+
+        /// <summary>
         /// Revoke another user's contributorship.
         /// Requires the manage permission for this thread.
         /// See also: /api/live/thread/invite_contributor.
@@ -239,6 +349,19 @@ namespace Reddit.Models
         public GenericContainer RemoveContributor(string thread, LiveThreadsIdInput liveThreadsIdInput)
         {
             return SendRequest<GenericContainer>("api/live/" + thread + "/rm_contributor", liveThreadsIdInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Revoke another user's contributorship asynchronously.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> RemoveContributorAsync(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/rm_contributor", liveThreadsIdInput, Method.POST);
         }
 
         /// <summary>
@@ -255,6 +378,19 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Revoke an outstanding contributor invite asynchronously.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="id">fullname of an account</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> RemoveContributorInviteAsync(string thread, string id)
+        {
+            return await RemoveContributorInviteAsync(thread, new LiveThreadsIdInput(id));
+        }
+
+        /// <summary>
         /// Revoke an outstanding contributor invite.
         /// Requires the manage permission for this thread.
         /// See also: /api/live/thread/invite_contributor.
@@ -265,6 +401,19 @@ namespace Reddit.Models
         public GenericContainer RemoveContributorInvite(string thread, LiveThreadsIdInput liveThreadsIdInput)
         {
             return SendRequest<GenericContainer>("api/live/" + thread + "/rm_contributor_invite", liveThreadsIdInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Revoke an outstanding contributor invite asynchronously.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> RemoveContributorInviteAsync(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/rm_contributor_invite", liveThreadsIdInput, Method.POST);
         }
 
         /// <summary>
@@ -282,6 +431,20 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Change a contributor or contributor invite's permissions asynchronously.
+        /// Requires the manage permission for this thread.
+        /// Note that permissions overrides the previous value completely.
+        /// See also: /api/live/thread/invite_contributor and /api/live/thread/rm_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> SetContributorPermissionsAsync(string thread, LiveThreadsContributorInput liveThreadsContributorInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/set_contributor_permissions", liveThreadsContributorInput, Method.POST);
+        }
+
+        /// <summary>
         /// Strike (mark incorrect and cross out) the content of an update.
         /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
         /// See also: /api/live/thread/update.
@@ -295,6 +458,19 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Strike (mark incorrect and cross out) the content of an update asynchronously.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="id">the ID (Name) of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> StrikeUpdateAsync(string thread, string id)
+        {
+            return await StrikeUpdateAsync(thread, new LiveThreadsIdInput(id));
+        }
+
+        /// <summary>
         /// Strike (mark incorrect and cross out) the content of an update.
         /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
         /// See also: /api/live/thread/update.
@@ -305,6 +481,19 @@ namespace Reddit.Models
         public GenericContainer StrikeUpdate(string thread, LiveThreadsIdInput liveThreadsIdInput)
         {
             return SendRequest<GenericContainer>("api/live/" + thread + "/strike_update", liveThreadsIdInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Strike (mark incorrect and cross out) the content of an update asynchronously.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> StrikeUpdateAsync(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/strike_update", liveThreadsIdInput, Method.POST);
         }
 
         // TODO - Needs testing.
@@ -341,6 +530,19 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Post an update to the thread asynchronously.
+        /// Requires the update permission for this thread.
+        /// See also: /api/live/thread/strike_update, and /api/live/thread/delete_update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="body">raw markdown text</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> UpdateAsync(string thread, string body)
+        {
+            return await UpdateAsync(thread, new LiveThreadsBodyInput(body));
+        }
+
+        /// <summary>
         /// Post an update to the thread.
         /// Requires the update permission for this thread.
         /// See also: /api/live/thread/strike_update, and /api/live/thread/delete_update.
@@ -351,6 +553,19 @@ namespace Reddit.Models
         public GenericContainer Update(string thread, LiveThreadsBodyInput liveThreadsBodyInput)
         {
             return SendRequest<GenericContainer>("api/live/" + thread + "/update", liveThreadsBodyInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Post an update to the thread asynchronously.
+        /// Requires the update permission for this thread.
+        /// See also: /api/live/thread/strike_update, and /api/live/thread/delete_update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsBodyInput">A valid LiveThreadsBodyInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> UpdateAsync(string thread, LiveThreadsBodyInput liveThreadsBodyInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/update", liveThreadsBodyInput, Method.POST);
         }
 
         /// <summary>
