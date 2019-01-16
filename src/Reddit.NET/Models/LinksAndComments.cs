@@ -87,6 +87,17 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Edit the body text of a self-post asynchronously.
+        /// the thing_id is the fullname of a self post.
+        /// </summary>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
+        /// <returns>The modified post data.</returns>
+        public async Task<PostResultContainer> EditUserTextAsync(LinksAndCommentsThingInput linksAndCommentsThingInput)
+        {
+            return await SendRequestAsync<PostResultContainer>("api/editusertext", linksAndCommentsThingInput, Method.POST);
+        }
+
+        /// <summary>
         /// Edit the body text of a comment.
         /// the thing_id is the fullname of a comment.
         /// </summary>

@@ -4,7 +4,6 @@ using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
 using System;
 using System.Threading.Tasks;
-using System.Web;
 
 namespace Reddit.Controllers
 {
@@ -172,14 +171,12 @@ namespace Reddit.Controllers
         /// <param name="sendReplies">boolean value</param>
         /// <param name="spoiler">boolean value</param>
         /// <param name="videoPosterUrl">a valid URL</param>
-        public async Task SubmitAsync(bool ad = false, string app = "", string extension = "",
+        public async Task<SelfPost> SubmitAsync(bool ad = false, string app = "", string extension = "",
             string flairId = "", string flairText = "", string gRecapthaResponse = "", bool sendReplies = true, bool spoiler = false,
             string videoPosterUrl = "")
         {
-            await Task.Run(() =>
-            {
-                Submit(ad, app, extension, flairId, flairText, gRecapthaResponse, sendReplies, spoiler, videoPosterUrl);
-            });
+            return new SelfPost(Dispatch, Validate(await Dispatch.LinksAndComments.SubmitAsync(new LinksAndCommentsSubmitInput(ad, app, extension, flairId, flairText,
+                "self", NSFW, false, null, sendReplies, spoiler, Subreddit, SelfText, Title, null, videoPosterUrl), gRecapthaResponse)).JSON.Data, this);
         }
 
         /// <summary>
@@ -198,12 +195,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="linksAndCommentsSubmitInput">A valid LinksAndCommentsSubmitInput instance</param>
         /// <param name="gRecapthaResponse"></param>
-        public async Task SubmitAsync(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecapthaResponse = "")
+        public async Task<SelfPost> SubmitAsync(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecapthaResponse = "")
         {
-            await Task.Run(() =>
-            {
-                Submit(linksAndCommentsSubmitInput, gRecapthaResponse);
-            });
+            return new SelfPost(Dispatch, Validate(await Dispatch.LinksAndComments.SubmitAsync(linksAndCommentsSubmitInput, gRecapthaResponse)).JSON.Data, this);
         }
 
         /// <summary>
@@ -222,12 +216,11 @@ namespace Reddit.Controllers
         /// Edit the body text of this self post asynchronously.  This instance will be automatically updated with the return data.
         /// </summary>
         /// <param name="text">raw markdown text</param>
-        public async Task EditAsync(string text)
+        public async Task<SelfPost> EditAsync(string text)
         {
-            await Task.Run(() =>
-            {
-                Edit(text);
-            });
+            Import(Validate(await Dispatch.LinksAndComments.EditUserTextAsync(new LinksAndCommentsThingInput(text, Fullname))).JSON.Data.Things[0].Data);
+
+            return this;
         }
 
         /// <summary>
