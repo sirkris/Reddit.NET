@@ -54,9 +54,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing created by the user</param>
         public void Delete(string id)
         {
-            RestRequest restRequest = PrepareDelete(id);
-
-            ExecuteRequest(restRequest);
+            ExecuteRequest(PrepareDelete(id));
         }
 
         /// <summary>
@@ -65,9 +63,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing created by the user</param>
         public async Task DeleteAsync(string id)
         {
-            RestRequest restRequest = PrepareDelete(id);
-
-            await ExecuteRequestAsync(restRequest);
+            await ExecuteRequestAsync(PrepareDelete(id));
         }
 
         private RestRequest PrepareDelete(string id)
@@ -120,11 +116,27 @@ namespace Reddit.Models
         /// <param name="id">A comma-separated list of link fullnames</param>
         public void Hide(string id)
         {
+            ExecuteRequest(PrepareHide(id));
+        }
+
+        /// <summary>
+        /// Hide a link asynchronously.
+        /// This removes it from the user's default view of subreddit listings.
+        /// See also: /api/unhide.
+        /// </summary>
+        /// <param name="id">A comma-separated list of link fullnames</param>
+        public async Task HideAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareHide(id));
+        }
+
+        private RestRequest PrepareHide(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/hide", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
@@ -173,11 +185,29 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public void Lock(string id)
         {
+            RestRequest restRequest = PrepareLock(id);
+
+            ExecuteRequest(restRequest);
+        }
+
+        /// <summary>
+        /// Lock a link asynchronously.
+        /// Prevents a post from receiving new comments.
+        /// See also: /api/unlock.
+        /// </summary>
+        /// <param name="id">fullname of a link</param>
+        public async Task LockAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareLock(id));
+        }
+
+        private RestRequest PrepareLock(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/lock", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
@@ -187,11 +217,26 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void MarkNSFW(string id)
         {
+            ExecuteRequest(PrepareMarkNSFW(id));
+        }
+
+        /// <summary>
+        /// Mark a link NSFW asynchronously.
+        /// See also: /api/unmarknsfw.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public async Task MarkNSFWAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareMarkNSFW(id));
+        }
+
+        private RestRequest PrepareMarkNSFW(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/marknsfw", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
@@ -321,6 +366,17 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Set or unset "contest mode" for a link's comments asynchronously.
+        /// state is a boolean that indicates whether you are enabling or disabling contest mode - true to enable, false to disable.
+        /// </summary>
+        /// <param name="linksAndCommentsStateInput">a valid LinksAndCommentsStateInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> SetContestModeAsync(LinksAndCommentsStateInput linksAndCommentsStateInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/set_contest_mode", linksAndCommentsStateInput, Method.POST);
+        }
+
+        /// <summary>
         /// Set or unset a Link as the sticky in its subreddit.
         /// state is a boolean that indicates whether to sticky or unsticky this post - true to sticky, false to unsticky.
         /// The num argument is optional, and only used when stickying a post.
@@ -332,6 +388,20 @@ namespace Reddit.Models
         public GenericContainer SetSubredditSticky(LinksAndCommentsStickyInput linksAndCommentsStickyInput)
         {
             return SendRequest<GenericContainer>("api/set_subreddit_sticky", linksAndCommentsStickyInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Set or unset a Link as the sticky in its subreddit asynchronously.
+        /// state is a boolean that indicates whether to sticky or unsticky this post - true to sticky, false to unsticky.
+        /// The num argument is optional, and only used when stickying a post.
+        /// It allows specifying a particular "slot" to sticky the post into, and if there is already a post stickied in that slot it will be replaced.
+        /// If there is no post in the specified slot to replace, or num is None, the bottom-most slot will be used.
+        /// </summary>
+        /// <param name="linksAndCommentsStickyInput">A valid LinksAndCommentsStickyInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> SetSubredditStickyAsync(LinksAndCommentsStickyInput linksAndCommentsStickyInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/set_subreddit_sticky", linksAndCommentsStickyInput, Method.POST);
         }
 
         /// <summary>
@@ -348,16 +418,43 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Set a suggested sort for a link asynchronously.
+        /// Suggested sorts are useful to display comments in a certain preferred way for posts.
+        /// For example, casual conversation may be better sorted by new by default, or AMAs may be sorted by Q&A.
+        /// A sort of an empty string clears the default sort.
+        /// </summary>
+        /// <param name="linksAndCommentsSuggestedSortInput">A valid LinksAndCommentsSuggestedSortInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> SetSuggestedSortAsync(LinksAndCommentsSuggestedSortInput linksAndCommentsSuggestedSortInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/set_suggested_sort", linksAndCommentsSuggestedSortInput, Method.POST);
+        }
+
+        /// <summary>
         /// Spoiler.
         /// </summary>
         /// <param name="id">fullname of a link</param>
         public void Spoiler(string id)
         {
+            ExecuteRequest(PrepareSpoiler(id));
+        }
+
+        /// <summary>
+        /// Asynchronous spoiler.
+        /// </summary>
+        /// <param name="id">fullname of a link</param>
+        public async Task SpoilerAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareSpoiler(id));
+        }
+
+        private RestRequest PrepareSpoiler(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/spoiler", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         // TODO - Needs testing.
@@ -419,11 +516,25 @@ namespace Reddit.Models
         /// <param name="id">A comma-separated list of link fullnames</param>
         public void Unhide(string id)
         {
+            ExecuteRequest(PrepareUnhide(id));
+        }
+
+        /// <summary>
+        /// Unhide a link asynchronously.
+        /// </summary>
+        /// <param name="id">A comma-separated list of link fullnames</param>
+        public async Task UnhideAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareUnhide(id));
+        }
+
+        private RestRequest PrepareUnhide(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/unhide", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
@@ -434,11 +545,27 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public void Unlock(string id)
         {
+            ExecuteRequest(PrepareUnlock(id));
+        }
+
+        /// <summary>
+        /// Unlock a link asynchronously.
+        /// Allows a post to receive new comments.
+        /// See also: /api/lock.
+        /// </summary>
+        /// <param name="id">A comma-separated list of link fullnames</param>
+        public async Task UnlockAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareUnlock(id));
+        }
+
+        private RestRequest PrepareUnlock(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/unlock", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
@@ -448,11 +575,26 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void UnmarkNSFW(string id)
         {
+            ExecuteRequest(PrepareUnmarkNSFW(id));
+        }
+
+        /// <summary>
+        /// Remove the NSFW marking from a link asynchronously.
+        /// See also: /api/marknsfw.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public async Task UnmarkNSFWAsync(string id)
+        {
+           await ExecuteRequestAsync(PrepareUnmarkNSFW(id));
+        }
+
+        private RestRequest PrepareUnmarkNSFW(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/unmarknsfw", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         /// <summary>
@@ -463,9 +605,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void Unsave(string id)
         {
-            RestRequest restRequest = PrepareUnsave(id);
-
-            ExecuteRequest(restRequest);
+            ExecuteRequest(PrepareUnsave(id));
         }
 
         /// <summary>
@@ -476,9 +616,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public async Task UnsaveAsync(string id)
         {
-            RestRequest restRequest = PrepareUnsave(id);
-
-            await ExecuteRequestAsync(restRequest);
+            await ExecuteRequestAsync(PrepareUnsave(id));
         }
 
         private RestRequest PrepareUnsave(string id)
@@ -496,11 +634,25 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public void Unspoiler(string id)
         {
+            ExecuteRequest(PrepareUnspoiler(id));
+        }
+
+        /// <summary>
+        /// Remove spoiler asynchronously.
+        /// </summary>
+        /// <param name="id">fullname of a link</param>
+        public async Task UnspoilerAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareUnspoiler(id));
+        }
+
+        private RestRequest PrepareUnspoiler(string id)
+        {
             RestRequest restRequest = PrepareRequest("api/unspoiler", Method.POST);
 
             restRequest.AddParameter("id", id);
 
-            ExecuteRequest(restRequest);
+            return restRequest;
         }
 
         // WARNING:  Automated bot-voting violates Reddit's rules.  --Kris

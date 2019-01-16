@@ -101,6 +101,25 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Distinguish a thing's author with a sigil asynchronously.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a link or comment of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish. depends on user.
+        /// The first time a top-level comment is moderator distinguished, the author of the link the comment is in reply to will get a notification in their inbox.
+        /// sticky is a boolean flag for comments, which will stick the distingushed comment to the top of all comments threads.
+        /// If a comment is marked sticky, it will override any other stickied comment for that link (as only one comment may be stickied at a time). Only top-level comments may be stickied.
+        /// </summary>
+        /// <param name="moderationDistinguishInput">A valid ModerationDistinguishInput instance</param>
+        /// <returns>The distinguished post or comment object.</returns>
+        public async Task<T> DistinguishAsync<T>(ModerationDistinguishInput moderationDistinguishInput)
+        {
+            return await SendRequestAsync<T>("api/distinguish", moderationDistinguishInput, Method.POST);
+        }
+
+        /// <summary>
         /// Distinguish a post's author with a sigil.
         /// This can be useful to draw attention to and confirm the identity of the user in the context of a link of theirs.
         /// The options for distinguish are as follows:
@@ -115,6 +134,23 @@ namespace Reddit.Models
         public PostResultContainer DistinguishPost(string how, string id)
         {
             return Distinguish<PostResultContainer>(new ModerationDistinguishInput(id, how));
+        }
+
+        /// <summary>
+        /// Distinguish a post's author with a sigil asynchronously.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a link of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish. depends on user.
+        /// </summary>
+        /// <param name="how">one of (yes, no, admin, special)</param>
+        /// <param name="id">fullname of a thing</param>
+        /// <returns>The distinguished post object.</returns>
+        public async Task<PostResultContainer> DistinguishPostAsync(string how, string id)
+        {
+            return await DistinguishAsync<PostResultContainer>(new ModerationDistinguishInput(id, how));
         }
 
         /// <summary>
@@ -136,6 +172,27 @@ namespace Reddit.Models
         public CommentResultContainer DistinguishComment(string how, string id, bool? sticky = null)
         {
             return Distinguish<CommentResultContainer>(new ModerationDistinguishInput(id, how, sticky));
+        }
+
+        /// <summary>
+        /// Distinguish a comment's author with a sigil asynchronously.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a comment of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish.depends on user.
+        /// The first time a top-level comment is moderator distinguished, the author of the link the comment is in reply to will get a notification in their inbox.
+        /// sticky is a boolean flag for comments, which will stick the distingushed comment to the top of all comments threads.
+        /// If a comment is marked sticky, it will override any other stickied comment for that link (as only one comment may be stickied at a time). Only top-level comments may be stickied.
+        /// </summary>
+        /// <param name="how">one of (yes, no, admin, special)</param>
+        /// <param name="id">fullname of a thing</param>
+        /// <param name="sticky">boolean value</param>
+        /// <returns>The distinguished comment object.</returns>
+        public async Task<CommentResultContainer> DistinguishCommentAsync(string how, string id, bool? sticky = null)
+        {
+            return await DistinguishAsync<CommentResultContainer>(new ModerationDistinguishInput(id, how, sticky));
         }
 
         /// <summary>

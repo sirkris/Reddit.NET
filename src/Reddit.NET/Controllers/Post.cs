@@ -289,17 +289,14 @@ namespace Reddit.Controllers
         /// <param name="downVotes"></param>
         /// <param name="removed"></param>
         /// <param name="spam"></param>
-        public async Task ReplyAsync(string body, string bodyHtml = null, string author = null,
+        public async Task<Comment> ReplyAsync(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            await Task.Run(() =>
-            {
-                Reply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
-                    depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
-            });
+            return await Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+                depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).SubmitAsync();
         }
 
         /// <summary>
@@ -337,6 +334,22 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Distinguish a post's author with a sigil asynchronously.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a link of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish. depends on user.
+        /// </summary>
+        /// <param name="how">one of (yes, no, admin, special)</param>
+        /// <returns>The distinguished post object.</returns>
+        public async Task<Post> DistinguishAsync(string how)
+        {
+            return Listings.GetPosts(Validate(await Dispatch.Moderation.DistinguishPostAsync(how, Fullname)), Dispatch)[0];
+        }
+
+        /// <summary>
         /// Remove this post from all subreddit listings.
         /// </summary>
         /// <param name="spam">boolean value</param>
@@ -350,10 +363,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task RemoveAsync(bool spam = false)
         {
-            await Task.Run(() =>
-            {
-                Remove(spam);
-            });
+            await Dispatch.Moderation.RemoveAsync(new ModerationRemoveInput(Fullname, spam));
         }
 
         /// <summary>
@@ -369,10 +379,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DeleteAsync()
         {
-            await Task.Run(() =>
-            {
-                Delete();
-            });
+            await Dispatch.LinksAndComments.DeleteAsync(Fullname);
         }
 
         /// <summary>
@@ -390,10 +397,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task HideAsync()
         {
-            await Task.Run(() =>
-            {
-                Hide();
-            });
+            await Dispatch.LinksAndComments.HideAsync(Fullname);
         }
 
         /// <summary>
@@ -411,10 +415,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task LockAsync()
         {
-            await Task.Run(() =>
-            {
-                Lock();
-            });
+            await Dispatch.LinksAndComments.LockAsync(Fullname);
         }
 
         /// <summary>
@@ -430,10 +431,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task MarkNSFWAsync()
         {
-            await Task.Run(() =>
-            {
-                MarkNSFW();
-            });
+            await Dispatch.LinksAndComments.MarkNSFWAsync(Fullname);
         }
 
         /// <summary>
@@ -511,10 +509,8 @@ namespace Reddit.Controllers
         public async Task ReportAsync(string additionalInfo, string banEvadingAccountsNames, string customText, bool fromHelpCenter,
             string otherReason, string reason, string ruleReason, string siteReason, string violatorUsername)
         {
-            await Task.Run(() =>
-            {
-                Report(additionalInfo, banEvadingAccountsNames, customText, fromHelpCenter, otherReason, reason, ruleReason, siteReason, violatorUsername);
-            });
+            await ReportAsync(new LinksAndCommentsReportInput(additionalInfo, banEvadingAccountsNames, customText, fromHelpCenter, otherReason, reason,
+                ruleReason, siteReason, Subreddit, Fullname, violatorUsername));
         }
 
         /// <summary>
@@ -532,10 +528,7 @@ namespace Reddit.Controllers
         /// <param name="linksAndCommentsReportInput">A valid LinksAndCommentsReportInput instance</param>
         public async Task ReportAsync(LinksAndCommentsReportInput linksAndCommentsReportInput)
         {
-            await Task.Run(() =>
-            {
-                Report(linksAndCommentsReportInput);
-            });
+            Validate(await Dispatch.LinksAndComments.ReportAsync(linksAndCommentsReportInput));
         }
 
         /// <summary>
@@ -555,10 +548,7 @@ namespace Reddit.Controllers
         /// <param name="category">a category name</param>
         public async Task SaveAsync(string category)
         {
-            await Task.Run(() =>
-            {
-                Save(category);
-            });
+            await Dispatch.LinksAndComments.SaveAsync(new LinksAndCommentsSaveInput(Fullname, category));
         }
 
         /// <summary>
@@ -574,10 +564,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task EnableSendRepliesAsync()
         {
-            await Task.Run(() =>
-            {
-                EnableSendReplies();
-            });
+            await Dispatch.LinksAndComments.SendRepliesAsync(new LinksAndCommentsStateInput(Fullname, true));
         }
 
         /// <summary>
@@ -593,10 +580,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DisableSendRepliesAsync()
         {
-            await Task.Run(() =>
-            {
-                DisableSendReplies();
-            });
+            await Dispatch.LinksAndComments.SendRepliesAsync(new LinksAndCommentsStateInput(Fullname, false));
         }
 
         /// <summary>
@@ -612,10 +596,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task EnableContestModeAsync()
         {
-            await Task.Run(() =>
-            {
-                EnableContestMode();
-            });
+            await Dispatch.LinksAndComments.SetContestModeAsync(new LinksAndCommentsStateInput(Fullname, true));
         }
 
         /// <summary>
@@ -631,10 +612,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DisableContestModeAsync()
         {
-            await Task.Run(() =>
-            {
-                DisableContestMode();
-            });
+            await Dispatch.LinksAndComments.SetContestModeAsync(new LinksAndCommentsStateInput(Fullname, false));
         }
 
         /// <summary>
@@ -660,10 +638,7 @@ namespace Reddit.Controllers
         /// <param name="toProfile">boolean value</param>
         public async Task SetSubredditStickyAsync(int num, bool toProfile)
         {
-            await Task.Run(() =>
-            {
-                SetSubredditSticky(num, toProfile);
-            });
+            Validate(await Dispatch.LinksAndComments.SetSubredditStickyAsync(new LinksAndCommentsStickyInput(Fullname, num, true, toProfile)));
         }
 
         /// <summary>
@@ -689,10 +664,7 @@ namespace Reddit.Controllers
         /// <param name="toProfile">boolean value</param>
         public async Task UnsetSubredditStickyAsync(int num, bool toProfile)
         {
-            await Task.Run(() =>
-            {
-                UnsetSubredditSticky(num, toProfile);
-            });
+            Validate(await Dispatch.LinksAndComments.SetSubredditStickyAsync(new LinksAndCommentsStickyInput(Fullname, num, false, toProfile)));
         }
 
         /// <summary>
@@ -716,10 +688,7 @@ namespace Reddit.Controllers
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live, blank)</param>
         public async Task SetSuggestedSortAsync(string sort)
         {
-            await Task.Run(() =>
-            {
-                SetSuggestedSort(sort);
-            });
+            Validate(await Dispatch.LinksAndComments.SetSuggestedSortAsync(new LinksAndCommentsSuggestedSortInput(Fullname, sort)));
         }
 
         /// <summary>
@@ -735,10 +704,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task SpoilerAsync()
         {
-            await Task.Run(() =>
-            {
-                Spoiler();
-            });
+            await Dispatch.LinksAndComments.SpoilerAsync(Fullname);
         }
 
         /// <summary>
@@ -754,10 +720,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UnhideAsync()
         {
-            await Task.Run(() =>
-            {
-                Unhide();
-            });
+            await Dispatch.LinksAndComments.UnhideAsync(Fullname);
         }
 
         /// <summary>
@@ -775,10 +738,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UnlockAsync()
         {
-            await Task.Run(() =>
-            {
-                Unlock();
-            });
+            await Dispatch.LinksAndComments.UnlockAsync(Fullname);
         }
 
         /// <summary>
@@ -794,10 +754,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UnmarkNSFWAsync()
         {
-            await Task.Run(() =>
-            {
-                UnmarkNSFW();
-            });
+            await Dispatch.LinksAndComments.UnmarkNSFWAsync(Fullname);
         }
 
         /// <summary>
@@ -815,10 +772,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UnsaveAsync()
         {
-            await Task.Run(() =>
-            {
-                Unsave();
-            });
+            await Dispatch.LinksAndComments.UnsaveAsync(Fullname);
         }
 
         /// <summary>
@@ -834,10 +788,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UnspoilerAsync()
         {
-            await Task.Run(() =>
-            {
-                Unspoiler();
-            });
+            await Dispatch.LinksAndComments.UnspoilerAsync(Fullname);
         }
 
         /// <summary>
@@ -859,10 +810,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UpvoteAsync()
         {
-            await Task.Run(() =>
-            {
-                Upvote();
-            });
+            await Dispatch.LinksAndComments.VoteAsync(new LinksAndCommentsVoteInput(Fullname, 1));
         }
 
         /// <summary>
@@ -884,10 +832,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DownvoteAsync()
         {
-            await Task.Run(() =>
-            {
-                Downvote();
-            });
+            await Dispatch.LinksAndComments.VoteAsync(new LinksAndCommentsVoteInput(Fullname, -1));
         }
 
         /// <summary>
@@ -909,10 +854,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UnvoteAsync()
         {
-            await Task.Run(() =>
-            {
-                Unvote();
-            });
+            await Dispatch.LinksAndComments.VoteAsync(new LinksAndCommentsVoteInput(Fullname, 0));
         }
 
         /// <summary>

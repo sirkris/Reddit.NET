@@ -22,9 +22,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer ClearFlairTemplates(string flairType, string subreddit = null)
         {
-            RestRequest restRequest = PrepareClearFlairTemplates(flairType, subreddit);
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(PrepareClearFlairTemplates(flairType, subreddit)));
         }
 
         /// <summary>
@@ -35,9 +33,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public async Task<GenericContainer> ClearFlairTemplatesAsync(string flairType, string subreddit = null)
         {
-            RestRequest restRequest = PrepareClearFlairTemplates(flairType, subreddit);
-
-            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(PrepareClearFlairTemplates(flairType, subreddit)));
         }
 
         private RestRequest PrepareClearFlairTemplates(string flairType, string subreddit = null)
@@ -58,9 +54,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer DeleteFlair(string name, string subreddit = null)
         {
-            RestRequest restRequest = PrepareDeleteFlair(name, subreddit);
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(PrepareDeleteFlair(name, subreddit)));
         }
 
         /// <summary>
@@ -71,9 +65,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public async Task<GenericContainer> DeleteFlairAsync(string name, string subreddit = null)
         {
-            RestRequest restRequest = PrepareDeleteFlair(name, subreddit);
-
-            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(PrepareDeleteFlair(name, subreddit)));
         }
 
         private RestRequest PrepareDeleteFlair(string name, string subreddit = null)
@@ -94,9 +86,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer DeleteFlairTemplate(string flairTemplateId, string subreddit = null)
         {
-            RestRequest restRequest = PrepareDeleteFlairTemplate(flairTemplateId, subreddit);
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(PrepareDeleteFlairTemplate(flairTemplateId, subreddit)));
         }
 
         /// <summary>
@@ -107,9 +97,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public async Task<GenericContainer> DeleteFlairTemplateAsync(string flairTemplateId, string subreddit = null)
         {
-            RestRequest restRequest = PrepareDeleteFlairTemplate(flairTemplateId, subreddit);
-
-            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(PrepareDeleteFlairTemplate(flairTemplateId, subreddit)));
         }
 
         private RestRequest PrepareDeleteFlairTemplate(string flairTemplateId, string subreddit = null)
@@ -203,9 +191,7 @@ namespace Reddit.Models
         /// <returns>Action results.</returns>
         public List<ActionResult> FlairCSV(string flairCsv, string subreddit = null)
         {
-            RestRequest restRequest = PrepareFlairCSV(flairCsv, subreddit);
-
-            return JsonConvert.DeserializeObject<List<ActionResult>>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<List<ActionResult>>(ExecuteRequest(PrepareFlairCSV(flairCsv, subreddit)));
         }
 
         /// <summary>
@@ -219,9 +205,7 @@ namespace Reddit.Models
         /// <returns>Action results.</returns>
         public async Task<List<ActionResult>> FlairCSVAsync(string flairCsv, string subreddit = null)
         {
-            RestRequest restRequest = PrepareFlairCSV(flairCsv, subreddit);
-
-            return JsonConvert.DeserializeObject<List<ActionResult>>(await ExecuteRequestAsync(restRequest));
+            return JsonConvert.DeserializeObject<List<ActionResult>>(await ExecuteRequestAsync(PrepareFlairCSV(flairCsv, subreddit)));
         }
 
         private RestRequest PrepareFlairCSV(string flairCsv, string subreddit = null)
@@ -363,9 +347,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer SetFlairEnabled(bool flairEnabled, string subreddit = null)
         {
-            RestRequest restRequest = PrepareSetFlairEnabled(flairEnabled, subreddit);
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(PrepareSetFlairEnabled(flairEnabled, subreddit)));
         }
 
         /// <summary>
@@ -376,9 +358,7 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public async Task<GenericContainer> SetFlairEnabledAsync(bool flairEnabled, string subreddit = null)
         {
-            RestRequest restRequest = PrepareSetFlairEnabled(flairEnabled, subreddit);
-
-            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(restRequest));
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(PrepareSetFlairEnabled(flairEnabled, subreddit)));
         }
 
         private RestRequest PrepareSetFlairEnabled(bool flairEnabled, string subreddit = null)

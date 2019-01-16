@@ -439,6 +439,26 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Distinguish a comment's author with a sigil asynchronously.
+        /// This can be useful to draw attention to and confirm the identity of the user in the context of a comment of theirs.
+        /// The options for distinguish are as follows:
+        /// yes - add a moderator distinguish([M]). only if the user is a moderator of the subreddit the thing is in.
+        /// no - remove any distinguishes.
+        /// admin - add an admin distinguish([A]). admin accounts only.
+        /// special - add a user-specific distinguish.depends on user.
+        /// The first time a top-level comment is moderator distinguished, the author of the link the comment is in reply to will get a notification in their inbox.
+        /// sticky is a boolean flag for comments, which will stick the distingushed comment to the top of all comments threads.
+        /// If a comment is marked sticky, it will override any other stickied comment for that link (as only one comment may be stickied at a time). Only top-level comments may be stickied.
+        /// </summary>
+        /// <param name="how">one of (yes, no, admin, special)</param>
+        /// <param name="sticky">boolean value</param>
+        /// <returns>The distinguished comment object.</returns>
+        public async Task<Comment> DistinguishAsync(string how, bool? sticky = null)
+        {
+            return Listings.GetComments(Validate(await Dispatch.Moderation.DistinguishCommentAsync(how, Fullname, sticky)), Dispatch)[0];
+        }
+
+        /// <summary>
         /// Redact and remove this comment from all subreddit comment listings.
         /// </summary>
         public void Remove(bool spam = false)
