@@ -62,6 +62,15 @@ namespace Reddit.Models.Internal
             return (json != null ? JsonConvert.DeserializeObject<T>(json) : default(T));
         }
 
+        public RestRequest PrepareIDRequest(string path, string id, Method method = Method.POST)
+        {
+            RestRequest restRequest = PrepareRequest(path, method);
+
+            restRequest.AddParameter("id", id);
+
+            return restRequest;
+        }
+
         public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
         {
             RestRequest restRequest = new RestRequest(url, method);

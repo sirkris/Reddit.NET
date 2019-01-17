@@ -233,10 +233,7 @@ namespace Reddit.Controllers
         /// <param name="filterTypes">A comma-separated list of items</param>
         public async Task MarkAllReadAsync(string filterTypes = "")
         {
-            await Task.Run(() =>
-            {
-                MarkAllRead(filterTypes);
-            });
+            await Dispatch.PrivateMessages.ReadAllMessagesAsync(filterTypes);
         }
 
         /// <summary>
@@ -254,10 +251,7 @@ namespace Reddit.Controllers
         /// <param name="ids">A comma-separated list of thing fullnames</param>
         public async Task CollapseMessageAsync(string ids)
         {
-            await Task.Run(() =>
-            {
-                CollapseMessage(ids);
-            });
+            await Dispatch.PrivateMessages.CollapseMessageAsync(ids);
         }
 
         /// <summary>
@@ -275,10 +269,7 @@ namespace Reddit.Controllers
         /// <param name="id">fullname of a thing</param>
         public async Task DeleteMessageAsync(string id)
         {
-            await Task.Run(() =>
-            {
-                DeleteMessage(id);
-            });
+            await Dispatch.PrivateMessages.DelMsgAsync(id);
         }
 
         /// <summary>
@@ -296,10 +287,7 @@ namespace Reddit.Controllers
         /// <param name="ids">A comma-separated list of thing fullnames</param>
         public async Task ReadMessageAsync(string ids)
         {
-            await Task.Run(() =>
-            {
-                ReadMessage(ids);
-            });
+            await Dispatch.PrivateMessages.ReadMessageAsync(ids);
         }
 
         /// <summary>
@@ -317,10 +305,7 @@ namespace Reddit.Controllers
         /// <param name="ids">A comma-separated list of thing fullnames</param>
         public async Task UncollapseMessageAsync(string ids)
         {
-            await Task.Run(() =>
-            {
-                UncollapseMessage(ids);
-            });
+            await Dispatch.PrivateMessages.UncollapseMessageAsync(ids);
         }
 
         /// <summary>
@@ -338,10 +323,7 @@ namespace Reddit.Controllers
         /// <param name="ids">A comma-separated list of thing fullnames</param>
         public async Task UnreadMessageAsync(string ids)
         {
-            await Task.Run(() =>
-            {
-                UnreadMessage(ids);
-            });
+            await Dispatch.PrivateMessages.UnreadMessageAsync(ids);
         }
 
         /// <summary>
@@ -367,10 +349,7 @@ namespace Reddit.Controllers
         /// <param name="gRecaptchaResponse"></param>
         public async Task ComposeAsync(string to, string subject, string text, string fromSr = "", string gRecaptchaResponse = "")
         {
-            await Task.Run(() =>
-            {
-                Compose(to, subject, text, fromSr, gRecaptchaResponse);
-            });
+            Validate(await Dispatch.PrivateMessages.ComposeAsync(new PrivateMessagesComposeInput(fromSr, subject, text, to), gRecaptchaResponse));
         }
 
         /// <summary>
@@ -390,10 +369,7 @@ namespace Reddit.Controllers
         /// <param name="gRecaptchaResponse"></param>
         public async Task ComposeAsync(PrivateMessagesComposeInput privateMessagesComposeInput, string gRecaptchaResponse = "")
         {
-            await Task.Run(() =>
-            {
-                Compose(privateMessagesComposeInput, gRecaptchaResponse);
-            });
+            Validate(await Dispatch.PrivateMessages.ComposeAsync(privateMessagesComposeInput, gRecaptchaResponse));
         }
 
         protected virtual void OnInboxUpdated(MessagesUpdateEventArgs e)

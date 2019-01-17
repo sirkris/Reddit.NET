@@ -54,7 +54,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing created by the user</param>
         public void Delete(string id)
         {
-            ExecuteRequest(PrepareDelete(id));
+            ExecuteRequest(PrepareIDRequest("api/del", id));
         }
 
         /// <summary>
@@ -63,16 +63,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing created by the user</param>
         public async Task DeleteAsync(string id)
         {
-            await ExecuteRequestAsync(PrepareDelete(id));
-        }
-
-        private RestRequest PrepareDelete(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/del", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+            await ExecuteRequestAsync(PrepareIDRequest("api/del", id));
         }
 
         /// <summary>
@@ -127,7 +118,7 @@ namespace Reddit.Models
         /// <param name="id">A comma-separated list of link fullnames</param>
         public void Hide(string id)
         {
-            ExecuteRequest(PrepareHide(id));
+            ExecuteRequest(PrepareIDRequest("api/hide", id));
         }
 
         /// <summary>
@@ -138,16 +129,7 @@ namespace Reddit.Models
         /// <param name="id">A comma-separated list of link fullnames</param>
         public async Task HideAsync(string id)
         {
-            await ExecuteRequestAsync(PrepareHide(id));
-        }
-
-        private RestRequest PrepareHide(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/hide", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+            await ExecuteRequestAsync(PrepareIDRequest("api/hide", id));
         }
 
         /// <summary>
@@ -196,7 +178,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public void Lock(string id)
         {
-            RestRequest restRequest = PrepareLock(id);
+            RestRequest restRequest = PrepareIDRequest("api/lock", id);
 
             ExecuteRequest(restRequest);
         }
@@ -209,16 +191,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public async Task LockAsync(string id)
         {
-            await ExecuteRequestAsync(PrepareLock(id));
-        }
-
-        private RestRequest PrepareLock(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/lock", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+            await ExecuteRequestAsync(PrepareIDRequest("api/lock", id));
         }
 
         /// <summary>
@@ -228,7 +201,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void MarkNSFW(string id)
         {
-            ExecuteRequest(PrepareMarkNSFW(id));
+            ExecuteRequest(PrepareIDRequest("api/marknsfw", id));
         }
 
         /// <summary>
@@ -238,16 +211,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public async Task MarkNSFWAsync(string id)
         {
-            await ExecuteRequestAsync(PrepareMarkNSFW(id));
-        }
-
-        private RestRequest PrepareMarkNSFW(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/marknsfw", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+            await ExecuteRequestAsync(PrepareIDRequest("api/marknsfw", id));
         }
 
         /// <summary>
@@ -447,7 +411,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public void Spoiler(string id)
         {
-            ExecuteRequest(PrepareSpoiler(id));
+            ExecuteRequest(PrepareIDRequest("api/spoiler", id));
         }
 
         /// <summary>
@@ -456,16 +420,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public async Task SpoilerAsync(string id)
         {
-            await ExecuteRequestAsync(PrepareSpoiler(id));
-        }
-
-        private RestRequest PrepareSpoiler(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/spoiler", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+            await ExecuteRequestAsync(PrepareIDRequest("api/spoiler", id));
         }
 
         // TODO - Needs testing.
@@ -564,7 +519,7 @@ namespace Reddit.Models
         /// <param name="id">A comma-separated list of link fullnames</param>
         public void Unhide(string id)
         {
-            ExecuteRequest(PrepareUnhide(id));
+            ExecuteRequest(PrepareIDRequest("api/unhide", id));
         }
 
         /// <summary>
@@ -573,16 +528,7 @@ namespace Reddit.Models
         /// <param name="id">A comma-separated list of link fullnames</param>
         public async Task UnhideAsync(string id)
         {
-            await ExecuteRequestAsync(PrepareUnhide(id));
-        }
-
-        private RestRequest PrepareUnhide(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/unhide", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+            await ExecuteRequestAsync(PrepareIDRequest("api/unhide", id));
         }
 
         /// <summary>
@@ -593,7 +539,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public void Unlock(string id)
         {
-            ExecuteRequest(PrepareUnlock(id));
+            ExecuteRequest(PrepareIDRequest("api/unlock", id));
         }
 
         /// <summary>
@@ -604,16 +550,7 @@ namespace Reddit.Models
         /// <param name="id">A comma-separated list of link fullnames</param>
         public async Task UnlockAsync(string id)
         {
-            await ExecuteRequestAsync(PrepareUnlock(id));
-        }
-
-        private RestRequest PrepareUnlock(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/unlock", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+            await ExecuteRequestAsync(PrepareIDRequest("api/unlock", id));
         }
 
         /// <summary>
@@ -623,7 +560,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void UnmarkNSFW(string id)
         {
-            ExecuteRequest(PrepareUnmarkNSFW(id));
+            ExecuteRequest(PrepareIDRequest("api/unmarknsfw", id));
         }
 
         /// <summary>
@@ -633,16 +570,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public async Task UnmarkNSFWAsync(string id)
         {
-           await ExecuteRequestAsync(PrepareUnmarkNSFW(id));
-        }
-
-        private RestRequest PrepareUnmarkNSFW(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/unmarknsfw", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+           await ExecuteRequestAsync(PrepareIDRequest("api/unmarknsfw", id));
         }
 
         /// <summary>
@@ -653,7 +581,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void Unsave(string id)
         {
-            ExecuteRequest(PrepareUnsave(id));
+            ExecuteRequest(PrepareIDRequest("api/unsave", id));
         }
 
         /// <summary>
@@ -664,16 +592,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public async Task UnsaveAsync(string id)
         {
-            await ExecuteRequestAsync(PrepareUnsave(id));
-        }
-
-        private RestRequest PrepareUnsave(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/unsave", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+            await ExecuteRequestAsync(PrepareIDRequest("api/unsave", id));
         }
 
         /// <summary>
@@ -682,7 +601,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public void Unspoiler(string id)
         {
-            ExecuteRequest(PrepareUnspoiler(id));
+            ExecuteRequest(PrepareIDRequest("api/unspoiler", id));
         }
 
         /// <summary>
@@ -691,16 +610,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a link</param>
         public async Task UnspoilerAsync(string id)
         {
-            await ExecuteRequestAsync(PrepareUnspoiler(id));
-        }
-
-        private RestRequest PrepareUnspoiler(string id)
-        {
-            RestRequest restRequest = PrepareRequest("api/unspoiler", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return restRequest;
+            await ExecuteRequestAsync(PrepareIDRequest("api/unspoiler", id));
         }
 
         // WARNING:  Automated bot-voting violates Reddit's rules.  --Kris
