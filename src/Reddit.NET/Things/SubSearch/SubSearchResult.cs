@@ -7,7 +7,7 @@ namespace Reddit.Things
     public class SubSearchResult
     {
         [JsonProperty("active_user_count")]
-        public int ActiveUserCount;
+        public int? ActiveUserCount;
 
         [JsonProperty("icon_img")]
         public string IconImg;
