@@ -432,6 +432,15 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Asynchronously accept an invite to moderate the specified subreddit.
+        /// The authenticated user must have been invited to moderate the subreddit by one of its current moderators.
+        /// </summary>
+        public async Task AcceptModeratorInviteAsync()
+        {
+            Validate(await Dispatch.Moderation.AcceptModeratorInviteAsync(Name));
+        }
+
+        /// <summary>
         /// Abdicate moderator status in a subreddit.
         /// </summary>
         public void LeaveModerator()
@@ -440,11 +449,27 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Abdicate moderator status in a subreddit asynchronously.
+        /// </summary>
+        public async Task LeaveModeratorAsync()
+        {
+            await Dispatch.Moderation.LeaveModeratorAsync("t2_" + Dispatch.Account.Me().Id, Name);
+        }
+
+        /// <summary>
         /// Abdicate approved submitter status in a subreddit.
         /// </summary>
         public void LeaveContributor()
         {
             Dispatch.Moderation.LeaveContributor(Fullname);
+        }
+
+        /// <summary>
+        /// Abdicate approved submitter status in a subreddit asynchronously.
+        /// </summary>
+        public async Task LeaveContributorAsync()
+        {
+            await Dispatch.Moderation.LeaveContributorAsync(Fullname);
         }
 
         /// <summary>
@@ -609,10 +634,7 @@ namespace Reddit.Controllers
         /// <param name="stylesheetContents">the new stylesheet content</param>
         public async Task UpdateStylesheetAsync(string reason, string stylesheetContents)
         {
-            await Task.Run(() =>
-            {
-                UpdateStylesheet(reason, stylesheetContents);
-            });
+            Validate(await Dispatch.Subreddits.SubredditStylesheetAsync(new SubredditsSubredditStylesheetInput(stylesheetContents, reason), Name));
         }
         
         /// <summary>
@@ -630,10 +652,7 @@ namespace Reddit.Controllers
         /// <param name="skipInitialDefaults">boolean value</param>
         public async Task SubscribeAsync(bool skipInitialDefaults = false)
         {
-            await Task.Run(() =>
-            {
-                Subscribe(skipInitialDefaults);
-            });
+            await Dispatch.Subreddits.SubscribeAsync(new SubredditsSubByNameInput(Name, skipInitialDefaults: skipInitialDefaults));
         }
 
         /// <summary>
@@ -649,10 +668,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task UnsubscribeAsync()
         {
-            await Task.Run(() =>
-            {
-                Unsubscribe();
-            });
+            await Dispatch.Subreddits.SubscribeAsync(new SubredditsSubByNameInput(Name, "unsub"));
         }
 
         /// <summary>
@@ -668,10 +684,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DeleteBannerAsync()
         {
-            await Task.Run(() =>
-            {
-                DeleteBanner();
-            });
+            Validate(await Dispatch.Subreddits.DeleteSrBannerAsync(Name));
         }
 
         /// <summary>
@@ -688,10 +701,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DeleteHeaderAsync()
         {
-            await Task.Run(() =>
-            {
-                DeleteHeader();
-            });
+            Validate(await Dispatch.Subreddits.DeleteSrHeaderAsync(Name));
         }
 
         /// <summary>
@@ -707,10 +717,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task DeleteIconAsync()
         {
-            await Task.Run(() =>
-            {
-                DeleteIcon();
-            });
+            Validate(await Dispatch.Subreddits.DeleteSrIconAsync(Name));
         }
 
         /// <summary>
@@ -732,10 +739,7 @@ namespace Reddit.Controllers
         /// <param name="imgName">a valid subreddit image name</param>
         public async Task DeleteImgAsync(string imgName)
         {
-            await Task.Run(() =>
-            {
-                DeleteImg(imgName);
-            });
+            Validate(await Dispatch.Subreddits.DeleteSrImgAsync(new SubredditsDeleteSrImgInput(imgName), Name));
         }
 
         /// <summary>
@@ -756,12 +760,9 @@ namespace Reddit.Controllers
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgName">a valid subreddit image name</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async Task UploadImgAsync(byte[] imgData, string imgName, string imgType = "png")
+        public async Task<Things.ImageUploadResult> UploadImgAsync(byte[] imgData, string imgName, string imgType = "png")
         {
-            await Task.Run(() =>
-            {
-                UploadImg(imgData, imgName, imgType);
-            });
+            return Validate(await Dispatch.Subreddits.UploadSrImgAsync(new SubredditsUploadSrImgInput(imgData, 0, imgName, "img", imgType), Name));
         }
 
         /// <summary>
@@ -780,12 +781,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async Task UploadHeaderAsync(byte[] imgData, string imgType = "png")
+        public async Task<Things.ImageUploadResult> UploadHeaderAsync(byte[] imgData, string imgType = "png")
         {
-            await Task.Run(() =>
-            {
-                UploadHeader(imgData, imgType);
-            });
+            return Validate(await Dispatch.Subreddits.UploadSrImgAsync(new SubredditsUploadSrImgInput(imgData, 1, null, "header", imgType), Name));
         }
 
         /// <summary>
@@ -804,12 +802,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async Task UploadIconAsync(byte[] imgData, string imgType = "png")
+        public async Task<Things.ImageUploadResult> UploadIconAsync(byte[] imgData, string imgType = "png")
         {
-            await Task.Run(() =>
-            {
-                UploadIcon(imgData, imgType);
-            });
+            return Validate(await Dispatch.Subreddits.UploadSrImgAsync(new SubredditsUploadSrImgInput(imgData, 0, null, "icon", imgType), Name));
         }
 
         /// <summary>
@@ -828,12 +823,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="imgData">file upload with maximum size of 500 KiB</param>
         /// <param name="imgType">one of png or jpg (default: png)</param>
-        public async Task UploadBannerAsync(byte[] imgData, string imgType = "png")
+        public async Task<Things.ImageUploadResult> UploadBannerAsync(byte[] imgData, string imgType = "png")
         {
-            await Task.Run(() =>
-            {
-                UploadBanner(imgData, imgType);
-            });
+            return Validate(await Dispatch.Subreddits.UploadSrImgAsync(new SubredditsUploadSrImgInput(imgData, 0, null, "banner", imgType), Name));
         }
 
         // TODO - Figure out what created and location are for.  --Kris
@@ -940,10 +932,7 @@ namespace Reddit.Controllers
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
         public async Task ModeratorInviteAsync(string username, string permissions, int duration = 999)
         {
-            await Task.Run(() =>
-            {
-                ModeratorInvite(username, permissions, duration);
-            });
+            await ModeratorInviteAsync(new UsersFriendInput(username, "moderator_invite", duration, permissions));
         }
 
         /// <summary>
@@ -963,10 +952,9 @@ namespace Reddit.Controllers
         /// <param name="usersFriendInput">A valid UsersFriendInput instance</param>
         public async Task ModeratorInviteAsync(UsersFriendInput usersFriendInput)
         {
-            await Task.Run(() =>
-            {
-                ModeratorInvite(usersFriendInput);
-            });
+            usersFriendInput.type = "moderator_invite";
+
+            Validate(await Dispatch.Users.FriendAsync(usersFriendInput, Name));
         }
 
         /// <summary>
@@ -988,10 +976,7 @@ namespace Reddit.Controllers
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
         public async Task SetUserPermissionsAsync(string username, string permissions, string type)
         {
-            await Task.Run(() =>
-            {
-                SetUserPermissions(username, permissions, type);
-            });
+            await SetUserPermissionsAsync(new UsersSetPermissionsInput(username, permissions, type));
         }
 
         /// <summary>
@@ -1009,10 +994,7 @@ namespace Reddit.Controllers
         /// <param name="usersSetPermissionsInput">A valid UsersSetPermissionsInput instance</param>
         public async Task SetUserPermissionsAsync(UsersSetPermissionsInput usersSetPermissionsInput)
         {
-            await Task.Run(() =>
-            {
-                SetUserPermissions(usersSetPermissionsInput);
-            });
+            Validate(await Dispatch.Users.SetPermissionsAsync(usersSetPermissionsInput, Name));
         }
 
         // TODO - Add Emoji and Widgets endpoints once the S3 image upload issue is solved.  --Kris
@@ -1043,12 +1025,37 @@ namespace Reddit.Controllers
             string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
             string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
         {
-            Things.GenericContainer res = Dispatch.Subreddits.SiteAdmin(UpdateSubredditData(), allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse,
-                linkType, spamComments, spamLinks, spamSelfPosts, "", themeSr, themeSrUpdate, wikiMode, wikiEditAge, wikiEditKarma);
+            return Create(new SubredditsSiteAdminInput(allowPostCrossposts: allowPostCrossposts, allowTop: allowTop, excludeBannedModqueue: excludeBannedModqueue,
+                freeFormReports: freeFormReports, linkType: linkType, spamComments: spamComments, spamLinks: spamLinks, spamSelfPosts: spamSelfPosts, themeSr: themeSr,
+                themeSrUpdate: themeSrUpdate, wikiMode: wikiMode, wikiEditAge: wikiEditAge, wikiEditKarma: wikiEditKarma), gRecaptchaResponse);
+        }
 
-            Validate(res);
-
-            return About();
+        /// <summary>
+        /// Create a new subreddit asynchronously and return the created result.
+        /// If a subreddit by that name already exists, an exception is thrown.
+        /// </summary>
+        /// <param name="allowPostCrossposts">boolean value</param>
+        /// <param name="allowTop">boolean value</param>
+        /// <param name="excludeBannedModqueue">boolean value</param>
+        /// <param name="freeFormReports">boolean value</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="linkType">one of (any, link, self)</param>
+        /// <param name="spamComments">one of (low, high, all)</param>
+        /// <param name="spamLinks">one of (low, high, all)</param>
+        /// <param name="spamSelfPosts">one of (low, high, all)</param>
+        /// <param name="themeSr">subreddit name</param>
+        /// <param name="themeSrUpdate">boolean value</param>
+        /// <param name="wikiMode">one of (disabled, modonly, anyone)</param>
+        /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
+        /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
+        /// <returns>An instance of this class populated with the newly created subreddit.</returns>
+        public async Task<Subreddit> CreateAsync(bool allowPostCrossposts = true, bool allowTop = true, bool excludeBannedModqueue = false, bool freeFormReports = true,
+            string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
+            string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
+        {
+            return await CreateAsync(new SubredditsSiteAdminInput(allowPostCrossposts: allowPostCrossposts, allowTop: allowTop, excludeBannedModqueue: excludeBannedModqueue,
+                freeFormReports: freeFormReports, linkType: linkType, spamComments: spamComments, spamLinks: spamLinks, spamSelfPosts: spamSelfPosts, themeSr: themeSr,
+                themeSrUpdate: themeSrUpdate, wikiMode: wikiMode, wikiEditAge: wikiEditAge, wikiEditKarma: wikiEditKarma), gRecaptchaResponse);
         }
 
         /// <summary>
@@ -1061,9 +1068,22 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the newly created subreddit.</returns>
         public Subreddit Create(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
         {
-            Things.GenericContainer res = Dispatch.Subreddits.SiteAdmin(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
+            Validate(Dispatch.Subreddits.SiteAdmin(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle));
 
-            Validate(res);
+            return About();
+        }
+
+        /// <summary>
+        /// Create a new subreddit asynchronously and return the created result.
+        /// If a subreddit by that name already exists, an exception is thrown.
+        /// </summary>
+        /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle"></param>
+        /// <returns>An instance of this class populated with the newly created subreddit.</returns>
+        public async Task<Subreddit> CreateAsync(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
+        {
+            Validate(await Dispatch.Subreddits.SiteAdminAsync(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle));
 
             return About();
         }
@@ -1098,6 +1118,35 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Create a new subreddit asynchronously and return the created result.
+        /// If a subreddit by that name already exists, retrieve that existing subreddit and return the result.
+        /// If the subreddit already exists, the parameters passed to this method will be ignored.
+        /// </summary>
+        /// <param name="allowPostCrossposts">boolean value</param>
+        /// <param name="allowTop">boolean value</param>
+        /// <param name="excludeBannedModqueue">boolean value</param>
+        /// <param name="freeFormReports">boolean value</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="linkType">one of (any, link, self)</param>
+        /// <param name="spamComments">one of (low, high, all)</param>
+        /// <param name="spamLinks">one of (low, high, all)</param>
+        /// <param name="spamSelfPosts">one of (low, high, all)</param>
+        /// <param name="themeSr">subreddit name</param>
+        /// <param name="themeSrUpdate">boolean value</param>
+        /// <param name="wikiMode">one of (disabled, modonly, anyone)</param>
+        /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
+        /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
+        /// <returns>An instance of this class populated with the newly created or existing subreddit.</returns>
+        public async Task<Subreddit> CreateIfNotExistsAsync(bool allowPostCrossposts = true, bool allowTop = true, bool excludeBannedModqueue = false, bool freeFormReports = true,
+            string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
+            string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
+        {
+            return await CreateIfNotExistsAsync(new SubredditsSiteAdminInput(allowPostCrossposts: allowPostCrossposts, allowTop: allowTop, excludeBannedModqueue: excludeBannedModqueue,
+                freeFormReports: freeFormReports, linkType: linkType, spamComments: spamComments, spamLinks: spamLinks, spamSelfPosts: spamSelfPosts,
+                themeSr: themeSr, themeSrUpdate: themeSrUpdate, wikiMode: wikiMode, wikiEditAge: wikiEditAge, wikiEditKarma: wikiEditKarma), gRecaptchaResponse);
+        }
+
+        /// <summary>
         /// Create a new subreddit and return the created result.
         /// If a subreddit by that name already exists, retrieve that existing subreddit and return the result.
         /// If the subreddit already exists, the parameters passed to this method will be ignored.
@@ -1109,6 +1158,24 @@ namespace Reddit.Controllers
             try
             {
                 return Create(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
+            }
+            catch (RedditSubredditExistsException) { }
+
+            return About();
+        }
+
+        /// <summary>
+        /// Create a new subreddit asynchronously and return the created result.
+        /// If a subreddit by that name already exists, retrieve that existing subreddit and return the result.
+        /// If the subreddit already exists, the parameters passed to this method will be ignored.
+        /// </summary>
+        /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <returns>An instance of this class populated with the newly created or existing subreddit.</returns>
+        public async Task<Subreddit> CreateIfNotExistsAsync(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
+        {
+            try
+            {
+                return await CreateAsync(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
             }
             catch (RedditSubredditExistsException) { }
 
@@ -1158,6 +1225,48 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Create a new subreddit asynchronously and return the created result.
+        /// If a subreddit by that name already exists, update that existing subreddit and return the result.
+        /// </summary>
+        /// <param name="allowPostCrossposts">boolean value</param>
+        /// <param name="allowTop">boolean value</param>
+        /// <param name="excludeBannedModqueue">boolean value</param>
+        /// <param name="freeFormReports">boolean value</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="linkType">one of (any, link, self)</param>
+        /// <param name="spamComments">one of (low, high, all)</param>
+        /// <param name="spamLinks">one of (low, high, all)</param>
+        /// <param name="spamSelfPosts">one of (low, high, all)</param>
+        /// <param name="themeSr">subreddit name</param>
+        /// <param name="themeSrUpdate">boolean value</param>
+        /// <param name="wikiMode">one of (disabled, modonly, anyone)</param>
+        /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
+        /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
+        /// <returns>An instance of this class populated with the newly created or updated subreddit.</returns>
+        public async Task<Subreddit> CreateOrUpdateAsync(bool allowPostCrossposts = true, bool allowTop = true, bool excludeBannedModqueue = false, bool freeFormReports = true,
+            string gRecaptchaResponse = "", string linkType = "any", string spamComments = "low", string spamLinks = "high", string spamSelfPosts = "high",
+            string themeSr = "", bool themeSrUpdate = true, string wikiMode = "disabled", int wikiEditAge = 0, int wikiEditKarma = 0)
+        {
+            try
+            {
+                return await CreateAsync(allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports, gRecaptchaResponse, linkType, spamComments,
+                    spamLinks, spamSelfPosts, themeSr, themeSrUpdate, wikiMode, wikiEditAge, wikiEditKarma);
+            }
+            catch (RedditSubredditExistsException) { }
+
+            // If subreddit already exists, import its data to this instance so we can get the fullname.  --Kris
+            if (string.IsNullOrWhiteSpace(Fullname))
+            {
+                Import(About(), false);
+            }
+
+            return await UpdateAsync(allowPostCrossposts: allowPostCrossposts, allowTop: allowTop, excludeBannedModqueue: excludeBannedModqueue,
+                freeFormReports: freeFormReports, gRecaptchaResponse: gRecaptchaResponse, linkType: linkType, spamComments: spamComments,
+                spamLinks: spamLinks, spamSelfPosts: spamSelfPosts, themeSr: themeSr, themeSrUpdate: themeSrUpdate, wikiMode: wikiMode,
+                wikiEditAge: wikiEditAge, wikiEditKarma: wikiEditKarma);
+        }
+
+        /// <summary>
         /// Create a new subreddit and return the created result.
         /// If a subreddit by that name already exists, update that existing subreddit and return the result.
         /// </summary>
@@ -1180,6 +1289,31 @@ namespace Reddit.Controllers
             }
 
             return Update(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
+        }
+
+        /// <summary>
+        /// Create a new subreddit asynchronously and return the created result.
+        /// If a subreddit by that name already exists, update that existing subreddit and return the result.
+        /// </summary>
+        /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle"></param>
+        /// <returns>An instance of this class populated with the newly created or updated subreddit.</returns>
+        public async Task<Subreddit> CreateOrUpdateAsync(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
+        {
+            try
+            {
+                return await CreateAsync(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
+            }
+            catch (RedditSubredditExistsException) { }
+
+            // If subreddit already exists, import its data to this instance so we can get the fullname.  --Kris
+            if (string.IsNullOrWhiteSpace(Fullname))
+            {
+                Import(About(), false);
+            }
+
+            return await UpdateAsync(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
         }
 
         // Example:  Subreddit sub = reddit.Subreddit("MyNewSubreddit").About();
@@ -1305,7 +1439,7 @@ namespace Reddit.Controllers
         /// <param name="commentScoreHideMins">an integer between 0 and 1440 (default: 0)</param>
         /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
-        public async Task UpdateAsync(bool manualUpdate = false, bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
+        public async Task<Subreddit> UpdateAsync(bool manualUpdate = false, bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
             bool? allowTop = null, bool? allowVideos = null, bool? collapseDeletedComments = null, string description = null, bool? excludeBannedModqueue = null,
             bool? freeFormReports = null, string gRecaptchaResponse = null, string headerTitle = null, bool? hideAds = null, string keyColor = null, string lang = null,
             string linkType = null, string name = null, bool? originalContentTagEnabled = null, bool? over18 = null, string publicDescription = null, bool? showMedia = null,
@@ -1314,13 +1448,10 @@ namespace Reddit.Controllers
             bool? themeSrUpdate = null, string title = null, string type = null, string wikiMode = null, int? commentScoreHideMins = null, int? wikiEditAge = null,
             int? wikiEditKarma = null)
         {
-            await Task.Run(() =>
-            {
-                Update(manualUpdate, allOriginalContent, allowDiscovery, allowImages, allowPostCrossposts, allowTop, allowVideos, collapseDeletedComments, description,
+            return await UpdateAsync(manualUpdate, allOriginalContent, allowDiscovery, allowImages, allowPostCrossposts, allowTop, allowVideos, collapseDeletedComments, description,
                     excludeBannedModqueue, freeFormReports, gRecaptchaResponse, headerTitle, hideAds, keyColor, lang, linkType, name, originalContentTagEnabled,
                     over18, publicDescription, showMedia, showMediaPreview, spamComments, spamLinks, spamSelfPosts, spoilersEnabled, sr, submitLinkLabel, submitText,
                     submitTextLabel, suggestedCommentSort, themeSr, themeSrUpdate, title, type, wikiMode, commentScoreHideMins, wikiEditAge, wikiEditKarma);
-            });
         }
 
         /// <summary>
@@ -1332,9 +1463,7 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the newly created or updated subreddit.</returns>
         public Subreddit Update(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
         {
-            Things.GenericContainer res = Dispatch.Subreddits.SiteAdmin(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
-
-            Validate(res);
+            Validate(Dispatch.Subreddits.SiteAdmin(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle));
 
             return About();
         }
@@ -1345,12 +1474,11 @@ namespace Reddit.Controllers
         /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
         /// <param name="gRecaptchaResponse"></param>
         /// <param name="headerTitle"></param>
-        public async Task UpdateAsync(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
+        public async Task<Subreddit> UpdateAsync(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
         {
-            await Task.Run(() =>
-            {
-                Update(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle);
-            });
+            Validate(await Dispatch.Subreddits.SiteAdminAsync(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle));
+
+            return About();
         }
     }
 }

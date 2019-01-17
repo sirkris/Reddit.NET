@@ -48,6 +48,28 @@ namespace Reddit.Models
             return SendRequest<GenericContainer>(Sr(subreddit) + "api/friend", usersFriendInput, Method.POST);
         }
 
+        /// <summary>
+        /// Create a relationship between a user and another user or subreddit asynchronously.
+        /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
+        /// moderator: Use "moderator_invite"
+        /// moderator_invite: modothers
+        /// contributor: modcontributors
+        /// banned: modcontributors
+        /// muted: modcontributors
+        /// wikibanned: modcontributors and modwiki
+        /// wikicontributor: modcontributors and modwiki
+        /// friend: Use /api/v1/me/friends/{username}
+        /// enemy: Use /api/block
+        /// Complement to POST_unfriend
+        /// </summary>
+        /// <param name="usersFriendInput">A valid UsersFriendInput instance</param>
+        /// <param name="subreddit">A subreddit</param>
+        /// <returns>An object indicating any errors.</returns>
+        public async Task<GenericContainer> FriendAsync(UsersFriendInput usersFriendInput, string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/friend", usersFriendInput, Method.POST);
+        }
+
         // Note - I tested this one manually.  Leaving out of automated tests so as not to spam the Reddit admins.  --Kris
         /// <summary>
         /// Report a user. Reporting a user brings it to the attention of a Reddit admin.
@@ -67,6 +89,17 @@ namespace Reddit.Models
         public GenericContainer SetPermissions(UsersSetPermissionsInput usersSetPermissionsInput, string subreddit = null)
         {
             return SendRequest<GenericContainer>(Sr(subreddit) + "api/setpermissions", usersSetPermissionsInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Set permissions asynchronously.
+        /// </summary>
+        /// <param name="usersSetPermissionsInput">A valid UsersSetPermissionsInput instance</param>
+        /// <param name="subreddit">A subreddit</param>
+        /// <returns>An object indicating any errors.</returns>
+        public async Task<GenericContainer> SetPermissionsAsync(UsersSetPermissionsInput usersSetPermissionsInput, string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/setpermissions", usersSetPermissionsInput, Method.POST);
         }
 
         /// <summary>

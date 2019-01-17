@@ -71,6 +71,15 @@ namespace Reddit.Models.Internal
             return restRequest;
         }
 
+        public RestRequest PrepareJSONRequest(string path, Method method = Method.POST)
+        {
+            RestRequest restRequest = PrepareRequest(path, method);
+
+            restRequest.AddParameter("api_type", "json");
+
+            return restRequest;
+        }
+
         public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
         {
             RestRequest restRequest = new RestRequest(url, method);

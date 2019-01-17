@@ -4,6 +4,7 @@ using Reddit.Inputs.Subreddits;
 using Reddit.Things;
 using RestSharp;
 using System;
+using System.Threading.Tasks;
 
 namespace Reddit.Models
 {
@@ -49,6 +50,17 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Remove the subreddit's custom mobile banner asynchronously.
+        /// See also: /api/upload_sr_img.
+        /// </summary>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>An object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteSrBannerAsync(string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/delete_sr_banner", new APITypeInput(), Method.POST);
+        }
+
+        /// <summary>
         /// Remove the subreddit's custom header image.
         /// The sitewide-default header image will be shown again after this call.
         /// See also: /api/upload_sr_img.
@@ -58,6 +70,18 @@ namespace Reddit.Models
         public GenericContainer DeleteSrHeader(string subreddit = null)
         {
             return SendRequest<GenericContainer>(Sr(subreddit) + "api/delete_sr_header", new APITypeInput(), Method.POST);
+        }
+
+        /// <summary>
+        /// Remove the subreddit's custom header image asynchronously.
+        /// The sitewide-default header image will be shown again after this call.
+        /// See also: /api/upload_sr_img.
+        /// </summary>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>An object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteSrHeaderAsync(string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/delete_sr_header", new APITypeInput(), Method.POST);
         }
 
         /// <summary>
@@ -72,6 +96,17 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Remove the subreddit's custom mobile icon asynchronously.
+        /// See also: /api/upload_sr_img.
+        /// </summary>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>An object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteSrIconAsync(string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/delete_sr_icon", new APITypeInput(), Method.POST);
+        }
+
+        /// <summary>
         /// Remove an image from the subreddit's custom image set.
         /// The image will no longer count against the subreddit's image limit. However, the actual image data may still be accessible for an unspecified amount of time. 
         /// If the image is currently referenced by the subreddit's stylesheet, that stylesheet will no longer validate and won't be editable until the image reference is removed.
@@ -83,6 +118,20 @@ namespace Reddit.Models
         public GenericContainer DeleteSrImg(SubredditsDeleteSrImgInput subredditsDeleteSrImgInput, string subreddit = null)
         {
             return SendRequest<GenericContainer>(Sr(subreddit) + "api/delete_sr_img", subredditsDeleteSrImgInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Remove an image from the subreddit's custom image set asynchronously.
+        /// The image will no longer count against the subreddit's image limit. However, the actual image data may still be accessible for an unspecified amount of time. 
+        /// If the image is currently referenced by the subreddit's stylesheet, that stylesheet will no longer validate and won't be editable until the image reference is removed.
+        /// See also: /api/upload_sr_img.
+        /// </summary>
+        /// <param name="subredditsDeleteSrImgInput">A valid SubredditsDeleteSrImgInput instance</param>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>An object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteSrImgAsync(SubredditsDeleteSrImgInput subredditsDeleteSrImgInput, string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/delete_sr_img", subredditsDeleteSrImgInput, Method.POST);
         }
 
         // TODO - Every test I try just returns an empty JSON result.  --Kris
@@ -133,13 +182,35 @@ namespace Reddit.Models
         /// <returns>An object indicating any errors.</returns>
         public GenericContainer SiteAdmin(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = null, string headerTitle = null)
         {
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(PrepareSiteAdmin(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle)));
+        }
+
+        /// <summary>
+        /// Create or configure a subreddit asynchronously.  Null values are ignored.
+        /// If sr is specified, the request will attempt to modify the specified subreddit. If not, a subreddit with name name will be created.
+        /// This endpoint expects all values to be supplied on every request. If modifying a subset of options, it may be useful to get the current settings from /about/edit.json first.
+        /// For backwards compatibility, description is the sidebar text and public_description is the publicly visible subreddit description.
+        /// Most of the parameters for this endpoint are identical to options visible in the user interface and their meanings are best explained there.
+        /// See also: /about/edit.json.
+        /// </summary>
+        /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle">a string no longer than 500 characters</param>
+        /// <returns>An object indicating any errors.</returns>
+        public async Task<GenericContainer> SiteAdminAsync(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = null, string headerTitle = null)
+        {
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(PrepareSiteAdmin(subredditsSiteAdminInput, gRecaptchaResponse, headerTitle)));
+        }
+
+        private RestRequest PrepareSiteAdmin(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = null, string headerTitle = null)
+        {
             RestRequest restRequest = PrepareRequest("api/site_admin", Method.POST);
 
             restRequest.AddObject(subredditsSiteAdminInput);
             AddParamIfNotNull("g-recaptcha-response", gRecaptchaResponse, ref restRequest);
             AddParamIfNotNull("header-title", headerTitle, ref restRequest);
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+            return restRequest;
         }
 
         /// <summary>
@@ -167,12 +238,51 @@ namespace Reddit.Models
         /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
         /// <returns>An object indicating any errors.</returns>
-        public GenericContainer SiteAdmin(Subreddit subreddit, bool? allowPostCrossposts = null, bool? allowTop = null, bool? excludeBannedModqueue = null, 
-            bool? freeFormReports = null, string gRecaptchaResponse = null, string linkType = null, string spamComments = null, string spamLinks = null, 
-            string spamSelfPosts = null, string sr = null, string themeSr = null, bool? themeSrUpdate = null, string wikiMode = null, int? wikiEditAge = null, 
+        public GenericContainer SiteAdmin(Subreddit subreddit, bool? allowPostCrossposts = null, bool? allowTop = null, bool? excludeBannedModqueue = null,
+            bool? freeFormReports = null, string gRecaptchaResponse = null, string linkType = null, string spamComments = null, string spamLinks = null,
+            string spamSelfPosts = null, string sr = null, string themeSr = null, bool? themeSrUpdate = null, string wikiMode = null, int? wikiEditAge = null,
             int? wikiEditKarma = null)
         {
             return SiteAdmin(new SubredditsSiteAdminInput(subreddit.AllOriginalContent, subreddit.AllowDiscovery, subreddit.AllowImages, allowPostCrossposts,
+                allowTop, subreddit.AllowVideos, subreddit.CollapseDeletedComments, subreddit.Description, excludeBannedModqueue,
+                freeFormReports, subreddit.HideAds, subreddit.KeyColor, subreddit.Lang, linkType,
+                subreddit.DisplayName, subreddit.OriginalContentTagEnabled, subreddit.Over18, subreddit.PublicDescription, subreddit.ShowMedia,
+                subreddit.ShowMediaPreview, spamComments, spamLinks, spamSelfPosts, subreddit.SpoilersEnabled, sr, subreddit.SubmitLinkLabel,
+                subreddit.SubmitText, subreddit.SubmitTextLabel, subreddit.SuggestedCommentSort, themeSr, themeSrUpdate, subreddit.Title,
+                subreddit.SubredditType, wikiMode, subreddit.CommentScoreHideMins, wikiEditAge, wikiEditKarma), gRecaptchaResponse, subreddit.HeaderTitle);
+        }
+
+        /// <summary>
+        /// Create or configure a subreddit asynchronously.
+        /// If sr is specified, the request will attempt to modify the specified subreddit. If not, a subreddit with name name will be created.
+        /// This endpoint expects all values to be supplied on every request. If modifying a subset of options, it may be useful to get the current settings from /about/edit.json first.
+        /// For backwards compatibility, description is the sidebar text and public_description is the publicly visible subreddit description.
+        /// Most of the parameters for this endpoint are identical to options visible in the user interface and their meanings are best explained there.
+        /// See also: /about/edit.json.
+        /// </summary>
+        /// <param name="subreddit">A valid subreddit object.</param>
+        /// <param name="allowPostCrossposts">boolean value</param>
+        /// <param name="allowTop">boolean value</param>
+        /// <param name="excludeBannedModqueue">boolean value</param>
+        /// <param name="freeFormReports">boolean value</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="linkType">one of (any, link, self)</param>
+        /// <param name="spamComments">one of (low, high, all)</param>
+        /// <param name="spamLinks">one of (low, high, all)</param>
+        /// <param name="spamSelfPosts">one of (low, high, all)</param>
+        /// <param name="sr">fullname of a thing</param>
+        /// <param name="themeSr">subreddit name</param>
+        /// <param name="themeSrUpdate">boolean value</param>
+        /// <param name="wikiMode">one of (disabled, modonly, anyone)</param>
+        /// <param name="wikiEditAge">an integer between 0 and 36600 (default: 0)</param>
+        /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
+        /// <returns>An object indicating any errors.</returns>
+        public async Task<GenericContainer> SiteAdminAsync(Subreddit subreddit, bool? allowPostCrossposts = null, bool? allowTop = null, bool? excludeBannedModqueue = null,
+            bool? freeFormReports = null, string gRecaptchaResponse = null, string linkType = null, string spamComments = null, string spamLinks = null,
+            string spamSelfPosts = null, string sr = null, string themeSr = null, bool? themeSrUpdate = null, string wikiMode = null, int? wikiEditAge = null,
+            int? wikiEditKarma = null)
+        {
+            return await SiteAdminAsync(new SubredditsSiteAdminInput(subreddit.AllOriginalContent, subreddit.AllowDiscovery, subreddit.AllowImages, allowPostCrossposts,
                 allowTop, subreddit.AllowVideos, subreddit.CollapseDeletedComments, subreddit.Description, excludeBannedModqueue,
                 freeFormReports, subreddit.HideAds, subreddit.KeyColor, subreddit.Lang, linkType,
                 subreddit.DisplayName, subreddit.OriginalContentTagEnabled, subreddit.Over18, subreddit.PublicDescription, subreddit.ShowMedia,
@@ -228,6 +338,18 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Update a subreddit's stylesheet asynchronously.
+        /// op should be save to update the contents of the stylesheet.
+        /// </summary>
+        /// <param name="subredditsSubredditStylesheetInput">A valid SubredditsSubredditStylesheetInput instance</param>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>An object indicating any errors.</returns>
+        public async Task<GenericContainer> SubredditStylesheetAsync(SubredditsSubredditStylesheetInput subredditsSubredditStylesheetInput, string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/subreddit_stylesheet", subredditsSubredditStylesheetInput, Method.POST);
+        }
+
+        /// <summary>
         /// Subscribe to or unsubscribe from a subreddit.
         /// To subscribe, action should be sub.  To unsubscribe, action should be unsub.The user must have access to the subreddit to be able to subscribe to it.
         /// The skip_initial_defaults param can be set to True to prevent automatically subscribing the user to the current set of defaults when they take their first subscription action.
@@ -241,6 +363,19 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Subscribe to or unsubscribe from a subreddit asynchronously.
+        /// To subscribe, action should be sub.  To unsubscribe, action should be unsub.The user must have access to the subreddit to be able to subscribe to it.
+        /// The skip_initial_defaults param can be set to True to prevent automatically subscribing the user to the current set of defaults when they take their first subscription action.
+        /// Attempting to set it for an unsubscribe action will result in an error.
+        /// See also: /subreddits/mine/.
+        /// </summary>
+        /// <param name="subredditsSubByFullnameInput">A valid SubredditsSubByFullnameInput instance</param>
+        public async Task SubscribeByFullnameAsync(SubredditsSubByFullnameInput subredditsSubByFullnameInput)
+        {
+            await SendRequestAsync<object>("api/subscribe", subredditsSubByFullnameInput, Method.POST);
+        }
+
+        /// <summary>
         /// Subscribe to or unsubscribe from a subreddit.
         /// To subscribe, action should be sub.  To unsubscribe, action should be unsub.The user must have access to the subreddit to be able to subscribe to it.
         /// The skip_initial_defaults param can be set to True to prevent automatically subscribing the user to the current set of defaults when they take their first subscription action.
@@ -251,6 +386,19 @@ namespace Reddit.Models
         public void Subscribe(SubredditsSubByNameInput subredditsSubByNameInput)
         {
             SendRequest<object>("api/subscribe", subredditsSubByNameInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Subscribe to or unsubscribe from a subreddit asynchronously.
+        /// To subscribe, action should be sub.  To unsubscribe, action should be unsub.The user must have access to the subreddit to be able to subscribe to it.
+        /// The skip_initial_defaults param can be set to True to prevent automatically subscribing the user to the current set of defaults when they take their first subscription action.
+        /// Attempting to set it for an unsubscribe action will result in an error.
+        /// See also: /subreddits/mine/.
+        /// </summary>
+        /// <param name="subredditsSubByNameInput">A valid SubredditsSubByNameInput instance</param>
+        public async Task SubscribeAsync(SubredditsSubByNameInput subredditsSubByNameInput)
+        {
+            await SendRequestAsync<object>("api/subscribe", subredditsSubByNameInput, Method.POST);
         }
 
         /// <summary>
@@ -272,13 +420,40 @@ namespace Reddit.Models
         /// <returns>An object containing the resulting image URL and any errors.</returns>
         public ImageUploadResult UploadSrImg(SubredditsUploadSrImgInput subredditsUploadSrImgInput, string subreddit = null)
         {
+            return JsonConvert.DeserializeObject<ImageUploadResult>(ExecuteRequest(PrepareUploadSrImg(subredditsUploadSrImgInput, subreddit)));
+        }
+
+        /// <summary>
+        /// Add or replace a subreddit image, custom header logo, custom mobile icon, or custom mobile banner asynchronously.
+        /// If the upload_type value is img, an image for use in the subreddit stylesheet is uploaded with the name specified in name.
+        /// If the upload_type value is header then the image uploaded will be the subreddit's new logo and name will be ignored.
+        /// If the upload_type value is icon then the image uploaded will be the subreddit's new mobile icon and name will be ignored.
+        /// If the upload_type value is banner then the image uploaded will be the subreddit's new mobile banner and name will be ignored.
+        /// For backwards compatibility, if upload_type is not specified, the header field will be used instead:
+        /// If the header field has value 0, then upload_type is img.
+        /// If the header field has value 1, then upload_type is header.
+        /// The img_type field specifies whether to store the uploaded image as a PNG or JPEG.
+        /// Subreddits have a limited number of images that can be in use at any given time. If no image with the specified name already exists, one of the slots will be consumed
+        /// If an image with the specified name already exists, it will be replaced. This does not affect the stylesheet immediately, but will take effect the next time the stylesheet is saved.
+        /// See also: /api/delete_sr_img, /api/delete_sr_header, /api/delete_sr_icon, and /api/delete_sr_banner.
+        /// </summary>
+        /// <param name="subredditsUploadSrImgInput">A valid SubredditsUploadSrImgInput instance</param>
+        /// <param name="subreddit">The subreddit being queried</param>
+        /// <returns>An object containing the resulting image URL and any errors.</returns>
+        public async Task<ImageUploadResult> UploadSrImgAsync(SubredditsUploadSrImgInput subredditsUploadSrImgInput, string subreddit = null)
+        {
+            return JsonConvert.DeserializeObject<ImageUploadResult>(await ExecuteRequestAsync(PrepareUploadSrImg(subredditsUploadSrImgInput, subreddit)));
+        }
+
+        private RestRequest PrepareUploadSrImg(SubredditsUploadSrImgInput subredditsUploadSrImgInput, string subreddit = null)
+        {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/upload_sr_img", Method.POST, "multipart/form-data");
 
-            restRequest.AddFileBytes("file", subredditsUploadSrImgInput.file, 
+            restRequest.AddFileBytes("file", subredditsUploadSrImgInput.file,
                 (!string.IsNullOrWhiteSpace(subredditsUploadSrImgInput.name) ? subredditsUploadSrImgInput.name : "image") + "." + subredditsUploadSrImgInput.img_type);
             restRequest.AddObject(subredditsUploadSrImgInput);
 
-            return JsonConvert.DeserializeObject<ImageUploadResult>(ExecuteRequest(restRequest));
+            return restRequest;
         }
 
         // TODO - API returns 400 (after/before == "", q == "KrisCraig" or "t2_6vsit", sort == "relevance").  No idea why.  --Kris

@@ -58,11 +58,19 @@ namespace Reddit.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer AcceptModeratorInvite(string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/accept_moderator_invite", Method.POST);
+            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(PrepareJSONRequest(Sr(subreddit) + "api/accept_moderator_invite")));
+        }
 
-            restRequest.AddParameter("api_type", "json");
-            
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Asynchronously accept an invite to moderate the specified subreddit.
+        /// The authenticated user must have been invited to moderate the subreddit by one of its current moderators.
+        /// See also: /api/friend and /subreddits/mine.
+        /// </summary>
+        /// <param name="subreddit">The subreddit being moderated</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> AcceptModeratorInviteAsync(string subreddit = null)
+        {
+            return JsonConvert.DeserializeObject<GenericContainer>(await ExecuteRequestAsync(PrepareJSONRequest(Sr(subreddit) + "api/accept_moderator_invite")));
         }
 
         /// <summary>
@@ -74,11 +82,19 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void Approve(string id)
         {
-            RestRequest restRequest = PrepareRequest("api/approve", Method.POST);
+            ExecuteRequest(PrepareIDRequest("api/approve", id));
+        }
 
-            restRequest.AddParameter("id", id);
-
-            ExecuteRequest(restRequest);
+        /// <summary>
+        /// Approve a link or comment asynchronously.
+        /// If the thing was removed, it will be re-inserted into appropriate listings.
+        /// Any reports on the approved thing will be discarded.
+        /// See also: /api/remove.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public async Task ApproveAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareIDRequest("api/approve", id));
         }
 
         /// <summary>
@@ -203,11 +219,18 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void IgnoreReports(string id)
         {
-            RestRequest restRequest = PrepareRequest("api/ignore_reports", Method.POST);
+            ExecuteRequest(PrepareIDRequest("api/ignore_reports", id));
+        }
 
-            restRequest.AddParameter("id", id);
-
-            ExecuteRequest(restRequest);
+        /// <summary>
+        /// Asynchronously future reports on a thing from causing notifications.
+        /// Any reports made about a thing after this flag is set on it will not cause notifications or make the thing show up in the various moderation listings.
+        /// See also: /api/unignore_reports.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public async Task IgnoreReportsAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareIDRequest("api/ignore_reports", id));
         }
 
         /// <summary>
@@ -217,11 +240,17 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void LeaveContributor(string id)
         {
-            RestRequest restRequest = PrepareRequest("api/leavecontributor", Method.POST);
+            ExecuteRequest(PrepareIDRequest("api/leavecontributor", id));
+        }
 
-            restRequest.AddParameter("id", id);
-
-            ExecuteRequest(restRequest);
+        /// <summary>
+        /// Abdicate approved submitter status in a subreddit asynchronously.
+        /// See also: /api/friend.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public async Task LeaveContributorAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareIDRequest("api/leavecontributor", id));
         }
 
         /// <summary>
@@ -235,6 +264,17 @@ namespace Reddit.Models
             SendRequest<object>(Sr(subreddit) + "api/unfriend", new UsersUnfriendInput(null, id, "moderator"), Method.POST);
         }
 
+        /// <summary>
+        /// Abdicate moderator status in a subreddit asynchronously.
+        /// See also: /api/friend.
+        /// </summary>
+        /// <param name="fullname">fullname of the abdicating user</param>
+        /// <param name="subreddit">The name of the subreddit being abdicated</param>
+        public async Task LeaveModeratorAsync(string id, string subreddit)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/unfriend", new UsersUnfriendInput(null, id, "moderator"), Method.POST);
+        }
+
         // TODO - Reddit API returns 500 server error when passing a user fullname (t2_2cclzaxt).  Maybe it expects a thread id, instead?  --Kris
         /// <summary>
         /// For muting user via modmail.
@@ -243,11 +283,7 @@ namespace Reddit.Models
         /// <returns>(TODO - Untested)</returns>
         public object MuteMessageAuthor(string id)
         {
-            RestRequest restRequest = PrepareRequest("api/mute_message_author", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject(ExecuteRequest(PrepareIDRequest("api/mute_message_author", id)));
         }
 
         // TODO - Test with Modmail.  --Kris
@@ -280,11 +316,17 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public void UnignoreReports(string id)
         {
-            RestRequest restRequest = PrepareRequest("api/unignore_reports", Method.POST);
+            ExecuteRequest(PrepareIDRequest("api/unignore_reports", id));
+        }
 
-            restRequest.AddParameter("id", id);
-
-            ExecuteRequest(restRequest);
+        /// <summary>
+        /// Asynchronously allow future reports on a thing to cause notifications.
+        /// See also: /api/ignore_reports.
+        /// </summary>
+        /// <param name="id">fullname of a thing</param>
+        public async Task UnignoreReportsAsync(string id)
+        {
+            await ExecuteRequestAsync(PrepareIDRequest("api/unignore_reports", id));
         }
 
         // TODO - Reddit API returns 500 server error when passing a user fullname (t2_2cclzaxt).  Maybe it expects a thread id, instead?  --Kris
@@ -295,11 +337,7 @@ namespace Reddit.Models
         /// <returns>(TODO - Untested)</returns>
         public object UnmuteMessageAuthor(string id)
         {
-            RestRequest restRequest = PrepareRequest("api/unmute_message_author", Method.POST);
-
-            restRequest.AddParameter("id", id);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject(ExecuteRequest(PrepareIDRequest("api/unmute_message_author", id)));
         }
 
         /// <summary>
