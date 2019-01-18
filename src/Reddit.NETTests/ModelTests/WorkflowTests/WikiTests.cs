@@ -53,7 +53,7 @@ namespace RedditTests.ModelTests.WorkflowTests
             StatusResult unhideRes = reddit.Models.Wiki.Hide(new WikiPageRevisionInput("index", revisions.Data.Children[0].Id), testData["Subreddit"]);
 
             Validate(hideRes);
-            Validate(unhideRes, false);
+            Validate(unhideRes);
 
             // Revert to the original page version.  --Kris
             reddit.Models.Wiki.Revert(new WikiPageRevisionInput("index", revisions.Data.Children[revisions.Data.Children.Count - 1].Id), testData["Subreddit"]);

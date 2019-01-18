@@ -363,19 +363,6 @@ namespace RedditTests
             Assert.IsNotNull(wikiPageRevisionContainer.Data);
         }
 
-        public void Validate(StatusResult statusResult, bool status = true)
-        {
-            Assert.IsNotNull(statusResult);
-            if (status)
-            {
-                Assert.IsTrue(statusResult.Status);
-            }
-            else
-            {
-                Assert.IsFalse(statusResult.Status);
-            }
-        }
-
         public void Validate(List<ActionResult> actionResults, int minCount = 0)
         {
             Assert.IsNotNull(actionResults);

@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Reddit.Exceptions;
 using Reddit.Inputs;
 using Reddit.Inputs.Moderation;
 using Reddit.Inputs.Users;
@@ -50,13 +51,18 @@ namespace RedditTests.ModelTests.WorkflowTests
                     || res.JSON.Errors == null
                     || res.JSON.Errors.Count == 0
                     || res.JSON.Errors[0].Count == 0
-                    || !res.JSON.Errors[0][0].Equals("ALREADY_MODERATOR"))
+                    || (!res.JSON.Errors[0][0].Equals("NO_INVITE_FOUND")  // This appears to be an API bug, as this is sometimes returned with a success response.  --Kris
+                        && !res.JSON.Errors[0][0].Equals("ALREADY_MODERATOR")))
                 {
                     throw ex;
                 }
             }
 
-            reddit2.Models.Moderation.LeaveModerator("t2_" + patsy.Id, testData["Subreddit"]);
+            try
+            {
+                reddit2.Models.Moderation.LeaveModerator("t2_" + patsy.Id, testData["Subreddit"]);
+            }
+            catch (RedditForbiddenException) { }
         }
 
         [TestMethod]

@@ -29,6 +29,7 @@ namespace RedditTests.ModelTests.WorkflowTests
                             reddit.Models.Widgets.Delete(data["id"].ToString(), testData["Subreddit"]);
                         }
                         // At least one id came back with a WIDGET_NOEXIST error even though it was in the retrieved results.  --Kris
+                        catch (RedditBadRequestException) { }
                         catch (AggregateException ex) when (ex.InnerException is RedditBadRequestException) { }
                     }
                 }
@@ -111,9 +112,21 @@ namespace RedditTests.ModelTests.WorkflowTests
             reddit.Models.Widgets.UpdateOrder("sidebar", order, testData["Subreddit"]);
 
             // Delete the widgets.  --Kris
-            reddit.Models.Widgets.Delete(widgetTextAreaId, testData["Subreddit"]);
-            reddit.Models.Widgets.Delete(widgetCalendarId, testData["Subreddit"]);
-            reddit.Models.Widgets.Delete(widgetCommunityListId, testData["Subreddit"]);
+            DeleteWidget(widgetTextAreaId);
+            DeleteWidget(widgetCalendarId);
+            DeleteWidget(widgetCommunityListId);
+        }
+
+        private void DeleteWidget(string id)
+        {
+            try
+            {
+                reddit.Models.Widgets.Delete(id, testData["Subreddit"]);
+            }
+            catch (RedditBadRequestException ex)
+            {
+                try { CheckBadRequest("WIDGET_NOEXIST", "", ex); } catch (AssertInconclusiveException) { }
+            }
         }
     }
 }
