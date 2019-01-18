@@ -67,6 +67,7 @@ namespace RedditTests.ModelTests
             {
                 reddit.Models.Wiki.Edit(new WikiEditPageInput("Lorem ipsum dolor sit amet, motherfucker.", "index", "Because I can."), testData["Subreddit"]);
             }
+            catch (RedditConflictException) { }
             catch (AggregateException ex) when (ex.InnerException is RedditConflictException) { }
         }
     }

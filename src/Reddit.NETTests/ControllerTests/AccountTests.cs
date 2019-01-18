@@ -95,6 +95,7 @@ namespace RedditTests.ControllerTests
             {
                 Validate(reddit.Account.MyStreamingSubreddits());
             }
+            catch (RedditForbiddenException) { }
             catch (AggregateException ex) when (ex.InnerException is RedditForbiddenException) { }
         }
 

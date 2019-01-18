@@ -16,6 +16,7 @@ namespace RedditTests.ModelTests
             {
                 Validate(reddit3.Models.Emoji.All("WayOfTheBern"));
             }
+            catch (RedditUserRequiredException) { }
             catch (AggregateException ex) when (ex.InnerException is RedditUserRequiredException) { }
         }
 
@@ -27,6 +28,10 @@ namespace RedditTests.ModelTests
             {
                 // This will fail because the UserFlair endpoint requires an authenticated user.  --Kris
                 Validate(reddit3.Models.Flair.UserFlair(testData["Subreddit"]));
+            }
+            catch (RedditUserRequiredException)
+            {
+                caught = true;
             }
             catch (AggregateException ex) when (ex.InnerException is RedditUserRequiredException)
             {
