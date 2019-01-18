@@ -3,6 +3,7 @@ using Reddit.Inputs;
 using Reddit.Inputs.Wiki;
 using Reddit.Things;
 using RestSharp;
+using System.Threading.Tasks;
 
 namespace Reddit.Models
 {
@@ -24,6 +25,16 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Asynchronously allow username to edit this wiki page.
+        /// </summary>
+        /// <param name="wikiPageEditorInput">A valid WikiPageEditorInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task AllowEditorAsync(WikiPageEditorInput wikiPageEditorInput, string subreddit = null)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/wiki/alloweditor/add", wikiPageEditorInput, Method.POST);
+        }
+
+        /// <summary>
         /// Deny username to edit this wiki page.
         /// </summary>
         /// <param name="wikiPageEditorInput">A valid WikiPageEditorInput instance</param>
@@ -31,6 +42,16 @@ namespace Reddit.Models
         public void DenyEditor(WikiPageEditorInput wikiPageEditorInput, string subreddit = null)
         {
             SendRequest<object>(Sr(subreddit) + "api/wiki/alloweditor/del", wikiPageEditorInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Asynchronously deny username to edit this wiki page.
+        /// </summary>
+        /// <param name="wikiPageEditorInput">A valid WikiPageEditorInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task DenyEditorAsync(WikiPageEditorInput wikiPageEditorInput, string subreddit = null)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/wiki/alloweditor/del", wikiPageEditorInput, Method.POST);
         }
 
         /// <summary>

@@ -25,6 +25,16 @@ namespace Reddit.Models
             return SendRequest<UserActionResult>("api/block_user", usersBlockUserInput, Method.POST);
         }
 
+        /// <summary>
+        /// For blocking a user asynchronously.
+        /// </summary>
+        /// <param name="usersBlockUserInput">A valid UserActionResult input</param>
+        /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
+        public async Task<UserActionResult> BlockUserAsync(UsersBlockUserInput usersBlockUserInput)
+        {
+            return await SendRequestAsync<UserActionResult>("api/block_user", usersBlockUserInput, Method.POST);
+        }
+
         // TODO - Specifying "friend" as type causes API to return 400 no matter what I try.  Did Reddit deprecate this??  --Kris
         /// <summary>
         /// Create a relationship between a user and another user or subreddit.
@@ -81,6 +91,15 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Report a user asynchronously. Reporting a user brings it to the attention of a Reddit admin.
+        /// </summary>
+        /// <param name="usersReportUserInput">A valid UsersReportUserInput instance</param>
+        public async Task ReportUserAsync(UsersReportUserInput usersReportUserInput)
+        {
+            await SendRequestAsync<object>("api/report_user", usersReportUserInput, Method.POST);
+        }
+
+        /// <summary>
         /// Set permissions.
         /// </summary>
         /// <param name="usersSetPermissionsInput">A valid UsersSetPermissionsInput instance</param>
@@ -126,17 +145,45 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Remove a relationship between a user and another user or subreddit asynchronously.
+        /// The user can either be passed in by name (nuser) or by fullname (iuser).
+        /// If type is friend or enemy, 'container' MUST be the current user's fullname; for other types, the subreddit must be set via URL (e.g., /r/funny/api/unfriend).
+        /// OAuth2 use requires appropriate scope based on the 'type' of the relationship:
+        /// moderator: modothers
+        /// moderator_invite: modothers
+        /// contributor: modcontributors
+        /// banned: modcontributors
+        /// muted: modcontributors
+        /// wikibanned: modcontributors and modwiki
+        /// wikicontributor: modcontributors and modwiki
+        /// friend: Use /api/v1/me/friends/{username}
+        /// enemy: Use /api/block
+        /// Complement to POST_friend
+        /// </summary>
+        /// <param name="usersUnfriendInput">A valid UsersUnfriendInput instance</param>
+        /// <param name="subreddit">A subreddit</param>
+        public async Task UnfriendAsync(UsersUnfriendInput usersUnfriendInput, string subreddit = null)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/unfriend", usersUnfriendInput, Method.POST);
+        }
+
+        /// <summary>
         /// Get user data by account IDs.
         /// </summary>
         /// <param name="ids">A comma-separated list of account fullnames</param>
         /// <returns>A dictionary of user summary objects.</returns>
         public Dictionary<string, UserSummary> UserDataByAccountIds(string ids)
         {
+            return JsonConvert.DeserializeObject<Dictionary<string, UserSummary>>(ExecuteRequest(PrepareUserDataByAccountIds(ids)));
+        }
+
+        private RestRequest PrepareUserDataByAccountIds(string ids)
+        {
             RestRequest restRequest = PrepareRequest("api/user_data_by_account_ids");
 
             restRequest.AddParameter("ids", ids);
 
-            return JsonConvert.DeserializeObject<Dictionary<string, UserSummary>>(ExecuteRequest(restRequest));
+            return restRequest;
         }
 
         /// <summary>
@@ -197,11 +244,7 @@ namespace Reddit.Models
         /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
         public UserActionResult UpdateFriend(string username, string json = "{}")
         {
-            RestRequest restRequest = PrepareRequest("api/v1/me/friends/" + username, Method.PUT);
-
-            restRequest.AddParameter("json", json);
-
-            return JsonConvert.DeserializeObject<UserActionResult>(ExecuteRequest(restRequest));
+            return JsonConvert.DeserializeObject<UserActionResult>(ExecuteRequest(PrepareUpdateFriend(username, json)));
         }
 
         /// <summary>
@@ -216,12 +259,16 @@ namespace Reddit.Models
         /// <returns>An object containing basic info on the target user and the datetime of this action.</returns>
         public async Task<UserActionResult> UpdateFriendAsync(string username, string json = "{}")
         {
+            return JsonConvert.DeserializeObject<UserActionResult>(await ExecuteRequestAsync(PrepareUpdateFriend(username, json)));
+        }
+
+        private RestRequest PrepareUpdateFriend(string username, string json = "{}")
+        {
             RestRequest restRequest = PrepareRequest("api/v1/me/friends/" + username, Method.PUT);
 
             restRequest.AddParameter("json", json);
 
-            string res = await ExecuteRequestAsync(restRequest);
-            return JsonConvert.DeserializeObject<UserActionResult>(res);
+            return restRequest;
         }
 
         /// <summary>

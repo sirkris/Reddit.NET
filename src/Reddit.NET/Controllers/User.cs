@@ -232,10 +232,7 @@ namespace Reddit.Controllers
         public async Task AddRelationshipAsync(string banContext, string banMessage, string banReason, string container, int duration,
             string permissions, string type, string subreddit = null)
         {
-            await Task.Run(() =>
-            {
-                AddRelationship(banContext, banMessage, banReason, container, duration, permissions, type, subreddit);
-            });
+            await AddRelationshipAsync(new UsersFriendInput(Name, type, duration, permissions, banContext, banMessage, banReason, container), subreddit);
         }
 
         /// <summary>
@@ -279,10 +276,9 @@ namespace Reddit.Controllers
         /// <param name="subreddit">A subreddit</param>
         public async Task AddRelationshipAsync(UsersFriendInput usersFriendInput, string subreddit = null)
         {
-            await Task.Run(() =>
-            {
-                AddRelationship(usersFriendInput, subreddit);
-            });
+            usersFriendInput.name = Name;
+
+            Validate(await Dispatch.Users.FriendAsync(usersFriendInput, subreddit));
         }
 
         // TODO - Break this fucker up into multiple methods.  --Kris
@@ -329,10 +325,7 @@ namespace Reddit.Controllers
         /// <param name="subreddit">A subreddit</param>
         public async Task RemoveRelationshipAsync(string type, string container = "", string subreddit = null)
         {
-            await Task.Run(() =>
-            {
-                RemoveRelationship(new UsersUnfriendInput(Name, Fullname, type, container), subreddit);
-            });
+            await RemoveRelationshipAsync(new UsersUnfriendInput(Name, Fullname, type, container), subreddit);
         }
 
         /// <summary>
@@ -377,10 +370,9 @@ namespace Reddit.Controllers
         /// <param name="subreddit">A subreddit</param>
         public async Task RemoveRelationshipAsync(UsersUnfriendInput usersUnfriendInput, string subreddit = null)
         {
-            await Task.Run(() =>
-            {
-                RemoveRelationship(usersUnfriendInput, subreddit);
-            });
+            usersUnfriendInput.name = Name;
+
+            await Dispatch.Users.UnfriendAsync(usersUnfriendInput, subreddit);
         }
 
         // Note - I tested this one manually.  Leaving out of automated tests so as not to spam the Reddit admins.  --Kris
@@ -401,10 +393,7 @@ namespace Reddit.Controllers
         /// <param name="reason">a string no longer than 100 characters</param>
         public async Task ReportAsync(string reason, string details = "{}")
         {
-            await Task.Run(() =>
-            {
-                Report(details, reason);
-            });
+            await Dispatch.Users.ReportUserAsync(new UsersReportUserInput(Name, reason, details));
         }
 
         /// <summary>
@@ -426,10 +415,7 @@ namespace Reddit.Controllers
         /// <param name="type">A string representing the type (e.g. "moderator_invite")</param>
         public async Task SetPermissionsAsync(string subreddit, string permissions, string type)
         {
-            await Task.Run(() =>
-            {
-                SetPermissions(subreddit, permissions, type);
-            });
+            await SetPermissionsAsync(new UsersSetPermissionsInput(Name, permissions, type), subreddit);
         }
 
         /// <summary>
@@ -451,10 +437,9 @@ namespace Reddit.Controllers
         /// <param name="subreddit">the name of an existing subreddit</param>
         public async Task SetPermissionsAsync(UsersSetPermissionsInput usersSetPermissionsInput, string subreddit = null)
         {
-            await Task.Run(() =>
-            {
-                SetPermissions(usersSetPermissionsInput, subreddit);
-            });
+            usersSetPermissionsInput.name = Name;
+
+            await Validate(Dispatch.Users.SetPermissionsAsync(usersSetPermissionsInput, subreddit));
         }
 
         /// <summary>
@@ -579,10 +564,7 @@ namespace Reddit.Controllers
         /// <param name="subreddit">The subreddit with the flairs</param>
         public async Task DeleteFlairAsync(string subreddit)
         {
-            await Task.Run(() =>
-            {
-                DeleteFlair(subreddit);
-            });
+            Validate(await Dispatch.Flair.DeleteFlairAsync(Name, subreddit));
         }
 
         /// <summary>
@@ -604,10 +586,7 @@ namespace Reddit.Controllers
         /// <param name="cssClass">a valid subreddit image name</param>
         public async Task CreateFlairAsync(string subreddit, string text, string cssClass = "")
         {
-            await Task.Run(() =>
-            {
-                CreateFlair(subreddit, text, cssClass);
-            });
+            await CreateFlairAsync(new FlairCreateInput(text, "", Name, cssClass), subreddit);
         }
 
         /// <summary>
@@ -627,10 +606,7 @@ namespace Reddit.Controllers
         /// <param name="subreddit">The subreddit with the flairs</param>
         public async Task CreateFlairAsync(FlairCreateInput flairCreateInput, string subreddit = null)
         {
-            await Task.Run(() =>
-            {
-                CreateFlair(flairCreateInput, subreddit);
-            });
+            Validate(await Dispatch.Flair.CreateAsync(flairCreateInput, subreddit));
         }
 
         /// <summary>
@@ -694,10 +670,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public async Task InviteToLiveThreadAsync(string thread, string permissions, string type)
         {
-            await Task.Run(() =>
-            {
-                InviteToLiveThread(thread, permissions, type);
-            });
+            await InviteToLiveThreadAsync(new LiveThreadsContributorInput(Name, permissions, type), thread);
         }
 
         /// <summary>
@@ -721,10 +694,9 @@ namespace Reddit.Controllers
         /// <param name="thread">id</param>
         public async Task InviteToLiveThreadAsync(LiveThreadsContributorInput liveThreadsContributorInput, string thread = "")
         {
-            await Task.Run(() =>
-            {
-                InviteToLiveThread(liveThreadsContributorInput, thread);
-            });
+            liveThreadsContributorInput.name = Name;
+
+            Validate(await Dispatch.LiveThreads.InviteContributorAsync(thread, liveThreadsContributorInput));
         }
 
         /// <summary>
@@ -746,10 +718,9 @@ namespace Reddit.Controllers
         /// <param name="thread">id</param>
         public async Task RemoveFromLiveThreadAsync(string thread)
         {
-            await Task.Run(() =>
-            {
-                RemoveFromLiveThread(thread);
-            });
+            CheckFullname();
+
+            Validate(await Dispatch.LiveThreads.RemoveContributorAsync(thread, Fullname));
         }
 
         /// <summary>
@@ -771,10 +742,9 @@ namespace Reddit.Controllers
         /// <param name="thread">id</param>
         public async Task RevokeLiveThreadInvitationAsync(string thread)
         {
-            await Task.Run(() =>
-            {
-                RevokeLiveThreadInvitation(thread);
-            });
+            CheckFullname();
+
+            Validate(await Dispatch.LiveThreads.RemoveContributorInviteAsync(thread, Fullname));
         }
 
         /// <summary>
@@ -800,10 +770,7 @@ namespace Reddit.Controllers
         /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
         public async Task SetLiveThreadPermissionsAsync(string thread, string permissions, string type)
         {
-            await Task.Run(() =>
-            {
-                SetLiveThreadPermissions(thread, permissions, type);
-            });
+            Validate(await Dispatch.LiveThreads.SetContributorPermissionsAsync(thread, new LiveThreadsContributorInput(Name, permissions, type)));
         }
 
         /// <summary>
@@ -827,10 +794,7 @@ namespace Reddit.Controllers
         /// <param name="thread">id</param>
         public async Task SetLiveThreadPermissionsAsync(LiveThreadsContributorInput liveThreadsContributorInput, string thread = "")
         {
-            await Task.Run(() =>
-            {
-                SetLiveThreadPermissions(liveThreadsContributorInput, thread);
-            });
+            await SetLiveThreadPermissionsAsync(liveThreadsContributorInput, thread);
         }
 
         /// <summary>
@@ -852,10 +816,7 @@ namespace Reddit.Controllers
         /// <param name="body">raw markdown text</param>
         public async Task UpdateLiveThreadAsync(string id = "", string body = "")
         {
-            await Task.Run(() =>
-            {
-                UpdateLiveThread(id, body);
-            });
+            Validate(await Dispatch.LiveThreads.UpdateAsync(id, body));
         }
 
         /// <summary>
@@ -873,10 +834,7 @@ namespace Reddit.Controllers
         /// <param name="id">The ID of the live thread</param>
         public async Task AcceptLiveThreadInviteAsync(string id)
         {
-            await Task.Run(() =>
-            {
-                AcceptLiveThreadInvite(id);
-            });
+            Validate(await Dispatch.LiveThreads.AcceptContributorInviteAsync(id));
         }
 
         /// <summary>
@@ -917,10 +875,7 @@ namespace Reddit.Controllers
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         public async Task AllowWikiEditAsync(string page, string subreddit = null)
         {
-            await Task.Run(() =>
-            {
-                AllowWikiEdit(page, subreddit);
-            });
+            await Dispatch.Wiki.AllowEditorAsync(new WikiPageEditorInput(page, Name), subreddit);
         }
 
         /// <summary>
@@ -940,10 +895,7 @@ namespace Reddit.Controllers
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         public async Task DenyWikiEditAsync(string page, string subreddit = null)
         {
-            await Task.Run(() =>
-            {
-                DenyWikiEdit(page, subreddit);
-            });
+            await Dispatch.Wiki.DenyEditorAsync(new WikiPageEditorInput(page, Name), subreddit);
         }
 
         /// <summary>
@@ -959,10 +911,7 @@ namespace Reddit.Controllers
         /// </summary>
         public async Task BlockAsync()
         {
-            await Task.Run(() =>
-            {
-                Block();
-            });
+            Validate(await Dispatch.Users.BlockUserAsync(new UsersBlockUserInput(Fullname ?? null, Name ?? null)));
         }
     }
 }
