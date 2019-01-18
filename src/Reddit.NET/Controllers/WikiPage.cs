@@ -97,10 +97,7 @@ namespace Reddit.Controllers
         /// Create an empty wiki page controller instance.
         /// </summary>
         /// <param name="dispatch"></param>
-        public WikiPage(Dispatch dispatch)
-        {
-
-        }
+        public WikiPage(Dispatch dispatch) { }
 
         /// <summary>
         /// Allow username to edit this wiki page.
@@ -117,10 +114,7 @@ namespace Reddit.Controllers
         /// <param name="username">the name of an existing user</param>
         public async Task AllowEditorAsync(string username)
         {
-            await Task.Run(() =>
-            {
-                AllowEditor(username);
-            });
+            await Dispatch.Wiki.AllowEditorAsync(new WikiPageEditorInput(Name, username), Subreddit);
         }
 
         /// <summary>
@@ -138,10 +132,7 @@ namespace Reddit.Controllers
         /// <param name="username">the name of an existing user</param>
         public async Task DenyEditorAsync(string username)
         {
-            await Task.Run(() =>
-            {
-                DenyEditor(username);
-            });
+            await Dispatch.Wiki.DenyEditorAsync(new WikiPageEditorInput(Name, username), Subreddit);
         }
 
         /// <summary>
@@ -186,10 +177,7 @@ namespace Reddit.Controllers
         /// <param name="previous">the starting point revision for this edit</param>
         public async Task EditAsync(string reason, string content = null, string previous = "")
         {
-            await Task.Run(() =>
-            {
-                Edit(reason, content, previous);
-            });
+            await EditAsync(new WikiEditPageInput(content, Name, reason, previous));
         }
 
         /// <summary>
@@ -209,10 +197,9 @@ namespace Reddit.Controllers
         /// <param name="wikiEditPageInput">A valid WikiEditPageInput instance</param>
         public async Task EditAsync(WikiEditPageInput wikiEditPageInput)
         {
-            await Task.Run(() =>
-            {
-                Edit(wikiEditPageInput);
-            });
+            wikiEditPageInput.page = Name;
+
+            await Dispatch.Wiki.EditAsync(wikiEditPageInput, Subreddit);
         }
 
         /// <summary>
@@ -232,10 +219,7 @@ namespace Reddit.Controllers
         /// <param name="previous">the starting point revision for this edit</param>
         public async Task SaveChangesAsync(string reason, string previous = "")
         {
-            await Task.Run(() =>
-            {
-                SaveChanges(reason, previous);
-            });
+            await EditAsync(reason, ContentMd);
         }
 
         /// <summary>
@@ -266,10 +250,7 @@ namespace Reddit.Controllers
         /// <param name="content">The page content</param>
         public async Task CreateAsync(string reason, string content = null)
         {
-            await Task.Run(() =>
-            {
-                Create(reason, content);
-            });
+            await Dispatch.Wiki.CreateAsync(new WikiCreatePageInput(content, Name, reason), Subreddit);
         }
 
         /// <summary>
@@ -286,12 +267,9 @@ namespace Reddit.Controllers
         /// Toggle the public visibility of a wiki page revision asynchronously.
         /// </summary>
         /// <param name="revision">a wiki revision ID</param>
-        public async Task HideAsync(string revision)
+        public async Task<bool> HideAsync(string revision)
         {
-            await Task.Run(() =>
-            {
-                Hide(revision);
-            });
+            return ((StatusResult)Validate(await Dispatch.Wiki.HideAsync(new WikiPageRevisionInput(Name, revision), Subreddit))).Status;
         }
 
         /// <summary>
@@ -320,10 +298,7 @@ namespace Reddit.Controllers
         /// <param name="revision">a wiki revision ID</param>
         public async Task RevertAsync(string revision)
         {
-            await Task.Run(() =>
-            {
-                Revert(revision);
-            });
+            await Dispatch.Wiki.RevertAsync(new WikiPageRevisionInput(Name, revision), Subreddit);
         }
 
         /// <summary>
@@ -377,12 +352,9 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="listed">boolean value (true = appear in /wiki/pages, false = don't appear in /wiki/pages)</param>
         /// <param name="permLevel">an integer (0 = use wiki perms, 1 = only approved users may edit, 2 = only mods may edit or view)</param>
-        public async Task UpdatePermissionsAsync(bool listed, int permLevel)
+        public async Task<WikiPageSettings> UpdatePermissionsAsync(bool listed, int permLevel)
         {
-            await Task.Run(() =>
-            {
-                UpdatePermissions(listed, permLevel);
-            });
+            return await UpdatePermissionsAsync(new WikiUpdatePermissionsInput(listed, permLevel));
         }
 
         /// <summary>
@@ -399,12 +371,9 @@ namespace Reddit.Controllers
         /// Update the permissions and visibility of wiki page asynchronously.
         /// </summary>
         /// <param name="wikiUpdatePermissionsInput">A valid WikiUpdatePermissionsInput instance</param>
-        public async Task UpdatePermissionsAsync(WikiUpdatePermissionsInput wikiUpdatePermissionsInput)
+        public async Task<WikiPageSettings> UpdatePermissionsAsync(WikiUpdatePermissionsInput wikiUpdatePermissionsInput)
         {
-            await Task.Run(() =>
-            {
-                UpdatePermissions(wikiUpdatePermissionsInput);
-            });
+            return Validate(await Dispatch.Wiki.UpdatePermissionsAsync(Name, wikiUpdatePermissionsInput, Subreddit)).Data;
         }
 
         /// <summary>
@@ -421,12 +390,9 @@ namespace Reddit.Controllers
         /// Update the permissions and visibility of wiki page asynchronously.
         /// </summary>
         /// <param name="wikiPageSettings">A valid instance of WikiPageSettings</param>
-        public async Task UpdatePermissionsAsync(WikiPageSettings wikiPageSettings)
+        public async Task<WikiPageSettings> UpdatePermissionsAsync(WikiPageSettings wikiPageSettings)
         {
-            await Task.Run(() =>
-            {
-                UpdatePermissions(wikiPageSettings);
-            });
+            return Validate(await Dispatch.Wiki.UpdatePermissionsAsync(Name, wikiPageSettings, Subreddit)).Data;
         }
 
         /// <summary>

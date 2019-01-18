@@ -65,6 +65,16 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Edit a wiki page asynchronously.
+        /// </summary>
+        /// <param name="wikiEditPageInput">A valid WikiEditPageInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task EditAsync(WikiEditPageInput wikiEditPageInput, string subreddit = null)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/wiki/edit", wikiEditPageInput, Method.POST);
+        }
+
+        /// <summary>
         /// Create a wiki page.
         /// </summary>
         /// <param name="wikiCreatePageInput">A valid WikiCreatePageInput instance</param>
@@ -72,6 +82,16 @@ namespace Reddit.Models
         public void Create(WikiCreatePageInput wikiCreatePageInput, string subreddit = null)
         {
             Edit(new WikiEditPageInput(wikiCreatePageInput), subreddit);
+        }
+
+        /// <summary>
+        /// Create a wiki page asynchronously.
+        /// </summary>
+        /// <param name="wikiCreatePageInput">A valid WikiCreatePageInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task CreateAsync(WikiCreatePageInput wikiCreatePageInput, string subreddit = null)
+        {
+            await EditAsync(new WikiEditPageInput(wikiCreatePageInput), subreddit);
         }
 
         /// <summary>
@@ -86,6 +106,17 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Toggle the public visibility of a wiki page revision asynchronously.
+        /// </summary>
+        /// <param name="wikiPageRevisionInput">A valid WikiPageRevisionInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        /// <returns>Status object indicating true if page was hidden, false if page was unhidden.</returns>
+        public async Task<StatusResult> HideAsync(WikiPageRevisionInput wikiPageRevisionInput, string subreddit = null)
+        {
+            return await SendRequestAsync<StatusResult>(Sr(subreddit) + "api/wiki/hide", wikiPageRevisionInput, Method.POST);
+        }
+
+        /// <summary>
         /// Revert a wiki page to revision.
         /// </summary>
         /// <param name="wikiPageRevisionInput">A valid WikiPageRevisionInput instance</param>
@@ -93,6 +124,16 @@ namespace Reddit.Models
         public void Revert(WikiPageRevisionInput wikiPageRevisionInput, string subreddit = null)
         {
             SendRequest<object>(Sr(subreddit) + "api/wiki/revert", wikiPageRevisionInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Revert a wiki page to revision asynchronously.
+        /// </summary>
+        /// <param name="wikiPageRevisionInput">A valid WikiPageRevisionInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task RevertAsync(WikiPageRevisionInput wikiPageRevisionInput, string subreddit = null)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/wiki/revert", wikiPageRevisionInput, Method.POST);
         }
 
         // TODO - Either this feature doesn't work or even the busiest subreddits have no Wiki discussion posts.  All my tests yield a listing container with no children.  --Kris
@@ -167,6 +208,18 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Update the permissions and visibility of wiki page asynchronously.
+        /// </summary>
+        /// <param name="page">the name of an existing wiki page</param>
+        /// <param name="wikiUpdatePermissionsInput">A valid WikiUpdatePermissionsInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        /// <returns>An object containing wiki page settings.</returns>
+        public async Task<WikiPageSettingsContainer> UpdatePermissionsAsync(string page, WikiUpdatePermissionsInput wikiUpdatePermissionsInput, string subreddit = null)
+        {
+            return await SendRequestAsync<WikiPageSettingsContainer>(Sr(subreddit) + "wiki/settings/" + page, wikiUpdatePermissionsInput, Method.POST);
+        }
+
+        /// <summary>
         /// Update the permissions and visibility of wiki page.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
@@ -176,6 +229,18 @@ namespace Reddit.Models
         public WikiPageSettingsContainer UpdatePermissions(string page, WikiPageSettings wikiPageSettings, string subreddit = null)
         {
             return UpdatePermissions(page, new WikiUpdatePermissionsInput(wikiPageSettings.Listed, wikiPageSettings.PermLevel), subreddit);
+        }
+
+        /// <summary>
+        /// Update the permissions and visibility of wiki page asynchronously.
+        /// </summary>
+        /// <param name="page">the name of an existing wiki page</param>
+        /// <param name="wikiPageSettings">A valid instance of WikiPageSettings</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        /// <returns>An object containing wiki page settings.</returns>
+        public async Task<WikiPageSettingsContainer> UpdatePermissionsAsync(string page, WikiPageSettings wikiPageSettings, string subreddit = null)
+        {
+            return await UpdatePermissionsAsync(page, new WikiUpdatePermissionsInput(wikiPageSettings.Listed, wikiPageSettings.PermLevel), subreddit);
         }
 
         /// <summary>
