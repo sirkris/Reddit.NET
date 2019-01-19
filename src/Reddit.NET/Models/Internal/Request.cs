@@ -155,7 +155,12 @@ namespace Reddit.Models.Internal
         private IRestResponse GetResponse(IRestResponse res, ref RestRequest restRequest)
         {
             int retry = 5;
-            do
+            while ((res == null || !res.IsSuccessful)
+                    && (RefreshToken != null || DeviceId != null)
+                    && (res.StatusCode == HttpStatusCode.Unauthorized  // This is returned if the access token needs to be refreshed or wasn't provided.  --Kris
+                        || res.StatusCode == HttpStatusCode.InternalServerError  // On rare occasion, a valid request will return a status code of 500, particularly if under heavy load.  --Kris
+                        || res.StatusCode == 0)  // On rare occasion, a valid request will return a status code of 0, particularly if under heavy load.  --Kris
+                    && retry > 0)
             {
                 /*
                  * If it fails and we have a refresh token, request a new access token and retry.
@@ -168,12 +173,7 @@ namespace Reddit.Models.Internal
                 res = RestClient.Execute(restRequest);
 
                 retry--;
-            } while ((res == null || !res.IsSuccessful)
-                    && (RefreshToken != null || DeviceId != null)
-                    && (res.StatusCode == HttpStatusCode.Unauthorized  // This is returned if the access token needs to be refreshed or wasn't provided.  --Kris
-                        || res.StatusCode == HttpStatusCode.InternalServerError  // On rare occasion, a valid request will return a status code of 500, particularly if under heavy load.  --Kris
-                        || res.StatusCode == 0)  // On rare occasion, a valid request will return a status code of 0, particularly if under heavy load.  --Kris
-                    && retry > 0);
+            }
 
             return res;
         }
