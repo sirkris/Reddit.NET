@@ -501,7 +501,7 @@ namespace Reddit.Controllers
 
             Validate(res);
 
-            Moderators = Listings.GetAboutChildren<Moderator>(res);
+            Moderators = Lists.GetAboutChildren<Moderator>(res);
             return Moderators;
         }
 
@@ -534,7 +534,7 @@ namespace Reddit.Controllers
 
             Validate(res);
 
-            return Listings.GetAboutChildren<SubredditUser>(res);
+            return Lists.GetAboutChildren<SubredditUser>(res);
         }
 
         /// <summary>
@@ -566,7 +566,7 @@ namespace Reddit.Controllers
 
             Validate(res);
 
-            return Listings.GetAboutChildren<SubredditUser>(res);
+            return Lists.GetAboutChildren<SubredditUser>(res);
         }
 
 
@@ -599,7 +599,7 @@ namespace Reddit.Controllers
 
             Validate(res);
 
-            return Listings.GetAboutChildren<BannedUser>(res);
+            return Lists.GetAboutChildren<BannedUser>(res);
         }
 
         /// <summary>

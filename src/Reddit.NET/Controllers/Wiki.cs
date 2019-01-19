@@ -126,7 +126,7 @@ namespace Reddit.Controllers
         /// <returns>A list of subreddit contributors.</returns>
         public List<SubredditUser> GetContributors(SubredditsAboutInput subredditsAboutInput)
         {
-            return Listings.GetAboutChildren<SubredditUser>(Validate(Dispatch.Subreddits.About("wikicontributors", subredditsAboutInput, Subreddit)));
+            return Lists.GetAboutChildren<SubredditUser>(Validate(Dispatch.Subreddits.About("wikicontributors", subredditsAboutInput, Subreddit)));
         }
 
         /// <summary>
@@ -154,7 +154,7 @@ namespace Reddit.Controllers
         /// <returns>A list of subreddit contributors.</returns>
         public List<BannedUser> GetBannedUsers(SubredditsAboutInput subredditsAboutInput)
         {
-            return Listings.GetAboutChildren<BannedUser>(Validate(Dispatch.Subreddits.About("wikibanned", subredditsAboutInput, Subreddit)));
+            return Lists.GetAboutChildren<BannedUser>(Validate(Dispatch.Subreddits.About("wikibanned", subredditsAboutInput, Subreddit)));
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace Reddit.Controllers
                 List<string> oldList = pages;
                 List<string> newList = GetPages();
 
-                if (Listings.ListDiff(oldList, newList, out List<string> added, out List<string> removed))
+                if (Lists.ListDiff(oldList, newList, out List<string> added, out List<string> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     WikiPagesUpdateEventArgs args = new WikiPagesUpdateEventArgs

@@ -513,9 +513,9 @@ namespace Reddit.Controllers
         public List<Post> PostHistory(UsersHistoryInput usersHistoryInput, string where = "overview")
         {
             return (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase)
-                ? Listings.ForceNewSort(Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)),
+                ? Lists.ForceNewSort(Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)),
                     Dispatch))
-                : Listings.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)), Dispatch));
+                : Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)), Dispatch));
         }
 
         /// <summary>
@@ -546,7 +546,7 @@ namespace Reddit.Controllers
         /// <returns>A list of comments.</returns>
         public List<Comment> CommentHistory(UsersHistoryInput usersHistoryInput)
         {
-            return Listings.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", usersHistoryInput)), Dispatch);
+            return Lists.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", usersHistoryInput)), Dispatch);
         }
 
         /// <summary>

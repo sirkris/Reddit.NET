@@ -162,27 +162,27 @@ namespace Reddit.Things
 
         public User(Controllers.User user)
         {
-            this.IsFriend = user.IsFriend;
-            this.PrefNoProfanity = user.ProfanityFilter;
-            this.IsSuspended = user.IsSuspended;
-            this.HasGoldSubscription = user.HasGoldSubscription;
-            this.NumFriends = user.NumFriends;
-            this.Verified = user.IsVerified;
-            this.NewModmailExists = user.HasNewModmail;
-            this.Id = user.Id;
-            this.Over18 = user.Over18;
-            this.IsGold = user.IsGold;
-            this.IsMod = user.IsMod;
-            this.HasVerifiedEmail = user.HasVerifiedEmail;
-            this.IconImg = user.IconImg;
-            this.HasModMail = user.HasModmail;
-            this.LinkKarma = user.LinkKarma;
-            this.InboxCount = user.InboxCount;
-            this.HasMail = user.HasMail;
-            this.Name = user.Name;
-            this.Created = user.Created;
-            this.CommentKarma = user.CommentKarma;
-            this.HasSubscribed = user.HasSubscribed;
+            IsFriend = user.IsFriend;
+            PrefNoProfanity = user.ProfanityFilter;
+            IsSuspended = user.IsSuspended;
+            HasGoldSubscription = user.HasGoldSubscription;
+            NumFriends = user.NumFriends;
+            Verified = user.IsVerified;
+            NewModmailExists = user.HasNewModmail;
+            Id = user.Id;
+            Over18 = user.Over18;
+            IsGold = user.IsGold;
+            IsMod = user.IsMod;
+            HasVerifiedEmail = user.HasVerifiedEmail;
+            IconImg = user.IconImg;
+            HasModMail = user.HasModmail;
+            LinkKarma = user.LinkKarma;
+            InboxCount = user.InboxCount;
+            HasMail = user.HasMail;
+            Name = user.Name;
+            Created = user.Created;
+            CommentKarma = user.CommentKarma;
+            HasSubscribed = user.HasSubscribed;
         }
 
         public User() { }

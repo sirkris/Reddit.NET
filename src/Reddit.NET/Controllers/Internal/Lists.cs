@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Reddit.Controllers.Internal
 {
-    public class Listings
+    public class Lists
     {
         private string GetFullnameFromObj(dynamic obj)
         {

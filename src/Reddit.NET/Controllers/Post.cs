@@ -330,7 +330,7 @@ namespace Reddit.Controllers
         /// <returns>The distinguished post object.</returns>
         public Post Distinguish(string how)
         {
-            return Listings.GetPosts(Validate(Dispatch.Moderation.DistinguishPost(how, Fullname)), Dispatch)[0];
+            return base.Lists.GetPosts(Validate(Dispatch.Moderation.DistinguishPost(how, Fullname)), Dispatch)[0];
         }
 
         /// <summary>
@@ -346,7 +346,7 @@ namespace Reddit.Controllers
         /// <returns>The distinguished post object.</returns>
         public async Task<Post> DistinguishAsync(string how)
         {
-            return Listings.GetPosts(Validate(await Dispatch.Moderation.DistinguishPostAsync(how, Fullname)), Dispatch)[0];
+            return base.Lists.GetPosts(Validate(await Dispatch.Moderation.DistinguishPostAsync(how, Fullname)), Dispatch)[0];
         }
 
         /// <summary>

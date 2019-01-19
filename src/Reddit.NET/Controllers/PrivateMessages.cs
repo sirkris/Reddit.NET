@@ -462,7 +462,7 @@ namespace Reddit.Controllers
                         break;
                 }
 
-                if (Listings.ListDiff(oldList, newList, out List<Message> added, out List<Message> removed))
+                if (Lists.ListDiff(oldList, newList, out List<Message> added, out List<Message> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     MessagesUpdateEventArgs args = new MessagesUpdateEventArgs

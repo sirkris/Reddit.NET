@@ -296,7 +296,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetBest(CategorizedSrListingInput categorizedSrListingInput)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Best(categorizedSrListingInput), Dispatch);
+            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Best(categorizedSrListingInput), Dispatch);
 
             BestLastUpdated = DateTime.Now;
 
@@ -323,7 +323,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetHot(ListingsHotInput listingsHotInput)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Hot(listingsHotInput), Dispatch);
+            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Hot(listingsHotInput, Subreddit), Dispatch);
 
             HotLastUpdated = DateTime.Now;
 
@@ -350,7 +350,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetNew(CategorizedSrListingInput categorizedSrListingInput)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.New(categorizedSrListingInput), Dispatch);
+            List<Post> posts = Lists.GetPosts(Dispatch.Listings.New(categorizedSrListingInput, Subreddit), Dispatch);
 
             NewLastUpdated = DateTime.Now;
 
@@ -377,7 +377,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetRising(CategorizedSrListingInput categorizedSrListingInput)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Rising(categorizedSrListingInput), Dispatch);
+            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Rising(categorizedSrListingInput, Subreddit), Dispatch);
 
             RisingLastUpdated = DateTime.Now;
 
@@ -404,7 +404,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetTop(TimedCatSrListingInput timedCatSrListingInput)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Top(timedCatSrListingInput), Dispatch);
+            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Top(timedCatSrListingInput, Subreddit), Dispatch);
 
             TopLastUpdated = DateTime.Now;
 
@@ -432,7 +432,7 @@ namespace Reddit.Controllers
         /// <returns>A list of posts.</returns>
         public List<Post> GetControversial(TimedCatSrListingInput timedCatSrListingInput)
         {
-            List<Post> posts = Listings.GetPosts(Dispatch.Listings.Controversial(timedCatSrListingInput), Dispatch);
+            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Controversial(timedCatSrListingInput, Subreddit), Dispatch);
 
             ControversialLastUpdated = DateTime.Now;
 
@@ -444,7 +444,7 @@ namespace Reddit.Controllers
         private List<Post> GetModQueuePosts(string location, string after = "", string before = "", int limit = 100, string show = "all",
             bool srDetail = false, int count = 0)
         {
-            return Listings.GetPosts(Dispatch.Moderation.ModQueue(new ModerationModQueueInput("links", after, before, limit, count, srDetail, show), location, Subreddit), Dispatch);
+            return Lists.GetPosts(Dispatch.Moderation.ModQueue(new ModerationModQueueInput("links", after, before, limit, count, srDetail, show), location, Subreddit), Dispatch);
         }
 
         /// <summary>
@@ -860,7 +860,7 @@ namespace Reddit.Controllers
                         break;
                 }
 
-                if (Listings.ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
+                if (Lists.ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     PostsUpdateEventArgs args = new PostsUpdateEventArgs

@@ -4,11 +4,11 @@ namespace Reddit.Controllers
 {
     public abstract class BaseController : Validators
     {
-        public Listings Listings;
+        public Lists Lists;
 
         public BaseController()
         {
-            Listings = new Listings();
+            Lists = new Lists();
         }
     }
 }

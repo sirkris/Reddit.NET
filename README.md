@@ -1,8 +1,8 @@
 ## Overview
 
-Reddit.NET is a .NET Core library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
+Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
 
-Currently, the library supports 169 of the 205 endpoints currently listed in the API documentation. All of them (except voting and admin-reporting, for obvious reasons) are covered by unit tests and all 327 of the tests are currently passing. All of the most commonly used endpoints are supported.
+Currently, the library supports 169 of the 205 endpoints currently listed in the API documentation. All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 327 of the tests are currently passing. All of the most commonly used endpoints are supported.
 
 Reddit.NET is FOSS (MIT license) and was written in C# by me over the last few months. It will be available on NuGet once I'm ready to put out the first stable release, which I expect to be very soon. You can check it out now on Github at:
 https://github.com/sirkris/Reddit.NET/tree/develop
@@ -41,6 +41,8 @@ Ratelimit handling also occurs in the model layer. If it's less than a minute, t
 Reddit.NET has a built-in limit of no more than 60 requests in any 1-minute period. This is a safety net designed to keep us from inadvertantly violating the API speed limit.
 
 JSON return data is automatically deserialized to its appropriate type. All 170 of these custom types (and yes, it did take fucking forever to write them all) can be found in Models.Structures.
+
+Many model methods also have async counterparts.
 
 ### Controllers
 These are the classes with which app developers will be doing all or most of their interactions. While the models are structured to closely mirror the API documentation, the controllers are structured to create an intuitive, object-oriented interface with the API, so you'll notice I took a lot more liberties in this layer.
@@ -96,6 +98,7 @@ Represents a subreddit's wiki and provides access to related data and endpoints.
 
 #### WikiPage
 Represents a wiki page and provides access to related data and endpoints.
+
 Many controller methods also have async counterparts.
 
 ## Monitoring
@@ -130,7 +133,7 @@ There are 3 projects in the Reddit.NET solution:
 
 ### Example
 
-A simple example console application that demonstrates some of Reddit.NET's functionality. If you have Visual Studio 2017, you can run it using debug. You'll need to set your application ID and refresh token in the debug arguments. Only passive operations are demonstrated in this example app; nothing is created or modified in any way.
+A simple example .NET Core console application that demonstrates some of Reddit.NET's functionality. If you have Visual Studio 2017, you can run it using debug. You'll need to set your application ID and refresh token in the debug arguments. Only passive operations are demonstrated in this example app; nothing is created or modified in any way.
 
 ### Reddit.NET
 
@@ -139,7 +142,6 @@ The main library. This is what the app dev includes in their project.
 ### Reddit.NETTests
 
 This project contains unit, workflow, and stress tests using MSTest. There are currently 327 tests, all passing (at least, they all pass for me). All of the 169 supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
-
 
 ## Running the Tests
 
@@ -227,6 +229,67 @@ public static void C_NewPostsUpdated(object sender, PostsUpdateEventArgs e)
 // Stop monitoring r/AskReddit for new posts.
 askReddit.Posts.MonitorNew();
 askReddit.Posts.NewUpdated -= C_NewPostsUpdated;
+```
+
+## Code Examples Using Models
+
+The controllers basically just make calls to the models, which can be accessed directly via the Dispatch controller.  As such, it is possible to bypass the controllers entirely for most things, so long as you don't mind the bulkier code.  This is only recommended for scenarios where the convenience-oriented features of the controllers aren't needed and would just get in the way.  In most cases, it is recommended that you instead use the controllers as demonstrated in the above examples.
+
+Here's how you can do some basic things using the models:
+
+```c#
+using Reddit.Inputs.Users;
+using Reddit.Things;
+
+...
+
+// Create a new Reddit.NET instance.
+var r = new RedditAPI("MyAppID", "MyRefreshToken");
+
+// Display the name and cake day of the authenticated user.
+Console.WriteLine("Username: " + r.Models.Account.Me().Name);
+Console.WriteLine("Cake Day: " + r.Models.Account.Me().Created.ToString("D"));
+
+// Retrieve the authenticated user's recent post history.
+var postContainer = r.Models.Users.PostHistory(Name, "overview", new UsersHistoryInput());
+var postHistory = new List<Post>();
+foreach (PostChild postChild in postContainer.JSON.Data.Things)
+{
+    if (postChild.Data != null)
+    {
+		postHistory.Add(postChild.Data);
+    }
+}
+
+// Retrieve the authenticated user's recent comment history.
+var commentContainer = r.Models.Users.CommentHistory(Name, "comments", new UsersHistoryInput());
+var commentHistory = new List<Comment>();
+foreach (CommentChild commentChild in commentContainer.JSON.Data.Things)
+{
+    if (commentChild.Data != null)
+    {
+		commentHistory.Add(commentChild.Data);
+    }
+}
+
+// Create a new subreddit.
+r.Models.Subreddits.SiteAdmin(new SubredditsSiteAdminInput(name: "MyNewSubreddit", title: "My subreddit's title", publicDescription: "Description", description: "Sidebar"));
+var mySub = r.Models.Subreddits.About("MyNewSubreddit");
+
+// Get info on another subreddit.
+var askReddit = r.Models.Subreddits.About("AskReddit");
+
+// Get the top post from a subreddit.
+var topPost = r.Models.Listings.Top(new TimedCatSrListingInput(), "AskReddit").JSON.Data.Things[0].Data;
+
+// Create a new self post.
+r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Self Post Title", text: "Self post text."));
+
+// Create a new link post.
+r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Link Post Title", url: "http://www.google.com"));
+
+// Comment on a post.
+r.Models.LinksAndComments.Comment(LinksAndCommentsThingInput("This is my comment.", topPost.Name));
 ```
 
 For more examples, check out the Example and Reddit.NETTests projects.
@@ -431,4 +494,4 @@ Total:  169 / 205 (82%)
 
 There are 36 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
 
-Virtually all of the supported endpoints are covered by unit tests (voting and admin-reporting were manually tested for obvious reasons) and all of those tests are passing.
+Virtually all of the supported endpoints are covered by tests (voting and admin-reporting were manually tested for obvious reasons) and all of those tests are passing.

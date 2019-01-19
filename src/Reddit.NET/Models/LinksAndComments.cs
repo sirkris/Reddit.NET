@@ -448,23 +448,8 @@ namespace Reddit.Models
         /// If a link with the same URL has already been submitted to the specified subreddit an error will be returned unless resubmit is true.
         /// extension is used for determining which view-type (e.g.json, compact etc.) to use for the redirect that is generated if the resubmit error occurs.
         /// </summary>
-        /// <param name="ad">boolean value</param>
-        /// <param name="app"></param>
-        /// <param name="extension">extension used for redirects</param>
-        /// <param name="flairId">a string no longer than 36 characters</param>
-        /// <param name="flairText">a string no longer than 64 characters</param>
+        /// <param name="linksAndCommentsSubmitInput">A valid LinksAndCommentsSubmitInput instance</param>
         /// <param name="gRecaptchaResponse"></param>
-        /// <param name="kind">one of (link, self, image, video, videogif)</param>
-        /// <param name="nsfw">boolean value</param>
-        /// <param name="resubmit">boolean value</param>
-        /// <param name="richtextJson">JSON data</param>
-        /// <param name="sendReplies">boolean value</param>
-        /// <param name="spoiler">boolean value</param>
-        /// <param name="sr">name of a subreddit</param>
-        /// <param name="text">raw markdown text</param>
-        /// <param name="title">title of the submission. up to 300 characters long</param>
-        /// <param name="url">a valid URL</param>
-        /// <param name="videoPosterUrl">a valid URL</param>
         /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
         public PostResultShortContainer Submit(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecaptchaResponse = "")
         {
@@ -480,23 +465,8 @@ namespace Reddit.Models
         /// If a link with the same URL has already been submitted to the specified subreddit an error will be returned unless resubmit is true.
         /// extension is used for determining which view-type (e.g.json, compact etc.) to use for the redirect that is generated if the resubmit error occurs.
         /// </summary>
-        /// <param name="ad">boolean value</param>
-        /// <param name="app"></param>
-        /// <param name="extension">extension used for redirects</param>
-        /// <param name="flairId">a string no longer than 36 characters</param>
-        /// <param name="flairText">a string no longer than 64 characters</param>
+        /// <param name="linksAndCommentsSubmitInput">A valid LinksAndCommentsSubmitInput instance</param>
         /// <param name="gRecaptchaResponse"></param>
-        /// <param name="kind">one of (link, self, image, video, videogif)</param>
-        /// <param name="nsfw">boolean value</param>
-        /// <param name="resubmit">boolean value</param>
-        /// <param name="richtextJson">JSON data</param>
-        /// <param name="sendReplies">boolean value</param>
-        /// <param name="spoiler">boolean value</param>
-        /// <param name="sr">name of a subreddit</param>
-        /// <param name="text">raw markdown text</param>
-        /// <param name="title">title of the submission. up to 300 characters long</param>
-        /// <param name="url">a valid URL</param>
-        /// <param name="videoPosterUrl">a valid URL</param>
         /// <returns>An object containing the id, name, and URL of the newly created post.</returns>
         public async Task<PostResultShortContainer> SubmitAsync(LinksAndCommentsSubmitInput linksAndCommentsSubmitInput, string gRecaptchaResponse = "")
         {

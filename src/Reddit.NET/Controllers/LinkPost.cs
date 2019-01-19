@@ -262,7 +262,7 @@ namespace Reddit.Controllers
         /// <returns>A list of matching posts.</returns>
         public List<LinkPost> GetDuplicates(ListingsGetDuplicatesInput listingsGetDuplicatesInput)
         {
-            Listings.GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, listingsGetDuplicatesInput)), Dispatch,
+            Lists.GetPosts(Validate(Dispatch.Listings.GetDuplicates(Id, listingsGetDuplicatesInput)), Dispatch,
                 out List<LinkPost> linkPosts);
 
             return linkPosts;

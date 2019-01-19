@@ -246,7 +246,7 @@ namespace Reddit.Controllers
         public List<Comment> GetComments(string sort = "new", int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
         {
-            List<Comment> comments = Listings.GetComments(Dispatch.Listings.GetComments(PostId, new ListingsGetCommentsInput(context, showEdits, showMore, sort, threaded, truncate, Comment?.Id,
+            List<Comment> comments = Lists.GetComments(Dispatch.Listings.GetComments(PostId, new ListingsGetCommentsInput(context, showEdits, showMore, sort, threaded, truncate, Comment?.Id,
                 depth, limit, srDetail), Subreddit), Dispatch);
 
             List<Comment> replies = (Comment != null ? comments[0].Replies : comments);
@@ -643,7 +643,7 @@ namespace Reddit.Controllers
                         break;
                 }
                 
-                if (Listings.ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
+                if (Lists.ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
                 {
                     // Event handler to alert the calling app that the list has changed.  --Kris
                     CommentsUpdateEventArgs args = new CommentsUpdateEventArgs

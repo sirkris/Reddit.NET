@@ -199,7 +199,7 @@ namespace Reddit.Controllers
         /// <returns>The requested live updates.</returns>
         public List<LiveUpdate> GetUpdates(LiveThreadsGetUpdatesInput liveThreadsGetUpdatesInput)
         {
-            Updates = Listings.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, liveThreadsGetUpdatesInput)));
+            Updates = Lists.GetLiveUpdates(Validate(Dispatch.LiveThreads.GetUpdates(Id, liveThreadsGetUpdatesInput)));
             UpdatesLastUpdated = DateTime.Now;
 
             return Updates;
@@ -791,7 +791,7 @@ namespace Reddit.Controllers
                 added.Add(new UserListContainer { Data = new UserListData { Children = new List<UserListChild>() } });
                 removed.Add(new UserListContainer { Data = new UserListData { Children = new List<UserListChild>() } });
 
-                if (Listings.ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<UserListChild> childrenAdded, out List<UserListChild> childrenRemoved))
+                if (Lists.ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<UserListChild> childrenAdded, out List<UserListChild> childrenRemoved))
                 {
                     added[i].Data.Children = childrenAdded;
                     removed[i].Data.Children = childrenRemoved;
@@ -807,7 +807,7 @@ namespace Reddit.Controllers
             List<LiveUpdate> oldList = updates;
             List<LiveUpdate> newList = GetUpdates();
 
-            if (Listings.ListDiff(oldList, newList, out List<LiveUpdate> added, out List<LiveUpdate> removed))
+            if (Lists.ListDiff(oldList, newList, out List<LiveUpdate> added, out List<LiveUpdate> removed))
             {
                 // Event handler to alert the calling app that the list has changed.  --Kris
                 LiveThreadUpdatesUpdateEventArgs args = new LiveThreadUpdatesUpdateEventArgs
