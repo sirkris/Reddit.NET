@@ -59,12 +59,12 @@ JSON return data is automatically deserialized to its appropriate type. All 170 
 
 Many model methods also have async counterparts.
 
-### Controllers
-These are the classes with which app developers will be doing all or most of their interactions. While the models are structured to closely mirror the API documentation, the controllers are structured to create an intuitive, object-oriented interface with the API, so you'll notice I took a lot more liberties in this layer.
+### Coordinators
+These constitute our controllers and are the classes with which app developers will be doing all or most of their interactions. While the models are structured to closely mirror the API documentation, the coordinators are structured to create an intuitive, object-oriented interface with the API, so you'll notice I took a lot more liberties in this layer.
 
-The controllers also provide other features, like asynchronous monitoring and automatic caching of certain data sets. I'll get into that stuff in more detail below.
+The coordinators also provide other features, like asynchronous monitoring and automatic caching of certain data sets. I'll get into that stuff in more detail below.
 
-Each controller class corresponds to a Reddit object of some kind (subreddit, post, user, etc). Here's a list of the controller classes:
+Each coordinator class corresponds to a Reddit object of some kind (subreddit, post, user, etc). Here's a list of the coordinator classes:
 
 #### Account
 Provides access to data and endpoints related to the authenticated user.
