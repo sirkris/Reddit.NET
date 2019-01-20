@@ -32,7 +32,7 @@ Reddit.NET can be installed via NuGet.  You can find it at:  https://www.nuget.o
 To install via the Visual Studio NuGet Package Manager Console (in VS 2017, you'll find it under Tools->NuGet Package Manager->NuGet Package Manager Console):
 
 ```nuget
-PM> Install-Package Reddit.NET
+PM> Install-Package Reddit
 ```
 
 To create a new API instance bound to a specific user's refresh token:
