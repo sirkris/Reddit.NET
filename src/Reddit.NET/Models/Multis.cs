@@ -120,7 +120,7 @@ namespace Reddit.Models
         /// <returns>(TODO - Untested)</returns>
         public object GetFilter(string filterpath, bool expandSrs)
         {
-            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
+            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath);
 
             restRequest.AddParameter("expand_srs", expandSrs);
 
@@ -187,7 +187,7 @@ namespace Reddit.Models
         /// <returns>(TODO - Untested)</returns>
         public object CreateFilter(string filterpath, string model, bool expandSrs)
         {
-            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
+            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.POST);
 
             restRequest.AddParameter("expand_srs", expandSrs);
 
@@ -254,7 +254,7 @@ namespace Reddit.Models
         /// <returns>(TODO - Untested)</returns>
         public object UpdateFilter(string filterpath, string model, bool expandSrs)
         {
-            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
+            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.PUT);
 
             restRequest.AddParameter("expand_srs", expandSrs);
 
