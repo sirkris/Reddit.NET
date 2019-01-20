@@ -291,6 +291,7 @@ namespace Reddit.Models
             return JsonConvert.DeserializeObject<UserChild>(ExecuteRequest("user/" + username + "/about"));
         }
 
+        // TODO - The Reddit API sometimes includes a comment with the post history when "links" is specified as the type.  Probably an API bug.  --Kris
         /// <summary>
         /// This endpoint is a listing.
         /// </summary>
@@ -305,8 +306,7 @@ namespace Reddit.Models
             usersHistoryInput.sort = (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase) ? "new" : usersHistoryInput.sort);
 
             restRequest.AddObject(usersHistoryInput);
-            restRequest.AddParameter("type", "links");
-
+            
             return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
         }
 
@@ -322,7 +322,6 @@ namespace Reddit.Models
             RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
 
             restRequest.AddObject(usersHistoryInput);
-            restRequest.AddParameter("type", "comments");
 
             return JsonConvert.DeserializeObject<CommentContainer>(ExecuteRequest(restRequest));
         }

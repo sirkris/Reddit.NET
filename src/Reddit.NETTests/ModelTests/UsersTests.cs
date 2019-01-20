@@ -140,7 +140,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void CommentHistoryComments()
         {
-            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "comments", new UsersHistoryInput(sort: "top", context: 10));
+            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "comments", new UsersHistoryInput(type: "comments", sort: "top", context: 10));
 
             Validate(history);
         }
@@ -148,7 +148,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void CommentHistorySaved()
         {
-            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "saved", new UsersHistoryInput(sort: "top", context: 10));
+            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "saved", new UsersHistoryInput(type: "comments", sort: "top", context: 10));
 
             Validate(history);
         }
@@ -156,7 +156,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void CommentHistoryGilded()
         {
-            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "gilded", new UsersHistoryInput(sort: "top", context: 10));
+            CommentContainer history = reddit.Models.Users.CommentHistory("KrisCraig", "gilded", new UsersHistoryInput(type: "comments", sort: "top", context: 10));
 
             Validate(history, true);
         }

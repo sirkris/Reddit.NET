@@ -501,7 +501,7 @@ namespace Reddit.Coordinators
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            return PostHistory(new UsersHistoryInput(t, sort, context, after, before, count, limit, show, srDetail, includeCategories), where);
+            return PostHistory(new UsersHistoryInput("links", t, sort, context, after, before, count, limit, show, srDetail, includeCategories), where);
         }
 
         /// <summary>
@@ -513,9 +513,30 @@ namespace Reddit.Coordinators
         public List<Post> PostHistory(UsersHistoryInput usersHistoryInput, string where = "overview")
         {
             return (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase)
-                ? Lists.ForceNewSort(Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)),
-                    Dispatch))
-                : Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)), Dispatch));
+                ? SanitizePosts(Lists.ForceNewSort(Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)),
+                    Dispatch)))
+                : SanitizePosts(Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)), Dispatch)));
+        }
+
+        /// <summary>
+        /// Strip out any comments erroneously returned by the Reddit API.
+        /// This is necessary because the API sometimes includes comments in post results when it's not supposed to.
+        /// </summary>
+        /// <param name="posts">A list of posts.</param>
+        /// <returns>A list of posts.</returns>
+        private List<Post> SanitizePosts(List<Post> posts)
+        {
+            List<Post> res = new List<Post>();
+            foreach (Post post in posts)
+            {
+                if (post != null
+                    && post.Fullname.StartsWith("t3"))
+                {
+                    res.Add(post);
+                }
+            }
+
+            return res;
         }
 
         /// <summary>
@@ -536,7 +557,7 @@ namespace Reddit.Coordinators
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            return CommentHistory(new UsersHistoryInput(t, sort, context, after, before, count, limit, show, srDetail, includeCategories));
+            return CommentHistory(new UsersHistoryInput("comments", t, sort, context, after, before, count, limit, show, srDetail, includeCategories));
         }
 
         /// <summary>
