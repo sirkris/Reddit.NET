@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using Reddit;
 using Coordinators = Reddit.Coordinators;
-using Reddit.Exceptions;
 using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
 using RestSharp;

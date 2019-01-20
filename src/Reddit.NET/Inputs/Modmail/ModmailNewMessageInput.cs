@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Reddit.Inputs.Modmail
+﻿namespace Reddit.Inputs.Modmail
 {
     public class ModmailNewMessageInput : ModmailMessageBodyInput
     {
