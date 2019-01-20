@@ -27,7 +27,7 @@ Kris Craig
 
 ## Usage
 
-Reddit.NET can be installed via NuGet.  You can find it at:  https://www.nuget.org/packages/Reddit.NET
+Reddit.NET can be installed via NuGet.  You can find it at:  https://www.nuget.org/packages/Reddit
 
 To install via the Visual Studio NuGet Package Manager Console (in VS 2017, you'll find it under Tools->NuGet Package Manager->NuGet Package Manager Console):
 
