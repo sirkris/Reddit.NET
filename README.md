@@ -182,8 +182,8 @@ Many tests take less than a second to complete. Others can take up to a few minu
 ## Code Examples
 ```c#
 using Reddit;
-using Reddit.Controllers;
-using Reddit.Controllers.EventArgs;
+using Reddit.Coordinators;
+using Reddit.Coordinators.EventArgs;
 using System;
 
 ...
@@ -255,7 +255,7 @@ askReddit.Posts.NewUpdated -= C_NewPostsUpdated;
 
 ## Code Examples Using Models
 
-The controllers basically just make calls to the models, which can be accessed directly via the Dispatch controller.  As such, it is possible to bypass the controllers entirely for most things, so long as you don't mind the bulkier code.  This is only recommended for scenarios where the convenience-oriented features of the controllers aren't needed and would just get in the way.  In most cases, it is recommended that you instead use the controllers as demonstrated in the above examples.
+The coordinators basically just make calls to the models, which can be accessed directly via the Dispatch controller.  As such, it is possible to bypass the controllers entirely for most things, so long as you don't mind the bulkier code.  This is only recommended for scenarios where the convenience-oriented features of the controllers aren't needed and would just get in the way.  In most cases, it is recommended that you instead use the controllers as demonstrated in the above examples.
 
 Here's how you can do some basic things using the models:
 
