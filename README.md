@@ -1,11 +1,27 @@
+    ____             __     __ _  __      _   __ ______ ______
+   / __ \ ___   ____/ /____/ /(_)/ /_    / | / // ____//_  __/
+  / /_/ // _ \ / __  // __  // // __/   /  |/ // __/    / /   
+ / _, _//  __// /_/ // /_/ // // /_ _  / /|  // /___   / /    
+/_/ |_| \___/ \__,_/ \__,_//_/ \__/(_)/_/ |_//_____/  /_/     
+
+Created by Kris Craig.
+
 ## Overview
 
 Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
 
 Currently, the library supports 169 of the 205 endpoints currently listed in the API documentation. All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 327 of the tests are currently passing. All of the most commonly used endpoints are supported.
 
-Reddit.NET is FOSS (MIT license) and was written in C# by me over the last few months. It will be available on NuGet once I'm ready to put out the first stable release, which I expect to be very soon. You can check it out now on Github at:
+Reddit.NET is FOSS (MIT license) and was written in C#. It will be available on NuGet once I'm ready to put out the first stable release, which I expect to be very soon. You can check it out now on Github at:
 https://github.com/sirkris/Reddit.NET/tree/develop
+
+### Contributors
+
+[Kris Craig](https://www.linkedin.com/in/kriscraig/), [Andrew Hall](https://github.com/ryzngard), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
+
+### Beta Testers
+
+Kris Craig
 
 ## Basic Architecture
 Reddit.NET follows a model-controller pattern, with each layer serving a distinct purpose. The model classes/methods (which can be accessed directly if for some reason you don't want to go through the controller) handle all the REST interactions and deserializations. The controller classes/methods organize these API features into a cleaner OO interface, with an emphasis on intuitive design and minimizing any need for messy boilerplate code.
@@ -33,9 +49,6 @@ Here's a list of the model classes:
 * Users
 * Widgets
 * Wiki
-
-See https://github.com/sirkris/Reddit.NET/blob/develop/README.md for a list of all currently supported endpoints accessible via the models.
-Since all the supported models can be accessed via one or more controllers, it is unlikely that you will ever need to call the models directly, at least in any production application. But the option is there should the use case arise.
 
 Ratelimit handling also occurs in the model layer. If it's less than a minute, the library will automatically wait the specified number of seconds then retry. This can be easily tested using the LiveThread workflow tests. If it's more than a minute, an exception will bubble up and it'll be up to the app developer to decide what to do with it.
 Reddit.NET has a built-in limit of no more than 60 requests in any 1-minute period. This is a safety net designed to keep us from inadvertantly violating the API speed limit.
@@ -166,6 +179,13 @@ Many tests take less than a second to complete. Others can take up to a few minu
 
 ## Code Examples
 ```c#
+using Reddit;
+using Reddit.Controllers;
+using Reddit.Controllers.EventArgs;
+using System;
+
+...
+
 // Create a new Reddit.NET instance.
 var r = new RedditAPI("MyAppID", "MyRefreshToken");
 
@@ -238,8 +258,14 @@ The controllers basically just make calls to the models, which can be accessed d
 Here's how you can do some basic things using the models:
 
 ```c#
+using Reddit;
+using Reddit.Inputs;
+using Reddit.Inputs.LinksAndComments;
+using Reddit.Inputs.Subreddits;
 using Reddit.Inputs.Users;
 using Reddit.Things;
+using System;
+using System.Collections.Generic;
 
 ...
 
@@ -251,7 +277,7 @@ Console.WriteLine("Username: " + r.Models.Account.Me().Name);
 Console.WriteLine("Cake Day: " + r.Models.Account.Me().Created.ToString("D"));
 
 // Retrieve the authenticated user's recent post history.
-var postContainer = r.Models.Users.PostHistory(Name, "overview", new UsersHistoryInput());
+var postContainer = r.Models.Users.PostHistory(r.Models.Account.Me().Name, "overview", new UsersHistoryInput());
 var postHistory = new List<Post>();
 foreach (PostChild postChild in postContainer.JSON.Data.Things)
 {
@@ -262,7 +288,7 @@ foreach (PostChild postChild in postContainer.JSON.Data.Things)
 }
 
 // Retrieve the authenticated user's recent comment history.
-var commentContainer = r.Models.Users.CommentHistory(Name, "comments", new UsersHistoryInput());
+var commentContainer = r.Models.Users.CommentHistory(r.Models.Account.Me().Name, "comments", new UsersHistoryInput());
 var commentHistory = new List<Comment>();
 foreach (CommentChild commentChild in commentContainer.JSON.Data.Things)
 {
@@ -296,11 +322,7 @@ For more examples, check out the Example and Reddit.NETTests projects.
 
 ## How You Can Help
 
-At the moment, what I need more than anything is a fresh pair of eyes (preferably several). This project has grown rather large, so I imagine there are all kinds of little things here and there that could be improved upon. Please don't be afraid to speak-up! The feedback you give me will enable me to fix anything I might've missed, plan new features, etc.
-
-Code reviews would be helpful at this stage. I've been a software engineer for just about 25 years now, though I'm still wading into modern C# and .NET Core in particular, so there may be available optimizations/etc that I'm simply not aware of. This will be our opportunity to catch any of those.
-
-Once I've implemented any recommendations made here, we'll proceed to beta testing. That will be when I'll be needing people to help by running the tests and posting the results. You can do that now, if you like; they should all pass. Though I'm not seeking beta testers yet, if you do run the tests anyway, please post your results here! So far, I'm the only one who has tested this.
+Once I've finished with code reviews/revisions, we'll proceed to beta testing. That will be when I'll be needing people to help by running the tests and posting the results. You can do that now, if you like; they should all pass. Though I'm not seeking beta testers yet, if you do run the tests anyway, please post your results here! So far, I'm the only one who has tested this.
 
 I'm sure there's probably more that I'm forgetting to mention, but I think I've covered all the major points. I'll of course be happy to answer any questions you might have, as well. Thanks for reading!
 
