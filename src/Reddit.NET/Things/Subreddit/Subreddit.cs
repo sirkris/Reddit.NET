@@ -262,7 +262,7 @@ namespace Reddit.Things
         [JsonProperty("user_is_subscriber")]
         public bool? UserIsSubscriber;
 
-        public Subreddit(Controllers.Subreddit subreddit)
+        public Subreddit(Coordinators.Subreddit subreddit)
         {
             BannerImg = subreddit.BannerImg;
             BannerBackgroundColor = subreddit.BannerBackgroundColor;

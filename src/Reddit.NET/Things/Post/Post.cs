@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Reddit.Controllers;
+using Reddit.Coordinators;
 using Reddit.Models.Converters;
 using System;
 using System.Collections.Generic;
@@ -330,7 +330,7 @@ namespace Reddit.Things
         [JsonProperty("sr_detail")]
         public Subreddit SrDetail;
 
-        public Post(Controllers.Post post)
+        public Post(Coordinators.Post post)
         {
             ImportFromPost(post);
         }
@@ -345,7 +345,7 @@ namespace Reddit.Things
             ImportFromLinkPost(linkPost);
         }
 
-        private void ImportFromPost(Controllers.Post post)
+        private void ImportFromPost(Coordinators.Post post)
         {
             Subreddit = post.Subreddit;
             Title = post.Title;

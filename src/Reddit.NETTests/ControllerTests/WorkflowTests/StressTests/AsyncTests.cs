@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Controllers;
-using Reddit.Controllers.EventArgs;
+using Reddit.Coordinators;
+using Reddit.Coordinators.EventArgs;
 using System;
 using System.Collections.Generic;
 
-namespace RedditTests.ControllerTests.WorkflowTests.StressTests
+namespace RedditTests.CoordinatorTests.WorkflowTests.StressTests
 {
     [TestClass]
     public class AsyncTests : BaseStressTests
@@ -33,7 +33,7 @@ namespace RedditTests.ControllerTests.WorkflowTests.StressTests
             start = DateTime.Now;
             while (start.AddMinutes(5) > DateTime.Now) { }
 
-            Assert.IsTrue(SelfPost.Comments.New.Count >= 58);
+            Assert.IsTrue(SelfPost.Comments.New.Count >= 60);
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@ namespace RedditTests.ControllerTests.WorkflowTests.StressTests
             Subreddit.Posts.NewUpdated -= C_NewPostsUpdated;
             Subreddit.Posts.MonitorNew();
 
-            Assert.IsTrue(NewPosts.Count >= 96);
+            Assert.IsTrue(NewPosts.Count >= 100);
         }
 
         [TestMethod]

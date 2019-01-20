@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Reddit;
-using Controllers = Reddit.Controllers;
+using Coordinators = Reddit.Coordinators;
 using Reddit.Exceptions;
 using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
@@ -127,7 +127,7 @@ namespace RedditTests
         /// Retrieves your test subreddit.  It is assumed that the subreddit already exists at this point.
         /// </summary>
         /// <returns>The populated Subreddit data.</returns>
-        protected Controllers.Subreddit GetSubreddit(ref Controllers.Subreddit subreddit)
+        protected Coordinators.Subreddit GetSubreddit(ref Coordinators.Subreddit subreddit)
         {
             subreddit = reddit.Subreddit(testData["Subreddit"]).About();
             return subreddit;
@@ -137,7 +137,7 @@ namespace RedditTests
         /// Retrieves your secondary test user.
         /// </summary>
         /// <returns>The populated User data.</returns>
-        protected Controllers.User GetTargetUser()
+        protected Coordinators.User GetTargetUser()
         {
             return reddit2.Account.Me;
         }
@@ -176,7 +176,7 @@ namespace RedditTests
             Assert.IsNotNull(dynamic);
         }
 
-        public Controllers.LiveThread Validate(Controllers.LiveThread liveThread)
+        public Coordinators.LiveThread Validate(Coordinators.LiveThread liveThread)
         {
             Assert.IsNotNull(liveThread);
             Assert.IsNotNull(liveThread.Id);
@@ -200,7 +200,7 @@ namespace RedditTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(user.Name));
         }
 
-        public void Validate(Controllers.User user)
+        public void Validate(Coordinators.User user)
         {
             Assert.IsNotNull(user);
             Assert.IsFalse(user.Created.Equals(default(DateTime)));

@@ -1,4 +1,4 @@
-﻿using Reddit.Controllers.Structures;
+﻿using Reddit.Coordinators.Structures;
 
 namespace Reddit.Models.EventArgs
 {

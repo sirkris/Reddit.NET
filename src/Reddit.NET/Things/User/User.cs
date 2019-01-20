@@ -160,7 +160,7 @@ namespace Reddit.Things
         [JsonProperty("has_subscribed")]
         public bool HasSubscribed;
 
-        public User(Controllers.User user)
+        public User(Coordinators.User user)
         {
             IsFriend = user.IsFriend;
             PrefNoProfanity = user.ProfanityFilter;

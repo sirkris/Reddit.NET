@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Controllers;
-using Reddit.Controllers.EventArgs;
+using Reddit.Coordinators;
+using Reddit.Coordinators.EventArgs;
 using System;
 using System.Collections.Generic;
 
-namespace RedditTests.ControllerTests.WorkflowTests
+namespace RedditTests.CoordinatorTests.WorkflowTests
 {
     [TestClass]
     public class LiveThreadTests : BaseTests

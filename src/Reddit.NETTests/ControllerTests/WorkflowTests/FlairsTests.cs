@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Controllers;
+using Reddit.Coordinators;
 using System;
 
-namespace RedditTests.ControllerTests.WorkflowTests
+namespace RedditTests.CoordinatorTests.WorkflowTests
 {
     [TestClass]
     public class FlairsTests : BaseTests

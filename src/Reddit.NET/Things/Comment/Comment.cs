@@ -206,14 +206,14 @@ namespace Reddit.Things
         [JsonProperty("link_id")]
         public string LinkId;
 
-        public Comment(Controllers.Comment comment)
+        public Comment(Coordinators.Comment comment)
         {
             ImportFromComment(comment);
         }
 
         public Comment() { }
 
-        private void ImportFromComment(Controllers.Comment comment)
+        private void ImportFromComment(Coordinators.Comment comment)
         {
             Subreddit = comment.Subreddit;
             Author = comment.Author;
@@ -247,7 +247,7 @@ namespace Reddit.Things
                     }
                 };
 
-                foreach (Controllers.Comment commentReply in comment.Replies)
+                foreach (Coordinators.Comment commentReply in comment.Replies)
                 {
                     Replies.Data.Children.Add(new CommentChild { Data = new Comment(commentReply) });
                 }

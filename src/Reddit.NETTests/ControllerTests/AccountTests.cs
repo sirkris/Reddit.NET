@@ -2,7 +2,7 @@
 using Reddit.Exceptions;
 using System;
 
-namespace RedditTests.ControllerTests
+namespace RedditTests.CoordinatorTests
 {
     [TestClass]
     public class AccountTests : BaseTests
