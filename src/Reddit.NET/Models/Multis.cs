@@ -1,9 +1,10 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs.Multis;
+using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Models
+namespace Reddit.Models
 {
     public class Multis : BaseModel
     {
@@ -17,19 +18,11 @@ namespace Reddit.NET.Models
         /// Responds with 409 Conflict if the target already exists.
         /// A "copied from ..." line will automatically be appended to the description.
         /// </summary>
-        /// <param name="displayName">a string no longer than 50 characters</param>
-        /// <param name="from">multireddit url path</param>
-        /// <param name="to">destination multireddit url path</param>
+        /// <param name="multiURLInput">A valid MultiURLInput instance</param>
         /// <returns>An object containing the multireddit data.</returns>
-        public LabeledMultiContainer Copy(string displayName, string from, string to)
+        public LabeledMultiContainer Copy(MultiURLInput multiURLInput)
         {
-            RestRequest restRequest = PrepareRequest("api/multi/copy", Method.POST);
-
-            restRequest.AddParameter("display_name", displayName);
-            restRequest.AddParameter("from", from);
-            restRequest.AddParameter("to", to);
-            
-            return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
+            return SendRequest<LabeledMultiContainer>("api/multi/copy", multiURLInput, Method.POST);
         }
 
         /// <summary>
@@ -49,19 +42,11 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Rename a multi.
         /// </summary>
-        /// <param name="displayName">a string no longer than 50 characters</param>
-        /// <param name="from">multireddit url path</param>
-        /// <param name="to">destination multireddit url path</param>
+        /// <param name="multiURLInput">A valid MultiURLInput instance</param>
         /// <returns>An object containing the multireddit data.</returns>
-        public LabeledMultiContainer Rename(string displayName, string from, string to)
+        public LabeledMultiContainer Rename(MultiURLInput multiURLInput)
         {
-            RestRequest restRequest = PrepareRequest("api/multi/rename", Method.POST);
-
-            restRequest.AddParameter("display_name", displayName);
-            restRequest.AddParameter("from", from);
-            restRequest.AddParameter("to", to);
-            
-            return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
+            return SendRequest<LabeledMultiContainer>("api/multi/rename", multiURLInput, Method.POST);
         }
 
         /// <summary>
@@ -135,7 +120,7 @@ namespace Reddit.NET.Models
         /// <returns>(TODO - Untested)</returns>
         public object GetFilter(string filterpath, bool expandSrs)
         {
-            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
+            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath);
 
             restRequest.AddParameter("expand_srs", expandSrs);
 
@@ -202,7 +187,7 @@ namespace Reddit.NET.Models
         /// <returns>(TODO - Untested)</returns>
         public object CreateFilter(string filterpath, string model, bool expandSrs)
         {
-            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
+            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.POST);
 
             restRequest.AddParameter("expand_srs", expandSrs);
 
@@ -269,7 +254,7 @@ namespace Reddit.NET.Models
         /// <returns>(TODO - Untested)</returns>
         public object UpdateFilter(string filterpath, string model, bool expandSrs)
         {
-            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.DELETE);
+            RestRequest restRequest = PrepareRequest("api/filter/" + filterpath, Method.PUT);
 
             restRequest.AddParameter("expand_srs", expandSrs);
 

@@ -1,9 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Exceptions;
-using Reddit.NET.Models.Structures;
+using Reddit.Exceptions;
+using Reddit.Inputs;
+using Reddit.Inputs.Listings;
+using Reddit.Things;
 using System.Collections.Generic;
 
-namespace Reddit.NETTests.ModelTests
+namespace RedditTests.ModelTests
 {
     [TestClass]
     public class ListingsTests : BaseTests
@@ -13,7 +15,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Best()
         {
-            PostContainer posts = reddit.Models.Listings.Best(null, null, true);
+            PostContainer posts = reddit.Models.Listings.Best(new CategorizedSrListingInput(includeCategories: true));
 
             Validate(posts);
         }
@@ -21,7 +23,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void BestNoCats()
         {
-            PostContainer posts = reddit.Models.Listings.Best(null, null, false);
+            PostContainer posts = reddit.Models.Listings.Best(new CategorizedSrListingInput(includeCategories: false));
 
             Validate(posts);
         }
@@ -29,7 +31,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void BestWithSrDetail()
         {
-            PostContainer posts = reddit.Models.Listings.Best(null, null, true, 0, 25, "all", true);
+            PostContainer posts = reddit.Models.Listings.Best(new CategorizedSrListingInput(srDetail: true));
 
             Validate(posts);
             Assert.IsNotNull(posts.Data.Children[0].Data.SrDetail);
@@ -46,7 +48,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetComments()
         {
-            List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("9gaze5", 0, false, false, "top", true, 0);
+            List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("9gaze5", new ListingsGetCommentsInput(0, false, false, "top", true, 0));
 
             Assert.IsNotNull(res);
             Assert.IsTrue(res.Count == 1);
@@ -68,7 +70,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetCommentsWithEditsAndMoreAndTruncate()
         {
-            List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("8gmf99", 0, true, true, "top", true, 50);
+            List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("8gmf99", new ListingsGetCommentsInput(0, true, true, "top", true, 50));
 
             Assert.IsNotNull(res);
             Assert.IsTrue(res.Count == 1);
@@ -90,7 +92,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetCommentsWithContext()
         {
-            List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("8gmf99", 8, true, true, "top", true, 0, "FloridaMan", "dyd2vtc");
+            List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("8gmf99", new ListingsGetCommentsInput(8, true, true, "top", true, 0, "dyd2vtc"), "FloridaMan");
 
             Assert.IsNotNull(res);
             Assert.IsTrue(res.Count == 1);
@@ -112,7 +114,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Hot()
         {
-            PostContainer posts = reddit.Models.Listings.Hot("GLOBAL", null, null, true);
+            PostContainer posts = reddit.Models.Listings.Hot(new ListingsHotInput(includeCategories: true));
 
             Validate(posts);
         }
@@ -120,7 +122,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void New()
         {
-            PostContainer posts = reddit.Models.Listings.New(null, null, true, "StillSandersForPres");
+            PostContainer posts = reddit.Models.Listings.New(new CategorizedSrListingInput(includeCategories: true), "StillSandersForPres");
 
             Validate(posts);
         }
@@ -164,7 +166,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Rising()
         {
-            PostContainer posts = reddit.Models.Listings.Rising(null, null, true);
+            PostContainer posts = reddit.Models.Listings.Rising(new CategorizedSrListingInput(includeCategories: true));
 
             Validate(posts);
         }
@@ -172,7 +174,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Top()
         {
-            PostContainer posts = reddit.Models.Listings.Top("all", null, null, true);
+            PostContainer posts = reddit.Models.Listings.Top(new TimedCatSrListingInput(includeCategories: true));
 
             Validate(posts);
         }
@@ -180,7 +182,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void TopDay()
         {
-            PostContainer posts = reddit.Models.Listings.Top("day", null, null, true);
+            PostContainer posts = reddit.Models.Listings.Top(new TimedCatSrListingInput("day", includeCategories: true));
 
             Validate(posts);
         }
@@ -188,7 +190,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Controversial()
         {
-            PostContainer posts = reddit.Models.Listings.Controversial("all", null, null, true);
+            PostContainer posts = reddit.Models.Listings.Controversial(new TimedCatSrListingInput(includeCategories: true));
 
             Validate(posts);
         }
@@ -196,7 +198,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void GetDuplicates()
         {
-            List<PostContainer> posts = reddit.Models.Listings.GetDuplicates("9gaze5", "", "", false, "num_comments", "");
+            List<PostContainer> posts = reddit.Models.Listings.GetDuplicates("9gaze5", new ListingsGetDuplicatesInput(sort: "num_comments"));
 
             Assert.IsNotNull(posts);
             Assert.IsTrue(posts.Count > 0);

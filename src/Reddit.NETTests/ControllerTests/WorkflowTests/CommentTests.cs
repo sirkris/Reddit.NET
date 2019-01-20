@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.EventArgs;
+using Reddit.Coordinators;
+using Reddit.Coordinators.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Reddit.NETTests.ControllerTests.WorkflowTests
+namespace RedditTests.CoordinatorTests.WorkflowTests
 {
     [TestClass]
     public class CommentTests : BaseTests
@@ -149,7 +149,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             Comment.Comments.NewUpdated -= C_NewCommentsUpdated;
             Comment.Comments.MonitorNew();
 
-            Assert.AreEqual(10, NewComments.Count);
+            Assert.IsTrue(NewComments.Count >= 7);
         }
 
         // When a new comment is detected in MonitorNewComments, this method will add it/them to the list.  --Kris

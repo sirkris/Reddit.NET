@@ -1,15 +1,15 @@
 ﻿using System;
 
-namespace Reddit.NET.Exceptions
+namespace Reddit.Exceptions
 {
-    public class RedditControllerException : Exception
+    public class RedditCoordinatorException : Exception
     {
-        public RedditControllerException(string message, Exception inner)
+        public RedditCoordinatorException(string message, Exception inner)
             : base(message, inner) { }
 
-        public RedditControllerException(string message)
+        public RedditCoordinatorException(string message)
             : base(message) { }
 
-        public RedditControllerException() { }
+        public RedditCoordinatorException() { }
     }
 }

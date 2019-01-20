@@ -1,15 +1,18 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Reddit.NET.Exceptions;
-using Reddit.NET.Models.EventArgs;
+using Reddit.Exceptions;
+using Reddit.Models.EventArgs;
+using Reddit.Things;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Reflection;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
-namespace Reddit.NET.Models.Internal
+namespace Reddit.Models.Internal
 {
     public abstract class Request
     {
@@ -34,6 +37,47 @@ namespace Reddit.NET.Models.Internal
             DeviceId = deviceId;
 
             Requests = new List<DateTime>();
+        }
+
+        public T SendRequest<T>(string url, dynamic parameters, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
+        {
+            string json = ExecuteRequest(PrepareSendRequest(url, parameters, method, contentType));
+
+            return (json != null ? JsonConvert.DeserializeObject<T>(json) : default(T));
+        }
+
+        public async Task<T> SendRequestAsync<T>(string url, dynamic parameters, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
+        {
+            string json = await ExecuteRequestAsync(PrepareSendRequest(url, parameters, method, contentType));
+
+            return (json != null ? JsonConvert.DeserializeObject<T>(json) : default(T));
+        }
+
+        private RestRequest PrepareSendRequest(string url, dynamic parameters, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
+        {
+            RestRequest restRequest = PrepareRequest(url, method, contentType);
+
+            restRequest.AddObject(parameters);
+
+            return restRequest;
+        }
+
+        public RestRequest PrepareIDRequest(string path, string id, Method method = Method.POST)
+        {
+            RestRequest restRequest = PrepareRequest(path, method);
+
+            restRequest.AddParameter("id", id);
+
+            return restRequest;
+        }
+
+        public RestRequest PrepareJSONRequest(string path, Method method = Method.POST)
+        {
+            RestRequest restRequest = PrepareRequest(path, method);
+
+            restRequest.AddParameter("api_type", "json");
+
+            return restRequest;
         }
 
         public RestRequest PrepareRequest(string url, Method method = Method.GET, string contentType = "application/x-www-form-urlencoded")
@@ -77,12 +121,23 @@ namespace Reddit.NET.Models.Internal
             return restRequest;
         }
 
+        public string GetVersion()
+        {
+            string res = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            return (string.IsNullOrWhiteSpace(res) || !res.Contains(".") ? res : res.Substring(0, res.LastIndexOf(".")) + (res.EndsWith(".1") ? "-develop" : ""));
+        }
+
         public string ExecuteRequest(string url, Method method = Method.GET)
         {
             return ExecuteRequest(PrepareRequest(url, method));
         }
 
-        public string ExecuteRequest(RestRequest restRequest)
+        public async Task<string> ExecuteRequestAsync(string url, Method method = Method.GET)
+        {
+            return await ExecuteRequestAsync(PrepareRequest(url, method));
+        }
+
+        private RestRequest PrepareExecuteRequest(RestRequest restRequest)
         {
             // If we've reached the speed limit, hold until we're clear to proceed.  --Kris
             while (!RequestReady()) { }
@@ -90,69 +145,78 @@ namespace Reddit.NET.Models.Internal
             // Add to recent request history (used for ratelimiting purposes).  --Kris
             AddRequest();
 
-            restRequest.AddHeader("User-Agent", "Reddit.NET");
+            restRequest.AddHeader("User-Agent", "Reddit.NET v" + GetVersion());
 
-            bool ratelimited;
-            int ratelimitRetry = 100;
-            IRestResponse res;
-            do
-            {
-                res = RestClient.Execute(restRequest);
+            return restRequest;
+        }
 
-                // If we're not authenticated or the API doesn't respond, grab a new access token and retry.  --Kris
-                int retry = 5;
-                while ((res == null || !res.IsSuccessful)
+        private IRestResponse GetResponse(IRestResponse res, ref RestRequest restRequest)
+        {
+            int retry = 5;
+            while ((res == null || !res.IsSuccessful)
                     && (RefreshToken != null || DeviceId != null)
                     && (res.StatusCode == HttpStatusCode.Unauthorized  // This is returned if the access token needs to be refreshed or wasn't provided.  --Kris
                         || res.StatusCode == HttpStatusCode.InternalServerError  // On rare occasion, a valid request will return a status code of 500, particularly if under heavy load.  --Kris
                         || res.StatusCode == 0)  // On rare occasion, a valid request will return a status code of 0, particularly if under heavy load.  --Kris
                     && retry > 0)
+            {
+                /*
+                 * If it fails and we have a refresh token, request a new access token and retry.
+                 * Note that this workflow will not work if you pass an empty access token, as the Reddit API will still return 200 on those requests.
+                 * Therefore, if you just want to get a new access token from refresh, pass an arbitrary string value instead of null.
+                 * 
+                 * --Kris
+                 */
+                restRequest = RefreshAccessToken(restRequest);
+                res = RestClient.Execute(restRequest);
+
+                retry--;
+            }
+
+            return res;
+        }
+
+        private bool IsRateLimited(IRestResponse res, ref int retry)
+        {
+            // If we hit a ratelimit of less than a minute, wait the specified time then retry.  --Kris
+            bool ratelimited = false;
+            if (!string.IsNullOrWhiteSpace(res.Content)
+                && res.Content.Contains("you are doing that too much. try again in ")
+                && res.Content.Contains("\"errors\":")
+                && res.Content.Contains("\"ratelimit\":")
+                && (res.Content.Contains("seconds.") || res.Content.Contains("second.")))
+            {
+                // Confirm the errors JSON and extract the wait time.  --Kris
+                Thread.Sleep(GetRateLimit(res.Content));
+
+                ratelimited = true;
+                retry--;
+            }
+
+            return ratelimited;
+        }
+
+        private void CheckAuthRequired(IRestResponse res)
+        {
+            // If we're using app-only authentication, handle any responses prompting for user login.  --Kris
+            if (!string.IsNullOrWhiteSpace(res.Content)
+                && res.Content.Contains("Please log in to do that.")
+                && res.Content.Contains("\"errors\":")
+                && res.Content.Contains("USER_REQUIRED"))
+            {
+                GenericContainer resObj = GetGenericResponse(res.Content);
+                if (resObj != null
+                    && resObj.JSON != null
+                    && resObj.JSON.Errors != null
+                    && resObj.JSON.Errors.Count > 0)
                 {
-                    /*
-                     * If it fails and we have a refresh token, request a new access token and retry.
-                     * Note that this workflow will not work if you pass an empty access token, as the Reddit API will still return 200 on those requests.
-                     * Therefore, if you just want to get a new access token from refresh, pass an arbitrary string value instead of null.
-                     * 
-                     * --Kris
-                     */
-                    restRequest = RefreshAccessToken(restRequest);
-                    res = RestClient.Execute(restRequest);
-
-                    retry--;
+                    throw new RedditUserRequiredException("This endpoint requires an authenticated user.");
                 }
+            }
+        }
 
-                // If we're using app-only authentication, handle any responses prompting for user login.  --Kris
-                if (!string.IsNullOrWhiteSpace(res.Content)
-                    && res.Content.Contains("Please log in to do that.")
-                    && res.Content.Contains("\"errors\":")
-                    && res.Content.Contains("USER_REQUIRED"))
-                {
-                    Structures.GenericContainer resObj = GetGenericResponse(res.Content);
-                    if (resObj != null
-                        && resObj.JSON != null
-                        && resObj.JSON.Errors != null
-                        && resObj.JSON.Errors.Count > 0)
-                    {
-                        throw new RedditUserRequiredException("This endpoint requires an authenticated user.");
-                    }
-                }
-
-                // If we hit a ratelimit of less than a minute, wait the specified time then retry.  --Kris
-                ratelimited = false;
-                if (!string.IsNullOrWhiteSpace(res.Content)
-                    && res.Content.Contains("you are doing that too much. try again in ")
-                    && res.Content.Contains("\"errors\":")
-                    && res.Content.Contains("\"ratelimit\":")
-                    && (res.Content.Contains("seconds.") || res.Content.Contains("second.")))
-                {
-                    // Confirm the errors JSON and extract the wait time.  --Kris
-                    Thread.Sleep(GetRateLimit(res.Content));
-
-                    ratelimited = true;
-                    ratelimitRetry--;
-                }
-            } while (ratelimited && ratelimitRetry > 0);
-
+        private string ProcessResponse(IRestResponse res)
+        {
             if (res == null)
             {
                 throw new RedditException("Reddit API returned null response.");
@@ -175,7 +239,7 @@ namespace Reddit.NET.Models.Internal
                         throw (RedditNotFoundException)BuildException(new RedditNotFoundException("Reddit API returned Not Found (404) response."), res);
                     case HttpStatusCode.Conflict:
                         throw (RedditConflictException)BuildException(new RedditConflictException("Reddit API returned Conflict (409) response."), res);
-                    case HttpStatusCode.UnprocessableEntity:
+                    case (HttpStatusCode)422:
                         throw (RedditUnprocessableEntityException)BuildException(new RedditUnprocessableEntityException("Reddit API returned Unprocessable Entity (422) response."), res);
                     case HttpStatusCode.InternalServerError:
                         throw (RedditInternalServerErrorException)BuildException(
@@ -195,26 +259,52 @@ namespace Reddit.NET.Models.Internal
             }
         }
 
+        public string ExecuteRequest(RestRequest restRequest)
+        {
+            int ratelimitRetry = 100;
+            IRestResponse res;
+            do
+            {
+                res = GetResponse(RestClient.Execute(PrepareExecuteRequest(restRequest)), ref restRequest);
+                CheckAuthRequired(res);
+            } while (IsRateLimited(res, ref ratelimitRetry) && ratelimitRetry > 0);
+
+            return ProcessResponse(res);
+        }
+
+        public async Task<string> ExecuteRequestAsync(RestRequest restRequest)
+        {
+            int ratelimitRetry = 100;
+            IRestResponse res;
+            do
+            {
+                res = GetResponse(await RestClient.ExecuteTaskAsync(PrepareExecuteRequest(restRequest)), ref restRequest);
+                CheckAuthRequired(res);
+            } while (IsRateLimited(res, ref ratelimitRetry) && ratelimitRetry > 0);
+
+            return ProcessResponse(res);
+        }
+
         private int GetRateLimit(string content)
         {
             int? res = null;
 
             try
             {
-                res = Convert.ToInt32(JsonConvert.DeserializeObject<Structures.GenericContainer>(content).JSON.Ratelimit * 1000);
+                res = Convert.ToInt32(JsonConvert.DeserializeObject<GenericContainer>(content).JSON.Ratelimit * 1000);
             }
             catch (Exception) { }
 
             return res ?? 60000;
         }
 
-        private Structures.GenericContainer GetGenericResponse(string content)
+        private GenericContainer GetGenericResponse(string content)
         {
-            Structures.GenericContainer res = null;
+            GenericContainer res = null;
 
             try
             {
-                res = JsonConvert.DeserializeObject<Structures.GenericContainer>(content);
+                res = JsonConvert.DeserializeObject<GenericContainer>(content);
             }
             catch (Exception) { }
 
@@ -345,23 +435,7 @@ namespace Reddit.NET.Models.Internal
             }
         }
 
-        public void AddParamIfNotNull(string name, bool? value, ref RestRequest restRequest)
-        {
-            if (value.HasValue)
-            {
-                restRequest.AddParameter(name, value.Value);
-            }
-        }
-
-        public void AddParamIfNotNull(string name, int? value, ref RestRequest restRequest)
-        {
-            if (value.HasValue)
-            {
-                restRequest.AddParameter(name, value.Value);
-            }
-        }
-
-        public void AddParamIfNotNull(string name, object value, ref RestRequest restRequest)
+        public void AddParamIfNotNull(string name, dynamic value, ref RestRequest restRequest)
         {
             if (value != null)
             {

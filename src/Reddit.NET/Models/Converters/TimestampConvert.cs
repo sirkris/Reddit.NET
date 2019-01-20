@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Converters;
 using System;
 
-namespace Reddit.NET.Models.Converters
+namespace Reddit.Models.Converters
 {
     class TimestampConvert : DateTimeConverterBase
     {

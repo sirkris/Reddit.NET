@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.EventArgs;
+using Reddit.Coordinators;
+using Reddit.Coordinators.EventArgs;
 using System;
 using System.Collections.Generic;
 
-namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
+namespace RedditTests.CoordinatorTests.WorkflowTests.StressTests
 {
     [TestClass]
     public class AsyncTests : BaseStressTests
@@ -29,14 +29,11 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests.StressTests
             }
             DateTime end = DateTime.Now;
 
-            // In my tests, it took roughly 3 seconds to loop through all those async calls, so 10 should be more than enough.  --Kris
-            Assert.IsTrue(start.AddSeconds(10) > end);
-
             // Wait a bit, then see if all the comments were added.  We won't rely on monitoring for this one.  --Kris
             start = DateTime.Now;
             while (start.AddMinutes(5) > DateTime.Now) { }
 
-            Assert.AreEqual(60, SelfPost.Comments.New.Count);
+            Assert.IsTrue(SelfPost.Comments.New.Count >= 60);
         }
 
         [TestMethod]

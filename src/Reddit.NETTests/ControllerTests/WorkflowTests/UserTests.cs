@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
+using Reddit.Coordinators;
 
-namespace Reddit.NETTests.ControllerTests.WorkflowTests
+namespace RedditTests.CoordinatorTests.WorkflowTests
 {
     [TestClass]
     public class UserTests : BaseTests
@@ -14,7 +14,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             User patsy = reddit.User(GetTargetUserModel());
 
             patsy.AddRelationship("", "", "", "", 999, "+mail", "moderator_invite", testData["Subreddit"]);
-            patsy.RemoveRelationship("", "moderator_invite", testData["Subreddit"]);
+            patsy.RemoveRelationship("moderator_invite", "", testData["Subreddit"]);
         }
     }
 }

@@ -1,7 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs.Users;
+using Reddit.Things;
 
-namespace Reddit.NETTests.ModelTests.WorkflowTests
+namespace RedditTests.ModelTests.WorkflowTests
 {
     [TestClass]
     public class UsersTests : BaseTests
@@ -38,8 +39,8 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             string myFullname = "t2_" + me.Id;
             string patsyFullname = "t2_" + patsy.Id;
 
-            Validate(reddit.Models.Users.Friend(null, null, null, null, 999, patsy.Name, "+mail", "moderator_invite", testData["Subreddit"]));
-            reddit.Models.Users.Unfriend(null, patsyFullname, patsy.Name, "moderator_invite", testData["Subreddit"]);
+            Validate(reddit.Models.Users.Friend(new UsersFriendInput(patsy.Name, "moderator_invite"), testData["Subreddit"]));
+            reddit.Models.Users.Unfriend(new UsersUnfriendInput(patsy.Name, patsyFullname, "moderator_invite"), testData["Subreddit"]);
         }
     }
 }

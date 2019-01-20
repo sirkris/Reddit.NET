@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
+using Reddit.Coordinators;
+using Reddit.Inputs.Flair;
 using System;
 
-namespace Reddit.NETTests.ControllerTests
+namespace RedditTests.CoordinatorTests
 {
     [TestClass]
     public class FlairsTests : BaseTests
@@ -79,7 +80,7 @@ namespace Reddit.NETTests.ControllerTests
         [TestMethod]
         public void FlairConfig()
         {
-            Subreddit.Flairs.FlairConfig(true, "right", true, "right", true);
+            Subreddit.Flairs.FlairConfig(new FlairConfigInput(true, true, "right", true, "right"));
         }
 
         [TestMethod]

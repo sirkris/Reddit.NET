@@ -1,7 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Models.Structures;
+using Reddit.Exceptions;
+using Reddit.Inputs;
+using Reddit.Inputs.Moderation;
+using Reddit.Inputs.Users;
+using Reddit.Things;
 
-namespace Reddit.NETTests.ModelTests.WorkflowTests
+namespace RedditTests.ModelTests.WorkflowTests
 {
     [TestClass]
     public class ModerationTests : BaseTests
@@ -12,7 +16,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
         [TestMethod]
         public void Approve()
         {
-            Post post = reddit.Models.Listings.New(null, null, true, testData["Subreddit"]).Data.Children[0].Data;
+            Post post = reddit.Models.Listings.New(new CategorizedSrListingInput(includeCategories: true), testData["Subreddit"]).Data.Children[0].Data;
 
             reddit.Models.Moderation.Approve(post.Name);
 
@@ -29,15 +33,36 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
 
             Validate(patsy);
 
-            GenericContainer res = reddit.Models.Users.Friend(null, null, null, null, 999, patsy.Name, "+mail", "moderator_invite", testData["Subreddit"]);
+            GenericContainer res = null;
+            try
+            {
+                res = reddit.Models.Users.Friend(new UsersFriendInput(patsy.Name, "moderator_invite"), testData["Subreddit"]);
 
-            Validate(res);
+                Validate(res);
 
-            res = reddit2.Models.Moderation.AcceptModeratorInvite(testData["Subreddit"]);
+                res = reddit2.Models.Moderation.AcceptModeratorInvite(testData["Subreddit"]);
 
-            Validate(res);
+                Validate(res);
+            }
+            catch (AssertFailedException ex)
+            {
+                if (res == null
+                    || res.JSON == null
+                    || res.JSON.Errors == null
+                    || res.JSON.Errors.Count == 0
+                    || res.JSON.Errors[0].Count == 0
+                    || (!res.JSON.Errors[0][0].Equals("NO_INVITE_FOUND")  // This appears to be an API bug, as this is sometimes returned with a success response.  --Kris
+                        && !res.JSON.Errors[0][0].Equals("ALREADY_MODERATOR")))
+                {
+                    throw ex;
+                }
+            }
 
-            reddit2.Models.Moderation.LeaveModerator(reddit2.Models.Subreddits.About(testData["Subreddit"]).Data.Name);
+            try
+            {
+                reddit2.Models.Moderation.LeaveModerator("t2_" + patsy.Id, testData["Subreddit"]);
+            }
+            catch (RedditForbiddenException) { }
         }
 
         [TestMethod]
@@ -89,7 +114,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
 
             Validate(patsy);
 
-            GenericContainer res = reddit.Models.Users.Friend(null, null, null, null, 999, patsy.Name, "", "contributor", testData["Subreddit"]);
+            GenericContainer res = reddit.Models.Users.Friend(new UsersFriendInput(patsy.Name, "contributor", permissions: ""), testData["Subreddit"]);
 
             Validate(res);
 
@@ -107,8 +132,8 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
 
             Validate(commentResult);
 
-            reddit.Models.Moderation.Remove(postResult.JSON.Data.Name, false);
-            reddit.Models.Moderation.Remove(commentResult.JSON.Data.Things[0].Data.Name, false);
+            reddit.Models.Moderation.Remove(new ModerationRemoveInput(postResult.JSON.Data.Name));
+            reddit.Models.Moderation.Remove(new ModerationRemoveInput(commentResult.JSON.Data.Things[0].Data.Name));
         }
     }
 }

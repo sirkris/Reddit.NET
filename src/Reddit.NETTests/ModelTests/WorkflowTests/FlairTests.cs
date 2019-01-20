@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs.Flair;
+using Reddit.Things;
 using System;
 
-namespace Reddit.NETTests.ModelTests.WorkflowTests
+namespace RedditTests.ModelTests.WorkflowTests
 {
     [TestClass]
     public class FlairTests : BaseTests
@@ -12,10 +13,10 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
         [TestMethod]
         public void CreateAndDeleteFlairTemplate()
         {
-            FlairV2 linkFlair = reddit.Models.Flair.FlairTemplateV2("#88AAFF", "", "LINK_FLAIR", false,
-                    "V2-" + DateTime.Now.ToString("fffffff"), "dark", false, testData["Subreddit"]);
-            FlairV2 userFlair = reddit.Models.Flair.FlairTemplateV2("#88AAFF", "", "USER_FLAIR", false,
-                    "V2-" + DateTime.Now.ToString("fffffff"), "dark", false, testData["Subreddit"]);
+            FlairV2 linkFlair = reddit.Models.Flair.FlairTemplateV2(
+                new FlairTemplateV2Input("V2-" + DateTime.Now.ToString("fffffff"), "LINK_FLAIR", false, "dark", "#88AAFF"), testData["Subreddit"]);
+            FlairV2 userFlair = reddit.Models.Flair.FlairTemplateV2(
+                new FlairTemplateV2Input("V2-" + DateTime.Now.ToString("fffffff"), "USER_FLAIR", false, "dark", "#88AAFF"), testData["Subreddit"]);
 
             Assert.IsNotNull(linkFlair);
             Assert.IsNotNull(userFlair);

@@ -1,8 +1,9 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs;
+using Reddit.Things;
 using System.Collections.Generic;
 
-namespace Reddit.NETTests.ModelTests
+namespace RedditTests.ModelTests
 {
     [TestClass]
     public class AccountTests : BaseTests
@@ -35,10 +36,10 @@ namespace Reddit.NETTests.ModelTests
         public void Prefs()
         {
             AccountPrefs prefs = reddit.Models.Account.Prefs();
-            List<UserPrefsContainer> prefsFriends = reddit.Models.Account.PrefsList("friends");
-            List<UserPrefsContainer> prefsMessaging = reddit.Models.Account.PrefsList("messaging");
-            UserPrefsContainer prefsBlocked = reddit.Models.Account.PrefsSingle("blocked");
-            UserPrefsContainer prefsTrusted = reddit.Models.Account.PrefsSingle("trusted");
+            List<UserPrefsContainer> prefsFriends = reddit.Models.Account.PrefsList("friends", new CategorizedSrListingInput());
+            List<UserPrefsContainer> prefsMessaging = reddit.Models.Account.PrefsList("messaging", new CategorizedSrListingInput());
+            UserPrefsContainer prefsBlocked = reddit.Models.Account.PrefsSingle("blocked", new CategorizedSrListingInput());
+            UserPrefsContainer prefsTrusted = reddit.Models.Account.PrefsSingle("trusted", new CategorizedSrListingInput());
 
             Assert.IsNotNull(prefs);
             Assert.IsNotNull(prefsFriends);

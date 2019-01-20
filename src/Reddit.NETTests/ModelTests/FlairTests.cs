@@ -1,9 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs.Flair;
+using Reddit.Things;
 using System;
 using System.Collections.Generic;
 
-namespace Reddit.NETTests.ModelTests
+namespace RedditTests.ModelTests
 {
     [TestClass]
     public class FlairTests : BaseTests
@@ -47,7 +48,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void Create()
         {
-            GenericContainer res = reddit.Models.Flair.Create("", "", "KrisCraig", "Test User Flair", testData["Subreddit"]);
+            GenericContainer res = reddit.Models.Flair.Create(new FlairCreateInput("Test User Flair", "", "KrisCraig"), testData["Subreddit"]);
 
             Validate(res);
         }
@@ -55,7 +56,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void FlairConfig()
         {
-            GenericContainer res = reddit.Models.Flair.FlairConfig(true, "right", true, "right", true, testData["Subreddit"]);
+            GenericContainer res = reddit.Models.Flair.FlairConfig(new FlairConfigInput(true, true, "right", true, "right"), testData["Subreddit"]);
 
             Validate(res);
         }
@@ -76,7 +77,7 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void FlairList()
         {
-            FlairListResultContainer res = reddit.Models.Flair.FlairList("", "", "", testData["Subreddit"]);
+            FlairListResultContainer res = reddit.Models.Flair.FlairList(new FlairNameListingInput(), testData["Subreddit"]);
 
             Validate(res);
         }
@@ -84,9 +85,9 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void FlairSelector()
         {
-            FlairSelectorResultContainer res = reddit.Models.Flair.FlairSelector(null, testData["Subreddit"]);
-            FlairSelectorResultContainer resUser = reddit.Models.Flair.FlairSelector("KrisCraig", testData["Subreddit"]);
-            FlairSelectorResultContainer resLink = reddit.Models.Flair.FlairSelector(null, "RedditDotNETBot", "t3_9rirb3");
+            FlairSelectorResultContainer res = reddit.Models.Flair.FlairSelector(new FlairLinkInput(), testData["Subreddit"]);
+            FlairSelectorResultContainer resUser = reddit.Models.Flair.FlairSelector(new FlairLinkInput(name: "KrisCraig"), testData["Subreddit"]);
+            FlairSelectorResultContainer resLink = reddit.Models.Flair.FlairSelector(new FlairLinkInput("t3_9rirb3"), "RedditDotNETBot");
 
             Validate(res);
             Validate(resUser);
@@ -120,8 +121,8 @@ namespace Reddit.NETTests.ModelTests
         [TestMethod]
         public void FlairTemplate()
         {
-            GenericContainer resLink = reddit.Models.Flair.FlairTemplate("", "", "LINK_FLAIR", DateTime.Now.ToString("fffffff"), false, testData["Subreddit"]);
-            GenericContainer resUser = reddit.Models.Flair.FlairTemplate("", "", "USER_FLAIR", DateTime.Now.ToString("fffffff"), false, testData["Subreddit"]);
+            GenericContainer resLink = reddit.Models.Flair.FlairTemplate(new FlairTemplateInput(DateTime.Now.ToString("fffffff"), "LINK_FLAIR", false), testData["Subreddit"]);
+            GenericContainer resUser = reddit.Models.Flair.FlairTemplate(new FlairTemplateInput(DateTime.Now.ToString("fffffff"), "USER_FLAIR", false), testData["Subreddit"]);
 
             Validate(resLink);
             Validate(resUser);

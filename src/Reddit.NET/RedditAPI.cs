@@ -1,13 +1,14 @@
-﻿using Reddit.NET.Controllers;
-using RedditThings = Reddit.NET.Models.Structures;
+﻿using Reddit.Coordinators;
+using Reddit.Inputs;
+using Reddit.Inputs.Subreddits;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 
 /// <summary>
-/// A Reddit API library for .NET Core with OAuth support.
+/// A Reddit API library for .NET Standard with OAuth support.
 /// </summary>
-namespace Reddit.NET
+namespace Reddit
 {
     /// <summary>
     /// The main Reddit API class.
@@ -83,7 +84,7 @@ namespace Reddit.NET
 
         private Account GetAccount()
         {
-            Account = new Account(ref Models);
+            Account = new Account(Models);
             return Account;
         }
 
@@ -103,7 +104,7 @@ namespace Reddit.NET
         /// <returns>A new comment controller instance.</returns>
         public Comment Comment(string name)
         {
-            return new Comment(ref Models, name);
+            return new Comment(Models, name);
         }
 
         /// <summary>
@@ -113,7 +114,7 @@ namespace Reddit.NET
         /// <returns>A new link post controller instance.</returns>
         public LinkPost LinkPost(string name)
         {
-            return new LinkPost(ref Models, name);
+            return new LinkPost(Models, name);
         }
 
         /// <summary>
@@ -123,7 +124,7 @@ namespace Reddit.NET
         /// <returns>A new self post controller instance.</returns>
         public SelfPost SelfPost(string name)
         {
-            return new SelfPost(ref Models, name);
+            return new SelfPost(Models, name);
         }
 
         /// <summary>
@@ -133,7 +134,7 @@ namespace Reddit.NET
         /// <returns>A new post controller instance.</returns>
         public Post Post(string name)
         {
-            return new Post(ref Models, name);
+            return new Post(Models, name);
         }
 
         /// <summary>
@@ -141,9 +142,9 @@ namespace Reddit.NET
         /// </summary>
         /// <param name="liveUpdateEvent"></param>
         /// <returns>A new live thread controller instance.</returns>
-        public LiveThread LiveThread(RedditThings.LiveUpdateEvent liveUpdateEvent)
+        public LiveThread LiveThread(Things.LiveUpdateEvent liveUpdateEvent)
         {
-            return new LiveThread(ref Models, liveUpdateEvent);
+            return new LiveThread(Models, liveUpdateEvent);
         }
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace Reddit.NET
         /// <returns>A new live thread controller instance.</returns>
         public LiveThread LiveThread(LiveThread liveThread)
         {
-            return new LiveThread(ref Models, liveThread);
+            return new LiveThread(Models, liveThread);
         }
 
         /// <summary>
@@ -177,7 +178,7 @@ namespace Reddit.NET
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
         {
-            return new LiveThread(ref Models, title, description, nsfw, resources, id, name, websocketUrl, announcementUrl, state,
+            return new LiveThread(Models, title, description, nsfw, resources, id, name, websocketUrl, announcementUrl, state,
                 icon, totalViews, viewerCount, created);
         }
 
@@ -188,7 +189,7 @@ namespace Reddit.NET
         /// <returns>A new live thread controller instance.</returns>
         public LiveThread LiveThread(string id)
         {
-            return new LiveThread(ref Models, id);
+            return new LiveThread(Models, id);
         }
 
         /// <summary>
@@ -196,9 +197,9 @@ namespace Reddit.NET
         /// </summary>
         /// <param name="user"></param>
         /// <returns>A new user controller instance.</returns>
-        public User User(RedditThings.User user)
+        public User User(Things.User user)
         {
-            return new User(ref Models, user);
+            return new User(Models, user);
         }
 
         /// <summary>
@@ -208,7 +209,7 @@ namespace Reddit.NET
         /// <returns>A new user controller instance.</returns>
         public User User(User user)
         {
-            return new User(ref Models, user);
+            return new User(Models, user);
         }
 
         /// <summary>
@@ -241,7 +242,7 @@ namespace Reddit.NET
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
         {
-            return new User(ref Models, name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
+            return new User(Models, name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
                 hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
         }
 
@@ -251,7 +252,7 @@ namespace Reddit.NET
         /// <returns>A new user controller instance.</returns>
         public User User()
         {
-            return new User(ref Models);
+            return new User(Models);
         }
 
         /// <summary>
@@ -261,7 +262,7 @@ namespace Reddit.NET
         /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit(Subreddit subreddit)
         {
-            return new Subreddit(ref Models, subreddit);
+            return new Subreddit(Models, subreddit);
         }
 
         /// <summary>
@@ -269,9 +270,9 @@ namespace Reddit.NET
         /// </summary>
         /// <param name="subreddit"></param>
         /// <returns>A new subreddit controller instance.</returns>
-        public Subreddit Subreddit(RedditThings.Subreddit subreddit)
+        public Subreddit Subreddit(Things.Subreddit subreddit)
         {
-            return new Subreddit(ref Models, subreddit);
+            return new Subreddit(Models, subreddit);
         }
 
         /// <summary>
@@ -279,9 +280,9 @@ namespace Reddit.NET
         /// </summary>
         /// <param name="subredditChild"></param>
         /// <returns>A new subreddit controller instance.</returns>
-        public Subreddit Subreddit(RedditThings.SubredditChild subredditChild)
+        public Subreddit Subreddit(Things.SubredditChild subredditChild)
         {
-            return new Subreddit(ref Models, subredditChild);
+            return new Subreddit(Models, subredditChild);
         }
 
         /// <summary>
@@ -322,7 +323,7 @@ namespace Reddit.NET
             int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
             string fullname = null)
         {
-            return new Subreddit(ref Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
+            return new Subreddit(Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
         }
@@ -333,7 +334,7 @@ namespace Reddit.NET
         /// <returns>A new subreddit controller instance.</returns>
         public Subreddit Subreddit()
         {
-            return new Subreddit(ref Models);
+            return new Subreddit(Models);
         }
 
         /// <summary>
@@ -343,7 +344,7 @@ namespace Reddit.NET
         /// <returns>A list of populated posts.</returns>
         public List<Post> GetPosts(List<string> fullnames)
         {
-            return Account.Listings.GetPosts(Account.Validate(Models.Listings.GetByNames(string.Join(",", fullnames))), Models);
+            return Account.Lists.GetPosts(Account.Validate(Models.Listings.GetByNames(string.Join(",", fullnames))), Models);
         }
 
         /// <summary>
@@ -369,7 +370,7 @@ namespace Reddit.NET
         /// </summary>
         /// <param name="scopes">(optional) An OAuth2 scope string</param>
         /// <returns>A list of scopes.</returns>
-        public Dictionary<string, RedditThings.Scope> Scopes(string scopes = null)
+        public Dictionary<string, Things.Scope> Scopes(string scopes = null)
         {
             return Account.Validate(Models.Misc.Scopes(scopes));
         }
@@ -388,7 +389,7 @@ namespace Reddit.NET
         /// <returns>A list of subreddit names.</returns>
         public List<string> SearchRedditNames(string query, bool exact = false, bool includeOver18 = true, bool includeUnadvertisable = true)
         {
-            return ((RedditThings.SubredditNames)Account.Validate(Models.Subreddits.SearchRedditNames(exact, includeOver18, includeUnadvertisable, query))).Names;
+            return ((Things.SubredditNames)Account.Validate(Models.Subreddits.SearchRedditNames(new SubredditsSearchNamesInput(query, exact, includeOver18, includeUnadvertisable)))).Names;
         }
 
         /// <summary>
@@ -403,9 +404,9 @@ namespace Reddit.NET
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeUnadvertisable">boolean value</param>
         /// <returns>A list of subreddit listings.</returns>
-        public List<RedditThings.SubSearchResult> SearchSubredditNames(string query, bool exact = false, bool includeOver18 = true, bool includeUnadvertisable = true)
+        public List<Things.SubSearchResult> SearchSubredditNames(string query, bool exact = false, bool includeOver18 = true, bool includeUnadvertisable = true)
         {
-            return ((RedditThings.SubSearch)Account.Validate(Models.Subreddits.SearchSubreddits(exact, includeOver18, includeUnadvertisable, query))).Subreddits;
+            return ((Things.SubSearch)Account.Validate(Models.Subreddits.SearchSubreddits(new SubredditsSearchNamesInput(query, exact, includeOver18, includeUnadvertisable)))).Subreddits;
         }
 
         /// <summary>
@@ -424,7 +425,8 @@ namespace Reddit.NET
         public List<Subreddit> SearchSubreddits(string query, int limit = 25, bool showUsers = false, string after = "", string before = "", string sort = "relevance",
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Account.Listings.GetSubreddits(Account.Validate(Models.Subreddits.Search(after, before, query, showUsers, sort, count, limit, show, srDetail)), Models);
+            return Account.Lists.GetSubreddits(Account.Validate(Models.Subreddits.Search(
+                new SubredditsSearchInput(query, showUsers, after, before, sort, count, limit, show, srDetail))), Models);
         }
 
         /// <summary>
@@ -436,9 +438,10 @@ namespace Reddit.NET
         /// <param name="includeOver18">boolean value</param>
         /// <param name="includeProfiles">boolean value</param>
         /// <returns>Matching subreddits.</returns>
-        public List<RedditThings.SubredditAutocompleteResult> SubredditAutocomplete(string query, bool includeOver18 = true, bool includeProfiles = true)
+        public List<Things.SubredditAutocompleteResult> SubredditAutocomplete(string query, bool includeOver18 = true, bool includeProfiles = true)
         {
-            return ((RedditThings.SubredditAutocompleteResultContainer)Account.Validate(Models.Subreddits.SubredditAutocomplete(includeOver18, includeProfiles, query))).Subreddits;
+            return ((Things.SubredditAutocompleteResultContainer)Account.Validate(Models.Subreddits.SubredditAutocomplete(
+                new SubredditsAutocompleteInput(query, includeProfiles, includeOver18)))).Subreddits;
         }
 
         /// <summary>
@@ -452,7 +455,8 @@ namespace Reddit.NET
         /// <returns>Matching subreddits.</returns>
         public List<Subreddit> SubredditAutocompleteV2(string query, bool includeOver18 = true, bool includeProfiles = true, bool includeCategories = true, int limit = 5)
         {
-            return Account.Listings.GetSubreddits(Account.Validate(Models.Subreddits.SubredditAutocompleteV2(includeCategories, includeOver18, includeProfiles, query, limit)), Models);
+            return Account.Lists.GetSubreddits(Account.Validate(Models.Subreddits.SubredditAutocompleteV2(
+                new SubredditsAutocompleteV2Input(query, includeCategories, includeOver18, includeProfiles, limit))), Models);
         }
 
         // TODO - Split this up and maybe create a new Subreddits controller for these?  --Kris
@@ -474,7 +478,8 @@ namespace Reddit.NET
         public List<Subreddit> GetSubreddits(string where, int limit = 25, string after = "", string before = "", bool includeCategories = false,
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Account.Listings.GetSubreddits(Account.Validate(Models.Subreddits.Get(where, after, before, includeCategories, count, limit, show, srDetail)), Models);
+            return Account.Lists.GetSubreddits(Account.Validate(Models.Subreddits.Get(where, 
+                new CategorizedSrListingInput(after, before, count, limit, show, srDetail, includeCategories))), Models);
         }
 
         // TODO - Split this up and maybe create a new Subreddits controller for these?  --Kris
@@ -496,7 +501,8 @@ namespace Reddit.NET
         public List<Subreddit> GetUserSubreddits(string where, int limit = 25, string after = "", string before = "", bool includeCategories = false,
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Account.Listings.GetSubreddits(Account.Validate(Models.Subreddits.GetUserSubreddits(where, after, before, includeCategories, count, limit, show, srDetail)), Models);
+            return Account.Lists.GetSubreddits(Account.Validate(Models.Subreddits.GetUserSubreddits(where, 
+                new CategorizedSrListingInput(after, before, count, limit, show, srDetail, includeCategories))), Models);
         }
 
         /// <summary>

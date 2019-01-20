@@ -1,11 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.EventArgs;
-using RedditThings = Reddit.NET.Models.Structures;
+using Reddit.Coordinators;
+using Reddit.Coordinators.EventArgs;
 using System;
 using System.Collections.Generic;
 
-namespace Reddit.NETTests.ControllerTests.WorkflowTests
+namespace RedditTests.CoordinatorTests.WorkflowTests
 {
     [TestClass]
     public class WikiTests : BaseTests
@@ -64,7 +63,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
         public void Modify()
         {
             // Ordered by most recent first.  --Kris
-            List<RedditThings.WikiPageRevision> revisions = Index.Revisions();
+            List<Reddit.Things.WikiPageRevision> revisions = Index.Revisions();
 
             Validate(revisions);
             Assert.IsTrue(revisions.Count > 0);

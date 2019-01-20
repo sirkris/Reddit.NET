@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs.PrivateMessages;
+using Reddit.Things;
 using System;
 
-namespace Reddit.NETTests.ModelTests.WorkflowTests
+namespace RedditTests.ModelTests.WorkflowTests
 {
     [TestClass]
     public class PrivateMessagesTests : BaseTests
@@ -36,7 +37,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             bool res = false;
             do
             {
-                res = MessageExists(reddit.Models.PrivateMessages.GetMessages("unread", false, "", "", "", false), author, subject, body, out message);
+                res = MessageExists(reddit.Models.PrivateMessages.GetMessages("unread", new PrivateMessagesGetMessagesInput()), author, subject, body, out message);
             } while (!res && start.AddMilliseconds(waitMs) > DateTime.Now);
 
             return res;
@@ -51,7 +52,9 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             string subject = "Test Message: " + DateTime.Now.ToString("yyyyMMddHHmmssfffffff");
             string body = "This is a test message sent by Reddit.NET.";
 
-            Validate(reddit2.Models.PrivateMessages.Compose("", "", subject, body, me.Name));
+            Validate(reddit2.Models.PrivateMessages.Compose(new PrivateMessagesComposeInput(subject: subject, text: body, to: me.Name)));
+
+            // Note that this will fail if the primary test user is blocking the secondary test user.  You can confirm by running the corresponding controller test.  --Kris
             Assert.IsTrue(MessageExists(patsy.Name, subject, body, out Message message));
 
             reddit.Models.PrivateMessages.CollapseMessage(message.Name);

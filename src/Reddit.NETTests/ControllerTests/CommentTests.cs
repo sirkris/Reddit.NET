@@ -1,8 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
-using RedditThings = Reddit.NET.Models.Structures;
+using Reddit.Coordinators;
 
-namespace Reddit.NETTests.ControllerTests
+namespace RedditTests.CoordinatorTests
 {
     [TestClass]
     public class CommentTests : BaseTests
@@ -76,7 +75,7 @@ namespace Reddit.NETTests.ControllerTests
         [TestMethod]
         public void MoreChildren()
         {
-            RedditThings.MoreChildren moreChildren = Comment.MoreChildren(false, "new");
+            Reddit.Things.MoreChildren moreChildren = Comment.MoreChildren(false, "new");
 
             Validate(moreChildren);
             Assert.IsTrue(moreChildren.Comments.Count > 0);

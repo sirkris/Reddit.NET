@@ -1,9 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs;
+using Reddit.Inputs.LiveThreads;
+using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
-namespace Reddit.NET.Models
+namespace Reddit.Models
 {
     // TODO - Add support for WebSockets.  --Kris
     /// <summary>
@@ -42,22 +45,22 @@ namespace Reddit.NET.Models
         /// Create a new live thread.
         /// Once created, the initial settings can be modified with /api/live/thread/edit and new updates can be posted with /api/live/thread/update.
         /// </summary>
-        /// <param name="description">raw markdown text</param>
-        /// <param name="nsfw">boolean value</param>
-        /// <param name="resources">raw markdown text</param>
-        /// <param name="title">a string no longer than 120 characters</param>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
         /// <returns>A response object containing the ID of the newly-created live thread.</returns>
-        public LiveThreadCreateResultContainer Create(string description, bool nsfw, string resources, string title)
+        public LiveThreadCreateResultContainer Create(LiveThreadsConfigInput liveThreadsConfigInput)
         {
-            RestRequest restRequest = PrepareRequest("api/live/create", Method.POST);
+            return SendRequest<LiveThreadCreateResultContainer>("api/live/create", liveThreadsConfigInput, Method.POST);
+        }
 
-            restRequest.AddParameter("description", description);
-            restRequest.AddParameter("nsfw", nsfw);
-            restRequest.AddParameter("resources", resources);
-            restRequest.AddParameter("title", title);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<LiveThreadCreateResultContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Create a new live thread asynchronously.
+        /// Once created, the initial settings can be modified with /api/live/thread/edit and new updates can be posted with /api/live/thread/update.
+        /// </summary>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
+        /// <returns>A response object containing the ID of the newly-created live thread.</returns>
+        public async Task<LiveThreadCreateResultContainer> CreateAsync(LiveThreadsConfigInput liveThreadsConfigInput)
+        {
+            return await SendRequestAsync<LiveThreadCreateResultContainer>("api/live/create", liveThreadsConfigInput, Method.POST);
         }
 
         // TODO - Returned empty 204 response on my tests.  Need to test when there's a featured live thread.  --Kris
@@ -80,11 +83,18 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer AcceptContributorInvite(string thread)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/accept_contributor_invite", Method.POST);
+            return SendRequest<GenericContainer>("api/live/" + thread + "/accept_contributor_invite", new APITypeInput(), Method.POST);
+        }
 
-            restRequest.AddParameter("api_type", "json");
-            
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Accept a pending invitation to contribute to the thread asynchronously.
+        /// See also: /api/live/thread/leave_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> AcceptContributorInviteAsync(string thread)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/accept_contributor_invite", new APITypeInput(), Method.POST);
         }
 
         /// <summary>
@@ -96,11 +106,19 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer CloseThread(string thread)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/close_thread", Method.POST);
+            return SendRequest<GenericContainer>("api/live/" + thread + "/close_thread", new APITypeInput(), Method.POST);
+        }
 
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Permanently close the thread asynchronously, disallowing future updates.
+        /// Requires the close permission for this thread.
+        /// Returns forbidden response if the thread has already been closed.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> CloseThreadAsync(string thread)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/close_thread", new APITypeInput(), Method.POST);
         }
 
         /// <summary>
@@ -113,12 +131,46 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer DeleteUpdate(string thread, string id)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/delete_update", Method.POST);
+            return DeleteUpdate(thread, new LiveThreadsIdInput(id));
+        }
 
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("api_type", "json");
+        /// <summary>
+        /// Delete an update from the thread asynchronously.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="id">the ID of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteUpdateAsync(string thread, string id)
+        {
+            return await DeleteUpdateAsync(thread, new LiveThreadsIdInput(id));
+        }
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Delete an update from the thread.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer DeleteUpdate(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return SendRequest<GenericContainer>("api/live/" + thread + "/delete_update", liveThreadsIdInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Delete an update from the thread asynchronously.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> DeleteUpdateAsync(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/delete_update", liveThreadsIdInput, Method.POST);
         }
 
         /// <summary>
@@ -127,22 +179,24 @@ namespace Reddit.NET.Models
         /// See also: /live/thread/about.json.
         /// </summary>
         /// <param name="thread">id</param>
-        /// <param name="description">raw markdown text</param>
-        /// <param name="nsfw">boolean value</param>
-        /// <param name="resources">raw markdown text</param>
-        /// <param name="title">a string no longer than 120 characters</param>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
         /// <returns>A generic response object indicating any errors.</returns>
-        public GenericContainer Edit(string thread, string description, bool nsfw, string resources, string title)
+        public GenericContainer Edit(string thread, LiveThreadsConfigInput liveThreadsConfigInput)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/edit", Method.POST);
+            return SendRequest<GenericContainer>("api/live/" + thread + "/edit", liveThreadsConfigInput, Method.POST);
+        }
 
-            restRequest.AddParameter("description", description);
-            restRequest.AddParameter("nsfw", nsfw);
-            restRequest.AddParameter("resources", resources);
-            restRequest.AddParameter("title", title);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Configure the thread asynchronously.
+        /// Requires the settings permission for this thread.
+        /// See also: /live/thread/about.json.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsConfigInput">A valid LiveThreadsConfigInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> EditAsync(string thread, LiveThreadsConfigInput liveThreadsConfigInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/edit", liveThreadsConfigInput, Method.POST);
         }
 
         // TODO - Needs testing.
@@ -171,20 +225,24 @@ namespace Reddit.NET.Models
         /// See also: /api/live/thread/accept_contributor_invite, and /api/live/thread/rm_contributor_invite.
         /// </summary>
         /// <param name="thread">id</param>
-        /// <param name="name">the name of an existing user</param>
-        /// <param name="permissions">permission description e.g. +update,+edit,-manage</param>
-        /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
         /// <returns>A generic response object indicating any errors.</returns>
-        public GenericContainer InviteContributor(string thread, string name, string permissions, string type)
+        public GenericContainer InviteContributor(string thread, LiveThreadsContributorInput liveThreadsContributorInput)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/invite_contributor", Method.POST);
+            return SendRequest<GenericContainer>("api/live/" + thread + "/invite_contributor", liveThreadsContributorInput, Method.POST);
+        }
 
-            restRequest.AddParameter("name", name);
-            restRequest.AddParameter("permissions", permissions);
-            restRequest.AddParameter("type", type);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Asynchronously invite another user to contribute to the thread.
+        /// Requires the manage permission for this thread. If the recipient accepts the invite, they will be granted the permissions specified.
+        /// See also: /api/live/thread/accept_contributor_invite, and /api/live/thread/rm_contributor_invite.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> InviteContributorAsync(string thread, LiveThreadsContributorInput liveThreadsContributorInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/invite_contributor", liveThreadsContributorInput, Method.POST);
         }
 
         /// <summary>
@@ -195,11 +253,18 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer LeaveContributor(string thread)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/leave_contributor", Method.POST);
+            return SendRequest<GenericContainer>("api/live/" + thread + "/leave_contributor", new APITypeInput(), Method.POST);
+        }
 
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Abdicate contributorship of the thread asynchronously.
+        /// See also: /api/live/thread/accept_contributor_invite, and /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> LeaveContributorAsync(string thread)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/leave_contributor", new APITypeInput(), Method.POST);
         }
 
         // Note - I tested this one manually.  Will leave out of automated tests so as not to spam the Reddit admins.  --Kris
@@ -211,12 +276,40 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer Report(string thread, string type)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/report", Method.POST);
+            return Report(thread, new LiveThreadsReportTypeInput(type));
+        }
 
-            restRequest.AddParameter("type", type);
-            restRequest.AddParameter("api_type", "json");
+        /// <summary>
+        /// Asynchronously report the thread for violating the rules of reddit.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="type">one of (spam, vote-manipulation, personal-information, sexualizing-minors, site-breaking)</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> ReportAsync(string thread, string type)
+        {
+            return await ReportAsync(thread, new LiveThreadsReportTypeInput(type));
+        }
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Report the thread for violating the rules of reddit.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsReportTypeInput">A valid LiveThreadsReportTypeInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer Report(string thread, LiveThreadsReportTypeInput liveThreadsReportTypeInput)
+        {
+            return SendRequest<GenericContainer>("api/live/" + thread + "/report", liveThreadsReportTypeInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Asynchronously report the thread for violating the rules of reddit.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsReportTypeInput">A valid LiveThreadsReportTypeInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> ReportAsync(string thread, LiveThreadsReportTypeInput liveThreadsReportTypeInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/report", liveThreadsReportTypeInput, Method.POST);
         }
 
         /// <summary>
@@ -229,12 +322,46 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer RemoveContributor(string thread, string id)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/rm_contributor", Method.POST);
+            return RemoveContributor(thread, new LiveThreadsIdInput(id));
+        }
 
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("api_type", "json");
+        /// <summary>
+        /// Revoke another user's contributorship asynchronously.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="id">fullname of an account</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> RemoveContributorAsync(string thread, string id)
+        {
+            return await RemoveContributorAsync(thread, new LiveThreadsIdInput(id));
+        }
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Revoke another user's contributorship.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer RemoveContributor(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return SendRequest<GenericContainer>("api/live/" + thread + "/rm_contributor", liveThreadsIdInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Revoke another user's contributorship asynchronously.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> RemoveContributorAsync(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/rm_contributor", liveThreadsIdInput, Method.POST);
         }
 
         /// <summary>
@@ -247,12 +374,46 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer RemoveContributorInvite(string thread, string id)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/rm_contributor_invite", Method.POST);
+            return RemoveContributorInvite(thread, new LiveThreadsIdInput(id));
+        }
 
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("api_type", "json");
+        /// <summary>
+        /// Revoke an outstanding contributor invite asynchronously.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="id">fullname of an account</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> RemoveContributorInviteAsync(string thread, string id)
+        {
+            return await RemoveContributorInviteAsync(thread, new LiveThreadsIdInput(id));
+        }
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Revoke an outstanding contributor invite.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer RemoveContributorInvite(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return SendRequest<GenericContainer>("api/live/" + thread + "/rm_contributor_invite", liveThreadsIdInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Revoke an outstanding contributor invite asynchronously.
+        /// Requires the manage permission for this thread.
+        /// See also: /api/live/thread/invite_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> RemoveContributorInviteAsync(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/rm_contributor_invite", liveThreadsIdInput, Method.POST);
         }
 
         /// <summary>
@@ -262,20 +423,25 @@ namespace Reddit.NET.Models
         /// See also: /api/live/thread/invite_contributor and /api/live/thread/rm_contributor.
         /// </summary>
         /// <param name="thread">id</param>
-        /// <param name="name">the name of an existing user</param>
-        /// <param name="permissions">permission description e.g. +update,+edit,-manage</param>
-        /// <param name="type">one of (liveupdate_contributor_invite, liveupdate_contributor)</param>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
         /// <returns>A generic response object indicating any errors.</returns>
-        public GenericContainer SetContributorPermissions(string thread, string name, string permissions, string type)
+        public GenericContainer SetContributorPermissions(string thread, LiveThreadsContributorInput liveThreadsContributorInput)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/set_contributor_permissions", Method.POST);
+            return SendRequest<GenericContainer>("api/live/" + thread + "/set_contributor_permissions", liveThreadsContributorInput, Method.POST);
+        }
 
-            restRequest.AddParameter("name", name);
-            restRequest.AddParameter("permissions", permissions);
-            restRequest.AddParameter("type", type);
-            restRequest.AddParameter("api_type", "json");
-
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Change a contributor or contributor invite's permissions asynchronously.
+        /// Requires the manage permission for this thread.
+        /// Note that permissions overrides the previous value completely.
+        /// See also: /api/live/thread/invite_contributor and /api/live/thread/rm_contributor.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsContributorInput">A valid LiveThreadsContributorInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> SetContributorPermissionsAsync(string thread, LiveThreadsContributorInput liveThreadsContributorInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/set_contributor_permissions", liveThreadsContributorInput, Method.POST);
         }
 
         /// <summary>
@@ -288,12 +454,46 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer StrikeUpdate(string thread, string id)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/strike_update", Method.POST);
+            return StrikeUpdate(thread, new LiveThreadsIdInput(id));
+        }
 
-            restRequest.AddParameter("id", id);
-            restRequest.AddParameter("api_type", "json");
+        /// <summary>
+        /// Strike (mark incorrect and cross out) the content of an update asynchronously.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="id">the ID (Name) of a single update. e.g. LiveUpdate_ff87068e-a126-11e3-9f93-12313b0b3603</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> StrikeUpdateAsync(string thread, string id)
+        {
+            return await StrikeUpdateAsync(thread, new LiveThreadsIdInput(id));
+        }
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Strike (mark incorrect and cross out) the content of an update.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer StrikeUpdate(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return SendRequest<GenericContainer>("api/live/" + thread + "/strike_update", liveThreadsIdInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Strike (mark incorrect and cross out) the content of an update asynchronously.
+        /// Requires that specified update must have been authored by the user or that you have the edit permission for this thread.
+        /// See also: /api/live/thread/update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsIdInput">A valid LiveThreadsIdInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> StrikeUpdateAsync(string thread, LiveThreadsIdInput liveThreadsIdInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/strike_update", liveThreadsIdInput, Method.POST);
         }
 
         // TODO - Needs testing.
@@ -326,12 +526,46 @@ namespace Reddit.NET.Models
         /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer Update(string thread, string body)
         {
-            RestRequest restRequest = PrepareRequest("api/live/" + thread + "/update", Method.POST);
+            return Update(thread, new LiveThreadsBodyInput(body));
+        }
 
-            restRequest.AddParameter("body", body);
-            restRequest.AddParameter("api_type", "json");
+        /// <summary>
+        /// Post an update to the thread asynchronously.
+        /// Requires the update permission for this thread.
+        /// See also: /api/live/thread/strike_update, and /api/live/thread/delete_update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="body">raw markdown text</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> UpdateAsync(string thread, string body)
+        {
+            return await UpdateAsync(thread, new LiveThreadsBodyInput(body));
+        }
 
-            return JsonConvert.DeserializeObject<GenericContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Post an update to the thread.
+        /// Requires the update permission for this thread.
+        /// See also: /api/live/thread/strike_update, and /api/live/thread/delete_update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsBodyInput">A valid LiveThreadsBodyInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public GenericContainer Update(string thread, LiveThreadsBodyInput liveThreadsBodyInput)
+        {
+            return SendRequest<GenericContainer>("api/live/" + thread + "/update", liveThreadsBodyInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Post an update to the thread asynchronously.
+        /// Requires the update permission for this thread.
+        /// See also: /api/live/thread/strike_update, and /api/live/thread/delete_update.
+        /// </summary>
+        /// <param name="thread">id</param>
+        /// <param name="liveThreadsBodyInput">A valid LiveThreadsBodyInput instance</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> UpdateAsync(string thread, LiveThreadsBodyInput liveThreadsBodyInput)
+        {
+            return await SendRequestAsync<GenericContainer>("api/live/" + thread + "/update", liveThreadsBodyInput, Method.POST);
         }
 
         /// <summary>
@@ -340,23 +574,11 @@ namespace Reddit.NET.Models
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="thread">id</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="styleSr">subreddit name</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="liveThreadsGetUpdatesInput">A valid LiveThreadsGetUpdatesInput instance</param>
         /// <returns>The requested live updates.</returns>
-        public LiveUpdateContainer GetUpdates(string thread, string after, string before, string styleSr, int count = 0, int limit = 25)
+        public LiveUpdateContainer GetUpdates(string thread, LiveThreadsGetUpdatesInput liveThreadsGetUpdatesInput)
         {
-            RestRequest restRequest = PrepareRequest("live/" + thread);
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("stylesr", styleSr);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-
-            return JsonConvert.DeserializeObject<LiveUpdateContainer>(ExecuteRequest(restRequest));
+            return SendRequest<LiveUpdateContainer>("live/" + thread, liveThreadsGetUpdatesInput);
         }
 
         /// <summary>
@@ -389,25 +611,11 @@ namespace Reddit.NET.Models
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="thread">id</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="srListingInput">A valid SrListingInput instance</param>
         /// <returns>(TODO - Untested)</returns>
-        public object Discussions(string thread, string after, string before, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        public object Discussions(string thread, SrListingInput srListingInput)
         {
-            RestRequest restRequest = PrepareRequest("live/" + thread + "/discussions");
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return SendRequest<object>("live/" + thread + "/discussions", srListingInput);
         }
 
         /// <summary>

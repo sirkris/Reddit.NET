@@ -1,7 +1,7 @@
 ﻿using RestSharp;
 using System;
 
-namespace Reddit.NET.Models
+namespace Reddit.Models
 {
     public class Captcha : BaseModel
     {

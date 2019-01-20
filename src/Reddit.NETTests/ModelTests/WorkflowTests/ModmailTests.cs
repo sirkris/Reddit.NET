@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Exceptions;
-using Reddit.NET.Models.Structures;
+using Reddit.Exceptions;
+using Reddit.Inputs.Modmail;
+using Reddit.Things;
 
-namespace Reddit.NETTests.ModelTests.WorkflowTests
+namespace RedditTests.ModelTests.WorkflowTests
 {
     [TestClass]
     public class ModmailTests : BaseTests
@@ -12,11 +13,12 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
         [TestMethod]
         public void GetConversations()
         {
-            ConversationContainer conversationContainer = reddit.Models.Modmail.GetConversations("", "", "user", "all");
+            ConversationContainer conversationContainer = reddit.Models.Modmail.GetConversations(new ModmailGetConversationsInput(sort: "user"));
 
             Validate(conversationContainer);
 
-            conversationContainer = reddit.Models.Modmail.GetConversations("", reddit.Models.Subreddits.About(testData["Subreddit"]).Data.Name, "recent", "all");
+            conversationContainer = reddit.Models.Modmail.GetConversations(
+                new ModmailGetConversationsInput(entity: reddit.Models.Subreddits.About(testData["Subreddit"]).Data.Name, sort: "recent"));
 
             Validate(conversationContainer);
         }
@@ -25,13 +27,14 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
         public void Conversation()
         {
             // If a non-moderator tries to specify a "to" username for NewConversation, the API will return 403 Forbidden.  --Kris
-            Validate(reddit.Models.Modmail.NewConversation("This is a test.", false, testData["Subreddit"], "Test Message", reddit.Models.Account.Me().Name));
+            Validate(reddit.Models.Modmail.NewConversation(new ModmailNewConversationInput("This is a test.", false, testData["Subreddit"], "Test Message", reddit.Models.Account.Me().Name)));
 
             // If user is already muted, we can't continue because Unmute requires the ID of the conversation in which the user was originally muted.  --Kris
             ModmailConversationContainer modmailConversationContainer = null;
             try
             {
-                modmailConversationContainer = reddit2.Models.Modmail.NewConversation("This is a test with no target user.", false, testData["Subreddit"], "Test Message", "");
+                modmailConversationContainer = reddit2.Models.Modmail.NewConversation(
+                    new ModmailNewConversationInput("This is a test with no target user.", false, testData["Subreddit"], "Test Message"));
             }
             catch (RedditBadRequestException ex)
             {
@@ -46,7 +49,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Validate(modmailConversationContainer2);
             Assert.AreEqual(modmailConversationContainer.Conversation.Id, modmailConversationContainer2.Conversation.Id);
 
-            modmailConversationContainer2 = reddit.Models.Modmail.NewMessage(modmailConversationContainer.Conversation.Id, "This is a test reply.", false, false);
+            modmailConversationContainer2 = reddit.Models.Modmail.NewMessage(modmailConversationContainer.Conversation.Id, new ModmailNewMessageInput("This is a test reply.", false, false));
 
             Validate(modmailConversationContainer2);
             Assert.AreEqual(modmailConversationContainer.Conversation.Id, modmailConversationContainer2.Conversation.Id);

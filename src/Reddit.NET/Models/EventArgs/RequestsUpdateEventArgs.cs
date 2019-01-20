@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Models.EventArgs
+namespace Reddit.Models.EventArgs
 {
     public class RequestsUpdateEventArgs
     {

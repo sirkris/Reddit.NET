@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs;
+using Reddit.Inputs.Emoji;
+using Reddit.Things;
 using RestSharp;
 using System;
 using System.Linq;
 
-namespace Reddit.NET.Models
+namespace Reddit.Models
 {
     public class Emoji : BaseModel
     {
@@ -20,17 +22,11 @@ namespace Reddit.NET.Models
         /// It also adds it to the DB using name as the column and sr_fullname as the key and sends the status on the websocket URL that is provided as part of this response.
         /// </summary>
         /// <param name="subreddit">The subreddit with the emojis</param>
-        /// <param name="name">Name of the emoji to be created. It can be alphanumeric without any special characters except '-' & '_' and cannot exceed 24 characters</param>
-        /// <param name="s3Key">S3 key of the uploaded image which can be obtained from the S3 url. This is of the form subreddit/hash_value</param>
+        /// <param name="emojiAddInput">A valid EmojiAddInput instance</param>
         /// <returns>(TODO - Untested)</returns>
-        public object Add(string subreddit, string name, string s3Key)
+        public object Add(string subreddit, EmojiAddInput emojiAddInput)
         {
-            RestRequest restRequest = PrepareRequest("api/v1/" + subreddit + "/emoji.json", Method.POST);
-
-            restRequest.AddParameter("name", name);
-            restRequest.AddParameter("s3_key", s3Key);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return SendRequest<object>("api/v1/" + subreddit + "/emoji.json", emojiAddInput, Method.POST);
         }
 
         // TODO - Needs testing.
@@ -51,17 +47,11 @@ namespace Reddit.NET.Models
         /// Using this lease the client will upload the emoji image to S3 temp bucket (included as part of the S3 URL). This lease is used by S3 to verify that the upload is authorized.
         /// </summary>
         /// <param name="subreddit">The subreddit with the emojis</param>
-        /// <param name="filePath">name and extension of the image file e.g. image1.png</param>
-        /// <param name="mimeType">mime type of the image e.g. image/png</param>
+        /// <param name="imageUploadInput">A valid ImageUploadInput instance</param>
         /// <returns>An S3 lease.</returns>
-        public S3UploadLeaseContainer AcquireLease(string subreddit, string filePath, string mimeType)
+        public S3UploadLeaseContainer AcquireLease(string subreddit, ImageUploadInput imageUploadInput)
         {
-            RestRequest restRequest = PrepareRequest("api/v1/" + subreddit + "/emoji_asset_upload_s3.json", Method.POST);
-
-            restRequest.AddParameter("filepath", filePath);
-            restRequest.AddParameter("mimetype", mimeType);
-
-            return JsonConvert.DeserializeObject<S3UploadLeaseContainer>(ExecuteRequest(restRequest));
+            return SendRequest<S3UploadLeaseContainer>("api/v1/" + subreddit + "/emoji_asset_upload_s3.json", imageUploadInput, Method.POST);
         }
 
         // TODO - Can't get this to work.  Action URL keeps returning 403.  --Kris

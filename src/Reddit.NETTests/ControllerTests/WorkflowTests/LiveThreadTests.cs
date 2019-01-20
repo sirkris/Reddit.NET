@@ -1,11 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.EventArgs;
-using RedditThings = Reddit.NET.Models.Structures;
+using Reddit.Coordinators;
+using Reddit.Coordinators.EventArgs;
 using System;
 using System.Collections.Generic;
 
-namespace Reddit.NETTests.ControllerTests.WorkflowTests
+namespace RedditTests.CoordinatorTests.WorkflowTests
 {
     [TestClass]
     public class LiveThreadTests : BaseTests
@@ -25,7 +24,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
 
         private bool LiveThreadUpdated = false;
         private bool LiveThreadContributorsUpdated = false;
-        private List<RedditThings.LiveUpdate> LiveThreadUpdates;
+        private List<Reddit.Things.LiveUpdate> LiveThreadUpdates;
 
         public LiveThreadTests() : base() { }
 
@@ -113,7 +112,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             LiveThread.StrikeUpdate(LiveThread.Updates[0].Name);
 
             // Get update.  --Kris
-            RedditThings.LiveUpdate liveUpdate = LiveThread.GetUpdate(LiveThread.Updates[0].Id);
+            Reddit.Things.LiveUpdate liveUpdate = LiveThread.GetUpdate(LiveThread.Updates[0].Id);
 
             Validate(liveUpdate);
             Assert.AreEqual(LiveThread.Updates[0].Id, liveUpdate.Id);
@@ -155,7 +154,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             // Despite what VS says, we don't want to use await here.  --Kris
             LiveThread.EditAsync(LiveThread.Title, LiveThread.Description, !LiveThread.NSFW, LiveThread.Resources);
 
-            LiveThreadUpdates = new List<RedditThings.LiveUpdate>();
+            LiveThreadUpdates = new List<Reddit.Things.LiveUpdate>();
             for (int i = 1; i <= 5; i++)
             {
                 // Despite what VS says, we don't want to use await here.  --Kris

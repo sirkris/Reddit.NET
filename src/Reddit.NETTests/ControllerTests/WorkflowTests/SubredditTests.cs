@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.EventArgs;
+using Reddit.Coordinators;
+using Reddit.Coordinators.EventArgs;
 using System;
 using System.Collections.Generic;
 
-namespace Reddit.NETTests.ControllerTests.WorkflowTests
+namespace RedditTests.CoordinatorTests.WorkflowTests
 {
     [TestClass]
     public class SubredditTests : BaseTests
@@ -103,7 +103,7 @@ namespace Reddit.NETTests.ControllerTests.WorkflowTests
             Subreddit.Posts.NewUpdated -= C_NewPostsUpdated;
             Subreddit.Posts.MonitorNew();
 
-            Assert.AreEqual(10, NewPosts.Count);
+            Assert.IsTrue(NewPosts.Count >= 10);
         }
 
         // When a new post is detected in MonitorNewPosts, this method will add it/them to the list.  --Kris

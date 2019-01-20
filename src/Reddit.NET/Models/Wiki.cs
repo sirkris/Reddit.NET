@@ -1,8 +1,11 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs;
+using Reddit.Inputs.Wiki;
+using Reddit.Things;
 using RestSharp;
+using System.Threading.Tasks;
 
-namespace Reddit.NET.Models
+namespace Reddit.Models
 {
     public class Wiki : BaseModel
     {
@@ -14,98 +17,123 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Allow username to edit this wiki page.
         /// </summary>
-        /// <param name="page">the name of an existing wiki page</param>
-        /// <param name="username">the name of an existing user</param>
+        /// <param name="wikiPageEditorInput">A valid WikiPageEditorInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        public void AllowEditor(string page, string username, string subreddit = null)
+        public void AllowEditor(WikiPageEditorInput wikiPageEditorInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/alloweditor/add", Method.POST);
+            SendRequest<object>(Sr(subreddit) + "api/wiki/alloweditor/add", wikiPageEditorInput, Method.POST);
+        }
 
-            restRequest.AddParameter("page", page);
-            restRequest.AddParameter("username", username);
-
-            ExecuteRequest(restRequest);
+        /// <summary>
+        /// Asynchronously allow username to edit this wiki page.
+        /// </summary>
+        /// <param name="wikiPageEditorInput">A valid WikiPageEditorInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task AllowEditorAsync(WikiPageEditorInput wikiPageEditorInput, string subreddit = null)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/wiki/alloweditor/add", wikiPageEditorInput, Method.POST);
         }
 
         /// <summary>
         /// Deny username to edit this wiki page.
         /// </summary>
-        /// <param name="page">the name of an existing wiki page</param>
-        /// <param name="username">the name of an existing user</param>
+        /// <param name="wikiPageEditorInput">A valid WikiPageEditorInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        public void DenyEditor(string page, string username, string subreddit = null)
+        public void DenyEditor(WikiPageEditorInput wikiPageEditorInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/alloweditor/del", Method.POST);
+            SendRequest<object>(Sr(subreddit) + "api/wiki/alloweditor/del", wikiPageEditorInput, Method.POST);
+        }
 
-            restRequest.AddParameter("page", page);
-            restRequest.AddParameter("username", username);
-
-            ExecuteRequest(restRequest);
+        /// <summary>
+        /// Asynchronously deny username to edit this wiki page.
+        /// </summary>
+        /// <param name="wikiPageEditorInput">A valid WikiPageEditorInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task DenyEditorAsync(WikiPageEditorInput wikiPageEditorInput, string subreddit = null)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/wiki/alloweditor/del", wikiPageEditorInput, Method.POST);
         }
 
         /// <summary>
         /// Edit a wiki page.
         /// </summary>
-        /// <param name="content">The page content</param>
-        /// <param name="page">the name of an existing page or a new page to create</param>
-        /// <param name="previous">the starting point revision for this edit</param>
-        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="wikiEditPageInput">A valid WikiEditPageInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        public void Edit(string content, string page, string previous, string reason, string subreddit = null)
+        public void Edit(WikiEditPageInput wikiEditPageInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/edit", Method.POST);
+            SendRequest<object>(Sr(subreddit) + "api/wiki/edit", wikiEditPageInput, Method.POST);
+        }
 
-            AddParamIfNotNull("content", content, ref restRequest);
-            restRequest.AddParameter("page", page);
-            restRequest.AddParameter("previous", previous);
-            restRequest.AddParameter("reason", reason);
-            
-            ExecuteRequest(restRequest);
+        /// <summary>
+        /// Edit a wiki page asynchronously.
+        /// </summary>
+        /// <param name="wikiEditPageInput">A valid WikiEditPageInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task EditAsync(WikiEditPageInput wikiEditPageInput, string subreddit = null)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/wiki/edit", wikiEditPageInput, Method.POST);
         }
 
         /// <summary>
         /// Create a wiki page.
         /// </summary>
-        /// <param name="content">The page content</param>
-        /// <param name="page">the name of the new page being created</param>
-        /// <param name="reason">a string up to 256 characters long, consisting of printable characters</param>
+        /// <param name="wikiCreatePageInput">A valid WikiCreatePageInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        public void Create(string content, string page, string reason, string subreddit = null)
+        public void Create(WikiCreatePageInput wikiCreatePageInput, string subreddit = null)
         {
-            Edit(content, page, null, reason, subreddit);
+            Edit(new WikiEditPageInput(wikiCreatePageInput), subreddit);
+        }
+
+        /// <summary>
+        /// Create a wiki page asynchronously.
+        /// </summary>
+        /// <param name="wikiCreatePageInput">A valid WikiCreatePageInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task CreateAsync(WikiCreatePageInput wikiCreatePageInput, string subreddit = null)
+        {
+            await EditAsync(new WikiEditPageInput(wikiCreatePageInput), subreddit);
         }
 
         /// <summary>
         /// Toggle the public visibility of a wiki page revision.
         /// </summary>
-        /// <param name="page">the name of an existing wiki page</param>
-        /// <param name="revision">a wiki revision ID</param>
+        /// <param name="wikiPageRevisionInput">A valid WikiPageRevisionInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         /// <returns>Status object indicating true if page was hidden, false if page was unhidden.</returns>
-        public StatusResult Hide(string page, string revision, string subreddit = null)
+        public StatusResult Hide(WikiPageRevisionInput wikiPageRevisionInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/hide", Method.POST);
+            return SendRequest<StatusResult>(Sr(subreddit) + "api/wiki/hide", wikiPageRevisionInput, Method.POST);
+        }
 
-            restRequest.AddParameter("page", page);
-            restRequest.AddParameter("revision", revision);
-
-            return JsonConvert.DeserializeObject<StatusResult>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Toggle the public visibility of a wiki page revision asynchronously.
+        /// </summary>
+        /// <param name="wikiPageRevisionInput">A valid WikiPageRevisionInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        /// <returns>Status object indicating true if page was hidden, false if page was unhidden.</returns>
+        public async Task<StatusResult> HideAsync(WikiPageRevisionInput wikiPageRevisionInput, string subreddit = null)
+        {
+            return await SendRequestAsync<StatusResult>(Sr(subreddit) + "api/wiki/hide", wikiPageRevisionInput, Method.POST);
         }
 
         /// <summary>
         /// Revert a wiki page to revision.
         /// </summary>
-        /// <param name="page">the name of an existing wiki page</param>
-        /// <param name="revision">a wiki revision ID</param>
+        /// <param name="wikiPageRevisionInput">A valid WikiPageRevisionInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        public void Revert(string page, string revision, string subreddit = null)
+        public void Revert(WikiPageRevisionInput wikiPageRevisionInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/wiki/revert", Method.POST);
+            SendRequest<object>(Sr(subreddit) + "api/wiki/revert", wikiPageRevisionInput, Method.POST);
+        }
 
-            restRequest.AddParameter("page", page);
-            restRequest.AddParameter("revision", revision);
-
-            ExecuteRequest(restRequest);
+        /// <summary>
+        /// Revert a wiki page to revision asynchronously.
+        /// </summary>
+        /// <param name="wikiPageRevisionInput">A valid WikiPageRevisionInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        public async Task RevertAsync(WikiPageRevisionInput wikiPageRevisionInput, string subreddit = null)
+        {
+            await SendRequestAsync<object>(Sr(subreddit) + "api/wiki/revert", wikiPageRevisionInput, Method.POST);
         }
 
         // TODO - Either this feature doesn't work or even the busiest subreddits have no Wiki discussion posts.  All my tests yield a listing container with no children.  --Kris
@@ -114,26 +142,12 @@ namespace Reddit.NET.Models
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
+        /// <param name="srListingInput">A valid SrListingInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>(TODO - Untested)</returns>
-        public object Discussions(string page, string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        public object Discussions(string page, SrListingInput srListingInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/discussions/" + page);
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-            
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return SendRequest<object>(Sr(subreddit) + "wiki/discussions/" + page, srListingInput);
         }
 
         /// <summary>
@@ -149,26 +163,12 @@ namespace Reddit.NET.Models
         /// <summary>
         /// Retrieve a list of recently changed wiki pages in this subreddit.
         /// </summary>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
+        /// <param name="srListingInput">A valid SrListingInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of wiki pages.</returns>
-        public WikiPageRevisionContainer Revisions(string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        public WikiPageRevisionContainer Revisions(SrListingInput srListingInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/revisions");
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-
-            return JsonConvert.DeserializeObject<WikiPageRevisionContainer>(ExecuteRequest(restRequest));
+            return SendRequest<WikiPageRevisionContainer>(Sr(subreddit) + "wiki/revisions", srListingInput);
         }
 
         /// <summary>
@@ -176,26 +176,12 @@ namespace Reddit.NET.Models
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
+        /// <param name="srListingInput">A valid SrListingInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of revisions.</returns>
-        public WikiPageRevisionContainer PageRevisions(string page, string after, string before, string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false)
+        public WikiPageRevisionContainer PageRevisions(string page, SrListingInput srListingInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/revisions/" + page);
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-
-            return JsonConvert.DeserializeObject<WikiPageRevisionContainer>(ExecuteRequest(restRequest));
+            return SendRequest<WikiPageRevisionContainer>(Sr(subreddit) + "wiki/revisions/" + page, srListingInput);
         }
 
         /// <summary>
@@ -213,18 +199,24 @@ namespace Reddit.NET.Models
         /// Update the permissions and visibility of wiki page.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
-        /// <param name="listed">boolean value (true = appear in /wiki/pages, false = don't appear in /wiki/pages)</param>
-        /// <param name="permLevel">an integer (0 = use wiki perms, 1 = only approved users may edit, 2 = only mods may edit or view)</param>
+        /// <param name="wikiUpdatePermissionsInput">A valid WikiUpdatePermissionsInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         /// <returns>An object containing wiki page settings.</returns>
-        public WikiPageSettingsContainer UpdatePermissions(string page, bool listed, int permLevel, string subreddit = null)
+        public WikiPageSettingsContainer UpdatePermissions(string page, WikiUpdatePermissionsInput wikiUpdatePermissionsInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/settings/" + page, Method.POST);
+            return SendRequest<WikiPageSettingsContainer>(Sr(subreddit) + "wiki/settings/" + page, wikiUpdatePermissionsInput, Method.POST);
+        }
 
-            restRequest.AddParameter("listed", listed);
-            restRequest.AddParameter("permlevel", permLevel);
-
-            return JsonConvert.DeserializeObject<WikiPageSettingsContainer>(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Update the permissions and visibility of wiki page asynchronously.
+        /// </summary>
+        /// <param name="page">the name of an existing wiki page</param>
+        /// <param name="wikiUpdatePermissionsInput">A valid WikiUpdatePermissionsInput instance</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        /// <returns>An object containing wiki page settings.</returns>
+        public async Task<WikiPageSettingsContainer> UpdatePermissionsAsync(string page, WikiUpdatePermissionsInput wikiUpdatePermissionsInput, string subreddit = null)
+        {
+            return await SendRequestAsync<WikiPageSettingsContainer>(Sr(subreddit) + "wiki/settings/" + page, wikiUpdatePermissionsInput, Method.POST);
         }
 
         /// <summary>
@@ -236,7 +228,19 @@ namespace Reddit.NET.Models
         /// <returns>An object containing wiki page settings.</returns>
         public WikiPageSettingsContainer UpdatePermissions(string page, WikiPageSettings wikiPageSettings, string subreddit = null)
         {
-            return UpdatePermissions(page, wikiPageSettings.Listed, wikiPageSettings.PermLevel, subreddit);
+            return UpdatePermissions(page, new WikiUpdatePermissionsInput(wikiPageSettings.Listed, wikiPageSettings.PermLevel), subreddit);
+        }
+
+        /// <summary>
+        /// Update the permissions and visibility of wiki page asynchronously.
+        /// </summary>
+        /// <param name="page">the name of an existing wiki page</param>
+        /// <param name="wikiPageSettings">A valid instance of WikiPageSettings</param>
+        /// <param name="subreddit">The subreddit where the wiki lives</param>
+        /// <returns>An object containing wiki page settings.</returns>
+        public async Task<WikiPageSettingsContainer> UpdatePermissionsAsync(string page, WikiPageSettings wikiPageSettings, string subreddit = null)
+        {
+            return await UpdatePermissionsAsync(page, new WikiUpdatePermissionsInput(wikiPageSettings.Listed, wikiPageSettings.PermLevel), subreddit);
         }
 
         /// <summary>
@@ -244,18 +248,12 @@ namespace Reddit.NET.Models
         /// If v is given, show the wiki page as it was at that version. If both v and v2 are given, show a diff of the two.
         /// </summary>
         /// <param name="page">the name of an existing wiki page</param>
-        /// <param name="v">a wiki revision ID</param>
-        /// <param name="v2">a wiki revision ID</param>
+        /// <param name="wikiPageContentInput">A valid WikiPageContentInput instance</param>
         /// <param name="subreddit">The subreddit where the wiki lives</param>
         /// <returns>An object containing wiki page data.</returns>
-        public WikiPageContainer Page(string page, string v, string v2, string subreddit = null)
+        public WikiPageContainer Page(string page, WikiPageContentInput wikiPageContentInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "wiki/" + page);
-
-            restRequest.AddParameter("v", v);
-            restRequest.AddParameter("v2", v2);
-
-            return JsonConvert.DeserializeObject<WikiPageContainer>(ExecuteRequest(restRequest));
+            return SendRequest<WikiPageContainer>(Sr(subreddit) + "wiki/" + page, wikiPageContentInput);
         }
     }
 }

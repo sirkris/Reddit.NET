@@ -1,6 +1,6 @@
-﻿using Reddit.NET;
-using Reddit.NET.Controllers;
-using Reddit.NET.Controllers.EventArgs;
+﻿using Reddit;
+using Reddit.Coordinators;
+using Reddit.Coordinators.EventArgs;
 using System;
 using System.Collections.Generic;
 
@@ -79,7 +79,7 @@ namespace Example
 
                 /*
                  * But wait, there's more!  We can monitor posts on multiple subreddits at once (delay is automatically multiplied to keep us under speed the limit).
-                 * If you want to see something really crazy, check out Reddit.NETTests.ControllerTests.WorkflowTests.StressTests.AsyncTests.PoliceState().  That 
+                 * If you want to see something really crazy, check out Reddit.NETTests.CoordinatorTests.WorkflowTests.StressTests.AsyncTests.PoliceState().  That 
                  * test creates 60 new posts on the test subreddit (and 10 comments for each post), while simultaneously monitoring each of these 60 posts for new 
                  * comments, all while monitoring the test subreddit for new posts.  Of course, the delay between each monitoring thread's request would be roughly 
                  * 90 seconds in this case (the delay is the number of things being monitored times 1.5 seconds), but the library handles all that for you automatically.

@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Exceptions;
+using Reddit.Exceptions;
+using Reddit.Inputs.LinksAndComments;
+using System;
 
-namespace Reddit.NETTests.ModelTests
+namespace RedditTests.ModelTests
 {
     [TestClass]
     public class AppOnlyTests : BaseTests
@@ -15,6 +17,7 @@ namespace Reddit.NETTests.ModelTests
                 Validate(reddit3.Models.Emoji.All("WayOfTheBern"));
             }
             catch (RedditUserRequiredException) { }
+            catch (AggregateException ex) when (ex.InnerException is RedditUserRequiredException) { }
         }
 
         [TestMethod]
@@ -30,13 +33,17 @@ namespace Reddit.NETTests.ModelTests
             {
                 caught = true;
             }
+            catch (AggregateException ex) when (ex.InnerException is RedditUserRequiredException)
+            {
+                caught = true;
+            }
             Assert.IsTrue(caught);
         }
 
         [TestMethod]
         public void LinksAndComments()
         {
-            Validate(reddit3.Models.LinksAndComments.MoreChildren("dlpnw9j", false, "t3_6tyfna", "new"));
+            Validate(reddit3.Models.LinksAndComments.MoreChildren(new LinksAndCommentsMoreChildrenInput("dlpnw9j", false, "t3_6tyfna", "new")));
         }
 
         [TestMethod]

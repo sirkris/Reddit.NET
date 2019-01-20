@@ -1,9 +1,9 @@
 ﻿using Newtonsoft.Json;
-using Reddit.NET.Models.Structures;
+using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
 
-namespace Reddit.NET.Models
+namespace Reddit.Models
 {
     public class Misc : BaseModel
     {

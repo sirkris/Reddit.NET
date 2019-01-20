@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Exceptions;
-using RedditThings = Reddit.NET.Models.Structures;
+using Reddit.Exceptions;
+using System;
 
-namespace Reddit.NETTests.ControllerTests
+namespace RedditTests.CoordinatorTests
 {
     [TestClass]
     public class AccountTests : BaseTests
@@ -31,7 +31,7 @@ namespace Reddit.NETTests.ControllerTests
         public void UpdatePrefs()
         {
             // This just grabs your existing preferences and sends them right back.  --Kris
-            Validate(reddit.Account.UpdatePrefs(new RedditThings.AccountPrefsSubmit(reddit.Account.Prefs(), "US", false, "")));
+            Validate(reddit.Account.UpdatePrefs(new Reddit.Things.AccountPrefsSubmit(reddit.Account.Prefs(), "US", false, "")));
         }
 
         [TestMethod]
@@ -96,6 +96,7 @@ namespace Reddit.NETTests.ControllerTests
                 Validate(reddit.Account.MyStreamingSubreddits());
             }
             catch (RedditForbiddenException) { }
+            catch (AggregateException ex) when (ex.InnerException is RedditForbiddenException) { }
         }
 
         [TestMethod]

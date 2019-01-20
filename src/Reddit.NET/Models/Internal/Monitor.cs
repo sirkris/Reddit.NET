@@ -1,9 +1,9 @@
-﻿using ControlStructures = Reddit.NET.Controllers.Structures;
-using Reddit.NET.Exceptions;
-using Reddit.NET.Models.EventArgs;
+﻿using ControlStructures = Reddit.Coordinators.Structures;
+using Reddit.Exceptions;
+using Reddit.Models.EventArgs;
 using System;
 
-namespace Reddit.NET.Models.Internal
+namespace Reddit.Models.Internal
 {
     internal class Monitor
     {

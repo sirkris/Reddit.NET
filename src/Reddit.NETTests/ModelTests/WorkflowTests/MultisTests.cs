@@ -1,9 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Exceptions;
-using Reddit.NET.Models.Structures;
+using Reddit.Exceptions;
+using Reddit.Inputs.Multis;
+using Reddit.Things;
 using System.Collections.Generic;
 
-namespace Reddit.NETTests.ModelTests.WorkflowTests
+namespace RedditTests.ModelTests.WorkflowTests
 {
     [TestClass]
     public class MultisTests : BaseTests
@@ -48,7 +49,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
         {
             try
             {
-                LabeledMultiContainer labeledMultiContainer = reddit.Models.Multis.Copy(multiDisplayName, multiPath, multiPathCopy);
+                LabeledMultiContainer labeledMultiContainer = reddit.Models.Multis.Copy(new MultiURLInput(multiDisplayName, multiPath, multiPathCopy));
 
                 return labeledMultiContainer;
             }
@@ -80,7 +81,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
         {
             try
             {
-                LabeledMultiContainer labeledMultiContainer = reddit.Models.Multis.Rename(multiDisplayName, multiPath, multiPathRenamed);
+                LabeledMultiContainer labeledMultiContainer = reddit.Models.Multis.Rename(new MultiURLInput(multiDisplayName, multiPath, multiPathRenamed));
 
                 return labeledMultiContainer;
             }

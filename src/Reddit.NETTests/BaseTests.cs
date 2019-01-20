@@ -1,14 +1,15 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
-using Reddit.NET;
-using Controllers = Reddit.NET.Controllers;
-using Reddit.NET.Models.Structures;
+using Reddit;
+using Coordinators = Reddit.Coordinators;
+using Reddit.Inputs.LinksAndComments;
+using Reddit.Things;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Reddit.NETTests
+namespace RedditTests
 {
     public abstract class BaseTests
     {
@@ -64,7 +65,7 @@ namespace Reddit.NETTests
             System.Xml.XmlDocument xmlDocument = new System.Xml.XmlDocument();
             xmlDocument.LoadXml(xmlData);
 
-            return new Dictionary<string, string>
+            Dictionary<string, string> res = new Dictionary<string, string>
             {
                 { "AppId", xmlDocument.GetElementsByTagName("AppId")[0].InnerText },
                 { "RefreshToken", xmlDocument.GetElementsByTagName("RefreshToken")[0].InnerText },
@@ -72,6 +73,16 @@ namespace Reddit.NETTests
                 { "Subreddit", xmlDocument.GetElementsByTagName("Subreddit")[0].InnerText }
             };
             // End .NET Core workaround.  --Kris
+
+            if (res["AppId"].Equals("Paste Reddit App ID here")
+                || res["RefreshToken"].Equals("Paste Reddit Refresh Token here")
+                || res["RefreshToken2"].Equals("Paste second account's Reddit Refresh Token here (required for WorkflowTests)")
+                || res["Subreddit"].Equals("Paste test subreddit (new or existing with full mod privs) here"))
+            {
+                Assert.Inconclusive("You must replace all default values in Reddit.NETTestsData.xml before running the tests.");
+            }
+
+            return res;
 
             // TODO - Replace above workaround with commented code below for all test classes after .NET Core adds support for DataSourceAttribute.  --Kris
             // https://github.com/Microsoft/testfx/issues/233
@@ -96,26 +107,26 @@ namespace Reddit.NETTests
 
         public PostResultShortContainer TestPost()
         {
-            return reddit.Models.LinksAndComments.Submit(false, "", "", "", "", "",
+            return reddit.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(false, "", "", "", "",
                     "link", false, true, null, true, false, testData["Subreddit"], "",
-                    "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null);
+                    "UPDATE:  As of " + DateTime.Now.ToString("f") + ", she's still looking into it....", "http://iwilllookintoit.com/", null));
         }
 
         public CommentResultContainer TestComment(string parentFullname)
         {
-            return reddit.Models.LinksAndComments.Comment(false, "", "This is a test comment.  So there.", parentFullname);
+            return reddit.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is a test comment.  So there.", parentFullname));
         }
 
         public CommentResultContainer TestCommentReply(string parentFullname)
         {
-            return reddit.Models.LinksAndComments.Comment(false, "", "This is a reply to a test comment.", parentFullname);
+            return reddit.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is a reply to a test comment.", parentFullname));
         }
 
         /// <summary>
         /// Retrieves your test subreddit.  It is assumed that the subreddit already exists at this point.
         /// </summary>
         /// <returns>The populated Subreddit data.</returns>
-        protected Controllers.Subreddit GetSubreddit(ref Controllers.Subreddit subreddit)
+        protected Coordinators.Subreddit GetSubreddit(ref Coordinators.Subreddit subreddit)
         {
             subreddit = reddit.Subreddit(testData["Subreddit"]).About();
             return subreddit;
@@ -125,7 +136,7 @@ namespace Reddit.NETTests
         /// Retrieves your secondary test user.
         /// </summary>
         /// <returns>The populated User data.</returns>
-        protected Controllers.User GetTargetUser()
+        protected Coordinators.User GetTargetUser()
         {
             return reddit2.Account.Me;
         }
@@ -164,7 +175,7 @@ namespace Reddit.NETTests
             Assert.IsNotNull(dynamic);
         }
 
-        public Controllers.LiveThread Validate(Controllers.LiveThread liveThread)
+        public Coordinators.LiveThread Validate(Coordinators.LiveThread liveThread)
         {
             Assert.IsNotNull(liveThread);
             Assert.IsNotNull(liveThread.Id);
@@ -188,7 +199,7 @@ namespace Reddit.NETTests
             Assert.IsFalse(string.IsNullOrWhiteSpace(user.Name));
         }
 
-        public void Validate(Controllers.User user)
+        public void Validate(Coordinators.User user)
         {
             Assert.IsNotNull(user);
             Assert.IsFalse(user.Created.Equals(default(DateTime)));
@@ -349,19 +360,6 @@ namespace Reddit.NETTests
         {
             Assert.IsNotNull(wikiPageRevisionContainer);
             Assert.IsNotNull(wikiPageRevisionContainer.Data);
-        }
-
-        public void Validate(StatusResult statusResult, bool status = true)
-        {
-            Assert.IsNotNull(statusResult);
-            if (status)
-            {
-                Assert.IsTrue(statusResult.Status);
-            }
-            else
-            {
-                Assert.IsFalse(statusResult.Status);
-            }
         }
 
         public void Validate(List<ActionResult> actionResults, int minCount = 0)

@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.NET.Models.Structures;
+using Reddit.Inputs.LiveThreads;
+using Reddit.Things;
 using System.Collections.Generic;
 
-namespace Reddit.NETTests.ModelTests.WorkflowTests
+namespace RedditTests.ModelTests.WorkflowTests
 {
     [TestClass]
     public class LiveThreadsTests : BaseTests
@@ -15,7 +16,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             User patsy = GetTargetUserModel();
 
             // Create a new live thread.  --Kris
-            LiveThreadCreateResultContainer createRes = reddit.Models.LiveThreads.Create("This is a test.", false, "Resources text.", "Title text.");
+            LiveThreadCreateResultContainer createRes = reddit.Models.LiveThreads.Create(new LiveThreadsConfigInput("Title text.", "This is a test.", false, "Resources text."));
 
             Validate(createRes);
 
@@ -25,18 +26,17 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Validate(liveEvent);
 
             // Edit the live thread.  --Kris
-            GenericContainer editRes = reddit.Models.LiveThreads.Edit(liveEvent.Data.Id, "This is an ADULTS-ONLY test.", true, "Resources text.", "Title text.");
+            GenericContainer editRes = reddit.Models.LiveThreads.Edit(liveEvent.Data.Id, new LiveThreadsConfigInput("Title text.", "This is an ADULTS-ONLY test.", true, "Resources text."));
 
             Validate(editRes);
 
             // Invite a contributor.  --Kris
-            GenericContainer inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, patsy.Name, "+update", "liveupdate_contributor_invite");
+            GenericContainer inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, new LiveThreadsContributorInput(patsy.Name, "+update", "liveupdate_contributor_invite"));
 
             Validate(inviteRes);
 
             // Change contributor permissions.  --Kris
-            GenericContainer permsRes = reddit.Models.LiveThreads.SetContributorPermissions(liveEvent.Data.Id, patsy.Name, "+edit", "liveupdate_contributor_invite");
-
+            GenericContainer permsRes = reddit.Models.LiveThreads.SetContributorPermissions(liveEvent.Data.Id, new LiveThreadsContributorInput(patsy.Name, "+edit", "liveupdate_contributor_invite"));
             Validate(permsRes);
 
             // Get contributors.  --Kris
@@ -58,7 +58,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Validate(removeInviteRes);
 
             // Re-invite contributor so they can accept it.  --Kris
-            inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, patsy.Name, "+update", "liveupdate_contributor_invite");
+            inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, new LiveThreadsContributorInput(patsy.Name, "+update", "liveupdate_contributor_invite"));
 
             Validate(inviteRes);
 
@@ -73,7 +73,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Validate(removeRes);
 
             // Target user has friends in high places.  --Kris
-            inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, patsy.Name, "+update", "liveupdate_contributor_invite");
+            inviteRes = reddit.Models.LiveThreads.InviteContributor(liveEvent.Data.Id, new LiveThreadsContributorInput(patsy.Name, "+update", "liveupdate_contributor_invite"));
             acceptRes = reddit2.Models.LiveThreads.AcceptContributorInvite(liveEvent.Data.Id);
 
             Validate(inviteRes);
@@ -91,7 +91,7 @@ namespace Reddit.NETTests.ModelTests.WorkflowTests
             Validate(updateRes);
 
             // Get updates.  --Kris
-            LiveUpdateContainer updates = reddit.Models.LiveThreads.GetUpdates(liveEvent.Data.Id, "", "", "");
+            LiveUpdateContainer updates = reddit.Models.LiveThreads.GetUpdates(liveEvent.Data.Id, new LiveThreadsGetUpdatesInput());
 
             Validate(updates);
             Assert.IsTrue(updates.Data.Children.Count == 1);
