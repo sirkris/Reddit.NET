@@ -25,6 +25,28 @@ https://github.com/sirkris/Reddit.NET/tree/develop
 
 Kris Craig
 
+## Usage
+
+Reddit.NET can be installed via NuGet.  You can find it at:  https://www.nuget.org/packages/Reddit.NET
+
+To install via the Visual Studio NuGet Package Manager Console (in VS 2017, you'll find it under Tools->NuGet Package Manager->NuGet Package Manager Console):
+
+```nuget
+PM> Install-Package Reddit.NET
+```
+
+To create a new API instance bound to a specific user's refresh token:
+
+```c#
+using Reddit;
+
+...
+
+var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+```
+
+See below for more detailed usage examples.
+
 ## Basic Architecture
 Reddit.NET follows a model-controller pattern, with each layer serving a distinct purpose. The model classes/methods (which can be accessed directly if for some reason you don't want to go through the controller) handle all the REST interactions and deserializations. The controller classes/methods organize these API features into a cleaner OO interface, with an emphasis on intuitive design and minimizing any need for messy boilerplate code.
 
