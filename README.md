@@ -12,18 +12,40 @@ Created by Kris Craig.
 
 Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
 
-Currently, the library supports 169 of the 205 endpoints currently listed in the API documentation. All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 327 of the tests are currently passing. All of the most commonly used endpoints are supported.
+Currently, the library supports 169 of the 205 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 327 of the tests are currently passing. All of the most commonly used endpoints are supported.
 
 Reddit.NET is FOSS (MIT license) and was written in C#. It will be available on NuGet once I'm ready to put out the first stable release, which I expect to be very soon. You can check it out now on Github at:
 https://github.com/sirkris/Reddit.NET/tree/develop
 
 ### Contributors
 
-[Kris Craig](https://www.linkedin.com/in/kriscraig/), [Andrew Hall](https://github.com/ryzngard), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
+[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
 
 ### Beta Testers
 
 Kris Craig
+
+## Usage
+
+Reddit.NET can be installed via NuGet.  You can find it at:  https://www.nuget.org/packages/Reddit
+
+To install via the Visual Studio NuGet Package Manager Console (in VS 2017, you'll find it under Tools->NuGet Package Manager->NuGet Package Manager Console):
+
+```nuget
+PM> Install-Package Reddit
+```
+
+To create a new API instance bound to a specific user's refresh token:
+
+```c#
+using Reddit;
+
+...
+
+var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+```
+
+See below for more detailed usage examples.
 
 ## Basic Architecture
 Reddit.NET follows a model-controller pattern, with each layer serving a distinct purpose. The model classes/methods (which can be accessed directly if for some reason you don't want to go through the controller) handle all the REST interactions and deserializations. The controller classes/methods organize these API features into a cleaner OO interface, with an emphasis on intuitive design and minimizing any need for messy boilerplate code.
