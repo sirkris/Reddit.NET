@@ -19,7 +19,7 @@ https://github.com/sirkris/Reddit.NET/tree/develop
 
 ### Contributors
 
-[Kris Craig](docs/contributors/Kris Craig.md), [Andrew Hall](docs/contributors/Andrew Hall.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
+[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
 
 ### Beta Testers
 
