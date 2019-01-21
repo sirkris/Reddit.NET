@@ -5,7 +5,19 @@
     <Version>0.0.0-develop</Version>
     <AssemblyVersion>0.0.0.1</AssemblyVersion>
     <FileVersion>0.0.0.1</FileVersion>
-    <PackageReleaseNotes />
+    <PackageReleaseNotes>https://github.com/sirkris/Reddit.NET/blob/master/README.md</PackageReleaseNotes>
+    <PackageId>Reddit</PackageId>
+    <Authors>Kris Craig</Authors>
+    <Company />
+    <Description>Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required.</Description>
+    <Copyright>Copyright (C) 2019 by Kris Craig</Copyright>
+    <PackageLicenseUrl>https://github.com/sirkris/Reddit.NET/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageIconUrl>https://github.com/sirkris/Reddit.NET/blob/develop/Logo.gif</PackageIconUrl>
+    <PackageTags>reddit web utility http api oauth rest json netstandard</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
