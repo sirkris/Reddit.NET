@@ -47,8 +47,14 @@ namespace Example
                 List<Post> postHistory = me.PostHistory(sort: "newForced");
                 List<Comment> commentHistory = me.CommentHistory(sort: "new");
 
-                Console.WriteLine("Most recent post: " + postHistory[0].Title);
-                Console.WriteLine("Most recent comment: " + commentHistory[0].Body);
+                if (postHistory.Count > 0)
+                {
+                    Console.WriteLine("Most recent post: " + postHistory[0].Title);
+                }
+                if (commentHistory.Count > 0)
+                {
+                    Console.WriteLine("Most recent comment: " + commentHistory[0].Body);
+                }
 
                 // Create a new subreddit.  --Kris
                 //Subreddit newSub = reddit.Subreddit("RDNBotSub", "Test Subreddit", "Test sub created by Reddit.NET", "My sidebar.").Create();
@@ -56,7 +62,10 @@ namespace Example
                 // Get best posts.  Note that "Best" listings are subreddit-agnostic.  --Kris
                 List<Post> bestPosts = reddit.Subreddit().Posts.Best;
 
-                Console.WriteLine("Current best post (by " + bestPosts[0].Author + "): [" + bestPosts[0].Subreddit + "] " + bestPosts[0].Title);
+                if (bestPosts.Count > 0)
+                {
+                    Console.WriteLine("Current best post (by " + bestPosts[0].Author + "): [" + bestPosts[0].Subreddit + "] " + bestPosts[0].Title);
+                }
 
                 // Get info about a subreddit.  --Kris
                 Subreddit sub = reddit.Subreddit("AskReddit").About();

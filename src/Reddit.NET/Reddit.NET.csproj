@@ -16,7 +16,7 @@
     <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageIconUrl>https://github.com/sirkris/Reddit.NET/blob/develop/Logo.gif</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/sirkris/Reddit.NET/develop/Logo.gif</PackageIconUrl>
     <PackageTags>reddit web utility http api oauth rest json netstandard</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
