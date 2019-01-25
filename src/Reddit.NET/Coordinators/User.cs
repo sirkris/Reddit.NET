@@ -131,7 +131,7 @@ namespace Reddit.Coordinators
         }
 
         private void Import(string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
-            bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
+            bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool? hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
         {
@@ -141,7 +141,7 @@ namespace Reddit.Coordinators
             HasGoldSubscription = hasGoldSubscription;
             NumFriends = numFriends;
             this.IsVerified = IsVerified;
-            HasNewModmail = hasNewModmail;
+            HasNewModmail = hasNewModmail ?? false;
             Id = id;
             Fullname = (!string.IsNullOrWhiteSpace(Id) ? "t2_" + Id : null);
             Over18 = over18;

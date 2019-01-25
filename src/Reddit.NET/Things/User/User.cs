@@ -53,7 +53,7 @@ namespace Reddit.Things
         public bool Verified;
 
         [JsonProperty("new_modmail_exists")]
-        public bool NewModmailExists;
+        public bool? NewModmailExists;
 
         [JsonProperty("pref_autoplay")]
         public bool PrefAutoplay;
