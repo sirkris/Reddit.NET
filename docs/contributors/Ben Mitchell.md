@@ -2,4 +2,4 @@
 
 **Github:**  https://github.com/Dezyh
 
-**Reddit:**  [RedDeliciousApple](https://www.reddit.com/RedDeliciousApple)
+**Reddit:**  [RedDeliciousApple](https://www.reddit.com/u/RedDeliciousApple)
