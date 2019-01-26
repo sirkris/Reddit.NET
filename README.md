@@ -339,7 +339,7 @@ r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Self Po
 r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Link Post Title", url: "http://www.google.com"));
 
 // Comment on a post.
-r.Models.LinksAndComments.Comment(LinksAndCommentsThingInput("This is my comment.", topPost.Name));
+r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my comment.", topPost.Name));
 ```
 
 For more examples, check out the Example and Reddit.NETTests projects.
