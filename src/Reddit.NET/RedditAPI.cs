@@ -4,9 +4,6 @@ using Reddit.Inputs.Subreddits;
 using RestSharp;
 using System;
 using System.Collections.Generic;
-using System.Net;
-using RestSharp.Authenticators;
-using RestSharp.Deserializers;
 
 /// <summary>
 /// A Reddit API library for .NET Standard with OAuth support.

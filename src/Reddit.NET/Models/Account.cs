@@ -1,5 +1,4 @@
-﻿using System;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Reddit.Inputs;
 using Reddit.Things;
 using RestSharp;
