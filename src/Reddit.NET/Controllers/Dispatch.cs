@@ -41,7 +41,7 @@ namespace Reddit.Controllers
             LinksAndComments = new API.LinksAndComments(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
             Listings = new API.Listings(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
             LiveThreads = new API.LiveThreads(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
-            Misc = new API.Misc(appId, refreshToken, appSecret, accessToken, ref restClient, deviceId);
+            Misc = new API.Misc(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
             Moderation = new API.Moderation(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
             Modmail = new API.Modmail(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
             Multis = new API.Multis(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
