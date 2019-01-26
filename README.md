@@ -35,7 +35,7 @@ To install via the Visual Studio NuGet Package Manager Console (in VS 2017, you'
 PM> Install-Package Reddit
 ```
 
-To create a new API instance bound to a specific user's refresh token:
+To create a new API instance bound to a specific user's refresh token in an installed app:
 
 ```c#
 using Reddit;
@@ -43,6 +43,17 @@ using Reddit;
 ...
 
 var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+```
+
+If you're using a "script"-type app instead, you'll also need to pass your app secret:
+
+```c#
+using Reddit;
+
+...
+
+// You can also pass them as named parameters.
+var reddit = new RedditAPI(appId: "YourRedditAppID", appSecret: "YourRedditAppSecret", refreshToken: "YourBotUserRefreshToken");
 ```
 
 See below for more detailed usage examples.
