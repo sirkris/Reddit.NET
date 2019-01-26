@@ -2,14 +2,14 @@
 
 namespace Reddit.Exceptions
 {
-    public class RedditCoordinatorException : Exception
+    public class RedditControllerException : Exception
     {
-        public RedditCoordinatorException(string message, Exception inner)
+        public RedditControllerException(string message, Exception inner)
             : base(message, inner) { }
 
-        public RedditCoordinatorException(string message)
+        public RedditControllerException(string message)
             : base(message) { }
 
-        public RedditCoordinatorException() { }
+        public RedditControllerException() { }
     }
 }

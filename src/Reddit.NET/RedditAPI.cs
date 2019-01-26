@@ -1,4 +1,4 @@
-﻿using Reddit.Coordinators;
+﻿using Reddit.Controllers;
 using Reddit.Inputs;
 using Reddit.Inputs.Subreddits;
 using RestSharp;

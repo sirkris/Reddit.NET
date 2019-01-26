@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Coordinators;
+using Reddit.Controllers;
 using System;
 
-namespace RedditTests.CoordinatorTests.WorkflowTests
+namespace RedditTests.ControllerTests.WorkflowTests
 {
     [TestClass]
     public class SelfPostTests : BaseTests

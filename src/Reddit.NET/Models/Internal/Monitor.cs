@@ -1,4 +1,4 @@
-﻿using ControlStructures = Reddit.Coordinators.Structures;
+﻿using ControlStructures = Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Models.EventArgs;
 using System;

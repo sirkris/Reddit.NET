@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Coordinators;
+using Reddit.Controllers;
 
-namespace RedditTests.CoordinatorTests
+namespace RedditTests.ControllerTests
 {
     [TestClass]
     public class PostTests : BaseTests

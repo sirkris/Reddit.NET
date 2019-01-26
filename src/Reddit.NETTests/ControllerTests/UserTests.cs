@@ -1,9 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Coordinators;
+using Reddit.Controllers;
 using Reddit.Exceptions;
 using System;
 
-namespace RedditTests.CoordinatorTests
+namespace RedditTests.ControllerTests
 {
     [TestClass]
     public class UserTests : BaseTests

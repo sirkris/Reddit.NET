@@ -81,12 +81,12 @@ JSON return data is automatically deserialized to its appropriate type. All 170 
 
 Many model methods also have async counterparts.
 
-### Coordinators
-These constitute our controllers and are the classes with which app developers will be doing all or most of their interactions. While the models are structured to closely mirror the API documentation, the coordinators are structured to create an intuitive, object-oriented interface with the API, so you'll notice I took a lot more liberties in this layer.
+### Controllers
+These are the classes with which app developers will be doing all or most of their interactions. While the models are structured to closely mirror the API documentation, the controllers are structured to create an intuitive, object-oriented interface with the API, so you'll notice I took a lot more liberties in this layer.
 
-The coordinators also provide other features, like asynchronous monitoring and automatic caching of certain data sets. I'll get into that stuff in more detail below.
+The controllers also provide other features, like asynchronous monitoring and automatic caching of certain data sets. I'll get into that stuff in more detail below.
 
-Each coordinator class corresponds to a Reddit object of some kind (subreddit, post, user, etc). Here's a list of the coordinator classes:
+Each controller class corresponds to a Reddit object of some kind (subreddit, post, user, etc). Here's a list of the controller classes:
 
 #### Account
 Provides access to data and endpoints related to the authenticated user.
@@ -204,8 +204,8 @@ Many tests take less than a second to complete. Others can take up to a few minu
 ## Code Examples
 ```c#
 using Reddit;
-using Reddit.Coordinators;
-using Reddit.Coordinators.EventArgs;
+using Reddit.Controllers;
+using Reddit.Controllers.EventArgs;
 using System;
 
 ...
@@ -277,7 +277,7 @@ askReddit.Posts.NewUpdated -= C_NewPostsUpdated;
 
 ## Code Examples Using Models
 
-The coordinators basically just make calls to the models, which can be accessed directly via the Dispatch controller.  As such, it is possible to bypass the controllers entirely for most things, so long as you don't mind the bulkier code.  This is only recommended for scenarios where the convenience-oriented features of the controllers aren't needed and would just get in the way.  In most cases, it is recommended that you instead use the controllers as demonstrated in the above examples.
+The controllers basically just make calls to the models, which can be accessed directly via the Dispatch controller.  As such, it is possible to bypass the controllers entirely for most things, so long as you don't mind the bulkier code.  This is only recommended for scenarios where the convenience-oriented features of the controllers aren't needed and would just get in the way.  In most cases, it is recommended that you instead use the controllers as demonstrated in the above examples.
 
 Here's how you can do some basic things using the models:
 

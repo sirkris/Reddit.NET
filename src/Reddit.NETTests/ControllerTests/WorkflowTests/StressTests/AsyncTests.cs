@@ -1,10 +1,10 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Coordinators;
-using Reddit.Coordinators.EventArgs;
+using Reddit.Controllers;
+using Reddit.Controllers.EventArgs;
 using System;
 using System.Collections.Generic;
 
-namespace RedditTests.CoordinatorTests.WorkflowTests.StressTests
+namespace RedditTests.ControllerTests.WorkflowTests.StressTests
 {
     [TestClass]
     public class AsyncTests : BaseStressTests
