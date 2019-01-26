@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace RedditTests.CoordinatorTests
+namespace RedditTests.ControllerTests
 {
     [TestClass]
     public class PrivateMessagesTests : BaseTests

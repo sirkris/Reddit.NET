@@ -1,8 +1,8 @@
-﻿using Reddit.Coordinators;
+﻿using Reddit.Controllers;
 using System;
 using System.Threading;
 
-namespace RedditTests.CoordinatorTests.WorkflowTests.StressTests
+namespace RedditTests.ControllerTests.WorkflowTests.StressTests
 {
     public abstract class BaseStressTests : BaseTests
     {

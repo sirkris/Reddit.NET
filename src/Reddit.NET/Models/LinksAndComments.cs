@@ -438,7 +438,7 @@ namespace Reddit.Models
             return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
         }
 
-        // TODO - Coordinator support for image, video, and videogif kinds.  --Kris
+        // TODO - Controller support for image, video, and videogif kinds.  --Kris
         /// <summary>
         /// Submit a link to a subreddit.
         /// Submit will create a link or self-post in the subreddit sr with the title title.

@@ -82,11 +82,11 @@ namespace Reddit.Things
         /// <param name="subreddits">List of subreddits with which to initially populate the multireddit</param>
         /// <param name="visibility">One of (public, private, hidden)</param>
         /// <param name="weightingScheme">One of (classic, fresh)</param>
-        public LabeledMultiSubmit(string descriptionMd, string displayName, string iconName, string keyColor, List<Coordinators.Subreddit> subreddits,
+        public LabeledMultiSubmit(string descriptionMd, string displayName, string iconName, string keyColor, List<Controllers.Subreddit> subreddits,
             string visibility, string weightingScheme)
         {
             List<SubredditName> subs = new List<SubredditName>();
-            foreach (Coordinators.Subreddit sub in subreddits)
+            foreach (Controllers.Subreddit sub in subreddits)
             {
                 subs.Add(new SubredditName(sub.Name));
             }

@@ -69,7 +69,7 @@ namespace Reddit.Things
         [JsonProperty("icon")]
         public string Icon;
 
-        public LiveUpdateEvent(Coordinators.LiveThread liveThread)
+        public LiveUpdateEvent(Controllers.LiveThread liveThread)
         {
             Id = liveThread.Id;
             Description = liveThread.Description;

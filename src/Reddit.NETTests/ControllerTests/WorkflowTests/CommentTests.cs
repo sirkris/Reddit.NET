@@ -1,11 +1,11 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Reddit.Coordinators;
-using Reddit.Coordinators.EventArgs;
+using Reddit.Controllers;
+using Reddit.Controllers.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace RedditTests.CoordinatorTests.WorkflowTests
+namespace RedditTests.ControllerTests.WorkflowTests
 {
     [TestClass]
     public class CommentTests : BaseTests
