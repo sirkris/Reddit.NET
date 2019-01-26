@@ -22,15 +22,17 @@ namespace Reddit.Models.Internal
         public event EventHandler<RequestsUpdateEventArgs> RequestsUpdated;
 
         internal abstract string AppId { get; set; }
+        internal abstract string AppSecret { get; set; }
         internal abstract string AccessToken { get; set; }
         internal abstract string RefreshToken { get; set; }
         internal abstract string DeviceId { get; set; }
 
         internal abstract List<DateTime> Requests { get; set; }
 
-        public Request(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+        public Request(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
         {
             AppId = appId;
+            AppSecret = appSecret;
             AccessToken = accessToken;
             RefreshToken = refreshToken;
             RestClient = restClient;
@@ -387,7 +389,7 @@ namespace Reddit.Models.Internal
             RestClient keyCli = new RestClient("https://www.reddit.com");
             RestRequest keyReq = new RestRequest("/api/v1/access_token", Method.POST);
 
-            keyReq.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(AppId + ":")));
+            keyReq.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(AppId + ":" + AppSecret)));
             keyReq.AddHeader("Content-Type", "application/x-www-form-urlencoded");
 
             if (!string.IsNullOrEmpty(RefreshToken))

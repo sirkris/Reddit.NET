@@ -10,8 +10,8 @@ namespace Reddit.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public PrivateMessages(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
+        public PrivateMessages(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
 
         // Tested this one manually because there's no way to unblock a user via the API and having one test user blocking the other will cause tests to fail.  --Kris
         /// <summary>

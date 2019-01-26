@@ -7,8 +7,8 @@ namespace Reddit.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Search(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
+        public Search(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
 
         // TODO - Every test I've tried returns no search results.  Not sure what I'm doing wrong (ex. the word "Florida" should appear somewhere in r/FloridaMan).  --Kris
         /// <summary>

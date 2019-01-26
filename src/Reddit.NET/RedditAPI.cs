@@ -4,6 +4,9 @@ using Reddit.Inputs.Subreddits;
 using RestSharp;
 using System;
 using System.Collections.Generic;
+using System.Net;
+using RestSharp.Authenticators;
+using RestSharp.Deserializers;
 
 /// <summary>
 /// A Reddit API library for .NET Standard with OAuth support.
@@ -38,6 +41,20 @@ namespace Reddit
 
         /// <summary>
         /// Create a new instance of the Reddit.NET API library.
+        /// This instance will be bound to a single reddit user.
+        /// This is the required method for 'script' apps which use a secret to authenticate.
+        /// </summary>
+        /// <param name="appId">The OAuth application ID</param>
+        /// <param name="appSecret">The OAuth application secret</param>
+        /// <param name="refreshToken">The OAuth refresh token for the user we wish to authenticate.</param>
+        /// <param name="accessToken">An OAuth access token; if not provided (null), one will be automatically obtained using the refresh token</param>
+        public RedditAPI(string appId, string appSecret, string refreshToken, string accessToken)
+        {
+            Models = new Dispatch(appId, appSecret, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
+        }
+
+        /// <summary>
+        /// Create a new instance of the Reddit.NET API library.
         /// This instance will be bound to a single Reddit user.
         /// </summary>
         /// <param name="appId">The OAuth application ID</param>
@@ -55,12 +72,12 @@ namespace Reddit
                 || !string.IsNullOrWhiteSpace(accessToken))
             {
                 // Passing "null" instead of null forces the Reddit API to return a non-200 status code on auth failure, freeing us from having to parse the content string.  --Kris
-                Models = new Dispatch(appId, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
+                Models = new Dispatch(appId, "", refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"));
             }
             else
             {
                 // App-only authentication.  --Kris
-                Models = new Dispatch(appId, null, null, new RestClient("https://oauth.reddit.com"), GenerateDeviceId());
+                Models = new Dispatch(appId, "", null, null, new RestClient("https://oauth.reddit.com"), GenerateDeviceId());
             }
         }
 

@@ -12,8 +12,8 @@ namespace Reddit.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Subreddits(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
+        public Subreddits(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
 
         /// <summary>
         /// This endpoint is a listing.

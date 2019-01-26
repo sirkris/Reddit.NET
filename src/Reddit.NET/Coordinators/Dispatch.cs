@@ -32,26 +32,26 @@ namespace Reddit.Coordinators
         /// </summary>
         /// <param name="refreshToken">The OAuth refresh token required to obtain a Reddit API access token.</param>
         /// <param name="accessToken">The OAuth access token required to access the Reddit API.</param>
-        public Dispatch(string appId, string refreshToken, string accessToken, RestClient restClient, string deviceId = null)
+        public Dispatch(string appId, string appSecret, string refreshToken, string accessToken, RestClient restClient, string deviceId = null)
         {
-            Account = new API.Account(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Captcha = new API.Captcha(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Emoji = new API.Emoji(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Flair = new API.Flair(appId, refreshToken, accessToken, ref restClient, deviceId);
-            LinksAndComments = new API.LinksAndComments(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Listings = new API.Listings(appId, refreshToken, accessToken, ref restClient, deviceId);
-            LiveThreads = new API.LiveThreads(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Misc = new API.Misc(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Moderation = new API.Moderation(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Modmail = new API.Modmail(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Multis = new API.Multis(appId, refreshToken, accessToken, ref restClient, deviceId);
-            PrivateMessages = new API.PrivateMessages(appId, refreshToken, accessToken, ref restClient, deviceId);
-            RedditGold = new API.RedditGold(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Search = new API.Search(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Subreddits = new API.Subreddits(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Users = new API.Users(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Widgets = new API.Widgets(appId, refreshToken, accessToken, ref restClient, deviceId);
-            Wiki = new API.Wiki(appId, refreshToken, accessToken, ref restClient, deviceId);
+            Account = new API.Account(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Captcha = new API.Captcha(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Emoji = new API.Emoji(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Flair = new API.Flair(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            LinksAndComments = new API.LinksAndComments(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Listings = new API.Listings(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            LiveThreads = new API.LiveThreads(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Misc = new API.Misc(appId, refreshToken, appSecret, accessToken, ref restClient, deviceId);
+            Moderation = new API.Moderation(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Modmail = new API.Modmail(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Multis = new API.Multis(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            PrivateMessages = new API.PrivateMessages(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            RedditGold = new API.RedditGold(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Search = new API.Search(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Subreddits = new API.Subreddits(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Users = new API.Users(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Widgets = new API.Widgets(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+            Wiki = new API.Wiki(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
 
             Monitor = new API.Internal.Monitor();
 

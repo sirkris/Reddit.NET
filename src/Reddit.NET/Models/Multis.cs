@@ -10,8 +10,8 @@ namespace Reddit.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Multis(string appId, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, refreshToken, accessToken, ref restClient, deviceId) { }
+        public Multis(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
 
         /// <summary>
         /// Copy a multi.
