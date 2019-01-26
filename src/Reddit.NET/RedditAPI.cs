@@ -42,7 +42,7 @@ namespace Reddit
         /// </summary>
         /// <param name="appId">The OAuth application ID</param>
         /// <param name="refreshToken">The OAuth refresh token for the user we wish to authenticate</param>
-        /// <param name="appSecret">The OAuth application secret; this is the required method for 'script' apps which use a secret to authenticate</param>
+        /// <param name="appSecret">The OAuth application secret; this parameter is required for 'script' apps which use a secret to authenticate</param>
         /// <param name="accessToken">(optional) An OAuth access token; if not provided, one will be automatically obtained using the refresh token</param>
         public RedditAPI(string appId = null, string refreshToken = null, string appSecret = null, string accessToken = null)
         {
