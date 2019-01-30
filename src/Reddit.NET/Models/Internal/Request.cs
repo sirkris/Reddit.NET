@@ -126,7 +126,8 @@ namespace Reddit.Models.Internal
         public string GetVersion()
         {
             string res = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            return (string.IsNullOrWhiteSpace(res) || !res.Contains(".") ? res : res.Substring(0, res.LastIndexOf(".")) + (res.EndsWith(".1") ? "-develop" : ""));
+            return (string.IsNullOrWhiteSpace(res) || !res.Contains(".") ? res : res.Substring(0, res.LastIndexOf(".")) + 
+                (res.EndsWith(".1") ? "-develop" : res.EndsWith(".2") ? "-beta" : ""));
         }
 
         public string ExecuteRequest(string url, Method method = Method.GET)
