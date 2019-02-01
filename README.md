@@ -344,10 +344,10 @@ var askReddit = r.Models.Subreddits.About("AskReddit");
 var topPost = r.Models.Listings.Top(new TimedCatSrListingInput(), "AskReddit").JSON.Data.Things[0].Data;
 
 // Create a new self post.
-r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Self Post Title", text: "Self post text."));
+r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Self Post Title", text: "Self post text.", sr: "MyNewSubreddit"));
 
 // Create a new link post.
-r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Link Post Title", url: "http://www.google.com"));
+r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Link Post Title", url: "http://www.google.com", sr: "MyNewSubreddit"));
 
 // Comment on a post.
 r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my comment.", topPost.Name));
