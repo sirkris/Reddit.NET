@@ -357,9 +357,11 @@ For more examples, check out the Example and Reddit.NETTests projects.
 
 ## How You Can Help
 
-Once I've finished with code reviews/revisions, we'll proceed to beta testing. That will be when I'll be needing people to help by running the tests and posting the results. You can do that now, if you like; they should all pass. Though I'm not seeking beta testers yet, if you do run the tests anyway, please post your results here! So far, I'm the only one who has tested this.
+Beta testing!!  To-date, nobody other than the project creator has reported any beta test results.  While I think code-wise we're pretty much ready for a stable release now, I will be delaying it indefinitely until I get at least some independent confirmation that the tests are passing.  To do otherwise would be irresponsible, in my view.
 
-I'm sure there's probably more that I'm forgetting to mention, but I think I've covered all the major points. I'll of course be happy to answer any questions you might have, as well. Thanks for reading!
+We urgently need help with this!  Please check out this thread for more info:
+
+### [Beta Testing Thread for Reddit.NET](https://www.reddit.com/r/csharp/comments/aknbwl/the_redditnet_library_is_now_open_for_beta/)
 
 ## Currently Supported Endpoints
 
