@@ -177,7 +177,13 @@ Here's a list of things that can currently be monitored by Reddit.NET:
 
 ## Solution Projects
 
-There are 3 projects in the Reddit.NET solution:
+There are 4 projects in the Reddit.NET solution:
+
+### AuthTokenRetriever
+
+A .NET Core console application that greatly simplifies the OAuth token retrieval process.  Please review the video below for usage instructions:
+
+#### [Obtaining OAuth Tokens using Reddit.NET's AuthTokenRetriever utility](https://www.youtube.com/watch?v=xlWhLyVgN2s)
 
 ### Example
 
