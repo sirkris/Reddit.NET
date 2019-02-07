@@ -426,7 +426,7 @@ We urgently need help with this!  Please check out this thread for more info:
 
 `POST /api/editusertext`
 
-`POST /api/hide'
+`POST /api/hide`
 
 `GET [/r/<subreddit>]/api/info`
 
