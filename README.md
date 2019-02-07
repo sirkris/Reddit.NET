@@ -19,11 +19,11 @@ https://github.com/sirkris/Reddit.NET/tree/develop
 
 ### Contributors
 
-[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%Dorsman.md), [JP Dillingham](docs/contributors/JP%Dillingham.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
+[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md), [JP Dillingham](docs/contributors/JP%20Dillingham.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
 
 ### Beta Testers
 
-[Kris Craig](docs/contributors/Kris%20Craig.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), and [Emiel Dorsman](docs/contributors/Emiel%Dorsman.md).
+[Kris Craig](docs/contributors/Kris%20Craig.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), and [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md).
 
 ## Usage
 
