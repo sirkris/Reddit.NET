@@ -173,7 +173,8 @@ Here's a list of things that can currently be monitored by Reddit.NET:
 * Monitor a subreddit for new posts (any sort).
 * Monitor a subreddit's wiki for any added/removed pages.
 * Monitor a wiki page for new revisions.
-* Each monitoring session occurs in its own thread.
+
+Each monitoring session occurs in its own thread.
 
 ## Solution Projects
 
