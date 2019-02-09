@@ -730,3 +730,5 @@ Total:  169 / 205 (82%)
 There are 36 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
 
 Virtually all of the supported endpoints are covered by tests (voting and admin-reporting were manually tested for obvious reasons) and all of those tests are passing.
+
+Dedicated in loving memory to Daisy, loyal family dog of 14 years.  We miss you.
