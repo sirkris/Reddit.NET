@@ -437,15 +437,15 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "confidence" comments on this thread.
         /// </summary>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorConfidence()
+        public bool MonitorConfidence(int? monitoringDelayMs = null)
         {
             string key = "ConfidenceComments";
-            return Monitor(key, new Thread(() => MonitorConfidenceThread(key)), SubKey);
+            return Monitor(key, new Thread(() => MonitorConfidenceThread(key, monitoringDelayMs)), SubKey);
         }
 
-        private void MonitorConfidenceThread(string key)
+        private void MonitorConfidenceThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorCommentsThread(Monitoring, key, "confidence", SubKey);
+            MonitorCommentsThread(Monitoring, key, "confidence", SubKey, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnConfidenceUpdated(CommentsUpdateEventArgs e)
@@ -457,15 +457,15 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "top" comments on this thread.
         /// </summary>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorTop()
+        public bool MonitorTop(int? monitoringDelayMs = null)
         {
             string key = "TopComments";
-            return Monitor(key, new Thread(() => MonitorTopThread(key)), SubKey);
+            return Monitor(key, new Thread(() => MonitorTopThread(key, monitoringDelayMs)), SubKey);
         }
 
-        private void MonitorTopThread(string key)
+        private void MonitorTopThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorCommentsThread(Monitoring, key, "confidence", SubKey);
+            MonitorCommentsThread(Monitoring, key, "confidence", SubKey, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnTopUpdated(CommentsUpdateEventArgs e)
@@ -476,16 +476,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor Reddit for new "new" comments on this thread.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorNew()
+        public bool MonitorNew(int? monitoringDelayMs = null)
         {
             string key = "NewComments";
-            return Monitor(key, new Thread(() => MonitorNewThread(key)), SubKey);
+            return Monitor(key, new Thread(() => MonitorNewThread(key, monitoringDelayMs)), SubKey);
         }
 
-        private void MonitorNewThread(string key)
+        private void MonitorNewThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorCommentsThread(Monitoring, key, "new", SubKey);
+            MonitorCommentsThread(Monitoring, key, "new", SubKey, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnNewUpdated(CommentsUpdateEventArgs e)
@@ -496,16 +497,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor Reddit for new "controversial" comments on this thread.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorControversial()
+        public bool MonitorControversial(int? monitoringDelayMs = null)
         {
             string key = "ControversialComments";
-            return Monitor(key, new Thread(() => MonitorControversialThread(key)), SubKey);
+            return Monitor(key, new Thread(() => MonitorControversialThread(key, monitoringDelayMs)), SubKey);
         }
 
-        private void MonitorControversialThread(string key)
+        private void MonitorControversialThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorCommentsThread(Monitoring, key, "controversial", SubKey);
+            MonitorCommentsThread(Monitoring, key, "controversial", SubKey, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnControversialUpdated(CommentsUpdateEventArgs e)
@@ -516,16 +518,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor Reddit for new "old" comments on this thread.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorOld()
+        public bool MonitorOld(int? monitoringDelayMs = null)
         {
             string key = "OldComments";
-            return Monitor(key, new Thread(() => MonitorOldThread(key)), SubKey);
+            return Monitor(key, new Thread(() => MonitorOldThread(key, monitoringDelayMs)), SubKey);
         }
 
-        private void MonitorOldThread(string key)
+        private void MonitorOldThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorCommentsThread(Monitoring, key, "old", SubKey);
+            MonitorCommentsThread(Monitoring, key, "old", SubKey, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnOldUpdated(CommentsUpdateEventArgs e)
@@ -536,16 +539,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor Reddit for new "random" comments on this thread.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorRandom()
+        public bool MonitorRandom(int? monitoringDelayMs = null)
         {
             string key = "RandomComments";
-            return Monitor(key, new Thread(() => MonitorRandomThread(key)), SubKey);
+            return Monitor(key, new Thread(() => MonitorRandomThread(key, monitoringDelayMs)), SubKey);
         }
 
-        private void MonitorRandomThread(string key)
+        private void MonitorRandomThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorCommentsThread(Monitoring, key, "random", SubKey);
+            MonitorCommentsThread(Monitoring, key, "random", SubKey, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnRandomUpdated(CommentsUpdateEventArgs e)
@@ -556,16 +560,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor Reddit for new "qa" comments on this thread.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorQA()
+        public bool MonitorQA(int? monitoringDelayMs = null)
         {
             string key = "QAComments";
-            return Monitor(key, new Thread(() => MonitorQAThread(key)), SubKey);
+            return Monitor(key, new Thread(() => MonitorQAThread(key, monitoringDelayMs)), SubKey);
         }
 
-        private void MonitorQAThread(string key)
+        private void MonitorQAThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorCommentsThread(Monitoring, key, "qa", SubKey);
+            MonitorCommentsThread(Monitoring, key, "qa", SubKey, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnQAUpdated(CommentsUpdateEventArgs e)
@@ -576,16 +581,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor Reddit for new "live" comments on this thread.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorLive()
+        public bool MonitorLive(int? monitoringDelayMs = null)
         {
             string key = "LiveComments";
-            return Monitor(key, new Thread(() => MonitorLiveThread(key)), SubKey);
+            return Monitor(key, new Thread(() => MonitorLiveThread(key, monitoringDelayMs)), SubKey);
         }
 
-        private void MonitorLiveThread(string key)
+        private void MonitorLiveThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorCommentsThread(Monitoring, key, "live", SubKey);
+            MonitorCommentsThread(Monitoring, key, "live", SubKey, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnLiveUpdated(CommentsUpdateEventArgs e)
@@ -593,12 +599,14 @@ namespace Reddit.Controllers
             LiveUpdated?.Invoke(this, e);
         }
 
-        private void MonitorCommentsThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0)
+        private void MonitorCommentsThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             if (startDelayMs > 0)
             {
                 Thread.Sleep(startDelayMs);
             }
+
+            monitoringDelayMs = (monitoringDelayMs.HasValue ? monitoringDelayMs : Monitoring.Count() * MonitoringWaitDelayMS);
 
             while (!Terminate
                 && Monitoring.Get(key).Contains(subKey))
@@ -656,7 +664,7 @@ namespace Reddit.Controllers
                     TriggerUpdate(args, type);
                 }
 
-                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+                Thread.Sleep(monitoringDelayMs.Value);
             }
         }
 
@@ -691,28 +699,28 @@ namespace Reddit.Controllers
             }
         }
 
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "ConfidenceComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "confidence", SubKey, startDelayMs));
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "confidence", SubKey, startDelayMs, monitoringDelayMs));
                 case "TopComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "top", SubKey, startDelayMs));
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "top", SubKey, startDelayMs, monitoringDelayMs));
                 case "NewComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "new", SubKey, startDelayMs));
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "new", SubKey, startDelayMs, monitoringDelayMs));
                 case "ControversialComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "controversial", SubKey, startDelayMs));
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "controversial", SubKey, startDelayMs, monitoringDelayMs));
                 case "OldComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "old", SubKey, startDelayMs));
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "old", SubKey, startDelayMs, monitoringDelayMs));
                 case "RandomComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "random", SubKey, startDelayMs));
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "random", SubKey, startDelayMs, monitoringDelayMs));
                 case "QAComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "qa", SubKey, startDelayMs));
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "qa", SubKey, startDelayMs, monitoringDelayMs));
                 case "LiveComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "live", SubKey, startDelayMs));
+                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "live", SubKey, startDelayMs, monitoringDelayMs));
             }
         }
     }

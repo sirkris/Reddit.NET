@@ -616,69 +616,74 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor this live thread for any configuration changes.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorThread()
+        public bool MonitorThread(int? monitoringDelayMs = null)
         {
             string key = "LiveThread";
-            return Monitor(key, new Thread(() => MonitorThreadThread(key)), Id);
+            return Monitor(key, new Thread(() => MonitorThreadThread(key, monitoringDelayMs)), Id);
         }
 
         /// <summary>
         /// Monitor this live thread for any new or removed contributors.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorContributors()
+        public bool MonitorContributors(int? monitoringDelayMs = null)
         {
             string key = "LiveThreadContributors";
-            return Monitor(key, new Thread(() => MonitorContributorsThread(key)), Id);
+            return Monitor(key, new Thread(() => MonitorContributorsThread(key, monitoringDelayMs)), Id);
         }
 
         /// <summary>
         /// Monitor this live thread for any new updates.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorUpdates()
+        public bool MonitorUpdates(int? monitoringDelayMs = null)
         {
             string key = "LiveThreadUpdates";
-            return Monitor(key, new Thread(() => MonitorUpdatesThread(key)), Id);
+            return Monitor(key, new Thread(() => MonitorUpdatesThread(key, monitoringDelayMs)), Id);
         }
 
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "LiveThread":
-                    return new Thread(() => MonitorLiveThread(key, "thread", subKey, startDelayMs));
+                    return new Thread(() => MonitorLiveThread(key, "thread", subKey, startDelayMs, monitoringDelayMs));
                 case "LiveThreadContributors":
-                    return new Thread(() => MonitorLiveThread(key, "contributors", subKey, startDelayMs));
+                    return new Thread(() => MonitorLiveThread(key, "contributors", subKey, startDelayMs, monitoringDelayMs));
                 case "LiveThreadUpdates":
-                    return new Thread(() => MonitorLiveThread(key, "updates", subKey, startDelayMs));
+                    return new Thread(() => MonitorLiveThread(key, "updates", subKey, startDelayMs, monitoringDelayMs));
             }
         }
 
-        private void MonitorThreadThread(string key)
+        private void MonitorThreadThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorLiveThread(key, "thread", Id);
+            MonitorLiveThread(key, "thread", Id, monitoringDelayMs: monitoringDelayMs);
         }
 
-        private void MonitorContributorsThread(string key)
+        private void MonitorContributorsThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorLiveThread(key, "contributors", Id);
+            MonitorLiveThread(key, "contributors", Id, monitoringDelayMs: monitoringDelayMs);
         }
 
-        private void MonitorUpdatesThread(string key)
+        private void MonitorUpdatesThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorLiveThread(key, "updates", Id);
+            MonitorLiveThread(key, "updates", Id, monitoringDelayMs: monitoringDelayMs);
         }
 
-        private void MonitorLiveThread(string key, string type, string subKey, int startDelayMs = 0)
+        private void MonitorLiveThread(string key, string type, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             if (startDelayMs > 0)
             {
                 Thread.Sleep(startDelayMs);
             }
+
+            monitoringDelayMs = (monitoringDelayMs.HasValue ? monitoringDelayMs : Monitoring.Count() * MonitoringWaitDelayMS);
 
             while (!Terminate
                 && Monitoring.Get(key).Contains(subKey))
@@ -698,7 +703,7 @@ namespace Reddit.Controllers
                         break;
                 }
 
-                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+                Thread.Sleep(monitoringDelayMs.Value);
             }
         }
 

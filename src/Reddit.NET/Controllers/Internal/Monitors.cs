@@ -56,6 +56,7 @@ namespace Reddit.Controllers.Internal
             }
         }
 
+        // TODO - Preserve custom thread monitoring delays when they're rebuilt (occurs whenever a new monitoring thread starts or an existing one stops).  --Kris
         protected void RebuildThreads(string subKey)
         {
             List<string> oldThreads = new List<string>(Threads.Keys);
@@ -121,6 +122,6 @@ namespace Reddit.Controllers.Internal
             ReviveThread();
         }
 
-        protected abstract Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0);
+        protected abstract Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null);
     }
 }

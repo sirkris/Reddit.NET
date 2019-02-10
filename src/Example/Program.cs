@@ -112,7 +112,7 @@ namespace Example
                 Console.WriteLine("Monitoring worldnews for new posts....");
 
                 worldnews.Posts.NewUpdated += C_NewPostsUpdated;
-                worldnews.Posts.MonitorNew();  // Toggle on.
+                worldnews.Posts.MonitorNew(10000);  // Toggle on with a custom delay of 10 seconds between each monitoring query.
 
                 DateTime start = DateTime.Now;
                 while (start.AddMinutes(1) > DateTime.Now) { }

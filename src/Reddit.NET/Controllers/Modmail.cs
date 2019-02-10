@@ -560,41 +560,45 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor recent modmail messages as they arrive.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorRecent()
+        public bool MonitorRecent(int? monitoringDelayMs = null)
         {
             string key = "ModmailMessagesRecent";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent")), "ModmailMessages");
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
 
         /// <summary>
         /// Monitor mod modmail messages as they arrive.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorMod()
+        public bool MonitorMod(int? monitoringDelayMs = null)
         {
             string key = "ModmailMessagesMod";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod")), "ModmailMessages");
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
 
         /// <summary>
         /// Monitor user modmail messages as they arrive.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorUser()
+        public bool MonitorUser(int? monitoringDelayMs = null)
         {
             string key = "ModmailMessagesUser";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user")), "ModmailMessages");
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
 
         /// <summary>
         /// Monitor unread modmail messages as they arrive.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorUnread()
+        public bool MonitorUnread(int? monitoringDelayMs = null)
         {
             string key = "ModmailMessagesUnread";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread")), "ModmailMessages");
+            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
 
         protected virtual void OnRecentUpdated(ModmailConversationsEventArgs e)
@@ -617,12 +621,14 @@ namespace Reddit.Controllers
             UnreadUpdated?.Invoke(this, e);
         }
 
-        private void MonitorModmailMessagesThread(ConversationContainer conversationContainer, string key, string type, int startDelayMs = 0)
+        private void MonitorModmailMessagesThread(ConversationContainer conversationContainer, string key, string type, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             if (startDelayMs > 0)
             {
                 Thread.Sleep(startDelayMs);
             }
+
+            monitoringDelayMs = (monitoringDelayMs.HasValue ? monitoringDelayMs : Monitoring.Count() * MonitoringWaitDelayMS);
 
             while (!Terminate
                 && Monitoring.Get(key).Contains("ModmailMessages"))
@@ -676,7 +682,7 @@ namespace Reddit.Controllers
                     }
                 }
 
-                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+                Thread.Sleep(monitoringDelayMs.Value);
             }
         }
 
@@ -735,20 +741,20 @@ namespace Reddit.Controllers
             }
         }
 
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "ModmailMessagesRecent":
-                    return new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", startDelayMs));
+                    return new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", startDelayMs, monitoringDelayMs));
                 case "ModmailMessagesMod":
-                    return new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", startDelayMs));
+                    return new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", startDelayMs, monitoringDelayMs));
                 case "ModmailMessagesUser":
-                    return new Thread(() => MonitorModmailMessagesThread(user, key, "user", startDelayMs));
+                    return new Thread(() => MonitorModmailMessagesThread(user, key, "user", startDelayMs, monitoringDelayMs));
                 case "ModmailMessagesUnread":
-                    return new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", startDelayMs));
+                    return new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", startDelayMs, monitoringDelayMs));
             }
         }
     }
