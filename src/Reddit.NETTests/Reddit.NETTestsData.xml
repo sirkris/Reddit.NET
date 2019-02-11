@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Rows>
+  <Row>
+    <AppId>Paste Reddit App ID here</AppId>
+    <RefreshToken>Paste Reddit Refresh Token here</RefreshToken>
+    <RefreshToken2>Paste second account's Reddit Refresh Token here (required for WorkflowTests)</RefreshToken2>
+    <Subreddit>Paste test subreddit (new or existing with full mod privs) here</Subreddit>
+  </Row>
+</Rows>
