@@ -8,6 +8,20 @@
 
 Created by Kris Craig.
 
+| Table of Contents                                                 |
+|:-------------------------------------------------------------------|
+| [Overview](#overview)                                             |
+| [Usage](#usage)                                                   |
+| [Press Inquiries](#press-inquiries)                               |
+| [Basic Architecture](#basic-architecture)                         |
+| [Monitoring](#monitoring)                                         |
+| [Solution Projects](#solution-projects)                           |
+| [Running the Tests](#running-the-tests)                           |
+| [Code Examples](#code-examples)                                   |
+| [Code Examples Using Models](#code-examples-using-models)         |
+| [Contributing](#contributing)                                     |
+| [Currently Supported Endpoints](#currently-supported-endpoints)   |
+
 ## Overview
 
 Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
