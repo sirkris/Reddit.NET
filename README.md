@@ -58,6 +58,10 @@ var reddit = new RedditAPI(appId: "YourRedditAppID", appSecret: "YourRedditAppSe
 
 See below for more detailed usage examples.
 
+## Press Inquiries
+
+Please direct any inquiries about Reddit.NET to the project creator, [Kris Craig](docs/contributors/Kris%20Craig.md).
+
 ## Basic Architecture
 Reddit.NET follows a model-controller pattern, with each layer serving a distinct purpose. The model classes/methods (which can be accessed directly if for some reason you don't want to go through the controller) handle all the REST interactions and deserializations. The controller classes/methods organize these API features into a cleaner OO interface, with an emphasis on intuitive design and minimizing any need for messy boilerplate code.
 
@@ -362,13 +366,43 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 For more examples, check out the Example and Reddit.NETTests projects.
 
-## How You Can Help
+## Contributing
 
-Beta testing!!  To-date, nobody other than the project creator has reported any beta test results.  While I think code-wise we're pretty much ready for a stable release now, I will be delaying it indefinitely until I get at least some independent confirmation that the tests are passing.  To do otherwise would be irresponsible, in my view.
+### Code Style
 
-We urgently need help with this!  Please check out this thread for more info:
+This project adheres (mostly) to standard [C# Coding Conventions](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/inside-a-program/coding-conventions).
 
-### [Beta Testing Thread for Reddit.NET](https://www.reddit.com/r/csharp/comments/aknbwl/the_redditnet_library_is_now_open_for_beta/)
+### Branching
+
+The [Gitflow](https://nvie.com/posts/a-successful-git-branching-model/) branching model is used on this project.
+
+### Commits
+
+ALL commits must be made on a feature branch checked out from develop!  Any requests to merge direct commits to either master or develop will be subject to rejection.
+
+### Merging
+
+Please do all of your commits on a feature branch that you created from the develop branch.  When you are ready to merge, you'll want to follow these steps:
+
+1. On the Git command-line, do:
+
+```git
+git checkout develop
+
+git pull origin develop
+
+git checkout (YourFeatureBranch)
+
+git rebase develop
+```
+
+2. Create a new pull request.
+
+### Testing
+
+See:  [Running the Tests](#redditnettests)
+
+**[Testing Thread for Reddit.NET](https://www.reddit.com/r/csharp/comments/aknbwl/the_redditnet_library_is_now_open_for_beta/)**
 
 ## Currently Supported Endpoints
 
