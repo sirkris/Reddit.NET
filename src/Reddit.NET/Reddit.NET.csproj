@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>0.0.0-develop</Version>
-    <AssemblyVersion>0.0.0.1</AssemblyVersion>
-    <FileVersion>0.0.0.1</FileVersion>
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
     <PackageReleaseNotes>https://github.com/sirkris/Reddit.NET/blob/master/README.md</PackageReleaseNotes>
     <Title>Reddit.NET</Title>
     <PackageId>Reddit</PackageId>
@@ -16,7 +16,7 @@
     <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <PackageIconUrl>https://raw.githubusercontent.com/sirkris/Reddit.NET/develop/Logo.gif</PackageIconUrl>
+    <PackageIconUrl>https://raw.githubusercontent.com/sirkris/Reddit.NET/master/Logo.gif</PackageIconUrl>
     <PackageTags>reddit web utility http api oauth rest json netstandard</PackageTags>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>

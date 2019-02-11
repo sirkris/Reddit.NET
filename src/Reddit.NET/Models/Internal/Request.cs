@@ -126,7 +126,8 @@ namespace Reddit.Models.Internal
         public string GetVersion()
         {
             string res = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            return (string.IsNullOrWhiteSpace(res) || !res.Contains(".") ? res : res.Substring(0, res.LastIndexOf(".")) + (res.EndsWith(".1") ? "-develop" : ""));
+            return (string.IsNullOrWhiteSpace(res) || !res.Contains(".") ? res : res.Substring(0, res.LastIndexOf(".")) + 
+                (res.EndsWith(".1") ? "-develop" : res.EndsWith(".2") ? "-beta" : ""));
         }
 
         public string ExecuteRequest(string url, Method method = Method.GET)
@@ -154,26 +155,38 @@ namespace Reddit.Models.Internal
 
         private IRestResponse GetResponse(IRestResponse res, ref RestRequest restRequest)
         {
-            int retry = 5;
-            while ((res == null || !res.IsSuccessful)
-                    && (RefreshToken != null || DeviceId != null)
-                    && (res.StatusCode == HttpStatusCode.Unauthorized  // This is returned if the access token needs to be refreshed or wasn't provided.  --Kris
-                        || res.StatusCode == HttpStatusCode.InternalServerError  // On rare occasion, a valid request will return a status code of 500, particularly if under heavy load.  --Kris
-                        || res.StatusCode == 0)  // On rare occasion, a valid request will return a status code of 0, particularly if under heavy load.  --Kris
-                    && retry > 0)
+            int serviceRetry = 3;
+            do
             {
-                /*
-                 * If it fails and we have a refresh token, request a new access token and retry.
-                 * Note that this workflow will not work if you pass an empty access token, as the Reddit API will still return 200 on those requests.
-                 * Therefore, if you just want to get a new access token from refresh, pass an arbitrary string value instead of null.
-                 * 
-                 * --Kris
-                 */
-                restRequest = RefreshAccessToken(restRequest);
-                res = RestClient.Execute(restRequest);
+                int retry = 5;
+                while ((res == null || !res.IsSuccessful)
+                        && (RefreshToken != null || DeviceId != null)
+                        && (res.StatusCode == HttpStatusCode.Unauthorized  // This is returned if the access token needs to be refreshed or wasn't provided.  --Kris
+                            || res.StatusCode == HttpStatusCode.InternalServerError  // On rare occasion, a valid request will return a status code of 500, particularly if under heavy load.  --Kris
+                            || res.StatusCode == 0)  // On rare occasion, a valid request will return a status code of 0, particularly if under heavy load.  --Kris
+                        && retry > 0)
+                {
+                    /*
+                     * If it fails and we have a refresh token, request a new access token and retry.
+                     * Note that this workflow will not work if you pass an empty access token, as the Reddit API will still return 200 on those requests.
+                     * Therefore, if you just want to get a new access token from refresh, pass an arbitrary string value instead of null.
+                     * 
+                     * --Kris
+                     */
+                    restRequest = RefreshAccessToken(restRequest);
+                    res = RestClient.Execute(restRequest);
 
-                retry--;
-            }
+                    retry--;
+                }
+
+                // If API returns "Service Unavailable", wait a few seconds then retry.  --Kris
+                serviceRetry--;
+                if (serviceRetry > 0
+                    && res.StatusCode == HttpStatusCode.ServiceUnavailable)
+                {
+                    Thread.Sleep(3000);
+                }
+            } while ((res == null || res.StatusCode == HttpStatusCode.ServiceUnavailable) && serviceRetry > 0);
 
             return res;
         }

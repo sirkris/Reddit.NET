@@ -4,6 +4,20 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <Version>1.0.0</Version>
+
+    <Authors>Kris Craig</Authors>
+
+    <Copyright>Copyright (C) 2019 by Kris Craig</Copyright>
+
+    <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
+
+    <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
+
+    <RepositoryType>Git</RepositoryType>
+
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
   </PropertyGroup>
 
   <ItemGroup>

@@ -415,30 +415,33 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor this wiki page for any changes.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPage()
+        public bool MonitorPage(int? monitoringDelayMs = null)
         {
             string key = "WikiPage";
-            return Monitor(key, new Thread(() => MonitorPageThread(key)), Name);
+            return Monitor(key, new Thread(() => MonitorPageThread(key, monitoringDelayMs: monitoringDelayMs)), Name);
         }
 
-        protected override Thread CreateMonitoringThread(string key, string subkey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subkey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "WikiPage":
-                    return new Thread(() => MonitorPageThread(key, startDelayMs));
+                    return new Thread(() => MonitorPageThread(key, startDelayMs, monitoringDelayMs));
             }
         }
 
-        private void MonitorPageThread(string key, int startDelayMs = 0)
+        private void MonitorPageThread(string key, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             if (startDelayMs > 0)
             {
                 Thread.Sleep(startDelayMs);
             }
+
+            monitoringDelayMs = (monitoringDelayMs.HasValue ? monitoringDelayMs : Monitoring.Count() * MonitoringWaitDelayMS);
 
             while (!Terminate
                 && Monitoring.Get(key).Contains(Name))
@@ -456,7 +459,7 @@ namespace Reddit.Controllers
                     OnPagesUpdated(args);
                 }
 
-                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+                Thread.Sleep(monitoringDelayMs.Value);
             }
         }
     }

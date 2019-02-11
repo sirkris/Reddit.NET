@@ -550,16 +550,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor Reddit for new "Best" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorBest()
+        public bool MonitorBest(int? monitoringDelayMs = null)
         {
             string key = "BestPosts";
-            return Monitor(key, new Thread(() => MonitorBestThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorBestThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorBestThread(string key)
+        private void MonitorBestThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "best", Subreddit);
+            MonitorPostsThread(Monitoring, key, "best", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnBestUpdated(PostsUpdateEventArgs e)
@@ -570,16 +571,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit for new "Hot" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorHot()
+        public bool MonitorHot(int? monitoringDelayMs = null)
         {
             string key = "HotPosts";
-            return Monitor(key, new Thread(() => MonitorHotThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorHotThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorHotThread(string key)
+        private void MonitorHotThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "hot", Subreddit);
+            MonitorPostsThread(Monitoring, key, "hot", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnHotUpdated(PostsUpdateEventArgs e)
@@ -590,16 +592,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit for new posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorNew()
+        public bool MonitorNew(int? monitoringDelayMs = null)
         {
             string key = "NewPosts";
-            return Monitor(key, new Thread(() => MonitorNewThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorNewThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorNewThread(string key)
+        private void MonitorNewThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "new", Subreddit);
+            MonitorPostsThread(Monitoring, key, "new", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnNewUpdated(PostsUpdateEventArgs e)
@@ -610,16 +613,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit for new "Rising" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorRising()
+        public bool MonitorRising(int? monitoringDelayMs = null)
         {
             string key = "RisingPosts";
-            return Monitor(key, new Thread(() => MonitorRisingThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorRisingThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorRisingThread(string key)
+        private void MonitorRisingThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "rising", Subreddit);
+            MonitorPostsThread(Monitoring, key, "rising", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnRisingUpdated(PostsUpdateEventArgs e)
@@ -630,16 +634,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit for new "Top" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorTop()
+        public bool MonitorTop(int? monitoringDelayMs = null)
         {
             string key = "TopPosts";
-            return Monitor(key, new Thread(() => MonitorTopThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorTopThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorTopThread(string key)
+        private void MonitorTopThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "top", Subreddit);
+            MonitorPostsThread(Monitoring, key, "top", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnTopUpdated(PostsUpdateEventArgs e)
@@ -650,16 +655,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit for new "Controversial" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorControversial()
+        public bool MonitorControversial(int? monitoringDelayMs = null)
         {
             string key = "ControversialPosts";
-            return Monitor(key, new Thread(() => MonitorControversialThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorControversialThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorControversialThread(string key)
+        private void MonitorControversialThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "controversial", Subreddit);
+            MonitorPostsThread(Monitoring, key, "controversial", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnControversialUpdated(PostsUpdateEventArgs e)
@@ -670,16 +676,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit's modqueue for new "modqueue" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueue()
+        public bool MonitorModQueue(int? monitoringDelayMs = null)
         {
             string key = "ModQueuePosts";
-            return Monitor(key, new Thread(() => MonitorModQueueThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorModQueueThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorModQueueThread(string key)
+        private void MonitorModQueueThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "modqueue", Subreddit);
+            MonitorPostsThread(Monitoring, key, "modqueue", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnModQueueUpdated(PostsUpdateEventArgs e)
@@ -690,16 +697,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit's modqueue for new "reports" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueReports()
+        public bool MonitorModQueueReports(int? monitoringDelayMs = null)
         {
             string key = "ModQueueReportsPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueReportsThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorModQueueReportsThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorModQueueReportsThread(string key)
+        private void MonitorModQueueReportsThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "modqueuereports", Subreddit);
+            MonitorPostsThread(Monitoring, key, "modqueuereports", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnModQueueReportsUpdated(PostsUpdateEventArgs e)
@@ -710,16 +718,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit's modqueue for new "spam" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueSpam()
+        public bool MonitorModQueueSpam(int? monitoringDelayMs = null)
         {
             string key = "ModQueueSpamPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueSpamThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorModQueueSpamThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorModQueueSpamThread(string key)
+        private void MonitorModQueueSpamThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "modqueuespam", Subreddit);
+            MonitorPostsThread(Monitoring, key, "modqueuespam", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnModQueueSpamUpdated(PostsUpdateEventArgs e)
@@ -730,16 +739,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit's modqueue for new "unmoderated" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueUnmoderated()
+        public bool MonitorModQueueUnmoderated(int? monitoringDelayMs = null)
         {
             string key = "ModQueueUnmoderatedPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueUnmoderatedThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorModQueueUnmoderatedThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorModQueueUnmoderatedThread(string key)
+        private void MonitorModQueueUnmoderatedThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "modqueueunmoderated", Subreddit);
+            MonitorPostsThread(Monitoring, key, "modqueueunmoderated", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnModQueueUnmoderatedUpdated(PostsUpdateEventArgs e)
@@ -750,16 +760,17 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor the subreddit's modqueue for new "edited" posts.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueEdited()
+        public bool MonitorModQueueEdited(int? monitoringDelayMs = null)
         {
             string key = "ModQueueEditedPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueEditedThread(key)), Subreddit);
+            return Monitor(key, new Thread(() => MonitorModQueueEditedThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorModQueueEditedThread(string key)
+        private void MonitorModQueueEditedThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorPostsThread(Monitoring, key, "modqueueedited", Subreddit);
+            MonitorPostsThread(Monitoring, key, "modqueueedited", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnModQueueEditedUpdated(PostsUpdateEventArgs e)
@@ -767,43 +778,45 @@ namespace Reddit.Controllers
             ModQueueEditedUpdated?.Invoke(this, e);
         }
 
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0)
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "BestPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "best", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "best", subKey, startDelayMs, monitoringDelayMs));
                 case "HotPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "hot", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "hot", subKey, startDelayMs, monitoringDelayMs));
                 case "NewPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "new", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "new", subKey, startDelayMs, monitoringDelayMs));
                 case "RisingPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "rising", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "rising", subKey, startDelayMs, monitoringDelayMs));
                 case "TopPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "top", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "top", subKey, startDelayMs, monitoringDelayMs));
                 case "ControversialPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "controversial", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "controversial", subKey, startDelayMs, monitoringDelayMs));
                 case "ModQueuePosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueue", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueue", subKey, startDelayMs, monitoringDelayMs));
                 case "ModQueueReportsPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuereports", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuereports", subKey, startDelayMs, monitoringDelayMs));
                 case "ModQueueSpamPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuespam", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuespam", subKey, startDelayMs, monitoringDelayMs));
                 case "ModQueueUnmoderatedPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueunmoderated", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueunmoderated", subKey, startDelayMs, monitoringDelayMs));
                 case "ModQueueEditedPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueedited", subKey, startDelayMs));
+                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueedited", subKey, startDelayMs, monitoringDelayMs));
             }
         }
 
-        private void MonitorPostsThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0)
+        private void MonitorPostsThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             if (startDelayMs > 0)
             {
                 Thread.Sleep(startDelayMs);
             }
+
+            monitoringDelayMs = (monitoringDelayMs.HasValue ? monitoringDelayMs : Monitoring.Count() * MonitoringWaitDelayMS);
 
             while (!Terminate
                 && Monitoring.Get(key).Contains(subKey))
@@ -873,7 +886,7 @@ namespace Reddit.Controllers
                     TriggerUpdate(args, type);
                 }
 
-                Thread.Sleep(Monitoring.Count() * MonitoringWaitDelayMS);
+                Thread.Sleep(monitoringDelayMs.Value);
             }
         }
 

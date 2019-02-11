@@ -50,6 +50,12 @@ namespace Reddit.Controllers.Internal
                         case "ALREADY_MODERATOR":
                             throw (RedditAlreadyModeratorException)BuildException(new RedditAlreadyModeratorException(errors[1]),
                                 new List<List<string>> { errors });
+                        case "ALREADY_SUB":
+                            throw (RedditAlreadySubmittedException)BuildException(new RedditAlreadySubmittedException(errors[1]),
+                                new List<List<string>> { errors });
+                        case "TOO_LONG":
+                            throw (RedditTooLongException)BuildException(new RedditTooLongException(errors[1]),
+                                new List<List<string>> { errors });
                     }
                 }
             }

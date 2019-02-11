@@ -123,7 +123,7 @@ namespace Reddit.Things
         public int InboxCount;
 
         [JsonProperty("pref_top_karma_subreddits")]
-        public bool PrefTopKarmaSubreddits;
+        public bool? PrefTopKarmaSubreddits;
 
         [JsonProperty("has_mail")]
         public bool HasMail;
