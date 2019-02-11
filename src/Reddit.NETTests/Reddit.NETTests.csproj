@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <Version>1.0.0</Version>
+    <Version>1.0.0-develop</Version>
 
     <Authors>Kris Craig</Authors>
 
@@ -17,7 +17,11 @@
 
     <RepositoryType>Git</RepositoryType>
 
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+
+    <FileVersion>1.0.0.1</FileVersion>
+
+    <PackageReleaseNotes />
   </PropertyGroup>
 
   <ItemGroup>

@@ -3,14 +3,16 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>1.0.0-develop</Version>
     <Authors>Kris Craig</Authors>
     <Product>Reddit.NET Example Application</Product>
     <Copyright>Copyright (C) 2019 by Kris Craig</Copyright>
     <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <PackageReleaseNotes />
   </PropertyGroup>
 
   <ItemGroup>
