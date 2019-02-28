@@ -2,6 +2,7 @@
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Inputs.Moderation;
+using Reddit.Inputs.Search;
 using Reddit.Inputs.Subreddits;
 using Reddit.Inputs.Users;
 using System;
@@ -856,6 +857,44 @@ namespace Reddit.Controllers
         public Things.Traffic GetTraffic()
         {
             return Validate(Dispatch.Subreddits.Traffic(Name));
+        }
+
+        /// <summary>
+        /// Search this subreddit for posts.
+        /// </summary>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
+        /// <returns>A list of posts that match the search criteria.</returns>
+        public List<Post> Search(SearchGetSearchInput searchGetSearchInput)
+        {
+            return Lists.GetPosts(Validate(Dispatch.Search.GetSearch(searchGetSearchInput, Name)), Dispatch);
+        }
+
+        /// <summary>
+        /// Search this subreddit for posts.
+        /// </summary>
+        /// <param name="q">a string no longer than 512 characters</param>
+        /// <param name="restrictSr">boolean value</param>
+        /// <param name="sort">one of (relevance, hot, top, new, comments)</param>
+        /// <param name="category">a string no longer than 5 characters</param>
+        /// <param name="includeFacets">boolean value</param>
+        /// <param name="type">(optional) comma-delimited list of result types (sr, link, user)</param>
+        /// <param name="t">one of (hour, day, week, month, year, all)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">boolean value</param>
+        /// <returns>A list of posts that match the search criteria.</returns>
+        public List<Post> Search(string q = "", bool restrictSr = true, string sort = "new", string category = "", bool includeFacets = false, string type = null,
+            string t = "all", string after = null, string before = null, bool includeCategories = false, int count = 0, int limit = 25,
+            string show = "all", bool srDetail = false)
+        {
+            return Lists.GetPosts(Validate(Dispatch.Search.GetSearch(
+                new SearchGetSearchInput(q, restrictSr, sort, category, includeFacets, type, t, after, before,
+                    includeCategories, count, limit, show, srDetail),
+                Name)), Dispatch);
         }
 
         /// <summary>
