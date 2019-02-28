@@ -42,6 +42,7 @@ namespace Reddit.Models
             restRequest.AddParameter("restrict_sr", restrictSr);
             restRequest.AddParameter("sort", sort);
             restRequest.AddParameter("t", t);
+            restRequest.AddParameter("q", q);
             restRequest.AddParameter("count", count);
             restRequest.AddParameter("limit", limit);
             restRequest.AddParameter("show", show);
