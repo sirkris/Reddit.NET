@@ -1,5 +1,6 @@
 ﻿using Reddit.Controllers;
 using Reddit.Inputs;
+using Reddit.Inputs.Search;
 using Reddit.Inputs.Subreddits;
 using RestSharp;
 using System;
@@ -458,6 +459,47 @@ namespace Reddit
         {
             return Account.Lists.GetSubreddits(Account.Validate(Models.Subreddits.SubredditAutocompleteV2(
                 new SubredditsAutocompleteV2Input(query, includeCategories, includeOver18, includeProfiles, limit))), Models);
+        }
+
+        /// <summary>
+        /// Search all subreddits for posts.
+        /// To search a specific subreddit for posts, use the Subreddit controller.
+        /// </summary>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
+        /// <returns>A list of posts that match the search criteria.</returns>
+        public List<Post> Search(SearchGetSearchInput searchGetSearchInput)
+        {
+            searchGetSearchInput.restrict_sr = false;
+            return Account.Lists.GetPosts(Account.Validate(Models.Search.GetSearch(searchGetSearchInput, "")), Models);
+        }
+
+        /// <summary>
+        /// Search all subreddits for posts.
+        /// To search a specific subreddit for posts, use the Subreddit controller.
+        /// </summary>
+        /// <param name="q">a string no longer than 512 characters</param>
+        /// <param name="restrictSr">boolean value</param>
+        /// <param name="sort">one of (relevance, hot, top, new, comments)</param>
+        /// <param name="category">a string no longer than 5 characters</param>
+        /// <param name="includeFacets">boolean value</param>
+        /// <param name="type">(optional) comma-delimited list of result types (sr, link, user)</param>
+        /// <param name="t">one of (hour, day, week, month, year, all)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">boolean value</param>
+        /// <returns>A list of posts that match the search criteria.</returns>
+        public List<Post> Search(string q = "", string sort = "new", string category = "", bool includeFacets = false, string type = null,
+            string t = "all", string after = null, string before = null, bool includeCategories = false, int count = 0, int limit = 25,
+            string show = "all", bool srDetail = false)
+        {
+            return Account.Lists.GetPosts(Account.Validate(Models.Search.GetSearch(
+                new SearchGetSearchInput(q, false, sort, category, includeFacets, type, t, after, before,
+                    includeCategories, count, limit, show, srDetail),
+                "")), Models);
         }
 
         // TODO - Split this up and maybe create a new Subreddits controller for these?  --Kris

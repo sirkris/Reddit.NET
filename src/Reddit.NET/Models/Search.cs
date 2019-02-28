@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Reddit.Inputs.Search;
+using Reddit.Things;
 using RestSharp;
 
 namespace Reddit.Models
@@ -10,45 +11,16 @@ namespace Reddit.Models
         public Search(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
             : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
 
-        // TODO - Every test I've tried returns no search results.  Not sure what I'm doing wrong (ex. the word "Florida" should appear somewhere in r/FloridaMan).  --Kris
         /// <summary>
         /// Search links page.
         /// This endpoint is a listing.
         /// </summary>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="category">a string no longer than 5 characters</param>
-        /// <param name="includeFacets">boolean value</param>
-        /// <param name="q">a string no longer than 512 characters</param>
-        /// <param name="restrictSr">boolean value</param>
-        /// <param name="sort">one of (relevance, hot, top, new, comments)</param>
-        /// <param name="t">one of (hour, day, week, month, year, all)</param>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
         /// <param name="subreddit">The subreddit being searched</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <param name="type">(optional) comma-delimited list of result types (sr, link, user)</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object GetSearch(string after, string before, string category, bool includeFacets, string q, bool restrictSr, string sort, string t,
-            string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false, string type = null)
+        /// <returns>A listing of posts that match the search criteria.</returns>
+        public PostContainer GetSearch(SearchGetSearchInput searchGetSearchInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "search");
-
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("category", category);
-            restRequest.AddParameter("include_facets", includeFacets);
-            restRequest.AddParameter("restrict_sr", restrictSr);
-            restRequest.AddParameter("sort", sort);
-            restRequest.AddParameter("t", t);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-            restRequest.AddParameter("type", type);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return SendRequest<PostContainer>(Sr(subreddit) + "search", searchGetSearchInput);
         }
     }
 }

@@ -668,6 +668,9 @@ See:  [Running the Tests](#redditnettests)
 `PUT /api/multi/<multipath>/r/<srname>`
 
 
+`GET [/r/<subreddit>]/search`
+
+
 `GET [/r/<subreddit>]/about/<where>`
 
 `POST [/r/<subreddit>]/api/delete_sr_banner`
@@ -772,9 +775,9 @@ See:  [Running the Tests](#redditnettests)
 `GET [/r/<subreddit>]/wiki/<page>`
 
 
-Total:  169 / 205 (82%)
+Total:  170 / 205 (83%)
 
-There are 36 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
+There are 35 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
 
 Virtually all of the supported endpoints are covered by tests (voting and admin-reporting were manually tested for obvious reasons) and all of those tests are passing.
 

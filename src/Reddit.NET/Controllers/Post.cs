@@ -1,4 +1,6 @@
-﻿using Reddit.Controllers.Internal;
+﻿using Reddit.Controllers.EventArgs;
+using Reddit.Controllers.Internal;
+using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Inputs.Flair;
 using Reddit.Inputs.LinksAndComments;
@@ -6,6 +8,7 @@ using Reddit.Inputs.Moderation;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reddit.Controllers
@@ -13,8 +16,14 @@ namespace Reddit.Controllers
     /// <summary>
     /// Base controller for posts.
     /// </summary>
-    public class Post : BaseController
+    public class Post : Monitors
     {
+        public event EventHandler<PostUpdateEventArgs> PostDataUpdated;
+        public event EventHandler<PostUpdateEventArgs> PostScoreUpdated;
+
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+
         public string Subreddit;
         public string Author;
         public string Id;
@@ -28,6 +37,10 @@ namespace Reddit.Controllers
         public bool Removed;
         public bool Spam;
         public bool NSFW;
+
+        // Monitoring event fires when score changes by either value, whichever is greater.  This is to account for "vote fuzzing".  --Kris
+        private int MinScoreMonitoringThreshold = 4;
+        private int ScoreMonitoringPercentThreshold = 8;
 
         public string Title
         {
@@ -875,6 +888,142 @@ namespace Reddit.Controllers
         public FlairSelectorResultContainer FlairSelector(string username)
         {
             return Validate(Dispatch.Flair.FlairSelector(new FlairLinkInput(Fullname, username), Subreddit));
+        }
+
+        protected virtual void OnPostDataUpdated(PostUpdateEventArgs e)
+        {
+            PostDataUpdated?.Invoke(this, e);
+        }
+
+        protected virtual void OnPostScoreUpdated(PostUpdateEventArgs e)
+        {
+            PostScoreUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor this post for any configuration changes.
+        /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
+        public bool MonitorPostData(int? monitoringDelayMs = null)
+        {
+            string key = "PostData";
+            return Monitor(key, new Thread(() => MonitorPostDataThread(key, monitoringDelayMs)), Id);
+        }
+
+        /// <summary>
+        /// Monitor this post for any score changes.
+        /// In order for the event to fire, *both* minScoreMonitoringThreshold AND scoreMonitoringPercentThreshold must be met.
+        /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="minScoreMonitoringThreshold">The minimum change in score value between events (default: 4)</param>
+        /// <param name="scoreMonitoringPercentThreshold">The minimum score percent change between events (default: 8)</param>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
+        public bool MonitorPostScore(int? monitoringDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null)
+        {
+            if (minScoreMonitoringThreshold.HasValue)
+            {
+                MinScoreMonitoringThreshold = minScoreMonitoringThreshold.Value;
+            }
+
+            if (scoreMonitoringPercentThreshold.HasValue)
+            {
+                ScoreMonitoringPercentThreshold = scoreMonitoringPercentThreshold.Value;
+            }
+
+            string key = "PostScore";
+            return Monitor(key, new Thread(() => MonitorPostScoreThread(key, monitoringDelayMs)), Id);
+        }
+
+        private void MonitorPostDataThread(string key, int? monitoringDelayMs = null)
+        {
+            MonitorPost(key, "data", Id, monitoringDelayMs: monitoringDelayMs);
+        }
+
+        private void MonitorPostScoreThread(string key, int? monitoringDelayMs = null)
+        {
+            MonitorPost(key, "score", Id, monitoringDelayMs: monitoringDelayMs);
+        }
+
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "PostData":
+                    return new Thread(() => MonitorPost(key, "data", subKey, startDelayMs, monitoringDelayMs));
+                case "PostScore":
+                    return new Thread(() => MonitorPost(key, "score", subKey, startDelayMs, monitoringDelayMs));
+            }
+        }
+
+        private void MonitorPost(string key, string type, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            monitoringDelayMs = (monitoringDelayMs.HasValue ? monitoringDelayMs : Monitoring.Count() * MonitoringWaitDelayMS);
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(subKey))
+            {
+                Post post;
+                switch (type)
+                {
+                    default:
+                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                    case "data":
+                        post = About();
+                        if (post != null)
+                        {
+                            if (!post.Edited.Equals(Edited)
+                                || !post.Removed.Equals(Removed)
+                                || !post.Spam.Equals(Spam)
+                                || !post.NSFW.Equals(NSFW))
+                            {
+                                TriggerUpdate(post);
+
+                                // Data is automatically updated when the event fires.  --Kris
+                                Edited = post.Edited;
+                                Removed = post.Removed;
+                                Spam = post.Spam;
+                                NSFW = post.NSFW;
+                            }
+                        }
+                        break;
+                    case "score":
+                        post = About();
+                        if (post != null)
+                        {
+                            int scoreDiff = Math.Abs(post.Score - Score);
+                            double scoreDiffPercent = (scoreDiff / Score) * 100;
+                            if (scoreDiff >= MinScoreMonitoringThreshold
+                                && scoreDiffPercent >= ScoreMonitoringPercentThreshold)
+                            {
+                                TriggerUpdate(post);
+
+                                Score = post.Score;  // Score is automatically updated when the event fires.  --Kris
+                            }
+                        }
+                        break;
+                }
+
+                Thread.Sleep(monitoringDelayMs.Value);
+            }
+        }
+
+        private void TriggerUpdate(Post post)
+        {
+            // Event handler to alert the calling app that the score has changed.  --Kris
+            PostUpdateEventArgs args = new PostUpdateEventArgs
+            {
+                OldPost = this,
+                NewPost = post
+            };
+            OnPostScoreUpdated(args);
         }
     }
 }
