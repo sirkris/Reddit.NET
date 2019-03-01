@@ -130,6 +130,7 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
 
         private Dispatch Dispatch;
 
@@ -561,9 +562,15 @@ namespace Reddit.Controllers
         /// Monitor recent modmail messages as they arrive.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorRecent(int? monitoringDelayMs = null)
+        public bool MonitorRecent(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "ModmailMessagesRecent";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
@@ -572,9 +579,15 @@ namespace Reddit.Controllers
         /// Monitor mod modmail messages as they arrive.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorMod(int? monitoringDelayMs = null)
+        public bool MonitorMod(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "ModmailMessagesMod";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
@@ -583,9 +596,15 @@ namespace Reddit.Controllers
         /// Monitor user modmail messages as they arrive.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorUser(int? monitoringDelayMs = null)
+        public bool MonitorUser(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "ModmailMessagesUser";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
@@ -594,9 +613,15 @@ namespace Reddit.Controllers
         /// Monitor unread modmail messages as they arrive.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorUnread(int? monitoringDelayMs = null)
+        public bool MonitorUnread(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "ModmailMessagesUnread";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
@@ -639,48 +664,52 @@ namespace Reddit.Controllers
                 Dictionary<string, ConversationMessage> newMessageList;
 
                 ConversationContainer res;
-                switch (type)
+                try
                 {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "recent":
-                        res = GetRecentConversations();
-                        break;
-                    case "mod":
-                        res = GetModConversations();
-                        break;
-                    case "user":
-                        res = GetUserConversations();
-                        break;
-                    case "unread":
-                        res = GetUnreadConversations();
-                        break;
-                }
-
-                oldConversationList = conversationContainer?.Conversations;
-                newConversationList = res.Conversations;
-                oldMessageList = conversationContainer?.Messages;
-                newMessageList = res.Messages;
-
-                if (Diff(oldConversationList, newConversationList, out Dictionary<string, Conversation> addedC, out Dictionary<string, Conversation> removedC))
-                {
-                    if (Diff(oldMessageList, newMessageList, out Dictionary<string, ConversationMessage> addedM, out Dictionary<string, ConversationMessage> removedM))
+                    switch (type)
                     {
-                        // Event handler to alert the calling app that the list has changed.  --Kris
-                        ModmailConversationsEventArgs args = new ModmailConversationsEventArgs
+                        default:
+                            throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                        case "recent":
+                            res = GetRecentConversations();
+                            break;
+                        case "mod":
+                            res = GetModConversations();
+                            break;
+                        case "user":
+                            res = GetUserConversations();
+                            break;
+                        case "unread":
+                            res = GetUnreadConversations();
+                            break;
+                    }
+
+                    oldConversationList = conversationContainer?.Conversations;
+                    newConversationList = res.Conversations;
+                    oldMessageList = conversationContainer?.Messages;
+                    newMessageList = res.Messages;
+
+                    if (Diff(oldConversationList, newConversationList, out Dictionary<string, Conversation> addedC, out Dictionary<string, Conversation> removedC))
+                    {
+                        if (Diff(oldMessageList, newMessageList, out Dictionary<string, ConversationMessage> addedM, out Dictionary<string, ConversationMessage> removedM))
                         {
-                            NewConversations = newConversationList, 
-                            OldConversations = oldConversationList, 
-                            AddedConversations = addedC, 
-                            RemovedConversations = removedC, 
-                            NewMessages = newMessageList, 
-                            OldMessages = oldMessageList, 
-                            AddedMessages = addedM, 
-                            RemovedMessages = removedM
-                        };
-                        TriggerUpdate(args, type);
+                            // Event handler to alert the calling app that the list has changed.  --Kris
+                            ModmailConversationsEventArgs args = new ModmailConversationsEventArgs
+                            {
+                                NewConversations = newConversationList,
+                                OldConversations = oldConversationList,
+                                AddedConversations = addedC,
+                                RemovedConversations = removedC,
+                                NewMessages = newMessageList,
+                                OldMessages = oldMessageList,
+                                AddedMessages = addedM,
+                                RemovedMessages = removedM
+                            };
+                            TriggerUpdate(args, type);
+                        }
                     }
                 }
+                catch (Exception) when (!BreakOnFailure) { }
 
                 Thread.Sleep(monitoringDelayMs.Value);
             }

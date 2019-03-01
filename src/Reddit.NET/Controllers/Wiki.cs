@@ -19,6 +19,7 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
 
         /// <summary>
         /// List of pages on this wiki.
@@ -204,9 +205,15 @@ namespace Reddit.Controllers
         /// Monitor this wiki for added/removed pages.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPages(int? monitoringDelayMs = null)
+        public bool MonitorPages(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "WikiPages";
             return Monitor(key, new Thread(() => MonitorPagesThread(key, monitoringDelayMs: monitoringDelayMs)), Subreddit);
         }
@@ -234,21 +241,26 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(Subreddit))
             {
-                List<string> oldList = pages;
-                List<string> newList = GetPages();
-
-                if (Lists.ListDiff(oldList, newList, out List<string> added, out List<string> removed))
+                List<string> oldList;
+                List<string> newList;
+                try
                 {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    WikiPagesUpdateEventArgs args = new WikiPagesUpdateEventArgs
+                    oldList = pages;
+                    newList = GetPages();
+                    if (Lists.ListDiff(oldList, newList, out List<string> added, out List<string> removed))
                     {
-                        NewPages = newList,
-                        OldPages = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    OnPagesUpdated(args);
+                        // Event handler to alert the calling app that the list has changed.  --Kris
+                        WikiPagesUpdateEventArgs args = new WikiPagesUpdateEventArgs
+                        {
+                            NewPages = newList,
+                            OldPages = oldList,
+                            Added = added,
+                            Removed = removed
+                        };
+                        OnPagesUpdated(args);
+                    }
                 }
+                catch (Exception) when (!BreakOnFailure) { }
 
                 Thread.Sleep(monitoringDelayMs.Value);
             }

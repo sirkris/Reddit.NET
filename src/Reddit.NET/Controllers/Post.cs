@@ -23,6 +23,7 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
 
         public string Subreddit;
         public string Author;
@@ -904,9 +905,15 @@ namespace Reddit.Controllers
         /// Monitor this post for any configuration changes.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPostData(int? monitoringDelayMs = null)
+        public bool MonitorPostData(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "PostData";
             return Monitor(key, new Thread(() => MonitorPostDataThread(key, monitoringDelayMs)), Id);
         }
@@ -918,8 +925,9 @@ namespace Reddit.Controllers
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <param name="minScoreMonitoringThreshold">The minimum change in score value between events (default: 4)</param>
         /// <param name="scoreMonitoringPercentThreshold">The minimum score percent change between events (default: 8)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPostScore(int? monitoringDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null)
+        public bool MonitorPostScore(int? monitoringDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null, bool? breakOnFailure = null)
         {
             if (minScoreMonitoringThreshold.HasValue)
             {
@@ -929,6 +937,11 @@ namespace Reddit.Controllers
             if (scoreMonitoringPercentThreshold.HasValue)
             {
                 ScoreMonitoringPercentThreshold = scoreMonitoringPercentThreshold.Value;
+            }
+
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
             }
 
             string key = "PostScore";
@@ -971,45 +984,49 @@ namespace Reddit.Controllers
                 && Monitoring.Get(key).Contains(subKey))
             {
                 Post post;
-                switch (type)
+                try
                 {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "data":
-                        post = About();
-                        if (post != null)
-                        {
-                            if (!post.Edited.Equals(Edited)
-                                || !post.Removed.Equals(Removed)
-                                || !post.Spam.Equals(Spam)
-                                || !post.NSFW.Equals(NSFW))
+                    switch (type)
+                    {
+                        default:
+                            throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                        case "data":
+                            post = About();
+                            if (post != null)
                             {
-                                TriggerUpdate(post);
+                                if (!post.Edited.Equals(Edited)
+                                    || !post.Removed.Equals(Removed)
+                                    || !post.Spam.Equals(Spam)
+                                    || !post.NSFW.Equals(NSFW))
+                                {
+                                    TriggerUpdate(post);
 
-                                // Data is automatically updated when the event fires.  --Kris
-                                Edited = post.Edited;
-                                Removed = post.Removed;
-                                Spam = post.Spam;
-                                NSFW = post.NSFW;
+                                    // Data is automatically updated when the event fires.  --Kris
+                                    Edited = post.Edited;
+                                    Removed = post.Removed;
+                                    Spam = post.Spam;
+                                    NSFW = post.NSFW;
+                                }
                             }
-                        }
-                        break;
-                    case "score":
-                        post = About();
-                        if (post != null)
-                        {
-                            int scoreDiff = Math.Abs(post.Score - Score);
-                            double scoreDiffPercent = (scoreDiff / Score) * 100;
-                            if (scoreDiff >= MinScoreMonitoringThreshold
-                                && scoreDiffPercent >= ScoreMonitoringPercentThreshold)
+                            break;
+                        case "score":
+                            post = About();
+                            if (post != null)
                             {
-                                TriggerUpdate(post);
+                                int scoreDiff = Math.Abs(post.Score - Score);
+                                double scoreDiffPercent = (scoreDiff / Score) * 100;
+                                if (scoreDiff >= MinScoreMonitoringThreshold
+                                    && scoreDiffPercent >= ScoreMonitoringPercentThreshold)
+                                {
+                                    TriggerUpdate(post);
 
-                                Score = post.Score;  // Score is automatically updated when the event fires.  --Kris
+                                    Score = post.Score;  // Score is automatically updated when the event fires.  --Kris
+                                }
                             }
-                        }
-                        break;
+                            break;
+                    }
                 }
+                catch (Exception) when (!BreakOnFailure) { }
 
                 Thread.Sleep(monitoringDelayMs.Value);
             }

@@ -16,10 +16,12 @@ namespace Reddit.Controllers.Internal
 
         internal abstract Models.Internal.Monitor MonitorModel { get; }
         internal abstract ref MonitoringSnapshot Monitoring { get; }
+        internal abstract bool BreakOnFailure { get; set; }
 
         public Monitors() : base()
         {
             Threads = new Dictionary<string, Thread>();
+            BreakOnFailure = false;
         }
 
         protected bool Monitor(string key, Thread thread, string subKey)

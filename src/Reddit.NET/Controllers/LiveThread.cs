@@ -22,6 +22,7 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
 
         public string Id;
         public string Fullname;
@@ -617,9 +618,15 @@ namespace Reddit.Controllers
         /// Monitor this live thread for any configuration changes.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorThread(int? monitoringDelayMs = null)
+        public bool MonitorThread(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "LiveThread";
             return Monitor(key, new Thread(() => MonitorThreadThread(key, monitoringDelayMs)), Id);
         }
@@ -628,9 +635,15 @@ namespace Reddit.Controllers
         /// Monitor this live thread for any new or removed contributors.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorContributors(int? monitoringDelayMs = null)
+        public bool MonitorContributors(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "LiveThreadContributors";
             return Monitor(key, new Thread(() => MonitorContributorsThread(key, monitoringDelayMs)), Id);
         }
@@ -639,9 +652,15 @@ namespace Reddit.Controllers
         /// Monitor this live thread for any new updates.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorUpdates(int? monitoringDelayMs = null)
+        public bool MonitorUpdates(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "LiveThreadUpdates";
             return Monitor(key, new Thread(() => MonitorUpdatesThread(key, monitoringDelayMs)), Id);
         }
@@ -688,20 +707,24 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(subKey))
             {
-                switch (type)
+                try
                 {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "thread":
-                        CheckLiveThread();
-                        break;
-                    case "contributors":
-                        CheckContributors();
-                        break;
-                    case "updates":
-                        CheckUpdates();
-                        break;
+                    switch (type)
+                    {
+                        default:
+                            throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                        case "thread":
+                            CheckLiveThread();
+                            break;
+                        case "contributors":
+                            CheckContributors();
+                            break;
+                        case "updates":
+                            CheckUpdates();
+                            break;
+                    }
                 }
+                catch (Exception) when (!BreakOnFailure) { }
 
                 Thread.Sleep(monitoringDelayMs.Value);
             }

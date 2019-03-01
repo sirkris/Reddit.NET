@@ -30,6 +30,7 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
 
         private Dispatch Dispatch;
 
@@ -416,9 +417,15 @@ namespace Reddit.Controllers
         /// Monitor this wiki page for any changes.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPage(int? monitoringDelayMs = null)
+        public bool MonitorPage(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "WikiPage";
             return Monitor(key, new Thread(() => MonitorPageThread(key, monitoringDelayMs: monitoringDelayMs)), Name);
         }
@@ -446,18 +453,23 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(Name))
             {
-                WikiPage newPage = About();
-
-                if (!newPage.RevisionDate.Equals(RevisionDate))
+                WikiPage newPage;
+                try
                 {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    WikiPageUpdateEventArgs args = new WikiPageUpdateEventArgs
+                    newPage = About();
+
+                    if (!newPage.RevisionDate.Equals(RevisionDate))
                     {
-                        NewPage = newPage, 
-                        OldPage = this
-                    };
-                    OnPagesUpdated(args);
+                        // Event handler to alert the calling app that the list has changed.  --Kris
+                        WikiPageUpdateEventArgs args = new WikiPageUpdateEventArgs
+                        {
+                            NewPage = newPage,
+                            OldPage = this
+                        };
+                        OnPagesUpdated(args);
+                    }
                 }
+                catch (Exception) when (!BreakOnFailure) { }
 
                 Thread.Sleep(monitoringDelayMs.Value);
             }

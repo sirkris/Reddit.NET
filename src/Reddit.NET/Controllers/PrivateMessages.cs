@@ -22,6 +22,7 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
 
         /// <summary>
         /// List of inbox messages.
@@ -391,9 +392,15 @@ namespace Reddit.Controllers
         /// Monitor inbox messages.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorInbox(int? monitoringDelayMs = null)
+        public bool MonitorInbox(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "PrivateMessagesInbox";
             return Monitor(key, new Thread(() => MonitorInboxThread(key, monitoringDelayMs)), "PrivateMessages");
         }
@@ -407,9 +414,15 @@ namespace Reddit.Controllers
         /// Monitor unread messages.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorUnread(int? monitoringDelayMs = null)
+        public bool MonitorUnread(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "PrivateMessagesUnread";
             return Monitor(key, new Thread(() => MonitorUnreadThread(key, monitoringDelayMs)), "PrivateMessages");
         }
@@ -423,9 +436,15 @@ namespace Reddit.Controllers
         /// Monitor sent messages.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorSent(int? monitoringDelayMs = null)
+        public bool MonitorSent(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "PrivateMessagesSent";
             return Monitor(key, new Thread(() => MonitorSentThread(key, monitoringDelayMs)), "PrivateMessages");
         }
@@ -449,36 +468,40 @@ namespace Reddit.Controllers
             {
                 List<Message> oldList;
                 List<Message> newList;
-                switch (type)
+                try
                 {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "inbox":
-                        oldList = inbox;
-                        newList = GetMessagesInbox();
-                        break;
-                    case "unread":
-                        oldList = unread;
-                        newList = GetMessagesUnread();
-                        break;
-                    case "sent":
-                        oldList = sent;
-                        newList = GetMessagesSent();
-                        break;
-                }
-
-                if (Lists.ListDiff(oldList, newList, out List<Message> added, out List<Message> removed))
-                {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
+                    switch (type)
                     {
-                        NewMessages = newList,
-                        OldMessages = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    TriggerUpdate(args, type);
+                        default:
+                            throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                        case "inbox":
+                            oldList = inbox;
+                            newList = GetMessagesInbox();
+                            break;
+                        case "unread":
+                            oldList = unread;
+                            newList = GetMessagesUnread();
+                            break;
+                        case "sent":
+                            oldList = sent;
+                            newList = GetMessagesSent();
+                            break;
+                    }
+
+                    if (Lists.ListDiff(oldList, newList, out List<Message> added, out List<Message> removed))
+                    {
+                        // Event handler to alert the calling app that the list has changed.  --Kris
+                        MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
+                        {
+                            NewMessages = newList,
+                            OldMessages = oldList,
+                            Added = added,
+                            Removed = removed
+                        };
+                        TriggerUpdate(args, type);
+                    }
                 }
+                catch (Exception) when (!BreakOnFailure) { }
 
                 Thread.Sleep(monitoringDelayMs.Value);
             }

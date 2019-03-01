@@ -34,6 +34,7 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
 
         /// <summary>
         /// A list of comments using "confidence" sort.
@@ -436,9 +437,16 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor Reddit for new "confidence" comments on this thread.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorConfidence(int? monitoringDelayMs = null)
+        public bool MonitorConfidence(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "ConfidenceComments";
             return Monitor(key, new Thread(() => MonitorConfidenceThread(key, monitoringDelayMs)), SubKey);
         }
@@ -456,9 +464,16 @@ namespace Reddit.Controllers
         /// <summary>
         /// Monitor Reddit for new "top" comments on this thread.
         /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorTop(int? monitoringDelayMs = null)
+        public bool MonitorTop(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "TopComments";
             return Monitor(key, new Thread(() => MonitorTopThread(key, monitoringDelayMs)), SubKey);
         }
@@ -477,9 +492,15 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "new" comments on this thread.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorNew(int? monitoringDelayMs = null)
+        public bool MonitorNew(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "NewComments";
             return Monitor(key, new Thread(() => MonitorNewThread(key, monitoringDelayMs)), SubKey);
         }
@@ -498,9 +519,15 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "controversial" comments on this thread.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorControversial(int? monitoringDelayMs = null)
+        public bool MonitorControversial(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "ControversialComments";
             return Monitor(key, new Thread(() => MonitorControversialThread(key, monitoringDelayMs)), SubKey);
         }
@@ -519,9 +546,15 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "old" comments on this thread.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorOld(int? monitoringDelayMs = null)
+        public bool MonitorOld(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "OldComments";
             return Monitor(key, new Thread(() => MonitorOldThread(key, monitoringDelayMs)), SubKey);
         }
@@ -540,9 +573,15 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "random" comments on this thread.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorRandom(int? monitoringDelayMs = null)
+        public bool MonitorRandom(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "RandomComments";
             return Monitor(key, new Thread(() => MonitorRandomThread(key, monitoringDelayMs)), SubKey);
         }
@@ -561,9 +600,15 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "qa" comments on this thread.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorQA(int? monitoringDelayMs = null)
+        public bool MonitorQA(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "QAComments";
             return Monitor(key, new Thread(() => MonitorQAThread(key, monitoringDelayMs)), SubKey);
         }
@@ -582,9 +627,15 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "live" comments on this thread.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorLive(int? monitoringDelayMs = null)
+        public bool MonitorLive(int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
             string key = "LiveComments";
             return Monitor(key, new Thread(() => MonitorLiveThread(key, monitoringDelayMs)), SubKey);
         }
@@ -613,56 +664,60 @@ namespace Reddit.Controllers
             {
                 List<Comment> oldList;
                 List<Comment> newList;
-                switch (type)
+                try
                 {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "confidence":
-                        oldList = confidence;
-                        newList = GetConfidence();
-                        break;
-                    case "top":
-                        oldList = top;
-                        newList = GetTop();
-                        break;
-                    case "new":
-                        oldList = newComments;
-                        newList = GetNew();
-                        break;
-                    case "controversial":
-                        oldList = controversial;
-                        newList = GetControversial();
-                        break;
-                    case "old":
-                        oldList = old;
-                        newList = GetOld();
-                        break;
-                    case "random":
-                        oldList = random;
-                        newList = GetRandom();
-                        break;
-                    case "qa":
-                        oldList = qa;
-                        newList = GetQA();
-                        break;
-                    case "live":
-                        oldList = live;
-                        newList = GetLive();
-                        break;
-                }
-                
-                if (Lists.ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
-                {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
+                    switch (type)
                     {
-                        NewComments = newList,
-                        OldComments = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    TriggerUpdate(args, type);
+                        default:
+                            throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                        case "confidence":
+                            oldList = confidence;
+                            newList = GetConfidence();
+                            break;
+                        case "top":
+                            oldList = top;
+                            newList = GetTop();
+                            break;
+                        case "new":
+                            oldList = newComments;
+                            newList = GetNew();
+                            break;
+                        case "controversial":
+                            oldList = controversial;
+                            newList = GetControversial();
+                            break;
+                        case "old":
+                            oldList = old;
+                            newList = GetOld();
+                            break;
+                        case "random":
+                            oldList = random;
+                            newList = GetRandom();
+                            break;
+                        case "qa":
+                            oldList = qa;
+                            newList = GetQA();
+                            break;
+                        case "live":
+                            oldList = live;
+                            newList = GetLive();
+                            break;
+                    }
+
+                    if (Lists.ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
+                    {
+                        // Event handler to alert the calling app that the list has changed.  --Kris
+                        CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
+                        {
+                            NewComments = newList,
+                            OldComments = oldList,
+                            Added = added,
+                            Removed = removed
+                        };
+                        TriggerUpdate(args, type);
+                    }
                 }
+                catch (Exception) when (!BreakOnFailure) { }
 
                 Thread.Sleep(monitoringDelayMs.Value);
             }
