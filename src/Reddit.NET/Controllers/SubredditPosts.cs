@@ -32,6 +32,7 @@ namespace Reddit.Controllers
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
         internal override bool BreakOnFailure { get; set; }
+        internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
 
         /// <summary>
         /// List of posts using "best" sort.
@@ -552,13 +553,19 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "Best" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorBest(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorBest(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "BestPosts";
@@ -579,13 +586,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new "Hot" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorHot(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorHot(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "HotPosts";
@@ -606,13 +619,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorNew(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorNew(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "NewPosts";
@@ -633,13 +652,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new "Rising" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorRising(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorRising(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "RisingPosts";
@@ -660,13 +685,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new "Top" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorTop(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorTop(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "TopPosts";
@@ -687,13 +718,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new "Controversial" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorControversial(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorControversial(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "ControversialPosts";
@@ -714,13 +751,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "modqueue" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueue(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorModQueue(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "ModQueuePosts";
@@ -741,13 +784,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "reports" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueReports(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorModQueueReports(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "ModQueueReportsPosts";
@@ -768,13 +817,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "spam" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueSpam(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorModQueueSpam(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "ModQueueSpamPosts";
@@ -795,13 +850,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "unmoderated" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueUnmoderated(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorModQueueUnmoderated(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "ModQueueUnmoderatedPosts";
@@ -822,13 +883,19 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "edited" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueEdited(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorModQueueEdited(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "ModQueueEditedPosts";
@@ -888,6 +955,21 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(subKey))
             {
+                while (!IsScheduled())
+                {
+                    if (Terminate)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(15000);
+                }
+
+                if (Terminate)
+                {
+                    break;
+                }
+
                 List<Post> oldList;
                 List<Post> newList;
                 try

@@ -31,6 +31,7 @@ namespace Reddit.Controllers
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
         internal override bool BreakOnFailure { get; set; }
+        internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
 
         private Dispatch Dispatch;
 
@@ -417,13 +418,19 @@ namespace Reddit.Controllers
         /// Monitor this wiki page for any changes.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPage(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorPage(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "WikiPage";
@@ -453,6 +460,21 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(Name))
             {
+                while (!IsScheduled())
+                {
+                    if (Terminate)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(15000);
+                }
+
+                if (Terminate)
+                {
+                    break;
+                }
+
                 WikiPage newPage;
                 try
                 {

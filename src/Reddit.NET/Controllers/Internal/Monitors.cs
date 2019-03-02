@@ -17,11 +17,13 @@ namespace Reddit.Controllers.Internal
         internal abstract Models.Internal.Monitor MonitorModel { get; }
         internal abstract ref MonitoringSnapshot Monitoring { get; }
         internal abstract bool BreakOnFailure { get; set; }
+        internal abstract List<MonitoringSchedule> MonitoringSchedule { get; set; }
 
         public Monitors() : base()
         {
             Threads = new Dictionary<string, Thread>();
             BreakOnFailure = false;
+            MonitoringSchedule = new List<MonitoringSchedule> { null };  // Monitor 24/7 by default.  --Kris
         }
 
         protected bool Monitor(string key, Thread thread, string subKey)
@@ -56,6 +58,30 @@ namespace Reddit.Controllers.Internal
 
                 return true;
             }
+        }
+
+        public bool IsScheduled()
+        {
+            DateTime now = DateTime.Now;
+            foreach (MonitoringSchedule monitoringSchedule in MonitoringSchedule)
+            {
+                if (monitoringSchedule == null)
+                {
+                    return true;
+                }
+
+                DateTime start = new DateTime(now.Year, now.Month, now.Day, monitoringSchedule.StartHour, monitoringSchedule.StartMinute, 0);
+                DateTime end = new DateTime(now.Year, now.Month, now.Day, monitoringSchedule.EndHour, monitoringSchedule.EndMinute, 0);
+
+                if (monitoringSchedule.ScheduleDays.IsScheduledToday()
+                    && now >= start
+                    && now <= end)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         // TODO - Preserve custom thread monitoring delays when they're rebuilt (occurs whenever a new monitoring thread starts or an existing one stops).  --Kris

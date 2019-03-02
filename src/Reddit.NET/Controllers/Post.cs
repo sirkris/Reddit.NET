@@ -24,6 +24,7 @@ namespace Reddit.Controllers
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
         internal override bool BreakOnFailure { get; set; }
+        internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
 
         public string Subreddit;
         public string Author;
@@ -905,13 +906,19 @@ namespace Reddit.Controllers
         /// Monitor this post for any configuration changes.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPostData(int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        public bool MonitorPostData(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
             }
 
             string key = "PostData";
@@ -925,9 +932,11 @@ namespace Reddit.Controllers
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <param name="minScoreMonitoringThreshold">The minimum change in score value between events (default: 4)</param>
         /// <param name="scoreMonitoringPercentThreshold">The minimum score percent change between events (default: 8)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPostScore(int? monitoringDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null, bool? breakOnFailure = null)
+        public bool MonitorPostScore(int? monitoringDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null, 
+            List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (minScoreMonitoringThreshold.HasValue)
             {
@@ -983,6 +992,21 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(subKey))
             {
+                while (!IsScheduled())
+                {
+                    if (Terminate)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(15000);
+                }
+
+                if (Terminate)
+                {
+                    break;
+                }
+
                 Post post;
                 try
                 {
