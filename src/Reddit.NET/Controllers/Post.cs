@@ -972,7 +972,7 @@ namespace Reddit.Controllers
             switch (key)
             {
                 default:
-                    throw new RedditControllerException("Unrecognized key.");
+                    throw new RedditControllerException("Unrecognized key : " + key + ".");
                 case "PostData":
                     return new Thread(() => MonitorPost(key, "data", subKey, startDelayMs, monitoringDelayMs));
                 case "PostScore":
