@@ -143,7 +143,10 @@ namespace Reddit.Models.Internal
         private RestRequest PrepareExecuteRequest(RestRequest restRequest)
         {
             // If we've reached the speed limit, hold until we're clear to proceed.  --Kris
-            while (!RequestReady()) { }
+            while (!RequestReady())
+            {
+                Thread.Sleep(1000);
+            }
 
             // Add to recent request history (used for ratelimiting purposes).  --Kris
             AddRequest();
