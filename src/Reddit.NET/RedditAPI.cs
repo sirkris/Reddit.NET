@@ -96,7 +96,10 @@ namespace Reddit
         /// <param name="waitUntilRequestsAt">The wait ends when the number of requests count goes down to less than or equal to this value</param>
         public void WaitForRequestQueue(int waitUntilRequestsAt = 0)
         {
-            while (!Models.Account.RequestReady((waitUntilRequestsAt + 1))) { }
+            while (!Models.Account.RequestReady((waitUntilRequestsAt + 1)))
+            {
+                System.Threading.Thread.Sleep(1000);
+            }
         }
 
         /// <summary>

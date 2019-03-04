@@ -906,10 +906,11 @@ namespace Reddit.Controllers
         /// Monitor this post for any configuration changes.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPostData(int? monitoringDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorPostData(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -921,6 +922,11 @@ namespace Reddit.Controllers
                 MonitoringSchedule = schedule;
             }
 
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
             string key = "PostData";
             return Monitor(key, new Thread(() => MonitorPostDataThread(key, monitoringDelayMs)), Id);
         }
@@ -930,12 +936,13 @@ namespace Reddit.Controllers
         /// In order for the event to fire, *both* minScoreMonitoringThreshold AND scoreMonitoringPercentThreshold must be met.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="minScoreMonitoringThreshold">The minimum change in score value between events (default: 4)</param>
         /// <param name="scoreMonitoringPercentThreshold">The minimum score percent change between events (default: 8)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPostScore(int? monitoringDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null, 
+        public bool MonitorPostScore(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null, 
             List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (minScoreMonitoringThreshold.HasValue)
@@ -951,6 +958,16 @@ namespace Reddit.Controllers
             if (breakOnFailure.HasValue)
             {
                 BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
             }
 
             string key = "PostScore";
