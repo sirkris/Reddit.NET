@@ -443,6 +443,11 @@ namespace Reddit.Controllers
             return Monitor(key, new Thread(() => MonitorPageThread(key, monitoringDelayMs: monitoringDelayMs)), Name);
         }
 
+        public bool WikiPagesIsMonitored()
+        {
+            return IsMonitored("WikiPage", Name);
+        }
+
         protected override Thread CreateMonitoringThread(string key, string subkey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

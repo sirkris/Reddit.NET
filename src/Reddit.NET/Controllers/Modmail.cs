@@ -834,6 +834,26 @@ namespace Reddit.Controllers
             }
         }
 
+        public bool ModmailMessagesRecentIsMonitored()
+        {
+            return IsMonitored("ModmailMessagesRecent", "ModmailMessages");
+        }
+
+        public bool ModmailMessagesModIsMonitored()
+        {
+            return IsMonitored("ModmailMessagesMod", "ModmailMessages");
+        }
+
+        public bool ModmailMessagesUserIsMonitored()
+        {
+            return IsMonitored("ModmailMessagesUser", "ModmailMessages");
+        }
+
+        public bool ModmailMessagesUnreadIsMonitored()
+        {
+            return IsMonitored("ModmailMessagesUnread", "ModmailMessages");
+        }
+
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

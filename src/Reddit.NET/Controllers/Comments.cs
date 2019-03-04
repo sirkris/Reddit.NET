@@ -850,6 +850,46 @@ namespace Reddit.Controllers
             }
         }
 
+        public bool ConfidenceCommentsIsMonitored()
+        {
+            return IsMonitored("ConfidenceComments", SubKey);
+        }
+
+        public bool TopCommentsIsMonitored()
+        {
+            return IsMonitored("TopComments", SubKey);
+        }
+
+        public bool NewCommentsIsMonitored()
+        {
+            return IsMonitored("NewComments", SubKey);
+        }
+
+        public bool ControversialCommentsIsMonitored()
+        {
+            return IsMonitored("ControversialComments", SubKey);
+        }
+
+        public bool OldCommentsIsMonitored()
+        {
+            return IsMonitored("OldComments", SubKey);
+        }
+
+        public bool RandomCommentsIsMonitored()
+        {
+            return IsMonitored("RandomComments", SubKey);
+        }
+
+        public bool QACommentsIsMonitored()
+        {
+            return IsMonitored("QAComments", SubKey);
+        }
+
+        public bool LiveCommentsIsMonitored()
+        {
+            return IsMonitored("LiveComments", SubKey);
+        }
+
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

@@ -231,6 +231,11 @@ namespace Reddit.Controllers
             return Monitor(key, new Thread(() => MonitorPagesThread(key, monitoringDelayMs: monitoringDelayMs)), Subreddit);
         }
 
+        public bool WikiPagesIsMonitored()
+        {
+            return IsMonitored("WikiPages", Subreddit);
+        }
+
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

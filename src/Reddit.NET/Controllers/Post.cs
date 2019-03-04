@@ -974,6 +974,16 @@ namespace Reddit.Controllers
             return Monitor(key, new Thread(() => MonitorPostScoreThread(key, monitoringDelayMs)), Id);
         }
 
+        public bool PostDataIsMonitored()
+        {
+            return IsMonitored("PostData", Id);
+        }
+
+        public bool PostScoreIsMonitored()
+        {
+            return IsMonitored("PostScore", Id);
+        }
+
         private void MonitorPostDataThread(string key, int? monitoringDelayMs = null)
         {
             MonitorPost(key, "data", Id, monitoringDelayMs: monitoringDelayMs);
@@ -1007,7 +1017,7 @@ namespace Reddit.Controllers
             monitoringDelayMs = (monitoringDelayMs.HasValue ? monitoringDelayMs : Monitoring.Count() * MonitoringWaitDelayMS);
 
             while (!Terminate
-                && Monitoring.Get(key).Contains(subKey))
+                && Monitoring.Get(key).Contains(Id))
             {
                 while (!IsScheduled())
                 {

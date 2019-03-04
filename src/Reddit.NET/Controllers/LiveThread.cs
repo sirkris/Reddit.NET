@@ -702,6 +702,21 @@ namespace Reddit.Controllers
             return Monitor(key, new Thread(() => MonitorUpdatesThread(key, monitoringDelayMs)), Id);
         }
 
+        public bool LiveThreadIsMonitored()
+        {
+            return IsMonitored("LiveThread", "thread");
+        }
+
+        public bool LiveThreadContributorsIsMonitored()
+        {
+            return IsMonitored("LiveThreadContributors", "contributors");
+        }
+
+        public bool LiveThreadUpdatesIsMonitored()
+        {
+            return IsMonitored("LiveThreadUpdates", "updates");
+        }
+
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

@@ -978,6 +978,61 @@ namespace Reddit.Controllers
             ModQueueEditedUpdated?.Invoke(this, e);
         }
 
+        public bool BestPostsIsMonitored()
+        {
+            return IsMonitored("BestPosts", Subreddit);
+        }
+
+        public bool HotPostsIsMonitored()
+        {
+            return IsMonitored("HotPosts", Subreddit);
+        }
+
+        public bool NewPostsIsMonitored()
+        {
+            return IsMonitored("NewPosts", Subreddit);
+        }
+
+        public bool RisingPostsIsMonitored()
+        {
+            return IsMonitored("RisingPosts", Subreddit);
+        }
+
+        public bool TopPostsIsMonitored()
+        {
+            return IsMonitored("TopPosts", Subreddit);
+        }
+
+        public bool ControversialPostsIsMonitored()
+        {
+            return IsMonitored("ControversialPosts", Subreddit);
+        }
+
+        public bool ModQueuePostsIsMonitored()
+        {
+            return IsMonitored("ModQueuePosts", Subreddit);
+        }
+
+        public bool ModQueueReportsPostsIsMonitored()
+        {
+            return IsMonitored("ModQueueReportsPosts", Subreddit);
+        }
+
+        public bool ModQueueSpamPostsIsMonitored()
+        {
+            return IsMonitored("ModQueueSpamPosts", Subreddit);
+        }
+
+        public bool ModQueueUnmoderatedPostsIsMonitored()
+        {
+            return IsMonitored("ModQueueUnmoderatedPosts", Subreddit);
+        }
+
+        public bool ModQueueEditedPostsIsMonitored()
+        {
+            return IsMonitored("ModQueueEditedPosts", Subreddit);
+        }
+
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

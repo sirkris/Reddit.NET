@@ -575,6 +575,21 @@ namespace Reddit.Controllers
             }
         }
 
+        public bool PrivateMessagesInboxIsMonitored()
+        {
+            return IsMonitored("PrivateMessagesInbox", "PrivateMessages");
+        }
+
+        public bool PrivateMessagesUnreadIsMonitored()
+        {
+            return IsMonitored("PrivateMessagesUnread", "PrivateMessages");
+        }
+
+        public bool PrivateMessagesSentIsMonitored()
+        {
+            return IsMonitored("PrivateMessagesSent", "PrivateMessages");
+        }
+
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

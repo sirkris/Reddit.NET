@@ -39,7 +39,7 @@ namespace Reddit.Controllers.Internal
         internal bool Monitor(string key, Thread thread, string subKey, out Thread newThread)
         {
             newThread = null;
-            if (Monitoring.Get(key).Contains(subKey))
+            if (IsMonitored(key, subKey))
             {
                 // Stop monitoring.  --Kris
                 MonitorModel.RemoveMonitoringKey(key, subKey, ref Monitoring);
@@ -58,6 +58,11 @@ namespace Reddit.Controllers.Internal
 
                 return true;
             }
+        }
+
+        public bool IsMonitored(string key, string subKey)
+        {
+            return Monitoring.Get(key).Contains(subKey);
         }
 
         public bool IsScheduled()
