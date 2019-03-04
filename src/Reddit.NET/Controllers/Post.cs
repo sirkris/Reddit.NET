@@ -1065,7 +1065,7 @@ namespace Reddit.Controllers
                             if (post != null)
                             {
                                 int scoreDiff = Math.Abs(post.Score - Score);
-                                double scoreDiffPercent = (scoreDiff / Score) * 100;
+                                double scoreDiffPercent = (Score > 0 ? (scoreDiff / Score) * 100 : scoreDiff * 100);
                                 if (scoreDiff >= MinScoreMonitoringThreshold
                                     && scoreDiffPercent >= ScoreMonitoringPercentThreshold)
                                 {
