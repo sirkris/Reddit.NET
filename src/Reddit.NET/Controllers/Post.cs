@@ -1079,7 +1079,7 @@ namespace Reddit.Controllers
                 }
                 catch (Exception) when (!BreakOnFailure) { }
 
-                Thread.Sleep(monitoringDelayMs.Value);
+                Wait(monitoringDelayMs.Value);
             }
         }
 

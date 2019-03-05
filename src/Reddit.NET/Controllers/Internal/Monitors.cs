@@ -42,6 +42,8 @@ namespace Reddit.Controllers.Internal
             if (IsMonitored(key, subKey))
             {
                 // Stop monitoring.  --Kris
+                TerminateThread();
+
                 MonitorModel.RemoveMonitoringKey(key, subKey, ref Monitoring);
                 WaitOrDie(Threads[key]);
 
@@ -57,6 +59,20 @@ namespace Reddit.Controllers.Internal
                 newThread = thread;
 
                 return true;
+            }
+        }
+
+        public void Wait(int ms)
+        {
+            DateTime start = DateTime.Now;
+            while (start.AddMilliseconds(ms) > DateTime.Now
+                && !Terminate)
+            {
+                int sleepMs = (int)(start.AddMilliseconds(ms) - DateTime.Now).TotalMilliseconds;
+                sleepMs = (sleepMs < 100 ? 100 : sleepMs);
+                sleepMs = (sleepMs > 3000 ? 3000 : sleepMs);
+
+                Thread.Sleep(sleepMs);
             }
         }
 
