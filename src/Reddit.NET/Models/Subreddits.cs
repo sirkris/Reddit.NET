@@ -557,6 +557,17 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Search subreddits by title and description.
+        /// This endpoint is a listing.
+        /// </summary>
+        /// <param name="subredditsSearchInput">A valid SubredditsSearchInput instance</param>
+        /// <returns>Results of the specified type.</returns>
+        public T Search<T>(SubredditsSearchInput subredditsSearchInput)
+        {
+            return SendRequest<T>("subreddits/search", subredditsSearchInput);
+        }
+
+        /// <summary>
         /// Get all subreddits.
         /// The where parameter chooses the order in which the subreddits are displayed.
         /// popular sorts on the activity of the subreddit and the position of the subreddits can shift around.

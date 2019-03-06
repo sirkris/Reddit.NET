@@ -143,7 +143,10 @@ namespace Reddit.Models.Internal
         private RestRequest PrepareExecuteRequest(RestRequest restRequest)
         {
             // If we've reached the speed limit, hold until we're clear to proceed.  --Kris
-            while (!RequestReady()) { }
+            while (!RequestReady())
+            {
+                Thread.Sleep(1000);
+            }
 
             // Add to recent request history (used for ratelimiting purposes).  --Kris
             AddRequest();
@@ -243,7 +246,7 @@ namespace Reddit.Models.Internal
                     default:
                         throw (RedditException)BuildException(new RedditException("Reddit API returned non-success (" + res.StatusCode.ToString() + ") response."), res);
                     case 0:
-                        throw (RedditException)BuildException(new RedditException("Reddit API failed to return a response."), res);
+                        throw (RedditNoResponseException)BuildException(new RedditNoResponseException("Reddit API failed to return a response."), res);
                     case HttpStatusCode.BadRequest:
                         throw (RedditBadRequestException)BuildException(new RedditBadRequestException("Reddit API returned Bad Request (400) response."), res);
                     case HttpStatusCode.Unauthorized:

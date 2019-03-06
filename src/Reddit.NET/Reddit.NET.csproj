@@ -24,7 +24,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="RestSharp" Version="106.4.2" />
+    <PackageReference Include="RestSharp" Version="106.6.9" />
   </ItemGroup>
 
 </Project>

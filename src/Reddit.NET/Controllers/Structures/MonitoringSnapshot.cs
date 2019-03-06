@@ -36,6 +36,8 @@ namespace Reddit.Controllers.Structures
         public List<string> LiveThread;
         public List<string> LiveThreadContributors;
         public List<string> LiveThreadUpdates;
+        public List<string> PostData;
+        public List<string> PostScore;
 
         public MonitoringSnapshot(List<string> bestPosts = null, List<string> hotPosts = null, List<string> newPosts = null, List<string> risingPosts = null, 
             List<string> topPosts = null, List<string> controversialPosts = null, List<string> modQueuePosts = null, List<string> modQueueReportsPosts = null, 
@@ -45,7 +47,7 @@ namespace Reddit.Controllers.Structures
             List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null, 
             List<string> wikiPages = null, List<string> wikiPage = null, List<string> modmailMessagesRecent = null, List<string> modmailMessagesMod = null, 
             List<string> modmailMessagesUser = null, List<string> modmailMessagesUnread = null, List<string> liveThread = null, List<string> liveThreadContributors = null, 
-            List<string> liveThreadUpdates = null)
+            List<string> liveThreadUpdates = null, List<string> postData = null, List<string> postScore = null)
         {
             BestPosts = bestPosts ?? new List<string>();
             HotPosts = hotPosts ?? new List<string>();
@@ -78,6 +80,8 @@ namespace Reddit.Controllers.Structures
             LiveThread = liveThread ?? new List<string>();
             LiveThreadContributors = liveThreadContributors ?? new List<string>();
             LiveThreadUpdates = liveThreadUpdates ?? new List<string>();
+            PostData = postData ?? new List<string>();
+            PostScore = postScore ?? new List<string>();
         }
 
         public ref List<string> Get(string key)
@@ -148,6 +152,10 @@ namespace Reddit.Controllers.Structures
                     return ref LiveThreadContributors;
                 case "LiveThreadUpdates":
                     return ref LiveThreadUpdates;
+                case "PostData":
+                    return ref PostData;
+                case "PostScore":
+                    return ref PostScore;
             }
         }
         
@@ -186,6 +194,8 @@ namespace Reddit.Controllers.Structures
                 Add(monitoringSnapshot.LiveThread, ref LiveThread);
                 Add(monitoringSnapshot.LiveThreadContributors, ref LiveThreadContributors);
                 Add(monitoringSnapshot.LiveThreadUpdates, ref LiveThreadUpdates);
+                Add(monitoringSnapshot.PostData, ref PostData);
+                Add(monitoringSnapshot.PostScore, ref PostScore);
             }
         }
 
@@ -235,6 +245,8 @@ namespace Reddit.Controllers.Structures
                 Remove(monitoringSnapshot.LiveThread, ref LiveThread);
                 Remove(monitoringSnapshot.LiveThreadContributors, ref LiveThreadContributors);
                 Remove(monitoringSnapshot.LiveThreadUpdates, ref LiveThreadUpdates);
+                Remove(monitoringSnapshot.PostData, ref PostData);
+                Remove(monitoringSnapshot.PostScore, ref PostScore);
             }
         }
 
@@ -280,7 +292,9 @@ namespace Reddit.Controllers.Structures
                 + ModmailMessagesUnread.Count
                 + LiveThread.Count
                 + LiveThreadContributors.Count
-                + LiveThreadUpdates.Count);
+                + LiveThreadUpdates.Count
+                + PostData.Count
+                + PostScore.Count);
         }
     }
 }

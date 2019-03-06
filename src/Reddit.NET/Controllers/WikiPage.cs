@@ -30,6 +30,8 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
+        internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
 
         private Dispatch Dispatch;
 
@@ -416,11 +418,34 @@ namespace Reddit.Controllers
         /// Monitor this wiki page for any changes.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPage(int? monitoringDelayMs = null)
+        public bool MonitorPage(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
             string key = "WikiPage";
             return Monitor(key, new Thread(() => MonitorPageThread(key, monitoringDelayMs: monitoringDelayMs)), Name);
+        }
+
+        public bool WikiPagesIsMonitored()
+        {
+            return IsMonitored("WikiPage", Name);
         }
 
         protected override Thread CreateMonitoringThread(string key, string subkey, int startDelayMs = 0, int? monitoringDelayMs = null)
@@ -446,20 +471,40 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(Name))
             {
-                WikiPage newPage = About();
-
-                if (!newPage.RevisionDate.Equals(RevisionDate))
+                while (!IsScheduled())
                 {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    WikiPageUpdateEventArgs args = new WikiPageUpdateEventArgs
+                    if (Terminate)
                     {
-                        NewPage = newPage, 
-                        OldPage = this
-                    };
-                    OnPagesUpdated(args);
+                        break;
+                    }
+
+                    Thread.Sleep(15000);
                 }
 
-                Thread.Sleep(monitoringDelayMs.Value);
+                if (Terminate)
+                {
+                    break;
+                }
+
+                WikiPage newPage;
+                try
+                {
+                    newPage = About();
+
+                    if (!newPage.RevisionDate.Equals(RevisionDate))
+                    {
+                        // Event handler to alert the calling app that the list has changed.  --Kris
+                        WikiPageUpdateEventArgs args = new WikiPageUpdateEventArgs
+                        {
+                            NewPage = newPage,
+                            OldPage = this
+                        };
+                        OnPagesUpdated(args);
+                    }
+                }
+                catch (Exception) when (!BreakOnFailure) { }
+
+                Wait(monitoringDelayMs.Value);
             }
         }
     }

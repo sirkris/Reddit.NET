@@ -16,10 +16,14 @@ namespace Reddit.Controllers.Internal
 
         internal abstract Models.Internal.Monitor MonitorModel { get; }
         internal abstract ref MonitoringSnapshot Monitoring { get; }
+        internal abstract bool BreakOnFailure { get; set; }
+        internal abstract List<MonitoringSchedule> MonitoringSchedule { get; set; }
 
         public Monitors() : base()
         {
             Threads = new Dictionary<string, Thread>();
+            BreakOnFailure = false;
+            MonitoringSchedule = new List<MonitoringSchedule> { null };  // Monitor 24/7 by default.  --Kris
         }
 
         protected bool Monitor(string key, Thread thread, string subKey)
@@ -35,11 +39,13 @@ namespace Reddit.Controllers.Internal
         internal bool Monitor(string key, Thread thread, string subKey, out Thread newThread)
         {
             newThread = null;
-            if (Monitoring.Get(key).Contains(subKey))
+            if (IsMonitored(key, subKey))
             {
                 // Stop monitoring.  --Kris
+                TerminateThread();
+
                 MonitorModel.RemoveMonitoringKey(key, subKey, ref Monitoring);
-                WaitOrDie(Threads[key]);
+                WaitOrDie(key);
 
                 Threads.Remove(key);
 
@@ -54,6 +60,49 @@ namespace Reddit.Controllers.Internal
 
                 return true;
             }
+        }
+
+        public void Wait(int ms)
+        {
+            DateTime start = DateTime.Now;
+            while (start.AddMilliseconds(ms) > DateTime.Now
+                && !Terminate)
+            {
+                int sleepMs = (int)(start.AddMilliseconds(ms) - DateTime.Now).TotalMilliseconds;
+                sleepMs = (sleepMs < 100 ? 100 : sleepMs);
+                sleepMs = (sleepMs > 3000 ? 3000 : sleepMs);
+
+                Thread.Sleep(sleepMs);
+            }
+        }
+
+        public bool IsMonitored(string key, string subKey)
+        {
+            return Monitoring.Get(key).Contains(subKey);
+        }
+
+        public bool IsScheduled()
+        {
+            DateTime now = DateTime.Now;
+            foreach (MonitoringSchedule monitoringSchedule in MonitoringSchedule)
+            {
+                if (monitoringSchedule == null)
+                {
+                    return true;
+                }
+
+                DateTime start = new DateTime(now.Year, now.Month, now.Day, monitoringSchedule.StartHour, monitoringSchedule.StartMinute, 0);
+                DateTime end = new DateTime(now.Year, now.Month, now.Day, monitoringSchedule.EndHour, monitoringSchedule.EndMinute, 0);
+
+                if (monitoringSchedule.ScheduleDays.IsScheduledToday()
+                    && now >= start
+                    && now <= end)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         // TODO - Preserve custom thread monitoring delays when they're rebuilt (occurs whenever a new monitoring thread starts or an existing one stops).  --Kris
@@ -91,6 +140,14 @@ namespace Reddit.Controllers.Internal
             Terminate = false;
         }
 
+        public void WaitOrDie(string key, int timeout = 60)
+        {
+            Thread thread = Threads[key];
+
+            KillThread(key);
+            WaitOrDie(thread, timeout);
+        }
+
         public void WaitOrDie(Thread thread, int timeout = 60)
         {
             DateTime start = DateTime.Now;
@@ -104,19 +161,29 @@ namespace Reddit.Controllers.Internal
             }
         }
 
+        protected void KillThread(Thread thread)
+        {
+            try
+            {
+                thread.Join();
+            }
+            catch (Exception) { }
+        }
+
+        protected void KillThread(string key)
+        {
+            KillThread(Threads[key]);
+
+            Threads.Remove(key);
+        }
+
         protected void KillThreads(List<string> oldThreads)
         {
             TerminateThread();
 
             foreach (string key in oldThreads)
             {
-                try
-                {
-                    Threads[key].Join();
-                }
-                catch (Exception) { }
-
-                Threads.Remove(key);
+                KillThread(key);
             }
 
             ReviveThread();
