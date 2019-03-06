@@ -44,6 +44,9 @@ namespace Reddit.Controllers
         private int MinScoreMonitoringThreshold = 4;
         private int ScoreMonitoringPercentThreshold = 8;
 
+        private int? MonitoringCancellationThresholdMinutes = null;
+        private DateTime? LastMonitoringScoreUpdate = null;
+
         public string Title
         {
             get
@@ -939,11 +942,12 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="minScoreMonitoringThreshold">The minimum change in score value between events (default: 4)</param>
         /// <param name="scoreMonitoringPercentThreshold">The minimum score percent change between events (default: 8)</param>
+        /// <param name="cancellationThresholdMinutes">If not null, monitoring will automatically stop if more than this time elapses between score updates (default: null)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorPostScore(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null, 
-            List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorPostScore(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null,
+            int? cancellationThresholdMinutes = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
         {
             if (minScoreMonitoringThreshold.HasValue)
             {
@@ -954,6 +958,8 @@ namespace Reddit.Controllers
             {
                 ScoreMonitoringPercentThreshold = scoreMonitoringPercentThreshold.Value;
             }
+
+            MonitoringCancellationThresholdMinutes = cancellationThresholdMinutes.Value;
 
             if (breakOnFailure.HasValue)
             {
@@ -1072,6 +1078,16 @@ namespace Reddit.Controllers
                                     TriggerUpdate(post);
 
                                     Score = post.Score;  // Score is automatically updated when the event fires.  --Kris
+
+                                    LastMonitoringScoreUpdate = DateTime.Now;
+                                }
+                                else if (MonitoringCancellationThresholdMinutes.HasValue
+                                    && LastMonitoringScoreUpdate.HasValue
+                                    && LastMonitoringScoreUpdate.Value.AddMinutes(MonitoringCancellationThresholdMinutes.Value) < DateTime.Now)
+                                {
+                                    // If the score hasn't changed by the required amount within the cancellation threshold (if set), stop monitoring automatically.  --Kris
+                                    PostScoreUpdated = null;
+                                    MonitorPostScore();
                                 }
                             }
                             break;
