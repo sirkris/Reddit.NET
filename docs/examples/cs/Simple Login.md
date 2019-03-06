@@ -12,8 +12,6 @@ This demonstrates how to login to the Reddit API via OAuth.  This assumes you al
 
 In the NuGet Package Manager console:
 
-    Install-Package ELIZA.NET
-    
     Install-Package Reddit
 
 ## The Code
