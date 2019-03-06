@@ -959,7 +959,14 @@ namespace Reddit.Controllers
                 ScoreMonitoringPercentThreshold = scoreMonitoringPercentThreshold.Value;
             }
 
-            MonitoringCancellationThresholdMinutes = cancellationThresholdMinutes.Value;
+            if (cancellationThresholdMinutes.HasValue)
+            {
+                MonitoringCancellationThresholdMinutes = cancellationThresholdMinutes.Value;
+            }
+            else
+            {
+                MonitoringCancellationThresholdMinutes = null;
+            }
 
             if (breakOnFailure.HasValue)
             {
