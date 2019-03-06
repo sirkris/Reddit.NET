@@ -1,22 +1,24 @@
-# Required libraries:
+# ELIZA Chatbot
 
-## [Reddit.NET](https://github.com/sirkris/Reddit.NET)
+## Required libraries:
 
-## [ELIZA.NET](https://github.com/sirkris/ELIZA.NET)
+### [Reddit.NET](https://github.com/sirkris/Reddit.NET)
 
-# Overview
+### [ELIZA.NET](https://github.com/sirkris/ELIZA.NET)
+
+## Overview
 
 This is a simple chatbot that monitors a designated Reddit bot account's new messages and sends replies.  The responses are generated using a recreation of an [early AI algorithm](https://en.wikipedia.org/wiki/ELIZA) written in 1966.  As such, don't expect it to be anywhere near as accurate or human-like as more modern AI chatbots.  
 
 ELIZA is basically just an elaborate pattern-matching toy, so inputs should be limited to a single short sentence each for best results.  All punctuation is ignored.
 
-# Live Demo
+## Live Demo
 
 If you'd like to see what this looks like in action, try sending a private message to [u/ElizaRobot](/u/ElizaRobot).  
 
 You'll probably get faster results if you create your own, though, as I'm not currently running this 24/7.  When she is running, she checks for new messages every 15 seconds and responds immediately.
 
-# Library Installation
+## Library Installation
 
 In the NuGet Package Manager console:
 
@@ -24,7 +26,7 @@ In the NuGet Package Manager console:
     
     Install-Package Reddit
 
-# The Code
+## The Code
 
 For best results, I recommend that you add the scripts/DOCTOR/DOCTOR.json file from the ELIZA.NET repo as an embedded resource in your project, as you will need to point to that file in order for the ELIZA.NET library to properly function.  This example assumes you took that recommended step.
 

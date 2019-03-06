@@ -1,12 +1,14 @@
-# Required libraries:
+# Simple Login
 
-## [Reddit.NET](https://github.com/sirkris/Reddit.NET)
+## Required libraries:
 
-# Overview
+### [Reddit.NET](https://github.com/sirkris/Reddit.NET)
+
+## Overview
 
 This demonstrates how to login to the Reddit API via OAuth.  This assumes you already have an access token and refresh token.  If not, you can checkout [this video](https://www.youtube.com/watch?v=xlWhLyVgN2s) or consult [Reddit's docs](https://github.com/reddit-archive/reddit/wiki/OAuth2) for assistance.
 
-# Library Installation
+## Library Installation
 
 In the NuGet Package Manager console:
 
@@ -14,7 +16,7 @@ In the NuGet Package Manager console:
     
     Install-Package Reddit
 
-# The Code
+## The Code
 
 ```c#
 using Reddit;
