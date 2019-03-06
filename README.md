@@ -9,7 +9,7 @@
 Created by Kris Craig.
 
 | Table of Contents                                                 |
-|:-------------------------------------------------------------------|
+|:------------------------------------------------------------------|
 | [Overview](#overview)                                             |
 | [Usage](#usage)                                                   |
 | [Press Inquiries](#press-inquiries)                               |
@@ -19,6 +19,7 @@ Created by Kris Craig.
 | [Running the Tests](#running-the-tests)                           |
 | [Code Examples](#code-examples)                                   |
 | [Code Examples Using Models](#code-examples-using-models)         |
+| [More Code Examples](#more-code-examples)                         |
 | [Contributing](#contributing)                                     |
 | [Currently Supported Endpoints](#currently-supported-endpoints)   |
 
@@ -376,6 +377,14 @@ r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Link Po
 // Comment on a post.
 r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my comment.", topPost.Name));
 ```
+
+## More Code Examples
+
+### C#
+
+#### [Simple Login](docs/examples/cs/Simple%20Login.md)
+
+#### [ELIZA Chatbot](docs/examples/cs/ELIZA.md)
 
 For more examples, check out the Example and Reddit.NETTests projects.
 
