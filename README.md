@@ -386,6 +386,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [ELIZA Chatbot](docs/examples/cs/ELIZA.md)
 
+#### [Track Subreddit Daily Comments](docs/examples/cs/Track%20Subreddit%20Daily%20Comments.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Contributing
