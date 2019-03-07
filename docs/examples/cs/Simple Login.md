@@ -2,7 +2,7 @@
 
 ## Author
 
-[Kris Craig](docs/contributors/Kris%20Craig.md)
+[Kris Craig](../../../docs/contributors/Kris%20Craig.md)
 
 ## Required libraries:
 
