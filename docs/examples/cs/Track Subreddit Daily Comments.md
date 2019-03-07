@@ -60,6 +60,8 @@ do
 		{
 			outdatedPosts++;
 		}
+		
+		after = post.Fullname;
 	}
 } while (outdatedPosts < 3 && start.AddMinutes(5) > DateTime.Now);
 
