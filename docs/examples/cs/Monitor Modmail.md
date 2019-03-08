@@ -24,6 +24,7 @@ In the NuGet Package Manager console:
 using Reddit;
 using Reddit.Controllers.EventArgs;
 using Reddit.Things;
+using System.Collections.Generic;
 
 namespace MonitorModmail
 {
