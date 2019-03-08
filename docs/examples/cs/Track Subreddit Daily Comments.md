@@ -36,7 +36,6 @@ var subreddit = reddit.Subreddit("MySubreddit").About();
 
 /*
  * Gather all of yesterday's posts and add the total comments.  Note the use of "after" for pagination, as the API is limited to a maximum of 100 results per query.
- * Use the special "newForced" sort and the library will keep stickied posts (announcements) in chronological order.  The API always returns stickied posts at the top of "new"-sorted results.
  * The API sometimes returns posts slightly out of order (don't ask me why), so this will keep going until it gets 3 or more consecutive posts outside the date range.  It's an arbitrary number but should be sufficient.
  * Loop will timeout after 5 minutes, just to be safe.
  * 
