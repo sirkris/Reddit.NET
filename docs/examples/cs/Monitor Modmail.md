@@ -30,11 +30,13 @@ namespace MonitorModmail
 {
 	class Program
 	{
-		public int NewMessages = 0;
+		public List<ConversationMessage> NewMessages;
 		
 		static void Main(string[] args)
 		{
 			var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+			
+			NewMessages = new List<ConversationMessage>();
 
 			// Start monitoring unread modmail messages and register the callback function.  --Kris
 			reddit.Account.Modmail.MonitorUnread();
@@ -51,7 +53,7 @@ namespace MonitorModmail
 		{
 			foreach (KeyValuePair<string, ConversationMessage> pair in e.AddedMessages)
 			{
-				NewMessages++;
+				NewMessages.Add(pair.Value);
 			}
 		}
 	}
