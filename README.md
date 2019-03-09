@@ -390,6 +390,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Monitor Incoming Modmail](docs/examples/cs/Monitor%20Modmail.md)
 
+#### [Record a Subreddit's Daily Top Posts on its Wiki](docs/examples/cs/Daily%20Top%20Posts%20Wiki.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Contributing
