@@ -16,7 +16,7 @@ Here's the basic workflow:
 
 1. Grab the top posts from the last 24 hours.  Don't include older posts that appear in the results.
 
-2. Create a new wiki page for today and posts links to the top posts, if there are any.
+2. Create a new wiki page for today and post links to the top posts, if there are any.
 
 3. Update the Index wiki page with a link to the page we just created.
 
