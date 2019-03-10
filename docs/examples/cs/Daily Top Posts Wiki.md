@@ -62,7 +62,7 @@ else
 
 var pageUrl = "TopPosts/" + today.Year + "/" + today.Month + "/" + today.Day;
 
-// Create teh wiki page.  Note that the first argument is the edit reason for the history and is required by the API.  --Kris
+// Create the wiki page.  Note that the first argument is the edit reason for the history and is required by the API.  --Kris
 var wikiPage = subreddit.Wiki.Page(pageUrl).CreateAndReturn("Created the page.", pageContent);
 
 // Retrieve the index.  Note that this page should already exist with a single revision even on a brand new subreddit.  --Kris
