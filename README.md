@@ -392,6 +392,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Record a Subreddit's Daily Top Posts on its Wiki](docs/examples/cs/Daily%20Top%20Posts%20Wiki.md)
 
+#### [Set User Flair](docs/examples/cs/Set%20User%20Flair.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Contributing
