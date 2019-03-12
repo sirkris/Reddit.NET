@@ -394,6 +394,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Set User Flair](docs/examples/cs/Set%20User%20Flair.md)
 
+#### [Set Link Flair](docs/examples/cs/Set%20Link%20Flair.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Contributing
