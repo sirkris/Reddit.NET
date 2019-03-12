@@ -310,33 +310,15 @@ namespace Reddit.Models
             return JsonConvert.DeserializeObject<List<FlairV2>>(ExecuteRequest(Sr(subreddit) + "api/link_flair_v2"));
         }
 
-        // TODO - API returns 404 but this is right according to the docs.  Deprecated maybe?  --Kris
         /// <summary>
-        /// Select flair.
+        /// Sets a link flair.
         /// </summary>
-        /// <param name="backgroundColor">a 6-digit rgb hex color, e.g. #AABBCC</param>
-        /// <param name="flairTemplateId"></param>
-        /// <param name="link">a fullname of a link</param>
-        /// <param name="name">a user by name</param>
-        /// <param name="returnRtson">[all|only|none]: "all" saves attributes and returns rtjson, "only" only returns rtjson, and "none" only saves attributes</param>
-        /// <param name="text">a string no longer than 64 characters</param>
-        /// <param name="textColor">one of (light, dark)</param>
+        /// <param name="flairSelectFlairInput">a valid FlairSelectFlairInput instance</param>
         /// <param name="subreddit">The subreddit with the flairs</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object SelectFlair(string backgroundColor, string flairTemplateId, string link, string name, string returnRtson, string text,
-            string textColor, string subreddit = null)
+        /// <returns>A generic response object indicating any errors</returns>
+        public GenericContainer SelectFlair(FlairSelectFlairInput flairSelectFlairInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/selectflair", Method.POST);
-
-            restRequest.AddParameter("background_color", backgroundColor);
-            restRequest.AddParameter("flair_template_id", flairTemplateId);
-            restRequest.AddParameter("link", link);
-            restRequest.AddParameter("name", name);
-            restRequest.AddParameter("return_rtson", returnRtson);
-            restRequest.AddParameter("text", text);
-            restRequest.AddParameter("text_color", textColor);
-
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+            return SendRequest<GenericContainer>(Sr(subreddit) + "api/selectflair", flairSelectFlairInput, Method.POST);
         }
 
         /// <summary>
