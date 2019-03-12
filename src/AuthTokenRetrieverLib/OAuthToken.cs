@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 
-namespace AuthTokenRetriever
+namespace Reddit.AuthTokenRetriever
 {
     [Serializable]
     public class OAuthToken

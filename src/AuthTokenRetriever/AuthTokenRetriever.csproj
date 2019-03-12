@@ -29,4 +29,8 @@
     <PackageReference Include="uHttpSharp" Version="0.1.6.22" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AuthTokenRetrieverLib\AuthTokenRetrieverLib.csproj" />
+  </ItemGroup>
+
 </Project>
