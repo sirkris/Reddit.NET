@@ -861,12 +861,34 @@ namespace Reddit.Controllers
 
         /// <summary>
         /// Search this subreddit for posts.
+        /// To search across all subreddits, use RedditAPI.Search, instead.
         /// </summary>
         /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
         /// <returns>A list of posts that match the search criteria.</returns>
         public List<Post> Search(SearchGetSearchInput searchGetSearchInput)
         {
+            searchGetSearchInput.restrict_sr = true;
             return Lists.GetPosts(Validate(Dispatch.Search.GetSearch(searchGetSearchInput, Name)), Dispatch);
+        }
+
+        /// <summary>
+        /// Search this subreddit for posts.
+        /// To search across all subreddits, use RedditAPI.Search, instead.
+        /// </summary>
+        /// <param name="q">A valid search query</param>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance (optional)</param>
+        /// <returns>A list of posts that match the search criteria.</returns>
+        public List<Post> Search(string q, SearchGetSearchInput searchGetSearchInput = null)
+        {
+            if (searchGetSearchInput == null)
+            {
+                searchGetSearchInput = new SearchGetSearchInput();
+            }
+
+            searchGetSearchInput.q = q;
+            searchGetSearchInput.restrict_sr = true;
+
+            return Search(searchGetSearchInput);
         }
 
         /// <summary>
