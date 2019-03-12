@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
+using Reddit.Inputs.Flair;
 using System;
 
 namespace RedditTests.ControllerTests.WorkflowTests
@@ -33,6 +34,41 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
             Subreddit.Flairs.DeleteFlairTemplate(linkFlair.Id);
             Subreddit.Flairs.DeleteFlairTemplate(userFlair.Id);
+        }
+
+        [TestMethod]
+        public void SetLinkFlair()
+        {
+            LinkPost linkPost = Subreddit.LinkPost("Test Link Flair Post", "https://www.nuget.org/packages/Reddit").Submit(resubmit: true);
+
+            linkPost.SetFlair("NuGet Package");
+        }
+
+        [TestMethod]
+        public void SetLinkFlairWithTemplate()
+        {
+            LinkPost linkPost = Subreddit.LinkPost("Test Link Flair Post", "https://www.nuget.org/packages/Reddit").Submit(resubmit: true);
+
+            // Get the available templates and use the first one that isn't empty.  --Kris
+            Reddit.Things.FlairSelectorResultContainer flairSelectorResultContainer = Subreddit.Flairs.FlairSelector(link: linkPost.Fullname);
+            Validate(flairSelectorResultContainer);
+
+            string flairTemplateId = null;
+            foreach (Reddit.Things.FlairSelectorResult flairSelectorResult in flairSelectorResultContainer.Choices)
+            {
+                if (!string.IsNullOrWhiteSpace(flairSelectorResult.FlairTemplateId))
+                {
+                    flairTemplateId = flairSelectorResult.FlairTemplateId;
+                    break;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(flairTemplateId))
+            {
+                Assert.Inconclusive("Unable to find a flair template ID for this subreddit.  Please create one then retry.");
+            }
+
+            linkPost.SetFlair("NuGet Package", flairTemplateId);
         }
     }
 }

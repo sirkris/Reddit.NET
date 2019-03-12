@@ -183,7 +183,7 @@ namespace Reddit.Controllers
             CollapsedReason = listing.CollapsedReason;
             Collapsed = listing.Collapsed;
             IsSubmitter = listing.IsSubmitter;
-            Replies = base.Lists.GetComments(listing.Replies, Dispatch);
+            Replies = Lists.GetComments(listing.Replies, Dispatch);
             ScoreHidden = listing.ScoreHidden;
             Depth = listing.Depth;
             Id = listing.Id;
@@ -435,7 +435,7 @@ namespace Reddit.Controllers
         /// <returns>The distinguished comment object.</returns>
         public Comment Distinguish(string how, bool? sticky = null)
         {
-            return base.Lists.GetComments(Validate(Dispatch.Moderation.DistinguishComment(how, Fullname, sticky)), Dispatch)[0];
+            return Lists.GetComments(Validate(Dispatch.Moderation.DistinguishComment(how, Fullname, sticky)), Dispatch)[0];
         }
 
         /// <summary>
@@ -455,7 +455,7 @@ namespace Reddit.Controllers
         /// <returns>The distinguished comment object.</returns>
         public async Task<Comment> DistinguishAsync(string how, bool? sticky = null)
         {
-            return base.Lists.GetComments(Validate(await Dispatch.Moderation.DistinguishCommentAsync(how, Fullname, sticky)), Dispatch)[0];
+            return Lists.GetComments(Validate(await Dispatch.Moderation.DistinguishCommentAsync(how, Fullname, sticky)), Dispatch)[0];
         }
 
         /// <summary>

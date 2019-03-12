@@ -315,10 +315,21 @@ namespace Reddit.Models
         /// </summary>
         /// <param name="flairSelectFlairInput">a valid FlairSelectFlairInput instance</param>
         /// <param name="subreddit">The subreddit with the flairs</param>
-        /// <returns>A generic response object indicating any errors</returns>
+        /// <returns>A generic response object indicating any errors.</returns>
         public GenericContainer SelectFlair(FlairSelectFlairInput flairSelectFlairInput, string subreddit = null)
         {
             return SendRequest<GenericContainer>(Sr(subreddit) + "api/selectflair", flairSelectFlairInput, Method.POST);
+        }
+
+        /// <summary>
+        /// Sets a link flair asynchronously.
+        /// </summary>
+        /// <param name="flairSelectFlairInput">a valid FlairSelectFlairInput instance</param>
+        /// <param name="subreddit">The subreddit with the flairs</param>
+        /// <returns>A generic response object indicating any errors.</returns>
+        public async Task<GenericContainer> SelectFlairAsync(FlairSelectFlairInput flairSelectFlairInput, string subreddit = null)
+        {
+            return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/selectflair", flairSelectFlairInput, Method.POST);
         }
 
         /// <summary>

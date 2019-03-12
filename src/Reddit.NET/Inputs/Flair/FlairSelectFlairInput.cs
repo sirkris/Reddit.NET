@@ -50,7 +50,7 @@ namespace Reddit.Inputs.Flair
         /// <param name="returnRtson">[all|only|none]: "all" saves attributes and returns rtjson, "only" only returns rtjson, and "none" only saves attributes</param>
         /// <param name="text">a string no longer than 64 characters</param>
         /// <param name="textColor">one of (light, dark)</param>
-        public FlairSelectFlairInput(string backgroundColor = "#88BBFF", string flairTemplateId = null, string link = null, string name = null, string returnRtson = "all", string text = "",
+        public FlairSelectFlairInput(string backgroundColor = "#88BBFF", string flairTemplateId = null, string link = "", string name = "", string returnRtson = "all", string text = "",
             string textColor = "dark")
             : base()
         {

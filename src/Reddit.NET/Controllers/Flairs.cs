@@ -184,14 +184,32 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Create a new link flair.
+        /// </summary>
+        /// <param name="flairSelectFlairInput">a valid FlairSelectFlairInput instance</param>
+        public void CreateLinkFlair(FlairSelectFlairInput flairSelectFlairInput)
+        {
+            Validate(Dispatch.Flair.SelectFlair(flairSelectFlairInput, Subreddit));
+        }
+
+        /// <summary>
+        /// Create a new link flair asynchronously.
+        /// </summary>
+        /// <param name="flairSelectFlairInput">a valid FlairSelectFlairInput instance</param>
+        public async Task CreateLinkFlairAsync(FlairSelectFlairInput flairSelectFlairInput)
+        {
+            Validate(await Dispatch.Flair.SelectFlairAsync(flairSelectFlairInput, Subreddit));
+        }
+
+        /// <summary>
         /// Create a new user flair.
         /// </summary>
         /// <param name="username">The user who's getting the new flair</param>
         /// <param name="text">The flair text</param>
         /// <param name="cssClass">a valid subreddit image name</param>
-        public void CreateFlair(string username, string text, string cssClass = "")
+        public void CreateUserFlair(string username, string text, string cssClass = "")
         {
-            CreateFlair(new FlairCreateInput(text, "", username, cssClass));
+            CreateUserFlair(new FlairCreateInput(text, "", username, cssClass));
         }
 
         /// <summary>
@@ -200,16 +218,16 @@ namespace Reddit.Controllers
         /// <param name="username">The user who's getting the new flair</param>
         /// <param name="text">The flair text</param>
         /// <param name="cssClass">a valid subreddit image name</param>
-        public async Task CreateFlairAsync(string username, string text, string cssClass = "")
+        public async Task CreateUserFlairAsync(string username, string text, string cssClass = "")
         {
-            await CreateFlairAsync(new FlairCreateInput(text, "", username, cssClass));
+            await CreateUserFlairAsync(new FlairCreateInput(text, "", username, cssClass));
         }
 
         /// <summary>
         /// Create a new user flair.
         /// </summary>
         /// <param name="flairCreateInput">A valid FlairCreateInput instance</param>
-        public void CreateFlair(FlairCreateInput flairCreateInput)
+        public void CreateUserFlair(FlairCreateInput flairCreateInput)
         {
             Validate(Dispatch.Flair.Create(flairCreateInput, Subreddit));
         }
@@ -218,7 +236,7 @@ namespace Reddit.Controllers
         /// Create a new user flair asynchronously.
         /// </summary>
         /// <param name="flairCreateInput">A valid FlairCreateInput instance</param>
-        public async Task CreateFlairAsync(FlairCreateInput flairCreateInput)
+        public async Task CreateUserFlairAsync(FlairCreateInput flairCreateInput)
         {
             Validate(await Dispatch.Flair.CreateAsync(flairCreateInput, Subreddit));
         }
@@ -354,13 +372,13 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
-        /// Return information about a users's flair options.
+        /// Return information about a user's or link's flair options.
         /// </summary>
         /// <param name="username">A valid Reddit username</param>
         /// <returns>Flair results.</returns>
-        public FlairSelectorResultContainer FlairSelector(string username)
+        public FlairSelectorResultContainer FlairSelector(string username = null, string link = null)
         {
-            return Validate(Dispatch.Flair.FlairSelector(new FlairLinkInput(name: username), Subreddit));
+            return Validate(Dispatch.Flair.FlairSelector(new FlairLinkInput(link: link, name: username), Subreddit));
         }
 
         /// <summary>
