@@ -336,6 +336,25 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Sets the link flair.
+        /// </summary>
+        /// <param name="flairText">The text to be displayed in the flair.</param>
+        public void SetFlair(string flairText = "", string flairTemplateId = "")
+        {
+            Dispatch.Flair.SelectFlair(new FlairSelectFlairInput(text: flairText, flairTemplateId: flairTemplateId, link: Fullname), Subreddit);
+        }
+
+        /// <summary>
+        /// Sets the link flair.
+        /// </summary>
+        /// <param name="flairSelectFlairInput">The text to be displayed in the flair.</param>
+        public void SetFlair(FlairSelectFlairInput flairSelectFlairInput)
+        {
+            flairSelectFlairInput.link = Fullname;
+            Dispatch.Flair.SelectFlair(flairSelectFlairInput, Subreddit);
+        }
+
+        /// <summary>
         /// Distinguish a post's author with a sigil.
         /// This can be useful to draw attention to and confirm the identity of the user in the context of a link of theirs.
         /// The options for distinguish are as follows:
@@ -348,7 +367,7 @@ namespace Reddit.Controllers
         /// <returns>The distinguished post object.</returns>
         public Post Distinguish(string how)
         {
-            return base.Lists.GetPosts(Validate(Dispatch.Moderation.DistinguishPost(how, Fullname)), Dispatch)[0];
+            return Lists.GetPosts(Validate(Dispatch.Moderation.DistinguishPost(how, Fullname)), Dispatch)[0];
         }
 
         /// <summary>
@@ -364,7 +383,7 @@ namespace Reddit.Controllers
         /// <returns>The distinguished post object.</returns>
         public async Task<Post> DistinguishAsync(string how)
         {
-            return base.Lists.GetPosts(Validate(await Dispatch.Moderation.DistinguishPostAsync(how, Fullname)), Dispatch)[0];
+            return Lists.GetPosts(Validate(await Dispatch.Moderation.DistinguishPostAsync(how, Fullname)), Dispatch)[0];
         }
 
         /// <summary>

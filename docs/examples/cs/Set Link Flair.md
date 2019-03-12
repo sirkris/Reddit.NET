@@ -1,4 +1,4 @@
-# Set User Flair
+# Set Link Flair
 
 ## Author
 
@@ -10,7 +10,7 @@
 
 ## Overview
 
-Assigns the flair "Fucking Genius" to the user "KrisCraig" on a given subreddit.
+Creates a new link post and assigns a flair to it.
 
 ## Library Installation
 
@@ -27,5 +27,5 @@ using Reddit;
 
 var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
 
-reddit.Subreddit("MySub").CreateFlair("KrisCraig", "Fucking Genius");
+reddit.Subreddit("MySub").LinkPost("Reddit.NET", "https://www.nuget.org/packages/Reddit").Submit().SetFlair("NuGet Package");
 ```

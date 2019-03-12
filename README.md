@@ -27,7 +27,7 @@ Created by Kris Craig.
 
 Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
 
-Currently, the library supports 170 of the 205 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 327 of the tests are currently passing. All of the most commonly used endpoints are supported.
+Currently, the library supports 171 of the 205 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 327 of the tests are currently passing. All of the most commonly used endpoints are supported.
 
 Reddit.NET is FOSS (MIT license) and was written in C#. It can be found on Github at:  https://github.com/sirkris/Reddit.NET
 
@@ -394,6 +394,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Set User Flair](docs/examples/cs/Set%20User%20Flair.md)
 
+#### [Set Link Flair](docs/examples/cs/Set%20Link%20Flair.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Contributing
@@ -477,6 +479,8 @@ See:  [Running the Tests](#redditnettests)
 `GET [/r/<subreddit>]/api/link_flair`
 
 `GET [/r/<subreddit>]/api/link_flair_v2`
+
+`POST [/r/<subreddit>]/api/selectflair`
 
 `POST [/r/<subreddit>]/api/setflairenabled`
 
@@ -792,9 +796,9 @@ See:  [Running the Tests](#redditnettests)
 `GET [/r/<subreddit>]/wiki/<page>`
 
 
-Total:  170 / 205 (83%)
+Total:  171 / 205 (83%)
 
-There are 35 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
+There are 34 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
 
 Virtually all of the supported endpoints are covered by tests (voting and admin-reporting were manually tested for obvious reasons) and all of those tests are passing.
 
