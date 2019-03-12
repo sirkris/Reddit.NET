@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
 using Reddit.Exceptions;
+using Reddit.Inputs.Search;
+using System.Collections.Generic;
 
 namespace RedditTests.ControllerTests
 {
@@ -240,6 +242,15 @@ namespace RedditTests.ControllerTests
         public void ModQueueEdited()
         {
             Validate(Subreddit.Posts.ModQueueEdited);
+        }
+
+        [TestMethod]
+        public void Search()
+        {
+            List<Post> posts = Subreddit.Search(new SearchGetSearchInput("Test"));
+
+            Validate(posts);
+            Assert.IsTrue(posts.Count > 0);
         }
     }
 }

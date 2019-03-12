@@ -480,6 +480,26 @@ namespace Reddit
         /// Search all subreddits for posts.
         /// To search a specific subreddit for posts, use the Subreddit controller.
         /// </summary>
+        /// <param name="q">A valid search query</param>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance (optional)</param>
+        /// <returns>A list of posts that match the search criteria.</returns>
+        public List<Post> Search(string q, SearchGetSearchInput searchGetSearchInput = null)
+        {
+            if (searchGetSearchInput == null)
+            {
+                searchGetSearchInput = new SearchGetSearchInput();
+            }
+
+            searchGetSearchInput.q = q;
+            searchGetSearchInput.restrict_sr = false;
+
+            return Search(searchGetSearchInput);
+        }
+
+        /// <summary>
+        /// Search all subreddits for posts.
+        /// To search a specific subreddit for posts, use the Subreddit controller.
+        /// </summary>
         /// <param name="q">a string no longer than 512 characters</param>
         /// <param name="restrictSr">boolean value</param>
         /// <param name="sort">one of (relevance, hot, top, new, comments)</param>
