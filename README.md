@@ -384,6 +384,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Simple Login](docs/examples/cs/Simple%20Login.md)
 
+#### [Token Retrieval](docs/examples/cs/Authorize%20New%20User.md)
+
 #### [ELIZA Chatbot](docs/examples/cs/ELIZA.md)
 
 #### [Track a Subreddit's Daily Comments](docs/examples/cs/Track%20Subreddit%20Daily%20Comments.md)

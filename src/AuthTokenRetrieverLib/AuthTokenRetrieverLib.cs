@@ -58,6 +58,18 @@ namespace Reddit.AuthTokenRetriever
             private set;
         }
 
+        internal string AccessToken
+        {
+            get;
+            private set;
+        }
+
+        internal string RefreshToken
+        {
+            get;
+            private set;
+        }
+
         /// <summary>
         /// Create a new instance of the Reddit.NET OAuth Token Retriever library.
         /// </summary>
@@ -112,8 +124,8 @@ namespace Reddit.AuthTokenRetriever
 
                         OAuthToken oAuthToken = JsonConvert.DeserializeObject<OAuthToken>(ExecuteRequest(restRequest));
 
-                        Console.WriteLine("Access Token:  " + oAuthToken.AccessToken);
-                        Console.WriteLine("Refresh Token: " + oAuthToken.RefreshToken);
+                        AccessToken = oAuthToken.AccessToken;
+                        RefreshToken = oAuthToken.RefreshToken;
 
                         string[] sArr = state.Split(':');
                         if (sArr == null || sArr.Length == 0)

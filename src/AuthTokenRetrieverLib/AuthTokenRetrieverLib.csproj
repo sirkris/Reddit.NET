@@ -2,6 +2,23 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <FileVersion>1.0.0.1</FileVersion>
+    <Version>1.0.0-develop</Version>
+    <Authors>Kris Craig</Authors>
+    <Company>Kris Craig</Company>
+    <Description>This simple library enables an app developer to grant a new refresh token to a given Reddit user.</Description>
+    <Copyright>Copyright (C) 2019 by Kris Craig</Copyright>
+    <PackageLicenseUrl>https://github.com/sirkris/Reddit.NET/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>reddit web utility http api oauth rest json netstandard</PackageTags>
+    <PackageReleaseNotes>https://github.com/sirkris/Reddit.NET/blob/master/README.md</PackageReleaseNotes>
+    <PackageIconUrl>https://raw.githubusercontent.com/sirkris/Reddit.NET/master/Logo.gif</PackageIconUrl>
+    <Product>Reddit.NET AuthTokenRetrieverLib</Product>
+    <PackageId>Reddit.AuthTokenRetrieverLib</PackageId>
   </PropertyGroup>
 
   <ItemGroup>
