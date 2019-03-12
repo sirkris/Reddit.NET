@@ -16,11 +16,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Templates\Success.html" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Templates\Success.html" />
+    <Compile Remove="Templates\**" />
+    <EmbeddedResource Remove="Templates\**" />
+    <None Remove="Templates\**" />
   </ItemGroup>
 
   <ItemGroup>
