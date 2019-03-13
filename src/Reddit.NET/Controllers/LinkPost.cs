@@ -219,6 +219,32 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Cross-post this to another subreddit.
+        /// </summary>
+        /// <param name="subreddit">The name of the subreddit being xposted to</param>
+        /// <returns>The resulting post data.</returns>
+        public LinkPost XPostTo(string subreddit)
+        {
+            LinkPost res = this;
+            res.Subreddit = subreddit;
+
+            return Validate(res.Submit());
+        }
+
+        /// <summary>
+        /// Cross-post this to another subreddit asynchronously.
+        /// </summary>
+        /// <param name="subreddit">The name of the subreddit being xposted to</param>
+        /// <returns>The resulting post data.</returns>
+        public async Task<LinkPost> XPostToAsync(string subreddit)
+        {
+            LinkPost res = this;
+            res.Subreddit = subreddit;
+
+            return Validate(await res.SubmitAsync());
+        }
+
+        /// <summary>
         /// Return information about the current LinkPost instance.
         /// </summary>
         /// <returns>An instance of this class populated with the retrieved data.</returns>

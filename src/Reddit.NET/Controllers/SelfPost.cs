@@ -201,6 +201,37 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Cross-post this to another subreddit.
+        /// </summary>
+        /// <param name="subreddit">The name of the subreddit being xposted to</param>
+        /// <returns>The resulting post data.</returns>
+        public SelfPost XPostTo(string subreddit)
+        {
+            SelfPost res = this;
+            res.Subreddit = subreddit;
+
+            return Validate(res.Submit());
+        }
+
+        /// <summary>
+        /// Cross-post this to another subreddit asynchronously.
+        /// </summary>
+        /// <param name="subreddit">The name of the subreddit being xposted to</param>
+        /// <param name="creditOriginSub">Whether to include an attribution to the source subreddit in the title (default: true)</param>
+        /// <returns>The resulting post data.</returns>
+        public async Task<SelfPost> XPostToAsync(string subreddit, bool creditOriginSub = true)
+        {
+            SelfPost res = this;
+            res.Subreddit = subreddit;
+            if (creditOriginSub)
+            {
+                res.Title += " • r/" + Subreddit;
+            }
+
+            return Validate(await res.SubmitAsync());
+        }
+
+        /// <summary>
         /// Edit the body text of this self post.  This instance will be automatically updated with the return data.
         /// </summary>
         /// <param name="text">raw markdown text</param>
