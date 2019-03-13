@@ -43,15 +43,6 @@ namespace Reddit.AuthTokenRetriever
             private set;
         }
 
-        /// <summary>
-        /// The path to your local web browser
-        /// </summary>
-        internal string BrowserPath
-        {
-            get;
-            private set;
-        }
-
         internal HttpServer HttpServer
         {
             get;
@@ -77,12 +68,11 @@ namespace Reddit.AuthTokenRetriever
         /// <param name="appSecret">Your Reddit App Secret (leave empty for installed apps)</param>
         /// <param name="port">The port to listen on for the callback (default: 8080)</param>
         /// <param name="browserPath">The path to your local web browser</param>
-        public AuthTokenRetrieverLib(string appId = null, string appSecret = null, int port = 8080, string browserPath = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe")
+        public AuthTokenRetrieverLib(string appId = null, string appSecret = null, int port = 8080)
         {
             AppId = appId;
             AppSecret = appSecret;
             Port = port;
-            BrowserPath = browserPath;
         }
 
         public void AwaitCallback()
@@ -90,7 +80,7 @@ namespace Reddit.AuthTokenRetriever
             using (HttpServer = new HttpServer(new HttpRequestProvider()))
             {
                 HttpServer.Use(new TcpListenerAdapter(new TcpListener(IPAddress.Loopback, Port)));
-
+                
                 HttpServer.Use((context, next) =>
                 {
                     string code = null;
@@ -171,27 +161,12 @@ namespace Reddit.AuthTokenRetriever
             HttpServer.Dispose();
         }
 
-        public void OpenBrowser(string scope = "creddits%20modcontributors%20modmail%20modconfig%20subscribe%20structuredstyles%20vote%20wikiedit%20mysubreddits%20submit%20modlog%20modposts%20modflair%20save%20modothers%20read%20privatemessages%20report%20identity%20livemanage%20account%20modtraffic%20wikiread%20edit%20modwiki%20modself%20history%20flair")
+        public string AuthURL(string scope = "creddits%20modcontributors%20modmail%20modconfig%20subscribe%20structuredstyles%20vote%20wikiedit%20mysubreddits%20submit%20modlog%20modposts%20modflair%20save%20modothers%20read%20privatemessages%20report%20identity%20livemanage%20account%20modtraffic%20wikiread%20edit%20modwiki%20modself%20history%20flair")
         {
-            string authUrl = "https://www.reddit.com/api/v1/authorize?client_id=" + AppId + "&response_type=code"
+            return "https://www.reddit.com/api/v1/authorize?client_id=" + AppId + "&response_type=code"
                 + "&state=" + AppId + ":" + AppSecret
                 + "&redirect_uri=http://localhost:" + Port.ToString() + "/Reddit.NET/oauthRedirect&duration=permanent"
                 + "&scope=" + scope;
-
-            try
-            {
-                ProcessStartInfo processStartInfo = new ProcessStartInfo(authUrl);
-                Process.Start(processStartInfo);
-            }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                // This typically occurs if the runtime doesn't know where your browser is.  Use BrowserPath for when this happens.  --Kris
-                ProcessStartInfo processStartInfo = new ProcessStartInfo(BrowserPath)
-                {
-                    Arguments = authUrl
-                };
-                Process.Start(processStartInfo);
-            }
         }
 
         public string ExecuteRequest(RestRequest restRequest)
