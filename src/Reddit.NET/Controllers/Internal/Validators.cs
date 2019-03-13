@@ -56,6 +56,9 @@ namespace Reddit.Controllers.Internal
                         case "TOO_LONG":
                             throw (RedditTooLongException)BuildException(new RedditTooLongException(errors[1]),
                                 new List<List<string>> { errors });
+                        case "INVALID_OPTION":
+                            throw (RedditInvalidOptionException)BuildException(new RedditInvalidOptionException(errors[1]),
+                                new List<List<string>> { errors });
                     }
                 }
             }
