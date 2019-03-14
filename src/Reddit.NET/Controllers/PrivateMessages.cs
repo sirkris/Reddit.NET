@@ -2,6 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Inputs.LinksAndComments;
 using Reddit.Inputs.PrivateMessages;
 using Reddit.Things;
 using System;
@@ -373,6 +374,26 @@ namespace Reddit.Controllers
         public async Task ComposeAsync(PrivateMessagesComposeInput privateMessagesComposeInput, string gRecaptchaResponse = "")
         {
             Validate(await Dispatch.PrivateMessages.ComposeAsync(privateMessagesComposeInput, gRecaptchaResponse));
+        }
+
+        /// <summary>
+        /// Reply to a private message.
+        /// </summary>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
+        /// <returns>The created message reply.</returns>
+        public MessageContainer Reply(LinksAndCommentsThingInput linksAndCommentsThingInput)
+        {
+            return Validate(Dispatch.LinksAndComments.Comment<MessageContainer>(linksAndCommentsThingInput));
+        }
+
+        /// <summary>
+        /// Reply to a private message asynchronously.
+        /// </summary>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
+        /// <returns>The created message reply.</returns>
+        public async Task<MessageContainer> ReplyAsync(LinksAndCommentsThingInput linksAndCommentsThingInput)
+        {
+            return Validate(await Dispatch.LinksAndComments.CommentAsync<MessageContainer>(linksAndCommentsThingInput));
         }
 
         protected virtual void OnInboxUpdated(MessagesUpdateEventArgs e)

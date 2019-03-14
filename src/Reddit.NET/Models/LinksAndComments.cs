@@ -26,9 +26,9 @@ namespace Reddit.Models
         /// </summary>
         /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
         /// <returns>A Reddit comment.</returns>
-        public CommentResultContainer Comment(LinksAndCommentsThingInput linksAndCommentsThingInput)
+        public T Comment<T>(LinksAndCommentsThingInput linksAndCommentsThingInput)
         {
-            return SendRequest<CommentResultContainer>("api/comment", linksAndCommentsThingInput, Method.POST);
+            return SendRequest<T>("api/comment", linksAndCommentsThingInput, Method.POST);
         }
 
         /// <summary>
@@ -43,9 +43,9 @@ namespace Reddit.Models
         /// </summary>
         /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
         /// <returns>A Reddit comment.</returns>
-        public async Task<CommentResultContainer> CommentAsync(LinksAndCommentsThingInput linksAndCommentsThingInput)
+        public async Task<T> CommentAsync<T>(LinksAndCommentsThingInput linksAndCommentsThingInput)
         {
-            return await SendRequestAsync<CommentResultContainer>("api/comment", linksAndCommentsThingInput, Method.POST);
+            return await SendRequestAsync<T>("api/comment", linksAndCommentsThingInput, Method.POST);
         }
 
         /// <summary>

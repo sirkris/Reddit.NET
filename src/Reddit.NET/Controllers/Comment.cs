@@ -290,7 +290,8 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the return data.</returns>
         public Comment Submit()
         {
-            return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment(new LinksAndCommentsThingInput(Body, ParentFullname))).JSON.Data.Things[0].Data);
+            return new Comment(Dispatch, Validate(Dispatch.LinksAndComments.Comment<Things.CommentResultContainer>(
+                new LinksAndCommentsThingInput(Body, ParentFullname))).JSON.Data.Things[0].Data);
         }
 
         /// <summary>
@@ -299,7 +300,8 @@ namespace Reddit.Controllers
         /// <returns>An instance of this class populated with the return data.</returns>
         public async Task<Comment> SubmitAsync()
         {
-            return new Comment(Dispatch, Validate(await Dispatch.LinksAndComments.CommentAsync(new LinksAndCommentsThingInput(Body, ParentFullname))).JSON.Data.Things[0].Data);
+            return new Comment(Dispatch, Validate(await Dispatch.LinksAndComments.CommentAsync<Things.CommentResultContainer>(
+                new LinksAndCommentsThingInput(Body, ParentFullname))).JSON.Data.Things[0].Data);
         }
 
         /// <summary>

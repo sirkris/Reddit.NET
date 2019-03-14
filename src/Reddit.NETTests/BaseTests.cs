@@ -114,12 +114,12 @@ namespace RedditTests
 
         public CommentResultContainer TestComment(string parentFullname)
         {
-            return reddit.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is a test comment.  So there.", parentFullname));
+            return reddit.Models.LinksAndComments.Comment<CommentResultContainer>(new LinksAndCommentsThingInput("This is a test comment.  So there.", parentFullname));
         }
 
         public CommentResultContainer TestCommentReply(string parentFullname)
         {
-            return reddit.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is a reply to a test comment.", parentFullname));
+            return reddit.Models.LinksAndComments.Comment<CommentResultContainer>(new LinksAndCommentsThingInput("This is a reply to a test comment.", parentFullname));
         }
 
         /// <summary>
