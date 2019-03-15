@@ -17,10 +17,10 @@ namespace Reddit.Models
         /// </summary>
         /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
         /// <param name="subreddit">The subreddit being searched</param>
-        /// <returns>A listing of posts that match the search criteria.</returns>
-        public PostContainer GetSearch(SearchGetSearchInput searchGetSearchInput, string subreddit = null)
+        /// <returns>A listing of things that match the search criteria.</returns>
+        public T GetSearch<T>(SearchGetSearchInput searchGetSearchInput, string subreddit = null)
         {
-            return SendRequest<PostContainer>(Sr(subreddit) + "search", searchGetSearchInput);
+            return SendRequest<T>(Sr(subreddit) + "search", searchGetSearchInput);
         }
     }
 }

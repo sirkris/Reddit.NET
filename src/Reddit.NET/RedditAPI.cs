@@ -473,7 +473,7 @@ namespace Reddit
         public List<Post> Search(SearchGetSearchInput searchGetSearchInput)
         {
             searchGetSearchInput.restrict_sr = false;
-            return Account.Lists.GetPosts(Account.Validate(Models.Search.GetSearch(searchGetSearchInput, "")), Models);
+            return Account.Lists.GetPosts(Account.Validate(Models.Search.GetSearch<Things.PostContainer>(searchGetSearchInput, "")), Models);
         }
 
         /// <summary>
@@ -519,7 +519,7 @@ namespace Reddit
             string t = "all", string after = null, string before = null, bool includeCategories = false, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
-            return Account.Lists.GetPosts(Account.Validate(Models.Search.GetSearch(
+            return Account.Lists.GetPosts(Account.Validate(Models.Search.GetSearch<Things.PostContainer>(
                 new SearchGetSearchInput(q, false, sort, category, includeFacets, type, t, after, before,
                     includeCategories, count, limit, show, srDetail),
                 "")), Models);

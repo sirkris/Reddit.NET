@@ -868,7 +868,7 @@ namespace Reddit.Controllers
         public List<Post> Search(SearchGetSearchInput searchGetSearchInput)
         {
             searchGetSearchInput.restrict_sr = true;
-            return Lists.GetPosts(Validate(Dispatch.Search.GetSearch(searchGetSearchInput, Name)), Dispatch);
+            return Lists.GetPosts(Validate(Dispatch.Search.GetSearch<Things.PostContainer>(searchGetSearchInput, Name)), Dispatch);
         }
 
         /// <summary>
@@ -913,7 +913,7 @@ namespace Reddit.Controllers
             string t = "all", string after = null, string before = null, bool includeCategories = false, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
-            return Lists.GetPosts(Validate(Dispatch.Search.GetSearch(
+            return Lists.GetPosts(Validate(Dispatch.Search.GetSearch<Things.PostContainer>(
                 new SearchGetSearchInput(q, restrictSr, sort, category, includeFacets, type, t, after, before,
                     includeCategories, count, limit, show, srDetail),
                 Name)), Dispatch);
