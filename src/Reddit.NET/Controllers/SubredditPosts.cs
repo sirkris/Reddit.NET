@@ -33,6 +33,7 @@ namespace Reddit.Controllers
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
+        internal override DateTime? MonitoringExpiration { get; set; }
 
         /// <summary>
         /// List of posts using "best" sort.
@@ -556,8 +557,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorBest(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorBest(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -572,6 +575,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "BestPosts";
@@ -595,8 +603,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorHot(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorHot(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -611,6 +621,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "HotPosts";
@@ -634,8 +649,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorNew(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorNew(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -650,6 +667,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "NewPosts";
@@ -673,8 +695,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorRising(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorRising(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -689,6 +713,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "RisingPosts";
@@ -712,8 +741,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorTop(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorTop(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -728,6 +759,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "TopPosts";
@@ -751,8 +787,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorControversial(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorControversial(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -767,6 +805,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "ControversialPosts";
@@ -790,8 +833,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueue(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorModQueue(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -806,6 +851,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "ModQueuePosts";
@@ -829,8 +879,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueReports(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorModQueueReports(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -845,6 +897,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "ModQueueReportsPosts";
@@ -868,8 +925,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueSpam(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorModQueueSpam(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -884,6 +943,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "ModQueueSpamPosts";
@@ -907,8 +971,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueUnmoderated(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorModQueueUnmoderated(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -923,6 +989,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "ModQueueUnmoderatedPosts";
@@ -946,8 +1017,10 @@ namespace Reddit.Controllers
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueEdited(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null)
+        public bool MonitorModQueueEdited(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
             if (breakOnFailure.HasValue)
             {
@@ -962,6 +1035,11 @@ namespace Reddit.Controllers
             if (monitoringBaseDelayMs.HasValue)
             {
                 MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
             }
 
             string key = "ModQueueEditedPosts";
@@ -1076,6 +1154,15 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(subKey))
             {
+                if (MonitoringExpiration.HasValue
+                    && DateTime.Now > MonitoringExpiration.Value)
+                {
+                    MonitorModel.RemoveMonitoringKey(key, subKey, ref Monitoring);
+                    Threads.Remove(key);
+
+                    break;
+                }
+
                 while (!IsScheduled())
                 {
                     if (Terminate)

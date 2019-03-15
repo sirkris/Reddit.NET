@@ -82,13 +82,13 @@ namespace RedditTests.ControllerTests
         [TestMethod]
         public void PostHistory()
         {
-            Validate(User.PostHistory());
+            Validate(User.GetPostHistory());
         }
 
         [TestMethod]
         public void CommentHistory()
         {
-            Validate(User.CommentHistory());
+            Validate(User.GetCommentHistory());
         }
 
         [TestMethod]

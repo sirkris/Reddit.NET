@@ -18,6 +18,7 @@ namespace Reddit.Controllers.Internal
         internal abstract ref MonitoringSnapshot Monitoring { get; }
         internal abstract bool BreakOnFailure { get; set; }
         internal abstract List<MonitoringSchedule> MonitoringSchedule { get; set; }
+        internal abstract DateTime? MonitoringExpiration { get; set; }
 
         public Monitors() : base()
         {

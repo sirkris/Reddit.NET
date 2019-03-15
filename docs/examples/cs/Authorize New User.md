@@ -22,6 +22,7 @@ In the NuGet Package Manager console:
 
 ```c#
 using Reddit.AuthTokenRetriever;
+using System.Diagnostics;
 
 ...
 
@@ -35,7 +36,7 @@ public static string AuthorizeUser(string appId, string appSecret = null, int po
 	authTokenRetrieverLib.AwaitCallback();
 	
 	// Open the browser to the Reddit authentication page.  Once the user clicks "accept", Reddit will redirect the browser to localhost:8080, where AwaitCallback will take over.  --Kris
-	authTokenRetrieverLib.OpenBrowser();
+	OpenBrowser(authTokenRetrieverLib.AuthURL());
 	
 	// Replace this with whatever you want the app to do while it waits for the user to load the auth page and click Accept.  --Kris
 	while (true) { }
@@ -44,5 +45,23 @@ public static string AuthorizeUser(string appId, string appSecret = null, int po
 	authTokenRetrieverLib.StopListening();
 	
 	return authTokenRetrieverLib.RefreshToken;
+}
+
+public static void OpenBrowser(string authUrl, string browserPath = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe")
+{
+    try
+    {
+        ProcessStartInfo processStartInfo = new ProcessStartInfo(authUrl);
+        Process.Start(processStartInfo);
+    }
+    catch (System.ComponentModel.Win32Exception)
+    {
+        // This typically occurs if the runtime doesn't know where your browser is.  Use BrowserPath for when this happens.  --Kris
+        ProcessStartInfo processStartInfo = new ProcessStartInfo(browserPath)
+        {
+            Arguments = authUrl
+        };
+        Process.Start(processStartInfo);
+    }
 }
 ```

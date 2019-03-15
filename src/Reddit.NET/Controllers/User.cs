@@ -1,4 +1,7 @@
-﻿using Reddit.Exceptions;
+﻿using Reddit.Controllers.EventArgs;
+using Reddit.Controllers.Internal;
+using Reddit.Controllers.Structures;
+using Reddit.Exceptions;
 using Reddit.Inputs.Flair;
 using Reddit.Inputs.LiveThreads;
 using Reddit.Inputs.Users;
@@ -6,6 +9,7 @@ using Reddit.Inputs.Wiki;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reddit.Controllers
@@ -13,8 +17,17 @@ namespace Reddit.Controllers
     /// <summary>
     /// Controller class for users.
     /// </summary>
-    public class User : BaseController
+    public class User : Monitors
     {
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
+        internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
+        internal override DateTime? MonitoringExpiration { get; set; }
+
+        public event EventHandler<PostsUpdateEventArgs> PostHistoryUpdated;
+        public event EventHandler<CommentsUpdateEventArgs> CommentHistoryUpdated;
+
         public bool IsFriend;
         public bool ProfanityFilter;
         public bool IsSuspended;
@@ -37,6 +50,36 @@ namespace Reddit.Controllers
         public DateTime Created;
         public int CommentKarma;
         public bool HasSubscribed;
+
+        public List<Post> PostHistory
+        {
+            get
+            {
+                return (PostHistoryLastUpdated.HasValue
+                    && PostHistoryLastUpdated.Value.AddSeconds(15) > DateTime.Now ? postHistory : GetPostHistory());
+            }
+            private set
+            {
+                postHistory = value;
+            }
+        }
+        internal List<Post> postHistory;
+        internal DateTime? PostHistoryLastUpdated;
+
+        public List<Comment> CommentHistory
+        {
+            get
+            {
+                return (CommentHistoryLastUpdated.HasValue
+                    && CommentHistoryLastUpdated.Value.AddSeconds(15) > DateTime.Now ? commentHistory : GetCommentHistory());
+            }
+            private set
+            {
+                commentHistory = value;
+            }
+        }
+        internal List<Comment> commentHistory;
+        internal DateTime? CommentHistoryLastUpdated;
 
         /// <summary>
         /// Full user data from the API.
@@ -497,11 +540,12 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> PostHistory(string where = "overview", int context = 3, string t = "all", int limit = 25, string sort = "",
+        public List<Post> GetPostHistory(string where = "overview", int context = 3, string t = "all", int limit = 25, string sort = "",
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            return PostHistory(new UsersHistoryInput("links", t, sort, context, after, before, count, limit, show, srDetail, includeCategories), where);
+            PostHistoryLastUpdated = DateTime.Now;
+            return GetPostHistory(new UsersHistoryInput("links", t, sort, context, after, before, count, limit, show, srDetail, includeCategories), where);
         }
 
         /// <summary>
@@ -510,7 +554,7 @@ namespace Reddit.Controllers
         /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
         /// <param name="where">One of (overview, submitted, upvotes, downvoted, hidden, saved, gilded)</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> PostHistory(UsersHistoryInput usersHistoryInput, string where = "overview")
+        public List<Post> GetPostHistory(UsersHistoryInput usersHistoryInput, string where = "overview")
         {
             return (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase)
                 ? SanitizePosts(Lists.ForceNewSort(Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)),
@@ -553,11 +597,11 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> CommentHistory(int context = 3, string t = "all", int limit = 25, string sort = "",
+        public List<Comment> GetCommentHistory(int context = 3, string t = "all", int limit = 25, string sort = "",
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            return CommentHistory(new UsersHistoryInput("comments", t, sort, context, after, before, count, limit, show, srDetail, includeCategories));
+            return GetCommentHistory(new UsersHistoryInput("comments", t, sort, context, after, before, count, limit, show, srDetail, includeCategories));
         }
 
         /// <summary>
@@ -565,7 +609,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> CommentHistory(UsersHistoryInput usersHistoryInput)
+        public List<Comment> GetCommentHistory(UsersHistoryInput usersHistoryInput)
         {
             return Lists.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", usersHistoryInput)), Dispatch);
         }
@@ -933,6 +977,199 @@ namespace Reddit.Controllers
         public async Task BlockAsync()
         {
             Validate(await Dispatch.Users.BlockUserAsync(new UsersBlockUserInput(Fullname ?? null, Name ?? null)));
+        }
+
+        /// <summary>
+        /// Monitor the user for new posts.
+        /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorPostHistory(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
+        {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
+            string key = "PostHistory";
+            return Monitor(key, new Thread(() => MonitorPostHistoryThread(key, monitoringDelayMs)), Fullname);
+        }
+
+        private void MonitorPostHistoryThread(string key, int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        {
+            MonitorHistoryThread(Monitoring, key, "posts", Fullname, monitoringDelayMs: monitoringDelayMs);
+        }
+
+        internal virtual void OnPostHistoryUpdated(PostsUpdateEventArgs e)
+        {
+            PostHistoryUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor the user for new posts.
+        /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
+        public bool MonitorCommentHistory(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
+        {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
+            string key = "CommentHistory";
+            return Monitor(key, new Thread(() => MonitorCommentHistoryThread(key, monitoringDelayMs)), Fullname);
+        }
+
+        private void MonitorCommentHistoryThread(string key, int? monitoringDelayMs = null, bool? breakOnFailure = null)
+        {
+            MonitorHistoryThread(Monitoring, key, "comments", Fullname, monitoringDelayMs: monitoringDelayMs);
+        }
+
+        internal virtual void OnCommentHistoryUpdated(CommentsUpdateEventArgs e)
+        {
+            CommentHistoryUpdated?.Invoke(this, e);
+        }
+
+        private void MonitorHistoryThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            monitoringDelayMs = (monitoringDelayMs.HasValue ? monitoringDelayMs : Monitoring.Count() * MonitoringWaitDelayMS);
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(subKey))
+            {
+                if (MonitoringExpiration.HasValue
+                    && DateTime.Now > MonitoringExpiration.Value)
+                {
+                    MonitorModel.RemoveMonitoringKey(key, subKey, ref Monitoring);
+                    Threads.Remove(key);
+
+                    break;
+                }
+
+                while (!IsScheduled())
+                {
+                    if (Terminate)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(15000);
+                }
+
+                if (Terminate)
+                {
+                    break;
+                }
+
+                List<Post> oldPostsList;
+                List<Post> newPostsList;
+                List<Comment> oldCommentsList;
+                List<Comment> newCommentsList;
+                try
+                {
+                    switch (type)
+                    {
+                        default:
+                            throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                        case "posts":
+                            oldPostsList = postHistory;
+                            newPostsList = GetPostHistory();
+
+                            if (Lists.ListDiff(oldPostsList, newPostsList, out List<Post> addedPosts, out List<Post> removedPosts))
+                            {
+                                // Event handler to alert the calling app that the list has changed.  --Kris
+                                PostsUpdateEventArgs args = new PostsUpdateEventArgs
+                                {
+                                    NewPosts = newPostsList,
+                                    OldPosts = oldPostsList,
+                                    Added = addedPosts,
+                                    Removed = removedPosts
+                                };
+                                OnPostHistoryUpdated(args);
+                            }
+                            break;
+                        case "comments":
+                            oldCommentsList = commentHistory;
+                            newCommentsList = GetCommentHistory();
+
+                            if (Lists.ListDiff(oldCommentsList, newCommentsList, out List<Comment> addedComments, out List<Comment> removedComments))
+                            {
+                                // Event handler to alert the calling app that the list has changed.  --Kris
+                                CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
+                                {
+                                    NewComments = newCommentsList,
+                                    OldComments = oldCommentsList,
+                                    Added = addedComments,
+                                    Removed = removedComments
+                                };
+                                OnCommentHistoryUpdated(args);
+                            }
+                            break;
+                    }
+                }
+                catch (Exception) when (!BreakOnFailure) { }
+
+                Wait(monitoringDelayMs.Value);
+            }
+        }
+
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key.");
+                case "PostHistory":
+                    return new Thread(() => MonitorHistoryThread(Monitoring, key, "posts", subKey, startDelayMs, monitoringDelayMs));
+                case "CommentHistory":
+                    return new Thread(() => MonitorHistoryThread(Monitoring, key, "comments", subKey, startDelayMs, monitoringDelayMs));
+            }
         }
     }
 }
