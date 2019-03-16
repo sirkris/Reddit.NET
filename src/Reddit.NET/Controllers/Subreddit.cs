@@ -868,7 +868,7 @@ namespace Reddit.Controllers
         public List<Post> Search(SearchGetSearchInput searchGetSearchInput)
         {
             searchGetSearchInput.restrict_sr = true;
-            return Lists.GetPosts(Validate(Dispatch.Search.GetSearch<Things.PostContainer>(searchGetSearchInput, Name)), Dispatch);
+            return Lists.GetPosts(Validate(Dispatch.Search.SearchPosts(searchGetSearchInput, Name)), Dispatch);
         }
 
         /// <summary>
