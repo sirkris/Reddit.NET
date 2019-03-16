@@ -465,6 +465,39 @@ namespace Reddit
         }
 
         /// <summary>
+        /// Search Reddit for matching users.
+        /// </summary>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
+        /// <returns>A list of users that match the search criteria.</returns>
+        public List<Subreddit> SearchSubreddits(SearchGetSearchInput searchGetSearchInput)
+        {
+            searchGetSearchInput.restrict_sr = false;
+            return Account.Lists.GetSubreddits(Account.Validate(Models.Search.SearchSubreddits(searchGetSearchInput)), Models);
+        }
+
+        /// <summary>
+        /// Search Reddit for matching users.
+        /// </summary>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
+        /// <returns>A list of users that match the search criteria.</returns>
+        public List<User> SearchUsers(SearchGetSearchInput searchGetSearchInput)
+        {
+            searchGetSearchInput.restrict_sr = false;
+            return Account.Lists.GetUsers(Account.Validate(Models.Search.SearchUsers(searchGetSearchInput)), Models);
+        }
+
+        /// <summary>
+        /// Search Reddit for matching things.
+        /// This method can return links, subreddits, and/or users.  To include all of them, set type to "link,sr,user".
+        /// </summary>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
+        /// <returns>A list of things that match the search criteria.</returns>
+        public Things.MixedListingContainer MixedSearch(SearchGetSearchInput searchGetSearchInput)
+        {
+            return Account.Validate(Models.Search.MultiSearch(searchGetSearchInput));
+        }
+
+        /// <summary>
         /// Search all subreddits for posts.
         /// To search a specific subreddit for posts, use the Subreddit controller.
         /// </summary>
@@ -473,7 +506,7 @@ namespace Reddit
         public List<Post> Search(SearchGetSearchInput searchGetSearchInput)
         {
             searchGetSearchInput.restrict_sr = false;
-            return Account.Lists.GetPosts(Account.Validate(Models.Search.GetSearch<Things.PostContainer>(searchGetSearchInput, "")), Models);
+            return Account.Lists.GetPosts(Account.Validate(Models.Search.SearchPosts(searchGetSearchInput)), Models);
         }
 
         /// <summary>
@@ -519,10 +552,9 @@ namespace Reddit
             string t = "all", string after = null, string before = null, bool includeCategories = false, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false)
         {
-            return Account.Lists.GetPosts(Account.Validate(Models.Search.GetSearch<Things.PostContainer>(
+            return Account.Lists.GetPosts(Account.Validate(Models.Search.SearchPosts(
                 new SearchGetSearchInput(q, false, sort, category, includeFacets, type, t, after, before,
-                    includeCategories, count, limit, show, srDetail),
-                "")), Models);
+                    includeCategories, count, limit, show, srDetail))), Models);
         }
 
         // TODO - Split this up and maybe create a new Subreddits controller for these?  --Kris

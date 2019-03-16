@@ -307,6 +307,20 @@ namespace Reddit.Controllers.Internal
             return subreddits;
         }
 
+        public List<User> GetUsers(UserContainer userContainer, Dispatch dispatch)
+        {
+            List<User> users = new List<User>();
+            foreach (UserChild userChild in userContainer.Data.Children)
+            {
+                if (userChild.Data != null)
+                {
+                    users.Add(new User(dispatch, userChild.Data));
+                }
+            }
+
+            return users;
+        }
+
         public List<LiveUpdate> GetLiveUpdates(LiveUpdateContainer liveUpdateContainer)
         {
             List<LiveUpdate> res = new List<LiveUpdate>();
