@@ -31,7 +31,7 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void MultiSearch()
         {
-            Validate(reddit.Models.Search.MultiSearch(new SearchGetSearchInput("Trump")));
+            Validate(reddit.Models.Search.MultiSearch(new SearchGetSearchInput("Trump", type: "link,sr,user")));
         }
     }
 }
