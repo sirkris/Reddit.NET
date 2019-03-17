@@ -37,7 +37,7 @@ var news = reddit.Subreddit("news");
  * 
  * --Kris
  */
-if (news.Posts.GetTop("all")[0].Listing.IsSelf)
+if (news.Posts.GetTop("day")[0].Listing.IsSelf)
 {
 	var newSelfPost = news.SelfPost(news.Posts.Top[0].Fullname).About().XPostTo("MySub");
 }
