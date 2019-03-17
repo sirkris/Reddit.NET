@@ -78,12 +78,27 @@ namespace Reddit.Models
                 {
                     case "t2":
                         res.Users.Add(JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(mixedListingChild.Data)));
+                        if (string.IsNullOrEmpty(res.First))
+                        {
+                            res.First = "t2_" + res.Users[0].Id;
+                        }
+                        res.Last = "t2_" + res.Users[0].Id;
                         break;
                     case "t3":
                         res.Posts.Add(JsonConvert.DeserializeObject<Post>(JsonConvert.SerializeObject(mixedListingChild.Data)));
+                        if (string.IsNullOrEmpty(res.First))
+                        {
+                            res.First = "t3_" + res.Posts[0].Id;
+                        }
+                        res.Last = "t3_" + res.Posts[0].Id;
                         break;
                     case "t5":
                         res.Subreddits.Add(JsonConvert.DeserializeObject<Subreddit>(JsonConvert.SerializeObject(mixedListingChild.Data)));
+                        if (string.IsNullOrEmpty(res.First))
+                        {
+                            res.First = "t5_" + res.Subreddits[0].Id;
+                        }
+                        res.Last = "t5_" + res.Subreddits[0].Id;
                         break;
                 }
             }
