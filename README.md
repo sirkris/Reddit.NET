@@ -400,6 +400,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Search](docs/examples/cs/Search.md)
 
+#### [Crossposting](docs/examples/cs/Crosspost.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Contributing
