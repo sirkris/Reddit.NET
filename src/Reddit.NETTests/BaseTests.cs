@@ -114,12 +114,12 @@ namespace RedditTests
 
         public CommentResultContainer TestComment(string parentFullname)
         {
-            return reddit.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is a test comment.  So there.", parentFullname));
+            return reddit.Models.LinksAndComments.Comment<CommentResultContainer>(new LinksAndCommentsThingInput("This is a test comment.  So there.", parentFullname));
         }
 
         public CommentResultContainer TestCommentReply(string parentFullname)
         {
-            return reddit.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is a reply to a test comment.", parentFullname));
+            return reddit.Models.LinksAndComments.Comment<CommentResultContainer>(new LinksAndCommentsThingInput("This is a reply to a test comment.", parentFullname));
         }
 
         /// <summary>
@@ -173,6 +173,30 @@ namespace RedditTests
         public void Validate(dynamic dynamic)
         {
             Assert.IsNotNull(dynamic);
+        }
+
+        public SubredditContainer Validate(SubredditContainer subredditContainer, int minResults)
+        {
+            Assert.IsNotNull(subredditContainer);
+            Assert.IsTrue(subredditContainer.Data.Children.Count >= minResults);
+
+            return subredditContainer;
+        }
+
+        public PostContainer Validate(PostContainer postContainer, int minResults)
+        {
+            Assert.IsNotNull(postContainer);
+            Assert.IsTrue(postContainer.Data.Children.Count >= minResults);
+
+            return postContainer;
+        }
+
+        public UserContainer Validate(UserContainer userContainer, int minResults)
+        {
+            Assert.IsNotNull(userContainer);
+            Assert.IsTrue(userContainer.Data.Children.Count >= minResults);
+
+            return userContainer;
         }
 
         public Controllers.LiveThread Validate(Controllers.LiveThread liveThread)

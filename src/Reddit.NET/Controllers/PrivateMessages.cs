@@ -2,6 +2,7 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Inputs.LinksAndComments;
 using Reddit.Inputs.PrivateMessages;
 using Reddit.Things;
 using System;
@@ -22,6 +23,9 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
+        internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
+        internal override DateTime? MonitoringExpiration { get; set; }
 
         /// <summary>
         /// List of inbox messages.
@@ -372,6 +376,26 @@ namespace Reddit.Controllers
             Validate(await Dispatch.PrivateMessages.ComposeAsync(privateMessagesComposeInput, gRecaptchaResponse));
         }
 
+        /// <summary>
+        /// Reply to a private message.
+        /// </summary>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
+        /// <returns>The created message reply.</returns>
+        public MessageContainer Reply(LinksAndCommentsThingInput linksAndCommentsThingInput)
+        {
+            return Validate(Dispatch.LinksAndComments.Comment<MessageContainer>(linksAndCommentsThingInput));
+        }
+
+        /// <summary>
+        /// Reply to a private message asynchronously.
+        /// </summary>
+        /// <param name="linksAndCommentsThingInput">A valid LinksAndCommentsThingInput instance</param>
+        /// <returns>The created message reply.</returns>
+        public async Task<MessageContainer> ReplyAsync(LinksAndCommentsThingInput linksAndCommentsThingInput)
+        {
+            return Validate(await Dispatch.LinksAndComments.CommentAsync<MessageContainer>(linksAndCommentsThingInput));
+        }
+
         protected virtual void OnInboxUpdated(MessagesUpdateEventArgs e)
         {
             InboxUpdated?.Invoke(this, e);
@@ -391,9 +415,34 @@ namespace Reddit.Controllers
         /// Monitor inbox messages.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorInbox(int? monitoringDelayMs = null)
+        public bool MonitorInbox(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "PrivateMessagesInbox";
             return Monitor(key, new Thread(() => MonitorInboxThread(key, monitoringDelayMs)), "PrivateMessages");
         }
@@ -407,9 +456,34 @@ namespace Reddit.Controllers
         /// Monitor unread messages.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorUnread(int? monitoringDelayMs = null)
+        public bool MonitorUnread(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "PrivateMessagesUnread";
             return Monitor(key, new Thread(() => MonitorUnreadThread(key, monitoringDelayMs)), "PrivateMessages");
         }
@@ -423,9 +497,34 @@ namespace Reddit.Controllers
         /// Monitor sent messages.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public bool MonitorSent(int? monitoringDelayMs = null)
+        public bool MonitorSent(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "PrivateMessagesSent";
             return Monitor(key, new Thread(() => MonitorSentThread(key, monitoringDelayMs)), "PrivateMessages");
         }
@@ -447,40 +546,68 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains("PrivateMessages"))
             {
+                if (MonitoringExpiration.HasValue
+                    && DateTime.Now > MonitoringExpiration.Value)
+                {
+                    MonitorModel.RemoveMonitoringKey(key, "PrivateMessages", ref Monitoring);
+                    Threads.Remove(key);
+
+                    break;
+                }
+
+                while (!IsScheduled())
+                {
+                    if (Terminate)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(15000);
+                }
+
+                if (Terminate)
+                {
+                    break;
+                }
+
                 List<Message> oldList;
                 List<Message> newList;
-                switch (type)
+                try
                 {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "inbox":
-                        oldList = inbox;
-                        newList = GetMessagesInbox();
-                        break;
-                    case "unread":
-                        oldList = unread;
-                        newList = GetMessagesUnread();
-                        break;
-                    case "sent":
-                        oldList = sent;
-                        newList = GetMessagesSent();
-                        break;
-                }
-
-                if (Lists.ListDiff(oldList, newList, out List<Message> added, out List<Message> removed))
-                {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
+                    switch (type)
                     {
-                        NewMessages = newList,
-                        OldMessages = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    TriggerUpdate(args, type);
-                }
+                        default:
+                            throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                        case "inbox":
+                            oldList = inbox;
+                            newList = GetMessagesInbox();
+                            break;
+                        case "unread":
+                            oldList = unread;
+                            newList = GetMessagesUnread();
+                            break;
+                        case "sent":
+                            oldList = sent;
+                            newList = GetMessagesSent();
+                            break;
+                    }
 
-                Thread.Sleep(monitoringDelayMs.Value);
+                    if (Lists.ListDiff(oldList, newList, out List<Message> added, out List<Message> removed))
+                    {
+                        // Event handler to alert the calling app that the list has changed.  --Kris
+                        MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
+                        {
+                            NewMessages = newList,
+                            OldMessages = oldList,
+                            Added = added,
+                            Removed = removed
+                        };
+                        TriggerUpdate(args, type);
+                    }
+                }
+                catch (Exception) when (!BreakOnFailure) { }
+
+                Wait(monitoringDelayMs.Value);
             }
         }
 
@@ -498,6 +625,21 @@ namespace Reddit.Controllers
                     OnSentUpdated(args);
                     break;
             }
+        }
+
+        public bool PrivateMessagesInboxIsMonitored()
+        {
+            return IsMonitored("PrivateMessagesInbox", "PrivateMessages");
+        }
+
+        public bool PrivateMessagesUnreadIsMonitored()
+        {
+            return IsMonitored("PrivateMessagesUnread", "PrivateMessages");
+        }
+
+        public bool PrivateMessagesSentIsMonitored()
+        {
+            return IsMonitored("PrivateMessagesSent", "PrivateMessages");
         }
 
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)

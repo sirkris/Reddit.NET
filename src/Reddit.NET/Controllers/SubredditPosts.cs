@@ -31,6 +31,9 @@ namespace Reddit.Controllers
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
+        internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
+        internal override DateTime? MonitoringExpiration { get; set; }
 
         /// <summary>
         /// List of posts using "best" sort.
@@ -282,7 +285,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetBest(string after = "", string before = "", int limit = 100)
         {
@@ -309,7 +312,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetHot(string g = "", string after = "", string before = "", int limit = 100)
         {
@@ -336,7 +339,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetNew(string after = "", string before = "", int limit = 100)
         {
@@ -363,7 +366,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetRising(string after = "", string before = "", int limit = 100)
         {
@@ -388,9 +391,10 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of posts using "top" sort.
         /// </summary>
+        /// <param name="t">one of(hour, day, week, month, year, all)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetTop(string t = "all", string after = "", string before = "", int limit = 100)
         {
@@ -407,7 +411,7 @@ namespace Reddit.Controllers
             List<Post> posts = Lists.GetPosts(Dispatch.Listings.Top(timedCatSrListingInput, Subreddit), Dispatch);
 
             TopLastUpdated = DateTime.Now;
-
+            
             Top = posts;
             TopT = timedCatSrListingInput.t;
             return posts;
@@ -416,9 +420,10 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of posts using "controversial" sort.
         /// </summary>
+        /// <param name="t">one of(hour, day, week, month, year, all)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetControversial(string t = "all", string after = "", string before = "", int limit = 100)
         {
@@ -450,12 +455,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueue(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
@@ -470,12 +475,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of reported posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueReports(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
@@ -490,12 +495,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of spammed posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueSpam(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
@@ -510,12 +515,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of unmoderated posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueUnmoderated(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
@@ -530,12 +535,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of edited posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueEdited(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
@@ -551,14 +556,39 @@ namespace Reddit.Controllers
         /// Monitor Reddit for new "Best" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorBest(int? monitoringDelayMs = null)
+        public bool MonitorBest(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "BestPosts";
             return Monitor(key, new Thread(() => MonitorBestThread(key, monitoringDelayMs)), Subreddit);
         }
 
-        private void MonitorBestThread(string key, int? monitoringDelayMs = null)
+        private void MonitorBestThread(string key, int? monitoringDelayMs = null, bool? breakOnFailure = null)
         {
             MonitorPostsThread(Monitoring, key, "best", Subreddit, monitoringDelayMs: monitoringDelayMs);
         }
@@ -572,9 +602,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new "Hot" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorHot(int? monitoringDelayMs = null)
+        public bool MonitorHot(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "HotPosts";
             return Monitor(key, new Thread(() => MonitorHotThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -593,9 +648,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorNew(int? monitoringDelayMs = null)
+        public bool MonitorNew(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "NewPosts";
             return Monitor(key, new Thread(() => MonitorNewThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -614,9 +694,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new "Rising" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorRising(int? monitoringDelayMs = null)
+        public bool MonitorRising(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "RisingPosts";
             return Monitor(key, new Thread(() => MonitorRisingThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -635,9 +740,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new "Top" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorTop(int? monitoringDelayMs = null)
+        public bool MonitorTop(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "TopPosts";
             return Monitor(key, new Thread(() => MonitorTopThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -656,9 +786,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit for new "Controversial" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorControversial(int? monitoringDelayMs = null)
+        public bool MonitorControversial(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "ControversialPosts";
             return Monitor(key, new Thread(() => MonitorControversialThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -677,9 +832,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "modqueue" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueue(int? monitoringDelayMs = null)
+        public bool MonitorModQueue(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "ModQueuePosts";
             return Monitor(key, new Thread(() => MonitorModQueueThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -698,9 +878,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "reports" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueReports(int? monitoringDelayMs = null)
+        public bool MonitorModQueueReports(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "ModQueueReportsPosts";
             return Monitor(key, new Thread(() => MonitorModQueueReportsThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -719,9 +924,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "spam" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueSpam(int? monitoringDelayMs = null)
+        public bool MonitorModQueueSpam(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "ModQueueSpamPosts";
             return Monitor(key, new Thread(() => MonitorModQueueSpamThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -740,9 +970,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "unmoderated" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueUnmoderated(int? monitoringDelayMs = null)
+        public bool MonitorModQueueUnmoderated(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "ModQueueUnmoderatedPosts";
             return Monitor(key, new Thread(() => MonitorModQueueUnmoderatedThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -761,9 +1016,34 @@ namespace Reddit.Controllers
         /// Monitor the subreddit's modqueue for new "edited" posts.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorModQueueEdited(int? monitoringDelayMs = null)
+        public bool MonitorModQueueEdited(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
+            DateTime? monitoringExpiration = null)
         {
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
             string key = "ModQueueEditedPosts";
             return Monitor(key, new Thread(() => MonitorModQueueEditedThread(key, monitoringDelayMs)), Subreddit);
         }
@@ -776,6 +1056,61 @@ namespace Reddit.Controllers
         internal virtual void OnModQueueEditedUpdated(PostsUpdateEventArgs e)
         {
             ModQueueEditedUpdated?.Invoke(this, e);
+        }
+
+        public bool BestPostsIsMonitored()
+        {
+            return IsMonitored("BestPosts", Subreddit);
+        }
+
+        public bool HotPostsIsMonitored()
+        {
+            return IsMonitored("HotPosts", Subreddit);
+        }
+
+        public bool NewPostsIsMonitored()
+        {
+            return IsMonitored("NewPosts", Subreddit);
+        }
+
+        public bool RisingPostsIsMonitored()
+        {
+            return IsMonitored("RisingPosts", Subreddit);
+        }
+
+        public bool TopPostsIsMonitored()
+        {
+            return IsMonitored("TopPosts", Subreddit);
+        }
+
+        public bool ControversialPostsIsMonitored()
+        {
+            return IsMonitored("ControversialPosts", Subreddit);
+        }
+
+        public bool ModQueuePostsIsMonitored()
+        {
+            return IsMonitored("ModQueuePosts", Subreddit);
+        }
+
+        public bool ModQueueReportsPostsIsMonitored()
+        {
+            return IsMonitored("ModQueueReportsPosts", Subreddit);
+        }
+
+        public bool ModQueueSpamPostsIsMonitored()
+        {
+            return IsMonitored("ModQueueSpamPosts", Subreddit);
+        }
+
+        public bool ModQueueUnmoderatedPostsIsMonitored()
+        {
+            return IsMonitored("ModQueueUnmoderatedPosts", Subreddit);
+        }
+
+        public bool ModQueueEditedPostsIsMonitored()
+        {
+            return IsMonitored("ModQueueEditedPosts", Subreddit);
         }
 
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
@@ -821,72 +1156,100 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(subKey))
             {
+                if (MonitoringExpiration.HasValue
+                    && DateTime.Now > MonitoringExpiration.Value)
+                {
+                    MonitorModel.RemoveMonitoringKey(key, subKey, ref Monitoring);
+                    Threads.Remove(key);
+
+                    break;
+                }
+
+                while (!IsScheduled())
+                {
+                    if (Terminate)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(15000);
+                }
+
+                if (Terminate)
+                {
+                    break;
+                }
+
                 List<Post> oldList;
                 List<Post> newList;
-                switch (type)
+                try
                 {
-                    default:
-                        throw new RedditControllerException("Unrecognized type '" + type + "'.");
-                    case "best":
-                        oldList = best;
-                        newList = GetBest();
-                        break;
-                    case "hot":
-                        oldList = hot;
-                        newList = GetHot();
-                        break;
-                    case "new":
-                        oldList = newPosts;
-                        newList = GetNew();
-                        break;
-                    case "rising":
-                        oldList = rising;
-                        newList = GetRising();
-                        break;
-                    case "top":
-                        oldList = top;
-                        newList = GetTop();
-                        break;
-                    case "controversial":
-                        oldList = controversial;
-                        newList = GetControversial();
-                        break;
-                    case "modqueue":
-                        oldList = modQueue;
-                        newList = GetModQueue();
-                        break;
-                    case "modqueuereports":
-                        oldList = modQueueReports;
-                        newList = GetModQueueReports();
-                        break;
-                    case "modqueuespam":
-                        oldList = modQueueSpam;
-                        newList = GetModQueueSpam();
-                        break;
-                    case "modqueueunmoderated":
-                        oldList = modQueueUnmoderated;
-                        newList = GetModQueueUnmoderated();
-                        break;
-                    case "modqueueedited":
-                        oldList = modQueueEdited;
-                        newList = GetModQueueEdited();
-                        break;
-                }
-
-                if (Lists.ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
-                {
-                    // Event handler to alert the calling app that the list has changed.  --Kris
-                    PostsUpdateEventArgs args = new PostsUpdateEventArgs
+                    switch (type)
                     {
-                        NewPosts = newList,
-                        OldPosts = oldList,
-                        Added = added,
-                        Removed = removed
-                    };
-                    TriggerUpdate(args, type);
-                }
+                        default:
+                            throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                        case "best":
+                            oldList = best;
+                            newList = GetBest();
+                            break;
+                        case "hot":
+                            oldList = hot;
+                            newList = GetHot();
+                            break;
+                        case "new":
+                            oldList = newPosts;
+                            newList = GetNew();
+                            break;
+                        case "rising":
+                            oldList = rising;
+                            newList = GetRising();
+                            break;
+                        case "top":
+                            oldList = top;
+                            newList = GetTop();
+                            break;
+                        case "controversial":
+                            oldList = controversial;
+                            newList = GetControversial();
+                            break;
+                        case "modqueue":
+                            oldList = modQueue;
+                            newList = GetModQueue();
+                            break;
+                        case "modqueuereports":
+                            oldList = modQueueReports;
+                            newList = GetModQueueReports();
+                            break;
+                        case "modqueuespam":
+                            oldList = modQueueSpam;
+                            newList = GetModQueueSpam();
+                            break;
+                        case "modqueueunmoderated":
+                            oldList = modQueueUnmoderated;
+                            newList = GetModQueueUnmoderated();
+                            break;
+                        case "modqueueedited":
+                            oldList = modQueueEdited;
+                            newList = GetModQueueEdited();
+                            break;
+                    }
 
-                Thread.Sleep(monitoringDelayMs.Value);
+                    if (Lists.ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
+                    {
+                        // Event handler to alert the calling app that the list has changed.  --Kris
+                        PostsUpdateEventArgs args = new PostsUpdateEventArgs
+                        {
+                            NewPosts = newList,
+                            OldPosts = oldList,
+                            Added = added,
+                            Removed = removed
+                        };
+                        TriggerUpdate(args, type);
+                    }
+                }
+                catch (Exception) when (!BreakOnFailure) { }
+
+                Wait(monitoringDelayMs.Value);
             }
         }
 

@@ -9,7 +9,7 @@
 Created by Kris Craig.
 
 | Table of Contents                                                 |
-|:-------------------------------------------------------------------|
+|:------------------------------------------------------------------|
 | [Overview](#overview)                                             |
 | [Usage](#usage)                                                   |
 | [Press Inquiries](#press-inquiries)                               |
@@ -19,6 +19,7 @@ Created by Kris Craig.
 | [Running the Tests](#running-the-tests)                           |
 | [Code Examples](#code-examples)                                   |
 | [Code Examples Using Models](#code-examples-using-models)         |
+| [More Code Examples](#more-code-examples)                         |
 | [Contributing](#contributing)                                     |
 | [Currently Supported Endpoints](#currently-supported-endpoints)   |
 
@@ -26,13 +27,13 @@ Created by Kris Craig.
 
 Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
 
-Currently, the library supports 169 of the 205 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 327 of the tests are currently passing. All of the most commonly used endpoints are supported.
+Currently, the library supports 171 of the 205 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 335 of the tests are currently passing. All of the most commonly used endpoints are supported.
 
 Reddit.NET is FOSS (MIT license) and was written in C#. It can be found on Github at:  https://github.com/sirkris/Reddit.NET
 
 ### Contributors
 
-[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md), [JP Dillingham](docs/contributors/JP%20Dillingham.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
+[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md), [JP Dillingham](docs/contributors/JP%20Dillingham.md), [origine999](docs/contributors/origine999.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
 
 ### Beta Testers
 
@@ -213,7 +214,7 @@ The main library. This is what the app dev includes in their project.
 
 ### Reddit.NETTests
 
-This project contains unit, workflow, and stress tests using MSTest. There are currently 327 tests, all passing (at least, they all pass for me). All of the 169 supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
+This project contains unit, workflow, and stress tests using MSTest. There are currently 335 tests, all passing (at least, they all pass for me). All of the supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
 
 ## Running the Tests
 
@@ -377,6 +378,32 @@ r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Link Po
 r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my comment.", topPost.Name));
 ```
 
+## More Code Examples
+
+### C#
+
+#### [Simple Login](docs/examples/cs/Simple%20Login.md)
+
+#### [Token Retrieval](docs/examples/cs/Authorize%20New%20User.md)
+
+#### [ELIZA Chatbot](docs/examples/cs/ELIZA.md)
+
+#### [Track a Subreddit's Daily Comments](docs/examples/cs/Track%20Subreddit%20Daily%20Comments.md)
+
+#### [Monitor Incoming Modmail](docs/examples/cs/Monitor%20Modmail.md)
+
+#### [Record a Subreddit's Daily Top Posts on its Wiki](docs/examples/cs/Daily%20Top%20Posts%20Wiki.md)
+
+#### [Set User Flair](docs/examples/cs/Set%20User%20Flair.md)
+
+#### [Set Link Flair](docs/examples/cs/Set%20Link%20Flair.md)
+
+#### [Search](docs/examples/cs/Search.md)
+
+#### [Crossposting](docs/examples/cs/Crosspost.md)
+
+#### [Pagination](docs/examples/cs/Paginated%20Posts.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Contributing
@@ -460,6 +487,8 @@ See:  [Running the Tests](#redditnettests)
 `GET [/r/<subreddit>]/api/link_flair`
 
 `GET [/r/<subreddit>]/api/link_flair_v2`
+
+`POST [/r/<subreddit>]/api/selectflair`
 
 `POST [/r/<subreddit>]/api/setflairenabled`
 
@@ -668,6 +697,9 @@ See:  [Running the Tests](#redditnettests)
 `PUT /api/multi/<multipath>/r/<srname>`
 
 
+`GET [/r/<subreddit>]/search`
+
+
 `GET [/r/<subreddit>]/about/<where>`
 
 `POST [/r/<subreddit>]/api/delete_sr_banner`
@@ -772,9 +804,9 @@ See:  [Running the Tests](#redditnettests)
 `GET [/r/<subreddit>]/wiki/<page>`
 
 
-Total:  169 / 205 (82%)
+Total:  171 / 205 (83%)
 
-There are 36 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
+There are 34 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
 
 Virtually all of the supported endpoints are covered by tests (voting and admin-reporting were manually tested for obvious reasons) and all of those tests are passing.
 

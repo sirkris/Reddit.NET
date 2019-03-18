@@ -2,6 +2,7 @@
 using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
 using Reddit.Exceptions;
+using Reddit.Inputs.LinksAndComments;
 using System;
 using System.Collections.Generic;
 
@@ -50,10 +51,13 @@ namespace RedditTests.ControllerTests.WorkflowTests
             reddit.Account.Messages.CollapseMessage(reddit.Account.Messages.Unread[0].Fullname);
             reddit.Account.Messages.UncollapseMessage(reddit.Account.Messages.Unread[0].Fullname);
 
-            reddit2.Account.Messages.ReadMessage(reddit.Account.Messages.Unread[0].Fullname);
-            reddit2.Account.Messages.UnreadMessage(reddit.Account.Messages.Unread[0].Fullname);
+            reddit2.Account.Messages.ReadMessage(reddit2.Account.Messages.Unread[0].Fullname);
+            reddit2.Account.Messages.UnreadMessage(reddit2.Account.Messages.Unread[0].Fullname);
 
-            reddit2.Account.Messages.DeleteMessage(reddit.Account.Messages.Unread[0].Fullname);
+            // Send a reply.  --Kris
+            reddit2.Account.Messages.Reply(new LinksAndCommentsThingInput("This is a test reply.", reddit2.Account.Messages.Unread[0].Fullname));
+
+            reddit2.Account.Messages.DeleteMessage(reddit2.Account.Messages.Unread[0].Fullname);
         }
 
         /// <summary>

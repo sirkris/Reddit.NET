@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.1.0</Version>
+    <Authors>Kris Craig</Authors>
+    <Company>Kris Craig</Company>
+    <Description>This simple library enables an app developer to grant a new refresh token to a given Reddit user.</Description>
+    <Copyright>Copyright (C) 2019 by Kris Craig</Copyright>
+    <PackageLicenseUrl>https://github.com/sirkris/Reddit.NET/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <PackageTags>reddit web utility http api oauth rest json netstandard</PackageTags>
+    <PackageReleaseNotes>https://github.com/sirkris/Reddit.NET/blob/master/README.md</PackageReleaseNotes>
+    <PackageIconUrl>https://raw.githubusercontent.com/sirkris/Reddit.NET/master/Logo.gif</PackageIconUrl>
+    <Product>Reddit.NET AuthTokenRetrieverLib</Product>
+    <PackageId>Reddit.AuthTokenRetrieverLib</PackageId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
+    <PackageReference Include="RestSharp" Version="106.6.9" />
+    <PackageReference Include="uhttpsharp" Version="0.1.6.22" />
+  </ItemGroup>
+
+</Project>

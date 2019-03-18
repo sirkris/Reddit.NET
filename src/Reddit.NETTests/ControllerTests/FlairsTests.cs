@@ -72,9 +72,9 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
-        public void CreateFlair()
+        public void CreateUserFlair()
         {
-            Subreddit.Flairs.CreateFlair("KrisCraig", "Human");
+            Subreddit.Flairs.CreateUserFlair("KrisCraig", "Human");
         }
 
         [TestMethod]

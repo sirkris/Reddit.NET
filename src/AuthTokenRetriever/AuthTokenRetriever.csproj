@@ -3,29 +3,34 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <Authors>Kris Craig</Authors>
     <Product>Reddit.NET OAuth Token Retriever</Product>
     <Copyright>Copyright (C) 2019 by Kris Craig</Copyright>
     <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-    <FileVersion>1.0.0.0</FileVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
     <Description>A simple utility for quickly and easily retrieving Reddit OAuth tokens for your app.</Description>
+    <PackageReleaseNotes>https://github.com/sirkris/Reddit.NET/blob/master/README.md</PackageReleaseNotes>
+    <PackageTags>reddit web utility http api oauth rest json netstandard</PackageTags>
+    <RepositoryType>Git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Templates\Success.html" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="Templates\Success.html" />
+    <Compile Remove="Templates\**" />
+    <EmbeddedResource Remove="Templates\**" />
+    <None Remove="Templates\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="NewtonSoft.JSON" Version="12.0.1" />
-    <PackageReference Include="RestSharp" Version="106.6.7" />
+    <PackageReference Include="RestSharp" Version="106.6.9" />
     <PackageReference Include="uHttpSharp" Version="0.1.6.22" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AuthTokenRetrieverLib\AuthTokenRetrieverLib.csproj" />
   </ItemGroup>
 
 </Project>

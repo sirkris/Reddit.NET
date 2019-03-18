@@ -1,4 +1,8 @@
-﻿using Newtonsoft.Json;
+﻿using System.Linq;
+
+using Newtonsoft.Json;
+using Reddit.Inputs.Search;
+using Reddit.Things;
 using RestSharp;
 
 namespace Reddit.Models
@@ -10,45 +14,86 @@ namespace Reddit.Models
         public Search(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
             : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
 
-        // TODO - Every test I've tried returns no search results.  Not sure what I'm doing wrong (ex. the word "Florida" should appear somewhere in r/FloridaMan).  --Kris
         /// <summary>
         /// Search links page.
         /// This endpoint is a listing.
         /// </summary>
-        /// <param name="after">fullname of a thing</param>
-        /// <param name="before">fullname of a thing</param>
-        /// <param name="category">a string no longer than 5 characters</param>
-        /// <param name="includeFacets">boolean value</param>
-        /// <param name="q">a string no longer than 512 characters</param>
-        /// <param name="restrictSr">boolean value</param>
-        /// <param name="sort">one of (relevance, hot, top, new, comments)</param>
-        /// <param name="t">one of (hour, day, week, month, year, all)</param>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
         /// <param name="subreddit">The subreddit being searched</param>
-        /// <param name="count">a positive integer (default: 0)</param>
-        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
-        /// <param name="show">(optional) the string all</param>
-        /// <param name="srDetail">(optional) expand subreddits</param>
-        /// <param name="type">(optional) comma-delimited list of result types (sr, link, user)</param>
-        /// <returns>(TODO - Untested)</returns>
-        public object GetSearch(string after, string before, string category, bool includeFacets, string q, bool restrictSr, string sort, string t,
-            string subreddit = null, int count = 0, int limit = 25, string show = "all", bool srDetail = false, string type = null)
+        /// <returns>A listing of things that match the search criteria.</returns>
+        public T GetSearch<T>(SearchGetSearchInput searchGetSearchInput, string subreddit = null)
         {
-            RestRequest restRequest = PrepareRequest(Sr(subreddit) + "search");
+            return SendRequest<T>(Sr(subreddit) + "search", searchGetSearchInput);
+        }
 
-            restRequest.AddParameter("after", after);
-            restRequest.AddParameter("before", before);
-            restRequest.AddParameter("category", category);
-            restRequest.AddParameter("include_facets", includeFacets);
-            restRequest.AddParameter("restrict_sr", restrictSr);
-            restRequest.AddParameter("sort", sort);
-            restRequest.AddParameter("t", t);
-            restRequest.AddParameter("count", count);
-            restRequest.AddParameter("limit", limit);
-            restRequest.AddParameter("show", show);
-            restRequest.AddParameter("sr_detail", srDetail);
-            restRequest.AddParameter("type", type);
+        /// <summary>
+        /// Search Reddit and return the results as subreddit listings.
+        /// </summary>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
+        /// <param name="subreddit">The subreddit being searched</param>
+        /// <returns>A listing of subreddits that match the search criteria.</returns>
+        public SubredditContainer SearchSubreddits(SearchGetSearchInput searchGetSearchInput, string subreddit = null)
+        {
+            searchGetSearchInput.type = "sr";
+            return GetSearch<SubredditContainer>(searchGetSearchInput, subreddit);
+        }
 
-            return JsonConvert.DeserializeObject(ExecuteRequest(restRequest));
+        /// <summary>
+        /// Search Reddit and return the results as post listings.
+        /// </summary>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
+        /// <param name="subreddit">The subreddit being searched</param>
+        /// <returns>A listing of posts that match the search criteria.</returns>
+        public PostContainer SearchPosts(SearchGetSearchInput searchGetSearchInput, string subreddit = null)
+        {
+            searchGetSearchInput.type = "link";
+            return GetSearch<PostContainer>(searchGetSearchInput, subreddit);
+        }
+
+        /// <summary>
+        /// Search Reddit and return the results as user listings.
+        /// </summary>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
+        /// <param name="subreddit">The subreddit being searched</param>
+        /// <returns>A listing of users that match the search criteria.</returns>
+        public UserContainer SearchUsers(SearchGetSearchInput searchGetSearchInput, string subreddit = null)
+        {
+            searchGetSearchInput.type = "user";
+            return GetSearch<UserContainer>(searchGetSearchInput, subreddit);
+        }
+
+        /// <summary>
+        /// Search Reddit and return the results as mixed listings.
+        /// Use this method if you're specifying multiple values for the "type" parameter.
+        /// </summary>
+        /// <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
+        /// <param name="subreddit">The subreddit being searched</param>
+        /// <returns>A listing of things that match the search criteria.</returns>
+        public MultiSearchResults MultiSearch(SearchGetSearchInput searchGetSearchInput, string subreddit = null)
+        {
+            MixedListingContainer mix = GetSearch<MixedListingContainer>(searchGetSearchInput, subreddit);
+
+            MultiSearchResults res = new MultiSearchResults();
+            foreach (MixedListingChild mixedListingChild in mix.Data.Children)
+            {
+                switch (mixedListingChild.Kind)
+                {
+                    case "t2":
+                        res.Users.Add(JsonConvert.DeserializeObject<User>(JsonConvert.SerializeObject(mixedListingChild.Data)));
+                        break;
+                    case "t3":
+                        res.Posts.Add(JsonConvert.DeserializeObject<Post>(JsonConvert.SerializeObject(mixedListingChild.Data)));
+                        break;
+                    case "t5":
+                        res.Subreddits.Add(JsonConvert.DeserializeObject<Subreddit>(JsonConvert.SerializeObject(mixedListingChild.Data)));
+                        break;
+                }
+            }
+
+            res.First = mix?.Data?.Children?.First()?.Data?["name"]?.ToString();
+            res.Last = mix?.Data?.Children?.Last()?.Data?["name"]?.ToString();
+
+            return res;
         }
     }
 }
