@@ -402,6 +402,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Crossposting](docs/examples/cs/Crosspost.md)
 
+#### [Pagination](docs/examples/cs/Paginated%20Posts.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Contributing
