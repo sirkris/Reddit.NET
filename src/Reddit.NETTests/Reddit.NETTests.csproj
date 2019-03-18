@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <Version>1.0.0-develop</Version>
+    <Version>1.1.0</Version>
 
     <Authors>Kris Craig</Authors>
 
@@ -17,11 +17,13 @@
 
     <RepositoryType>Git</RepositoryType>
 
-    <AssemblyVersion>1.0.0.1</AssemblyVersion>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
 
-    <FileVersion>1.0.0.1</FileVersion>
+    <FileVersion>1.1.0.0</FileVersion>
 
-    <PackageReleaseNotes />
+    <PackageReleaseNotes>https://github.com/sirkris/Reddit.NET/blob/master/README.md</PackageReleaseNotes>
+
+    <PackageTags>reddit web utility http api oauth rest json netstandard</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
