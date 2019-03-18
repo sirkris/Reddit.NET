@@ -31,6 +31,6 @@ var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
 List<Post> posts = reddit.Subreddit("MySub").Search("Bernie Sanders");  // Search r/MySub
 if (posts.Count == 0)
 {
-	posts = reddit.Search("Bernie Sanders");  // Search r/all
+	posts = reddit.SearchPosts("Bernie Sanders");  // Search r/all
 }
 ```

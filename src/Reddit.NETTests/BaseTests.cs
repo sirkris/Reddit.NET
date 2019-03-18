@@ -175,6 +175,30 @@ namespace RedditTests
             Assert.IsNotNull(dynamic);
         }
 
+        public SubredditContainer Validate(SubredditContainer subredditContainer, int minResults)
+        {
+            Assert.IsNotNull(subredditContainer);
+            Assert.IsTrue(subredditContainer.Data.Children.Count >= minResults);
+
+            return subredditContainer;
+        }
+
+        public PostContainer Validate(PostContainer postContainer, int minResults)
+        {
+            Assert.IsNotNull(postContainer);
+            Assert.IsTrue(postContainer.Data.Children.Count >= minResults);
+
+            return postContainer;
+        }
+
+        public UserContainer Validate(UserContainer userContainer, int minResults)
+        {
+            Assert.IsNotNull(userContainer);
+            Assert.IsTrue(userContainer.Data.Children.Count >= minResults);
+
+            return userContainer;
+        }
+
         public Controllers.LiveThread Validate(Controllers.LiveThread liveThread)
         {
             Assert.IsNotNull(liveThread);

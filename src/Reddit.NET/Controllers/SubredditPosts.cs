@@ -285,7 +285,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetBest(string after = "", string before = "", int limit = 100)
         {
@@ -312,7 +312,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetHot(string g = "", string after = "", string before = "", int limit = 100)
         {
@@ -339,7 +339,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetNew(string after = "", string before = "", int limit = 100)
         {
@@ -366,7 +366,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetRising(string after = "", string before = "", int limit = 100)
         {
@@ -391,9 +391,10 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of posts using "top" sort.
         /// </summary>
+        /// <param name="t">one of(hour, day, week, month, year, all)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetTop(string t = "all", string after = "", string before = "", int limit = 100)
         {
@@ -410,7 +411,7 @@ namespace Reddit.Controllers
             List<Post> posts = Lists.GetPosts(Dispatch.Listings.Top(timedCatSrListingInput, Subreddit), Dispatch);
 
             TopLastUpdated = DateTime.Now;
-
+            
             Top = posts;
             TopT = timedCatSrListingInput.t;
             return posts;
@@ -419,9 +420,10 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of posts using "controversial" sort.
         /// </summary>
+        /// <param name="t">one of(hour, day, week, month, year, all)</param>
         /// <param name="after">fullname of a thing</param>
         /// <param name="before">fullname of a thing</param>
-        /// <param name="limit"></param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetControversial(string t = "all", string after = "", string before = "", int limit = 100)
         {
@@ -453,12 +455,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueue(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
@@ -473,12 +475,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of reported posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueReports(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
@@ -493,12 +495,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of spammed posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueSpam(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
@@ -513,12 +515,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of unmoderated posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueUnmoderated(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
@@ -533,12 +535,12 @@ namespace Reddit.Controllers
         /// <summary>
         /// Retrieve a list of edited posts in the mod queue.
         /// </summary>
-        /// <param name="after"></param>
-        /// <param name="before"></param>
-        /// <param name="limit"></param>
-        /// <param name="show"></param>
-        /// <param name="srDetail"></param>
-        /// <param name="count"></param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
         public List<Post> GetModQueueEdited(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0)
         {
