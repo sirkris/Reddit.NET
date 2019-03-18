@@ -44,7 +44,6 @@ do
 	{
 		if (post.Created >= today)
 		{
-			outdatedPosts = 0;
 			posts.Add(post);
 		}
 		else
