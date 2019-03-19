@@ -62,4 +62,4 @@ namespace MonitorModmail
 
 ## Source File
 
-[Monitor Modmail.cs](/Monitor%20Modmail.cs)
+[Monitor Modmail.cs](src/Monitor%20Modmail.cs)
