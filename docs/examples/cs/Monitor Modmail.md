@@ -40,13 +40,13 @@ namespace MonitorModmail
 
 			// Start monitoring unread modmail messages and register the callback function.  --Kris
 			reddit.Account.Modmail.MonitorUnread();
-			reddit.Account.Modmail.UnreadUpdated += C_UnreadMessagesUpdated();
+			reddit.Account.Modmail.UnreadUpdated += C_UnreadMessagesUpdated;
 
 			while(true) { } // Replace this with whatever you've got for a program loop.  The monitoring will run asynchronously in a separate thread.  --Kris
 
 			// Stop monitoring and unregister the callback function.  --Kris
 			reddit.Account.Modmail.MonitorUnread();
-			reddit.Account.Modmail.UnreadUpdated -= C_UnreadMessagesUpdated();
+			reddit.Account.Modmail.UnreadUpdated -= C_UnreadMessagesUpdated;
 		}
 		
 		private void C_UnreadMessagesUpdated(object sender, ModmailConversationsEventArgs e)
@@ -58,4 +58,8 @@ namespace MonitorModmail
 		}
 	}
 }
+
+## Source File
+
+[Monitor Modmail.cs](/Monitor%20Modmail.cs)
 ```

@@ -27,5 +27,9 @@ using Reddit;
 
 var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
 
-reddit.Subreddit("MySub").CreateFlair("KrisCraig", "Fucking Genius");
+reddit.Subreddit("MySub").Flairs.CreateUserFlair("KrisCraig", "Fucking Genius");
+
+## Source File
+
+[User Flair.cs](src/Set%20User%20Flair.cs)
 ```
