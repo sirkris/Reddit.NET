@@ -64,8 +64,8 @@ public static void OpenBrowser(string authUrl, string browserPath = @"C:\Program
         Process.Start(processStartInfo);
     }
 }
+```
 
 ## Source File
 
 [Authorize New User.cs](src/Authorize%20New%20User.cs)
-```

@@ -30,8 +30,8 @@ var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
 Console.WriteLine("Username: " + reddit.Account.Me.Name);
 
 Console.WriteLine("Cake Day: " + reddit.Account.Me.Created.ToString("D"));
+```
 
 ## Source File
 
 [Simple Login.cs](src/Simple%20Login.cs)
-```
