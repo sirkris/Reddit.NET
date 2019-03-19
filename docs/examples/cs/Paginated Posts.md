@@ -23,6 +23,7 @@ In the NuGet Package Manager console:
 ```c#
 using Reddit;
 using Reddit.Controllers;
+using System;
 using System.Collections.Generic;
 
 ...
