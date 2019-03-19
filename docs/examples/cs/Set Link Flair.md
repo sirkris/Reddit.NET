@@ -28,8 +28,8 @@ using Reddit;
 var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
 
 reddit.Subreddit("MySub").LinkPost("Reddit.NET", "https://www.nuget.org/packages/Reddit").Submit().SetFlair("NuGet Package");
+```
 
 ## Source File
 
 [Set Link Flair.cs](src/Set%20Link%20Flair.cs)
-```

@@ -34,8 +34,8 @@ if (posts.Count == 0)
 {
     posts = reddit.Subreddit("all").Search(new SearchGetSearchInput("Bernie Sanders"));  // Search r/all
 }
+```
 
 ## Source File
 
 [Search.cs](src/Search.cs)
-```
