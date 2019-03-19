@@ -48,5 +48,5 @@ namespace AuthTokenRetriever
                 Process.Start(processStartInfo);
             }
         }
-	}
+    }
 }
