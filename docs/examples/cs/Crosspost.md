@@ -46,3 +46,7 @@ else
 	var newLinkPost = news.LinkPost(news.Posts.Top[0].Fullname).About().XPostTo("MySub");
 }
 ```
+
+## Source File
+
+[Crosspost.cs](src/Crosspost.cs)

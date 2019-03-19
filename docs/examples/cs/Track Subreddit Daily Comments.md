@@ -53,7 +53,7 @@ do
 		if (post.Created >= DateTime.Today.AddDays(-1) && post.Created < DateTime.Today)
 		{
 			outdatedPosts = 0;
-			comments += post.Listing.NumComments;
+			totalComments += post.Listing.NumComments;
 		}
 		else if (post.Created < DateTime.Today.AddDays(-1))
 		{
@@ -65,13 +65,17 @@ do
 } while (outdatedPosts < 3 && start.AddMinutes(5) > DateTime.Now);
 
 // Create a new self-post to report the result.  --Kris
-var newPost = subreddit.SelfPost("Total Comments for " + DateTime.Today.AddDays(-1).ToString("D"), comments.ToString()).Submit();
+var newPost = subreddit.SelfPost("Total Comments for " + DateTime.Today.AddDays(-1).ToString("D"), totalComments.ToString()).Submit();
 
 // Update the sidebar to reflect yesterday's total.  --Kris
-subreddit.Sidebar = "**Yesterday's Comments Total:** " + comments.ToString();
+subreddit.Sidebar = "**Yesterday's Comments Total:** " + totalComments.ToString();
 try
 {
 	subreddit.Update();  // Sends the subreddit data with the updated sidebar text back to the Reddit API to apply the change.  --Kris
 }
 catch (RedditControllerException) { }
 ```
+
+## Source File
+
+[Track Subreddit Daily Comments.cs](src/Track%20Subreddit%20Daily%20Comments.cs)

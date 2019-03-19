@@ -23,6 +23,7 @@ In the NuGet Package Manager console:
 ```c#
 using Reddit;
 using Reddit.Controllers;
+using System;
 using System.Collections.Generic;
 
 ...
@@ -58,3 +59,7 @@ do
 	&& start.AddMinutes(5) > DateTime.Now
 	&& worldnews.Posts.New.Count > 0);  // This is automatically populated with the results of the last GetNew call.  --Kris
 ```
+
+## Source File
+
+[Paginated Posts.cs](src/Paginated%20Posts.cs)

@@ -23,14 +23,19 @@ In the NuGet Package Manager console:
 ```c#
 using Reddit;
 using Reddit.Controllers;
+using System.Collections.Generic;
 
 ...
 
 var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
 
-List<Post> posts = reddit.Subreddit("MySub").Search("Bernie Sanders");  // Search r/MySub
+List<Post> posts = reddit.Subreddit("MySub").Search(new SearchGetSearchInput("Bernie Sanders"));  // Search r/MySub
 if (posts.Count == 0)
 {
-	posts = reddit.SearchPosts("Bernie Sanders");  // Search r/all
+    posts = reddit.Subreddit("all").Search(new SearchGetSearchInput("Bernie Sanders"));  // Search r/all
 }
 ```
+
+## Source File
+
+[Search.cs](src/Search.cs)

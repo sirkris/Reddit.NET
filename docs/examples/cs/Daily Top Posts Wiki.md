@@ -73,3 +73,7 @@ index.EditAndReturn("Added top posts for: " + today.ToString("D"),
 	index.ContentMd + Environment.NewLine + "### [" + today.ToString("D") + "](" + pageUrl + ")" + Environment.NewLine, 
 	index.Revisions()[0].Id);  // FYI, the Revisions() are sorted by most-recent first.  --Kris
 ```
+
+## Source File
+
+[Daily Top Posts Wiki.cs](src/Daily%20Top%20Posts%20Wiki.cs)
