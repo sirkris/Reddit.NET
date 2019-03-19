@@ -58,4 +58,8 @@ do
 } while (!outdated 
 	&& start.AddMinutes(5) > DateTime.Now
 	&& worldnews.Posts.New.Count > 0);  // This is automatically populated with the results of the last GetNew call.  --Kris
+
+## Source File
+
+[Paginated Posts.cs](src/Paginated%20Posts.cs)
 ```

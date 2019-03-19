@@ -49,13 +49,13 @@ namespace Reddit.AuthTokenRetriever
             private set;
         }
 
-        internal string AccessToken
+        public string AccessToken
         {
             get;
             private set;
         }
 
-        internal string RefreshToken
+        public string RefreshToken
         {
             get;
             private set;

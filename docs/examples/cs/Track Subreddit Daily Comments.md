@@ -74,4 +74,8 @@ try
 	subreddit.Update();  // Sends the subreddit data with the updated sidebar text back to the Reddit API to apply the change.  --Kris
 }
 catch (RedditControllerException) { }
+
+## Source File
+
+[Track Subreddit Daily Comments.cs](src/Track%20Subreddit%20Daily%20Comments.cs)
 ```
