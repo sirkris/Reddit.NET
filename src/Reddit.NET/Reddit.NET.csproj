@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.1.1</Version>
-    <AssemblyVersion>1.1.1.0</AssemblyVersion>
-    <FileVersion>1.1.1.0</FileVersion>
+    <Version>1.1.1-develop</Version>
+    <AssemblyVersion>1.1.1.1</AssemblyVersion>
+    <FileVersion>1.1.1.1</FileVersion>
     <PackageReleaseNotes>https://www.reddit.com/r/csharp/comments/b2hv7c/announcing_the_release_of_redditnet_110/</PackageReleaseNotes>
     <Title>Reddit.NET</Title>
     <PackageId>Reddit</PackageId>
