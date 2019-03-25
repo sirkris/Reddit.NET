@@ -62,19 +62,13 @@ namespace Reddit.Models
         {
             JToken res = SendRequest<JToken>(Sr(subreddit) + "comments/" + article +
                 (!string.IsNullOrWhiteSpace(listingsGetCommentsInput.comment) ? "/_/" + listingsGetCommentsInput.comment : ""), listingsGetCommentsInput);
-
-            CommentContainer container;
+            
             if(string.IsNullOrEmpty(article))
             {
-                container = JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res));
-            }
-            else
-            {
-                container = JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res[1]));
+                return JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res));
             }
 
-            // Note - Deserializing directly to the tuple list resulted in null values.  --Kris
-            return container;
+            return JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res[1]));
         }
 
         /// <summary>
