@@ -74,6 +74,11 @@ namespace Reddit.Controllers
         public SubredditPosts Posts;
 
         /// <summary>
+        /// Comments belonging to this subreddit.
+        /// </summary>
+        public Comments Comments;
+
+        /// <summary>
         /// Flairs belonging to this subreddit.
         /// </summary>
         public Flairs Flairs;
@@ -137,6 +142,7 @@ namespace Reddit.Controllers
 
             SubredditData = subreddit;
             Posts = new SubredditPosts(Dispatch, Name);
+            Comments = new Comments(Dispatch, subreddit: Name);
             Flairs = new Flairs(Dispatch, Name);
             Wiki = new Wiki(Dispatch, Name);
         }
@@ -154,6 +160,7 @@ namespace Reddit.Controllers
 
             SubredditData = subredditChild.Data;
             Posts = new SubredditPosts(Dispatch, Name);
+            Comments = new Comments(Dispatch, subreddit: Name);
             Flairs = new Flairs(Dispatch, Name);
             Wiki = new Wiki(Dispatch, Name);
         }
@@ -219,6 +226,7 @@ namespace Reddit.Controllers
 
             UpdateSubredditData();
             Posts = new SubredditPosts(Dispatch, Name);
+            Comments = new Comments(Dispatch, subreddit: Name);
             Flairs = new Flairs(Dispatch, Name);
             Wiki = new Wiki(Dispatch, Name);
         }
@@ -232,6 +240,7 @@ namespace Reddit.Controllers
         {
             Dispatch = dispatch;
             Posts = new SubredditPosts(Dispatch, Name);
+            Comments = new Comments(Dispatch, subreddit: Name);
             Flairs = new Flairs(Dispatch, Name);
             Wiki = new Wiki(Dispatch, Name);
         }
