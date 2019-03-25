@@ -24,9 +24,12 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
         private Dictionary<string, Post> NewPosts;
 
+        private Dictionary<string, Comment> NewComments;
+
         public SubredditTests() : base()
         {
             NewPosts = new Dictionary<string, Post>();
+            NewComments = new Dictionary<string, Comment>();
         }
 
         private Subreddit GetSubreddit()
@@ -114,6 +117,41 @@ namespace RedditTests.ControllerTests.WorkflowTests
                 if (!NewPosts.ContainsKey(post.Fullname))
                 {
                     NewPosts.Add(post.Fullname, post);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void MonitorNewComments()
+        {
+            Subreddit.Comments.GetNew();  // This call prevents any existing "new"-sorted posts from triggering the update event.  --Kris
+            Subreddit.Comments.MonitorNew();
+            Subreddit.Comments.NewUpdated += C_NewCommentsUpdated;
+
+            var post = Subreddit.SelfPost($"Post for monitoring {DateTime.UtcNow}", $"A post with bunch of comments for monitoring the subreddit at {DateTime.UtcNow}").Submit();
+            for (int i = 1; i <= 10; i++)
+            {
+                // Despite what VS says, we don't want to use await here.  --Kris
+                post.ReplyAsync($"Some comment #{i}");
+            }
+
+            DateTime start = DateTime.Now;
+            while (NewComments.Count < 10
+                && start.AddMinutes(1) > DateTime.Now) { }
+
+            Subreddit.Comments.NewUpdated -= C_NewCommentsUpdated;
+            Subreddit.Comments.MonitorNew();
+
+            Assert.IsTrue(NewComments.Count >= 10);
+        }
+
+        private void C_NewCommentsUpdated(object sender, CommentsUpdateEventArgs e)
+        {
+            foreach (Comment comment in e.Added)
+            {
+                if (!NewComments.ContainsKey(comment.Fullname))
+                {
+                    NewComments.Add(comment.Fullname, comment);
                 }
             }
         }
