@@ -3,6 +3,7 @@ using Reddit.Exceptions;
 using Reddit.Inputs;
 using Reddit.Inputs.Subreddits;
 using Reddit.Things;
+using System.Collections.Generic;
 
 namespace RedditTests.ModelTests
 {
@@ -189,6 +190,14 @@ namespace RedditTests.ModelTests
             SubredditSettingsContainer settings = reddit.Models.Subreddits.Edit(testData["Subreddit"], new SubredditsEditInput());
 
             Validate(settings);
+        }
+
+        [TestMethod]
+        public void Recommended()
+        {
+            IEnumerable<SubredditRecommendations> subredditRecommendations = reddit.Models.Subreddits.Recommended(testData["Subreddit"], new SubredditsRecommendInput());
+
+            Validate(subredditRecommendations);
         }
     }
 }
