@@ -48,67 +48,28 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void GetComments()
         {
-            List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("9gaze5", new ListingsGetCommentsInput(0, false, false, "top", true, 0));
+            CommentContainer res = reddit.Models.Listings.GetComments("9gaze5", new ListingsGetCommentsInput(0, false, false, "top", true, 0));
 
             Assert.IsNotNull(res);
-            Assert.IsTrue(res.Count == 1);
-
-            PostContainer post = res[0].Item1;
-            CommentContainer comments = res[0].Item2;
-
-            Validate(post);
-            Assert.IsTrue(post.Data.Children[0].Data.Approved);
-            Assert.IsFalse(post.Data.Children[0].Data.IsSelf);
-            Assert.IsTrue(post.Data.Children[0].Data.Id.Equals("9gaze5"));
-            Assert.IsTrue(post.Data.Children[0].Data.Author.Equals("KrisCraig"));
-            Assert.IsTrue(post.Data.Children[0].Data.Subreddit.Equals("StillSandersForPres"));
-            Assert.IsTrue(post.Data.Children[0].Data.Title.Equals("Reports of Widespread Voter Suppression in New York State Democratic Primary"));
-
-            Validate(comments);
+            Validate(res);
         }
 
         [TestMethod]
         public void GetCommentsWithEditsAndMoreAndTruncate()
         {
-            List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("8gmf99", new ListingsGetCommentsInput(0, true, true, "top", true, 50));
+            CommentContainer res = reddit.Models.Listings.GetComments("8gmf99", new ListingsGetCommentsInput(0, true, true, "top", true, 50));
 
             Assert.IsNotNull(res);
-            Assert.IsTrue(res.Count == 1);
-
-            PostContainer post = res[0].Item1;
-            CommentContainer comments = res[0].Item2;
-
-            Validate(post);
-            Assert.IsFalse(post.Data.Children[0].Data.IsSelf);
-            Assert.IsTrue(post.Data.Children[0].Data.Id.Equals("8gmf99"));
-            Assert.IsTrue(post.Data.Children[0].Data.Author.Equals("KrisCraig"));
-            Assert.IsTrue(post.Data.Children[0].Data.Subreddit.Equals("FloridaMan"));
-            Assert.IsTrue(post.Data.Children[0].Data.Title.Equals("Florida man with handlebar mustache assaults woman on plane, starts a fight with several passengers, " +
-                "yells at police to tase him and \"you'll see what happens\", then gets tased 10 times."));
-
-            Validate(comments);
+            Validate(res);
         }
 
         [TestMethod]
         public void GetCommentsWithContext()
         {
-            List<(PostContainer, CommentContainer)> res = reddit.Models.Listings.GetComments("8gmf99", new ListingsGetCommentsInput(8, true, true, "top", true, 0, "dyd2vtc"), "FloridaMan");
+            CommentContainer res = reddit.Models.Listings.GetComments("8gmf99", new ListingsGetCommentsInput(8, true, true, "top", true, 0, "dyd2vtc"), "FloridaMan");
 
             Assert.IsNotNull(res);
-            Assert.IsTrue(res.Count == 1);
-
-            PostContainer post = res[0].Item1;
-            CommentContainer comments = res[0].Item2;
-
-            Validate(post);
-            Assert.IsFalse(post.Data.Children[0].Data.IsSelf);
-            Assert.IsTrue(post.Data.Children[0].Data.Id.Equals("8gmf99"));
-            Assert.IsTrue(post.Data.Children[0].Data.Author.Equals("KrisCraig"));
-            Assert.IsTrue(post.Data.Children[0].Data.Subreddit.Equals("FloridaMan"));
-            Assert.IsTrue(post.Data.Children[0].Data.Title.Equals("Florida man with handlebar mustache assaults woman on plane, starts a fight with several passengers, " +
-                "yells at police to tase him and \"you'll see what happens\", then gets tased 10 times."));
-
-            Validate(comments);
+            Validate(res);
         }
 
         [TestMethod]
