@@ -4,6 +4,7 @@ using Reddit.Inputs.Subreddits;
 using Reddit.Things;
 using RestSharp;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Reddit.Models
@@ -134,7 +135,6 @@ namespace Reddit.Models
             return await SendRequestAsync<GenericContainer>(Sr(subreddit) + "api/delete_sr_img", subredditsDeleteSrImgInput, Method.POST);
         }
 
-        // TODO - Every test I try just returns an empty JSON result.  --Kris
         /// <summary>
         /// Return subreddits recommended for the given subreddit(s).
         /// Gets a list of subreddits recommended for srnames, filtering out any that appear in the optional omit param.
@@ -143,9 +143,9 @@ namespace Reddit.Models
         /// <param name="omit">comma-delimited list of subreddit names</param>
         /// <param name="over18">boolean value</param>
         /// <returns>A list of subreddits.</returns>
-        public object Recommend(string srNames, SubredditsRecommendInput subredditsRecommendInput)
+        public IEnumerable<SubredditRecommendations> Recommended(string srNames, SubredditsRecommendInput subredditsRecommendInput)
         {
-            return SendRequest<object>("api/recommend/sr/" + srNames, subredditsRecommendInput);
+            return SendRequest<IEnumerable<SubredditRecommendations>>("api/recommend/sr/" + srNames, subredditsRecommendInput);
         }
 
         /// <summary>
