@@ -29,6 +29,10 @@ namespace Reddit.Controllers
         private List<FlairListResult> flairList;
         private DateTime? FlairListLastUpdated;
 
+        public bool AdditionalFlairPages { get; set; } = false;
+
+        public string NextPageName { get; set; }
+
         /// <summary>
         /// List of link flairs.
         /// </summary>
@@ -366,7 +370,15 @@ namespace Reddit.Controllers
         /// <returns>Flair list results.</returns>
         public List<FlairListResult> GetFlairList(FlairNameListingInput flairNameListingInput)
         {
-            FlairList = Validate(Dispatch.Flair.FlairList(flairNameListingInput, Subreddit)).Users;
+            var flairResult = Dispatch.Flair.FlairList(flairNameListingInput, Subreddit);
+            FlairList = Validate(flairResult).Users;
+            AdditionalFlairPages = flairResult.HasMore();
+
+            if (AdditionalFlairPages)
+            {
+                NextPageName = flairResult.next;
+            }
+
             FlairListLastUpdated = DateTime.Now;
             return FlairList;
         }
