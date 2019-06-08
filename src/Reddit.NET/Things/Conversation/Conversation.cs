@@ -18,18 +18,18 @@ namespace Reddit.Things
         public bool IsReplicable;
 
         [JsonProperty("lastUserUpdate")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime LastUserUpdate;
 
         [JsonProperty("isInternal")]
         public bool IsInternal;
 
         [JsonProperty("lastModUpdate")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime LastModUpdate;
 
         [JsonProperty("lastUpdated")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime LastUpdated;
 
         [JsonProperty("authors")]
@@ -54,7 +54,7 @@ namespace Reddit.Things
         public int State;
 
         [JsonProperty("lastUnread")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime LastUnread;
 
         [JsonProperty("numMessages")]

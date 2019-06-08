@@ -17,7 +17,7 @@ namespace Reddit.Things
         public string ModId36;
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime CreatedUTC;
 
         [JsonProperty("subreddit")]

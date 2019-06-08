@@ -14,7 +14,7 @@ namespace Reddit.Things
         public string Name;
 
         [JsonProperty("lastUpdated")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime LastUpdated;
 
         [JsonProperty("keyColor")]

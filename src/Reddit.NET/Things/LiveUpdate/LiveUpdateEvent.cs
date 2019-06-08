@@ -17,14 +17,15 @@ namespace Reddit.Things
         public string DescriptionHTML;
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(LocalTimestampConverter))]
+        [Obsolete("Using this date can lead to unexpected results, please use " + nameof(CreatedUTC) + " instead.")]
         public DateTime Created;
 
         [JsonProperty("title")]
         public string Title;
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime CreatedUTC;
 
         [JsonProperty("button_cta")]
@@ -77,7 +78,7 @@ namespace Reddit.Things
             Resources = liveThread.Resources;
             Title = liveThread.Title;
             TotalViews = liveThread.TotalViews;
-            Created = liveThread.Created;
+            CreatedUTC = liveThread.Created;
             Name = liveThread.Fullname;
             WebsocketURL = liveThread.WebsocketURL;
             AnnouncementURL = liveThread.AnnouncementURL;

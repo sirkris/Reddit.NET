@@ -204,7 +204,8 @@ namespace Reddit.Things
         public bool? UserFlairEnabledInSr;
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(LocalTimestampConverter))]
+        [Obsolete("Using this date can lead to unexpected results, please use " + nameof(CreatedUTC) + " instead.")]
         public DateTime Created;
 
         [JsonProperty("url")]
@@ -217,7 +218,7 @@ namespace Reddit.Things
         public bool? HideAds;
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime CreatedUTC;
 
         [JsonProperty("banner_size")]
@@ -295,7 +296,7 @@ namespace Reddit.Things
             KeyColor = subreddit.KeyColor;
             Lang = subreddit.Lang;
             Name = subreddit.Fullname;
-            Created = subreddit.Created;
+            CreatedUTC = subreddit.Created;
             URL = subreddit.URL;
             SubmitLinkLabel = subreddit.SubmitLinkLabel;
             AllowDiscovery = subreddit.AllowDiscovery;

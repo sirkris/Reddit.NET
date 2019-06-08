@@ -11,7 +11,7 @@ namespace Reddit.Things
     public class Post
     {
         [JsonProperty("approved_at_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime ApprovedAtUTC;
 
         [JsonProperty("subreddit")]
@@ -147,7 +147,7 @@ namespace Reddit.Things
         public string Thumbnail;
 
         [JsonProperty("edited")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime Edited;
 
         [JsonProperty("author_flair_css_class")]
@@ -177,7 +177,8 @@ namespace Reddit.Things
         public string ModNote;
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(LocalTimestampConverter))]
+        [Obsolete("Using this date can lead to unexpected results, please use " + nameof(CreatedUTC) + " instead.")]
         public DateTime Created;
 
         [JsonProperty("link_flair_type")]
@@ -206,7 +207,7 @@ namespace Reddit.Things
         public string SuggestedSort;
 
         [JsonProperty("banned_at_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime BannedAtUTC;
 
         [JsonProperty("view_count")]
@@ -318,7 +319,7 @@ namespace Reddit.Things
         public int SubredditSubscribers;
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime CreatedUTC;
 
         [JsonProperty("mod_reports")]
@@ -353,7 +354,7 @@ namespace Reddit.Things
             Id = post.Id;
             Name = post.Fullname;
             Permalink = post.Permalink;
-            Created = post.Created;
+            CreatedUTC = post.Created;
             Edited = post.Edited;
             Score = post.Score;
             Ups = post.UpVotes;

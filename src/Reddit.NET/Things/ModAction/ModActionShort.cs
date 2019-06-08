@@ -8,7 +8,7 @@ namespace Reddit.Things
     public class ModActionShort
     {
         [JsonProperty("date")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime Date;
 
         [JsonProperty("actionTypeId")]

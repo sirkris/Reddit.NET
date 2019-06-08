@@ -108,7 +108,7 @@ namespace Reddit.Controllers
             Dispatch = dispatch;
 
             Import(liveUpdateEvent.Id, liveUpdateEvent.Description, liveUpdateEvent.NSFW, liveUpdateEvent.Resources, liveUpdateEvent.Title,
-                liveUpdateEvent.TotalViews, liveUpdateEvent.Created, liveUpdateEvent.Name, liveUpdateEvent.WebsocketURL, liveUpdateEvent.AnnouncementURL,
+                liveUpdateEvent.TotalViews, liveUpdateEvent.CreatedUTC, liveUpdateEvent.Name, liveUpdateEvent.WebsocketURL, liveUpdateEvent.AnnouncementURL,
                 liveUpdateEvent.State, liveUpdateEvent.ViewerCount, liveUpdateEvent.Icon);
 
             EventData = liveUpdateEvent;
@@ -853,7 +853,7 @@ namespace Reddit.Controllers
                 // Event handler to alert the calling app that the object has changed.  --Kris
                 LiveThreadUpdateEventArgs args = new LiveThreadUpdateEventArgs
                 {
-                    OldThread = this, 
+                    OldThread = this,
                     NewThread = newThread
                 };
                 OnThreadUpdated(args);
@@ -882,9 +882,9 @@ namespace Reddit.Controllers
                 // Event handler to alert the calling app that the list has changed.  --Kris
                 LiveThreadContributorsUpdateEventArgs args = new LiveThreadContributorsUpdateEventArgs
                 {
-                    OldContributors = oldList, 
-                    NewContributors = newList, 
-                    Added = added, 
+                    OldContributors = oldList,
+                    NewContributors = newList,
+                    Added = added,
                     Removed = removed
                 };
                 OnContributorsUpdated(args);
@@ -924,7 +924,7 @@ namespace Reddit.Controllers
                 }
             }
 
-            return !(added[0].Data.Children.Count == 0 && removed[0].Data.Children.Count == 0 
+            return !(added[0].Data.Children.Count == 0 && removed[0].Data.Children.Count == 0
                 && added[1].Data.Children.Count == 0 && removed[1].Data.Children.Count == 0);
         }
 
