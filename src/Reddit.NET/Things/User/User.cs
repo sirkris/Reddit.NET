@@ -80,7 +80,7 @@ namespace Reddit.Things
         public bool IsMod { get; set; }
 
         [JsonProperty("suspension_expiration_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime SuspensionExpirationUTC { get; set; }
 
         [JsonProperty("has_verified_email")]
@@ -138,14 +138,15 @@ namespace Reddit.Things
         public int PrefClickgadget { get; set; }
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(LocalTimestampConverter))]
+        [Obsolete("Using this date can lead to unexpected results, please use " + nameof(CreatedUTC) + " instead.")]
         public DateTime Created { get; set; }
 
         [JsonProperty("gold_credits")]
         public int GoldCredits { get; set; }
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("pref_show_twitter")]
@@ -180,7 +181,7 @@ namespace Reddit.Things
             InboxCount = user.InboxCount;
             HasMail = user.HasMail;
             Name = user.Name;
-            Created = user.Created;
+            CreatedUTC = user.Created;
             CommentKarma = user.CommentKarma;
             HasSubscribed = user.HasSubscribed;
         }

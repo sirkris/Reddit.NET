@@ -168,7 +168,7 @@ namespace Reddit.Controllers
             Id = listing.Id;
             Fullname = listing.Name;
             Permalink = listing.Permalink;
-            Created = listing.Created;
+            Created = listing.CreatedUTC;
             Edited = listing.Edited;
             Score = listing.Score;
             UpVotes = listing.Ups;
@@ -234,7 +234,7 @@ namespace Reddit.Controllers
         /// <param name="removed"></param>
         /// <param name="spam"></param>
         /// <returns></returns>
-        public Comment Comment(string body, string bodyHtml = null, string author = null, 
+        public Comment Comment(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
             List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
@@ -1065,7 +1065,7 @@ namespace Reddit.Controllers
             while (!Terminate
                 && Monitoring.Get(key).Contains(Id))
             {
-                if (MonitoringExpiration.HasValue 
+                if (MonitoringExpiration.HasValue
                     && DateTime.Now > MonitoringExpiration.Value)
                 {
                     MonitorModel.RemoveMonitoringKey(key, subKey, ref Monitoring);

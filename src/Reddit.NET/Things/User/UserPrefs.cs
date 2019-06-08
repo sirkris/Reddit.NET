@@ -8,7 +8,7 @@ namespace Reddit.Things
     public class UserPrefs
     {
         [JsonProperty("date")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime Date { get; set; }
 
         [JsonProperty("name")]

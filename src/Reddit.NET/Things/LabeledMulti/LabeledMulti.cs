@@ -21,7 +21,8 @@ namespace Reddit.Things
         public string DescriptionHTML { get; set; }
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(LocalTimestampConverter))]
+        [Obsolete("Using this date can lead to unexpected results, please use " + nameof(CreatedUTC) + " instead.")]
         public DateTime Created { get; set; }
 
         [JsonProperty("copied_from")]
@@ -34,7 +35,7 @@ namespace Reddit.Things
         public List<UserSubredditContainer> Subreddits { get; set; }
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("visibility")]

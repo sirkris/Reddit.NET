@@ -11,7 +11,7 @@ namespace Reddit.Things
         public string Name { get; set; }
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("link_karma")]
