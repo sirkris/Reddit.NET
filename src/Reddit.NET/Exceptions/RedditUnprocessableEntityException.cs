@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Reddit.Exceptions
 {
+    [Serializable]
     public class RedditUnprocessableEntityException : Exception
     {
         public RedditUnprocessableEntityException(string message, Exception inner)
@@ -11,5 +13,8 @@ namespace Reddit.Exceptions
             : base(message) { }
 
         public RedditUnprocessableEntityException() { }
+
+        protected RedditUnprocessableEntityException(SerializationInfo serializationInfo, StreamingContext context)
+            : base(serializationInfo, context) { }
     }
 }
