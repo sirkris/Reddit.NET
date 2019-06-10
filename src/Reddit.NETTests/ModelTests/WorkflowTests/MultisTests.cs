@@ -77,45 +77,12 @@ namespace RedditTests.ModelTests.WorkflowTests
             }
         }
 
-        private LabeledMultiContainer Rename(string multiPath, string multiPathRenamed, string multiDisplayName, bool retry = true)
-        {
-            try
-            {
-                LabeledMultiContainer labeledMultiContainer = reddit.Models.Multis.Rename(new MultiURLInput(multiDisplayName, multiPath, multiPathRenamed));
-
-                return labeledMultiContainer;
-            }
-            catch (RedditConflictException ex)
-            {
-                try
-                {
-                    CheckBadRequest("MULTI_EXISTS", "Target multireddit cannot exist when the test begins.", ex);
-
-                    throw ex;
-                }
-                catch (AssertInconclusiveException aex)
-                {
-                    if (retry)
-                    {
-                        reddit.Models.Multis.Delete(multiPathRenamed, false);
-
-                        return Rename(multiPath, multiPathRenamed, multiDisplayName, false);
-                    }
-                    else
-                    {
-                        throw aex;
-                    }
-                }
-            }
-        }
-
         [TestMethod]
         public void CreateAndDestroy()
         {
             User me = reddit.Models.Account.Me();
             string multiPath = "/user/" + me.Name + "/m/my_test_multi/";
             string multiPathCopy = "/user/" + me.Name + "/m/my_test_multi_copy/";
-            string multiPathCopyRenamed = "/user/" + me.Name + "/m/my_test_multi_renamed/";
             string multiDisplayName = "My Test Multi";
             string multiDescription = "Test multi created by [Reddit.NET](https://github.com/sirkris/Reddit.NET).";
 
@@ -123,42 +90,36 @@ namespace RedditTests.ModelTests.WorkflowTests
 
             Validate(labeledMultiContainer);
             Validate(labeledMultiContainer.Data);
-            Assert.AreEqual(multiPath, labeledMultiContainer.Data.Path);
-            Assert.AreEqual(multiDescription, labeledMultiContainer.Data.DescriptionMd);
+            Assert.AreEqual(multiPath, labeledMultiContainer.Data.Path, true);
+            Assert.AreEqual(multiDescription, labeledMultiContainer.Data.DescriptionMd, true);
 
             LabeledMultiContainer labeledMultiContainerCopy = Copy(multiPath, multiPathCopy, multiDisplayName);
 
             Validate(labeledMultiContainerCopy);
             Validate(labeledMultiContainerCopy.Data);
-            Assert.AreEqual(multiPathCopy, labeledMultiContainerCopy.Data.Path);
+            Assert.AreEqual(multiPathCopy, labeledMultiContainerCopy.Data.Path, true);
 
-            labeledMultiContainerCopy = Rename(multiPathCopy, multiPathCopyRenamed, multiDisplayName);
-
-            Validate(labeledMultiContainerCopy);
-            Validate(labeledMultiContainerCopy.Data);
-            Assert.AreEqual(multiPathCopyRenamed, labeledMultiContainerCopy.Data.Path);
-
-            labeledMultiContainerCopy = reddit.Models.Multis.Update(multiPathCopyRenamed,
+            labeledMultiContainerCopy = reddit.Models.Multis.Update(multiPathCopy,
                 new LabeledMultiSubmit(multiDescription, multiDisplayName, "", "",
                         new List<string> { testData["Subreddit"], "RedditDotNETBot" }, "public", "fresh"), false);
 
             Validate(labeledMultiContainerCopy);
             Validate(labeledMultiContainerCopy.Data);
-            Assert.AreEqual(multiPathCopyRenamed, labeledMultiContainerCopy.Data.Path);
+            Assert.AreEqual(multiPathCopy, labeledMultiContainerCopy.Data.Path, true);
 
-            LabeledMultiDescriptionContainer labeledMultiDescriptionContainer = reddit.Models.Multis.UpdateDescription(multiPathCopyRenamed, multiDescription);
+            LabeledMultiDescriptionContainer labeledMultiDescriptionContainer = reddit.Models.Multis.UpdateDescription(multiPathCopy, multiDescription);
 
             Validate(labeledMultiDescriptionContainer);
-            Assert.AreEqual(multiDescription, labeledMultiDescriptionContainer.Data.BodyMd);
+            Assert.AreEqual(multiDescription, labeledMultiDescriptionContainer.Data.BodyMd, true);
 
-            NamedObj namedObj = reddit.Models.Multis.AddMultiSub(multiPathCopyRenamed, "WayOfTheBern");
+            NamedObj namedObj = reddit.Models.Multis.AddMultiSub(multiPathCopy, "WayOfTheBern");
 
             Validate(namedObj);
-            Assert.AreEqual("WayOfTheBern", namedObj.Name);
+            Assert.AreEqual("WayOfTheBern", namedObj.Name, true);
 
-            reddit.Models.Multis.DeleteMultiSub(multiPathCopyRenamed, "WayOfTheBern");
+            reddit.Models.Multis.DeleteMultiSub(multiPathCopy, "WayOfTheBern");
 
-            reddit.Models.Multis.Delete(multiPathCopyRenamed, false);
+            reddit.Models.Multis.Delete(multiPathCopy, false);
             reddit.Models.Multis.Delete(multiPath, false);
         }
     }
