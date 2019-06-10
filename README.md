@@ -27,7 +27,7 @@ Created by Kris Craig.
 
 Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
 
-Currently, the library supports 172 of the 205 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 335 of the tests are currently passing. All of the most commonly used endpoints are supported.
+Currently, the library supports 171 of the 204 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 335 of the tests are currently passing. All of the most commonly used endpoints are supported.
 
 Reddit.NET is FOSS (MIT license) and was written in C#. It can be found on Github at:  https://github.com/sirkris/Reddit.NET
 
@@ -674,8 +674,6 @@ See:  [Running the Tests](#redditnettests)
 
 `GET /api/multi/mine`
 
-`POST /api/multi/rename`
-
 `GET /api/multi/user/<username>`
 
 `DELETE /api/multi/<multipath>`
@@ -806,7 +804,7 @@ See:  [Running the Tests](#redditnettests)
 `GET [/r/<subreddit>]/wiki/<page>`
 
 
-Total:  172 / 205 (84%)
+Total:  171 / 204 (84%)
 
 There are 33 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
 
