@@ -18,4 +18,3 @@ namespace Reddit.Exceptions
             : base(serializationInfo, context) { }
     }
 }
-}
