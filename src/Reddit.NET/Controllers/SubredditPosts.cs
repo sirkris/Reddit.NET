@@ -222,24 +222,25 @@ namespace Reddit.Controllers
         }
         internal List<Post> modQueueEdited;
 
-        private DateTime? BestLastUpdated;
-        private DateTime? HotLastUpdated;
-        private DateTime? NewLastUpdated;
-        private DateTime? RisingLastUpdated;
-        private DateTime? TopLastUpdated;
-        private DateTime? ControversialLastUpdated;
+        private DateTime? BestLastUpdated { get; set; }
+        private DateTime? HotLastUpdated { get; set; }
+        private DateTime? NewLastUpdated { get; set; }
+        private DateTime? RisingLastUpdated { get; set; }
+        private DateTime? TopLastUpdated { get; set; }
+        private DateTime? ControversialLastUpdated { get; set; }
 
-        private DateTime? ModQueueLastUpdated;
-        private DateTime? ModQueueReportsLastUpdated;
-        private DateTime? ModQueueSpamLastUpdated;
-        private DateTime? ModQueueUnmoderatedLastUpdated;
-        private DateTime? ModQueueEditedLastUpdated;
+        private DateTime? ModQueueLastUpdated { get; set; }
+        private DateTime? ModQueueReportsLastUpdated { get; set; }
+        private DateTime? ModQueueSpamLastUpdated { get; set; }
+        private DateTime? ModQueueUnmoderatedLastUpdated { get; set; }
+        private DateTime? ModQueueEditedLastUpdated { get; set; }
 
-        private readonly string Subreddit;
+        private string Subreddit { get; set; }
+
         private Dispatch Dispatch;
 
-        private string TopT = "all";
-        private string ControversialT = "all";
+        private string TopT { get; set; } = "all";
+        private string ControversialT { get; set; } = "all";
 
         /// <summary>
         /// Create a new instance of the subreddit posts controller.

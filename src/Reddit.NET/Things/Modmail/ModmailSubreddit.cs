@@ -8,25 +8,25 @@ namespace Reddit.Things
     public class ModmailSubreddit
     {
         [JsonProperty("display_name")]
-        public string DisplayName;
+        public string DisplayName { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("lastUpdated")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime LastUpdated;
+        public DateTime LastUpdated { get; set; }
 
         [JsonProperty("keyColor")]
-        public string KeyColor;
+        public string KeyColor { get; set; }
 
         [JsonProperty("subscribers")]
-        public int Subscribers;
+        public int Subscribers { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("icon")]
-        public string Icon;
+        public string Icon { get; set; }
     }
 }

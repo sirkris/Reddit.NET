@@ -7,9 +7,9 @@ namespace Reddit.Things
     public class WidgetButton3Data
     {
         [JsonProperty("height")]
-        public int Height;
+        public int Height { get; set; }
 
         [JsonProperty("hoverState")]
-        public WidgetHoverState HoverState;
+        public WidgetHoverState HoverState { get; set; }
     }
 }

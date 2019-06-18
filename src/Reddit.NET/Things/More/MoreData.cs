@@ -7,21 +7,21 @@ namespace Reddit.Things
     public class MoreData
     {
         [JsonProperty("count")]
-        public int Count;
+        public int Count { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("parent_id")]
-        public string ParentId;
+        public string ParentId { get; set; }
 
         [JsonProperty("depth")]
-        public int Depth;
+        public int Depth { get; set; }
 
         [JsonProperty("children")]
-        public object Children;  // TODO - Determine type.  --Kris
+        public object Children { get; set; }  // TODO - Determine type.  --Kris
     }
 }

@@ -27,7 +27,7 @@ namespace Reddit.Controllers
             }
         }
         private List<FlairListResult> flairList;
-        private DateTime? FlairListLastUpdated;
+        private DateTime? FlairListLastUpdated { get; set; }
 
         /// <summary>
         /// Fullname of the next page of flair list results.
@@ -63,7 +63,7 @@ namespace Reddit.Controllers
             }
         }
         private List<Flair> linkFlair;
-        private DateTime? LinkFlairLastUpdated;
+        private DateTime? LinkFlairLastUpdated { get; set; }
 
         /// <summary>
         /// List of link flairs.
@@ -81,7 +81,7 @@ namespace Reddit.Controllers
             }
         }
         private List<FlairV2> linkFlairV2;
-        private DateTime? LinkFlairLastUpdatedV2;
+        private DateTime? LinkFlairLastUpdatedV2 { get; set; }
 
         /// <summary>
         /// List of user flairs.
@@ -99,7 +99,7 @@ namespace Reddit.Controllers
             }
         }
         private List<Flair> userFlair;
-        private DateTime? UserFlairLastUpdated;
+        private DateTime? UserFlairLastUpdated { get; set; }
 
         /// <summary>
         /// List of user flairs.
@@ -117,9 +117,10 @@ namespace Reddit.Controllers
             }
         }
         private List<FlairV2> userFlairV2;
-        private DateTime? UserFlairLastUpdatedV2;
-        
-        private readonly string Subreddit;
+        private DateTime? UserFlairLastUpdatedV2 { get; set; }
+
+        private string Subreddit { get; set; }
+
         private readonly Dispatch Dispatch;
 
         /// <summary>

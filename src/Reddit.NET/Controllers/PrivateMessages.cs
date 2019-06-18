@@ -78,9 +78,9 @@ namespace Reddit.Controllers
         }
         internal List<Message> sent;
 
-        private DateTime? InboxLastUpdated;
-        private DateTime? UnreadLastUpdated;
-        private DateTime? SentLastUpdated;
+        private DateTime? InboxLastUpdated { get; set; }
+        private DateTime? UnreadLastUpdated { get; set; }
+        private DateTime? SentLastUpdated { get; set; }
 
         private Dispatch Dispatch;
 

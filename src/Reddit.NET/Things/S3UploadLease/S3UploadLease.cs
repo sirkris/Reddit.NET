@@ -8,9 +8,9 @@ namespace Reddit.Things
     public class S3UploadLease
     {
         [JsonProperty("action")]
-        public string Action;
+        public string Action { get; set; }
 
         [JsonProperty("fields")]
-        public List<S3UploadLeaseField> Fields;
+        public List<S3UploadLeaseField> Fields { get; set; }
     }
 }

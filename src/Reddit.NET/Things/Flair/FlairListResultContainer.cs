@@ -8,12 +8,12 @@ namespace Reddit.Things
     public class FlairListResultContainer
     {
         [JsonProperty("prev")]
-        public string Prev;
+        public string Prev { get; set; }
 
         [JsonProperty("users")]
-        public List<FlairListResult> Users;
+        public List<FlairListResult> Users { get; set; }
 
         [JsonProperty("next")]
-        public string Next;
+        public string Next { get; set; }
     }
 }

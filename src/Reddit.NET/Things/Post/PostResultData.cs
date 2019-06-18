@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class PostResultData
     {
         [JsonProperty("things")]
-        public List<PostChild> Things;
+        public List<PostChild> Things { get; set; }
     }
 }

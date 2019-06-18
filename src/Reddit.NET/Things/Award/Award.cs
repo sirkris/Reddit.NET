@@ -7,24 +7,24 @@ namespace Reddit.Things
     public class Award
     {
         [JsonProperty("icon_70")]
-        public string Icon70;
+        public string Icon70 { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("url")]
-        public string URL;
+        public string URL { get; set; }
 
         [JsonProperty("icon_40")]
-        public string Icon40;
+        public string Icon40 { get; set; }
 
         [JsonProperty("award_id")]
-        public string AwardId;
+        public string AwardId { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("description")]
-        public string Description;
+        public string Description { get; set; }
     }
 }

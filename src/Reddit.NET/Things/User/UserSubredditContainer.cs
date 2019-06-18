@@ -7,10 +7,10 @@ namespace Reddit.Things
     public class UserSubredditContainer
     {
         [JsonProperty("data")]
-        public UserSubreddit Data;
+        public UserSubreddit Data { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         public UserSubredditContainer(UserSubreddit data, string name)
         {

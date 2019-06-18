@@ -9,22 +9,22 @@ namespace Reddit.Controllers.Structures
     public class Moderator
     {
         [JsonProperty("author_flair_css_class")]
-        public string AuthorFlairCSSClass;
+        public string AuthorFlairCSSClass { get; set; }
 
         [JsonProperty("author_flair_text")]
-        public string AuthorFlairText;
+        public string AuthorFlairText { get; set; }
 
         [JsonProperty("mod_permissions")]
-        public List<string> ModPermissions;
+        public List<string> ModPermissions { get; set; }
 
         [JsonProperty("date")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Date;
+        public DateTime Date { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
     }
 }

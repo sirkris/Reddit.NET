@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class TrophyList : BaseContainer
     {
         [JsonProperty("data")]
-        public TrophiesData Data;
+        public TrophiesData Data { get; set; }
     }
 }

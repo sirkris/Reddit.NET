@@ -6,12 +6,12 @@ namespace Reddit.Things
     [Serializable]
     public class MultiSearchResults
     {
-        public List<Post> Posts;
-        public List<Subreddit> Subreddits;
-        public List<User> Users;
+        public List<Post> Posts { get; set; }
+        public List<Subreddit> Subreddits { get; set; }
+        public List<User> Users { get; set; }
 
-        public string First;
-        public string Last;
+        public string First { get; set; }
+        public string Last { get; set; }
 
         public MultiSearchResults(List<Post> posts = null, List<Subreddit> subreddits = null, List<User> users = null, 
             string first = null, string last = null)

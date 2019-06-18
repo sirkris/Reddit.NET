@@ -9,34 +9,34 @@ namespace Reddit.Things
     public class ModmailUser
     {
         [JsonProperty("recentComments")]
-        public object RecentComments;  // TODO - Determine type.  --Kris
+        public object RecentComments { get; set; }  // TODO - Determine type.  --Kris
 
         [JsonProperty("muteStatus")]
-        public MuteStatus MuteStatus;
+        public MuteStatus MuteStatus { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("created")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Created;
+        public DateTime Created { get; set; }
 
         [JsonProperty("banStatus")]
-        public BanStatus BanStatus;
+        public BanStatus BanStatus { get; set; }
 
         [JsonProperty("isSuspended")]
-        public bool IsSuspended;
+        public bool IsSuspended { get; set; }
 
         [JsonProperty("isShadowBanned")]
-        public bool IsShadowBanned;
+        public bool IsShadowBanned { get; set; }
 
         [JsonProperty("recentPosts")]
-        public object RecentPosts;  // TODO - Determine type.  --Kris
+        public object RecentPosts { get; set; }  // TODO - Determine type.  --Kris
 
         [JsonProperty("recentConvos")]
-        public Dictionary<string, Convo> RecentConvos;
+        public Dictionary<string, Convo> RecentConvos { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
     }
 }

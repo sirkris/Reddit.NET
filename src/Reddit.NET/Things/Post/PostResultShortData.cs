@@ -7,15 +7,15 @@ namespace Reddit.Things
     public class PostResultShortData
     {
         [JsonProperty("url")]
-        public string URL;
+        public string URL { get; set; }
 
         [JsonProperty("drafts_count")]
-        public int DraftsCount;
+        public int DraftsCount { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
     }
 }

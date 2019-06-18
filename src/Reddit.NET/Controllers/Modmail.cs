@@ -36,7 +36,7 @@ namespace Reddit.Controllers
             }
         }
         private User me;
-        private DateTime? MeLastUpdated;
+        private DateTime? MeLastUpdated { get; set; }
 
         /// <summary>
         /// Recent modmail conversations.
@@ -54,7 +54,7 @@ namespace Reddit.Controllers
             }
         }
         private ConversationContainer recent;
-        private DateTime? RecentLastUpdated;
+        private DateTime? RecentLastUpdated { get; set; }
 
         /// <summary>
         /// Mod modmail conversations.
@@ -72,7 +72,7 @@ namespace Reddit.Controllers
             }
         }
         private ConversationContainer mod;
-        private DateTime? ModLastUpdated;
+        private DateTime? ModLastUpdated { get; set; }
 
         /// <summary>
         /// User modmail conversations.
@@ -90,7 +90,7 @@ namespace Reddit.Controllers
             }
         }
         private ConversationContainer user;
-        private DateTime? UserLastUpdated;
+        private DateTime? UserLastUpdated { get; set; }
 
         /// <summary>
         /// Unread modmail conversations.
@@ -108,7 +108,7 @@ namespace Reddit.Controllers
             }
         }
         private ConversationContainer unread;
-        private DateTime? UnreadLastUpdated;
+        private DateTime? UnreadLastUpdated { get; set; }
 
         /// <summary>
         /// Unread messages count.
@@ -126,7 +126,7 @@ namespace Reddit.Controllers
             }
         }
         private ModmailUnreadCount unreadCount;
-        private DateTime? UnreadCountLastUpdated;
+        private DateTime? UnreadCountLastUpdated { get; set; }
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;

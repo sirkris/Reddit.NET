@@ -7,27 +7,27 @@ namespace Reddit.Things
     public class ConversationAuthor
     {
         [JsonProperty("isMod")]
-        public bool IsMod;
+        public bool IsMod { get; set; }
 
         [JsonProperty("isAdmin")]
-        public bool IsAdmin;
+        public bool IsAdmin { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("isOp")]
-        public bool IsOp;
+        public bool IsOp { get; set; }
 
         [JsonProperty("isParticipant")]
-        public bool IsParticipant;
+        public bool IsParticipant { get; set; }
 
         [JsonProperty("isHidden")]
-        public bool IsHidden;
+        public bool IsHidden { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("isDeleted")]
-        public bool IsDeleted;
+        public bool IsDeleted { get; set; }
     }
 }

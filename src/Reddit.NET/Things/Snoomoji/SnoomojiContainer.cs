@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class SnoomojiContainer
     {
         [JsonProperty("snoomojis")]
-        public Dictionary<string, Snoomoji> Snoomojis;
+        public Dictionary<string, Snoomoji> Snoomojis { get; set; }
     }
 }

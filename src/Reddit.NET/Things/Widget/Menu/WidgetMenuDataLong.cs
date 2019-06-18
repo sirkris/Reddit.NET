@@ -8,9 +8,9 @@ namespace Reddit.Things
     public class WidgetMenuDataLong
     {
         [JsonProperty("children")]
-        public List<WidgetMenuData> Children;
+        public List<WidgetMenuData> Children { get; set; }
 
         [JsonProperty("text")]
-        public string Text;
+        public string Text { get; set; }
     }
 }

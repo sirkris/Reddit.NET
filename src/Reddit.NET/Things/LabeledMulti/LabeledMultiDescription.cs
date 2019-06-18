@@ -7,9 +7,9 @@ namespace Reddit.Things
     public class LabeledMultiDescription
     {
         [JsonProperty("body_html")]
-        public string BodyHTML;
+        public string BodyHTML { get; set; }
 
         [JsonProperty("body_md")]
-        public string BodyMd;
+        public string BodyMd { get; set; }
     }
 }

@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class SubredditRecommendations
     {
         [JsonProperty("sr_name")]
-        public string Name;
+        public string Name { get; set; }
     }
 }

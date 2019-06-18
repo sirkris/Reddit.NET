@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class WidgetLayoutOrder
     {
         [JsonProperty("order")]
-        public List<string> Order;
+        public List<string> Order { get; set; }
     }
 }

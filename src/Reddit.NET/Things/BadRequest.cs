@@ -7,15 +7,15 @@ namespace Reddit.Things
     public class BadRequest
     {
         [JsonProperty("fields")]
-        public object Fields;  // TODO - Determine type.  --Kris
+        public object Fields { get; set; }  // TODO - Determine type.  --Kris
 
         [JsonProperty("explanation")]
-        public string Explanation;
+        public string Explanation { get; set; }
 
         [JsonProperty("message")]
-        public string Message;
+        public string Message { get; set; }
 
         [JsonProperty("reason")]
-        public string Reason;
+        public string Reason { get; set; }
     }
 }

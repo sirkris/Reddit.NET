@@ -12,323 +12,323 @@ namespace Reddit.Things
     {
         [JsonProperty("approved_at_utc")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime ApprovedAtUTC;
+        public DateTime ApprovedAtUTC { get; set; }
 
         [JsonProperty("subreddit")]
-        public string Subreddit;
+        public string Subreddit { get; set; }
 
         [JsonProperty("selftext")]
-        public string SelfText;
+        public string SelfText { get; set; }
 
         [JsonProperty("user_reports")]
-        public JArray UserReports;
+        public JArray UserReports { get; set; }
 
         [JsonProperty("saved")]
-        public bool Saved;
+        public bool Saved { get; set; }
 
         [JsonProperty("mod_reason_title")]
-        public string ModReasonTitle;
+        public string ModReasonTitle { get; set; }
 
         // TODO - Assuming this is supposed to be boolean.  Not sure what else the int value could be for (it's either gilded or it's not, right?).  --Kris
         [JsonProperty("gilded")]
         [JsonConverter(typeof(IntBoolConvert))]
-        public bool Gilded;
+        public bool Gilded { get; set; }
 
         [JsonProperty("clicked")]
-        public bool Clicked;
+        public bool Clicked { get; set; }
 
         [JsonProperty("title")]
-        public string Title;
+        public string Title { get; set; }
 
         // TODO - Only had an empty example so not sure if the structure is right.  --Kris
         [JsonProperty("link_flair_richtext")]
-        public object PublicFlairRichtext;
+        public object PublicFlairRichtext { get; set; }
 
         [JsonProperty("subreddit_name_prefixed")]
-        public string SubredditNamePrefixed;
+        public string SubredditNamePrefixed { get; set; }
 
         [JsonProperty("hidden")]
-        public bool Hidden;
+        public bool Hidden { get; set; }
 
         // TODO - No idea what this is.  --Kris
         [JsonProperty("pwls")]
-        public string Pwls;
+        public string Pwls { get; set; }
 
         [JsonProperty("link_flair_css_class")]
-        public string LinkFlairCSSClass;
+        public string LinkFlairCSSClass { get; set; }
 
         [JsonProperty("downs")]
-        public int Downs;
+        public int Downs { get; set; }
 
         [JsonProperty("thumbnail_height")]
-        public int? ThumbnailHeight;
+        public int? ThumbnailHeight { get; set; }
 
         [JsonProperty("parent_whitelist_status")]
-        public string ParentWhitelistStatus;
+        public string ParentWhitelistStatus { get; set; }
 
         [JsonProperty("hide_score")]
-        public bool HideScore;
+        public bool HideScore { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("quarantine")]
-        public bool Quarantine;
+        public bool Quarantine { get; set; }
 
         [JsonProperty("link_flair_text_color")]
-        public string LinkFlairTextColor;
+        public string LinkFlairTextColor { get; set; }
 
         [JsonProperty("upvote_ratio")]
-        public double UpvoteRatio;
+        public double UpvoteRatio { get; set; }
 
         [JsonProperty("author_flair_background_color")]
-        public string AuthorFlairBackgroundColor;
+        public string AuthorFlairBackgroundColor { get; set; }
 
         [JsonProperty("subreddit_type")]
-        public string SubredditType;
+        public string SubredditType { get; set; }
 
         [JsonProperty("ups")]
-        public int Ups;
+        public int Ups { get; set; }
 
         [JsonProperty("domain")]
-        public string Domain;
+        public string Domain { get; set; }
 
         // TODO - No idea what this does.  It's always empty when I see it.  --Kris
         [JsonProperty("media_embed")]
-        public object MediaEmbed;
+        public object MediaEmbed { get; set; }
 
         [JsonProperty("thumbnail_width")]
-        public int? ThumbnailWidth;
+        public int? ThumbnailWidth { get; set; }
 
         [JsonProperty("author_flair_template_id")]
-        public string AuthorFlairTemplateId;
+        public string AuthorFlairTemplateId { get; set; }
 
         [JsonProperty("is_original_content")]
-        public bool IsOriginalContent;
+        public bool IsOriginalContent { get; set; }
 
         [JsonProperty("author_fullname")]
-        public string AuthorFullname;
+        public string AuthorFullname { get; set; }
 
         [JsonProperty("secure_media")]
-        public object SecureMedia;
+        public object SecureMedia { get; set; }
 
         [JsonProperty("is_reddit_media_domain")]
-        public bool IsRedditMediaDomain;
+        public bool IsRedditMediaDomain { get; set; }
 
         [JsonProperty("is_meta")]
-        public bool IsMeta;
+        public bool IsMeta { get; set; }
 
         [JsonProperty("category")]
-        public string category;
+        public string category { get; set; }
 
         [JsonProperty("num_comments")]
-        public int NumComments;
+        public int NumComments { get; set; }
 
         // TODO - Same as MediaEmbed.  Not sure what this is supposed to be.  --Kris
         [JsonProperty("secure_media_embed")]
-        public object SecureMediaEmbed;
+        public object SecureMediaEmbed { get; set; }
 
         [JsonProperty("link_flair_text")]
-        public string LinkFlairText;
+        public string LinkFlairText { get; set; }
 
         [JsonProperty("can_mod_post")]
-        public bool CanModPost;
+        public bool CanModPost { get; set; }
 
         [JsonProperty("score")]
-        public int Score;
+        public int Score { get; set; }
 
         [JsonProperty("approved_by")]
-        public string ApprovedBy;
+        public string ApprovedBy { get; set; }
 
         [JsonProperty("ignore_reports")]
-        public bool IgnoreReports;
+        public bool IgnoreReports { get; set; }
 
         [JsonProperty("thumbnail")]
-        public string Thumbnail;
+        public string Thumbnail { get; set; }
 
         [JsonProperty("edited")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Edited;
+        public DateTime Edited { get; set; }
 
         [JsonProperty("author_flair_css_class")]
-        public string AuthorFlairCSSClass;
+        public string AuthorFlairCSSClass { get; set; }
 
         [JsonProperty("previous_visits")]
         //[JsonConverter(typeof(List<TimestampConvert>))]
-        public object PreviousVisits;
+        public object PreviousVisits { get; set; }
 
         // TODO - Is this a list or a string or what?  --Kris
         [JsonProperty("author_flair_richtext")]
-        public List<object> AuthorFlairRichtext;
+        public List<object> AuthorFlairRichtext { get; set; }
 
         [JsonProperty("gildings")]
-        public Dictionary<string, int> Gildings;
+        public Dictionary<string, int> Gildings { get; set; }
 
         [JsonProperty("post_hint")]
-        public string PostHint;
+        public string PostHint { get; set; }
 
         [JsonProperty("content_categories")]
-        public object ContentCategories;
+        public object ContentCategories { get; set; }
 
         [JsonProperty("is_self")]
-        public bool IsSelf;
+        public bool IsSelf { get; set; }
 
         [JsonProperty("mod_note")]
-        public string ModNote;
+        public string ModNote { get; set; }
 
         [JsonProperty("created")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Created;
+        public DateTime Created { get; set; }
 
         [JsonProperty("link_flair_type")]
-        public string LinkFlairType;
+        public string LinkFlairType { get; set; }
 
         // TODO - No idea what this is.  --Kris
         [JsonProperty("wls")]
-        public string Wls;
+        public string Wls { get; set; }
 
         [JsonProperty("banned_by")]
-        public string BannedBy;
+        public string BannedBy { get; set; }
 
         [JsonProperty("author_flair_type")]
-        public string AuthorFlairType;
+        public string AuthorFlairType { get; set; }
 
         [JsonProperty("contest_mode")]
-        public bool ContestMode;
+        public bool ContestMode { get; set; }
 
         [JsonProperty("selftext_html")]
-        public string SelfTextHTML;
+        public string SelfTextHTML { get; set; }
 
         [JsonProperty("likes")]
-        public bool? Likes;
+        public bool? Likes { get; set; }
 
         [JsonProperty("suggested_sort")]
-        public string SuggestedSort;
+        public string SuggestedSort { get; set; }
 
         [JsonProperty("banned_at_utc")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime BannedAtUTC;
+        public DateTime BannedAtUTC { get; set; }
 
         [JsonProperty("view_count")]
-        public int? ViewCount;
+        public int? ViewCount { get; set; }
 
         [JsonProperty("archived")]
-        public bool Archived;
+        public bool Archived { get; set; }
 
         [JsonProperty("no_follow")]
-        public bool NoFollow;
+        public bool NoFollow { get; set; }
 
         [JsonProperty("spam")]
-        public bool Spam;
+        public bool Spam { get; set; }
 
         [JsonProperty("is_crosspostable")]
-        public bool IsCrosspostable;
+        public bool IsCrosspostable { get; set; }
 
         [JsonProperty("pinned")]
-        public bool Pinned;
+        public bool Pinned { get; set; }
 
         [JsonProperty("over_18")]
-        public bool Over18;
+        public bool Over18 { get; set; }
 
         [JsonProperty("preview")]
-        public JObject Preview;
+        public JObject Preview { get; set; }
 
         [JsonProperty("media_only")]
-        public bool MediaOnly;
+        public bool MediaOnly { get; set; }
 
         [JsonProperty("link_flair_template_id")]
-        public string LinkFlairTemplateId;
+        public string LinkFlairTemplateId { get; set; }
 
         [JsonProperty("can_gild")]
-        public bool CanGild;
+        public bool CanGild { get; set; }
 
         [JsonProperty("removed")]
-        public bool Removed;
+        public bool Removed { get; set; }
 
         [JsonProperty("spoiler")]
-        public bool Spoiler;
+        public bool Spoiler { get; set; }
 
         [JsonProperty("locked")]
-        public bool Locked;
+        public bool Locked { get; set; }
 
         [JsonProperty("author_flair_text")]
-        public string AuthorFlairText;
+        public string AuthorFlairText { get; set; }
 
         [JsonProperty("rte_mode")]
-        public string RteMode;
+        public string RteMode { get; set; }
 
         [JsonProperty("visited")]
-        public bool Visited;
+        public bool Visited { get; set; }
 
         [JsonProperty("num_reports")]
-        public int? NumReports;
+        public int? NumReports { get; set; }
 
         [JsonProperty("distinguished")]
-        public string Distinguished;
+        public string Distinguished { get; set; }
 
         [JsonProperty("subreddit_id")]
-        public string SubredditId;
+        public string SubredditId { get; set; }
 
         [JsonProperty("mod_reason_by")]
-        public string ModReasonBy;
+        public string ModReasonBy { get; set; }
 
         [JsonProperty("removal_reason")]
-        public string RemovalReason;
+        public string RemovalReason { get; set; }
 
         [JsonProperty("link_flair_background_color")]
-        public string LinkFlairBackgroundColor;
+        public string LinkFlairBackgroundColor { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("report_reasons")]
-        public List<string> ReportReasons;
+        public List<string> ReportReasons { get; set; }
 
         [JsonProperty("author")]
-        public string Author;
+        public string Author { get; set; }
 
         [JsonProperty("num_crossposts")]
-        public int NumCrossposts;
+        public int NumCrossposts { get; set; }
 
         [JsonProperty("media")]
-        public object Media;
+        public object Media { get; set; }
 
         [JsonProperty("send_replies")]
-        public bool SendReplies;
+        public bool SendReplies { get; set; }
 
         [JsonProperty("approved")]
-        public bool Approved;
+        public bool Approved { get; set; }
 
         [JsonProperty("author_flair_text_color")]
-        public string AuthorFlairTextColor;
+        public string AuthorFlairTextColor { get; set; }
 
         [JsonProperty("permalink")]
-        public string Permalink;
+        public string Permalink { get; set; }
 
         [JsonProperty("whitelist_status")]
-        public string WhitelistStatus;
+        public string WhitelistStatus { get; set; }
 
         [JsonProperty("stickied")]
-        public bool Stickied;
+        public bool Stickied { get; set; }
 
         [JsonProperty("url")]
-        public string URL;
+        public string URL { get; set; }
 
         [JsonProperty("subreddit_subscribers")]
-        public int SubredditSubscribers;
+        public int SubredditSubscribers { get; set; }
 
         [JsonProperty("created_utc")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime CreatedUTC;
+        public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("mod_reports")]
-        public JArray ModReports;
+        public JArray ModReports { get; set; }
 
         [JsonProperty("is_video")]
-        public bool IsVideo;
+        public bool IsVideo { get; set; }
 
         [JsonProperty("sr_detail")]
-        public Subreddit SrDetail;
+        public Subreddit SrDetail { get; set; }
 
         public Post(Controllers.Post post)
         {

@@ -8,36 +8,36 @@ namespace Reddit.Things
     public class LiveUpdate
     {
         [JsonProperty("body")]
-        public string Body;
+        public string Body { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("mobile_embeds")]
-        public object MobileEmbeds;  // TODO - Determine type.  --Kris
+        public object MobileEmbeds { get; set; }  // TODO - Determine type.  --Kris
 
         [JsonProperty("author")]
-        public string Author;
+        public string Author { get; set; }
 
         [JsonProperty("embeds")]
-        public object Embeds;  // TODO - Determine type.  --Kris
+        public object Embeds { get; set; }  // TODO - Determine type.  --Kris
 
         [JsonProperty("created")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Created;
+        public DateTime Created { get; set; }
 
         [JsonProperty("created_utc")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime CreatedUTC;
+        public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("body_html")]
-        public string BodyHTML;
+        public string BodyHTML { get; set; }
 
         [JsonProperty("stricken")]
-        public bool Stricken;
+        public bool Stricken { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         public string Fullname => "LiveUpdate_" + Id;
     }

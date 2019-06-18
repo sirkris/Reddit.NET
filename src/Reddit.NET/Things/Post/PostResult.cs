@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class PostResult : BaseResult
     {
         [JsonProperty("data")]
-        public PostResultData Data;
+        public PostResultData Data { get; set; }
     }
 }

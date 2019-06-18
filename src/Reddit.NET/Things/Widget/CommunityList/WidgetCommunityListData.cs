@@ -7,24 +7,24 @@ namespace Reddit.Things
     public class WidgetCommunityListData
     {
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("isSubscribed")]
-        public bool IsSubscribed;
+        public bool IsSubscribed { get; set; }
 
         [JsonProperty("iconUrl")]
-        public string IconURL;
+        public string IconURL { get; set; }
 
         [JsonProperty("subscribers")]
-        public int Subscribers;
+        public int Subscribers { get; set; }
 
         [JsonProperty("primaryColor")]
-        public string PrimaryColor;
+        public string PrimaryColor { get; set; }
 
         [JsonProperty("type")]
-        public string Type;
+        public string Type { get; set; }
 
         [JsonProperty("communityIcon")]
-        public string CommunityIcon;
+        public string CommunityIcon { get; set; }
     }
 }

@@ -8,7 +8,7 @@ namespace Reddit.Things
     public class ModmailConversationContainer
     {
         [JsonProperty("conversation")]
-        public Conversation Conversation;
+        public Conversation Conversation { get; set; }
 
         [JsonProperty("conversations")]
         private Conversation Conversations
@@ -24,12 +24,12 @@ namespace Reddit.Things
         }
 
         [JsonProperty("messages")]
-        public Dictionary<string, ConversationMessage> Messages;
+        public Dictionary<string, ConversationMessage> Messages { get; set; }
 
         [JsonProperty("modActions")]
-        public Dictionary<string, ModActionShort> ModActions;
+        public Dictionary<string, ModActionShort> ModActions { get; set; }
 
         [JsonProperty("user")]
-        public object User;  // TODO - Determine specific type.  --Kris
+        public object User { get; set; }  // TODO - Determine specific type.  --Kris
     }
 }

@@ -7,15 +7,15 @@ namespace Reddit.Things
     public abstract class BaseData
     {
         [JsonProperty("modhash")]
-        public string Modhash;
+        public string Modhash { get; set; }
 
         [JsonProperty("dist")]
-        public int? Dist;
+        public int? Dist { get; set; }
 
         [JsonProperty("after")]
-        public string after;
+        public string after { get; set; }
 
         [JsonProperty("before")]
-        public string before;
+        public string before { get; set; }
     }
 }

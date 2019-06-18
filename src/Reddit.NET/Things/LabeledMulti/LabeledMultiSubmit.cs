@@ -8,25 +8,25 @@ namespace Reddit.Things
     public class LabeledMultiSubmit
     {
         [JsonProperty("display_name")]
-        public string DisplayName;
+        public string DisplayName { get; set; }
 
         [JsonProperty("subreddits")]
-        public List<SubredditName> Subreddits;
+        public List<SubredditName> Subreddits { get; set; }
 
         [JsonProperty("visibility")]
-        public string Visibility;
+        public string Visibility { get; set; }
 
         [JsonProperty("icon_name")]
-        public string IconName;
+        public string IconName { get; set; }
 
         [JsonProperty("weighting_scheme")]
-        public string WeightingScheme;
+        public string WeightingScheme { get; set; }
 
         [JsonProperty("key_color")]
-        public string KeyColor;
+        public string KeyColor { get; set; }
 
         [JsonProperty("description_md")]
-        public string DescriptionMd;
+        public string DescriptionMd { get; set; }
 
         /// <summary>
         /// Create a new multireddit submission object.

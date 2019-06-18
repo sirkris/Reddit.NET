@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class LiveThreadCreateResultData
     {
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
     }
 }

@@ -7,15 +7,15 @@ namespace Reddit.Things
     public class WidgetLayout
     {
         [JsonProperty("idCardWidget")]
-        public string IdCardWidget;
+        public string IdCardWidget { get; set; }
 
         [JsonProperty("topbar")]
-        public WidgetLayoutOrder Topbar;
+        public WidgetLayoutOrder Topbar { get; set; }
 
         [JsonProperty("sidebar")]
-        public WidgetLayoutOrder Sidebar;
+        public WidgetLayoutOrder Sidebar { get; set; }
 
         [JsonProperty("moderatorWidget")]
-        public string ModeratorWidget;
+        public string ModeratorWidget { get; set; }
     }
 }

@@ -7,21 +7,21 @@ namespace Reddit.Things
     public class ModmailUnreadCount
     {
         [JsonProperty("highlighted")]
-        public int Highlighted;
+        public int Highlighted { get; set; }
 
         [JsonProperty("notifications")]
-        public int Notifications;
+        public int Notifications { get; set; }
 
         [JsonProperty("archived")]
-        public int Archived;
+        public int Archived { get; set; }
 
         [JsonProperty("new")]
-        public int New;
+        public int New { get; set; }
 
         [JsonProperty("inprogress")]
-        public int InProgress;
+        public int InProgress { get; set; }
 
         [JsonProperty("mod")]
-        public int Mod;
+        public int Mod { get; set; }
     }
 }

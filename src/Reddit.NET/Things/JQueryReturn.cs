@@ -7,9 +7,9 @@ namespace Reddit.Things
     public class JQueryReturn
     {
         [JsonProperty("jquery")]
-        public dynamic JQuery;
+        public dynamic JQuery { get; set; }
 
         [JsonProperty("success")]
-        public bool Success;
+        public bool Success { get; set; }
     }
 }

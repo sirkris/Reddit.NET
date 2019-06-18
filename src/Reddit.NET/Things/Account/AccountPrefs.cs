@@ -8,22 +8,22 @@ namespace Reddit.Things
     public class AccountPrefs : AccountPrefsBase
     {
         [JsonProperty("default_theme_sr")]
-        public string DefaultThemeSr;
+        public string DefaultThemeSr { get; set; }
 
         [JsonProperty("public_server_seconds")]
-        public bool PublicServerSeconds;
+        public bool PublicServerSeconds { get; set; }
 
         [JsonProperty("show_snoovatar")]
-        public bool ShowSnoovatar;
+        public bool ShowSnoovatar { get; set; }
 
         [JsonProperty("force_https")]
-        public bool ForceHTTPS;
+        public bool ForceHTTPS { get; set; }
 
         [JsonProperty("geopopular")]
-        public string Geopopular;
+        public string Geopopular { get; set; }
 
         [JsonProperty("content_langs")]
-        public List<string> ContentLangs;
+        public List<string> ContentLangs { get; set; }
 
         public AccountPrefs(bool threadedMessages, bool hideDowns, bool labelNsfw, bool activityRelevantAds, bool emailMessages, bool profileOptOut, bool videoAutoplay,
             string acceptPms, bool thirdPartySiteDataPersonalizedContent, bool showLinkFlair, bool credditAutoRenew, bool showTrending, bool privateFeeds,

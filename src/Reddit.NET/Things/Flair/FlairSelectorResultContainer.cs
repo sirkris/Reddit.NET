@@ -8,9 +8,9 @@ namespace Reddit.Things
     public class FlairSelectorResultContainer
     {
         [JsonProperty("current")]
-        public FlairSelectorResult Current;
+        public FlairSelectorResult Current { get; set; }
 
         [JsonProperty("choices")]
-        public List<FlairSelectorResult> Choices;
+        public List<FlairSelectorResult> Choices { get; set; }
     }
 }

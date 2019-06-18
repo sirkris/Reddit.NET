@@ -6,8 +6,8 @@ namespace Reddit.Things
     [Serializable]
     public class MoreChildren
     {
-        public List<Comment> Comments;
-        public List<MoreData> MoreData;
+        public List<Comment> Comments { get; set; }
+        public List<MoreData> MoreData { get; set; }
 
         public MoreChildren(List<Comment> comments, List<MoreData> moreData)
         {

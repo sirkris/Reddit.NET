@@ -7,24 +7,24 @@ namespace Reddit.Things
     public class SubredditAutocompleteResult
     {
         [JsonProperty("numSubscribers")]
-        public int NumSubscribers;
+        public int NumSubscribers { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("allowedPostTypes")]
-        public AllowedPostTypes AllowedPostTypes;
+        public AllowedPostTypes AllowedPostTypes { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("primaryColor")]
-        public string PrimaryColor;
+        public string PrimaryColor { get; set; }
 
         [JsonProperty("communityIcon")]
-        public string CommunityIcon;
+        public string CommunityIcon { get; set; }
 
         [JsonProperty("icon")]
-        public string Icon;
+        public string Icon { get; set; }
     }
 }
