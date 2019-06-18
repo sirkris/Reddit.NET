@@ -7,9 +7,9 @@ namespace Reddit.Things
     public class FlairRichtext
     {
         [JsonProperty("e")]
-        public string E;
+        public string E { get; set; }
 
         [JsonProperty("t")]
-        public string T;
+        public string T { get; set; }
     }
 }

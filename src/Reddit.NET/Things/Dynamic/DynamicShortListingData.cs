@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class DynamicShortListingData : BaseData
     {
         [JsonProperty("children")]
-        public List<dynamic> Children;
+        public List<dynamic> Children { get; set; }
     }
 }

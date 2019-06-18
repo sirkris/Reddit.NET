@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class Generic : BaseResult
     {
         [JsonProperty("data")]
-        public dynamic Data;
+        public dynamic Data { get; set; }
     }
 }

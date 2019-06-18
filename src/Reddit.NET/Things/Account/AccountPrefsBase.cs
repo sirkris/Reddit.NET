@@ -7,193 +7,193 @@ namespace Reddit.Things
     public abstract class AccountPrefsBase
     {
         [JsonProperty("threaded_messages")]
-        public bool ThreadedMessages;
+        public bool ThreadedMessages { get; set; }
 
         [JsonProperty("hide_downs")]
-        public bool HideDowns;
+        public bool HideDowns { get; set; }
 
         [JsonProperty("label_nsfw")]
-        public bool LabelNSFW;
+        public bool LabelNSFW { get; set; }
 
         [JsonProperty("activity_relevant_ads")]
-        public bool ActivityRelevantAds;
+        public bool ActivityRelevantAds { get; set; }
 
         [JsonProperty("email_messages")]
-        public bool EmailMessages;
+        public bool EmailMessages { get; set; }
 
         [JsonProperty("profile_opt_out")]
-        public bool ProfileOptOut;
+        public bool ProfileOptOut { get; set; }
 
         [JsonProperty("video_autoplay")]
-        public bool VideoAutoplay;
+        public bool VideoAutoplay { get; set; }
 
         [JsonProperty("accept_pms")]
-        public string AcceptPms;
+        public string AcceptPms { get; set; }
 
         [JsonProperty("third_party_site_data_personalized_content")]
-        public bool ThirdPartySiteDataPersonalizedContent;
+        public bool ThirdPartySiteDataPersonalizedContent { get; set; }
 
         [JsonProperty("show_link_flair")]
-        public bool ShowLinkFlair;
+        public bool ShowLinkFlair { get; set; }
 
         [JsonProperty("creddit_auto_renew")]
-        public bool CredditAutoRenew;
+        public bool CredditAutoRenew { get; set; }
 
         [JsonProperty("show_trending")]
-        public bool ShowTrending;
+        public bool ShowTrending { get; set; }
 
         [JsonProperty("private_feeds")]
-        public bool PrivateFeeds;
+        public bool PrivateFeeds { get; set; }
 
         [JsonProperty("monitor_mentions")]
-        public bool MonitorMentions;
+        public bool MonitorMentions { get; set; }
 
         [JsonProperty("research")]
-        public bool Research;
+        public bool Research { get; set; }
 
         [JsonProperty("ignore_suggested_sort")]
-        public bool IgnoreSuggestedSort;
+        public bool IgnoreSuggestedSort { get; set; }
 
         [JsonProperty("email_digests")]
-        public bool EmailDigests;
+        public bool EmailDigests { get; set; }
 
         [JsonProperty("media")]
-        public string Media;
+        public string Media { get; set; }
 
         [JsonProperty("clickgadget")]
-        public bool ClickGadget;
+        public bool ClickGadget { get; set; }
 
         [JsonProperty("use_global_defaults")]
-        public bool UseGlobalDefaults;
+        public bool UseGlobalDefaults { get; set; }
 
         [JsonProperty("over_18")]
-        public bool Over18;
+        public bool Over18 { get; set; }
 
         [JsonProperty("show_stylesheets")]
-        public bool ShowStylesheets;
+        public bool ShowStylesheets { get; set; }
 
         [JsonProperty("live_orangereds")]
-        public bool LiveOrangeReds;
+        public bool LiveOrangeReds { get; set; }
 
         [JsonProperty("enable_default_themes")]
-        public bool EnableDefaultThemes;
+        public bool EnableDefaultThemes { get; set; }
 
         [JsonProperty("domain_details")]
-        public bool DomainDetails;
+        public bool DomainDetails { get; set; }
 
         [JsonProperty("collapse_left_bar")]
-        public bool CollapseLeftBar;
+        public bool CollapseLeftBar { get; set; }
 
         [JsonProperty("lang")]
-        public string Lang;
+        public string Lang { get; set; }
 
         [JsonProperty("hide_ups")]
-        public bool HideUps;
+        public bool HideUps { get; set; }
 
         [JsonProperty("third_party_data_personalized_ads")]
-        public bool ThirdPartyDataPersonalizedAds;
+        public bool ThirdPartyDataPersonalizedAds { get; set; }
 
         [JsonProperty("allow_clicktracking")]
-        public bool AllowClickTracking;
+        public bool AllowClickTracking { get; set; }
 
         [JsonProperty("hide_from_robots")]
-        public bool HideFromRobots;
+        public bool HideFromRobots { get; set; }
 
         [JsonProperty("show_twitter")]
-        public bool ShowTwitter;
+        public bool ShowTwitter { get; set; }
 
         [JsonProperty("compress")]
-        public bool Compress;
+        public bool Compress { get; set; }
 
         [JsonProperty("store_visits")]
-        public bool StoreVisits;
+        public bool StoreVisits { get; set; }
 
         [JsonProperty("threaded_modmail")]
-        public bool ThreadedModmail;
+        public bool ThreadedModmail { get; set; }
 
         [JsonProperty("min_link_score")]
-        public int MinLinkScore;
+        public int MinLinkScore { get; set; }
 
         [JsonProperty("media_preview")]
-        public string MediaPreview;
+        public string MediaPreview { get; set; }
 
         [JsonProperty("nightmode")]
-        public bool NightMode;
+        public bool NightMode { get; set; }
 
         [JsonProperty("highlight_controversial")]
-        public bool HighlightControversial;
+        public bool HighlightControversial { get; set; }
 
         [JsonProperty("third_party_site_data_personalized_ads")]
-        public bool ThirdPartySiteDataPersonalizedAds;
+        public bool ThirdPartySiteDataPersonalizedAds { get; set; }
 
         [JsonProperty("show_promote")]
-        public bool? ShowPromote;
+        public bool? ShowPromote { get; set; }
 
         [JsonProperty("min_comment_score")]
-        public int MinCommentScore;
+        public int MinCommentScore { get; set; }
 
         [JsonProperty("public_votes")]
-        public bool PublicVotes;
+        public bool PublicVotes { get; set; }
 
         [JsonProperty("no_video_autoplay")]
-        public bool NoVideoAutoplay;
+        public bool NoVideoAutoplay { get; set; }
 
         [JsonProperty("organic")]
-        public bool Organic;
+        public bool Organic { get; set; }
 
         [JsonProperty("collapse_read_messages")]
-        public bool CollapseReadMessages;
+        public bool CollapseReadMessages { get; set; }
 
         [JsonProperty("show_flair")]
-        public bool ShowFlair;
+        public bool ShowFlair { get; set; }
 
         [JsonProperty("mark_messages_read")]
-        public bool MarkMessagesRead;
+        public bool MarkMessagesRead { get; set; }
 
         [JsonProperty("search_include_over_18")]
-        public bool SearchIncludeOver18;
+        public bool SearchIncludeOver18 { get; set; }
 
         [JsonProperty("no_profanity")]
-        public bool NoProfanity;
+        public bool NoProfanity { get; set; }
 
         [JsonProperty("hide_ads")]
-        public bool HideAds;
+        public bool HideAds { get; set; }
 
         [JsonProperty("beta")]
-        public bool Beta;
+        public bool Beta { get; set; }
 
         [JsonProperty("top_karma_subreddits")]
-        public bool TopKarmaSubreddits;
+        public bool TopKarmaSubreddits { get; set; }
 
         [JsonProperty("newwindow")]
-        public bool NewWindow;
+        public bool NewWindow { get; set; }
 
         [JsonProperty("numsites")]
-        public int NumSites;
+        public int NumSites { get; set; }
 
         [JsonProperty("legacy_search")]
-        public bool LegacySearch;
+        public bool LegacySearch { get; set; }
 
         [JsonProperty("num_comments")]
-        public int NumComments;
+        public int NumComments { get; set; }
 
         [JsonProperty("show_gold_expiration")]
-        public bool ShowGoldExpiration;
+        public bool ShowGoldExpiration { get; set; }
 
         [JsonProperty("highlight_new_comments")]
-        public bool HighlightNewComments;
+        public bool HighlightNewComments { get; set; }
 
         [JsonProperty("email_unsubscribe_all")]
-        public bool EmailUnsubscribeAll;
+        public bool EmailUnsubscribeAll { get; set; }
 
         [JsonProperty("default_comment_sort")]
-        public string DefaultCommentSort;
+        public string DefaultCommentSort { get; set; }
 
         [JsonProperty("hide_locationbar")]
-        public bool HideLocationBar;
+        public bool HideLocationBar { get; set; }
 
         [JsonProperty("autoplay")]
-        public bool Autoplay;
+        public bool Autoplay { get; set; }
 
         public AccountPrefsBase(bool threadedMessages, bool hideDowns, bool labelNsfw, bool activityRelevantAds, bool emailMessages, bool profileOptOut, bool videoAutoplay,
             string acceptPms, bool thirdPartySiteDataPersonalizedContent, bool showLinkFlair, bool credditAutoRenew, bool showTrending, bool privateFeeds,

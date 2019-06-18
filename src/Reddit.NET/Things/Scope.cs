@@ -7,12 +7,12 @@ namespace Reddit.Things
     public class Scope
     {
         [JsonProperty("description")]
-        public string Description;
+        public string Description { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
     }
 }

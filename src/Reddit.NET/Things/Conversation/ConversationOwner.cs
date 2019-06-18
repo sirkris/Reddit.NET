@@ -7,12 +7,12 @@ namespace Reddit.Things
     public class ConversationOwner
     {
         [JsonProperty("displayName")]
-        public string DisplayName;
+        public string DisplayName { get; set; }
 
         [JsonProperty("type")]
-        public string Type;
+        public string Type { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
     }
 }

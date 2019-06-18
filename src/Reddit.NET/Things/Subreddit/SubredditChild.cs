@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class SubredditChild : BaseContainer
     {
         [JsonProperty("data")]
-        public Subreddit Data;
+        public Subreddit Data { get; set; }
     }
 }

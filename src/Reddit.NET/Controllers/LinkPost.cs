@@ -14,11 +14,11 @@ namespace Reddit.Controllers
     /// </summary>
     public class LinkPost : Post
     {
-        public JObject Preview;
-        public string URL;
-        public string Thumbnail;
-        public int? ThumbnailHeight;
-        public int? ThumbnailWidth;
+        public JObject Preview { get; set; }
+        public string URL { get; set; }
+        public string Thumbnail { get; set; }
+        public int? ThumbnailHeight { get; set; }
+        public int? ThumbnailWidth { get; set; }
 
         /// <summary>
         /// Create a new link post controller instance from API return data.

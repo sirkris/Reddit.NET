@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class LiveUpdateContainer : BaseContainer
     {
         [JsonProperty("data")]
-        public LiveUpdateData Data;
+        public LiveUpdateData Data { get; set; }
     }
 }

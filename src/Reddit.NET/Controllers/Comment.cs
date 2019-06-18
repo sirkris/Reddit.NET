@@ -13,26 +13,26 @@ namespace Reddit.Controllers
     /// </summary>
     public class Comment : BaseController
     {
-        public string Subreddit;
-        public string Author;
-        public string Id;
-        public string Fullname;
-        public string Permalink;
-        public DateTime Created;
-        public DateTime Edited;
-        public int Score;
-        public int UpVotes;
-        public int DownVotes;
-        public bool Removed;
-        public bool Spam;
-        public List<Comment> Replies;
-        public string ParentId;
-        public string ParentFullname;
-        public string CollapsedReason;
-        public bool Collapsed;
-        public bool IsSubmitter;
-        public bool ScoreHidden;
-        public int Depth;
+        public string Subreddit { get; set; }
+        public string Author { get; set; }
+        public string Id { get; set; }
+        public string Fullname { get; set; }
+        public string Permalink { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Edited { get; set; }
+        public int Score { get; set; }
+        public int UpVotes { get; set; }
+        public int DownVotes { get; set; }
+        public bool Removed { get; set; }
+        public bool Spam { get; set; }
+        public List<Comment> Replies { get; set; }
+        public string ParentId { get; set; }
+        public string ParentFullname { get; set; }
+        public string CollapsedReason { get; set; }
+        public bool Collapsed { get; set; }
+        public bool IsSubmitter { get; set; }
+        public bool ScoreHidden { get; set; }
+        public int Depth { get; set; }
 
         public string Body
         {

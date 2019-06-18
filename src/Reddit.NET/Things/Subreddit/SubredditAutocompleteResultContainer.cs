@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class SubredditAutocompleteResultContainer
     {
         [JsonProperty("subreddits")]
-        public List<SubredditAutocompleteResult> Subreddits;
+        public List<SubredditAutocompleteResult> Subreddits { get; set; }
     }
 }

@@ -8,12 +8,12 @@ namespace Reddit.Things
     public class WidgetImage : BaseContainer
     {
         [JsonProperty("data")]
-        public List<WidgetImageData> Data;
+        public List<WidgetImageData> Data { get; set; }
 
         [JsonProperty("shortName")]
-        public string ShortName;
+        public string ShortName { get; set; }
 
         [JsonProperty("styles")]
-        public WidgetStyles Styles;
+        public WidgetStyles Styles { get; set; }
     }
 }

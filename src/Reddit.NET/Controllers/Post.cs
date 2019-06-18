@@ -27,26 +27,26 @@ namespace Reddit.Controllers
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
 
-        public string Subreddit;
-        public string Author;
-        public string Id;
-        public string Fullname;
-        public string Permalink;
-        public DateTime Created;
-        public DateTime Edited;
-        public int Score;
-        public int UpVotes;
-        public int DownVotes;
-        public bool Removed;
-        public bool Spam;
-        public bool NSFW;
+        public string Subreddit { get; set; }
+        public string Author { get; set; }
+        public string Id { get; set; }
+        public string Fullname { get; set; }
+        public string Permalink { get; set; }
+        public DateTime Created { get; set; }
+        public DateTime Edited { get; set; }
+        public int Score { get; set; }
+        public int UpVotes { get; set; }
+        public int DownVotes { get; set; }
+        public bool Removed { get; set; }
+        public bool Spam { get; set; }
+        public bool NSFW { get; set; }
 
         // Monitoring event fires when score changes by either value, whichever is greater.  This is to account for "vote fuzzing".  --Kris
-        private int MinScoreMonitoringThreshold = 4;
-        private int ScoreMonitoringPercentThreshold = 8;
+        private int MinScoreMonitoringThreshold { get; set; } = 4;
+        private int ScoreMonitoringPercentThreshold { get; set; } = 8;
 
-        private int? MonitoringCancellationThresholdMinutes = null;
-        private DateTime? LastMonitoringScoreUpdate = null;
+        private int? MonitoringCancellationThresholdMinutes { get; set; } = null;
+        private DateTime? LastMonitoringScoreUpdate { get; set; } = null;
 
         public string Title
         {
@@ -64,7 +64,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// The full Listing object returned by the Reddit API;
         /// </summary>
-        public Things.Post Listing;
+        public Things.Post Listing { get; set; }
 
         /// <summary>
         /// Comment replies to this post.

@@ -7,12 +7,12 @@ namespace Reddit.Things
     public abstract class WidgetButton : BaseContainer
     {
         [JsonProperty("description")]
-        public string Description;
+        public string Description { get; set; }
 
         [JsonProperty("shortName")]
-        public string ShortName;
+        public string ShortName { get; set; }
 
         [JsonProperty("styles")]
-        public WidgetStyles Styles;
+        public WidgetStyles Styles { get; set; }
     }
 }

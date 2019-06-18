@@ -6,26 +6,26 @@ namespace Reddit.Controllers
 {
     public class Dispatch
     {
-        public API.Account Account;
-        public API.Captcha Captcha;
-        public API.Emoji Emoji;
-        public API.Flair Flair;
-        public API.LinksAndComments LinksAndComments;
-        public API.Listings Listings;
-        public API.LiveThreads LiveThreads;
-        public API.Misc Misc;
-        public API.Moderation Moderation;
-        public API.Modmail Modmail;
-        public API.Multis Multis;
-        public API.PrivateMessages PrivateMessages;
-        public API.RedditGold RedditGold;
-        public API.Search Search;
-        public API.Subreddits Subreddits;
-        public API.Users Users;
-        public API.Widgets Widgets;
-        public API.Wiki Wiki;
+        public API.Account Account { get; set; }
+        public API.Captcha Captcha { get; set; }
+        public API.Emoji Emoji { get; set; }
+        public API.Flair Flair { get; set; }
+        public API.LinksAndComments LinksAndComments { get; set; }
+        public API.Listings Listings { get; set; }
+        public API.LiveThreads LiveThreads { get; set; }
+        public API.Misc Misc { get; set; }
+        public API.Moderation Moderation { get; set; }
+        public API.Modmail Modmail { get; set; }
+        public API.Multis Multis { get; set; }
+        public API.PrivateMessages PrivateMessages { get; set; }
+        public API.RedditGold RedditGold { get; set; }
+        public API.Search Search { get; set; }
+        public API.Subreddits Subreddits { get; set; }
+        public API.Users Users { get; set; }
+        public API.Widgets Widgets { get; set; }
+        public API.Wiki Wiki { get; set; }
 
-        internal API.Internal.Monitor Monitor;
+        internal API.Internal.Monitor Monitor { get; set; }
 
         /// <summary>
         /// Instantiate endpoint singletons.

@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class ModActionChild : BaseContainer
     {
         [JsonProperty("data")]
-        public ModAction Data;
+        public ModAction Data { get; set; }
     }
 }

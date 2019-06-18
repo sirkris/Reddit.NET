@@ -7,9 +7,9 @@ namespace Reddit.Things
     public class ConversationObjId
     {
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("key")]
-        public string Key;
+        public string Key { get; set; }
     }
 }

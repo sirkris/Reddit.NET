@@ -23,15 +23,14 @@ namespace Reddit.Controllers
         public event EventHandler<CommentsUpdateEventArgs> QAUpdated;
         public event EventHandler<CommentsUpdateEventArgs> LiveUpdated;
 
-        private DateTime? ConfidenceLastUpdated;
-        private DateTime? TopLastUpdated;
-        private DateTime? NewLastUpdated;
-        private DateTime? ControversialLastUpdated;
-        private DateTime? OldLastUpdated;
-        private DateTime? RandomLastUpdated;
-        private DateTime? QALastUpdated;
-        private DateTime? LiveLastUpdated;
-
+        private DateTime? ConfidenceLastUpdated { get; set; }
+        private DateTime? TopLastUpdated { get; set; }
+        private DateTime? NewLastUpdated { get; set; }
+        private DateTime? ControversialLastUpdated { get; set; }
+        private DateTime? OldLastUpdated { get; set; }
+        private DateTime? RandomLastUpdated { get; set; }
+        private DateTime? QALastUpdated { get; set; }
+        private DateTime? LiveLastUpdated { get; set; }
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
         internal override bool BreakOnFailure { get; set; }
@@ -183,7 +182,7 @@ namespace Reddit.Controllers
             private set;
         }
 
-        public string SubKey;
+        public string SubKey { get; set; }
         private Dispatch Dispatch;
 
         /// <summary>

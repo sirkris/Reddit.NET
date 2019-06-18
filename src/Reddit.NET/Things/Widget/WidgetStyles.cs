@@ -7,10 +7,10 @@ namespace Reddit.Things
     public class WidgetStyles
     {
         [JsonProperty("backgroundColor")]
-        public string BackgroundColor;
+        public string BackgroundColor { get; set; }
 
         [JsonProperty("headerColor")]
-        public string HeaderColor;
+        public string HeaderColor { get; set; }
 
         public WidgetStyles(string backgroundColor = "#FFFFFF", string headerColor = "#0000FF")
         {

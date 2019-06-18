@@ -7,19 +7,19 @@ namespace Reddit.Things
     public class WidgetCalendar : BaseContainer
     {
         [JsonProperty("configuration")]
-        public WidgetCalendarConfiguration Configuration;
+        public WidgetCalendarConfiguration Configuration { get; set; }
 
         [JsonProperty("googleCalendarId")]
-        public string GoogleCalendarId;
+        public string GoogleCalendarId { get; set; }
 
         [JsonProperty("requiresSync")]
-        public bool RequiresSync;
+        public bool RequiresSync { get; set; }
 
         [JsonProperty("shortName")]
-        public string ShortName;
+        public string ShortName { get; set; }
 
         [JsonProperty("styles")]
-        public WidgetStyles Styles;
+        public WidgetStyles Styles { get; set; }
 
         public WidgetCalendar(WidgetCalendarConfiguration configuration, string googleCalendarId, bool requiresSync, string shortName, WidgetStyles styles)
         {

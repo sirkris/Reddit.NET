@@ -9,15 +9,15 @@ namespace Reddit.Things
     {
         [JsonProperty("date")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Date;
+        public DateTime Date { get; set; }
 
         [JsonProperty("permalink")]
-        public string Permalink;
+        public string Permalink { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("subject")]
-        public string Subject;
+        public string Subject { get; set; }
     }
 }

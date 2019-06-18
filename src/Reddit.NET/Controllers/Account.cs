@@ -28,10 +28,10 @@ namespace Reddit.Controllers
             }
         }
         private User me;
-        private DateTime? MeLastUpdated;
+        private DateTime? MeLastUpdated { get; set; }
 
-        public PrivateMessages Messages;
-        public Modmail Modmail;
+        public PrivateMessages Messages { get; set; }
+        public Modmail Modmail { get; set; }
 
         public Dispatch Dispatch;
 

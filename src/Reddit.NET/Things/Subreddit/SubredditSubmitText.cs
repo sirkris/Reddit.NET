@@ -7,10 +7,10 @@ namespace Reddit.Things
     public class SubredditSubmitText
     {
         [JsonProperty("submit_text")]
-        public string SubmitText;
+        public string SubmitText { get; set; }
 
         [JsonProperty("submit_text_html")]
-        public string SubmitTextHTML;
+        public string SubmitTextHTML { get; set; }
 
         public SubredditSubmitText(string submitText, string submitTextHtml)
         {

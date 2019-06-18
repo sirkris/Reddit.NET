@@ -8,12 +8,12 @@ namespace Reddit.Things
     public class RulesContainer
     {
         [JsonProperty("rules")]
-        public List<Rule> Rules;
+        public List<Rule> Rules { get; set; }
 
         [JsonProperty("site_rules")]
-        public List<string> SiteRules;
+        public List<string> SiteRules { get; set; }
 
         [JsonProperty("site_rules_flow")]
-        public List<NextStepReason> SiteRulesFlow;
+        public List<NextStepReason> SiteRulesFlow { get; set; }
     }
 }

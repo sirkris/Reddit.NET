@@ -7,12 +7,12 @@ namespace Reddit.Things
     public class UserKarma
     {
         [JsonProperty("comment_karma")]
-        public int CommentKarma;
+        public int CommentKarma { get; set; }
 
         [JsonProperty("link_karma")]
-        public int LinkKarma;
+        public int LinkKarma { get; set; }
 
         [JsonProperty("sr")]
-        public string Sr;
+        public string Sr { get; set; }
     }
 }

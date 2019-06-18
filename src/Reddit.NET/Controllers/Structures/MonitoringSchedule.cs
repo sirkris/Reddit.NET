@@ -5,27 +5,27 @@
         /// <summary>
         /// Which days of the week this schedule applies to; set to null to run 7 days/week
         /// </summary>
-        public MonitoringScheduleDays ScheduleDays;
+        public MonitoringScheduleDays ScheduleDays { get; set; }
 
         /// <summary>
         /// The hour to start monitoring in 24-hour format (0 = midnight, 23 = 11 PM)
         /// </summary>
-        public int StartHour;
+        public int StartHour { get; set; }
 
         /// <summary>
         /// The minute to start monitoring
         /// </summary>
-        public int StartMinute;
+        public int StartMinute { get; set; }
 
         /// <summary>
         /// The hour to stop monitoring in 24-hour format (0 = midnight, 23 = 11 PM)
         /// </summary>
-        public int EndHour;
+        public int EndHour { get; set; }
 
         /// <summary>
         /// The minute to stop monitoring
         /// </summary>
-        public int EndMinute;
+        public int EndMinute { get; set; }
 
         /// <summary>
         /// Specifies a timeframe for when a thing should be monitored.

@@ -7,9 +7,9 @@ namespace Reddit.Things
     public class Snoomoji
     {
         [JsonProperty("url")]
-        public string URL;
+        public string URL { get; set; }
 
         [JsonProperty("created_by")]
-        public string CreatedBy;
+        public string CreatedBy { get; set; }
     }
 }

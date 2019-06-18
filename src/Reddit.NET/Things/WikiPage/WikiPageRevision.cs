@@ -9,18 +9,18 @@ namespace Reddit.Things
     {
         [JsonConverter(typeof(TimestampConvert))]
         [JsonProperty("timestamp")]
-        public DateTime Timestamp;
+        public DateTime Timestamp { get; set; }
 
         [JsonProperty("reason")]
-        public string Reason;
+        public string Reason { get; set; }
 
         [JsonProperty("author")]
-        public UserChild Author;
+        public UserChild Author { get; set; }
 
         [JsonProperty("page")]
-        public string Page;
+        public string Page { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
     }
 }

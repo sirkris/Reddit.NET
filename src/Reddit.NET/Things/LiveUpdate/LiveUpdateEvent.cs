@@ -8,66 +8,66 @@ namespace Reddit.Things
     public class LiveUpdateEvent
     {
         [JsonProperty("total_views")]
-        public int? TotalViews;
+        public int? TotalViews { get; set; }
 
         [JsonProperty("description")]
-        public string Description;
+        public string Description { get; set; }
 
         [JsonProperty("description_html")]
-        public string DescriptionHTML;
+        public string DescriptionHTML { get; set; }
 
         [JsonProperty("created")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Created;
+        public DateTime Created { get; set; }
 
         [JsonProperty("title")]
-        public string Title;
+        public string Title { get; set; }
 
         [JsonProperty("created_utc")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime CreatedUTC;
+        public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("button_cta")]
-        public string ButtonCTA;
+        public string ButtonCTA { get; set; }
 
         [JsonProperty("websocket_url")]
-        public string WebsocketURL;
+        public string WebsocketURL { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("is_announcement")]
-        public bool IsAnnouncement;
+        public bool IsAnnouncement { get; set; }
 
         [JsonProperty("state")]
-        public string State;
+        public string State { get; set; }
 
         [JsonProperty("announcement_url")]
-        public string AnnouncementURL;
+        public string AnnouncementURL { get; set; }
 
         [JsonProperty("nsfw")]
-        public bool NSFW;
+        public bool NSFW { get; set; }
 
         [JsonProperty("viewer_count")]
-        public int ViewerCount;
+        public int ViewerCount { get; set; }
 
         [JsonProperty("num_times_dismissable")]
-        public int NumTimesDismissable;
+        public int NumTimesDismissable { get; set; }
 
         [JsonProperty("viewer_count_fuzzed")]
-        public bool ViewerCountFuzzed;
+        public bool ViewerCountFuzzed { get; set; }
 
         [JsonProperty("resources_html")]
-        public string ResourcesHTML;
+        public string ResourcesHTML { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("resources")]
-        public string Resources;
+        public string Resources { get; set; }
 
         [JsonProperty("icon")]
-        public string Icon;
+        public string Icon { get; set; }
 
         public LiveUpdateEvent(Controllers.LiveThread liveThread)
         {

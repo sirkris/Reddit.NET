@@ -8,7 +8,7 @@ namespace Reddit.Things
     public class FlairV2
     {
         [JsonProperty("text_editable")]
-        public bool TextEditable;
+        public bool TextEditable { get; set; }
 
         [JsonProperty("textEditable")]
         private bool textEditable
@@ -18,13 +18,13 @@ namespace Reddit.Things
         }
 
         [JsonProperty("type")]
-        public string Type;
+        public string Type { get; set; }
 
         [JsonProperty("text")]
-        public string Text;
+        public string Text { get; set; }
 
         [JsonProperty("mod_only")]
-        public bool ModOnly;
+        public bool ModOnly { get; set; }
 
         [JsonProperty("modOnly")]
         private bool modOnly
@@ -34,10 +34,10 @@ namespace Reddit.Things
         }
 
         [JsonProperty("richtext")]
-        public List<FlairRichtext> Richtext;
+        public List<FlairRichtext> Richtext { get; set; }
 
         [JsonProperty("background_color")]
-        public string BackgroundColor;
+        public string BackgroundColor { get; set; }
 
         [JsonProperty("backgroundColor")]
         private string backgroundColor
@@ -47,10 +47,10 @@ namespace Reddit.Things
         }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("text_color")]
-        public string TextColor;
+        public string TextColor { get; set; }
 
         [JsonProperty("textColor")]
         private string textColor
@@ -60,7 +60,7 @@ namespace Reddit.Things
         }
 
         [JsonProperty("flair_type")]
-        public string FlairType;
+        public string FlairType { get; set; }
 
         [JsonProperty("flairType")]
         private string flairType

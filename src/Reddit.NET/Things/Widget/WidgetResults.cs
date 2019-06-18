@@ -8,9 +8,9 @@ namespace Reddit.Things
     public class WidgetResults
     {
         [JsonProperty("items")]
-        public Dictionary<string, dynamic> Items;
+        public Dictionary<string, dynamic> Items { get; set; }
 
         [JsonProperty("layout")]
-        public WidgetLayout Layout;
+        public WidgetLayout Layout { get; set; }
     }
 }

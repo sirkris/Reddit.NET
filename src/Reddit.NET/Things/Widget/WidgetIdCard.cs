@@ -7,15 +7,15 @@ namespace Reddit.Things
     public class WidgetIdCard : BaseContainer
     {
         [JsonProperty("currentlyViewingText")]
-        public string CurrentlyViewingText;
+        public string CurrentlyViewingText { get; set; }
 
         [JsonProperty("shortName")]
-        public string ShortName;
+        public string ShortName { get; set; }
 
         [JsonProperty("styles")]
-        public WidgetStyles Styles;
+        public WidgetStyles Styles { get; set; }
 
         [JsonProperty("subscribersText")]
-        public string SubscribersText;
+        public string SubscribersText { get; set; }
     }
 }

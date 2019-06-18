@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class WikiPageContainer : BaseContainer
     {
         [JsonProperty("data")]
-        public WikiPage Data;
+        public WikiPage Data { get; set; }
     }
 }

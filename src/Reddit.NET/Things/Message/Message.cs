@@ -8,73 +8,73 @@ namespace Reddit.Things
     public class Message
     {
         [JsonProperty("first_message")]
-        public string FirstMessage;
+        public string FirstMessage { get; set; }
 
         [JsonProperty("first_message_name")]
-        public string FirstMessageName;
+        public string FirstMessageName { get; set; }
 
         [JsonProperty("subreddit")]
-        public string Subreddit;
+        public string Subreddit { get; set; }
 
         [JsonProperty("likes")]
-        public string Likes;
+        public string Likes { get; set; }
 
         [JsonProperty("replies")]
-        public object Replies;  // TODO - Determine type.  --Kris
+        public object Replies { get; set; }  // TODO - Determine type.  --Kris
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         public string Fullname => "t4_" + Id;
 
         [JsonProperty("subject")]
-        public string Subject;
+        public string Subject { get; set; }
 
         [JsonProperty("was_comment")]
-        public bool WasComment;
+        public bool WasComment { get; set; }
 
         [JsonProperty("score")]
-        public int Score;
+        public int Score { get; set; }
 
         [JsonProperty("author")]
-        public string Author;
+        public string Author { get; set; }
 
         [JsonProperty("num_comments")]
-        public int? NumComments;
+        public int? NumComments { get; set; }
 
         [JsonProperty("parent_id")]
-        public string ParentId;
+        public string ParentId { get; set; }
 
         [JsonProperty("subreddit_name_prefixed")]
-        public string SubredditNamePrefixed;
+        public string SubredditNamePrefixed { get; set; }
 
         [JsonProperty("new")]
-        public bool New;
+        public bool New { get; set; }
 
         [JsonProperty("body")]
-        public string Body;
+        public string Body { get; set; }
 
         [JsonProperty("dest")]
-        public string Dest;
+        public string Dest { get; set; }
 
         [JsonProperty("body_html")]
-        public string BodyHTML;
+        public string BodyHTML { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("created")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Created;
+        public DateTime Created { get; set; }
 
         [JsonProperty("created_utc")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime CreatedUTC;
+        public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("context")]
-        public string Context;
+        public string Context { get; set; }
 
         [JsonProperty("distinguished")]
-        public string Distinguished;
+        public string Distinguished { get; set; }
     }
 }

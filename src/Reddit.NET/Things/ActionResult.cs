@@ -7,15 +7,15 @@ namespace Reddit.Things
     public class ActionResult
     {
         [JsonProperty("status")]
-        public string Status;
+        public string Status { get; set; }
 
         [JsonProperty("errors")]
-        public object Errors;
+        public object Errors { get; set; }
 
         [JsonProperty("ok")]
-        public bool Ok;
+        public bool Ok { get; set; }
 
         [JsonProperty("warnings")]
-        public object Warnings;
+        public object Warnings { get; set; }
     }
 }

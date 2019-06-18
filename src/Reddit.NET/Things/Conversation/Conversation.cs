@@ -9,55 +9,55 @@ namespace Reddit.Things
     public class Conversation
     {
         [JsonProperty("isAuto")]
-        public bool IsAuto;
+        public bool IsAuto { get; set; }
 
         [JsonProperty("objIds")]
-        public List<ConversationObjId> ObjIds;
+        public List<ConversationObjId> ObjIds { get; set; }
 
         [JsonProperty("isReplicable")]
-        public bool IsReplicable;
+        public bool IsReplicable { get; set; }
 
         [JsonProperty("lastUserUpdate")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime LastUserUpdate;
+        public DateTime LastUserUpdate { get; set; }
 
         [JsonProperty("isInternal")]
-        public bool IsInternal;
+        public bool IsInternal { get; set; }
 
         [JsonProperty("lastModUpdate")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime LastModUpdate;
+        public DateTime LastModUpdate { get; set; }
 
         [JsonProperty("lastUpdated")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime LastUpdated;
+        public DateTime LastUpdated { get; set; }
 
         [JsonProperty("authors")]
-        public List<ConversationAuthor> Authors;
+        public List<ConversationAuthor> Authors { get; set; }
 
         [JsonProperty("owner")]
-        public ConversationOwner Owner;
+        public ConversationOwner Owner { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("isHighlighted")]
-        public bool IsHighlighted;
+        public bool IsHighlighted { get; set; }
 
         [JsonProperty("subject")]
-        public string Subject;
+        public string Subject { get; set; }
 
         [JsonProperty("participant")]
-        public ConversationAuthor Participant;
+        public ConversationAuthor Participant { get; set; }
 
         [JsonProperty("state")]
-        public int State;
+        public int State { get; set; }
 
         [JsonProperty("lastUnread")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime LastUnread;
+        public DateTime LastUnread { get; set; }
 
         [JsonProperty("numMessages")]
-        public int NumMessages;
+        public int NumMessages { get; set; }
     }
 }

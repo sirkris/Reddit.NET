@@ -7,18 +7,18 @@ namespace Reddit.Things
     public class AllowedPostTypes
     {
         [JsonProperty("images")]
-        public bool Images;
+        public bool Images { get; set; }
 
         [JsonProperty("text")]
-        public bool Text;
+        public bool Text { get; set; }
 
         [JsonProperty("videos")]
-        public bool Videos;
+        public bool Videos { get; set; }
 
         [JsonProperty("links")]
-        public bool Links;
+        public bool Links { get; set; }
 
         [JsonProperty("spoilers")]
-        public bool Spoilers;
+        public bool Spoilers { get; set; }
     }
 }

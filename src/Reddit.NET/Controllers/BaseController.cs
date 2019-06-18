@@ -4,7 +4,7 @@ namespace Reddit.Controllers
 {
     public abstract class BaseController : Validators
     {
-        public Lists Lists;
+        public Lists Lists { get; set; }
 
         public BaseController()
         {

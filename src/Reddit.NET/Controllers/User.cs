@@ -28,28 +28,28 @@ namespace Reddit.Controllers
         public event EventHandler<PostsUpdateEventArgs> PostHistoryUpdated;
         public event EventHandler<CommentsUpdateEventArgs> CommentHistoryUpdated;
 
-        public bool IsFriend;
-        public bool ProfanityFilter;
-        public bool IsSuspended;
-        public bool HasGoldSubscription;
-        public int NumFriends;
-        public bool IsVerified;
-        public bool HasNewModmail;
-        public string Id;
-        public string Fullname;
-        public bool Over18;
-        public bool IsGold;
-        public bool IsMod;
-        public bool HasVerifiedEmail;
-        public string IconImg;
-        public bool HasModmail;
-        public int LinkKarma;
-        public int InboxCount;
-        public bool HasMail;
-        public string Name;
-        public DateTime Created;
-        public int CommentKarma;
-        public bool HasSubscribed;
+        public bool IsFriend { get; set; }
+        public bool ProfanityFilter { get; set; }
+        public bool IsSuspended { get; set; }
+        public bool HasGoldSubscription { get; set; }
+        public int NumFriends { get; set; }
+        public bool IsVerified { get; set; }
+        public bool HasNewModmail { get; set; }
+        public string Id { get; set; }
+        public string Fullname { get; set; }
+        public bool Over18 { get; set; }
+        public bool IsGold { get; set; }
+        public bool IsMod { get; set; }
+        public bool HasVerifiedEmail { get; set; }
+        public string IconImg { get; set; }
+        public bool HasModmail { get; set; }
+        public int LinkKarma { get; set; }
+        public int InboxCount { get; set; }
+        public bool HasMail { get; set; }
+        public string Name { get; set; }
+        public DateTime Created { get; set; }
+        public int CommentKarma { get; set; }
+        public bool HasSubscribed { get; set; }
 
         public List<Post> PostHistory
         {
@@ -64,7 +64,7 @@ namespace Reddit.Controllers
             }
         }
         internal List<Post> postHistory;
-        internal DateTime? PostHistoryLastUpdated;
+        internal DateTime? PostHistoryLastUpdated { get; set; }
 
         public List<Comment> CommentHistory
         {
@@ -79,12 +79,12 @@ namespace Reddit.Controllers
             }
         }
         internal List<Comment> commentHistory;
-        internal DateTime? CommentHistoryLastUpdated;
+        internal DateTime? CommentHistoryLastUpdated { get; set; }
 
         /// <summary>
         /// Full user data from the API.
         /// </summary>
-        public Things.User UserData;
+        public Things.User UserData { get; set; }
 
         private Dispatch Dispatch;
 

@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class StatusResult
     {
         [JsonProperty("status")]
-        public bool Status;
+        public bool Status { get; set; }
     }
 }

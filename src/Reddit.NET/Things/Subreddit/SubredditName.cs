@@ -7,7 +7,7 @@ namespace Reddit.Things
     public class SubredditName
     {
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         public SubredditName(string name)
         {

@@ -9,53 +9,53 @@ namespace Reddit.Things
     public class LabeledMulti
     {
         [JsonProperty("can_edit")]
-        public bool CanEdit;
+        public bool CanEdit { get; set; }
 
         [JsonProperty("display_name")]
-        public string DisplayName;
+        public string DisplayName { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("description_html")]
-        public string DescriptionHTML;
+        public string DescriptionHTML { get; set; }
 
         [JsonProperty("created")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Created;
+        public DateTime Created { get; set; }
 
         [JsonProperty("copied_from")]
-        public string CopiedFrom;
+        public string CopiedFrom { get; set; }
 
         [JsonProperty("icon_url")]
-        public string IconURL;
+        public string IconURL { get; set; }
 
         [JsonProperty("subreddits")]
-        public List<UserSubredditContainer> Subreddits;
+        public List<UserSubredditContainer> Subreddits { get; set; }
 
         [JsonProperty("created_utc")]
         [JsonConverter(typeof(TimestampConvert))]
-        public DateTime CreatedUTC;
+        public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("visibility")]
-        public string Visibility;
+        public string Visibility { get; set; }
 
         [JsonProperty("icon_name")]
-        public string IconName;
+        public string IconName { get; set; }
 
         [JsonProperty("over_18")]
-        public bool Over18;
+        public bool Over18 { get; set; }
 
         [JsonProperty("weighting_scheme")]
-        public string WeightingScheme;
+        public string WeightingScheme { get; set; }
 
         [JsonProperty("path")]
-        public string Path;
+        public string Path { get; set; }
 
         [JsonProperty("key_color")]
-        public string KeyColor;
+        public string KeyColor { get; set; }
 
         [JsonProperty("description_md")]
-        public string DescriptionMd;
+        public string DescriptionMd { get; set; }
     }
 }

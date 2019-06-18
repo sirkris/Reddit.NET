@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class TrophiesData
     {
         [JsonProperty("trophies")]
-        public List<AwardContainer> Trophies;
+        public List<AwardContainer> Trophies { get; set; }
     }
 }

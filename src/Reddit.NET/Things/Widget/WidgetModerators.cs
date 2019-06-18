@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class WidgetModerators : BaseContainer
     {
         [JsonProperty("styles")]
-        public WidgetStyles Styles;
+        public WidgetStyles Styles { get; set; }
     }
 }
