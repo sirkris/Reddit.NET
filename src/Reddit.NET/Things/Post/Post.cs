@@ -178,7 +178,7 @@ namespace Reddit.Things
 
         [JsonProperty("created")]
         [JsonConverter(typeof(LocalTimestampConverter))]
-        [Obsolete("Using this date can lead to unexpected results, please use " + nameof(CreatedUTC) + " instead.")]
+        [Obsolete("Using this date can lead to unexpected results.  It is recommended that you use " + nameof(CreatedUTC) + " instead.")]
         public DateTime Created { get; set; }
 
         [JsonProperty("link_flair_type")]
