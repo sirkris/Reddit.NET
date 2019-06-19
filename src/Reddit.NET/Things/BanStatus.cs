@@ -8,7 +8,7 @@ namespace Reddit.Things
     public class BanStatus
     {
         [JsonProperty("endDate")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime EndDate { get; set; }
 
         [JsonProperty("reason")]

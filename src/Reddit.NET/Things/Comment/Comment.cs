@@ -9,7 +9,7 @@ namespace Reddit.Things
     public class Comment
     {
         [JsonProperty("approved_at_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime ApprovedAtUTC { get; set; }
 
         [JsonProperty("subreddit")]
@@ -66,7 +66,7 @@ namespace Reddit.Things
         public bool IgnoreReports { get; set; }
 
         [JsonProperty("edited")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime Edited { get; set; }
 
         [JsonProperty("author_flair_css_class")]
@@ -87,7 +87,8 @@ namespace Reddit.Things
         public string ModNote { get; set; }
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(LocalTimestampConverter))]
+        [Obsolete("Using this date can lead to unexpected results.  It is recommended that you use " + nameof(CreatedUTC) + " instead.")]
         public DateTime Created { get; set; }
 
         [JsonProperty("banned_by")]
@@ -100,7 +101,7 @@ namespace Reddit.Things
         public bool? Likes { get; set; }
 
         [JsonProperty("banned_at_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime BannedAtUTC { get; set; }
 
         [JsonProperty("archived")]
@@ -164,7 +165,7 @@ namespace Reddit.Things
         public bool Stickied { get; set; }
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("mod_reports")]
@@ -220,7 +221,7 @@ namespace Reddit.Things
             Id = comment.Id;
             Name = comment.Fullname;
             Permalink = comment.Permalink;
-            Created = comment.Created;
+            CreatedUTC = comment.Created;
             Edited = comment.Edited;
             Score = comment.Score;
             Ups = comment.UpVotes;

@@ -18,7 +18,7 @@ namespace Reddit.Controllers.Structures
         public List<string> ModPermissions { get; set; }
 
         [JsonProperty("date")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime Date { get; set; }
 
         [JsonProperty("id")]

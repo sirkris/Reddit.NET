@@ -159,7 +159,7 @@ namespace Reddit.Controllers
         {
             Import(user.Name, user.Id, user.IsFriend, user.PrefNoProfanity, user.IsSuspended, user.HasGoldSubscription, user.NumFriends,
                 user.Verified, user.NewModmailExists, user.Over18, user.IsGold, user.IsMod, user.HasVerifiedEmail, user.IconImg, user.HasModMail,
-                user.LinkKarma, user.InboxCount, user.HasMail, user.Created, user.CommentKarma, user.HasSubscribed);
+                user.LinkKarma, user.InboxCount, user.HasMail, user.CreatedUTC, user.CommentKarma, user.HasSubscribed);
 
             UserData = user;
         }

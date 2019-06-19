@@ -214,7 +214,7 @@ namespace Reddit.Controllers
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null,
             string fullname = null)
             : base()
         {
@@ -278,7 +278,7 @@ namespace Reddit.Controllers
             KeyColor = subreddit.KeyColor;
             Lang = subreddit.Lang;
             Fullname = subreddit.Name;
-            Created = subreddit.Created;
+            Created = subreddit.CreatedUTC;
             URL = subreddit.URL;
             SubmitLinkLabel = subreddit.SubmitLinkLabel;
             AllowDiscovery = subreddit.AllowDiscovery;
@@ -313,7 +313,7 @@ namespace Reddit.Controllers
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null,
             string fullname = null)
         {
             Name = name;
@@ -388,7 +388,7 @@ namespace Reddit.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new SelfPost(Dispatch, Name, title, author, selfText, selfTextHtml, id, fullname, permalink, created, 
+            return new SelfPost(Dispatch, Name, title, author, selfText, selfTextHtml, id, fullname, permalink, created,
                 edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -494,7 +494,7 @@ namespace Reddit.Controllers
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of subreddit moderators.</returns>
-        public List<Moderator> GetModerators(string after = "", string before = "", int limit = 25, string user = "", 
+        public List<Moderator> GetModerators(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
             return GetModerators(new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories));
@@ -646,7 +646,7 @@ namespace Reddit.Controllers
         {
             Validate(await Dispatch.Subreddits.SubredditStylesheetAsync(new SubredditsSubredditStylesheetInput(stylesheetContents, reason), Name));
         }
-        
+
         /// <summary>
         /// Subscribe to a subreddit.
         /// </summary>

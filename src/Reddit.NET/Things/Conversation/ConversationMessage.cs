@@ -17,7 +17,7 @@ namespace Reddit.Things
         public bool IsInternal { get; set; }
 
         [JsonProperty("date")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime Date { get; set; }
 
         [JsonProperty("bodyMarkdown")]

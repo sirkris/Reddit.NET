@@ -18,7 +18,7 @@ namespace Reddit.Things
         public string Name { get; set; }
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime Created { get; set; }
 
         [JsonProperty("banStatus")]

@@ -7,7 +7,7 @@ namespace Reddit.Things
     [Serializable]
     public class WikiPageRevision
     {
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         [JsonProperty("timestamp")]
         public DateTime Timestamp { get; set; }
 

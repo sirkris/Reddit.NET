@@ -11,7 +11,7 @@ namespace Reddit.Things
         public bool MayRevise { get; set; }
 
         [JsonProperty("revision_date")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime RevisionDate { get; set; }
 
         [JsonProperty("content_html")]

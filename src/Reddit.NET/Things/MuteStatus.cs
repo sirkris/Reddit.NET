@@ -11,7 +11,7 @@ namespace Reddit.Things
         public bool IsMuted { get; set; }
 
         [JsonProperty("endDate")]
-        [JsonConverter(typeof(TimestampConvert))]
+        [JsonConverter(typeof(UtcTimestampConverter))]
         public DateTime EndDate { get; set; }
 
         [JsonProperty("reason")]
