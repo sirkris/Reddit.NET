@@ -152,8 +152,7 @@ namespace Reddit.Controllers
         /// Create a new link post controller instance, populated from SelfPost data.
         /// </summary>
         /// <param name="dispatch"></param>
-        /// <param name="postResultShortData"></param>
-        /// <param name="linkPost"></param>
+        /// <param name="selfPost"></param>
         public LinkPost(Dispatch dispatch, SelfPost selfPost)
             : base(dispatch, selfPost.Subreddit, selfPost.Title, selfPost.Author, nsfw: selfPost.NSFW)
         {
