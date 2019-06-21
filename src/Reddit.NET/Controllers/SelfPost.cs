@@ -115,6 +115,17 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
+        /// Create a new self post controller instance, populated from LinkPost data.
+        /// </summary>
+        /// <param name="dispatch"></param>
+        /// <param name="linkPost"></param>
+        public SelfPost(Dispatch dispatch, LinkPost linkPost)
+            : base(dispatch, linkPost.Subreddit, linkPost.Title, linkPost.Author, nsfw: linkPost.NSFW)
+        {
+            Listing = new Things.Post(this);
+        }
+
+        /// <summary>
         /// Create an empty SelfPost instance.
         /// </summary>
         /// <param name="dispatch">An instance of the Dispatch controller</param>
@@ -204,11 +215,16 @@ namespace Reddit.Controllers
         /// Cross-post this to another subreddit.
         /// </summary>
         /// <param name="subreddit">The name of the subreddit being xposted to</param>
+        /// <param name="creditOriginSub">Whether to include an attribution to the source subreddit in the title (default: true)</param>
         /// <returns>The resulting post data.</returns>
-        public SelfPost XPostTo(string subreddit)
+        public SelfPost XPostTo(string subreddit, bool creditOriginSub = true)
         {
             SelfPost res = this;
             res.Subreddit = subreddit;
+            if (creditOriginSub)
+            {
+                res.Title += " • r/" + Subreddit;
+            }
 
             return Validate(res.Submit());
         }
@@ -229,6 +245,54 @@ namespace Reddit.Controllers
             }
 
             return Validate(await res.SubmitAsync());
+        }
+
+        /// <summary>
+        /// Link to this post from another subreddit.
+        /// </summary>
+        /// <param name="subreddit">The name of the subreddit being xposted to</param>
+        /// <param name="creditOriginSub">Whether to include an attribution to the source subreddit in the title (default: true)</param>
+        /// <param name="np">Whether to use np.reddit.com as the URL host (default: true)</param>
+        /// <returns>The resulting post data.</returns>
+        public LinkPost XPostToAsLink(string subreddit, bool creditOriginSub = true, bool np = true)
+        {
+            return Validate(PrepareXLinkPost(subreddit, creditOriginSub, np).Submit());
+        }
+
+        /// <summary>
+        /// Link to this post from another subreddit asynchronously.
+        /// </summary>
+        /// <param name="subreddit">The name of the subreddit being xposted to</param>
+        /// <param name="creditOriginSub">Whether to include an attribution to the source subreddit in the title (default: true)</param>
+        /// <param name="np">Whether to use np.reddit.com as the URL host (default: true)</param>
+        /// <returns>The resulting post data.</returns>
+        public async Task<LinkPost> XPostToAsLinkAsync(string subreddit, bool creditOriginSub = true, bool np = true)
+        {
+            return Validate(await PrepareXLinkPost(subreddit, creditOriginSub, np).SubmitAsync());
+        }
+
+        /// <summary>
+        /// Prepare a LinkPost object for cross-posting.
+        /// </summary>
+        /// <param name="subreddit">The name of the subreddit being xposted to</param>
+        /// <param name="creditOriginSub">Whether to include an attribution to the source subreddit in the title (default: true)</param>
+        /// <param name="np">Whether to use np.reddit.com as the URL host (default: true)</param>
+        /// <returns>The resulting post data.</returns>
+        private LinkPost PrepareXLinkPost(string subreddit, bool creditOriginSub = true, bool np = true)
+        {
+            LinkPost res = new LinkPost(Dispatch, this)
+            {
+                Subreddit = subreddit
+            };
+
+            if (creditOriginSub)
+            {
+                res.Title += " • r/" + Subreddit;
+            }
+
+            res.URL = (np ? res.Permalink.Replace("www.reddit.com", "np.reddit.com") : res.Permalink);
+
+            return res;
         }
 
         /// <summary>
