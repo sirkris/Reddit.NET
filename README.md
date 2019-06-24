@@ -404,6 +404,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Pagination](docs/examples/cs/Paginated%20Posts.md)
 
+#### [Monitor a Subreddit for New Comments](docs/examples/cs/Monitor%20Subreddit%20Comments.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Contributing
