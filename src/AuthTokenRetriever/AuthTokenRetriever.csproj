@@ -3,14 +3,14 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <Version>1.1.1-develop</Version>
+    <Version>1.1.1-beta</Version>
     <Authors>Kris Craig</Authors>
     <Product>Reddit.NET OAuth Token Retriever</Product>
     <Copyright>Copyright (C) 2019 by Kris Craig</Copyright>
     <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
-    <AssemblyVersion>1.1.1.1</AssemblyVersion>
-    <FileVersion>1.1.1.1</FileVersion>
+    <AssemblyVersion>1.1.1.2</AssemblyVersion>
+    <FileVersion>1.1.1.2</FileVersion>
     <Description>A simple utility for quickly and easily retrieving Reddit OAuth tokens for your app.</Description>
     <PackageReleaseNotes>https://github.com/sirkris/Reddit.NET/blob/master/README.md</PackageReleaseNotes>
     <PackageTags>reddit web utility http api oauth rest json netstandard</PackageTags>
