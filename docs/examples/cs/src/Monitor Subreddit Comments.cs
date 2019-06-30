@@ -29,15 +29,15 @@ namespace MonitorSubredditComments
 			reddit.Account.Modmail.NewUpdated -= C_NewCommentsUpdated;
 		}
 		
-        private void C_NewCommentsUpdated(object sender, CommentsUpdateEventArgs e)
-        {
-            foreach (Comment comment in e.Added)
-            {
-                if (!NewComments.ContainsKey(comment.Fullname))
-                {
-                    NewComments.Add(comment.Fullname, comment);
-                }
-            }
-        }
+		private void C_NewCommentsUpdated(object sender, CommentsUpdateEventArgs e)
+		{
+			foreach (Comment comment in e.Added)
+			{
+				if (!NewComments.ContainsKey(comment.Fullname))
+				{
+					NewComments.Add(comment.Fullname, comment);
+				}
+			}
+		}
 	}
 }
