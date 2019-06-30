@@ -1026,7 +1026,7 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
-        /// Monitor the user for new posts.
+        /// Monitor the user for new comments.
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
