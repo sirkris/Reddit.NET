@@ -49,23 +49,23 @@ namespace MonitorSubredditComments
 
 			// Stop monitoring and unregister the callback function.  --Kris
 			subreddit.Comments.MonitorNew();
-			reddit.Account.Modmail.NewUpdated -= C_NewCommentsUpdated;
+			subreddit.Comments.NewUpdated -= C_NewCommentsUpdated;
 		}
 		
-        private void C_NewCommentsUpdated(object sender, CommentsUpdateEventArgs e)
-        {
-            foreach (Comment comment in e.Added)
-            {
-                if (!NewComments.ContainsKey(comment.Fullname))
-                {
-                    NewComments.Add(comment.Fullname, comment);
-                }
-            }
-        }
+		private void C_NewCommentsUpdated(object sender, CommentsUpdateEventArgs e)
+		{
+			foreach (Comment comment in e.Added)
+			{
+				if (!NewComments.ContainsKey(comment.Fullname))
+				{
+					NewComments.Add(comment.Fullname, comment);
+				}
+			}
+		}
 	}
 }
 ```
 
 ## Source File
 
-[Monitor Modmail.cs](src/Monitor%20Subreddit%20Comments.cs)
+[Monitor Subreddit Comments.cs](src/Monitor%20Subreddit%20Comments.cs)

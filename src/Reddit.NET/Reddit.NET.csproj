@@ -2,10 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.1.1-develop</Version>
-    <AssemblyVersion>1.1.1.1</AssemblyVersion>
-    <FileVersion>1.1.1.1</FileVersion>
-    <PackageReleaseNotes>https://www.reddit.com/r/csharp/comments/b2hv7c/announcing_the_release_of_redditnet_110/</PackageReleaseNotes>
+    <Version>1.2.0</Version>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
+    <PackageReleaseNotes>https://www.reddit.com/r/csharp/comments/c7rtvm/announcing_the_release_of_redditnet_12/</PackageReleaseNotes>
     <Title>Reddit.NET</Title>
     <PackageId>Reddit</PackageId>
     <Authors>Kris Craig</Authors>

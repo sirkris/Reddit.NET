@@ -3,6 +3,7 @@
 ## Authors
 
 [jpsak09](../../../docs/contributors/jpsak09.md)
+
 [Kris Craig](../../../docs/contributors/Kris%20Craig.md)
 
 ## Required libraries
