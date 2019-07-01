@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <Version>1.2.0</Version>
+    <Version>1.2.0-develop</Version>
 
     <Authors>Kris Craig</Authors>
 
@@ -17,9 +17,9 @@
 
     <RepositoryType>Git</RepositoryType>
 
-    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <AssemblyVersion>1.2.0.1</AssemblyVersion>
 
-    <FileVersion>1.2.0.0</FileVersion>
+    <FileVersion>1.2.0.1</FileVersion>
 
     <PackageReleaseNotes>https://github.com/sirkris/Reddit.NET/blob/master/README.md</PackageReleaseNotes>
 
