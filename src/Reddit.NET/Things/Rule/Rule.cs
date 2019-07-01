@@ -8,22 +8,22 @@ namespace Reddit.Things
     public class Rule : BaseContainer
     {
         [JsonProperty("description")]
-        public string Description;
+        public string Description { get; set; }
 
         [JsonProperty("short_name")]
-        public string ShortName;
+        public string ShortName { get; set; }
 
         [JsonProperty("violation_reason")]
-        public string ViolationReason;
+        public string ViolationReason { get; set; }
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime CreatedUTC;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("priority")]
-        public int Priority;
+        public int Priority { get; set; }
 
         [JsonProperty("description_html")]
-        public string DescriptionHTML;
+        public string DescriptionHTML { get; set; }
     }
 }

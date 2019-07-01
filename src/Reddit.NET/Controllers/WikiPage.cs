@@ -17,14 +17,14 @@ namespace Reddit.Controllers
     /// </summary>
     public class WikiPage : Monitors
     {
-        public bool MayRevise;
-        public DateTime RevisionDate;
-        public string ContentHTML;
-        public User RevisionBy;
-        public string ContentMd;
+        public bool MayRevise { get; set; }
+        public DateTime RevisionDate { get; set; }
+        public string ContentHTML { get; set; }
+        public User RevisionBy { get; set; }
+        public string ContentMd { get; set; }
 
-        public string Name;
-        public string Subreddit;
+        public string Name { get; set; }
+        public string Subreddit { get; set; }
 
         public event EventHandler<WikiPageUpdateEventArgs> PageUpdated;
 

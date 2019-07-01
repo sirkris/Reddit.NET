@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class DynamicListingChild : BaseContainer
     {
         [JsonProperty("data")]
-        public dynamic Data;
+        public dynamic Data { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class MixedListingChild : BaseContainer
     {
         [JsonProperty("data")]
-        public JObject Data;
+        public JObject Data { get; set; }
     }
 }

@@ -8,157 +8,158 @@ namespace Reddit.Things
     public class User
     {
         [JsonProperty("is_employee")]
-        public bool IsEmployee;
+        public bool IsEmployee { get; set; }
 
         [JsonProperty("has_visited_new_profile")]
-        public bool HasVisitedNewProfile;
+        public bool HasVisitedNewProfile { get; set; }
 
         [JsonProperty("is_friend")]
-        public bool IsFriend;
+        public bool IsFriend { get; set; }
 
         [JsonProperty("pref_no_profanity")]
-        public bool PrefNoProfanity;
+        public bool PrefNoProfanity { get; set; }
 
         [JsonProperty("is_suspended")]
-        public bool IsSuspended;
+        public bool IsSuspended { get; set; }
 
         [JsonProperty("pref_geopopular")]
-        public string PrefGeopopular;
+        public string PrefGeopopular { get; set; }
 
         [JsonProperty("pref_show_trending")]
-        public bool PrefShowTrending;
+        public bool PrefShowTrending { get; set; }
 
         [JsonProperty("subreddit")]
-        public UserSubreddit Subreddit;
+        public UserSubreddit Subreddit { get; set; }
 
         [JsonProperty("is_sponsor")]
-        public bool IsSponsor;
+        public bool IsSponsor { get; set; }
 
         [JsonProperty("gold_expiration")]
-        public string GoldExpiration;
+        public string GoldExpiration { get; set; }
 
         [JsonProperty("has_gold_subscription")]
-        public bool HasGoldSubscription;
+        public bool HasGoldSubscription { get; set; }
 
         [JsonProperty("num_friends")]
-        public int NumFriends;
+        public int NumFriends { get; set; }
 
         [JsonProperty("features")]
-        public UserFeatures Features;
+        public UserFeatures Features { get; set; }
 
         [JsonProperty("has_stripe_subscription")]
-        public bool HasStripeSubscription;
+        public bool HasStripeSubscription { get; set; }
 
         [JsonProperty("verified")]
-        public bool Verified;
+        public bool Verified { get; set; }
 
         [JsonProperty("new_modmail_exists")]
-        public bool? NewModmailExists;
+        public bool? NewModmailExists { get; set; }
 
         [JsonProperty("pref_autoplay")]
-        public bool PrefAutoplay;
+        public bool PrefAutoplay { get; set; }
 
         [JsonProperty("coins")]
-        public int coins;
+        public int Coins { get; set; }
 
         [JsonProperty("has_paypal_subscription")]
-        public bool HasPayPalSubscription;
+        public bool HasPayPalSubscription { get; set; }
 
         [JsonProperty("has_subscribed_to_premium")]
-        public bool HasSubscribedToPremium;
+        public bool HasSubscribedToPremium { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("over_18")]
-        public bool Over18;
+        public bool Over18 { get; set; }
 
         [JsonProperty("is_gold")]
-        public bool IsGold;
+        public bool IsGold { get; set; }
 
         [JsonProperty("is_mod")]
-        public bool IsMod;
+        public bool IsMod { get; set; }
 
         [JsonProperty("suspension_expiration_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime SuspensionExpirationUTC;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime SuspensionExpirationUTC { get; set; }
 
         [JsonProperty("has_verified_email")]
-        public bool HasVerifiedEmail;
+        public bool HasVerifiedEmail { get; set; }
 
         [JsonProperty("has_external_account")]
-        public bool HasExternalAccount;
+        public bool HasExternalAccount { get; set; }
 
         [JsonProperty("pref_video_autoplay")]
-        public bool PrefVideoAutoplay;
+        public bool PrefVideoAutoplay { get; set; }
 
         [JsonProperty("in_chat")]
-        public bool InChat;
+        public bool InChat { get; set; }
 
         [JsonProperty("in_redesign_beta")]
-        public bool InRedesignBeta;
+        public bool InRedesignBeta { get; set; }
 
         [JsonProperty("icon_img")]
-        public string IconImg;
+        public string IconImg { get; set; }
 
         [JsonProperty("has_mod_mail")]
-        public bool HasModMail;
+        public bool HasModMail { get; set; }
 
         [JsonProperty("pref_nightmode")]
-        public bool PrefNightmode;
+        public bool PrefNightmode { get; set; }
 
         [JsonProperty("hide_from_robots")]
-        public bool HideFromRobots;
+        public bool HideFromRobots { get; set; }
 
         [JsonProperty("modhash")]
-        public string Modhash;
+        public string Modhash { get; set; }
 
         [JsonProperty("link_karma")]
-        public int LinkKarma;
+        public int LinkKarma { get; set; }
 
         [JsonProperty("force_password_reset")]
-        public bool ForcePasswordReset;
+        public bool ForcePasswordReset { get; set; }
 
         [JsonProperty("inbox_count")]
-        public int InboxCount;
+        public int InboxCount { get; set; }
 
         [JsonProperty("pref_top_karma_subreddits")]
-        public bool? PrefTopKarmaSubreddits;
+        public bool? PrefTopKarmaSubreddits { get; set; }
 
         [JsonProperty("has_mail")]
-        public bool HasMail;
+        public bool HasMail { get; set; }
 
         [JsonProperty("pref_show_snoovatar")]
-        public bool PrefShowSnoovatar;
+        public bool PrefShowSnoovatar { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("pref_clickgadget")]
-        public int PrefClickgadget;
+        public int PrefClickgadget { get; set; }
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Created;
+        [JsonConverter(typeof(LocalTimestampConverter))]
+        [Obsolete("Using this date can lead to unexpected results.  It is recommended that you use " + nameof(CreatedUTC) + " instead.")]
+        public DateTime Created { get; set; }
 
         [JsonProperty("gold_credits")]
-        public int GoldCredits;
+        public int GoldCredits { get; set; }
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime CreatedUTC;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("pref_show_twitter")]
-        public bool PrefShowTwitter;
+        public bool PrefShowTwitter { get; set; }
 
         [JsonProperty("in_beta")]
-        public bool InBeta;
+        public bool InBeta { get; set; }
 
         [JsonProperty("comment_karma")]
-        public int CommentKarma;
+        public int CommentKarma { get; set; }
 
         [JsonProperty("has_subscribed")]
-        public bool HasSubscribed;
+        public bool HasSubscribed { get; set; }
 
         public User(Controllers.User user)
         {
@@ -180,7 +181,7 @@ namespace Reddit.Things
             InboxCount = user.InboxCount;
             HasMail = user.HasMail;
             Name = user.Name;
-            Created = user.Created;
+            CreatedUTC = user.Created;
             CommentKarma = user.CommentKarma;
             HasSubscribed = user.HasSubscribed;
         }

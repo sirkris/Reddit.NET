@@ -58,17 +58,17 @@ namespace Reddit.Models
         /// <param name="listingsGetCommentsInput">A valid ListingsGetCommentsInput instance</param>
         /// <param name="subreddit">The subreddit with the article</param>
         /// <returns>A post and comments tree.</returns>
-        public List<(PostContainer, CommentContainer)> GetComments(string article, ListingsGetCommentsInput listingsGetCommentsInput, string subreddit = null)
+        public CommentContainer GetComments(string article, ListingsGetCommentsInput listingsGetCommentsInput, string subreddit = null)
         {
-            JArray res = SendRequest<JArray>(Sr(subreddit) + "comments/" + article +
+            JToken res = SendRequest<JToken>(Sr(subreddit) + "comments/" + article +
                 (!string.IsNullOrWhiteSpace(listingsGetCommentsInput.comment) ? "/_/" + listingsGetCommentsInput.comment : ""), listingsGetCommentsInput);
-
-            // Note - Deserializing directly to the tuple list resulted in null values.  --Kris
-            return new List<(PostContainer, CommentContainer)>
+            
+            if(string.IsNullOrEmpty(article))
             {
-                (JsonConvert.DeserializeObject<PostContainer>(JsonConvert.SerializeObject(res[0])),
-                JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res[1])))
-            };
+                return JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res));
+            }
+
+            return JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res[1]));
         }
 
         /// <summary>

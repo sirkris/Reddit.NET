@@ -3,9 +3,9 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.1.1.0</AssemblyVersion>
-    <FileVersion>1.1.1.0</FileVersion>
-    <Version>1.1.1</Version>
+    <AssemblyVersion>1.2.0.0</AssemblyVersion>
+    <FileVersion>1.2.0.0</FileVersion>
+    <Version>1.2.0</Version>
     <Authors>Kris Craig</Authors>
     <Company>Kris Craig</Company>
     <Description>This simple library enables an app developer to grant a new refresh token to a given Reddit user.</Description>
@@ -20,6 +20,14 @@
     <Product>Reddit.NET AuthTokenRetrieverLib</Product>
     <PackageId>Reddit.AuthTokenRetrieverLib</PackageId>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Templates\Success.html" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\Success.html" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />

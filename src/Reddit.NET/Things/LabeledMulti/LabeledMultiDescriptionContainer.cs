@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class LabeledMultiDescriptionContainer : BaseContainer
     {
         [JsonProperty("data")]
-        public LabeledMultiDescription Data;
+        public LabeledMultiDescription Data { get; set; }
     }
 }

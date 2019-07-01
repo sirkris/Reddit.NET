@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class MultipleResponseContainer
     {
         [JsonProperty("json")]
-        public MultipleResponse JSON;
+        public MultipleResponse JSON { get; set; }
     }
 }

@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class LiveUpdateData : BaseData
     {
         [JsonProperty("children")]
-        public List<LiveUpdateChild> Children;
+        public List<LiveUpdateChild> Children { get; set; }
     }
 }

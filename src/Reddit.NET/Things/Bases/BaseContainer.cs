@@ -7,6 +7,6 @@ namespace Reddit.Things
     public abstract class BaseContainer
     {
         [JsonProperty("kind")]
-        public string Kind;
+        public string Kind { get; set; }
     }
 }

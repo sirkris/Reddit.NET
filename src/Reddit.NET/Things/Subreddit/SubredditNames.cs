@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class SubredditNames
     {
         [JsonProperty("names")]
-        public List<string> Names;
+        public List<string> Names { get; set; }
     }
 }

@@ -7,13 +7,13 @@ namespace Reddit.Things
     public class WidgetTextArea : BaseContainer
     {
         [JsonProperty("shortName")]
-        public string ShortName;
+        public string ShortName { get; set; }
 
         [JsonProperty("styles")]
-        public WidgetStyles Styles;
+        public WidgetStyles Styles { get; set; }
 
         [JsonProperty("text")]
-        public string Text;
+        public string Text { get; set; }
 
         [JsonProperty("textHtml")]
         public string TextHTML

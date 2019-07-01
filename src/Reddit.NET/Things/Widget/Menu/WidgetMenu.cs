@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class WidgetMenu : BaseContainer
     {
         [JsonProperty("data")]
-        public List<WidgetMenuDataLong> Data;
+        public List<WidgetMenuDataLong> Data { get; set; }
     }
 }

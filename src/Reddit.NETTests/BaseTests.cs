@@ -219,7 +219,7 @@ namespace RedditTests
         public void Validate(User user)
         {
             Assert.IsNotNull(user);
-            Assert.IsFalse(user.Created.Equals(default(DateTime)));
+            Assert.IsFalse(user.CreatedUTC.Equals(default(DateTime)));
             Assert.IsFalse(string.IsNullOrWhiteSpace(user.Name));
         }
 

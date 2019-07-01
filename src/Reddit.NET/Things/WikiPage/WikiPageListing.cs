@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class WikiPageListing : BaseContainer
     {
         [JsonProperty("data")]
-        public List<string> Data;
+        public List<string> Data { get; set; }
     }
 }

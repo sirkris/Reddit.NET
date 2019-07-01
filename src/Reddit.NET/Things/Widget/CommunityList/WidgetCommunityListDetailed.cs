@@ -8,13 +8,13 @@ namespace Reddit.Things
     public class WidgetCommunityListDetailed : BaseContainer
     {
         [JsonProperty("data")]
-        public List<WidgetCommunityListData> Data;  // List of subreddits.  --Kris
+        public List<WidgetCommunityListData> Data { get; set; }  // List of subreddits.  --Kris
 
         [JsonProperty("shortName")]
-        public string ShortName;
+        public string ShortName { get; set; }
 
         [JsonProperty("styles")]
-        public WidgetStyles Styles;
+        public WidgetStyles Styles { get; set; }
 
         public WidgetCommunityListDetailed(List<WidgetCommunityListData> data, string shortName, WidgetStyles styles)
         {

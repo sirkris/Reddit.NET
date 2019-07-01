@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class WidgetButton3 : WidgetButton
     {
         [JsonProperty("buttons")]
-        public List<WidgetButton3Data> Buttons;
+        public List<WidgetButton3Data> Buttons { get; set; }
     }
 }

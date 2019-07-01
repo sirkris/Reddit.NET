@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class UserKarmaContainer
     {
         [JsonProperty("data")]
-        public List<UserKarma> Data;
+        public List<UserKarma> Data { get; set; }
     }
 }

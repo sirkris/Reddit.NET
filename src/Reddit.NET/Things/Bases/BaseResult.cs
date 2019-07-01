@@ -8,9 +8,9 @@ namespace Reddit.Things
     public abstract class BaseResult
     {
         [JsonProperty("errors")]
-        public List<List<string>> Errors;
+        public List<List<string>> Errors { get; set; }
 
         [JsonProperty("ratelimit")]
-        public double Ratelimit;
+        public double Ratelimit { get; set; }
     }
 }

@@ -8,37 +8,37 @@ namespace Reddit.Controllers.Structures
         /// <summary>
         /// Whether to monitor on Sundays.
         /// </summary>
-        public bool Sunday;
+        public bool Sunday { get; set; }
 
         /// <summary>
         /// Whether to monitor on Mondays.
         /// </summary>
-        public bool Monday;
+        public bool Monday { get; set; }
 
         /// <summary>
         /// Whether to monitor on Tuesdays.
         /// </summary>
-        public bool Tuesday;
+        public bool Tuesday { get; set; }
 
         /// <summary>
         /// Whether to monitor on Wednesdays.
         /// </summary>
-        public bool Wednesday;
+        public bool Wednesday { get; set; }
 
         /// <summary>
         /// Whether to monitor on Thursdays.
         /// </summary>
-        public bool Thursday;
+        public bool Thursday { get; set; }
 
         /// <summary>
         /// Whether to monitor on Fridays.
         /// </summary>
-        public bool Friday;
+        public bool Friday { get; set; }
 
         /// <summary>
         /// Whether to monitor on Saturdays.
         /// </summary>
-        public bool Saturday;
+        public bool Saturday { get; set; }
 
         /// <summary>
         /// Create a new instance that specifies which days of the week a thing should be monitored.

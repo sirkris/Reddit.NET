@@ -7,18 +7,18 @@ namespace Reddit.Things
     public class WidgetButton4Data : BaseContainer
     {
         [JsonProperty("json")]
-        public WidgetImageProperties JSON;
+        public WidgetImageProperties JSON { get; set; }
 
         [JsonProperty("imageUrl")]
-        public string ImageURL;
+        public string ImageURL { get; set; }
 
         [JsonProperty("linkUrl")]
-        public string LinkURL;
+        public string LinkURL { get; set; }
 
         [JsonProperty("text")]
-        public string Text;
+        public string Text { get; set; }
 
         [JsonProperty("width")]
-        public int Width;
+        public int Width { get; set; }
     }
 }

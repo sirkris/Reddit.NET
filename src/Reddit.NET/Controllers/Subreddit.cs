@@ -18,46 +18,46 @@ namespace Reddit.Controllers
     public class Subreddit : BaseController
     {
         // Subreddit data pertaining to the logged-in user can be found in SubredditData.  --Kris
-        public string BannerImg;
-        public string BannerBackgroundColor;
-        public string BannerBackgroundImage;
-        public string SubredditType;
-        public string CommunityIcon;
-        public string HeaderTitle;
-        public bool WikiEnabled;
-        public bool? Over18;
-        public string Sidebar;
-        public string Name;
-        public object HeaderImg;
-        public string Title;
-        public bool? CollapseDeletedComments;
-        public string Id;
-        public bool EmojisEnabled;
-        public bool? ShowMedia;
-        public bool AllowVideos;
-        public bool CanAssignUserFlair;
-        public bool? SpoilersEnabled;
-        public string PrimaryColor;
-        public string SuggestedCommentSort;
-        public int? ActiveUserCount;
-        public object IconImg;
-        public bool CanAssignLinkFlair;
-        public bool AllowVideoGifs;
-        public int? Subscribers;
-        public string SubmitTextLabel;
-        public string KeyColor;
-        public string Lang;
-        public string Fullname;
-        public DateTime Created;
-        public string URL;
-        public string SubmitLinkLabel;
-        public bool? AllowDiscovery;
-        public string Description;
-        public bool? LinkFlairEnabled;
-        public bool? AllowImages;
-        public int? CommentScoreHideMins;
-        public bool? ShowMediaPreview;
-        public string SubmissionType;
+        public string BannerImg { get; set; }
+        public string BannerBackgroundColor { get; set; }
+        public string BannerBackgroundImage { get; set; }
+        public string SubredditType { get; set; }
+        public string CommunityIcon { get; set; }
+        public string HeaderTitle { get; set; }
+        public bool WikiEnabled { get; set; }
+        public bool? Over18 { get; set; }
+        public string Sidebar { get; set; }
+        public string Name { get; set; }
+        public object HeaderImg { get; set; }
+        public string Title { get; set; }
+        public bool? CollapseDeletedComments { get; set; }
+        public string Id { get; set; }
+        public bool EmojisEnabled { get; set; }
+        public bool? ShowMedia { get; set; }
+        public bool AllowVideos { get; set; }
+        public bool CanAssignUserFlair { get; set; }
+        public bool? SpoilersEnabled { get; set; }
+        public string PrimaryColor { get; set; }
+        public string SuggestedCommentSort { get; set; }
+        public int? ActiveUserCount { get; set; }
+        public object IconImg { get; set; }
+        public bool CanAssignLinkFlair { get; set; }
+        public bool AllowVideoGifs { get; set; }
+        public int? Subscribers { get; set; }
+        public string SubmitTextLabel { get; set; }
+        public string KeyColor { get; set; }
+        public string Lang { get; set; }
+        public string Fullname { get; set; }
+        public DateTime Created { get; set; }
+        public string URL { get; set; }
+        public string SubmitLinkLabel { get; set; }
+        public bool? AllowDiscovery { get; set; }
+        public string Description { get; set; }
+        public bool? LinkFlairEnabled { get; set; }
+        public bool? AllowImages { get; set; }
+        public int? CommentScoreHideMins { get; set; }
+        public bool? ShowMediaPreview { get; set; }
+        public string SubmissionType { get; set; }
 
         /// <summary>
         /// Full subreddit data retrieved from the API.
@@ -71,17 +71,22 @@ namespace Reddit.Controllers
         /// <summary>
         /// Posts belonging to this subreddit.
         /// </summary>
-        public SubredditPosts Posts;
+        public SubredditPosts Posts { get; set; }
+
+        /// <summary>
+        /// Comments belonging to this subreddit.
+        /// </summary>
+        public Comments Comments { get; set; }
 
         /// <summary>
         /// Flairs belonging to this subreddit.
         /// </summary>
-        public Flairs Flairs;
+        public Flairs Flairs { get; set; }
 
         /// <summary>
         /// The subreddit wiki controller.
         /// </summary>
-        public Wiki Wiki;
+        public Wiki Wiki { get; set; }
 
         internal Dispatch Dispatch;
 
@@ -103,7 +108,7 @@ namespace Reddit.Controllers
             }
         }
         internal Things.SubredditSubmitText submitText;
-        private DateTime? SubmitTextLastUpdated;
+        private DateTime? SubmitTextLastUpdated { get; set; }
 
         /// <summary>
         /// Get the moderators of this subreddit.
@@ -122,7 +127,7 @@ namespace Reddit.Controllers
             }
         }
         internal List<Moderator> moderators;
-        private DateTime? ModeratorsLastUpdated;
+        private DateTime? ModeratorsLastUpdated { get; set; }
 
         /// <summary>
         /// Create a new subreddit controller instance populated from API return data.
@@ -137,6 +142,7 @@ namespace Reddit.Controllers
 
             SubredditData = subreddit;
             Posts = new SubredditPosts(Dispatch, Name);
+            Comments = new Comments(Dispatch, subreddit: Name);
             Flairs = new Flairs(Dispatch, Name);
             Wiki = new Wiki(Dispatch, Name);
         }
@@ -154,6 +160,7 @@ namespace Reddit.Controllers
 
             SubredditData = subredditChild.Data;
             Posts = new SubredditPosts(Dispatch, Name);
+            Comments = new Comments(Dispatch, subreddit: Name);
             Flairs = new Flairs(Dispatch, Name);
             Wiki = new Wiki(Dispatch, Name);
         }
@@ -207,7 +214,7 @@ namespace Reddit.Controllers
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null,
             string fullname = null)
             : base()
         {
@@ -219,6 +226,7 @@ namespace Reddit.Controllers
 
             UpdateSubredditData();
             Posts = new SubredditPosts(Dispatch, Name);
+            Comments = new Comments(Dispatch, subreddit: Name);
             Flairs = new Flairs(Dispatch, Name);
             Wiki = new Wiki(Dispatch, Name);
         }
@@ -232,6 +240,7 @@ namespace Reddit.Controllers
         {
             Dispatch = dispatch;
             Posts = new SubredditPosts(Dispatch, Name);
+            Comments = new Comments(Dispatch, subreddit: Name);
             Flairs = new Flairs(Dispatch, Name);
             Wiki = new Wiki(Dispatch, Name);
         }
@@ -269,7 +278,7 @@ namespace Reddit.Controllers
             KeyColor = subreddit.KeyColor;
             Lang = subreddit.Lang;
             Fullname = subreddit.Name;
-            Created = subreddit.Created;
+            Created = subreddit.CreatedUTC;
             URL = subreddit.URL;
             SubmitLinkLabel = subreddit.SubmitLinkLabel;
             AllowDiscovery = subreddit.AllowDiscovery;
@@ -304,7 +313,7 @@ namespace Reddit.Controllers
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null,
             string fullname = null)
         {
             Name = name;
@@ -379,7 +388,7 @@ namespace Reddit.Controllers
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,
             bool removed = false, bool spam = false)
         {
-            return new SelfPost(Dispatch, Name, title, author, selfText, selfTextHtml, id, fullname, permalink, created, 
+            return new SelfPost(Dispatch, Name, title, author, selfText, selfTextHtml, id, fullname, permalink, created,
                 edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -485,7 +494,7 @@ namespace Reddit.Controllers
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <returns>A list of subreddit moderators.</returns>
-        public List<Moderator> GetModerators(string after = "", string before = "", int limit = 25, string user = "", 
+        public List<Moderator> GetModerators(string after = "", string before = "", int limit = 25, string user = "",
             bool includeCategories = false, int count = 0, string show = "all", bool srDetail = false)
         {
             return GetModerators(new SubredditsAboutInput(user, after, before, count, limit, show, srDetail, includeCategories));
@@ -637,7 +646,7 @@ namespace Reddit.Controllers
         {
             Validate(await Dispatch.Subreddits.SubredditStylesheetAsync(new SubredditsSubredditStylesheetInput(stylesheetContents, reason), Name));
         }
-        
+
         /// <summary>
         /// Subscribe to a subreddit.
         /// </summary>

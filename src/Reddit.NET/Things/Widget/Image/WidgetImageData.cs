@@ -7,15 +7,15 @@ namespace Reddit.Things
     public class WidgetImageData
     {
         [JsonProperty("height")]
-        public int Height;
+        public int Height { get; set; }
 
         [JsonProperty("linkUrl")]
-        public string LinkURL;
+        public string LinkURL { get; set; }
 
         [JsonProperty("url")]
-        public string URL;
+        public string URL { get; set; }
 
         [JsonProperty("width")]
-        public int Width;
+        public int Width { get; set; }
     }
 }

@@ -8,22 +8,22 @@ namespace Reddit.Things
     public class ConversationMessage
     {
         [JsonProperty("body")]
-        public string Body;
+        public string Body { get; set; }
 
         [JsonProperty("author")]
-        public ConversationAuthor Author;
+        public ConversationAuthor Author { get; set; }
 
         [JsonProperty("isInternal")]
-        public bool IsInternal;
+        public bool IsInternal { get; set; }
 
         [JsonProperty("date")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Date;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime Date { get; set; }
 
         [JsonProperty("bodyMarkdown")]
-        public string BodyMarkdown;
+        public string BodyMarkdown { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
     }
 }

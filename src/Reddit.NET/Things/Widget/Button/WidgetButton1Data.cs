@@ -7,12 +7,12 @@ namespace Reddit.Things
     public class WidgetButton1Data
     {
         [JsonProperty("color")]
-        public string Color;
+        public string Color { get; set; }
 
         [JsonProperty("fillColor")]
-        public string FillColor;
+        public string FillColor { get; set; }
 
         [JsonProperty("hoverState")]
-        public WidgetHoverState HoverState;
+        public WidgetHoverState HoverState { get; set; }
     }
 }

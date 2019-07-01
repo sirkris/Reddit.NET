@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class GenericContainer
     {
         [JsonProperty("json")]
-        public Generic JSON;
+        public Generic JSON { get; set; }
     }
 }

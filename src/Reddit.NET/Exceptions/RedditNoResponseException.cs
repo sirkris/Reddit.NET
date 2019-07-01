@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Reddit.Exceptions
 {
+    [Serializable]
     public class RedditNoResponseException : Exception
     {
         public RedditNoResponseException(string message, Exception inner)
@@ -11,5 +13,8 @@ namespace Reddit.Exceptions
             : base(message) { }
 
         public RedditNoResponseException() { }
+
+        protected RedditNoResponseException(SerializationInfo serializationInfo, StreamingContext context)
+            : base(serializationInfo, context) { }
     }
 }

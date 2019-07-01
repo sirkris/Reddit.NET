@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class MessageChild : BaseContainer
     {
         [JsonProperty("data")]
-        public Message Data;
+        public Message Data { get; set; }
     }
 }

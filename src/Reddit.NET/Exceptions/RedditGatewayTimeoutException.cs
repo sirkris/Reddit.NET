@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Runtime.Serialization;
 
 namespace Reddit.Exceptions
 {
+    [Serializable]
     public class RedditGatewayTimeoutException : Exception
     {
         public RedditGatewayTimeoutException(string message, Exception inner)
@@ -11,5 +13,8 @@ namespace Reddit.Exceptions
             : base(message) { }
 
         public RedditGatewayTimeoutException() { }
+
+        protected RedditGatewayTimeoutException(SerializationInfo serializationInfo, StreamingContext context)
+            : base(serializationInfo, context) { }
     }
 }

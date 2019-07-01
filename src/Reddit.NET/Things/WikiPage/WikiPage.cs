@@ -8,19 +8,19 @@ namespace Reddit.Things
     public class WikiPage
     {
         [JsonProperty("may_revise")]
-        public bool MayRevise;
+        public bool MayRevise { get; set; }
 
         [JsonProperty("revision_date")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime RevisionDate;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime RevisionDate { get; set; }
 
         [JsonProperty("content_html")]
-        public string ContentHTML;
+        public string ContentHTML { get; set; }
 
         [JsonProperty("revision_by")]
-        public UserChild RevisionBy;
+        public UserChild RevisionBy { get; set; }
 
         [JsonProperty("content_md")]
-        public string ContentMd;
+        public string ContentMd { get; set; }
     }
 }

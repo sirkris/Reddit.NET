@@ -7,13 +7,13 @@ namespace Reddit.Things
     public class AccountPrefsSubmit : AccountPrefsBase
     {
         [JsonProperty("g")]
-        public string G;
+        public string G { get; set; }
 
         [JsonProperty("in_redesign_beta")]
-        public bool InRedesignBeta;
+        public bool InRedesignBeta { get; set; }
 
         [JsonProperty("other_theme")]
-        public string OtherTheme;
+        public string OtherTheme { get; set; }
 
         public AccountPrefsSubmit(AccountPrefs accountPrefs, string g, bool inRedesignBeta, string otherTheme)
             : base(accountPrefs.ThreadedMessages, accountPrefs.HideDowns, accountPrefs.LabelNSFW, accountPrefs.ActivityRelevantAds, accountPrefs.EmailMessages, 

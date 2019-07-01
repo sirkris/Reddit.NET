@@ -7,12 +7,12 @@ namespace Reddit.Things
     public class WidgetImageProperties : BaseContainer
     {
         [JsonProperty("height")]
-        public int Height;
+        public int Height { get; set; }
 
         [JsonProperty("imageUrl")]
-        public string ImageURL;
+        public string ImageURL { get; set; }
 
         [JsonProperty("width")]
-        public int Width;
+        public int Width { get; set; }
     }
 }

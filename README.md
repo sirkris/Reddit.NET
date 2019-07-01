@@ -25,15 +25,15 @@ Created by Kris Craig.
 
 ## Overview
 
-Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
+Reddit.NET is a .NET Standard managed library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
 
-Currently, the library supports 171 of the 205 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 335 of the tests are currently passing. All of the most commonly used endpoints are supported.
+Currently, the library supports 171 of the 204 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 337 of the tests are currently passing. All of the most commonly used endpoints are supported.
 
 Reddit.NET is FOSS (MIT license) and was written in C#. It can be found on Github at:  https://github.com/sirkris/Reddit.NET
 
 ### Contributors
 
-[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md), [JP Dillingham](docs/contributors/JP%20Dillingham.md), [origine999](docs/contributors/origine999.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
+[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md), [JP Dillingham](docs/contributors/JP%20Dillingham.md), [origine999](docs/contributors/origine999.md), [Kevin Smith](docs/contributors/noiz.md), [jpsak09](docs/contributors/jpsak09.md), [Kostyantyn Sharovarsky](docs/contributors/kostya9.md), [Leland Olney](docs/contributors/Leland%20Olney.md), [Mingwei Samuel](docs/contributors/Mingwei%20Samuel.md), [John Kelly](docs/contributors/John%20Kelly.md), [Adam Gauthier](docs/contributors/Adam%20Gauthier.md), [Marek Toman](docs/contributors/Marek%20Toman.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
 
 ### Beta Testers
 
@@ -172,7 +172,7 @@ Many controller methods also have async counterparts.
 Reddit.NET allows for asynchronous, event-based monitoring of various things. For example, if you're monitoring a subreddit for new posts, the monitoring thread will do its API query once every 1.5 seconds times the total number of current monitoring threads (more on that below). When there's a change in the return data, the library identifies any posts that were added or removed since the last query and includes them in the eventargs. The app developer can then write a custom callback function that will be called whenever the event fires, at which point the dev can do whatever they want with it from there.
 
 Reddit.NET automatically scales the delay between each monitoring query depending on how many things are being monitored. This ensures that the library will average 1 monitoring query every 1.5 seconds, regardless of how many things are being monitored at once, leaving 25% of available bandwidth remaining for any non-monitoring queries you wish to run.
-There is theoretically no limit to how many things can be monitored at once, hardware and other considerations notwithstanding. In one of the stress tests, I have it simultaneously montioring 60 posts for new comments. In this case, the delay between each monitoring thread's query is 90 seconds (actually, it's 91.5 because it's also monitoring a subreddit for new posts at the same time).
+There is theoretically no limit to how many things can be monitored at once, hardware and other considerations notwithstanding. In one of the stress tests, I have it simultaneously montioring 60 posts for new comments. In this case, the delay between each monitoring thread's query is 90 seconds (actually, it's 91.5 because it's also monitoring a subreddit for new posts at the same time).  It is possible to override this behavior and specify a monitoring delay of your own choosing.
 
 If you want to see how much load this can handle, check out the PoliceState() stress test. That one was especially fun to write.
 
@@ -191,16 +191,24 @@ Here's a list of things that can currently be monitored by Reddit.NET:
 * Monitor a subreddit for new posts (any sort).
 * Monitor a subreddit's wiki for any added/removed pages.
 * Monitor a wiki page for new revisions.
+* Monitor a post for any configuration changes to edited, removed, spam, or nsfw.
+* Monitor a post for meaningful changes to its score (net upvotes).
+* Monitor a user for new posts.
+* Monitor a user for new comments.
 
 Each monitoring session occurs in its own thread.
 
 ## Solution Projects
 
-There are 4 projects in the Reddit.NET solution:
+There are 5 projects in the Reddit.NET solution:
 
 ### AuthTokenRetriever
 
 A .NET Core console application that greatly simplifies the OAuth token retrieval process.  Please review the video below for usage instructions:
+
+### AuthTokenRetrieverLib
+
+A .NET Standard library that is used by the AuthTokenRetriever app.  You can also use this in your own apps to retrieve auth tokens for new users.
 
 #### [Obtaining OAuth Tokens using Reddit.NET's AuthTokenRetriever utility](https://www.youtube.com/watch?v=xlWhLyVgN2s)
 
@@ -214,7 +222,7 @@ The main library. This is what the app dev includes in their project.
 
 ### Reddit.NETTests
 
-This project contains unit, workflow, and stress tests using MSTest. There are currently 335 tests, all passing (at least, they all pass for me). All of the supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
+This project contains unit, workflow, and stress tests using MSTest. There are currently 337 tests, all passing. All of the supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
 
 ## Running the Tests
 
@@ -403,6 +411,12 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 #### [Crossposting](docs/examples/cs/Crosspost.md)
 
 #### [Pagination](docs/examples/cs/Paginated%20Posts.md)
+
+#### [Monitor a Subreddit for New Comments](docs/examples/cs/Monitor%20Subreddit%20Comments.md)
+
+#### [Link to SelfPost](docs/examples/cs/Link%20to%20SelfPost.md)
+
+#### [Recommended Subreddits](docs/examples/cs/Recommended%20Subreddits.md)
 
 For more examples, check out the Example and Reddit.NETTests projects.
 
@@ -674,8 +688,6 @@ See:  [Running the Tests](#redditnettests)
 
 `GET /api/multi/mine`
 
-`POST /api/multi/rename`
-
 `GET /api/multi/user/<username>`
 
 `DELETE /api/multi/<multipath>`
@@ -709,6 +721,8 @@ See:  [Running the Tests](#redditnettests)
 `POST [/r/<subreddit>]/api/delete_sr_icon`
 
 `POST [/r/<subreddit>]/api/delete_sr_img`
+
+`GET /api/recommend/sr/srnames`
 
 `GET /api/search_reddit_names`
 
@@ -804,9 +818,9 @@ See:  [Running the Tests](#redditnettests)
 `GET [/r/<subreddit>]/wiki/<page>`
 
 
-Total:  171 / 205 (83%)
+Total:  171 / 204 (84%)
 
-There are 34 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
+There are 33 endpoints listed in the API docs that are not currently supported (mostly because I haven't been able to get them to work yet).
 
 Virtually all of the supported endpoints are covered by tests (voting and admin-reporting were manually tested for obvious reasons) and all of those tests are passing.
 

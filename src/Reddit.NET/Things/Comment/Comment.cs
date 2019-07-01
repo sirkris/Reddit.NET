@@ -9,202 +9,203 @@ namespace Reddit.Things
     public class Comment
     {
         [JsonProperty("approved_at_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime ApprovedAtUTC;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime ApprovedAtUTC { get; set; }
 
         [JsonProperty("subreddit")]
-        public string Subreddit;
+        public string Subreddit { get; set; }
 
         [JsonProperty("user_reports")]
-        public object UserReports;
+        public object UserReports { get; set; }
 
         [JsonProperty("saved")]
-        public bool Saved;
+        public bool Saved { get; set; }
 
         [JsonProperty("mod_reason_title")]
-        public string ModReasonTitle;
+        public string ModReasonTitle { get; set; }
 
         // TODO - Assuming this is supposed to be boolean.  Not sure what else the int value could be for (it's either gilded or it's not, right?).  --Kris
         [JsonProperty("gilded")]
         [JsonConverter(typeof(IntBoolConvert))]
-        public bool Gilded;
+        public bool Gilded { get; set; }
 
         [JsonProperty("subreddit_name_prefixed")]
-        public string SubredditNamePrefixed;
+        public string SubredditNamePrefixed { get; set; }
 
         [JsonProperty("downs")]
-        public int Downs;
+        public int Downs { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("author_flair_background_color")]
-        public string AuthorFlairBackgroundColor;
+        public string AuthorFlairBackgroundColor { get; set; }
 
         [JsonProperty("subreddit_type")]
-        public string SubredditType;
+        public string SubredditType { get; set; }
 
         [JsonProperty("ups")]
-        public int Ups;
+        public int Ups { get; set; }
 
         [JsonProperty("author_flair_template_id")]
-        public string AuthorFlairTemplateId;
+        public string AuthorFlairTemplateId { get; set; }
 
         [JsonProperty("author_fullname")]
-        public string AuthorFullname;
+        public string AuthorFullname { get; set; }
 
         [JsonProperty("can_mod_post")]
-        public bool CanModPost;
+        public bool CanModPost { get; set; }
 
         [JsonProperty("score")]
-        public int Score;
+        public int Score { get; set; }
 
         [JsonProperty("approved_by")]
-        public string ApprovedBy;
+        public string ApprovedBy { get; set; }
 
         [JsonProperty("ignore_reports")]
-        public bool IgnoreReports;
+        public bool IgnoreReports { get; set; }
 
         [JsonProperty("edited")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Edited;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime Edited { get; set; }
 
         [JsonProperty("author_flair_css_class")]
-        public string AuthorFlairCSSClass;
+        public string AuthorFlairCSSClass { get; set; }
 
         [JsonProperty("previous_visits")]
         //[JsonConverter(typeof(List<TimestampConvert>))]
-        public object PreviousVisits;
+        public object PreviousVisits { get; set; }
 
         // TODO - Is this a list or a string or what?  --Kris
         [JsonProperty("author_flair_richtext")]
-        public List<object> AuthorFlairRichtext;
+        public List<object> AuthorFlairRichtext { get; set; }
 
         [JsonProperty("gildings")]
-        public Dictionary<string, int> Gildings;
+        public Dictionary<string, int> Gildings { get; set; }
 
         [JsonProperty("mod_note")]
-        public string ModNote;
+        public string ModNote { get; set; }
 
         [JsonProperty("created")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Created;
+        [JsonConverter(typeof(LocalTimestampConverter))]
+        [Obsolete("Using this date can lead to unexpected results.  It is recommended that you use " + nameof(CreatedUTC) + " instead.")]
+        public DateTime Created { get; set; }
 
         [JsonProperty("banned_by")]
-        public string BannedBy;
+        public string BannedBy { get; set; }
 
         [JsonProperty("author_flair_type")]
-        public string AuthorFlairType;
+        public string AuthorFlairType { get; set; }
 
         [JsonProperty("likes")]
-        public bool? Likes;
+        public bool? Likes { get; set; }
 
         [JsonProperty("banned_at_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime BannedAtUTC;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime BannedAtUTC { get; set; }
 
         [JsonProperty("archived")]
-        public bool Archived;
+        public bool Archived { get; set; }
 
         [JsonProperty("no_follow")]
-        public bool NoFollow;
+        public bool NoFollow { get; set; }
 
         [JsonProperty("spam")]
-        public bool Spam;
+        public bool Spam { get; set; }
 
         [JsonProperty("can_gild")]
-        public bool CanGild;
+        public bool CanGild { get; set; }
 
         [JsonProperty("removed")]
-        public bool Removed;
+        public bool Removed { get; set; }
 
         [JsonProperty("author_flair_text")]
-        public string AuthorFlairText;
+        public string AuthorFlairText { get; set; }
 
         [JsonProperty("rte_mode")]
-        public string RteMode;
+        public string RteMode { get; set; }
 
         [JsonProperty("num_reports")]
-        public int? NumReports;
+        public int? NumReports { get; set; }
 
         [JsonProperty("distinguished")]
-        public string Distinguished;
+        public string Distinguished { get; set; }
 
         [JsonProperty("subreddit_id")]
-        public string SubredditId;
+        public string SubredditId { get; set; }
 
         [JsonProperty("mod_reason_by")]
-        public string ModReasonBy;
+        public string ModReasonBy { get; set; }
 
         [JsonProperty("removal_reason")]
-        public string RemovalReason;
+        public string RemovalReason { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("report_reasons")]
-        public List<string> ReportReasons;
+        public List<string> ReportReasons { get; set; }
 
         [JsonProperty("author")]
-        public string Author;
+        public string Author { get; set; }
 
         [JsonProperty("send_replies")]
-        public bool SendReplies;
+        public bool SendReplies { get; set; }
 
         [JsonProperty("approved")]
-        public bool Approved;
+        public bool Approved { get; set; }
 
         [JsonProperty("author_flair_text_color")]
-        public string AuthorFlairTextColor;
+        public string AuthorFlairTextColor { get; set; }
 
         [JsonProperty("permalink")]
-        public string Permalink;
+        public string Permalink { get; set; }
 
         [JsonProperty("stickied")]
-        public bool Stickied;
+        public bool Stickied { get; set; }
 
         [JsonProperty("created_utc")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime CreatedUTC;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime CreatedUTC { get; set; }
 
         [JsonProperty("mod_reports")]
-        public List<List<string>> ModReports;
+        public List<List<string>> ModReports { get; set; }
 
         [JsonProperty("replies")]
-        public CommentContainer Replies;
+        public CommentContainer Replies { get; set; }
 
         [JsonProperty("body_html")]
-        public string BodyHTML;
+        public string BodyHTML { get; set; }
 
         [JsonProperty("parent_id")]
-        public string ParentId;
+        public string ParentId { get; set; }
 
         [JsonProperty("body")]
-        public string Body;
+        public string Body { get; set; }
 
         [JsonProperty("collapsed")]
-        public bool Collapsed;
+        public bool Collapsed { get; set; }
 
         [JsonProperty("is_submitter")]
-        public bool IsSubmitter;
+        public bool IsSubmitter { get; set; }
 
         [JsonProperty("collapsed_reason")]
-        public string CollapsedReason;
+        public string CollapsedReason { get; set; }
 
         [JsonProperty("score_hidden")]
-        public bool ScoreHidden;
+        public bool ScoreHidden { get; set; }
 
         [JsonProperty("controversiality")]
-        public int Controversiality;
+        public int Controversiality { get; set; }
 
         [JsonProperty("depth")]
-        public int Depth;
+        public int Depth { get; set; }
 
         [JsonProperty("sr_detail")]
-        public Subreddit SrDetail;
+        public Subreddit SrDetail { get; set; }
 
         [JsonProperty("link_id")]
-        public string LinkId;
+        public string LinkId { get; set; }
 
         public Comment(Controllers.Comment comment)
         {
@@ -220,7 +221,7 @@ namespace Reddit.Things
             Id = comment.Id;
             Name = comment.Fullname;
             Permalink = comment.Permalink;
-            Created = comment.Created;
+            CreatedUTC = comment.Created;
             Edited = comment.Edited;
             Score = comment.Score;
             Ups = comment.UpVotes;

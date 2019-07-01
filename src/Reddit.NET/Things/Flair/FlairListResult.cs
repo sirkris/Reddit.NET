@@ -7,13 +7,13 @@ namespace Reddit.Things
     public class FlairListResult
     {
         [JsonProperty("flair_css_class")]
-        public string FlairCssClass;
+        public string FlairCssClass { get; set; }
 
         [JsonProperty("user")]
-        public string User;
+        public string User { get; set; }
 
         [JsonProperty("flair_text")]
-        public string FlairText;
+        public string FlairText { get; set; }
 
         public string ToCSV()
         {

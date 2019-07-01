@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class UserListData
     {
         [JsonProperty("children")]
-        public List<UserListChild> Children;
+        public List<UserListChild> Children { get; set; }
     }
 }

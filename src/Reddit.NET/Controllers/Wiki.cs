@@ -39,9 +39,10 @@ namespace Reddit.Controllers
             }
         }
         private List<string> pages;
-        private DateTime? PagesLastUpdated;
 
-        private readonly string Subreddit;
+        private DateTime? PagesLastUpdated { get; set; }
+        private string Subreddit { get; set; }
+
         private Dispatch Dispatch;
 
         /// <summary>

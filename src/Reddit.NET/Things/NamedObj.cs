@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class NamedObj
     {
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
     }
 }

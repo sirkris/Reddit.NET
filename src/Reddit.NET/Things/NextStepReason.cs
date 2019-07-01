@@ -8,15 +8,15 @@ namespace Reddit.Things
     public class NextStepReason
     {
         [JsonProperty("nextStepHeader")]
-        public string NextStepHeader;
+        public string NextStepHeader { get; set; }
 
         [JsonProperty("reasonTextToShow")]
-        public string ReasonTextToShow;
+        public string ReasonTextToShow { get; set; }
 
         [JsonProperty("reasonText")]
-        public string ReasonText;
+        public string ReasonText { get; set; }
 
         [JsonProperty("nextStepReasons")]
-        public List<NextStepReason> NextStepReasons;
+        public List<NextStepReason> NextStepReasons { get; set; }
     }
 }

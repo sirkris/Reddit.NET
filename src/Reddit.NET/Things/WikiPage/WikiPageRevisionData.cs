@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class WikiPageRevisionData : BaseData
     {
         [JsonProperty("children")]
-        public List<WikiPageRevision> Children;
+        public List<WikiPageRevision> Children { get; set; }
     }
 }

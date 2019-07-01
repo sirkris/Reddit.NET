@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class ModActionData : BaseData
     {
         [JsonProperty("children")]
-        public List<ModActionChild> Children;
+        public List<ModActionChild> Children { get; set; }
     }
 }

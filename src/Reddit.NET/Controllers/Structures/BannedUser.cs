@@ -8,16 +8,16 @@ namespace Reddit.Controllers.Structures
     public class BannedUser
     {
         [JsonProperty("date")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Date;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime Date { get; set; }
 
         [JsonProperty("note")]
-        public string Note;
+        public string Note { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
     }
 }

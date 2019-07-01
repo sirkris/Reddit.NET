@@ -7,9 +7,9 @@ namespace Reddit.Things
     public class WidgetMenuData
     {
         [JsonProperty("text")]
-        public string Text;
+        public string Text { get; set; }
 
         [JsonProperty("url")]
-        public string URL;
+        public string URL { get; set; }
     }
 }

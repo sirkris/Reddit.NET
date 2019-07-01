@@ -8,15 +8,15 @@ namespace Reddit.Things
     public class WidgetPostFlair : BaseContainer
     {
         [JsonProperty("display")]
-        public string Display;
+        public string Display { get; set; }
 
         [JsonProperty("order")]
-        public List<string> Order;  // List of flair template ids.  --Kris
+        public List<string> Order { get; set; }  // List of flair template ids.  --Kris
 
         [JsonProperty("shortName")]
-        public string ShortName;
+        public string ShortName { get; set; }
 
         [JsonProperty("styles")]
-        public WidgetStyles Styles;
+        public WidgetStyles Styles { get; set; }
     }
 }

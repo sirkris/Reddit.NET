@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class DynamicShortListingContainer : BaseContainer
     {
         [JsonProperty("data")]
-        public DynamicShortListingData Data;
+        public DynamicShortListingData Data { get; set; }
     }
 }

@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class LiveThreadCreateResultContainer
     {
         [JsonProperty("json")]
-        public LiveThreadCreateResult JSON;
+        public LiveThreadCreateResult JSON { get; set; }
     }
 }

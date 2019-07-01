@@ -7,12 +7,12 @@ namespace Reddit.Things
     public class WikiPageSettings
     {
         [JsonProperty("permlevel")]
-        public int PermLevel;
+        public int PermLevel { get; set; }
 
         [JsonProperty("editors")]
-        public object Editors;
+        public object Editors { get; set; }
 
         [JsonProperty("listed")]
-        public bool Listed;
+        public bool Listed { get; set; }
     }
 }

@@ -8,16 +8,16 @@ namespace Reddit.Things
     public class UserActionResult
     {
         [JsonProperty("date")]
-        [JsonConverter(typeof(TimestampConvert))]
-        public DateTime Date;
+        [JsonConverter(typeof(UtcTimestampConverter))]
+        public DateTime Date { get; set; }
 
         [JsonProperty("icon_img")]
-        public string IconImg;
+        public string IconImg { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
     }
 }

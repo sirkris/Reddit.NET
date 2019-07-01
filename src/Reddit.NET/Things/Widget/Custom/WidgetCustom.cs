@@ -8,21 +8,21 @@ namespace Reddit.Things
     public class WidgetCustom : BaseContainer
     {
         [JsonProperty("css")]
-        public string CSS;
+        public string CSS { get; set; }
 
         [JsonProperty("height")]
-        public int Height;
+        public int Height { get; set; }
 
         [JsonProperty("imageData")]
-        public List<WidgetCustomImageData> ImageData;
+        public List<WidgetCustomImageData> ImageData { get; set; }
 
         [JsonProperty("shortName")]
-        public string ShortName;
+        public string ShortName { get; set; }
 
         [JsonProperty("styles")]
-        public WidgetStyles Styles;
+        public WidgetStyles Styles { get; set; }
 
         [JsonProperty("text")]
-        public string Text;
+        public string Text { get; set; }
     }
 }

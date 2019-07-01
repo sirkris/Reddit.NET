@@ -8,13 +8,13 @@ namespace Reddit.Things
     public class UserListChild
     {
         [JsonProperty("permissions")]
-        public List<string> Permissions;
+        public List<string> Permissions { get; set; }
 
         [JsonProperty("id")]
-        public string Id;
+        public string Id { get; set; }
 
         [JsonProperty("name")]
-        public string Name;
+        public string Name { get; set; }
 
         public string Fullname => "t2_" + Id;
     }

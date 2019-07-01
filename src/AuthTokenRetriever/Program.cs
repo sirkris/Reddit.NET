@@ -1,6 +1,7 @@
 ﻿using Reddit.AuthTokenRetriever;
 using System;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace AuthTokenRetriever
 {
@@ -76,12 +77,20 @@ namespace AuthTokenRetriever
             }
             catch (System.ComponentModel.Win32Exception)
             {
-                // This typically occurs if the runtime doesn't know where your browser is.  Use BrowserPath for when this happens.  --Kris
-                ProcessStartInfo processStartInfo = new ProcessStartInfo(BROWSER_PATH)
+                //For OSX run a separate command to open the web browser as found in https://brockallen.com/2016/09/24/process-start-for-urls-on-net-core/
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                 {
-                    Arguments = authUrl
-                };
-                Process.Start(processStartInfo);
+                    Process.Start("open", authUrl);
+                }
+                else
+                {
+                    // This typically occurs if the runtime doesn't know where your browser is.  Use BrowserPath for when this happens.  --Kris
+                    ProcessStartInfo processStartInfo = new ProcessStartInfo(BROWSER_PATH)
+                    {
+                        Arguments = authUrl
+                    };
+                    Process.Start(processStartInfo);
+                }
             }
         }
     }

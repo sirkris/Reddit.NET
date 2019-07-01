@@ -26,23 +26,23 @@ namespace Reddit.Controllers
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
 
-        public string Id;
-        public string Fullname;
-        public string Description;
-        public bool NSFW;
-        public string Resources;
-        public string Title;
+        public string Id { get; set; }
+        public string Fullname { get; set; }
+        public string Description { get; set; }
+        public bool NSFW { get; set; }
+        public string Resources { get; set; }
+        public string Title { get; set; }
 
-        public int? TotalViews;
-        public DateTime Created;
-        public string WebsocketURL;  // TODO - Support for Websockets.  --Kris
-        public bool IsAnnouncement;
-        public string AnnouncementURL;
-        public string State;
-        public int ViewerCount;
-        public string Icon;
+        public int? TotalViews { get; set; }
+        public DateTime Created { get; set; }
+        public string WebsocketURL { get; set; }  // TODO - Support for Websockets.  --Kris
+        public bool IsAnnouncement { get; set; }
+        public string AnnouncementURL { get; set; }
+        public string State { get; set; }
+        public int ViewerCount { get; set; }
+        public string Icon { get; set; }
 
-        public LiveUpdateEvent EventData;
+        public LiveUpdateEvent EventData { get; set; }
 
         /// <summary>
         /// List of live thread updates.
@@ -60,7 +60,7 @@ namespace Reddit.Controllers
             }
         }
         private List<LiveUpdate> updates;
-        private DateTime? UpdatesLastUpdated;
+        private DateTime? UpdatesLastUpdated { get; set; }
 
         /// <summary>
         /// List of live thread contributors.
@@ -78,7 +78,7 @@ namespace Reddit.Controllers
             }
         }
         private List<UserListContainer> contributors;
-        private DateTime? ContributorsLastUpdated;
+        private DateTime? ContributorsLastUpdated { get; set; }
 
         private Dispatch Dispatch;
 
@@ -108,7 +108,7 @@ namespace Reddit.Controllers
             Dispatch = dispatch;
 
             Import(liveUpdateEvent.Id, liveUpdateEvent.Description, liveUpdateEvent.NSFW, liveUpdateEvent.Resources, liveUpdateEvent.Title,
-                liveUpdateEvent.TotalViews, liveUpdateEvent.Created, liveUpdateEvent.Name, liveUpdateEvent.WebsocketURL, liveUpdateEvent.AnnouncementURL,
+                liveUpdateEvent.TotalViews, liveUpdateEvent.CreatedUTC, liveUpdateEvent.Name, liveUpdateEvent.WebsocketURL, liveUpdateEvent.AnnouncementURL,
                 liveUpdateEvent.State, liveUpdateEvent.ViewerCount, liveUpdateEvent.Icon);
 
             EventData = liveUpdateEvent;
@@ -853,7 +853,7 @@ namespace Reddit.Controllers
                 // Event handler to alert the calling app that the object has changed.  --Kris
                 LiveThreadUpdateEventArgs args = new LiveThreadUpdateEventArgs
                 {
-                    OldThread = this, 
+                    OldThread = this,
                     NewThread = newThread
                 };
                 OnThreadUpdated(args);
@@ -882,9 +882,9 @@ namespace Reddit.Controllers
                 // Event handler to alert the calling app that the list has changed.  --Kris
                 LiveThreadContributorsUpdateEventArgs args = new LiveThreadContributorsUpdateEventArgs
                 {
-                    OldContributors = oldList, 
-                    NewContributors = newList, 
-                    Added = added, 
+                    OldContributors = oldList,
+                    NewContributors = newList,
+                    Added = added,
                     Removed = removed
                 };
                 OnContributorsUpdated(args);
@@ -924,7 +924,7 @@ namespace Reddit.Controllers
                 }
             }
 
-            return !(added[0].Data.Children.Count == 0 && removed[0].Data.Children.Count == 0 
+            return !(added[0].Data.Children.Count == 0 && removed[0].Data.Children.Count == 0
                 && added[1].Data.Children.Count == 0 && removed[1].Data.Children.Count == 0);
         }
 

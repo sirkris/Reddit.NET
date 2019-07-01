@@ -7,6 +7,6 @@ namespace Reddit.Things
     public class PostResultContainer
     {
         [JsonProperty("json")]
-        public PostResult JSON;
+        public PostResult JSON { get; set; }
     }
 }

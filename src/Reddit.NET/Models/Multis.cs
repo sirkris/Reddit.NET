@@ -40,16 +40,6 @@ namespace Reddit.Models
         }
 
         /// <summary>
-        /// Rename a multi.
-        /// </summary>
-        /// <param name="multiURLInput">A valid MultiURLInput instance</param>
-        /// <returns>An object containing the multireddit data.</returns>
-        public LabeledMultiContainer Rename(MultiURLInput multiURLInput)
-        {
-            return SendRequest<LabeledMultiContainer>("api/multi/rename", multiURLInput, Method.POST);
-        }
-
-        /// <summary>
         /// Fetch a list of public multis belonging to username.
         /// </summary>
         /// <param name="username">A valid, existing reddit username</param>

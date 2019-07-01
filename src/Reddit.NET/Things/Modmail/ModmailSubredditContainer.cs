@@ -8,6 +8,6 @@ namespace Reddit.Things
     public class ModmailSubredditContainer
     {
         [JsonProperty("subreddits")]
-        public Dictionary<string, ModmailSubreddit> Subreddits;
+        public Dictionary<string, ModmailSubreddit> Subreddits { get; set; }
     }
 }
