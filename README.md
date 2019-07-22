@@ -85,7 +85,6 @@ You'll notice that each model class corresponds to a section in the API document
 Here's a list of the model classes:
 
 * Account
-* Captcha (unused, possibly deprecated; will probably remove it entirely before release)
 * Emoji
 * Flair
 * LinksAndComments
@@ -106,7 +105,7 @@ Here's a list of the model classes:
 Ratelimit handling also occurs in the model layer. If it's less than a minute, the library will automatically wait the specified number of seconds then retry. This can be easily tested using the LiveThread workflow tests. If it's more than a minute, an exception will bubble up and it'll be up to the app developer to decide what to do with it.
 Reddit.NET has a built-in limit of no more than 60 requests in any 1-minute period. This is a safety net designed to keep us from inadvertantly violating the API speed limit.
 
-JSON return data is automatically deserialized to its appropriate type. All 170 of these custom types (and yes, it did take fucking forever to write them all) can be found in Models.Structures.
+JSON return data is automatically deserialized to its appropriate type. All 170 of these custom types can be found in Models.Structures.
 
 Many model methods also have async counterparts.
 
