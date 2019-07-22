@@ -7,7 +7,6 @@ namespace Reddit.Controllers
     public class Dispatch
     {
         public API.Account Account { get; set; }
-        public API.Captcha Captcha { get; set; }
         public API.Emoji Emoji { get; set; }
         public API.Flair Flair { get; set; }
         public API.LinksAndComments LinksAndComments { get; set; }
@@ -35,7 +34,6 @@ namespace Reddit.Controllers
         public Dispatch(string appId, string appSecret, string refreshToken, string accessToken, RestClient restClient, string deviceId = null)
         {
             Account = new API.Account(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
-            Captcha = new API.Captcha(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
             Emoji = new API.Emoji(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
             Flair = new API.Flair(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
             LinksAndComments = new API.LinksAndComments(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
@@ -56,7 +54,6 @@ namespace Reddit.Controllers
             Monitor = new API.Internal.Monitor();
 
             Account.TokenUpdated += C_TokenUpdated;
-            Captcha.TokenUpdated += C_TokenUpdated;
             Emoji.TokenUpdated += C_TokenUpdated;
             Flair.TokenUpdated += C_TokenUpdated;
             LinksAndComments.TokenUpdated += C_TokenUpdated;
@@ -75,7 +72,6 @@ namespace Reddit.Controllers
             Wiki.TokenUpdated += C_TokenUpdated;
 
             Account.RequestsUpdated += C_RequestsUpdated;
-            Captcha.RequestsUpdated += C_RequestsUpdated;
             Emoji.RequestsUpdated += C_RequestsUpdated;
             Flair.RequestsUpdated += C_RequestsUpdated;
             LinksAndComments.RequestsUpdated += C_RequestsUpdated;
@@ -99,7 +95,6 @@ namespace Reddit.Controllers
         public void C_TokenUpdated(object sender, TokenUpdateEventArgs e)
         {
             Account.UpdateAccessToken(e.AccessToken);
-            Captcha.UpdateAccessToken(e.AccessToken);
             Emoji.UpdateAccessToken(e.AccessToken);
             Flair.UpdateAccessToken(e.AccessToken);
             LinksAndComments.UpdateAccessToken(e.AccessToken);
@@ -121,7 +116,6 @@ namespace Reddit.Controllers
         public void C_RequestsUpdated(object sender, RequestsUpdateEventArgs e)
         {
             Account.UpdateRequests(e.Requests);
-            Captcha.UpdateRequests(e.Requests);
             Emoji.UpdateRequests(e.Requests);
             Flair.UpdateRequests(e.Requests);
             LinksAndComments.UpdateRequests(e.Requests);
