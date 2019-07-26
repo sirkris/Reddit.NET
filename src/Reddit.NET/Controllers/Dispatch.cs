@@ -24,6 +24,13 @@ namespace Reddit.Controllers
         public API.Widgets Widgets { get; set; }
         public API.Wiki Wiki { get; set; }
 
+        /// <summary>
+        /// Makes the Reddit OAuth credentials accessible to the calling app.
+        /// Aside from populating these values for that reason, this class is not used by the library, itself.
+        /// Each model class stores these credentials internally.
+        /// </summary>
+        public API.OAuthCredentials OAuthCredentials { get; set; }
+
         internal API.Internal.Monitor Monitor { get; set; }
 
         /// <summary>
@@ -53,6 +60,8 @@ namespace Reddit.Controllers
 
             Monitor = new API.Internal.Monitor();
 
+            OAuthCredentials = new API.OAuthCredentials(appId, appSecret, refreshToken, accessToken, deviceId);
+
             Account.TokenUpdated += C_TokenUpdated;
             Emoji.TokenUpdated += C_TokenUpdated;
             Flair.TokenUpdated += C_TokenUpdated;
@@ -63,6 +72,7 @@ namespace Reddit.Controllers
             Moderation.TokenUpdated += C_TokenUpdated;
             Modmail.TokenUpdated += C_TokenUpdated;
             Multis.TokenUpdated += C_TokenUpdated;
+            OAuthCredentials.TokenUpdated += C_TokenUpdated;
             PrivateMessages.TokenUpdated += C_TokenUpdated;
             RedditGold.TokenUpdated += C_TokenUpdated;
             Search.TokenUpdated += C_TokenUpdated;
@@ -104,6 +114,7 @@ namespace Reddit.Controllers
             Moderation.UpdateAccessToken(e.AccessToken);
             Modmail.UpdateAccessToken(e.AccessToken);
             Multis.UpdateAccessToken(e.AccessToken);
+            OAuthCredentials.UpdateAccessToken(e.AccessToken);
             PrivateMessages.UpdateAccessToken(e.AccessToken);
             RedditGold.UpdateAccessToken(e.AccessToken);
             Search.UpdateAccessToken(e.AccessToken);
