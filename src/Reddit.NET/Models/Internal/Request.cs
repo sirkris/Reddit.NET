@@ -174,7 +174,7 @@ namespace Reddit.Models.Internal
                     /*
                      * If it fails and we have a refresh token, request a new access token and retry.
                      * Note that this workflow will not work if you pass an empty access token, as the Reddit API will still return 200 on those requests.
-                     * Therefore, if you just want to get a new access token from refresh, pass an arbitrary string value instead of null.j
+                     * Therefore, if you just want to get a new access token from refresh, pass an arbitrary string value instead of null.
                      * 
                      * --Kris
                      */
