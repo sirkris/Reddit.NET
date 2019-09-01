@@ -335,7 +335,7 @@ namespace Reddit.Models.Internal
         {
             ex.Data.Add("StatusCode", res.StatusCode);
             ex.Data.Add("StatusDescription", res.StatusDescription);
-            ex.Data.Add("res", res);
+            ex.Data.Add("Content", res.Content);
 
             return ex;
         }
