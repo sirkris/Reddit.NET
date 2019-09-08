@@ -1,18 +1,21 @@
 ﻿using System;
 using System.IO;
-using Newtonsoft.Json;
-using Reddit.Inputs;
-using Reddit.Inputs.Emoji;
-using Reddit.Things;
-using RestSharp;
 using System.Net;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
+using Newtonsoft.Json;
+using RestSharp;
+using Reddit.Inputs.Emoji;
+using Reddit.Things;
 using Reddit.Exceptions;
 
 namespace Reddit.Models
 {
     public class Emoji : BaseModel
     {
+        // Used for deserializing S3PostResponse from S3 emoji post. --MingweiSamuel
+        private static readonly XmlSerializer S3PostResponseXmlSerializer = new XmlSerializer(typeof(S3PostResponse));
+
         internal override RestClient RestClient { get; set; }
 
         public Emoji(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
@@ -79,9 +82,10 @@ namespace Reddit.Models
         /// <param name="s3">The data retrieved by AcquireLease.</param>
         /// <param name="imageData">Raw image data.</param>
         /// <param name="imageUploadInput">File name (with extension) and mime type.</param>
-        public void UploadLeaseImage(S3UploadLeaseContainer s3, byte[] imageData, ImageUploadInput imageUploadInput)
+        /// <returns>Decoded PostResponse including Key.</returns>
+        public S3PostResponse UploadLeaseImage(S3UploadLeaseContainer s3, byte[] imageData, ImageUploadInput imageUploadInput)
         {
-            HelperUploadLeaseImage(s3.S3UploadLease, new RestRequest(Method.POST)
+            return HelperUploadLeaseImage(s3.S3UploadLease, new RestRequest(Method.POST)
                 .AddFile("file", imageData, imageUploadInput.filepath, imageUploadInput.mimetype));
         }
 
@@ -92,14 +96,15 @@ namespace Reddit.Models
         /// <param name="imageData"></param>
         /// <param name="imageUploadInput">File name (with extension) and mime type.</param>
         /// <param name="contentLength">Optional length of imageData. Otherwise imageData.Length will be used.</param>
-        public void UploadLeaseImage(S3UploadLeaseContainer s3, Stream imageData, ImageUploadInput imageUploadInput, long? contentLength = null)
+        /// <returns>Decoded PostResponse including Key.</returns>
+        public S3PostResponse UploadLeaseImage(S3UploadLeaseContainer s3, Stream imageData, ImageUploadInput imageUploadInput, long? contentLength = null)
         {
-            HelperUploadLeaseImage(s3.S3UploadLease, new RestRequest(Method.POST)
+            return HelperUploadLeaseImage(s3.S3UploadLease, new RestRequest(Method.POST)
                 .AddFile("file", imageData.CopyTo, imageUploadInput.filepath, contentLength ?? imageData.Length, imageUploadInput.mimetype));
         }
 
         // Helper for upload lease image.
-        private void HelperUploadLeaseImage(S3UploadLease s3Lease, IRestRequest restRequest)
+        private S3PostResponse HelperUploadLeaseImage(S3UploadLease s3Lease, IRestRequest restRequest)
         {
             RestClient s3RestClient = new RestClient("https:" + s3Lease.Action);
             foreach (S3UploadLeaseField s3Field in s3Lease.Fields)
@@ -108,7 +113,7 @@ namespace Reddit.Models
             }
 
             IRestResponse response = s3RestClient.Execute(restRequest);
-            CheckUploadLeaseImageResponse(response);
+            return HandleUploadLeaseImageResponse(response);
         }
 
         /// <summary>
@@ -118,9 +123,11 @@ namespace Reddit.Models
         /// <param name="imageData">Raw image data.</param>
         /// <param name="imageUploadInput">File name (with extension) and mime type.</param>
         /// <returns>Task which may contain exceptions.</returns>
-        public async Task UploadLeaseImageAsync(S3UploadLeaseContainer s3, byte[] imageData, ImageUploadInput imageUploadInput)
+        /// <returns>Decoded PostResponse including Key.</returns>
+        public async Task<S3PostResponse> UploadLeaseImageAsync(
+            S3UploadLeaseContainer s3, byte[] imageData, ImageUploadInput imageUploadInput)
         {
-            await HelperUploadLeaseImageAsync(s3.S3UploadLease, new RestRequest(Method.POST)
+            return await HelperUploadLeaseImageAsync(s3.S3UploadLease, new RestRequest(Method.POST)
                 .AddFile("file", imageData, imageUploadInput.filepath, imageUploadInput.mimetype));
         }
 
@@ -131,14 +138,16 @@ namespace Reddit.Models
         /// <param name="imageData"></param>
         /// <param name="imageUploadInput">File name (with extension) and mime type.</param>
         /// <param name="contentLength">Optional length of imageData. Otherwise imageData.Length will be used.</param>
-        public async Task UploadLeaseImageAsync(S3UploadLeaseContainer s3, Stream imageData, ImageUploadInput imageUploadInput, long? contentLength = null)
+        /// <returns>Decoded PostResponse including Key.</returns>
+        public async Task<S3PostResponse> UploadLeaseImageAsync(
+            S3UploadLeaseContainer s3, Stream imageData, ImageUploadInput imageUploadInput, long? contentLength = null)
         {
-            await HelperUploadLeaseImageAsync(s3.S3UploadLease, new RestRequest(Method.POST)
+            return await HelperUploadLeaseImageAsync(s3.S3UploadLease, new RestRequest(Method.POST)
                 .AddFile("file", imageData.CopyTo, imageUploadInput.filepath, contentLength ?? imageData.Length, imageUploadInput.mimetype));
         }
 
         // Helper for upload lease image (async).
-        private async Task HelperUploadLeaseImageAsync(S3UploadLease s3Lease, IRestRequest restRequest)
+        private async Task<S3PostResponse> HelperUploadLeaseImageAsync(S3UploadLease s3Lease, IRestRequest restRequest)
         {
             RestClient s3RestClient = new RestClient("https:" + s3Lease.Action);
             foreach (S3UploadLeaseField s3Field in s3Lease.Fields)
@@ -146,14 +155,16 @@ namespace Reddit.Models
                 restRequest.AddParameter(s3Field.Name, s3Field.Value);
             }
 
-            IRestResponse response = await s3RestClient.ExecuteTaskAsync(restRequest);
-            CheckUploadLeaseImageResponse(response);
+            IRestResponse response = await s3RestClient.ExecuteTaskAsync<S3PostResponse>(restRequest);
+            return HandleUploadLeaseImageResponse(response);
         }
 
-        private void CheckUploadLeaseImageResponse(IRestResponse s3Response)
+        private S3PostResponse HandleUploadLeaseImageResponse(IRestResponse s3Response)
         {
             if (null != s3Response.ErrorException || HttpStatusCode.Created != s3Response.StatusCode)
                 throw new RedditException("Failed to upload image to s3.", s3Response.ErrorException);
+
+            return (S3PostResponse) S3PostResponseXmlSerializer.Deserialize(new StringReader(s3Response.Content));
         }
         #endregion
 
