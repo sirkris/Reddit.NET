@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -30,9 +29,25 @@ namespace Reddit.Models
         /// <param name="subreddit">The subreddit with the emojis</param>
         /// <param name="emojiAddInput">A valid EmojiAddInput instance</param>
         /// <returns>(TODO - Untested)</returns>
+        // TODO returns {"json": {"errors": []}}
         public object Add(string subreddit, EmojiAddInput emojiAddInput)
         {
             return SendRequest<object>("api/v1/" + subreddit + "/emoji.json", emojiAddInput, Method.POST);
+        }
+
+        // TODO - Needs testing.
+        /// <summary>
+        /// Add an emoji to the DB by posting a message on emoji_upload_q.
+        /// A job processor that listens on a queue uses the s3_key provided in the request to locate the image in S3 Temp Bucket and moves it to the PERM bucket.
+        /// It also adds it to the DB using name as the column and sr_fullname as the key and sends the status on the websocket URL that is provided as part of this response.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the emojis</param>
+        /// <param name="emojiAddInput">A valid EmojiAddInput instance</param>
+        /// <returns>(TODO - Untested)</returns>
+        // TODO returns {"json": {"errors": []}}
+        public async Task<object> AddAsync(string subreddit, EmojiAddInput emojiAddInput)
+        {
+            return await SendRequestAsync<object>("api/v1/" + subreddit + "/emoji.json", emojiAddInput, Method.POST);
         }
 
         // TODO - Needs testing.
@@ -45,6 +60,18 @@ namespace Reddit.Models
         public object Delete(string subreddit, string emojiName)
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/v1/" + subreddit + "/emoji/" + emojiName, Method.DELETE));
+        }
+        
+        // TODO - Needs testing.
+        /// <summary>
+        /// Delete a Subreddit emoji. Remove the emoji from Cassandra and purge the assets from S3 and the image resizing provider.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the emojis</param>
+        /// <param name="emojiName">The name of the emoji to be deleted</param>
+        /// <returns>(TODO - Untested)</returns>
+        public async Task<object> DeleteAsync(string subreddit, string emojiName)
+        {
+            return JsonConvert.DeserializeObject(await ExecuteRequestAsync("api/v1/" + subreddit + "/emoji/" + emojiName, Method.DELETE));
         }
 
         /// <summary>
