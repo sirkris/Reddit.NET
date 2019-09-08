@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.IO;
+using Newtonsoft.Json;
 using Reddit.Inputs;
 using Reddit.Inputs.Emoji;
 using Reddit.Things;
 using RestSharp;
-using System;
-using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
+using Reddit.Exceptions;
 
 namespace Reddit.Models
 {
@@ -54,39 +57,105 @@ namespace Reddit.Models
             return SendRequest<S3UploadLeaseContainer>("api/v1/" + subreddit + "/emoji_asset_upload_s3.json", imageUploadInput, Method.POST);
         }
 
-        // TODO - Can't get this to work.  Action URL keeps returning 403.  --Kris
-        // See:  https://www.reddit.com/r/redditdev/comments/9s1pio/getting_aws_error_when_trying_to_upload_emoji/
-        // Update:  Switching headers to parameters helped, but now it's complaining about the content-type on the image for some reason.  --Kris
         /// <summary>
-        /// Upload an Emoji.
+        /// Acquire and return an upload lease to s3 temp bucket.
+        /// The return value of this function is a json object containing credentials for uploading assets to S3 bucket, S3 url for upload request and the key to use for uploading.
+        /// Using this lease the client will upload the emoji image to S3 temp bucket (included as part of the S3 URL). This lease is used by S3 to verify that the upload is authorized.
         /// </summary>
-        /// <param name="imageData">Raw image data.</param>
-        /// <param name="s3">The data retrieved by AcquireLease.</param>
-        /// <returns>(TODO - Untested)</returns>
-        public void UploadLeaseImage(byte[] imageData, S3UploadLeaseContainer s3)
+        /// <param name="subreddit">The subreddit with the emojis</param>
+        /// <param name="imageUploadInput">A valid ImageUploadInput instance</param>
+        /// <returns>An S3 lease.</returns>
+        public async Task<S3UploadLeaseContainer> AcquireLeaseAsync(string subreddit, ImageUploadInput imageUploadInput)
         {
-            RestClient = new RestClient("https:" + s3.S3UploadLease.Action);
-            RestRequest restRequest = new RestRequest(Method.POST);
+            return await SendRequestAsync<S3UploadLeaseContainer>("api/v1/" + subreddit + "/emoji_asset_upload_s3.json", imageUploadInput, Method.POST);
+        }
 
-            foreach (S3UploadLeaseField s3Field in s3.S3UploadLease.Fields)
+        #region UploadLeaseImage
+        // TODO: write tests for these.
+
+        /// <summary>
+        /// Upload an Emoji to S3.
+        /// </summary>
+        /// <param name="s3">The data retrieved by AcquireLease.</param>
+        /// <param name="imageData">Raw image data.</param>
+        /// <param name="imageUploadInput">File name (with extension) and mime type.</param>
+        public void UploadLeaseImage(S3UploadLeaseContainer s3, byte[] imageData, ImageUploadInput imageUploadInput)
+        {
+            HelperUploadLeaseImage(s3.S3UploadLease, new RestRequest(Method.POST)
+                .AddFile("file", imageData, imageUploadInput.filepath, imageUploadInput.mimetype));
+        }
+
+        /// <summary>
+        /// Upload an Emoji to S3.
+        /// </summary>
+        /// <param name="s3">The data retrieved by AcquireLease.</param>
+        /// <param name="imageData"></param>
+        /// <param name="imageUploadInput">File name (with extension) and mime type.</param>
+        /// <param name="contentLength">Optional length of imageData. Otherwise imageData.Length will be used.</param>
+        public void UploadLeaseImage(S3UploadLeaseContainer s3, Stream imageData, ImageUploadInput imageUploadInput, long? contentLength = null)
+        {
+            HelperUploadLeaseImage(s3.S3UploadLease, new RestRequest(Method.POST)
+                .AddFile("file", imageData.CopyTo, imageUploadInput.filepath, contentLength ?? imageData.Length, imageUploadInput.mimetype));
+        }
+
+        // Helper for upload lease image.
+        private void HelperUploadLeaseImage(S3UploadLease s3Lease, IRestRequest restRequest)
+        {
+            RestClient s3RestClient = new RestClient("https:" + s3Lease.Action);
+            foreach (S3UploadLeaseField s3Field in s3Lease.Fields)
             {
-                if (!s3Field.Name.Equals("content-type", StringComparison.OrdinalIgnoreCase))
-                {
-                    restRequest.AddParameter(s3Field.Name, s3Field.Value);
-                }
+                restRequest.AddParameter(s3Field.Name, s3Field.Value);
             }
 
-            //restRequest.AddBody(JsonConvert.SerializeObject(s3.S3UploadLease.Fields));
-
-            restRequest.AddHeader("content-type", "multipart/form-data");
-            //restRequest.AddHeader("key", s3.S3UploadLease.Fields.First(item => item.Name.Equals("key", StringComparison.OrdinalIgnoreCase)).Value);
-            //restRequest.AddParameter("key", s3.S3UploadLease.Fields.First(item => item.Name.Equals("key", StringComparison.OrdinalIgnoreCase)).Value);
-
-            restRequest.AddFileBytes("file", imageData, "birdie.jpg", s3.S3UploadLease.Fields.First(
-                item => item.Name.Equals("content-type", StringComparison.OrdinalIgnoreCase)).Value);
-
-            ExecuteRequest(restRequest);
+            IRestResponse response = s3RestClient.Execute(restRequest);
+            CheckUploadLeaseImageResponse(response);
         }
+
+        /// <summary>
+        /// Upload an Emoji to S3.
+        /// </summary>
+        /// <param name="s3">The data retrieved by AcquireLease.</param>
+        /// <param name="imageData">Raw image data.</param>
+        /// <param name="imageUploadInput">File name (with extension) and mime type.</param>
+        /// <returns>Task which may contain exceptions.</returns>
+        public async Task UploadLeaseImageAsync(S3UploadLeaseContainer s3, byte[] imageData, ImageUploadInput imageUploadInput)
+        {
+            await HelperUploadLeaseImageAsync(s3.S3UploadLease, new RestRequest(Method.POST)
+                .AddFile("file", imageData, imageUploadInput.filepath, imageUploadInput.mimetype));
+        }
+
+        /// <summary>
+        /// Upload an Emoji to S3.
+        /// </summary>
+        /// <param name="s3">The data retrieved by AcquireLease.</param>
+        /// <param name="imageData"></param>
+        /// <param name="imageUploadInput">File name (with extension) and mime type.</param>
+        /// <param name="contentLength">Optional length of imageData. Otherwise imageData.Length will be used.</param>
+        public async Task UploadLeaseImageAsync(S3UploadLeaseContainer s3, Stream imageData, ImageUploadInput imageUploadInput, long? contentLength = null)
+        {
+            await HelperUploadLeaseImageAsync(s3.S3UploadLease, new RestRequest(Method.POST)
+                .AddFile("file", imageData.CopyTo, imageUploadInput.filepath, contentLength ?? imageData.Length, imageUploadInput.mimetype));
+        }
+
+        // Helper for upload lease image (async).
+        private async Task HelperUploadLeaseImageAsync(S3UploadLease s3Lease, IRestRequest restRequest)
+        {
+            RestClient s3RestClient = new RestClient("https:" + s3Lease.Action);
+            foreach (S3UploadLeaseField s3Field in s3Lease.Fields)
+            {
+                restRequest.AddParameter(s3Field.Name, s3Field.Value);
+            }
+
+            IRestResponse response = await s3RestClient.ExecuteTaskAsync(restRequest);
+            CheckUploadLeaseImageResponse(response);
+        }
+
+        private void CheckUploadLeaseImageResponse(IRestResponse s3Response)
+        {
+            if (null != s3Response.ErrorException || HttpStatusCode.Created != s3Response.StatusCode)
+                throw new RedditException("Failed to upload image to s3.", s3Response.ErrorException);
+        }
+        #endregion
 
         // TODO - Needs testing.
         /// <summary>
@@ -114,6 +183,16 @@ namespace Reddit.Models
         public SnoomojiContainer All(string subreddit)
         {
             return JsonConvert.DeserializeObject<SnoomojiContainer>(ExecuteRequest("api/v1/" + subreddit + "/emojis/all"));
+        }
+
+        /// <summary>
+        /// Get all emojis for a SR. The response includes reddit emojis as well as emojis for the SR specified in the request.
+        /// </summary>
+        /// <param name="subreddit">The subreddit with the emojis</param>
+        /// <returns>Emojis.</returns>
+        public async Task<SnoomojiContainer> AllAsync(string subreddit)
+        {
+            return JsonConvert.DeserializeObject<SnoomojiContainer>(await ExecuteRequestAsync("api/v1/" + subreddit + "/emojis/all"));
         }
     }
 }

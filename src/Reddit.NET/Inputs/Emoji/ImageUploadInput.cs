@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Reddit.Inputs
+namespace Reddit.Inputs.Emoji
 {
     [Serializable]
     public class ImageUploadInput
@@ -18,11 +18,11 @@ namespace Reddit.Inputs
         /// <summary>
         /// Data for image to be uploaded.
         /// </summary>
-        /// <param name="filePath">name and extension of the image file e.g. image1.png</param>
+        /// <param name="fileName">name and extension of the image file e.g. image1.png</param>
         /// <param name="mimeType">mime type of the image e.g. image/png</param>
-        public ImageUploadInput(string filePath, string mimeType)
+        public ImageUploadInput(string fileName, string mimeType)
         {
-            filepath = filePath;
+            filepath = fileName;
             mimetype = mimeType;
         }
     }
