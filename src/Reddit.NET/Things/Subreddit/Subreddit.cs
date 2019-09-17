@@ -269,7 +269,6 @@ namespace Reddit.Things
         [JsonProperty("mod_permissions")]
         public List<string> ModPermissions { get; set; }
 
-
         public Subreddit(Controllers.Subreddit subreddit)
         {
             BannerImg = subreddit.BannerImg;
