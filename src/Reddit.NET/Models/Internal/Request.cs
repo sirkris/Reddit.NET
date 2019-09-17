@@ -336,6 +336,12 @@ namespace Reddit.Models.Internal
             ex.Data.Add("StatusCode", res.StatusCode);
             ex.Data.Add("StatusDescription", res.StatusDescription);
             ex.Data.Add("Content", res.Content);
+            ex.Data.Add("ContentEncoding", res.ContentEncoding);
+            ex.Data.Add("ContentLength", res.ContentLength);
+            ex.Data.Add("ContentType", res.ContentType);
+            ex.Data.Add("ErrorMessage", res.ErrorMessage);
+            ex.Data.Add("ProtocolVersion", res.ProtocolVersion);
+            ex.Data.Add("Server", res.Server);
 
             return ex;
         }
