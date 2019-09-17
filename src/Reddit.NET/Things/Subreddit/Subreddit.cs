@@ -263,6 +263,12 @@ namespace Reddit.Things
         [JsonProperty("user_is_subscriber")]
         public bool? UserIsSubscriber { get; set; }
 
+        [JsonProperty("event_posts_enabled")]
+        public bool? EventPostsEnabled { get; set; }
+
+        [JsonProperty("mod_permissions")]
+        public List<string> ModPermissions { get; set; }
+
         public Subreddit(Controllers.Subreddit subreddit)
         {
             BannerImg = subreddit.BannerImg;
