@@ -129,7 +129,7 @@ namespace RedditTests.ModelTests
         {
             PostContainer posts = reddit.Models.Listings.Rising(new CategorizedSrListingInput(includeCategories: true));
 
-            Validate(posts);
+            Validate(posts, true);
         }
 
         [TestMethod]
