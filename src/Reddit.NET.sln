@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Reddit.NETTests", "Reddit.N
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthTokenRetriever", "AuthTokenRetriever\AuthTokenRetriever.csproj", "{A61B6959-0EF7-4EAC-9839-CDB1D3435B11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthTokenRetrieverLib", "AuthTokenRetrieverLib\AuthTokenRetrieverLib.csproj", "{A2D9D25F-830F-4BED-8F98-83AAC57EF8B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthTokenRetrieverLib", "AuthTokenRetrieverLib\AuthTokenRetrieverLib.csproj", "{A2D9D25F-830F-4BED-8F98-83AAC57EF8B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Reddit.Android", "Reddit.Android\Reddit.Android.csproj", "{560A3949-33F3-4A8E-BB1C-0895DDE50BA0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{A2D9D25F-830F-4BED-8F98-83AAC57EF8B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A2D9D25F-830F-4BED-8F98-83AAC57EF8B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A2D9D25F-830F-4BED-8F98-83AAC57EF8B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{560A3949-33F3-4A8E-BB1C-0895DDE50BA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{560A3949-33F3-4A8E-BB1C-0895DDE50BA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{560A3949-33F3-4A8E-BB1C-0895DDE50BA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{560A3949-33F3-4A8E-BB1C-0895DDE50BA0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

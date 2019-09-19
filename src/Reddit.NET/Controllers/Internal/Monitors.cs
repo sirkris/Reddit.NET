@@ -20,8 +20,11 @@ namespace Reddit.Controllers.Internal
         internal abstract List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal abstract DateTime? MonitoringExpiration { get; set; }
 
-        public Monitors() : base()
+        public Dispatch Dispatch { get; set; }
+
+        public Monitors(Dispatch dispatch) : base()
         {
+            Dispatch = dispatch;
             Threads = new Dictionary<string, Thread>();
             BreakOnFailure = false;
             MonitoringSchedule = new List<MonitoringSchedule> { null };  // Monitor 24/7 by default.  --Kris

@@ -134,13 +134,11 @@ namespace Reddit.Controllers
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
 
-        private Dispatch Dispatch;
-
         /// <summary>
         /// Create a new instance of the modmail controller.
         /// </summary>
         /// <param name="dispatch"></param>
-        public Modmail(Dispatch dispatch) : base()
+        public Modmail(Dispatch dispatch) : base(dispatch)
         {
             Dispatch = dispatch;
         }

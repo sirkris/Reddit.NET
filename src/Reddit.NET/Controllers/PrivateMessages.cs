@@ -42,7 +42,7 @@ namespace Reddit.Controllers
                 inbox = value;
             }
         }
-        internal List<Message> inbox;
+        public List<Message> inbox;
 
         /// <summary>
         /// List of unread messages.
@@ -59,7 +59,7 @@ namespace Reddit.Controllers
                 unread = value;
             }
         }
-        internal List<Message> unread;
+        public List<Message> unread;
 
         /// <summary>
         /// List of sent messages.
@@ -76,13 +76,11 @@ namespace Reddit.Controllers
                 sent = value;
             }
         }
-        internal List<Message> sent;
+        public List<Message> sent;
 
         private DateTime? InboxLastUpdated { get; set; }
         private DateTime? UnreadLastUpdated { get; set; }
         private DateTime? SentLastUpdated { get; set; }
-
-        private Dispatch Dispatch;
 
         /// <summary>
         /// Create a new instance of the private messages controller.
@@ -93,7 +91,7 @@ namespace Reddit.Controllers
         /// <param name="sent"></param>
         public PrivateMessages(Dispatch dispatch, List<Message> inbox = null, List<Message> unread = null,
             List<Message> sent = null) 
-            : base()
+            : base(dispatch)
         {
             Inbox = inbox ?? new List<Message>();
             Unread = unread ?? new List<Message>();
@@ -611,7 +609,7 @@ namespace Reddit.Controllers
             }
         }
 
-        protected void TriggerUpdate(MessagesUpdateEventArgs args, string type)
+        public void TriggerUpdate(MessagesUpdateEventArgs args, string type)
         {
             switch (type)
             {

@@ -183,7 +183,6 @@ namespace Reddit.Controllers
         }
 
         public string SubKey { get; set; }
-        private Dispatch Dispatch;
 
         /// <summary>
         /// The name of the parent subreddit.
@@ -212,7 +211,7 @@ namespace Reddit.Controllers
         /// <param name="live"></param>
         public Comments(Dispatch dispatch, string postId = null, string subreddit = null, Comment comment = null, List<Comment> confidence = null, List<Comment> top = null, 
             List<Comment> newComments = null, List<Comment> controversial = null, List<Comment> old = null, List<Comment> random = null, List<Comment> qa = null, List<Comment> live = null) 
-            : base()
+            : base(dispatch)
         {
             Dispatch = dispatch;
             Subreddit = subreddit;

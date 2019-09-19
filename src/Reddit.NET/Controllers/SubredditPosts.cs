@@ -237,8 +237,6 @@ namespace Reddit.Controllers
 
         private string Subreddit { get; set; }
 
-        private Dispatch Dispatch;
-
         private string TopT { get; set; } = "all";
         private string ControversialT { get; set; } = "all";
 
@@ -262,7 +260,7 @@ namespace Reddit.Controllers
             List<Post> rising = null, List<Post> top = null, List<Post> controversial = null, List<Post> modQueue = null, 
             List<Post> modQueueReports = null, List<Post> modQueueSpam = null, List<Post> modQueueUnmoderated = null, 
             List<Post> modQueueEdited = null) 
-            : base()
+            : base(dispatch)
         {
             Dispatch = dispatch;
             Subreddit = subreddit;
