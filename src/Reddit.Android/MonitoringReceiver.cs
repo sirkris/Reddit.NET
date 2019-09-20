@@ -181,6 +181,8 @@ namespace Reddit.Android
                     Removed = removed
                 };
                 reddit.Account.Messages.TriggerUpdate(args, type);
+
+                // TODO - Also send as serialized intent.  --Kris
             }
         }
 
@@ -197,6 +199,8 @@ namespace Reddit.Android
                     Removed = removed
                 };
                 reddit.Subreddit(subreddit).Posts.TriggerUpdate(args, type);
+
+                // TODO - Also send as serialized intent.  --Kris
             }
         }
     }
