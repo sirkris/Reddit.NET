@@ -13,10 +13,11 @@ namespace Reddit.Android
         /// <param name="key">A unique string identifying what's being monitored</param>
         /// <param name="subKey">An optional string providing additional information about what's being monitored</param>
         /// <param name="monitoringDelayMs">The number of milliseconds to wait between each monitoring query (default: 15000)</param>
+        /// <param name="lastRes">Serialized JSON representation of the last query result (default: null)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
-        public static bool MonitorAndroid(this Controllers.Internal.Monitors monitors, string key, string subKey, int monitoringDelayMs = 15000)
+        public static bool MonitorAndroid(this Controllers.Internal.Monitors monitors, string key, string subKey, int monitoringDelayMs = 15000, string lastRes = null)
         {
-            return MonitorAndroid(monitors, key, subKey, monitoringDelayMs, out Intent alarmIntent, out PendingIntent pendingIntent);
+            return MonitorAndroid(monitors, key, subKey, monitoringDelayMs, out Intent alarmIntent, out PendingIntent pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -27,11 +28,12 @@ namespace Reddit.Android
         /// <param name="monitoringDelayMs">The number of milliseconds to wait between each monitoring query</param>
         /// <param name="alarmIntent">(out) The resulting alarm Intent</param>
         /// <param name="pendingIntent">(out) The resulting PendingIntent</param>
+        /// <param name="lastRes">Serialized JSON representation of the last query result (default: null)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public static bool MonitorAndroid(this Controllers.Internal.Monitors monitors, string key, string subKey, int monitoringDelayMs,
-            out Intent alarmIntent, out PendingIntent pendingIntent)
+            out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return MonitorAndroid(monitors, key, subKey, typeof(MonitoringReceiver), monitoringDelayMs, out alarmIntent, out pendingIntent);
+            return MonitorAndroid(monitors, key, subKey, typeof(MonitoringReceiver), monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -43,9 +45,10 @@ namespace Reddit.Android
         /// <param name="monitoringDelayMs">The number of milliseconds to wait between each monitoring query</param>
         /// <param name="alarmIntent">(out) The resulting alarm Intent</param>
         /// <param name="pendingIntent">(out) The resulting PendingIntent</param>
+        /// <param name="lastRes">Serialized JSON representation of the last query result (default: null)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public static bool MonitorAndroid(this Controllers.Internal.Monitors monitors, string key, string subKey, Type receiver, int monitoringDelayMs, 
-            out Intent alarmIntent, out PendingIntent pendingIntent)
+            out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
             alarmIntent = new Intent(Application.Context, receiver);
             alarmIntent.PutExtra("key", key);
@@ -55,6 +58,7 @@ namespace Reddit.Android
             alarmIntent.PutExtra("appSecret", monitors.Dispatch.OAuthCredentials.AppSecret);
             alarmIntent.PutExtra("accessToken", monitors.Dispatch.OAuthCredentials.AccessToken);
             alarmIntent.PutExtra("refreshToken", monitors.Dispatch.OAuthCredentials.RefreshToken);
+            alarmIntent.PutExtra("lastRes", lastRes);
 
             pendingIntent = PendingIntent.GetBroadcast(Application.Context, 0, alarmIntent, PendingIntentFlags.UpdateCurrent);
             AlarmManager alarmManager = (AlarmManager)Application.Context.GetSystemService(Context.AlarmService);

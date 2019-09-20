@@ -82,14 +82,13 @@ namespace Reddit.Controllers
         }
         private Comments comments = null;
 
-        internal Dispatch Dispatch;
-
         /// <summary>
         /// Create a new post controller instance from API return data.
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="listing"></param>
         public Post(Dispatch dispatch, Things.Post listing)
+            : base(dispatch)
         {
             Dispatch = dispatch;
             Import(listing);
@@ -116,6 +115,7 @@ namespace Reddit.Controllers
         public Post(Dispatch dispatch, string subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
+                : base(dispatch)
         {
             Dispatch = dispatch;
             Import(subreddit, title, author, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam, nsfw);
@@ -127,6 +127,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         /// <param name="fullname">Fullname of the post</param>
         public Post(Dispatch dispatch, string fullname)
+            : base(dispatch)
         {
             Dispatch = dispatch;
             Fullname = fullname;
@@ -139,6 +140,7 @@ namespace Reddit.Controllers
         /// <param name="fullname">Fullname of the post</param>
         /// <param name="subreddit">A valid subreddit name</param>
         public Post(Dispatch dispatch, string fullname, string subreddit)
+            : base(dispatch)
         {
             Dispatch = dispatch;
             Fullname = fullname;
@@ -150,6 +152,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         public Post(Dispatch dispatch)
+            : base(dispatch)
         {
             Dispatch = dispatch;
         }

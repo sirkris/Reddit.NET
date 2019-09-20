@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Reddit.Android</id>
+    <version>1.2.0-develop</version>
+    <title>Reddit.NET Extensions for Android</title>
+    <authors>Kris Craig</authors>
+    <owners>Kris Craig</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <licenseUrl>https://github.com/sirkris/Reddit.NET/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/sirkris/Reddit.NET</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/sirkris/Reddit.NET/master/Logo.gif</iconUrl>
+    <description>Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required.  This library extends it with Android-specific functionality.</description>
+    <releaseNotes>https://www.reddit.com/r/csharp/comments/c7rtvm/announcing_the_release_of_redditnet_12/</releaseNotes>
+    <copyright>Copyright (C) 2019 by Kris Craig</copyright>
+    <tags>reddit web utility http api oauth rest json netstandard</tags>
+    <repository type="Git" url="https://github.com/sirkris/Reddit.NET" />
+  </metadata>
+  <files>
+    <file src="C:\dev\repos\Reddit.NET\src\Reddit.Android\bin\Release\Reddit.Android.dll" target="lib\netstandard2.0\Reddit.Android.dll" />
+  </files>
+</package>

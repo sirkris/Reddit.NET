@@ -235,7 +235,7 @@ namespace Reddit.Controllers
         private DateTime? ModQueueUnmoderatedLastUpdated { get; set; }
         private DateTime? ModQueueEditedLastUpdated { get; set; }
 
-        private string Subreddit { get; set; }
+        public string Subreddit { get; set; }
 
         private string TopT { get; set; } = "all";
         private string ControversialT { get; set; } = "all";
@@ -1252,7 +1252,7 @@ namespace Reddit.Controllers
             }
         }
 
-        private void TriggerUpdate(PostsUpdateEventArgs args, string type)
+        public void TriggerUpdate(PostsUpdateEventArgs args, string type)
         {
             switch (type)
             {

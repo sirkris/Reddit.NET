@@ -34,8 +34,6 @@ namespace Reddit.Controllers
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
 
-        private Dispatch Dispatch;
-
         /// <summary>
         /// Create a new wiki page controller instance, populated manually.
         /// </summary>
@@ -49,6 +47,7 @@ namespace Reddit.Controllers
         /// <param name="name"></param>
         public WikiPage(Dispatch dispatch, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd, 
             string subreddit = null, string name = null)
+                : base(dispatch)
         {
             Dispatch = dispatch;
 
@@ -70,6 +69,7 @@ namespace Reddit.Controllers
         /// <param name="subreddit"></param>
         /// <param name="name"></param>
         public WikiPage(Dispatch dispatch, Things.WikiPage wikiPage, string subreddit = null, string name = null)
+            : base(dispatch)
         {
             Dispatch = dispatch;
 
@@ -90,6 +90,7 @@ namespace Reddit.Controllers
         /// <param name="subreddit"></param>
         /// <param name="name"></param>
         public WikiPage(Dispatch dispatch, string subreddit = null, string name = null)
+            : base(dispatch)
         {
             Dispatch = dispatch;
             Subreddit = subreddit;
@@ -100,7 +101,8 @@ namespace Reddit.Controllers
         /// Create an empty wiki page controller instance.
         /// </summary>
         /// <param name="dispatch"></param>
-        public WikiPage(Dispatch dispatch) { }
+        public WikiPage(Dispatch dispatch)
+            : base(dispatch) { }
 
         /// <summary>
         /// Allow username to edit this wiki page.

@@ -42,7 +42,7 @@ namespace Reddit.Controllers
                 inbox = value;
             }
         }
-        public List<Message> inbox;
+        internal List<Message> inbox;
 
         /// <summary>
         /// List of unread messages.
@@ -59,7 +59,7 @@ namespace Reddit.Controllers
                 unread = value;
             }
         }
-        public List<Message> unread;
+        internal List<Message> unread;
 
         /// <summary>
         /// List of sent messages.
@@ -76,7 +76,7 @@ namespace Reddit.Controllers
                 sent = value;
             }
         }
-        public List<Message> sent;
+        internal List<Message> sent;
 
         private DateTime? InboxLastUpdated { get; set; }
         private DateTime? UnreadLastUpdated { get; set; }

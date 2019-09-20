@@ -80,14 +80,13 @@ namespace Reddit.Controllers
         private List<UserListContainer> contributors;
         private DateTime? ContributorsLastUpdated { get; set; }
 
-        private Dispatch Dispatch;
-
         /// <summary>
         /// Create a new live thread controller instance from another live thread controller instance.
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="liveThread">A valid instance of this class</param>
         public LiveThread(Dispatch dispatch, LiveThread liveThread)
+            : base(dispatch)
         {
             Dispatch = dispatch;
 
@@ -104,6 +103,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         /// <param name="liveUpdateEvent"></param>
         public LiveThread(Dispatch dispatch, LiveUpdateEvent liveUpdateEvent)
+            : base(dispatch)
         {
             Dispatch = dispatch;
 
@@ -134,6 +134,7 @@ namespace Reddit.Controllers
         public LiveThread(Dispatch dispatch, string title = null, string description = null, bool nsfw = false, string resources = null,
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
             string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
+                : base(dispatch)
         {
             Dispatch = dispatch;
 
@@ -148,6 +149,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         /// <param name="id">A valid live thread ID</param>
         public LiveThread(Dispatch dispatch, string id)
+            : base(dispatch)
         {
             Dispatch = dispatch;
             Id = id;

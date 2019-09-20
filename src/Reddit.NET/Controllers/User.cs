@@ -86,14 +86,13 @@ namespace Reddit.Controllers
         /// </summary>
         public Things.User UserData { get; set; }
 
-        private Dispatch Dispatch;
-
         /// <summary>
         /// Create a new user controller instance from API return data.
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="user"></param>
         public User(Dispatch dispatch, Things.User user)
+            : base(dispatch)
         {
             Import(user);
             Dispatch = dispatch;
@@ -105,6 +104,7 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         /// <param name="user"></param>
         public User(Dispatch dispatch, User user)
+            : base(dispatch)
         {
             Import(user);
             Dispatch = dispatch;
@@ -139,6 +139,7 @@ namespace Reddit.Controllers
             bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
+                : base(dispatch)
         {
             Import(name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
                 hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
@@ -151,6 +152,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="dispatch"></param>
         public User(Dispatch dispatch)
+            : base(dispatch)
         {
             Dispatch = dispatch;
         }

@@ -43,14 +43,13 @@ namespace Reddit.Controllers
         private DateTime? PagesLastUpdated { get; set; }
         private string Subreddit { get; set; }
 
-        private Dispatch Dispatch;
-
         /// <summary>
         /// Create a new instance of the wiki controller.
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="subreddit">The name of the subreddit to which this wiki belongs</param>
         public Wiki(Dispatch dispatch, string subreddit)
+            : base(dispatch)
         {
             Dispatch = dispatch;
             Subreddit = subreddit;
