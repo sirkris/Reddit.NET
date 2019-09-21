@@ -16,7 +16,7 @@ namespace Reddit.Android
             string key = intent.GetStringExtra("key");
             string subKey = intent.GetStringExtra("subKey");
             int monitoringDelayMs = intent.GetIntExtra("monitoringDelayMs", 15000);
-
+            
             string lastRes = intent.GetStringExtra("lastRes");
 
             RedditAPI reddit = new RedditAPI(appId: intent.GetStringExtra("appId"), appSecret: intent.GetStringExtra("appSecret"),
@@ -180,9 +180,7 @@ namespace Reddit.Android
                     Added = added,
                     Removed = removed
                 };
-                reddit.Account.Messages.TriggerUpdate(args, type);
-
-                // TODO - Also send as serialized intent.  --Kris
+                Events.OnMessagesUpdated(args, type, this);
             }
         }
 
@@ -198,9 +196,7 @@ namespace Reddit.Android
                     Added = added,
                     Removed = removed
                 };
-                reddit.Subreddit(subreddit).Posts.TriggerUpdate(args, type);
-
-                // TODO - Also send as serialized intent.  --Kris
+                Events.OnPostsUpdated(args, type, this);
             }
         }
     }
