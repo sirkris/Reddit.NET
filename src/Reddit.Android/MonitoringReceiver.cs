@@ -58,7 +58,7 @@ namespace Reddit.Android
                 case "BestPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetBest();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "best", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "best");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorBestAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -68,7 +68,7 @@ namespace Reddit.Android
                 case "HotPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetHot();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "hot", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "hot");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorHotAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -78,7 +78,7 @@ namespace Reddit.Android
                 case "NewPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetNew();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "new", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "new");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorNewAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -88,7 +88,7 @@ namespace Reddit.Android
                 case "RisingPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetRising();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "rising", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "rising");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorRisingAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -98,7 +98,7 @@ namespace Reddit.Android
                 case "TopPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetTop();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "top", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "top");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorTopAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -108,7 +108,7 @@ namespace Reddit.Android
                 case "ControversialPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetControversial();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "controversial", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "controversial");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorControversialAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -118,7 +118,7 @@ namespace Reddit.Android
                 case "ModQueuePosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetModQueue();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueue", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueue");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorModQueueAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -128,7 +128,7 @@ namespace Reddit.Android
                 case "ModQueueReportsPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetModQueueReports();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueuereports", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueuereports");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorModQueueReportsAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -138,7 +138,7 @@ namespace Reddit.Android
                 case "ModQueueSpamPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetModQueueSpam();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueuespam", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueuespam");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorModQueueSpamAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -148,7 +148,7 @@ namespace Reddit.Android
                 case "ModQueueUnmoderatedPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetModQueueUnmoderated();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueueunmoderated", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueueunmoderated");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorModQueueUnmoderatedAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -158,7 +158,7 @@ namespace Reddit.Android
                 case "ModQueueEditedPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetModQueueEdited();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueueedited", subKey);
+                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "modqueueedited");
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorModQueueEditedAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -184,7 +184,7 @@ namespace Reddit.Android
             }
         }
 
-        private void ListCompare(RedditAPI reddit, List<Post> oldList, List<Post> newList, string type, string subreddit)
+        private void ListCompare(RedditAPI reddit, List<Post> oldList, List<Post> newList, string type)
         {
             if (reddit.Account.Messages.Lists.ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
             {
