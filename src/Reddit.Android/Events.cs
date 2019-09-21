@@ -27,13 +27,13 @@ namespace Reddit.Android
             switch (type.Trim().ToLower())
             {
                 case "inbox":
-                    OnInboxUpdated(e, sender);
+                    InboxUpdated?.Invoke(sender, e);
                     break;
                 case "sent":
-                    OnSentUpdated(e, sender);
+                    SentUpdated?.Invoke(sender, e);
                     break;
                 case "unread":
-                    OnUnreadUpdated(e, sender);
+                    UnreadUpdated?.Invoke(sender, e);
                     break;
             }
         }
@@ -43,109 +43,39 @@ namespace Reddit.Android
             switch (type.Trim().ToLower())
             {
                 case "best":
-                    OnBestPostsUpdated(e, sender);
+                    BestPostsUpdated?.Invoke(sender, e);
                     break;
                 case "hot":
-                    OnHotPostsUpdated(e, sender);
+                    HotPostsUpdated?.Invoke(sender, e);
                     break;
                 case "new":
-                    OnNewPostsUpdated(e, sender);
+                    NewPostsUpdated?.Invoke(sender, e);
                     break;
                 case "rising":
-                    OnRisingPostsUpdated(e, sender);
+                    RisingPostsUpdated?.Invoke(sender, e);
                     break;
                 case "top":
-                    OnTopPostsUpdated(e, sender);
+                    TopPostsUpdated?.Invoke(sender, e);
                     break;
                 case "controversial":
-                    OnControversialPostsUpdated(e, sender);
+                    ControversialPostsUpdated?.Invoke(sender, e);
                     break;
                 case "modqueue":
-                    OnModQueueUpdated(e, sender);
+                    ModQueueUpdated?.Invoke(sender, e);
                     break;
                 case "modqueuereports":
-                    OnModQueueReportsUpdated(e, sender);
+                    ModQueueReportsUpdated?.Invoke(sender, e);
                     break;
                 case "modqueuespam":
-                    OnModQueueSpamUpdated(e, sender);
+                    ModQueueSpamUpdated?.Invoke(sender, e);
                     break;
                 case "modqueueunmoderated":
-                    OnModQueueUnmoderatedUpdated(e, sender);
+                    ModQueueUnmoderatedUpdated?.Invoke(sender, e);
                     break;
                 case "modqueueedited":
-                    OnModQueueEditedUpdated(e, sender);
+                    ModQueueEditedUpdated?.Invoke(sender, e);
                     break;
             }
-        }
-
-        public static void OnBestPostsUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            BestPostsUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnHotPostsUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            HotPostsUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnNewPostsUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            NewPostsUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnRisingPostsUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            RisingPostsUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnTopPostsUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            TopPostsUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnControversialPostsUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            ControversialPostsUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnModQueueUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            ModQueueUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnModQueueReportsUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            ModQueueReportsUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnModQueueSpamUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            ModQueueSpamUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnModQueueUnmoderatedUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            ModQueueUnmoderatedUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnModQueueEditedUpdated(PostsUpdateEventArgs e, object sender)
-        {
-            ModQueueEditedUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnInboxUpdated(MessagesUpdateEventArgs e, object sender)
-        {
-            InboxUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnUnreadUpdated(MessagesUpdateEventArgs e, object sender)
-        {
-            UnreadUpdated?.Invoke(sender, e);
-        }
-
-        public static void OnSentUpdated(MessagesUpdateEventArgs e, object sender)
-        {
-            SentUpdated?.Invoke(sender, e);
         }
     }
 }
