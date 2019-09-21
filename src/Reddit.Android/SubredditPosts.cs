@@ -55,7 +55,7 @@ namespace Reddit.Android
         public static bool MonitorBestAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "BestPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "BestPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Reddit.Android
         public static bool MonitorHotAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "HotPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "HotPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Reddit.Android
         public static bool MonitorNewAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "NewPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "NewPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace Reddit.Android
         public static bool MonitorRisingAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "RisingPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "RisingPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -263,7 +263,7 @@ namespace Reddit.Android
         public static bool MonitorTopAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "TopPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "TopPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace Reddit.Android
         public static bool MonitorControversialAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "ControversialPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "ControversialPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -367,7 +367,7 @@ namespace Reddit.Android
         public static bool MonitorModQueueAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "ModQueuePosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "ModQueuePosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -419,7 +419,7 @@ namespace Reddit.Android
         public static bool MonitorModQueueReportsAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "ModQueueReportsPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "ModQueueReportsPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -471,7 +471,7 @@ namespace Reddit.Android
         public static bool MonitorModQueueSpamAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "ModQueueSpamPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "ModQueueSpamPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -523,7 +523,7 @@ namespace Reddit.Android
         public static bool MonitorModQueueUnmoderatedAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "ModQueueUnmoderatedPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "ModQueueUnmoderatedPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -575,7 +575,7 @@ namespace Reddit.Android
         public static bool MonitorModQueueEditedAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "ModQueueEditedPosts", subredditPosts.Subreddit, receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "ModQueueEditedPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
     }
 }

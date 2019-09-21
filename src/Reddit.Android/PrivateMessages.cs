@@ -55,7 +55,7 @@ namespace Reddit.Android
         public static bool MonitorInboxAndroid(this Controllers.PrivateMessages privateMessages, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(privateMessages, "PrivateMessagesInbox", "PrivateMessages", receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(privateMessages, "PrivateMessagesInbox", "PrivateMessages", receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -107,7 +107,7 @@ namespace Reddit.Android
         public static bool MonitorSentAndroid(this Controllers.PrivateMessages privateMessages, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(privateMessages, "PrivateMessagesSent", "PrivateMessages", receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(privateMessages, "PrivateMessagesSent", "PrivateMessages", receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
@@ -159,7 +159,7 @@ namespace Reddit.Android
         public static bool MonitorUnreadAndroid(this Controllers.PrivateMessages privateMessages, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(privateMessages, "PrivateMessagesUnread", "PrivateMessages", receiver, 0, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(privateMessages, "PrivateMessagesUnread", "PrivateMessages", receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
     }
 }
