@@ -226,7 +226,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return subreddit;
+                return GetSubreddit();
             }
             set
             {
@@ -288,6 +288,11 @@ namespace Reddit.Controllers
             ModQueueSpam = modQueueSpam ?? new List<Post>();
             ModQueueUnmoderated = modQueueUnmoderated ?? new List<Post>();
             ModQueueEdited = modQueueEdited ?? new List<Post>();
+        }
+
+        public string GetSubreddit()
+        {
+            return subreddit;
         }
 
         /// <summary>

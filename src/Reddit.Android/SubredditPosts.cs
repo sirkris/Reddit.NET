@@ -161,7 +161,7 @@ namespace Reddit.Android
         public static bool MonitorNewAndroid(this Controllers.SubredditPosts subredditPosts, Type receiver, int monitoringDelayMs,
             out Intent alarmIntent, out PendingIntent pendingIntent, string lastRes = null)
         {
-            return Monitors.MonitorAndroid(subredditPosts, "NewPosts", subredditPosts.Subreddit, receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
+            return Monitors.MonitorAndroid(subredditPosts, "NewPosts", subredditPosts.GetSubreddit(), receiver, monitoringDelayMs, out alarmIntent, out pendingIntent, lastRes);
         }
 
         /// <summary>
