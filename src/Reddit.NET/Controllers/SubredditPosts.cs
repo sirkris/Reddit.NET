@@ -222,6 +222,19 @@ namespace Reddit.Controllers
         }
         internal List<Post> modQueueEdited;
 
+        public string Subreddit
+        {
+            get
+            {
+                return subreddit;
+            }
+            set
+            {
+                subreddit = value;
+            }
+        }
+        internal string subreddit;
+
         private DateTime? BestLastUpdated { get; set; }
         private DateTime? HotLastUpdated { get; set; }
         private DateTime? NewLastUpdated { get; set; }
@@ -234,8 +247,6 @@ namespace Reddit.Controllers
         private DateTime? ModQueueSpamLastUpdated { get; set; }
         private DateTime? ModQueueUnmoderatedLastUpdated { get; set; }
         private DateTime? ModQueueEditedLastUpdated { get; set; }
-
-        public string Subreddit { get; set; }
 
         private string TopT { get; set; } = "all";
         private string ControversialT { get; set; } = "all";

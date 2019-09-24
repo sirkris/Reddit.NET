@@ -1,4 +1,5 @@
-﻿using Reddit.Controllers.Internal;
+﻿using Newtonsoft.Json;
+using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
 using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
@@ -10,6 +11,7 @@ namespace Reddit.Controllers
     /// <summary>
     /// Controller class for self posts.
     /// </summary>
+    [Serializable]
     public class SelfPost : Post
     {
         public string SelfText

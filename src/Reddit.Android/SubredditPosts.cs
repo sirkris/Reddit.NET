@@ -1,5 +1,7 @@
 ﻿using Android.App;
 using Android.Content;
+using Reddit;
+using Reddit.Controllers;
 using System;
 
 namespace Reddit.Android

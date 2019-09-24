@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using Reddit.Exceptions;
 using Reddit.Inputs.LinksAndComments;
 using Reddit.Inputs.Listings;
@@ -12,9 +13,12 @@ namespace Reddit.Controllers
     /// <summary>
     /// Controller class for link posts.
     /// </summary>
+    [Serializable]
     public class LinkPost : Post
     {
+        [JsonIgnore]
         public JObject Preview { get; set; }
+
         public string URL { get; set; }
         public string Thumbnail { get; set; }
         public int? ThumbnailHeight { get; set; }

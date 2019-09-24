@@ -1,4 +1,5 @@
-﻿using Reddit.Controllers.EventArgs;
+﻿using Newtonsoft.Json;
+using Reddit.Controllers.EventArgs;
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
@@ -16,15 +17,21 @@ namespace Reddit.Controllers
     /// <summary>
     /// Base controller for posts.
     /// </summary>
+    [Serializable]
     public class Post : Monitors
     {
         public event EventHandler<PostUpdateEventArgs> PostDataUpdated;
         public event EventHandler<PostUpdateEventArgs> PostScoreUpdated;
 
+        [JsonIgnore]
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
+        [JsonIgnore]
         internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        [JsonIgnore]
         internal override bool BreakOnFailure { get; set; }
+        [JsonIgnore]
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
+        [JsonIgnore]
         internal override DateTime? MonitoringExpiration { get; set; }
 
         public string Subreddit { get; set; }
@@ -42,10 +49,14 @@ namespace Reddit.Controllers
         public bool NSFW { get; set; }
 
         // Monitoring event fires when score changes by either value, whichever is greater.  This is to account for "vote fuzzing".  --Kris
+        [JsonIgnore]
         private int MinScoreMonitoringThreshold { get; set; } = 4;
+        [JsonIgnore]
         private int ScoreMonitoringPercentThreshold { get; set; } = 8;
 
+        [JsonIgnore]
         private int? MonitoringCancellationThresholdMinutes { get; set; } = null;
+        [JsonIgnore]
         private DateTime? LastMonitoringScoreUpdate { get; set; } = null;
 
         public string Title
@@ -64,11 +75,13 @@ namespace Reddit.Controllers
         /// <summary>
         /// The full Listing object returned by the Reddit API;
         /// </summary>
+        [JsonIgnore]
         public Things.Post Listing { get; set; }
 
         /// <summary>
         /// Comment replies to this post.
         /// </summary>
+        [JsonIgnore]
         public Comments Comments
         {
             get

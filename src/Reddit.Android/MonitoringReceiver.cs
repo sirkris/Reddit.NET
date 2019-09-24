@@ -78,7 +78,7 @@ namespace Reddit.Android
                 case "NewPosts":
                 {
                     List<Post> newList = reddit.Subreddit(subKey).Posts.GetNew();
-                    ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<Post>>(lastRes) : new List<Post>()), newList, "new");
+                        ListCompare(reddit, (!string.IsNullOrWhiteSpace(lastRes) ? JsonConvert.DeserializeObject<List<string>>(lastRes) : new List<string>()), SimplifyPosts(newList), "new", subKey);
 
                     // Schedule the next intent.  --Kris
                     reddit.Subreddit(subKey).Posts.MonitorNewAndroid(monitoringDelayMs, JsonConvert.SerializeObject(newList));
@@ -198,6 +198,50 @@ namespace Reddit.Android
                 };
                 Events.OnPostsUpdated(args, type, this);
             }
+        }
+
+        private void ListCompare(RedditAPI reddit, List<string> oldList, List<string> newList, string type, string subKey)
+        {
+            if (reddit.Account.Messages.Lists.ListDiff(oldList, newList, out List<string> added, out List<string> removed))
+            {
+                Subreddit subreddit = reddit.Subreddit(subKey);
+                List<Post> newPosts = UnsimplifyPosts(newList, subreddit);
+                List<Post> oldPosts = UnsimplifyPosts(oldList, subreddit);
+                List<Post> addedPosts = UnsimplifyPosts(added, subreddit);
+                List<Post> removedPosts = UnsimplifyPosts(removed, subreddit);
+
+                // Event handler to alert the calling app that the list has changed.  --Kris
+                PostsUpdateEventArgs args = new PostsUpdateEventArgs
+                {
+                    NewPosts = newPosts,
+                    OldPosts = oldPosts,
+                    Added = addedPosts,
+                    Removed = removedPosts
+                };
+                Events.OnPostsUpdated(args, type, this);
+            }
+        }
+
+        private List<string> SimplifyPosts(List<Post> posts)
+        {
+            List<string> res = new List<string>();
+            foreach (Post post in posts)
+            {
+                res.Add(post.Fullname);
+            }
+
+            return res;
+        }
+
+        private List<Post> UnsimplifyPosts(List<string> fullnames, Subreddit subreddit)
+        {
+            List<Post> res = new List<Post>();
+            foreach (string fullname in fullnames)
+            {
+                res.Add(subreddit.Post(fullname));
+            }
+
+            return res;
         }
     }
 }

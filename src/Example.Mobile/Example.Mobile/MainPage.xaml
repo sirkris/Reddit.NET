@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:Example.Mobile"
+             Title="Reddit.NET Mobile Extensions Example App"
+             BackgroundColor="DarkSlateBlue"
+             x:Class="Example.Mobile.MainPage"
+             NavigationPage.HasNavigationBar="False">
+
+    <StackLayout>
+        <!-- Place new controls here -->
+        <Label Text="Reddit.NET Mobile Extensions Example App" 
+           FontAttributes="Bold"
+           FontSize="Large"
+           TextColor="Gold"
+           HorizontalOptions="Center"
+           VerticalOptions="Start" />
+        <Label x:Name="username" Text="" 
+           FontSize="Medium"
+           TextColor="Lime"
+           HorizontalOptions="Center"
+           VerticalOptions="CenterAndExpand" />
+        <Label x:Name="stats" Text="" 
+           FontSize="Small"
+           TextColor="Aqua"
+           HorizontalOptions="Center"
+           VerticalOptions="Center" />
+        <Label x:Name="newPosts" Text="" 
+           FontSize="Small"
+           TextColor="Aqua"
+           HorizontalOptions="Center"
+           VerticalOptions="Center" />
+        <Button x:Name="StartButton" 
+                Text="Start" BackgroundColor="DarkGreen"  TextColor="LawnGreen"  FontAttributes="Bold" HorizontalOptions="Center" VerticalOptions="EndAndExpand" 
+                Clicked="StartButton_Pressed" />
+    </StackLayout>
+
+</ContentPage>
