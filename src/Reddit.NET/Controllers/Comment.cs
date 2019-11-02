@@ -643,6 +643,7 @@ namespace Reddit.Controllers
             return this;
         }
 
+        // TODO - Children should be specified by user; not based on parent ID!  --Kris
         /// <summary>
         /// Retrieve additional comments omitted from a base comment tree.
         /// When a comment tree is rendered, the most relevant comments are selected for display first.

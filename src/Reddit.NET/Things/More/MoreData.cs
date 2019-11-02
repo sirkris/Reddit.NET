@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 
 namespace Reddit.Things
 {
@@ -22,6 +23,6 @@ namespace Reddit.Things
         public int Depth { get; set; }
 
         [JsonProperty("children")]
-        public object Children { get; set; }  // TODO - Determine type.  --Kris
+        public List<string> Children { get; set; }
     }
 }

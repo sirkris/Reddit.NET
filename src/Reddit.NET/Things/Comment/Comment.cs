@@ -171,8 +171,13 @@ namespace Reddit.Things
         [JsonProperty("mod_reports")]
         public List<List<string>> ModReports { get; set; }
 
+        // TODO - Add custom converter and make null if Replies property is a more object (Issue 94).  --Kris
         [JsonProperty("replies")]
         public CommentContainer Replies { get; set; }
+
+        // TODO - Add custom converter and make null if Replies property is *not* a more object (Issue 94).  --Kris
+        [JsonProperty("replies")]
+        public List<MoreData> More { get; set; }
 
         [JsonProperty("body_html")]
         public string BodyHTML { get; set; }
