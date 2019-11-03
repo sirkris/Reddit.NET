@@ -183,13 +183,13 @@ namespace Reddit.Controllers
             CollapsedReason = listing.CollapsedReason;
             Collapsed = listing.Collapsed;
             IsSubmitter = listing.IsSubmitter;
-            Replies = Lists.GetComments(listing.Replies, Dispatch);
+            Replies = (listing.Replies != null ? Lists.GetComments(listing.Replies.Comments, Dispatch) : new List<Comment>());
             ScoreHidden = listing.ScoreHidden;
             Depth = listing.Depth;
             Id = listing.Id;
             Fullname = listing.Name;
             Permalink = listing.Permalink;
-            Created = listing.Created;
+            Created = listing.CreatedUTC;
             Edited = listing.Edited;
             Score = listing.Score;
             UpVotes = listing.Ups;

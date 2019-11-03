@@ -171,13 +171,10 @@ namespace Reddit.Things
         [JsonProperty("mod_reports")]
         public List<List<string>> ModReports { get; set; }
 
-        // TODO - Add custom converter and make null if Replies property is a more object (Issue 94).  --Kris
+        // Either Replies.Comments or Replies.MoreData will be populated; never both.  --Kris
         [JsonProperty("replies")]
-        public CommentContainer Replies { get; set; }
-
-        // TODO - Add custom converter and make null if Replies property is *not* a more object (Issue 94).  --Kris
-        [JsonProperty("replies")]
-        public List<MoreData> More { get; set; }
+        [JsonConverter(typeof(CommentRepliesConverter))]
+        public MoreChildren Replies { get; set; }
 
         [JsonProperty("body_html")]
         public string BodyHTML { get; set; }
@@ -242,20 +239,12 @@ namespace Reddit.Things
             ScoreHidden = comment.ScoreHidden;
             Depth = comment.Depth;
 
-            Replies = null;
+            Replies = new MoreChildren();
             if (comment.Replies != null && comment.Replies.Count > 0)
             {
-                Replies = new CommentContainer
-                {
-                    Data = new CommentData
-                    {
-                        Children = new List<CommentChild>()
-                    }
-                };
-
                 foreach (Controllers.Comment commentReply in comment.Replies)
                 {
-                    Replies.Data.Children.Add(new CommentChild { Data = new Comment(commentReply) });
+                    Replies.Comments.Add(commentReply.Listing);
                 }
             }
         }

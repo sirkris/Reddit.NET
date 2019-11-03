@@ -240,7 +240,7 @@ namespace Reddit.Models
                         moreChildren.Comments.Add(JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data)));
                         break;
                     case "more":
-                        moreChildren.MoreData.Add(JsonConvert.DeserializeObject<MoreData>(JsonConvert.SerializeObject(child.Data)));
+                        moreChildren.MoreData.Add(JsonConvert.DeserializeObject<More>(JsonConvert.SerializeObject(child.Data)));
                         break;
                 }
             }
