@@ -11,7 +11,7 @@ namespace Reddit.Models.Converters
     {
         public override bool CanConvert(Type objectType)
         {
-            return (objectType == typeof(CommentContainer) || objectType == typeof(MoreContainer));
+            return (objectType == typeof(MoreChildren));
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -27,25 +27,32 @@ namespace Reddit.Models.Converters
 
         private MoreChildren BuildResult(JToken jToken, Type objectType)
         {
-            if (objectType == typeof(CommentContainer))
+            CommentContainer listing = jToken.ToObject<CommentContainer>();
+            if (listing.Data != null
+                && listing.Data.Children != null
+                && !listing.Data.Children.Count.Equals(0))
             {
-                List<Comment> comments = new List<Comment>();
-                foreach (CommentChild commentChild in jToken.ToObject<CommentContainer>().Data.Children)
+                switch (listing.Data.Children[0].Kind)
                 {
-                    comments.Add(commentChild.Data);
-                }
+                    default:
+                        return new MoreChildren();
+                    case "t1":
+                        List<Comment> comments = new List<Comment>();
+                        foreach (CommentChild commentChild in listing.Data.Children)
+                        {
+                            comments.Add(commentChild.Data);
+                        }
 
-                return new MoreChildren(comments, null);
-            }
-            else if (objectType == typeof(MoreContainer))
-            {
-                List<More> more = new List<More>();
-                foreach (MoreChild moreChild in jToken.ToObject<MoreContainer>().Data.Children)
-                {
-                    more.Add(moreChild.Data);
-                }
+                        return new MoreChildren(comments, null);
+                    case "more":
+                        List<More> more = new List<More>();
+                        foreach (MoreChild moreChild in jToken.ToObject<MoreContainer>().Data.Children)
+                        {
+                            more.Add(moreChild.Data);
+                        }
 
-                return new MoreChildren(null, more);
+                        return new MoreChildren(null, more);
+                }
             }
             else
             {

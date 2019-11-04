@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Reddit.Inputs;
 using Reddit.Inputs.Listings;
+using Reddit.Models.Internal;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
@@ -11,16 +12,21 @@ namespace Reddit.Models
     public class Listings : BaseModel
     {
         internal override RestClient RestClient { get; set; }
+        
+        private Common Common { get; set; }
 
         public Listings(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId)
+        {
+            Common = new Common(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+        }
 
         // TODO - API returns 400.  No idea why.  --Kris
         /// <summary>
         /// Return a list of trending subreddits, link to the comment in r/trendingsubreddits, and the comment count of that link.
         /// </summary>
         /// <returns>(TODO - Untested)</returns>
-        public object TrendingSubreddits()
+            public object TrendingSubreddits()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/trending_subreddits"));
         }
@@ -60,15 +66,7 @@ namespace Reddit.Models
         /// <returns>A post and comments tree.</returns>
         public CommentContainer GetComments(string article, ListingsGetCommentsInput listingsGetCommentsInput, string subreddit = null)
         {
-            JToken res = SendRequest<JToken>(Sr(subreddit) + "comments/" + article +
-                (!string.IsNullOrWhiteSpace(listingsGetCommentsInput.comment) ? "/_/" + listingsGetCommentsInput.comment : ""), listingsGetCommentsInput);
-            
-            if(string.IsNullOrEmpty(article))
-            {
-                return JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res));
-            }
-
-            return JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res[1]));
+            return Common.GetComments(article, listingsGetCommentsInput, subreddit);
         }
 
         /// <summary>

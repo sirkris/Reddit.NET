@@ -643,7 +643,7 @@ namespace Reddit.Controllers
             return this;
         }
 
-        // TODO - Children should be specified by user; not based on parent ID!  --Kris
+        // Note - Calling these MoreChildren methods here is the same as calling the ones in Post.  --Kris
         /// <summary>
         /// Retrieve additional comments omitted from a base comment tree.
         /// When a comment tree is rendered, the most relevant comments are selected for display first.
@@ -660,9 +660,9 @@ namespace Reddit.Controllers
         /// <param name="sort">one of (confidence, top, new, controversial, old, random, qa, live)</param>
         /// <param name="id">(optional) id of the associated MoreChildren object</param>
         /// <returns>The requested comments.</returns>
-        public Things.MoreChildren MoreChildren(bool limitChildren, string sort, string id = null)
+        public Things.MoreChildren MoreChildren(string children, bool limitChildren, string sort, string id = null)
         {
-            return MoreChildren(new LinksAndCommentsMoreChildrenInput(Id, limitChildren, ParentFullname, sort, id));
+            return MoreChildren(new LinksAndCommentsMoreChildrenInput(children, limitChildren, ParentFullname, sort, id));
         }
 
         /// <summary>
@@ -680,6 +680,8 @@ namespace Reddit.Controllers
         /// <returns>The requested comments.</returns>
         public Things.MoreChildren MoreChildren(LinksAndCommentsMoreChildrenInput linksAndCommentsMoreChildrenInput)
         {
+            linksAndCommentsMoreChildrenInput.link_id = ParentFullname;
+
             return Validate(Dispatch.LinksAndComments.MoreChildren(linksAndCommentsMoreChildrenInput));
         }
 
