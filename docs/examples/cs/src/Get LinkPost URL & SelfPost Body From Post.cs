@@ -15,10 +15,10 @@ namespace ConsoleApp1
 	{
 		private RedditAPI Reddit { get; set; }
 		
-        public PostsHelper(string appId, string refreshToken)
-        {
-            Reddit = new RedditAPI(appId, refreshToken);
-        }
+		public PostsHelper(string appId, string refreshToken)
+		{
+			Reddit = new RedditAPI(appId, refreshToken);
+		}
 		
 		// Display the title of each post followed by the link URL (if it's a link post) or the Body (if it's a self post).  --Kris
 		public void ListPosts(string subreddit)

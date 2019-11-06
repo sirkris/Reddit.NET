@@ -32,10 +32,10 @@ public class GetPost
 {
 	private RedditAPI Reddit { get; set; }
 	
-    public GetPost(string appId, string refreshToken)
-    {
-        Reddit = new RedditAPI(appId, refreshToken);
-    }
+	public GetPost(string appId, string refreshToken)
+	{
+		Reddit = new RedditAPI(appId, refreshToken);
+	}
 	
 	public Post FromPermalink(string permalink)
 	{
