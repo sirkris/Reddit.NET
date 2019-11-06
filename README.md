@@ -205,15 +205,15 @@ There are 5 projects in the Reddit.NET solution:
 
 A .NET Core console application that greatly simplifies the OAuth token retrieval process.  Please review the video below for usage instructions:
 
+#### [Obtaining OAuth Tokens using Reddit.NET's AuthTokenRetriever utility](https://www.youtube.com/watch?v=xlWhLyVgN2s)
+
 ### AuthTokenRetrieverLib
 
 A .NET Standard library that is used by the AuthTokenRetriever app.  You can also use this in your own apps to retrieve auth tokens for new users.
 
-#### [Obtaining OAuth Tokens using Reddit.NET's AuthTokenRetriever utility](https://www.youtube.com/watch?v=xlWhLyVgN2s)
-
 ### Example
 
-A simple example .NET Core console application that demonstrates some of Reddit.NET's functionality. If you have Visual Studio 2017, you can run it using debug. You'll need to set your application ID and refresh token in the debug arguments. Only passive operations are demonstrated in this example app; nothing is created or modified in any way.
+A simple example .NET Core console application that demonstrates some of Reddit.NET's functionality. If you have Visual Studio 2017 or later, you can run it using debug. You'll need to set your application ID and refresh token in the debug arguments. Only passive operations are demonstrated in this example app; nothing is created or modified in any way.
 
 ### Reddit.NET
 
@@ -416,6 +416,10 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 #### [Link to SelfPost](docs/examples/cs/Link%20to%20SelfPost.md)
 
 #### [Recommended Subreddits](docs/examples/cs/Recommended%20Subreddits.md)
+
+#### [Use a Permalink to Retrieve a Reddit Post](docs/examples/cs/Get%20Post%20From%20Permalink.md)
+
+#### [Retrieve a LinkPost URL or SelfPost Body From a Reddit Post](docs/examples/cs/Get%20LinkPost%20URL%20%26%20SelfPost%20Body%20From%20Post.md)
 
 For more examples, check out the Example and Reddit.NETTests projects.
 
