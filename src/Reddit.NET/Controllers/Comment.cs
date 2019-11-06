@@ -26,6 +26,7 @@ namespace Reddit.Controllers
         public bool Removed { get; set; }
         public bool Spam { get; set; }
         public List<Comment> Replies { get; set; }
+        public List<Things.More> More { get; set; }
         public string ParentId { get; set; }
         public string ParentFullname { get; set; }
         public string CollapsedReason { get; set; }
@@ -109,7 +110,7 @@ namespace Reddit.Controllers
             Dispatch = dispatch;
             Import(listing);
         }
-        
+
         /// <summary>
         /// Create a new comment controller instance, populated manually.
         /// </summary>
@@ -123,6 +124,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -137,12 +139,12 @@ namespace Reddit.Controllers
         /// <param name="spam"></param>
         public Comment(Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null, 
+            List<Comment> replies = null, List<Things.More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null, 
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
             Dispatch = dispatch;
-            Import(subreddit, author, body, bodyHtml, parentFullname, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            Import(subreddit, author, body, bodyHtml, parentFullname, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -184,6 +186,7 @@ namespace Reddit.Controllers
             Collapsed = listing.Collapsed;
             IsSubmitter = listing.IsSubmitter;
             Replies = (listing.Replies != null ? Lists.GetComments(listing.Replies.Comments, Dispatch) : new List<Comment>());
+            More = (listing.Replies != null ? listing.Replies.MoreData : new List<Things.More>());
             ScoreHidden = listing.ScoreHidden;
             Depth = listing.Depth;
             Id = listing.Id;
@@ -202,7 +205,7 @@ namespace Reddit.Controllers
 
         private void Import(string subreddit, string author, string body, string bodyHtml,
             string parentFullname = null, string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<Things.More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
@@ -211,11 +214,12 @@ namespace Reddit.Controllers
             Body = body;
             BodyHTML = bodyHtml;
             ParentFullname = parentFullname;
-            ParentId = (!string.IsNullOrEmpty(ParentFullname) && (ParentFullname.StartsWith("t3_") || ParentFullname.StartsWith("t1_")) ? ParentFullname.Substring(3) : null); ;
+            ParentId = (!string.IsNullOrEmpty(ParentFullname) && (ParentFullname.StartsWith("t3_") || ParentFullname.StartsWith("t1_")) ? ParentFullname.Substring(3) : null);
             CollapsedReason = collapsedReason;
             Collapsed = collapsed;
             IsSubmitter = isSubmitter;
             Replies = replies;
+            More = more;
             ScoreHidden = scoreHidden;
             Depth = depth;
             Id = id;
@@ -314,6 +318,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -329,11 +334,11 @@ namespace Reddit.Controllers
         /// <returns>The newly-created comment reply.</returns>
         public Comment Reply(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<Things.More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return BuildReply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return BuildReply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).Submit();
         }
 
@@ -347,6 +352,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -361,11 +367,11 @@ namespace Reddit.Controllers
         /// <param name="spam"></param>
         public async Task<Comment> ReplyAsync(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<Things.More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return await BuildReply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return await BuildReply(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).SubmitAsync();
         }
 
@@ -379,6 +385,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -394,11 +401,11 @@ namespace Reddit.Controllers
         /// <returns>The unsent comment reply instance.</returns>
         public Comment BuildReply(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<Things.More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 

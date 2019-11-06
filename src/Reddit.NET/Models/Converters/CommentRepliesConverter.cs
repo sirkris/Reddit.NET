@@ -17,7 +17,7 @@ namespace Reddit.Models.Converters
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             JToken jToken = JToken.Load(reader);
-            return (jToken.Type == JTokenType.Object ? BuildResult(jToken, objectType) : new MoreChildren());
+            return (jToken.Type == JTokenType.Object ? BuildResult(jToken) : new MoreChildren());
         }
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
@@ -25,7 +25,7 @@ namespace Reddit.Models.Converters
             serializer.Serialize(writer, value);
         }
 
-        private MoreChildren BuildResult(JToken jToken, Type objectType)
+        private MoreChildren BuildResult(JToken jToken)
         {
             CommentContainer listing = jToken.ToObject<CommentContainer>();
             if (listing.Data != null
