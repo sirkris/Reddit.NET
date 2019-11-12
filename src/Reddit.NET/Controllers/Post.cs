@@ -221,6 +221,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -236,11 +237,11 @@ namespace Reddit.Controllers
         /// <returns></returns>
         public Comment Comment(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -263,6 +264,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -278,11 +280,11 @@ namespace Reddit.Controllers
         /// <returns>The newly-created comment reply.</returns>
         public Comment Reply(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).Submit();
         }
 
@@ -296,6 +298,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -310,11 +313,11 @@ namespace Reddit.Controllers
         /// <param name="spam"></param>
         public async Task<Comment> ReplyAsync(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return await Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return await Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).SubmitAsync();
         }
 

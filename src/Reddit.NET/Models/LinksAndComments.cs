@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using Reddit.Inputs.LinksAndComments;
+using Reddit.Inputs.Listings;
+using Reddit.Models.Internal;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
@@ -11,8 +13,13 @@ namespace Reddit.Models
     {
         internal override RestClient RestClient { get; set; }
 
+        private Common Common { get; set; }
+
         public LinksAndComments(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId)
+        {
+            Common = new Common(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+        }
 
         /// <summary>
         /// Submit a new comment or reply to a message.
@@ -132,14 +139,16 @@ namespace Reddit.Models
             await ExecuteRequestAsync(PrepareIDRequest("api/hide", id));
         }
 
+        // Regarding loadReplies:  https://www.reddit.com/r/redditdev/comments/dqz2jy/api_bug_the_apiinfo_endpoint_does_not_populate/
         /// <summary>
         /// Return a listing of things specified by their fullnames.
         /// Only Links, Comments, and Subreddits are allowed.
         /// </summary>
         /// <param name="id">A comma-separated list of thing fullnames</param>
-        /// <param name="subreddit">The subreddit with the listing.</param>
+        /// <param name="subreddit">The subreddit with the listing</param>
+        /// <param name="loadReplies">The Info endpoint doesn't include replies; if loadReplies is true, an additional API call will be triggered to retrieve the replies (default: true)</param>
         /// <returns>The requested listings.</returns>
-        public Info Info(string id, string subreddit = null)
+        public Info Info(string id, string subreddit = null, bool loadReplies = true)
         {
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/info");
 
@@ -150,7 +159,7 @@ namespace Reddit.Models
             List<Post> posts = new List<Post>();
             List<Comment> comments = new List<Comment>();
             List<Subreddit> subreddits = new List<Subreddit>();
-
+            
             foreach (DynamicListingChild child in res.Data.Children)
             {
                 switch (child.Kind)
@@ -159,7 +168,21 @@ namespace Reddit.Models
                         posts.Add(JsonConvert.DeserializeObject<Post>(JsonConvert.SerializeObject(child.Data)));
                         break;
                     case "t1":
-                        comments.Add(JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data)));
+                        Comment comment = JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data));
+                        if (loadReplies)
+                        {
+                            CommentContainer commentContainer = Common.GetComments(comment.ParentId.Substring(3), new ListingsGetCommentsInput(comment: comment.Id), comment.Subreddit);
+                            if (commentContainer != null
+                                && commentContainer.Data != null
+                                && commentContainer.Data.Children != null
+                                && !commentContainer.Data.Children.Count.Equals(0)
+                                && commentContainer.Data.Children[0].Data != null)
+                            {
+                                comment.Replies = commentContainer.Data.Children[0].Data.Replies;
+                            }
+                        }
+
+                        comments.Add(comment);
                         break;
                     case "t5":
                         subreddits.Add(JsonConvert.DeserializeObject<Subreddit>(JsonConvert.SerializeObject(child.Data)));
@@ -240,7 +263,7 @@ namespace Reddit.Models
                         moreChildren.Comments.Add(JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data)));
                         break;
                     case "more":
-                        moreChildren.MoreData.Add(JsonConvert.DeserializeObject<MoreData>(JsonConvert.SerializeObject(child.Data)));
+                        moreChildren.MoreData.Add(JsonConvert.DeserializeObject<More>(JsonConvert.SerializeObject(child.Data)));
                         break;
                 }
             }

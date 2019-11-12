@@ -288,6 +288,22 @@ namespace Reddit.Controllers.Internal
             return comments;
         }
 
+        public List<Comment> GetComments(List<Things.Comment> commentsList, Dispatch dispatch)
+        {
+            if (commentsList == null)
+            {
+                return null;
+            }
+
+            List<Comment> comments = new List<Comment>();
+            foreach (Things.Comment comment in commentsList)
+            {
+                comments.Add(new Comment(dispatch, comment));
+            }
+
+            return comments;
+        }
+
         public List<Subreddit> GetSubreddits(SubredditContainer subredditContainer, Dispatch dispatch)
         {
             List<Subreddit> subreddits = new List<Subreddit>();

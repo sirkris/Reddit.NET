@@ -75,7 +75,7 @@ namespace RedditTests.ControllerTests
         [TestMethod]
         public void MoreChildren()
         {
-            Reddit.Things.MoreChildren moreChildren = Comment.MoreChildren(false, "new");
+            Reddit.Things.MoreChildren moreChildren = Comment.MoreChildren(Comment.Id, false, "new");
 
             Validate(moreChildren);
             Assert.IsTrue(moreChildren.Comments.Count > 0);
