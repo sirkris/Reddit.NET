@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Reddit.Exceptions;
 using Reddit.Inputs.Listings;
 using Reddit.Things;
 using RestSharp;
@@ -36,6 +37,26 @@ namespace Reddit.Models.Internal
             }
 
             return JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res[1]));
+        }
+
+        /// <summary>
+        /// Get information on a given link via the comments endpoint.
+        /// </summary>
+        /// <param name="article">ID36 of a link</param>
+        /// <param name="listingsGetCommentsInput">A valid ListingsGetCommentsInput instance</param>
+        /// <param name="subreddit">The subreddit with the article</param>
+        /// <returns>A post and comments tree.</returns>
+        public PostContainer GetPost(string article, ListingsGetCommentsInput listingsGetCommentsInput, string subreddit = null)
+        {
+            if (string.IsNullOrEmpty(article))
+            {
+                throw new RedditException("You must specify a valid article link ID36.");
+            }
+
+            JToken res = SendRequest<JToken>(Sr(subreddit) + "comments/" + article +
+                (!string.IsNullOrWhiteSpace(listingsGetCommentsInput.comment) ? "/_/" + listingsGetCommentsInput.comment : ""), listingsGetCommentsInput);
+
+            return JsonConvert.DeserializeObject<PostContainer>(JsonConvert.SerializeObject(res[0]));
         }
     }
 }

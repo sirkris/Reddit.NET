@@ -70,6 +70,18 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Get information on a given link via the comments endpoint.
+        /// </summary>
+        /// <param name="article">ID36 of a link</param>
+        /// <param name="listingsGetCommentsInput">A valid ListingsGetCommentsInput instance</param>
+        /// <param name="subreddit">The subreddit with the article</param>
+        /// <returns>A post and comments tree.</returns>
+        public PostContainer GetPost(string article, ListingsGetCommentsInput listingsGetCommentsInput, string subreddit = null)
+        {
+            return Common.GetPost(article, listingsGetCommentsInput, subreddit);
+        }
+
+        /// <summary>
         /// Return a list of other submissions of the same URL
         /// This endpoint is a listing.
         /// </summary>
