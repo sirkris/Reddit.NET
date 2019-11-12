@@ -37,6 +37,8 @@ namespace RedditTests.ControllerTests
         {
             Validate(Post);
             Assert.IsTrue(Post.Fullname.Equals(PostFullname));
+            Assert.IsFalse(Post.UpvoteRatio.Equals(0));
+            Assert.IsFalse(Post.DownVotes.Equals(0));
         }
 
         [TestMethod]

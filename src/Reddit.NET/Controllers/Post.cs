@@ -4,6 +4,7 @@ using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Inputs.Flair;
 using Reddit.Inputs.LinksAndComments;
+using Reddit.Inputs.Listings;
 using Reddit.Inputs.Moderation;
 using Reddit.Things;
 using System;
@@ -34,12 +35,22 @@ namespace Reddit.Controllers
         public string Permalink { get; set; }
         public DateTime Created { get; set; }
         public DateTime Edited { get; set; }
-        public int Score { get; set; }
-        public int UpVotes { get; set; }
-        public int DownVotes { get; set; }
         public bool Removed { get; set; }
         public bool Spam { get; set; }
         public bool NSFW { get; set; }
+        public int Score { get; set; }
+        public int UpVotes { get; set; }
+        public double UpvoteRatio { get; set; }
+
+        // API no longer returns a value for "downs", so let's just calculate it, instead.  --Kris
+        public int DownVotes
+        {
+            get
+            {
+                return Score - (int)(Score * UpvoteRatio);
+            }
+            private set { }
+        }
 
         // Monitoring event fires when score changes by either value, whichever is greater.  This is to account for "vote fuzzing".  --Kris
         private int MinScoreMonitoringThreshold { get; set; } = 4;
@@ -172,7 +183,7 @@ namespace Reddit.Controllers
             Edited = listing.Edited;
             Score = listing.Score;
             UpVotes = listing.Ups;
-            DownVotes = listing.Downs;
+            UpvoteRatio = listing.UpvoteRatio;
             Removed = listing.Removed;
             Spam = listing.Spam;
             NSFW = listing.Over18;
@@ -182,7 +193,7 @@ namespace Reddit.Controllers
 
         internal void Import(string subreddit, string title, string author, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
-            int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
+            double upvoteRatio = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
             Subreddit = subreddit;
             Title = title;
@@ -194,7 +205,7 @@ namespace Reddit.Controllers
             Edited = edited;
             Score = score;
             UpVotes = upVotes;
-            DownVotes = downVotes;
+            UpvoteRatio = upvoteRatio;
             Removed = removed;
             Spam = spam;
             NSFW = nsfw;
@@ -326,6 +337,22 @@ namespace Reddit.Controllers
         /// </summary>
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public Post About()
+        {
+            if (string.IsNullOrEmpty(Subreddit))
+            {
+                Post post = Info();
+                Id = post.Id;
+                Subreddit = post.Subreddit;
+            }
+
+            return Validate(Lists.GetPosts(Dispatch.Listings.GetPost(Id, new ListingsGetCommentsInput(), Subreddit), Dispatch))[0];
+        }
+
+        /// <summary>
+        /// Return information about the current Post instance via the api/info endpoint.
+        /// </summary>
+        /// <returns>An instance of this class populated with the retrieved data.</returns>
+        public Post Info()
         {
             Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
