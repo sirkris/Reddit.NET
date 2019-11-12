@@ -240,9 +240,9 @@ namespace Reddit.Things
             Depth = comment.Depth;
 
             Replies = new MoreChildren();
-            if (comment.Replies != null && comment.Replies.Count > 0)
+            if (comment.replies != null && comment.replies.Count > 0)
             {
-                foreach (Controllers.Comment commentReply in comment.Replies)
+                foreach (Controllers.Comment commentReply in comment.replies)
                 {
                     Replies.Comments.Add(commentReply.Listing);
                 }

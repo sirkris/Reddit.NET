@@ -1,6 +1,7 @@
 ﻿using Reddit.Controllers.Internal;
 using Reddit.Exceptions;
 using Reddit.Inputs.LinksAndComments;
+using Reddit.Inputs.Listings;
 using Reddit.Inputs.Moderation;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,6 @@ namespace Reddit.Controllers
         public int DownVotes { get; set; }
         public bool Removed { get; set; }
         public bool Spam { get; set; }
-        public List<Comment> Replies { get; set; }
         public List<Things.More> More { get; set; }
         public string ParentId { get; set; }
         public string ParentFullname { get; set; }
@@ -34,6 +34,20 @@ namespace Reddit.Controllers
         public bool IsSubmitter { get; set; }
         public bool ScoreHidden { get; set; }
         public int Depth { get; set; }
+
+        public List<Comment> Replies
+        {
+            get
+            {
+                replies = replies ?? About().replies;
+                return replies;
+            }
+            set
+            {
+                replies = value;
+            }
+        }
+        public List<Comment> replies { get; private set; }
 
         public string Body
         {
@@ -270,12 +284,14 @@ namespace Reddit.Controllers
             Things.Info info = null;
             do
             {
-                info = Validate(Dispatch.LinksAndComments.Info(fullname, Subreddit));
+                info = Validate(Dispatch.LinksAndComments.Info(fullname, Subreddit, false));
                 fullname = GetInfoPostOrCommentParentFullname(info);
             } while (info != null && info.Comments != null && info.Comments.Count > 0
                 && !string.IsNullOrWhiteSpace(fullname) && !fullname.StartsWith("t3_"));
 
-            return new Post(Dispatch, fullname).About();
+            Root = new Post(Dispatch, fullname).About();
+
+            return root;
         }
 
         private string GetInfoPostOrCommentParentFullname(Things.Info info)
@@ -414,6 +430,22 @@ namespace Reddit.Controllers
         /// </summary>
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public Comment About()
+        {
+            if (Root != null)
+            {
+                return Validate(Lists.GetComments(Dispatch.Listings.GetComments(Root.Id, new ListingsGetCommentsInput(comment: Id, depth: 8), Subreddit), Dispatch))[0];
+            }
+            else
+            {
+                return Info();
+            }
+        }
+
+        /// <summary>
+        /// Return information about the current Comment instance via the api/info endpoint.
+        /// </summary>
+        /// <returns>An instance of this class populated with the retrieved data.</returns>
+        public Comment Info()
         {
             Things.Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
