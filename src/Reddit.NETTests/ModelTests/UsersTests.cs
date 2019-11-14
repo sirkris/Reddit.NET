@@ -82,6 +82,12 @@ namespace RedditTests.ModelTests
         }
 
         [TestMethod]
+        public void ModeratedSubreddits()
+        {
+            Validate(reddit.Models.Users.ModeratedSubreddits("KrisCraig", new UsersHistoryInput()));
+        }
+
+        [TestMethod]
         public void PostHistoryOverview()
         {
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "overview", new UsersHistoryInput(context: 10));

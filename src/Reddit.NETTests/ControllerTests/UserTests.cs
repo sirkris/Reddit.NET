@@ -1,7 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
 using Reddit.Exceptions;
+using Things = Reddit.Things;
 using System;
+using System.Collections.Generic;
 
 namespace RedditTests.ControllerTests
 {
@@ -77,6 +79,23 @@ namespace RedditTests.ControllerTests
         public void Trophies()
         {
             Validate(User.Trophies());
+        }
+
+        [TestMethod]
+        public void ModeratedSubreddits()
+        {
+            Validate(User.ModeratedSubreddits);
+            bool found = false;
+            foreach (Things.ModeratedListItem moderatedListItem in User.ModeratedSubreddits)
+            {
+                if (moderatedListItem.Name.Equals("t5_3fblp"))
+                {
+                    found = true;
+                    break;
+                }
+            }
+
+            Assert.IsTrue(found);
         }
 
         [TestMethod]

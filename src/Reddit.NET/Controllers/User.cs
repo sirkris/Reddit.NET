@@ -81,6 +81,21 @@ namespace Reddit.Controllers
         internal List<Comment> commentHistory;
         internal DateTime? CommentHistoryLastUpdated { get; set; }
 
+        public List<ModeratedListItem> ModeratedSubreddits
+        {
+            get
+            {
+                return (ModeratedSubredditsLastUpdated.HasValue
+                    && ModeratedSubredditsLastUpdated.Value.AddSeconds(15) > DateTime.Now ? moderatedSubreddits : GetModeratedSubreddits());
+            }
+            private set
+            {
+                moderatedSubreddits = value;
+            }
+        }
+        internal List<ModeratedListItem> moderatedSubreddits;
+        internal DateTime? ModeratedSubredditsLastUpdated { get; set; }
+
         /// <summary>
         /// Full user data from the API.
         /// </summary>
@@ -540,11 +555,10 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetPostHistory(string where = "overview", int context = 3, string t = "all", int limit = 25, string sort = "",
+        public List<Post> GetPostHistory(string where = "submitted", int context = 3, string t = "all", int limit = 25, string sort = "",
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            PostHistoryLastUpdated = DateTime.Now;
             return GetPostHistory(new UsersHistoryInput("links", t, sort, context, after, before, count, limit, show, srDetail, includeCategories), where);
         }
 
@@ -554,12 +568,15 @@ namespace Reddit.Controllers
         /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
         /// <param name="where">One of (overview, submitted, upvotes, downvoted, hidden, saved, gilded)</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetPostHistory(UsersHistoryInput usersHistoryInput, string where = "overview")
+        public List<Post> GetPostHistory(UsersHistoryInput usersHistoryInput, string where = "submitted")
         {
-            return (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase)
+            PostHistoryLastUpdated = DateTime.Now;
+            postHistory = (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase)
                 ? SanitizePosts(Lists.ForceNewSort(Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)),
                     Dispatch)))
                 : SanitizePosts(Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)), Dispatch)));
+
+            return postHistory;
         }
 
         /// <summary>
@@ -611,7 +628,41 @@ namespace Reddit.Controllers
         /// <returns>A list of comments.</returns>
         public List<Comment> GetCommentHistory(UsersHistoryInput usersHistoryInput)
         {
-            return Lists.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", usersHistoryInput)), Dispatch);
+            CommentHistoryLastUpdated = DateTime.Now;
+            commentHistory = Lists.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", usersHistoryInput)), Dispatch);
+
+            return commentHistory;
+        }
+
+        /// <summary>
+        /// Retrieve a list of subreddits that the user moderates.
+        /// </summary>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of moderated subreddits.</returns>
+        public List<ModeratedListItem> GetModeratedSubreddits(int limit = 25, string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
+            int count = 0)
+        {
+            return GetModeratedSubreddits(
+                new UsersHistoryInput(after: after, before: before, count: count, limit: limit, show: show, srDetail: srDetail, includeCategories: includeCategories));
+        }
+
+        /// <summary>
+        /// Retrieve a list of subreddits that the user moderates.
+        /// </summary>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <returns>A list of moderated subreddits.</returns>
+        public List<ModeratedListItem> GetModeratedSubreddits(UsersHistoryInput usersHistoryInput)
+        {
+            ModeratedSubredditsLastUpdated = DateTime.Now;
+            moderatedSubreddits = ((ModeratedListContainer)Validate(Dispatch.Users.ModeratedSubreddits(Name, usersHistoryInput))).Data;
+
+            return moderatedSubreddits;
         }
 
         /// <summary>
