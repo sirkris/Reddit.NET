@@ -84,9 +84,9 @@ namespace RedditTests.ControllerTests
         [TestMethod]
         public void ModeratedSubreddits()
         {
-            Validate(User.ModeratedSubreddits);
+            Validate(reddit.User("KrisCraig").ModeratedSubreddits);
             bool found = false;
-            foreach (Things.ModeratedListItem moderatedListItem in User.ModeratedSubreddits)
+            foreach (Things.ModeratedListItem moderatedListItem in reddit.User("KrisCraig").ModeratedSubreddits)
             {
                 if (moderatedListItem.Name.Equals("t5_3fblp"))
                 {
