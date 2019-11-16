@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Modmail
 {
     [Serializable]
-    public class ModmailMessageBodyInput
+    public class ModmailMessageBodyInput : BaseInput
     {
         /// <summary>
         /// raw markdown text

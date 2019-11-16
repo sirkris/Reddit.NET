@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Users
 {
     [Serializable]
-    public class UsersReportUserInput
+    public class UsersReportUserInput : BaseInput
     {
         /// <summary>
         /// JSON data

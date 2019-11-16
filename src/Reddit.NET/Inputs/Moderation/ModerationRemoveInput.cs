@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Moderation
 {
     [Serializable]
-    public class ModerationRemoveInput
+    public class ModerationRemoveInput : BaseInput
     {
         /// <summary>
         /// fullname of a thing

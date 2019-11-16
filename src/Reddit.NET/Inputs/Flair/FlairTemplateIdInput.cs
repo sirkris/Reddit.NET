@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Flair
 {
     [Serializable]
-    public class FlairTemplateIdInput
+    public class FlairTemplateIdInput : BaseInput
     {
         /// <summary>
         /// a valid flair template ID

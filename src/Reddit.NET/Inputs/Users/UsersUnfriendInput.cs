@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Users
 {
     [Serializable]
-    public class UsersUnfriendInput
+    public class UsersUnfriendInput : BaseInput
     {
         /// <summary>
         /// the name of an existing user

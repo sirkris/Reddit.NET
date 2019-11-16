@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Subreddits
 {
     [Serializable]
-    public class SubredditsEditInput
+    public class SubredditsEditInput : BaseInput
     {
         /// <summary>
         /// one of (true, false)

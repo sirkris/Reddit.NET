@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Wiki
 {
     [Serializable]
-    public class WikiUpdatePermissionsInput
+    public class WikiUpdatePermissionsInput : BaseInput
     {
         /// <summary>
         /// boolean value (true = appear in /wiki/pages, false = don't appear in /wiki/pages)

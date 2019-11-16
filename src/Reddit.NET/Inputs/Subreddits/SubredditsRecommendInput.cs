@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Subreddits
 {
     [Serializable]
-    public class SubredditsRecommendInput
+    public class SubredditsRecommendInput : BaseInput
     {
         /// <summary>
         /// comma-delimited list of subreddit names

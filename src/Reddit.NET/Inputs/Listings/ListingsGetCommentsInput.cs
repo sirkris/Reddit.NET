@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Listings
 {
     [Serializable]
-    public class ListingsGetCommentsInput
+    public class ListingsGetCommentsInput : BaseInput
     {
         /// <summary>
         /// an integer between 0 and 8

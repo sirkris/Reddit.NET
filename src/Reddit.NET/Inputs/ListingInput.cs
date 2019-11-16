@@ -3,7 +3,7 @@
 namespace Reddit.Inputs
 {
     [Serializable]
-    public class ListingInput
+    public class ListingInput : BaseInput
     {
         /// <summary>
         /// fullname of a thing
