@@ -27,7 +27,7 @@ Created by Kris Craig.
 
 Reddit.NET is a .NET Standard managed library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
 
-Currently, the library supports 171 of the 204 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 343 of the tests are currently passing. All of the most commonly used endpoints are supported.
+Currently, the library supports 171 of the 204 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 345 of the tests are currently passing. All of the most commonly used endpoints are supported.
 
 Reddit.NET is FOSS (MIT license) and was written in C#. It can be found on Github at:  https://github.com/sirkris/Reddit.NET
 
@@ -221,7 +221,7 @@ The main library. This is what the app dev includes in their project.
 
 ### Reddit.NETTests
 
-This project contains unit, workflow, and stress tests using MSTest. There are currently 343 tests, all passing. All of the supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
+This project contains unit, workflow, and stress tests using MSTest. There are currently 345 tests, all passing. All of the supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
 
 ## Running the Tests
 
