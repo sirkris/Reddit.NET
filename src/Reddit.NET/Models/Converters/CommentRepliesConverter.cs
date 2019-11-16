@@ -3,7 +3,6 @@ using Newtonsoft.Json.Linq;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Reddit.Models.Converters
 {

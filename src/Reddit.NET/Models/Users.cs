@@ -291,26 +291,63 @@ namespace Reddit.Models
             return JsonConvert.DeserializeObject<UserChild>(ExecuteRequest("user/" + username + "/about"));
         }
 
-        // TODO - The Reddit API sometimes includes a comment with the post history when "links" is specified as the type.  Probably an API bug.  --Kris
         /// <summary>
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
-        /// <param name="where">One of (overview, submitted, upvotes, downvoted, hidden, saved, gilded)</param>
+        /// <param name="where">One of (overview, submitted, upvotes, downvoted, hidden, saved, gilded, moderated_subreddits)</param>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <returns>A list of objects containing the requested data.</returns>
+        public T GetUser<T>(string username, string where, UsersHistoryInput usersHistoryInput)
+        {
+            RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
+
+            restRequest.AddObject(usersHistoryInput);
+
+            return JsonConvert.DeserializeObject<T>(ExecuteRequest(restRequest));
+        }
+
+        /// <summary>
+        /// Retrieve a list of subreddits that the user moderates.
+        /// This endpoint is a listing.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <returns>A list of objects containing the requested data.</returns>
+        public ModeratedListContainer ModeratedSubreddits(string username, UsersHistoryInput usersHistoryInput)
+        {
+            return GetUser<ModeratedListContainer>(username, "moderated_subreddits", usersHistoryInput);
+        }
+
+        /// <summary>
+        /// Get a user's post and comment history.
+        /// This endpoint is a listing.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <returns>A list of objects containing the requested data.</returns>
+        public OverviewContainer Overview(string username, UsersHistoryInput usersHistoryInput)
+        {
+            usersHistoryInput.sort = (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase) ? "new" : usersHistoryInput.sort);
+            return GetUser<OverviewContainer>(username, "overview", usersHistoryInput);
+        }
+
+        /// <summary>
+        /// Get a user's post history.
+        /// This endpoint is a listing.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="where">One of (submitted, upvotes, downvoted, hidden, saved, gilded)</param>
         /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
         /// <returns>A list of objects containing the requested data.</returns>
         public PostContainer PostHistory(string username, string where, UsersHistoryInput usersHistoryInput)
         {
-            RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
-
             usersHistoryInput.sort = (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase) ? "new" : usersHistoryInput.sort);
-
-            restRequest.AddObject(usersHistoryInput);
-            
-            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest(restRequest));
+            return GetUser<PostContainer>(username, where, usersHistoryInput);
         }
 
         /// <summary>
+        /// Get a user's comment history.
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
@@ -319,11 +356,7 @@ namespace Reddit.Models
         /// <returns>A list of objects containing the requested data.</returns>
         public CommentContainer CommentHistory(string username, string where, UsersHistoryInput usersHistoryInput)
         {
-            RestRequest restRequest = PrepareRequest("user/" + username + "/" + where);
-
-            restRequest.AddObject(usersHistoryInput);
-
-            return JsonConvert.DeserializeObject<CommentContainer>(ExecuteRequest(restRequest));
+            return GetUser<CommentContainer>(username, where, usersHistoryInput);
         }
     }
 }

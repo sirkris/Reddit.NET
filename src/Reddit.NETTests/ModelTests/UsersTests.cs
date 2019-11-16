@@ -82,6 +82,19 @@ namespace RedditTests.ModelTests
         }
 
         [TestMethod]
+        public void ModeratedSubreddits()
+        {
+            Validate(reddit.Models.Users.ModeratedSubreddits("KrisCraig", new UsersHistoryInput()));
+        }
+
+        [TestMethod]
+        public void Overview()
+        {
+            Validate(reddit.Models.Users.Overview("KrisCraig", new UsersHistoryInput()));
+        }
+
+        [TestMethod]
+        [Obsolete("Obtaining overview data using this method is no longer recommended.  Please use " + nameof(Reddit.Models.Users.Overview) + " instead.")]
         public void PostHistoryOverview()
         {
             PostContainer history = reddit.Models.Users.PostHistory("KrisCraig", "overview", new UsersHistoryInput(context: 10));

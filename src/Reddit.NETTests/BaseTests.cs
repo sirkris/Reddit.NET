@@ -175,6 +175,23 @@ namespace RedditTests
             Assert.IsNotNull(dynamic);
         }
 
+        public OverviewContainer Validate(OverviewContainer overviewContainer, int minResults = 1)
+        {
+            Assert.IsNotNull(overviewContainer);
+            Assert.IsNotNull(overviewContainer.Data);
+            Assert.IsNotNull(overviewContainer.Data.Children);
+            Assert.IsTrue(overviewContainer.Data.Children.Count >= minResults);
+
+            // Each CommentOrPost entry should have exactly one comment or one post-- not neither and not both.  --Kris
+            foreach (CommentOrPost commentOrPost in overviewContainer.Data.Children)
+            {
+                Assert.IsTrue(commentOrPost.Comment != null || commentOrPost.Post != null);
+                Assert.IsTrue(commentOrPost.Comment == null || commentOrPost.Post == null);
+            }
+
+            return overviewContainer;
+        }
+
         public SubredditContainer Validate(SubredditContainer subredditContainer, int minResults)
         {
             Assert.IsNotNull(subredditContainer);
