@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Users
 {
     [Serializable]
-    public class UsersBlockUserInput
+    public class UsersBlockUserInput : BaseInput
     {
         /// <summary>
         /// fullname of an account

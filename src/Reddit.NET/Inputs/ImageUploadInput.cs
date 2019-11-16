@@ -3,7 +3,7 @@
 namespace Reddit.Inputs
 {
     [Serializable]
-    public class ImageUploadInput
+    public class ImageUploadInput : BaseInput
     {
         /// <summary>
         /// name and extension of the image file e.g. image1.png

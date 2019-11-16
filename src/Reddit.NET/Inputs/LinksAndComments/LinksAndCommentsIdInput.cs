@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.LinksAndComments
 {
     [Serializable]
-    public class LinksAndCommentsIdInput
+    public class LinksAndCommentsIdInput : BaseInput
     {
         /// <summary>
         /// fullname of a thing

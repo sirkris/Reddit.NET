@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.LinksAndComments
 {
     [Serializable]
-    public class LinksAndCommentsReportInput
+    public class LinksAndCommentsReportInput : BaseInput
     {
         /// <summary>
         /// a string no longer than 2000 characters

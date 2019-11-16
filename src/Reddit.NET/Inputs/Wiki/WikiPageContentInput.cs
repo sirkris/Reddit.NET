@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Wiki
 {
     [Serializable]
-    public class WikiPageContentInput
+    public class WikiPageContentInput : BaseInput
     {
         /// <summary>
         /// a wiki revision ID

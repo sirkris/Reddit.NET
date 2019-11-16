@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Modmail
 {
     [Serializable]
-    public class ModmailBulkReadInput
+    public class ModmailBulkReadInput : BaseInput
     {
         /// <summary>
         /// comma-delimited list of subreddit names
