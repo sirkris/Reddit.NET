@@ -99,6 +99,12 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void Overview()
+        {
+            Validate(User.Overview);
+        }
+
+        [TestMethod]
         public void PostHistory()
         {
             Validate(User.GetPostHistory());

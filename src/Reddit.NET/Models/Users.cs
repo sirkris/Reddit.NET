@@ -308,7 +308,7 @@ namespace Reddit.Models
         }
 
         /// <summary>
-        /// Get a user's post history.
+        /// Retrieve a list of subreddits that the user moderates.
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
@@ -320,11 +320,24 @@ namespace Reddit.Models
         }
 
         /// <summary>
+        /// Get a user's post and comment history.
+        /// This endpoint is a listing.
+        /// </summary>
+        /// <param name="username">the name of an existing user</param>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <returns>A list of objects containing the requested data.</returns>
+        public OverviewContainer Overview(string username, UsersHistoryInput usersHistoryInput)
+        {
+            usersHistoryInput.sort = (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase) ? "new" : usersHistoryInput.sort);
+            return GetUser<OverviewContainer>(username, "overview", usersHistoryInput);
+        }
+
+        /// <summary>
         /// Get a user's post history.
         /// This endpoint is a listing.
         /// </summary>
         /// <param name="username">the name of an existing user</param>
-        /// <param name="where">One of (overview, submitted, upvotes, downvoted, hidden, saved, gilded)</param>
+        /// <param name="where">One of (submitted, upvotes, downvoted, hidden, saved, gilded)</param>
         /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
         /// <returns>A list of objects containing the requested data.</returns>
         public PostContainer PostHistory(string username, string where, UsersHistoryInput usersHistoryInput)

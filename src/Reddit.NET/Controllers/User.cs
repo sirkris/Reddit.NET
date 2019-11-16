@@ -51,6 +51,21 @@ namespace Reddit.Controllers
         public int CommentKarma { get; set; }
         public bool HasSubscribed { get; set; }
 
+        public List<CommentOrPost> Overview
+        {
+            get
+            {
+                return (OverviewLastUpdated.HasValue
+                    && OverviewLastUpdated.Value.AddSeconds(15) > DateTime.Now ? overview : GetOverview());
+            }
+            private set
+            {
+                overview = value;
+            }
+        }
+        internal List<CommentOrPost> overview;
+        internal DateTime? OverviewLastUpdated { get; set; }
+
         public List<Post> PostHistory
         {
             get
@@ -580,8 +595,41 @@ namespace Reddit.Controllers
         }
 
         /// <summary>
-        /// Strip out any comments erroneously returned by the Reddit API.
-        /// This is necessary because the API sometimes includes comments in post results when it's not supposed to.
+        /// Retrieve the user's overview.
+        /// </summary>
+        /// <param name="context">an integer between 2 and 10</param>
+        /// <param name="t">one of (hour, day, week, month, year, all)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="sort">one of (hot, new, newForced, top, controversial)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of posts.</returns>
+        public List<CommentOrPost> GetOverview(int context = 3, string t = "all", int limit = 25, string sort = "",
+            string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
+            int count = 0)
+        {
+            return GetOverview(new UsersHistoryInput("links", t, sort, context, after, before, count, limit, show, srDetail, includeCategories));
+        }
+
+        /// <summary>
+        /// Retrieve the user's overview.
+        /// </summary>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <returns>A list of comments and/or posts.</returns>
+        public List<CommentOrPost> GetOverview(UsersHistoryInput usersHistoryInput)
+        {
+            OverviewLastUpdated = DateTime.Now;
+            overview = Lists.GetCommentsAndPosts(Validate(Dispatch.Users.Overview(Name, usersHistoryInput)), Dispatch);
+            
+            return overview;
+        }
+
+        /// <summary>
+        /// Strip out any comments from a list of posts.
         /// </summary>
         /// <param name="posts">A list of posts.</param>
         /// <returns>A list of posts.</returns>
