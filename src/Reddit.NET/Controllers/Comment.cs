@@ -1,4 +1,5 @@
 ﻿using Reddit.Controllers.Internal;
+using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Inputs.LinksAndComments;
 using Reddit.Inputs.Listings;
@@ -34,6 +35,8 @@ namespace Reddit.Controllers
         public bool IsSubmitter { get; set; }
         public bool ScoreHidden { get; set; }
         public int Depth { get; set; }
+
+        public Awards Awards { get; set; }
 
         public List<Comment> Replies
         {
@@ -214,6 +217,8 @@ namespace Reddit.Controllers
             Removed = listing.Removed;
             Spam = listing.Spam;
 
+            Awards = new Awards(listing);
+
             Listing = listing;
         }
 
@@ -246,6 +251,8 @@ namespace Reddit.Controllers
             DownVotes = downVotes;
             Removed = removed;
             Spam = spam;
+
+            Awards = new Awards();
 
             Listing = new Things.Comment(this);
         }

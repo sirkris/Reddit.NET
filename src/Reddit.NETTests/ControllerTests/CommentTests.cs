@@ -40,6 +40,17 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void Awards()
+        {
+            Comment comment = reddit.Comment("t1_f7m226d").About();
+            Validate(comment);
+            Assert.IsTrue(comment.Awards.Count >= 37);
+            Assert.IsTrue(comment.Awards.Silver >= 29);
+            Assert.IsTrue(comment.Awards.Gold >= 7);
+            Assert.IsTrue(comment.Awards.Platinum >= 1);
+        }
+
+        [TestMethod]
         public void Root()
         {
             Post post = Comment.Root;
