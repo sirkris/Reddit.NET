@@ -42,6 +42,17 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void Awards()
+        {
+            Post post = reddit.Post("t3_dwut73").About();
+            Validate(post);
+            Assert.IsTrue(post.Awards.Count >= 174);
+            Assert.IsTrue(post.Awards.Silver >= 159);
+            Assert.IsTrue(post.Awards.Gold >= 11);
+            Assert.IsTrue(post.Awards.Platinum >= 4);
+        }
+
+        [TestMethod]
         public void Hide()
         {
             Post.Hide();

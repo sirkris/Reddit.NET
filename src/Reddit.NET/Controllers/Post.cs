@@ -42,6 +42,8 @@ namespace Reddit.Controllers
         public int UpVotes { get; set; }
         public double UpvoteRatio { get; set; }
 
+        public Awards Awards { get; set; }
+
         // API no longer returns a value for "downs", so let's just calculate it, instead.  --Kris
         public int DownVotes
         {
@@ -188,6 +190,8 @@ namespace Reddit.Controllers
             Spam = listing.Spam;
             NSFW = listing.Over18;
 
+            Awards = new Awards(listing);
+
             Listing = listing;
         }
 
@@ -209,6 +213,8 @@ namespace Reddit.Controllers
             Removed = removed;
             Spam = spam;
             NSFW = nsfw;
+
+            Awards = new Awards();
 
             Listing = new Things.Post(this);
         }

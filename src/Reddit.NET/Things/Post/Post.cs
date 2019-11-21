@@ -29,10 +29,8 @@ namespace Reddit.Things
         [JsonProperty("mod_reason_title")]
         public string ModReasonTitle { get; set; }
 
-        // TODO - Assuming this is supposed to be boolean.  Not sure what else the int value could be for (it's either gilded or it's not, right?).  --Kris
         [JsonProperty("gilded")]
-        [JsonConverter(typeof(IntBoolConvert))]
-        public bool Gilded { get; set; }
+        public int Gilded { get; set; }
 
         [JsonProperty("clicked")]
         public bool Clicked { get; set; }
