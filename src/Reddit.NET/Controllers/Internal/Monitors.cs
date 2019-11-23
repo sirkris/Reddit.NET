@@ -110,7 +110,7 @@ namespace Reddit.Controllers.Internal
         protected void RebuildThreads(string subKey)
         {
             List<string> oldThreads = new List<string>(Threads.Keys);
-            KillThreads(oldThreads);
+            ResetThreads(oldThreads);
 
             int i = 0;
             foreach (string key in oldThreads)
@@ -178,7 +178,15 @@ namespace Reddit.Controllers.Internal
             Threads.Remove(key);
         }
 
-        protected void KillThreads(List<string> oldThreads)
+        public void KillAllMonitoringThreads()
+        {
+            foreach (KeyValuePair<string, Thread> pair in Threads)
+            {
+                KillThread(pair.Key);
+            }
+        }
+
+        protected void ResetThreads(List<string> oldThreads)
         {
             TerminateThread();
 
