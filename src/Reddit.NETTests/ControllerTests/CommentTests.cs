@@ -100,10 +100,24 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void IConfidenceReplies()
+        {
+            Validate(Comment.Comments.IConfidence);
+            Assert.IsTrue(Comment.Comments.IConfidence.Count > 0);
+        }
+
+        [TestMethod]
         public void TopReplies()
         {
             Validate(Comment.Comments.Top);
             Assert.IsTrue(Comment.Comments.Top.Count > 0);
+        }
+
+        [TestMethod]
+        public void ITopReplies()
+        {
+            Validate(Comment.Comments.ITop);
+            Assert.IsTrue(Comment.Comments.ITop.Count > 0);
         }
 
         [TestMethod]
@@ -114,10 +128,24 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void INewReplies()
+        {
+            Validate(Comment.Comments.INew);
+            Assert.IsTrue(Comment.Comments.INew.Count > 0);
+        }
+
+        [TestMethod]
         public void ControversialReplies()
         {
             Validate(Comment.Comments.Controversial);
             Assert.IsTrue(Comment.Comments.Controversial.Count > 0);
+        }
+
+        [TestMethod]
+        public void IControversialReplies()
+        {
+            Validate(Comment.Comments.IControversial);
+            Assert.IsTrue(Comment.Comments.IControversial.Count > 0);
         }
 
         [TestMethod]
@@ -128,10 +156,24 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void IOldReplies()
+        {
+            Validate(Comment.Comments.IOld);
+            Assert.IsTrue(Comment.Comments.IOld.Count > 0);
+        }
+
+        [TestMethod]
         public void RandomReplies()
         {
             Validate(Comment.Comments.Random);
             Assert.IsTrue(Comment.Comments.Random.Count > 0);
+        }
+
+        [TestMethod]
+        public void IRandomReplies()
+        {
+            Validate(Comment.Comments.IRandom);
+            Assert.IsTrue(Comment.Comments.IRandom.Count > 0);
         }
 
         [TestMethod]
@@ -142,10 +184,24 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void IQAReplies()
+        {
+            Validate(Comment.Comments.IQA);
+            Assert.IsTrue(Comment.Comments.IQA.Count > 0);
+        }
+
+        [TestMethod]
         public void LiveReplies()
         {
             Validate(Comment.Comments.Live);
             Assert.IsTrue(Comment.Comments.Live.Count > 0);
+        }
+
+        [TestMethod]
+        public void ILiveReplies()
+        {
+            Validate(Comment.Comments.ILive);
+            Assert.IsTrue(Comment.Comments.ILive.Count > 0);
         }
     }
 }

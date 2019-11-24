@@ -55,6 +55,23 @@ namespace Reddit.Controllers
         internal List<Comment> confidence;
 
         /// <summary>
+        /// A list interface of comments using "confidence" sort.
+        /// </summary>
+        public IList<Comment> IConfidence
+        {
+            get
+            {
+                return (ConfidenceLastUpdated.HasValue
+                    && ConfidenceLastUpdated.Value.AddSeconds(15) > DateTime.Now ? iconfidence : GetConfidence(isInterface: true));
+            }
+            private set
+            {
+                iconfidence = value;
+            }
+        }
+        internal IList<Comment> iconfidence;
+
+        /// <summary>
         /// A list of comments using "top" sort.
         /// </summary>
         public List<Comment> Top
@@ -70,6 +87,23 @@ namespace Reddit.Controllers
             }
         }
         internal List<Comment> top;
+
+        /// <summary>
+        /// A list interface of comments using "top" sort.
+        /// </summary>
+        public IList<Comment> ITop
+        {
+            get
+            {
+                return (TopLastUpdated.HasValue
+                    && TopLastUpdated.Value.AddSeconds(15) > DateTime.Now ? itop : GetTop(isInterface: true));
+            }
+            private set
+            {
+                itop = value;
+            }
+        }
+        internal IList<Comment> itop;
 
         /// <summary>
         /// A list of comments using "new" sort.
@@ -89,6 +123,23 @@ namespace Reddit.Controllers
         internal List<Comment> newComments;
 
         /// <summary>
+        /// A list interface of comments using "new" sort.
+        /// </summary>
+        public IList<Comment> INew
+        {
+            get
+            {
+                return (NewLastUpdated.HasValue
+                    && NewLastUpdated.Value.AddSeconds(15) > DateTime.Now ? inewComments : GetNew(isInterface: true));
+            }
+            private set
+            {
+                inewComments = value;
+            }
+        }
+        internal IList<Comment> inewComments;
+
+        /// <summary>
         /// A list of comments using "controversial" sort.
         /// </summary>
         public List<Comment> Controversial
@@ -104,6 +155,23 @@ namespace Reddit.Controllers
             }
         }
         internal List<Comment> controversial;
+
+        /// <summary>
+        /// A list interface of comments using "controversial" sort.
+        /// </summary>
+        public IList<Comment> IControversial
+        {
+            get
+            {
+                return (ControversialLastUpdated.HasValue
+                    && ControversialLastUpdated.Value.AddSeconds(15) > DateTime.Now ? icontroversial : GetControversial(isInterface: true));
+            }
+            private set
+            {
+                icontroversial = value;
+            }
+        }
+        internal IList<Comment> icontroversial;
 
         /// <summary>
         /// A list of comments using "old" sort.
@@ -123,6 +191,23 @@ namespace Reddit.Controllers
         internal List<Comment> old;
 
         /// <summary>
+        /// A list interface of comments using "old" sort.
+        /// </summary>
+        public IList<Comment> IOld
+        {
+            get
+            {
+                return (OldLastUpdated.HasValue
+                    && OldLastUpdated.Value.AddSeconds(15) > DateTime.Now ? iold : GetOld(isInterface: true));
+            }
+            private set
+            {
+                iold = value;
+            }
+        }
+        internal IList<Comment> iold;
+
+        /// <summary>
         /// A list of comments using "random" sort.
         /// </summary>
         public List<Comment> Random
@@ -138,6 +223,23 @@ namespace Reddit.Controllers
             }
         }
         internal List<Comment> random;
+
+        /// <summary>
+        /// A list interface of comments using "random" sort.
+        /// </summary>
+        public IList<Comment> IRandom
+        {
+            get
+            {
+                return (RandomLastUpdated.HasValue
+                    && RandomLastUpdated.Value.AddSeconds(15) > DateTime.Now ? irandom : GetRandom(isInterface: true));
+            }
+            private set
+            {
+                irandom = value;
+            }
+        }
+        internal IList<Comment> irandom;
 
         /// <summary>
         /// A list of comments using "qa" sort.
@@ -157,6 +259,23 @@ namespace Reddit.Controllers
         internal List<Comment> qa;
 
         /// <summary>
+        /// A list interface of comments using "qa" sort.
+        /// </summary>
+        public IList<Comment> IQA
+        {
+            get
+            {
+                return (QALastUpdated.HasValue
+                    && QALastUpdated.Value.AddSeconds(15) > DateTime.Now ? iqa : GetQA(isInterface: true));
+            }
+            private set
+            {
+                iqa = value;
+            }
+        }
+        internal IList<Comment> iqa;
+
+        /// <summary>
         /// A list of comments using "live" sort.
         /// </summary>
         public List<Comment> Live
@@ -172,6 +291,23 @@ namespace Reddit.Controllers
             }
         }
         internal List<Comment> live;
+
+        /// <summary>
+        /// A list interface of comments using "live" sort.
+        /// </summary>
+        public IList<Comment> ILive
+        {
+            get
+            {
+                return (LiveLastUpdated.HasValue
+                    && LiveLastUpdated.Value.AddSeconds(15) > DateTime.Now ? ilive : GetLive(isInterface: true));
+            }
+            private set
+            {
+                ilive = value;
+            }
+        }
+        internal IList<Comment> ilive;
 
         /// <summary>
         /// The parent comment (if one exists).
@@ -244,9 +380,10 @@ namespace Reddit.Controllers
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
         public List<Comment> GetComments(string sort = "new", int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             List<Comment> comments = Lists.GetComments(Dispatch.Listings.GetComments(PostId, new ListingsGetCommentsInput(context, showEdits, showMore, sort, threaded, truncate, Comment?.Id,
                 depth, limit, srDetail), Subreddit), Dispatch);
@@ -256,35 +393,91 @@ namespace Reddit.Controllers
             {
                 case "confidence":
                     ConfidenceLastUpdated = DateTime.Now;
-                    Confidence = replies;
+                    if (!isInterface)
+                    {
+                        Confidence = replies;
+                    }
+                    else
+                    {
+                        IConfidence = replies;
+                    }
                     break;
                 case "top":
                     TopLastUpdated = DateTime.Now;
-                    Top = replies;
+                    if (!isInterface)
+                    {
+                        Top = replies;
+                    }
+                    else
+                    {
+                        ITop = replies;
+                    }
                     break;
                 case "new":
                     NewLastUpdated = DateTime.Now;
-                    New = replies;
+                    if (!isInterface)
+                    {
+                        New = replies;
+                    }
+                    else
+                    {
+                        INew = replies;
+                    }
                     break;
                 case "controversial":
                     ControversialLastUpdated = DateTime.Now;
-                    Controversial = replies;
+                    if (!isInterface)
+                    {
+                        Controversial = replies;
+                    }
+                    else
+                    {
+                        IControversial = replies;
+                    }
                     break;
                 case "old":
                     OldLastUpdated = DateTime.Now;
-                    Old = replies;
+                    if (!isInterface)
+                    {
+                        Old = replies;
+                    }
+                    else
+                    {
+                        IOld = replies;
+                    }
                     break;
                 case "random":
                     RandomLastUpdated = DateTime.Now;
-                    Random = replies;
+                    if (!isInterface)
+                    {
+                        Random = replies;
+                    }
+                    else
+                    {
+                        IRandom = replies;
+                    }
                     break;
                 case "qa":
                     QALastUpdated = DateTime.Now;
-                    QA = replies;
+                    if (!isInterface)
+                    {
+                        QA = replies;
+                    }
+                    else
+                    {
+                        IQA = replies;
+                    }
                     break;
                 case "live":
                     LiveLastUpdated = DateTime.Now;
-                    Live = replies;
+                    if (!isInterface)
+                    {
+                        Live = replies;
+                    }
+                    else
+                    {
+                        ILive = replies;
+                    }
                     break;
             }
 
@@ -302,11 +495,12 @@ namespace Reddit.Controllers
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
         public List<Comment> GetConfidence(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            return GetComments("confidence", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
+            return GetComments("confidence", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
         }
 
         /// <summary>
@@ -320,11 +514,12 @@ namespace Reddit.Controllers
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
         public List<Comment> GetTop(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            return GetComments("top", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
+            return GetComments("top", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
         }
 
         /// <summary>
@@ -338,11 +533,12 @@ namespace Reddit.Controllers
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
         public List<Comment> GetNew(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            return GetComments("new", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
+            return GetComments("new", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
         }
 
         /// <summary>
@@ -356,11 +552,12 @@ namespace Reddit.Controllers
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
         public List<Comment> GetControversial(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            return GetComments("controversial", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
+            return GetComments("controversial", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
         }
 
         /// <summary>
@@ -374,11 +571,12 @@ namespace Reddit.Controllers
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
         public List<Comment> GetOld(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            return GetComments("old", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
+            return GetComments("old", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
         }
 
         /// <summary>
@@ -392,11 +590,12 @@ namespace Reddit.Controllers
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
         public List<Comment> GetRandom(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            return GetComments("random", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
+            return GetComments("random", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
         }
 
         /// <summary>
@@ -410,11 +609,12 @@ namespace Reddit.Controllers
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
         public List<Comment> GetQA(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            return GetComments("qa", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
+            return GetComments("qa", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
         }
 
         /// <summary>
@@ -428,11 +628,12 @@ namespace Reddit.Controllers
         /// <param name="depth">(optional) an integer</param>
         /// <param name="limit">(optional) an integer</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
         public List<Comment> GetLive(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
-            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false)
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            return GetComments("live", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail);
+            return GetComments("live", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
         }
 
         /// <summary>
