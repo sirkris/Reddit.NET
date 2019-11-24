@@ -15,8 +15,8 @@ namespace Reddit.Models
 
         private Common Common { get; set; }
 
-        public LinksAndComments(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId)
+        public LinksAndComments(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null, string userAgent = null)
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent)
         {
             Common = new Common(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
         }
