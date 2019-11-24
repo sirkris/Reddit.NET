@@ -12,8 +12,8 @@ namespace Reddit.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Users(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
+        public Users(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null, string userAgent = null)
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent) { }
 
         /// <summary>
         /// For blocking a user.

@@ -37,17 +37,17 @@ namespace RedditTests
             testData = GetData();
 
             // Primary test user's instance.  --Kris
-            reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+            reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"], userAgent: "Reddit.NETTests");
 
             try
             {
                 // Secondary test user's instance.  --Kris
-                reddit2 = new RedditAPI(testData["AppId"], testData["RefreshToken2"]);
+                reddit2 = new RedditAPI(testData["AppId"], testData["RefreshToken2"], userAgent: "Reddit.NETTests");
             }
             catch (Exception) { }
 
             // App-only instance.  --Kris
-            reddit3 = new RedditAPI(testData["AppId"]);
+            reddit3 = new RedditAPI(testData["AppId"], userAgent: "Reddit.NETTests");
         }
 
         public Dictionary<string, string> GetData()
