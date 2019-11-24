@@ -185,9 +185,21 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void IBest()
+        {
+            Validate(Subreddit.Posts.IBest);
+        }
+
+        [TestMethod]
         public void Hot()
         {
             Validate(Subreddit.Posts.Hot);
+        }
+
+        [TestMethod]
+        public void IHot()
+        {
+            Validate(Subreddit.Posts.IHot);
         }
 
         [TestMethod]
@@ -197,9 +209,21 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void INew()
+        {
+            Validate(Subreddit.Posts.INew);
+        }
+
+        [TestMethod]
         public void Rising()
         {
             Validate(Subreddit.Posts.Rising);
+        }
+
+        [TestMethod]
+        public void IRising()
+        {
+            Validate(Subreddit.Posts.IRising);
         }
 
         [TestMethod]
@@ -209,9 +233,21 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void ITop()
+        {
+            Validate(Subreddit.Posts.ITop);
+        }
+
+        [TestMethod]
         public void Controversial()
         {
             Validate(Subreddit.Posts.Controversial);
+        }
+
+        [TestMethod]
+        public void IControversial()
+        {
+            Validate(Subreddit.Posts.IControversial);
         }
 
         [TestMethod]
@@ -221,9 +257,21 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void IModQueue()
+        {
+            Validate(Subreddit.Posts.IModQueue);
+        }
+
+        [TestMethod]
         public void ModQueueReports()
         {
             Validate(Subreddit.Posts.ModQueueReports);
+        }
+
+        [TestMethod]
+        public void IModQueueReports()
+        {
+            Validate(Subreddit.Posts.IModQueueReports);
         }
 
         [TestMethod]
@@ -233,15 +281,33 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void IModQueueSpam()
+        {
+            Validate(Subreddit.Posts.IModQueueSpam);
+        }
+
+        [TestMethod]
         public void ModQueueUnmoderated()
         {
             Validate(Subreddit.Posts.ModQueueUnmoderated);
         }
 
         [TestMethod]
+        public void IModQueueUnmoderated()
+        {
+            Validate(Subreddit.Posts.IModQueueUnmoderated);
+        }
+
+        [TestMethod]
         public void ModQueueEdited()
         {
             Validate(Subreddit.Posts.ModQueueEdited);
+        }
+
+        [TestMethod]
+        public void IModQueueEdited()
+        {
+            Validate(Subreddit.Posts.IModQueueEdited);
         }
 
         [TestMethod]
