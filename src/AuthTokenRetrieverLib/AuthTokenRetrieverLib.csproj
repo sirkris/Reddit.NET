@@ -21,6 +21,10 @@
     <PackageId>Reddit.AuthTokenRetrieverLib</PackageId>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile></DocumentationFile>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Templates\Success.html" />
   </ItemGroup>
