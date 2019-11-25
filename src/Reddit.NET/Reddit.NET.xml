@@ -3939,6 +3939,191 @@
             The banner background image URL.
             </summary>
         </member>
+        <member name="P:Reddit.Controllers.Subreddit.SubredditType">
+            <summary>
+            The subreddit type (public, restricted, or private)
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.CommunityIcon">
+            <summary>
+            The community icon URL.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.HeaderTitle">
+            <summary>
+            The header title.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.WikiEnabled">
+            <summary>
+            Whether the wiki is enabled for this subreddit.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Over18">
+            <summary>
+            Whether you have to be over 18 to view this subreddit.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Sidebar">
+            <summary>
+            The sidebar text.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Name">
+            <summary>
+            The subreddit name.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.HeaderImg">
+            <summary>
+            The header image.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Title">
+            <summary>
+            The subreddit title.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.CollapseDeletedComments">
+            <summary>
+            Whether to collapse deleted comments.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Id">
+            <summary>
+            The ID36 of this subreddit.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.EmojisEnabled">
+            <summary>
+            Whether emojis are enabled.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.ShowMedia">
+            <summary>
+            Whether to show media.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.AllowVideos">
+            <summary>
+            Whether to allow videos.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.CanAssignUserFlair">
+            <summary>
+            Whether user flair can be assigned.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.SpoilersEnabled">
+            <summary>
+            Whether spoilers are enabled.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.PrimaryColor">
+            <summary>
+            The primary color.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.SuggestedCommentSort">
+            <summary>
+            The suggested comment sort for this subreddit.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.ActiveUserCount">
+            <summary>
+            The active user count.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.IconImg">
+            <summary>
+            The icon image.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.CanAssignLinkFlair">
+            <summary>
+            Whether link flair can be assigned.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.AllowVideoGifs">
+            <summary>
+            Whether to allow video GIFs.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Subscribers">
+            <summary>
+            The number of subscribers.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.SubmitTextLabel">
+            <summary>
+            The submit text label.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.KeyColor">
+            <summary>
+            The key color.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Lang">
+            <summary>
+            The language.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Fullname">
+            <summary>
+            The subreddit fullname.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Created">
+            <summary>
+            When the subreddit was created.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.URL">
+            <summary>
+            The URL.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.SubmitLinkLabel">
+            <summary>
+            The submit link label.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.AllowDiscovery">
+            <summary>
+            Whether to allow discovery.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.Description">
+            <summary>
+            The subreddit description.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.LinkFlairEnabled">
+            <summary>
+            Whether link flair is enabled.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.AllowImages">
+            <summary>
+            Whether to allow images.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.CommentScoreHideMins">
+            <summary>
+            How many minutes to hide comment scores.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.ShowMediaPreview">
+            <summary>
+            Whether to show media previews.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.SubmissionType">
+            <summary>
+            The submission type.
+            </summary>
+        </member>
         <member name="P:Reddit.Controllers.Subreddit.SubredditData">
             <summary>
             Full subreddit data retrieved from the API.
@@ -5241,6 +5426,136 @@
         <member name="T:Reddit.Controllers.User">
             <summary>
             Controller class for users.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.IsFriend">
+            <summary>
+            Whether this user is friends with the authenticated user.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.ProfanityFilter">
+            <summary>
+            Whether this user's profanity filter is enabled.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.IsSuspended">
+            <summary>
+            Whether this user account has been suspended.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.HasGoldSubscription">
+            <summary>
+            Whether this user has a Reddit Gold subscription.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.NumFriends">
+            <summary>
+            How many friends this user has.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.IsVerified">
+            <summary>
+            Whether this user account has been verified.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.HasNewModmail">
+            <summary>
+            Whether this user has the new modmail.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.Id">
+            <summary>
+            The ID36 of this user.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.Fullname">
+            <summary>
+            The fullname of this user.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.Over18">
+            <summary>
+            Whether this user is over 18 years of age.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.IsGold">
+            <summary>
+            Whether this user is gold.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.IsMod">
+            <summary>
+            Whether this user is a mod.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.HasVerifiedEmail">
+            <summary>
+            Whether this user has a verified email address.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.IconImg">
+            <summary>
+            This user's icon image URL.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.HasModmail">
+            <summary>
+            Whether this user has modmail.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.LinkKarma">
+            <summary>
+            This user's total post karma.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.InboxCount">
+            <summary>
+            The number of messages in this user's inbox.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.HasMail">
+            <summary>
+            Whether this user has mail.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.Name">
+            <summary>
+            This user's username.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.Created">
+            <summary>
+            When this user was created.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.CommentKarma">
+            <summary>
+            This user's total comment karma.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.HasSubscribed">
+            <summary>
+            Whether this user has subscribed.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.Overview">
+            <summary>
+            This user's Overview (posts and comments).
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.PostHistory">
+            <summary>
+            This user's post history.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.CommentHistory">
+            <summary>
+            This user's comment history.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.User.ModeratedSubreddits">
+            <summary>
+            A list of subreddits moderated by this user.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.User.UserData">
