@@ -1,5 +1,9 @@
 var NAVTREEINDEX6 =
 {
+"class_reddit_1_1_controllers_1_1_user.html#a7e22e82d98672563301a3d7f59730c4a":[1,0,0,0,17,74],
+"class_reddit_1_1_controllers_1_1_user.html#a7f0f9b9354098780bb5719732401438b":[1,0,0,0,17,16],
+"class_reddit_1_1_controllers_1_1_user.html#a8029edfb39bbcd54903fbf982bc817eb":[1,0,0,0,17,91],
+"class_reddit_1_1_controllers_1_1_user.html#a895c0eff18ab350c568d6d5a4ce33c2d":[1,0,0,0,17,21],
 "class_reddit_1_1_controllers_1_1_user.html#a8fb66d024c2f9301c5ef3971570c5d2e":[1,0,0,0,17,76],
 "class_reddit_1_1_controllers_1_1_user.html#a949001cc46bce4ebcb5b8adbf354f57b":[1,0,0,0,17,99],
 "class_reddit_1_1_controllers_1_1_user.html#a96124772682ada8d363d9b7b66aa4bd4":[1,0,0,0,17,83],
@@ -245,9 +249,5 @@ var NAVTREEINDEX6 =
 "class_reddit_1_1_inputs_1_1_flair_1_1_flair_create_input.html#af11373dfe6f13472a0114188d901db4e":[1,0,0,2,1,1,1],
 "class_reddit_1_1_inputs_1_1_flair_1_1_flair_enabled_input.html":[1,0,0,2,1,2],
 "class_reddit_1_1_inputs_1_1_flair_1_1_flair_enabled_input.html#a835c531ff2b3d5218831f3686c3ea8bb":[1,0,0,2,1,2,1],
-"class_reddit_1_1_inputs_1_1_flair_1_1_flair_enabled_input.html#a9bb1d8fbbfb286405e896de28116f8d3":[1,0,0,2,1,2,0],
-"class_reddit_1_1_inputs_1_1_flair_1_1_flair_link_input.html":[1,0,0,2,1,3],
-"class_reddit_1_1_inputs_1_1_flair_1_1_flair_link_input.html#a25af9bfa68e08a881f3e324a4ac9cf8f":[1,0,0,2,1,3,0],
-"class_reddit_1_1_inputs_1_1_flair_1_1_flair_link_input.html#a84aca57cd85dc04c36c175ab8e4e020c":[1,0,0,2,1,3,1],
-"class_reddit_1_1_inputs_1_1_flair_1_1_flair_name_input.html":[1,0,0,2,1,4]
+"class_reddit_1_1_inputs_1_1_flair_1_1_flair_enabled_input.html#a9bb1d8fbbfb286405e896de28116f8d3":[1,0,0,2,1,2,0]
 };

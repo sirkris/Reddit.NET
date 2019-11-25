@@ -28,29 +28,119 @@ namespace Reddit.Controllers
         public event EventHandler<PostsUpdateEventArgs> PostHistoryUpdated;
         public event EventHandler<CommentsUpdateEventArgs> CommentHistoryUpdated;
 
+        /// <summary>
+        /// Whether this user is friends with the authenticated user.
+        /// </summary>
         public bool IsFriend { get; set; }
+
+        /// <summary>
+        /// Whether this user's profanity filter is enabled.
+        /// </summary>
         public bool ProfanityFilter { get; set; }
+
+        /// <summary>
+        /// Whether this user account has been suspended.
+        /// </summary>
         public bool IsSuspended { get; set; }
+
+        /// <summary>
+        /// Whether this user has a Reddit Gold subscription.
+        /// </summary>
         public bool HasGoldSubscription { get; set; }
+
+        /// <summary>
+        /// How many friends this user has.
+        /// </summary>
         public int NumFriends { get; set; }
+
+        /// <summary>
+        /// Whether this user account has been verified.
+        /// </summary>
         public bool IsVerified { get; set; }
+
+        /// <summary>
+        /// Whether this user has the new modmail.
+        /// </summary>
         public bool HasNewModmail { get; set; }
+
+        /// <summary>
+        /// The ID36 of this user.
+        /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// The fullname of this user.
+        /// </summary>
         public string Fullname { get; set; }
+
+        /// <summary>
+        /// Whether this user is over 18 years of age.
+        /// </summary>
         public bool Over18 { get; set; }
+
+        /// <summary>
+        /// Whether this user is gold.
+        /// </summary>
         public bool IsGold { get; set; }
+
+        /// <summary>
+        /// Whether this user is a mod.
+        /// </summary>
         public bool IsMod { get; set; }
+
+        /// <summary>
+        /// Whether this user has a verified email address.
+        /// </summary>
         public bool HasVerifiedEmail { get; set; }
+
+        /// <summary>
+        /// This user's icon image URL.
+        /// </summary>
         public string IconImg { get; set; }
+
+        /// <summary>
+        /// Whether this user has modmail.
+        /// </summary>
         public bool HasModmail { get; set; }
+
+        /// <summary>
+        /// This user's total post karma.
+        /// </summary>
         public int LinkKarma { get; set; }
+
+        /// <summary>
+        /// The number of messages in this user's inbox.
+        /// </summary>
         public int InboxCount { get; set; }
+
+        /// <summary>
+        /// Whether this user has mail.
+        /// </summary>
         public bool HasMail { get; set; }
+
+        /// <summary>
+        /// This user's username.
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// When this user was created.
+        /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// This user's total comment karma.
+        /// </summary>
         public int CommentKarma { get; set; }
+
+        /// <summary>
+        /// Whether this user has subscribed.
+        /// </summary>
         public bool HasSubscribed { get; set; }
 
+        /// <summary>
+        /// This user's Overview (posts and comments).
+        /// </summary>
         public List<CommentOrPost> Overview
         {
             get
@@ -66,6 +156,9 @@ namespace Reddit.Controllers
         internal List<CommentOrPost> overview;
         internal DateTime? OverviewLastUpdated { get; set; }
 
+        /// <summary>
+        /// This user's post history.
+        /// </summary>
         public List<Post> PostHistory
         {
             get
@@ -81,6 +174,9 @@ namespace Reddit.Controllers
         internal List<Post> postHistory;
         internal DateTime? PostHistoryLastUpdated { get; set; }
 
+        /// <summary>
+        /// This user's comment history.
+        /// </summary>
         public List<Comment> CommentHistory
         {
             get
@@ -96,6 +192,9 @@ namespace Reddit.Controllers
         internal List<Comment> commentHistory;
         internal DateTime? CommentHistoryLastUpdated { get; set; }
 
+        /// <summary>
+        /// A list of subreddits moderated by this user.
+        /// </summary>
         public List<ModeratedListItem> ModeratedSubreddits
         {
             get

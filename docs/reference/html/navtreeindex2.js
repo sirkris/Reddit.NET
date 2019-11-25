@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"class_reddit_1_1_controllers_1_1_comments.html#a56a4057efa899d753c47c85944048a66":[1,0,0,0,6,55],
+"class_reddit_1_1_controllers_1_1_comments.html#a5a4fd31664dbfa7159ad9d3c34a4fd80":[1,0,0,0,6,58],
 "class_reddit_1_1_controllers_1_1_comments.html#a5ae15b73356051787e5bd3718873f38b":[1,0,0,0,6,11],
 "class_reddit_1_1_controllers_1_1_comments.html#a6e63242ab983abc0c6881afdaab23dde":[1,0,0,0,6,13],
 "class_reddit_1_1_controllers_1_1_comments.html#a6f291e434380795748b90ba1e6680188":[1,0,0,0,6,57],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "class_reddit_1_1_controllers_1_1_internal_1_1_validators.html#a237d44678b6fc188be27ef6201723010":[1,0,0,0,1,2,26],
 "class_reddit_1_1_controllers_1_1_internal_1_1_validators.html#a241093124e819902f2e11aca3c177312":[1,0,0,0,1,2,3],
 "class_reddit_1_1_controllers_1_1_internal_1_1_validators.html#a37616f16f394ffb1c7ce9c6b7ed55c77":[1,0,0,0,1,2,1],
-"class_reddit_1_1_controllers_1_1_internal_1_1_validators.html#a43042bfbe650e6313f9bce267d4a571b":[1,0,0,0,1,2,29],
-"class_reddit_1_1_controllers_1_1_internal_1_1_validators.html#a5067210e6ebbc2e0f882b7ddcf3f4cc9":[1,0,0,0,1,2,18],
-"class_reddit_1_1_controllers_1_1_internal_1_1_validators.html#a5353098cf1df2d107ec7f20df394e4fa":[1,0,0,0,1,2,11]
+"class_reddit_1_1_controllers_1_1_internal_1_1_validators.html#a43042bfbe650e6313f9bce267d4a571b":[1,0,0,0,1,2,29]
 };

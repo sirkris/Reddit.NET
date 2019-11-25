@@ -84,6 +84,8 @@ var class_reddit_1_1_controllers_1_1_post =
     [ "Edited", "class_reddit_1_1_controllers_1_1_post.html#ad55f70b4a185f2ae59be3e6b5556a251", null ],
     [ "Fullname", "class_reddit_1_1_controllers_1_1_post.html#ac3d2b9d254a7eaf7ee45d9d609a7cbaa", null ],
     [ "Id", "class_reddit_1_1_controllers_1_1_post.html#aca7d9b8190916ff401e8298e509e230c", null ],
+    [ "IsDownvoted", "class_reddit_1_1_controllers_1_1_post.html#a1496643e22766721535e31ff5657d370", null ],
+    [ "IsUpvoted", "class_reddit_1_1_controllers_1_1_post.html#aa263781590dc90334484f03410f377ce", null ],
     [ "LastMonitoringScoreUpdate", "class_reddit_1_1_controllers_1_1_post.html#a6b4b0fa03fb6a5675fed223024e77d8b", null ],
     [ "Listing", "class_reddit_1_1_controllers_1_1_post.html#a5bf5e1807adbfa7e32d624560cb5b576", null ],
     [ "MinScoreMonitoringThreshold", "class_reddit_1_1_controllers_1_1_post.html#a3fd962435e0524b245d497a587e48932", null ],
