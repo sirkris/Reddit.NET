@@ -1,7 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
-using Things = Reddit.Things;
 using System;
 using System.Collections.Generic;
 using System.Linq;

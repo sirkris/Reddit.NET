@@ -1,6 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
-using Reddit.Inputs.Flair;
 using System;
 
 namespace RedditTests.ControllerTests.WorkflowTests

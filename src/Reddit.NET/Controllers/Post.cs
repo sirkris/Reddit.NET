@@ -28,23 +28,105 @@ namespace Reddit.Controllers
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
 
+        /// <summary>
+        /// The subreddit in which the post exists.
+        /// </summary>
         public string Subreddit { get; set; }
+
+        /// <summary>
+        /// The username of the post author.
+        /// </summary>
         public string Author { get; set; }
+
+        /// <summary>
+        /// The ID36 of the post.
+        /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// The fullname of the post.
+        /// </summary>
         public string Fullname { get; set; }
+
+        /// <summary>
+        /// The permalink URL of the post.
+        /// </summary>
         public string Permalink { get; set; }
+
+        /// <summary>
+        /// When the post was created.
+        /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// When the post was last edited.
+        /// </summary>
         public DateTime Edited { get; set; }
+
+        /// <summary>
+        /// Whether the post was removed.
+        /// </summary>
         public bool Removed { get; set; }
+
+        /// <summary>
+        /// Whether the post was marked as spam.
+        /// </summary>
         public bool Spam { get; set; }
+
+        /// <summary>
+        /// Whether the post was marked as NSFW.
+        /// </summary>
         public bool NSFW { get; set; }
+
+        /// <summary>
+        /// The post score.
+        /// </summary>
         public int Score { get; set; }
+
+        /// <summary>
+        /// The number of upvotes received.
+        /// </summary>
         public int UpVotes { get; set; }
+
+        /// <summary>
+        /// The number of upvotes received divided by the total number of votes.
+        /// </summary>
         public double UpvoteRatio { get; set; }
 
+
+        /// <summary>
+        /// Whether the post has been upvoted by the authenticated user.
+        /// </summary>
+        public bool IsUpvoted
+        {
+            get
+            {
+                return (Listing != null && Listing.Likes.HasValue && Listing.Likes.Value);
+            }
+            private set { }
+        }
+
+        /// <summary>
+        /// Whether the post has been downvoted by the authenticated user.
+        /// </summary>
+        public bool IsDownvoted
+        {
+            get
+            {
+                return (Listing != null && Listing.Likes.HasValue && !Listing.Likes.Value);
+            }
+            private set { }
+        }
+
+        /// <summary>
+        /// Any awards applied to the post.
+        /// </summary>
         public Awards Awards { get; set; }
 
         // API no longer returns a value for "downs", so let's just calculate it, instead.  --Kris
+        /// <summary>
+        /// The number of downvotes received.
+        /// </summary>
         public int DownVotes
         {
             get
@@ -61,6 +143,9 @@ namespace Reddit.Controllers
         private int? MonitoringCancellationThresholdMinutes { get; set; } = null;
         private DateTime? LastMonitoringScoreUpdate { get; set; } = null;
 
+        /// <summary>
+        /// The title of the post.
+        /// </summary>
         public string Title
         {
             get
@@ -375,7 +460,8 @@ namespace Reddit.Controllers
         /// <summary>
         /// Sets the link flair.
         /// </summary>
-        /// <param name="flairText">The text to be displayed in the flair.</param>
+        /// <param name="flairText">The text to be displayed in the flair</param>
+        /// <param name="flairTemplateId">(optional) A flair template ID</param>
         public void SetFlair(string flairText = "", string flairTemplateId = "")
         {
             Dispatch.Flair.SelectFlair(new FlairSelectFlairInput(text: flairText, flairTemplateId: flairTemplateId, link: Fullname), Subreddit);
@@ -384,7 +470,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// Sets the link flair.
         /// </summary>
-        /// <param name="flairSelectFlairInput">The text to be displayed in the flair.</param>
+        /// <param name="flairSelectFlairInput">The text to be displayed in the flair</param>
         public void SetFlair(FlairSelectFlairInput flairSelectFlairInput)
         {
             flairSelectFlairInput.link = Fullname;
