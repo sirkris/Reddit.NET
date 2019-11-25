@@ -15,29 +15,138 @@ namespace Reddit.Controllers
     /// </summary>
     public class Comment : BaseController
     {
+        /// <summary>
+        /// The subreddit in which this comment exists.
+        /// </summary>
         public string Subreddit { get; set; }
+
+        /// <summary>
+        /// The username of the comment author.
+        /// </summary>
         public string Author { get; set; }
+
+        /// <summary>
+        /// The comment ID36.
+        /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// The comment fullname.
+        /// </summary>
         public string Fullname { get; set; }
+
+        /// <summary>
+        /// The permalink URL of the comment.
+        /// </summary>
         public string Permalink { get; set; }
+
+        /// <summary>
+        /// When the comment was created.
+        /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// When the comment was last edited.
+        /// </summary>
         public DateTime Edited { get; set; }
+
+        /// <summary>
+        /// The comment score.
+        /// </summary>
         public int Score { get; set; }
+
+        /// <summary>
+        /// The number of upvotes received.
+        /// </summary>
         public int UpVotes { get; set; }
+
+        /// <summary>
+        /// The number of downvotes received.
+        /// </summary>
         public int DownVotes { get; set; }
+
+        /// <summary>
+        /// Whether the comment has been removed.
+        /// </summary>
         public bool Removed { get; set; }
+
+        /// <summary>
+        /// Whether the comment has been marked as spam.
+        /// </summary>
         public bool Spam { get; set; }
+
+        /// <summary>
+        /// A list of Things.More objects.
+        /// </summary>
         public List<Things.More> More { get; set; }
+
+        /// <summary>
+        /// The parent ID36.
+        /// </summary>
         public string ParentId { get; set; }
+
+        /// <summary>
+        /// The parent fullname.
+        /// </summary>
         public string ParentFullname { get; set; }
+
+        /// <summary>
+        /// The reason the comment was collapsed (if applicable).
+        /// </summary>
         public string CollapsedReason { get; set; }
+
+        /// <summary>
+        /// Whether the comment was collapsed.
+        /// </summary>
         public bool Collapsed { get; set; }
+
+        /// <summary>
+        /// Whether the comment was authored by the authenticated user.
+        /// </summary>
         public bool IsSubmitter { get; set; }
+
+        /// <summary>
+        /// Whether the comment score should be hidden.
+        /// </summary>
         public bool ScoreHidden { get; set; }
+
+        /// <summary>
+        /// The comment depth.
+        /// </summary>
         public int Depth { get; set; }
 
+        /// <summary>
+        /// Any awards applied to the comment.
+        /// </summary>
         public Awards Awards { get; set; }
 
+        /// <summary>
+        /// Whether the comment has been upvoted by the authenticated user.
+        /// </summary>
+        public bool IsUpvoted
+        {
+            get
+            {
+                return (Listing != null && Listing.Likes.HasValue && Listing.Likes.Value);
+            }
+            private set { }
+        }
+
+        /// <summary>
+        /// Whether the comment has been downvoted by the authenticated user.
+        /// </summary>
+        public bool IsDownvoted
+        {
+            get
+            {
+                return (Listing != null && Listing.Likes.HasValue && !Listing.Likes.Value);
+            }
+            private set { }
+        }
+
+        /// <summary>
+        /// A list of comment replies.
+        /// </summary>
         public List<Comment> Replies
         {
             get
@@ -52,6 +161,9 @@ namespace Reddit.Controllers
         }
         public List<Comment> replies { get; private set; }
 
+        /// <summary>
+        /// The comment body.
+        /// </summary>
         public string Body
         {
             get
@@ -65,6 +177,9 @@ namespace Reddit.Controllers
         }
         private string body;
 
+        /// <summary>
+        /// The comment body in HTML format.
+        /// </summary>
         public string BodyHTML
         {
             get
