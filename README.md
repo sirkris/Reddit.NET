@@ -428,7 +428,7 @@ For more examples, check out the Example and Reddit.NETTests projects.
 
 All classes/methods/etc can be looked up from here.  Generated using [Doxygen](http://www.doxygen.nl/).
 
-### [View Reference Documentation](docs/reference)
+### [View Reference Documentation](https://sirkris.github.io/Reddit.NET/reference/index.html)
 
 ## Contributing
 
