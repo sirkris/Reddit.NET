@@ -3,7 +3,6 @@ using Reddit.Controllers;
 using Reddit.Exceptions;
 using Things = Reddit.Things;
 using System;
-using System.Collections.Generic;
 
 namespace RedditTests.ControllerTests
 {

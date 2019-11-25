@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Reddit.Inputs;
 using Reddit.Inputs.Listings;
 using Reddit.Models.Internal;
