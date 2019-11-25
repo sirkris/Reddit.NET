@@ -29,7 +29,7 @@ namespace Reddit.Models.Internal
 
         internal abstract List<DateTime> Requests { get; set; }
 
-        public Request(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
+        public Request(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null, string userAgent = null)
         {
             AppId = appId;
             AppSecret = appSecret;
@@ -37,6 +37,13 @@ namespace Reddit.Models.Internal
             RefreshToken = refreshToken;
             RestClient = restClient;
             DeviceId = deviceId;
+
+            string version = "Reddit.NET v" + GetVersion();
+            if (!string.IsNullOrWhiteSpace(userAgent))
+            {
+                version = userAgent + " (via " + version + ")";
+            }
+            RestClient.UserAgent = version;
 
             Requests = new List<DateTime>();
         }
@@ -127,7 +134,7 @@ namespace Reddit.Models.Internal
         {
             string res = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             return (string.IsNullOrWhiteSpace(res) || !res.Contains(".") ? res : res.Substring(0, res.LastIndexOf(".")) + 
-                (res.EndsWith(".1") ? "-develop" : res.EndsWith(".2") ? "-beta" : ""));
+                (res.EndsWith(".1") ? "+develop" : res.EndsWith(".2") ? "+beta" : ""));
         }
 
         public string ExecuteRequest(string url, Method method = Method.GET)
@@ -151,7 +158,7 @@ namespace Reddit.Models.Internal
             // Add to recent request history (used for ratelimiting purposes).  --Kris
             AddRequest();
 
-            restRequest.AddHeader("User-Agent", "Reddit.NET v" + GetVersion());
+            restRequest.AddHeader("User-Agent", RestClient.UserAgent);
 
             return restRequest;
         }
@@ -333,7 +340,13 @@ namespace Reddit.Models.Internal
         {
             ex.Data.Add("StatusCode", res.StatusCode);
             ex.Data.Add("StatusDescription", res.StatusDescription);
-            ex.Data.Add("res", res);
+            ex.Data.Add("Content", res.Content);
+            ex.Data.Add("ContentEncoding", res.ContentEncoding);
+            ex.Data.Add("ContentLength", res.ContentLength);
+            ex.Data.Add("ContentType", res.ContentType);
+            ex.Data.Add("ErrorMessage", res.ErrorMessage);
+            ex.Data.Add("ProtocolVersion", res.ProtocolVersion);
+            ex.Data.Add("Server", res.Server);
 
             return ex;
         }

@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Flair
 {
     [Serializable]
-    public class FlairTextInput
+    public class FlairTextInput : BaseInput
     {
         /// <summary>
         /// a string no longer than 64 characters

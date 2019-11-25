@@ -3,7 +3,7 @@
 namespace Reddit.Inputs
 {
     [Serializable]
-    public class APITypeInput
+    public class APITypeInput : BaseInput
     {
         /// <summary>
         /// Required by the API for certain endpoints.

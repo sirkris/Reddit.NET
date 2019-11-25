@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Subreddits
 {
     [Serializable]
-    public class SubredditsQueryInput
+    public class SubredditsQueryInput : BaseInput
     {
         /// <summary>
         /// a string up to 50 characters long, consisting of printable characters

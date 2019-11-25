@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Subreddits
 {
     [Serializable]
-    public class SubredditsUploadSrImgInput
+    public class SubredditsUploadSrImgInput : BaseInput
     {
         /// <summary>
         /// file upload with maximum size of 500 KiB

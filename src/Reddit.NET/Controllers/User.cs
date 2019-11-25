@@ -28,29 +28,137 @@ namespace Reddit.Controllers
         public event EventHandler<PostsUpdateEventArgs> PostHistoryUpdated;
         public event EventHandler<CommentsUpdateEventArgs> CommentHistoryUpdated;
 
+        /// <summary>
+        /// Whether this user is friends with the authenticated user.
+        /// </summary>
         public bool IsFriend { get; set; }
+
+        /// <summary>
+        /// Whether this user's profanity filter is enabled.
+        /// </summary>
         public bool ProfanityFilter { get; set; }
+
+        /// <summary>
+        /// Whether this user account has been suspended.
+        /// </summary>
         public bool IsSuspended { get; set; }
+
+        /// <summary>
+        /// Whether this user has a Reddit Gold subscription.
+        /// </summary>
         public bool HasGoldSubscription { get; set; }
+
+        /// <summary>
+        /// How many friends this user has.
+        /// </summary>
         public int NumFriends { get; set; }
+
+        /// <summary>
+        /// Whether this user account has been verified.
+        /// </summary>
         public bool IsVerified { get; set; }
+
+        /// <summary>
+        /// Whether this user has the new modmail.
+        /// </summary>
         public bool HasNewModmail { get; set; }
+
+        /// <summary>
+        /// The ID36 of this user.
+        /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// The fullname of this user.
+        /// </summary>
         public string Fullname { get; set; }
+
+        /// <summary>
+        /// Whether this user is over 18 years of age.
+        /// </summary>
         public bool Over18 { get; set; }
+
+        /// <summary>
+        /// Whether this user is gold.
+        /// </summary>
         public bool IsGold { get; set; }
+
+        /// <summary>
+        /// Whether this user is a mod.
+        /// </summary>
         public bool IsMod { get; set; }
+
+        /// <summary>
+        /// Whether this user has a verified email address.
+        /// </summary>
         public bool HasVerifiedEmail { get; set; }
+
+        /// <summary>
+        /// This user's icon image URL.
+        /// </summary>
         public string IconImg { get; set; }
+
+        /// <summary>
+        /// Whether this user has modmail.
+        /// </summary>
         public bool HasModmail { get; set; }
+
+        /// <summary>
+        /// This user's total post karma.
+        /// </summary>
         public int LinkKarma { get; set; }
+
+        /// <summary>
+        /// The number of messages in this user's inbox.
+        /// </summary>
         public int InboxCount { get; set; }
+
+        /// <summary>
+        /// Whether this user has mail.
+        /// </summary>
         public bool HasMail { get; set; }
+
+        /// <summary>
+        /// This user's username.
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// When this user was created.
+        /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// This user's total comment karma.
+        /// </summary>
         public int CommentKarma { get; set; }
+
+        /// <summary>
+        /// Whether this user has subscribed.
+        /// </summary>
         public bool HasSubscribed { get; set; }
 
+        /// <summary>
+        /// This user's Overview (posts and comments).
+        /// </summary>
+        public List<CommentOrPost> Overview
+        {
+            get
+            {
+                return (OverviewLastUpdated.HasValue
+                    && OverviewLastUpdated.Value.AddSeconds(15) > DateTime.Now ? overview : GetOverview());
+            }
+            private set
+            {
+                overview = value;
+            }
+        }
+        internal List<CommentOrPost> overview;
+        internal DateTime? OverviewLastUpdated { get; set; }
+
+        /// <summary>
+        /// This user's post history.
+        /// </summary>
         public List<Post> PostHistory
         {
             get
@@ -66,6 +174,9 @@ namespace Reddit.Controllers
         internal List<Post> postHistory;
         internal DateTime? PostHistoryLastUpdated { get; set; }
 
+        /// <summary>
+        /// This user's comment history.
+        /// </summary>
         public List<Comment> CommentHistory
         {
             get
@@ -80,6 +191,24 @@ namespace Reddit.Controllers
         }
         internal List<Comment> commentHistory;
         internal DateTime? CommentHistoryLastUpdated { get; set; }
+
+        /// <summary>
+        /// A list of subreddits moderated by this user.
+        /// </summary>
+        public List<ModeratedListItem> ModeratedSubreddits
+        {
+            get
+            {
+                return (ModeratedSubredditsLastUpdated.HasValue
+                    && ModeratedSubredditsLastUpdated.Value.AddSeconds(15) > DateTime.Now ? moderatedSubreddits : GetModeratedSubreddits());
+            }
+            private set
+            {
+                moderatedSubreddits = value;
+            }
+        }
+        internal List<ModeratedListItem> moderatedSubreddits;
+        internal DateTime? ModeratedSubredditsLastUpdated { get; set; }
 
         /// <summary>
         /// Full user data from the API.
@@ -540,11 +669,10 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="count">a positive integer (default: 0)</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetPostHistory(string where = "overview", int context = 3, string t = "all", int limit = 25, string sort = "",
+        public List<Post> GetPostHistory(string where = "submitted", int context = 3, string t = "all", int limit = 25, string sort = "",
             string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
             int count = 0)
         {
-            PostHistoryLastUpdated = DateTime.Now;
             return GetPostHistory(new UsersHistoryInput("links", t, sort, context, after, before, count, limit, show, srDetail, includeCategories), where);
         }
 
@@ -554,17 +682,53 @@ namespace Reddit.Controllers
         /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
         /// <param name="where">One of (overview, submitted, upvotes, downvoted, hidden, saved, gilded)</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetPostHistory(UsersHistoryInput usersHistoryInput, string where = "overview")
+        public List<Post> GetPostHistory(UsersHistoryInput usersHistoryInput, string where = "submitted")
         {
-            return (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase)
+            PostHistoryLastUpdated = DateTime.Now;
+            postHistory = (usersHistoryInput.sort.Equals("newForced", StringComparison.OrdinalIgnoreCase)
                 ? SanitizePosts(Lists.ForceNewSort(Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)),
                     Dispatch)))
                 : SanitizePosts(Lists.GetPosts(Validate(Dispatch.Users.PostHistory(Name, where, usersHistoryInput)), Dispatch)));
+
+            return postHistory;
         }
 
         /// <summary>
-        /// Strip out any comments erroneously returned by the Reddit API.
-        /// This is necessary because the API sometimes includes comments in post results when it's not supposed to.
+        /// Retrieve the user's overview.
+        /// </summary>
+        /// <param name="context">an integer between 2 and 10</param>
+        /// <param name="t">one of (hour, day, week, month, year, all)</param>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="sort">one of (hot, new, newForced, top, controversial)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of posts.</returns>
+        public List<CommentOrPost> GetOverview(int context = 3, string t = "all", int limit = 25, string sort = "",
+            string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
+            int count = 0)
+        {
+            return GetOverview(new UsersHistoryInput("links", t, sort, context, after, before, count, limit, show, srDetail, includeCategories));
+        }
+
+        /// <summary>
+        /// Retrieve the user's overview.
+        /// </summary>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <returns>A list of comments and/or posts.</returns>
+        public List<CommentOrPost> GetOverview(UsersHistoryInput usersHistoryInput)
+        {
+            OverviewLastUpdated = DateTime.Now;
+            overview = Lists.GetCommentsAndPosts(Validate(Dispatch.Users.Overview(Name, usersHistoryInput)), Dispatch);
+            
+            return overview;
+        }
+
+        /// <summary>
+        /// Strip out any comments from a list of posts.
         /// </summary>
         /// <param name="posts">A list of posts.</param>
         /// <returns>A list of posts.</returns>
@@ -611,7 +775,41 @@ namespace Reddit.Controllers
         /// <returns>A list of comments.</returns>
         public List<Comment> GetCommentHistory(UsersHistoryInput usersHistoryInput)
         {
-            return Lists.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", usersHistoryInput)), Dispatch);
+            CommentHistoryLastUpdated = DateTime.Now;
+            commentHistory = Lists.GetComments(Validate(Dispatch.Users.CommentHistory(Name, "comments", usersHistoryInput)), Dispatch);
+
+            return commentHistory;
+        }
+
+        /// <summary>
+        /// Retrieve a list of subreddits that the user moderates.
+        /// </summary>
+        /// <param name="limit">the maximum number of items desired (default: 25, maximum: 100)</param>
+        /// <param name="after">fullname of a thing</param>
+        /// <param name="before">fullname of a thing</param>
+        /// <param name="includeCategories">boolean value</param>
+        /// <param name="show">(optional) the string all</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="count">a positive integer (default: 0)</param>
+        /// <returns>A list of moderated subreddits.</returns>
+        public List<ModeratedListItem> GetModeratedSubreddits(int limit = 25, string after = "", string before = "", bool includeCategories = false, string show = "all", bool srDetail = false,
+            int count = 0)
+        {
+            return GetModeratedSubreddits(
+                new UsersHistoryInput(after: after, before: before, count: count, limit: limit, show: show, srDetail: srDetail, includeCategories: includeCategories));
+        }
+
+        /// <summary>
+        /// Retrieve a list of subreddits that the user moderates.
+        /// </summary>
+        /// <param name="usersHistoryInput">A valid UsersHistoryInput instance</param>
+        /// <returns>A list of moderated subreddits.</returns>
+        public List<ModeratedListItem> GetModeratedSubreddits(UsersHistoryInput usersHistoryInput)
+        {
+            ModeratedSubredditsLastUpdated = DateTime.Now;
+            moderatedSubreddits = ((ModeratedListContainer)Validate(Dispatch.Users.ModeratedSubreddits(Name, usersHistoryInput))).Data;
+
+            return moderatedSubreddits;
         }
 
         /// <summary>

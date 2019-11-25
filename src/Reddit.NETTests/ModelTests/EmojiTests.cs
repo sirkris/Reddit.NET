@@ -11,9 +11,11 @@ namespace RedditTests.ModelTests
         [TestMethod]
         public void All()
         {
-            SnoomojiContainer snoomojiContainer = reddit.Models.Emoji.All("WayOfTheBern");
+            SnoomojiContainer snoomojiContainer = reddit.Models.Emoji.All("Pokemon");
 
             Validate(snoomojiContainer);
+
+            Assert.IsTrue(snoomojiContainer.SubredditEmojis.ContainsKey("bulbasaur"));
         }
     }
 }

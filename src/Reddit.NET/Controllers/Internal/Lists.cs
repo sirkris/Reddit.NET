@@ -120,6 +120,16 @@ namespace Reddit.Controllers.Internal
             }
         }
 
+        public List<CommentOrPost> GetCommentsAndPosts(OverviewContainer overviewContainer, Dispatch dispatch)
+        {
+            if (overviewContainer == null || overviewContainer.Data == null)
+            {
+                return null;
+            }
+
+            return overviewContainer.Data.Children;
+        }
+
         public List<Post> GetPosts(PostResultContainer postContainer, Dispatch dispatch)
         {
             return GetPosts(postContainer, dispatch, out List<LinkPost> linkPosts, out List<SelfPost> selfPosts);
@@ -283,6 +293,22 @@ namespace Reddit.Controllers.Internal
                 {
                     comments.Add(new Comment(dispatch, commentChild.Data));
                 }
+            }
+
+            return comments;
+        }
+
+        public List<Comment> GetComments(List<Things.Comment> commentsList, Dispatch dispatch)
+        {
+            if (commentsList == null)
+            {
+                return null;
+            }
+
+            List<Comment> comments = new List<Comment>();
+            foreach (Things.Comment comment in commentsList)
+            {
+                comments.Add(new Comment(dispatch, comment));
             }
 
             return comments;

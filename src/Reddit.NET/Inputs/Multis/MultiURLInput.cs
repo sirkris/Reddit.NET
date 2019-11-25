@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Multis
 {
     [Serializable]
-    public class MultiURLInput
+    public class MultiURLInput : BaseInput
     {
         /// <summary>
         /// a string no longer than 50 characters

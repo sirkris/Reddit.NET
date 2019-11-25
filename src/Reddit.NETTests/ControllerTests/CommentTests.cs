@@ -40,6 +40,17 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void Awards()
+        {
+            Comment comment = reddit.Comment("t1_f7m226d").About();
+            Validate(comment);
+            Assert.IsTrue(comment.Awards.Count >= 37);
+            Assert.IsTrue(comment.Awards.Silver >= 29);
+            Assert.IsTrue(comment.Awards.Gold >= 7);
+            Assert.IsTrue(comment.Awards.Platinum >= 1);
+        }
+
+        [TestMethod]
         public void Root()
         {
             Post post = Comment.Root;
@@ -75,7 +86,7 @@ namespace RedditTests.ControllerTests
         [TestMethod]
         public void MoreChildren()
         {
-            Reddit.Things.MoreChildren moreChildren = Comment.MoreChildren(false, "new");
+            Reddit.Things.MoreChildren moreChildren = Comment.MoreChildren(Comment.Id, false, "new");
 
             Validate(moreChildren);
             Assert.IsTrue(moreChildren.Comments.Count > 0);
@@ -89,10 +100,24 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void IConfidenceReplies()
+        {
+            Validate(Comment.Comments.IConfidence);
+            Assert.IsTrue(Comment.Comments.IConfidence.Count > 0);
+        }
+
+        [TestMethod]
         public void TopReplies()
         {
             Validate(Comment.Comments.Top);
             Assert.IsTrue(Comment.Comments.Top.Count > 0);
+        }
+
+        [TestMethod]
+        public void ITopReplies()
+        {
+            Validate(Comment.Comments.ITop);
+            Assert.IsTrue(Comment.Comments.ITop.Count > 0);
         }
 
         [TestMethod]
@@ -103,10 +128,24 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void INewReplies()
+        {
+            Validate(Comment.Comments.INew);
+            Assert.IsTrue(Comment.Comments.INew.Count > 0);
+        }
+
+        [TestMethod]
         public void ControversialReplies()
         {
             Validate(Comment.Comments.Controversial);
             Assert.IsTrue(Comment.Comments.Controversial.Count > 0);
+        }
+
+        [TestMethod]
+        public void IControversialReplies()
+        {
+            Validate(Comment.Comments.IControversial);
+            Assert.IsTrue(Comment.Comments.IControversial.Count > 0);
         }
 
         [TestMethod]
@@ -117,10 +156,24 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void IOldReplies()
+        {
+            Validate(Comment.Comments.IOld);
+            Assert.IsTrue(Comment.Comments.IOld.Count > 0);
+        }
+
+        [TestMethod]
         public void RandomReplies()
         {
             Validate(Comment.Comments.Random);
             Assert.IsTrue(Comment.Comments.Random.Count > 0);
+        }
+
+        [TestMethod]
+        public void IRandomReplies()
+        {
+            Validate(Comment.Comments.IRandom);
+            Assert.IsTrue(Comment.Comments.IRandom.Count > 0);
         }
 
         [TestMethod]
@@ -131,10 +184,24 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
+        public void IQAReplies()
+        {
+            Validate(Comment.Comments.IQA);
+            Assert.IsTrue(Comment.Comments.IQA.Count > 0);
+        }
+
+        [TestMethod]
         public void LiveReplies()
         {
             Validate(Comment.Comments.Live);
             Assert.IsTrue(Comment.Comments.Live.Count > 0);
+        }
+
+        [TestMethod]
+        public void ILiveReplies()
+        {
+            Validate(Comment.Comments.ILive);
+            Assert.IsTrue(Comment.Comments.ILive.Count > 0);
         }
     }
 }

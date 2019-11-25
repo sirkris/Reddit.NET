@@ -37,17 +37,17 @@ namespace RedditTests
             testData = GetData();
 
             // Primary test user's instance.  --Kris
-            reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"]);
+            reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"], userAgent: "Reddit.NETTests");
 
             try
             {
                 // Secondary test user's instance.  --Kris
-                reddit2 = new RedditAPI(testData["AppId"], testData["RefreshToken2"]);
+                reddit2 = new RedditAPI(testData["AppId"], testData["RefreshToken2"], userAgent: "Reddit.NETTests");
             }
             catch (Exception) { }
 
             // App-only instance.  --Kris
-            reddit3 = new RedditAPI(testData["AppId"]);
+            reddit3 = new RedditAPI(testData["AppId"], userAgent: "Reddit.NETTests");
         }
 
         public Dictionary<string, string> GetData()
@@ -173,6 +173,23 @@ namespace RedditTests
         public void Validate(dynamic dynamic)
         {
             Assert.IsNotNull(dynamic);
+        }
+
+        public OverviewContainer Validate(OverviewContainer overviewContainer, int minResults = 1)
+        {
+            Assert.IsNotNull(overviewContainer);
+            Assert.IsNotNull(overviewContainer.Data);
+            Assert.IsNotNull(overviewContainer.Data.Children);
+            Assert.IsTrue(overviewContainer.Data.Children.Count >= minResults);
+
+            // Each CommentOrPost entry should have exactly one comment or one post-- not neither and not both.  --Kris
+            foreach (CommentOrPost commentOrPost in overviewContainer.Data.Children)
+            {
+                Assert.IsTrue(commentOrPost.Comment != null || commentOrPost.Post != null);
+                Assert.IsTrue(commentOrPost.Comment == null || commentOrPost.Post == null);
+            }
+
+            return overviewContainer;
         }
 
         public SubredditContainer Validate(SubredditContainer subredditContainer, int minResults)

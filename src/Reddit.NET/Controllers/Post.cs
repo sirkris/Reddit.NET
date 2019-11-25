@@ -4,6 +4,7 @@ using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Inputs.Flair;
 using Reddit.Inputs.LinksAndComments;
+using Reddit.Inputs.Listings;
 using Reddit.Inputs.Moderation;
 using Reddit.Things;
 using System;
@@ -27,19 +28,113 @@ namespace Reddit.Controllers
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
 
+        /// <summary>
+        /// The subreddit in which the post exists.
+        /// </summary>
         public string Subreddit { get; set; }
+
+        /// <summary>
+        /// The username of the post author.
+        /// </summary>
         public string Author { get; set; }
+
+        /// <summary>
+        /// The ID36 of the post.
+        /// </summary>
         public string Id { get; set; }
+
+        /// <summary>
+        /// The fullname of the post.
+        /// </summary>
         public string Fullname { get; set; }
+
+        /// <summary>
+        /// The permalink URL of the post.
+        /// </summary>
         public string Permalink { get; set; }
+
+        /// <summary>
+        /// When the post was created.
+        /// </summary>
         public DateTime Created { get; set; }
+
+        /// <summary>
+        /// When the post was last edited.
+        /// </summary>
         public DateTime Edited { get; set; }
-        public int Score { get; set; }
-        public int UpVotes { get; set; }
-        public int DownVotes { get; set; }
+
+        /// <summary>
+        /// Whether the post was removed.
+        /// </summary>
         public bool Removed { get; set; }
+
+        /// <summary>
+        /// Whether the post was marked as spam.
+        /// </summary>
         public bool Spam { get; set; }
+
+        /// <summary>
+        /// Whether the post was marked as NSFW.
+        /// </summary>
         public bool NSFW { get; set; }
+
+        /// <summary>
+        /// The post score.
+        /// </summary>
+        public int Score { get; set; }
+
+        /// <summary>
+        /// The number of upvotes received.
+        /// </summary>
+        public int UpVotes { get; set; }
+
+        /// <summary>
+        /// The number of upvotes received divided by the total number of votes.
+        /// </summary>
+        public double UpvoteRatio { get; set; }
+
+
+        /// <summary>
+        /// Whether the post has been upvoted by the authenticated user.
+        /// </summary>
+        public bool IsUpvoted
+        {
+            get
+            {
+                return (Listing != null && Listing.Likes.HasValue && Listing.Likes.Value);
+            }
+            private set { }
+        }
+
+        /// <summary>
+        /// Whether the post has been downvoted by the authenticated user.
+        /// </summary>
+        public bool IsDownvoted
+        {
+            get
+            {
+                return (Listing != null && Listing.Likes.HasValue && !Listing.Likes.Value);
+            }
+            private set { }
+        }
+
+        /// <summary>
+        /// Any awards applied to the post.
+        /// </summary>
+        public Awards Awards { get; set; }
+
+        // API no longer returns a value for "downs", so let's just calculate it, instead.  --Kris
+        /// <summary>
+        /// The number of downvotes received.
+        /// </summary>
+        public int DownVotes
+        {
+            get
+            {
+                return Score - (int)(Score * UpvoteRatio);
+            }
+            private set { }
+        }
 
         // Monitoring event fires when score changes by either value, whichever is greater.  This is to account for "vote fuzzing".  --Kris
         private int MinScoreMonitoringThreshold { get; set; } = 4;
@@ -48,6 +143,9 @@ namespace Reddit.Controllers
         private int? MonitoringCancellationThresholdMinutes { get; set; } = null;
         private DateTime? LastMonitoringScoreUpdate { get; set; } = null;
 
+        /// <summary>
+        /// The title of the post.
+        /// </summary>
         public string Title
         {
             get
@@ -172,17 +270,19 @@ namespace Reddit.Controllers
             Edited = listing.Edited;
             Score = listing.Score;
             UpVotes = listing.Ups;
-            DownVotes = listing.Downs;
+            UpvoteRatio = listing.UpvoteRatio;
             Removed = listing.Removed;
             Spam = listing.Spam;
             NSFW = listing.Over18;
+
+            Awards = new Awards(listing);
 
             Listing = listing;
         }
 
         internal void Import(string subreddit, string title, string author, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
-            int downVotes = 0, bool removed = false, bool spam = false, bool nsfw = false)
+            double upvoteRatio = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
             Subreddit = subreddit;
             Title = title;
@@ -194,10 +294,12 @@ namespace Reddit.Controllers
             Edited = edited;
             Score = score;
             UpVotes = upVotes;
-            DownVotes = downVotes;
+            UpvoteRatio = upvoteRatio;
             Removed = removed;
             Spam = spam;
             NSFW = nsfw;
+
+            Awards = new Awards();
 
             Listing = new Things.Post(this);
         }
@@ -221,6 +323,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -236,11 +339,11 @@ namespace Reddit.Controllers
         /// <returns></returns>
         public Comment Comment(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return new Comment(Dispatch, Subreddit, author, body, Fullname, bodyHtml, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam);
         }
 
@@ -263,6 +366,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -278,11 +382,11 @@ namespace Reddit.Controllers
         /// <returns>The newly-created comment reply.</returns>
         public Comment Reply(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).Submit();
         }
 
@@ -296,6 +400,7 @@ namespace Reddit.Controllers
         /// <param name="collapsed"></param>
         /// <param name="isSubmitter"></param>
         /// <param name="replies"></param>
+        /// <param name="more"></param>
         /// <param name="scoreHidden"></param>
         /// <param name="depth"></param>
         /// <param name="id"></param>
@@ -310,11 +415,11 @@ namespace Reddit.Controllers
         /// <param name="spam"></param>
         public async Task<Comment> ReplyAsync(string body, string bodyHtml = null, string author = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            List<Comment> replies = null, List<More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            return await Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, scoreHidden,
+            return await Comment(body, bodyHtml, author, collapsedReason, collapsed, isSubmitter, replies, more, scoreHidden,
                 depth, id, fullname, permalink, created, edited, score, upVotes, downVotes, removed, spam).SubmitAsync();
         }
 
@@ -323,6 +428,22 @@ namespace Reddit.Controllers
         /// </summary>
         /// <returns>An instance of this class populated with the retrieved data.</returns>
         public Post About()
+        {
+            if (string.IsNullOrEmpty(Subreddit))
+            {
+                Post post = Info();
+                Id = post.Id;
+                Subreddit = post.Subreddit;
+            }
+
+            return Validate(Lists.GetPosts(Dispatch.Listings.GetPost(Id, new ListingsGetCommentsInput(), Subreddit), Dispatch))[0];
+        }
+
+        /// <summary>
+        /// Return information about the current Post instance via the api/info endpoint.
+        /// </summary>
+        /// <returns>An instance of this class populated with the retrieved data.</returns>
+        public Post Info()
         {
             Info info = Validate(Dispatch.LinksAndComments.Info(Fullname, Subreddit));
             if (info == null
@@ -339,7 +460,8 @@ namespace Reddit.Controllers
         /// <summary>
         /// Sets the link flair.
         /// </summary>
-        /// <param name="flairText">The text to be displayed in the flair.</param>
+        /// <param name="flairText">The text to be displayed in the flair</param>
+        /// <param name="flairTemplateId">(optional) A flair template ID</param>
         public void SetFlair(string flairText = "", string flairTemplateId = "")
         {
             Dispatch.Flair.SelectFlair(new FlairSelectFlairInput(text: flairText, flairTemplateId: flairTemplateId, link: Fullname), Subreddit);
@@ -348,7 +470,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// Sets the link flair.
         /// </summary>
-        /// <param name="flairSelectFlairInput">The text to be displayed in the flair.</param>
+        /// <param name="flairSelectFlairInput">The text to be displayed in the flair</param>
         public void SetFlair(FlairSelectFlairInput flairSelectFlairInput)
         {
             flairSelectFlairInput.link = Fullname;

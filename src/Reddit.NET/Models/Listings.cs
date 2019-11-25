@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using Reddit.Inputs;
 using Reddit.Inputs.Listings;
+using Reddit.Models.Internal;
 using Reddit.Things;
 using RestSharp;
 using System.Collections.Generic;
@@ -11,16 +11,21 @@ namespace Reddit.Models
     public class Listings : BaseModel
     {
         internal override RestClient RestClient { get; set; }
+        
+        private Common Common { get; set; }
 
-        public Listings(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
+        public Listings(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null, string userAgent = null)
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent)
+        {
+            Common = new Common(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId);
+        }
 
         // TODO - API returns 400.  No idea why.  --Kris
         /// <summary>
         /// Return a list of trending subreddits, link to the comment in r/trendingsubreddits, and the comment count of that link.
         /// </summary>
         /// <returns>(TODO - Untested)</returns>
-        public object TrendingSubreddits()
+            public object TrendingSubreddits()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/trending_subreddits"));
         }
@@ -60,15 +65,19 @@ namespace Reddit.Models
         /// <returns>A post and comments tree.</returns>
         public CommentContainer GetComments(string article, ListingsGetCommentsInput listingsGetCommentsInput, string subreddit = null)
         {
-            JToken res = SendRequest<JToken>(Sr(subreddit) + "comments/" + article +
-                (!string.IsNullOrWhiteSpace(listingsGetCommentsInput.comment) ? "/_/" + listingsGetCommentsInput.comment : ""), listingsGetCommentsInput);
-            
-            if(string.IsNullOrEmpty(article))
-            {
-                return JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res));
-            }
+            return Common.GetComments(article, listingsGetCommentsInput, subreddit);
+        }
 
-            return JsonConvert.DeserializeObject<CommentContainer>(JsonConvert.SerializeObject(res[1]));
+        /// <summary>
+        /// Get information on a given link via the comments endpoint.
+        /// </summary>
+        /// <param name="article">ID36 of a link</param>
+        /// <param name="listingsGetCommentsInput">A valid ListingsGetCommentsInput instance</param>
+        /// <param name="subreddit">The subreddit with the article</param>
+        /// <returns>A post and comments tree.</returns>
+        public PostContainer GetPost(string article, ListingsGetCommentsInput listingsGetCommentsInput, string subreddit = null)
+        {
+            return Common.GetPost(article, listingsGetCommentsInput, subreddit);
         }
 
         /// <summary>

@@ -11,8 +11,8 @@ namespace Reddit.Models
     {
         internal override RestClient RestClient { get; set; }
 
-        public Moderation(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null)
-            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId) { }
+        public Moderation(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null, string userAgent = null)
+            : base(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent) { }
 
         /// <summary>
         /// Get a list of recent moderation actions.

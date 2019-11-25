@@ -3,7 +3,7 @@
 namespace Reddit.Inputs.Wiki
 {
     [Serializable]
-    public class WikiCreatePageInput
+    public class WikiCreatePageInput : BaseInput
     {
         /// <summary>
         /// The page content

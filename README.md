@@ -20,6 +20,7 @@ Created by Kris Craig.
 | [Code Examples](#code-examples)                                   |
 | [Code Examples Using Models](#code-examples-using-models)         |
 | [More Code Examples](#more-code-examples)                         |
+| [Reference Documentation](#reference-documentation)               |
 | [Contributing](#contributing)                                     |
 | [Currently Supported Endpoints](#currently-supported-endpoints)   |
 
@@ -27,13 +28,13 @@ Created by Kris Craig.
 
 Reddit.NET is a .NET Standard managed library that provides easy access to the Reddit API with virtually no boilerplate code required. Keep reading below for code examples.
 
-Currently, the library supports 171 of the 204 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 337 of the tests are currently passing. All of the most commonly used endpoints are supported.
+Currently, the library supports 171 of the 204 endpoints listed in the [API documentation](https://www.reddit.com/dev/api/). All of them (except voting and admin-reporting, for obvious reasons) are covered by integration tests and all 392 of the tests are currently passing. All of the most commonly used endpoints are supported.
 
 Reddit.NET is FOSS (MIT license) and was written in C#. It can be found on Github at:  https://github.com/sirkris/Reddit.NET
 
 ### Contributors
 
-[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md), [JP Dillingham](docs/contributors/JP%20Dillingham.md), [origine999](docs/contributors/origine999.md), [Kevin Smith](docs/contributors/noiz.md), [jpsak09](docs/contributors/jpsak09.md), [Kostyantyn Sharovarsky](docs/contributors/kostya9.md), [Leland Olney](docs/contributors/Leland%20Olney.md), [Mingwei Samuel](docs/contributors/Mingwei%20Samuel.md), [John Kelly](docs/contributors/John%20Kelly.md), [Adam Gauthier](docs/contributors/Adam%20Gauthier.md), [Marek Toman](docs/contributors/Marek%20Toman.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
+[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md), [JP Dillingham](docs/contributors/JP%20Dillingham.md), [origine999](docs/contributors/origine999.md), [Kevin Smith](docs/contributors/noiz.md), [jpsak09](docs/contributors/jpsak09.md), [Kostyantyn Sharovarsky](docs/contributors/kostya9.md), [Leland Olney](docs/contributors/Leland%20Olney.md), [Mingwei Samuel](docs/contributors/Mingwei%20Samuel.md), [John Kelly](docs/contributors/John%20Kelly.md), [Adam Gauthier](docs/contributors/Adam%20Gauthier.md), [Marek Toman](docs/contributors/Marek%20Toman.md), [John Styler](docs/contributors/John%20Styler.md), [Adam Woodhead](docs/contributors/Adam%20Woodhead.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
 
 ### Beta Testers
 
@@ -85,7 +86,6 @@ You'll notice that each model class corresponds to a section in the API document
 Here's a list of the model classes:
 
 * Account
-* Captcha (unused, possibly deprecated; will probably remove it entirely before release)
 * Emoji
 * Flair
 * LinksAndComments
@@ -106,7 +106,7 @@ Here's a list of the model classes:
 Ratelimit handling also occurs in the model layer. If it's less than a minute, the library will automatically wait the specified number of seconds then retry. This can be easily tested using the LiveThread workflow tests. If it's more than a minute, an exception will bubble up and it'll be up to the app developer to decide what to do with it.
 Reddit.NET has a built-in limit of no more than 60 requests in any 1-minute period. This is a safety net designed to keep us from inadvertantly violating the API speed limit.
 
-JSON return data is automatically deserialized to its appropriate type. All 170 of these custom types (and yes, it did take fucking forever to write them all) can be found in Models.Structures.
+JSON return data is automatically deserialized to its appropriate type. All 170 of these custom types can be found in Models.Structures.
 
 Many model methods also have async counterparts.
 
@@ -206,15 +206,15 @@ There are 5 projects in the Reddit.NET solution:
 
 A .NET Core console application that greatly simplifies the OAuth token retrieval process.  Please review the video below for usage instructions:
 
+#### [Obtaining OAuth Tokens using Reddit.NET's AuthTokenRetriever utility](https://www.youtube.com/watch?v=xlWhLyVgN2s)
+
 ### AuthTokenRetrieverLib
 
 A .NET Standard library that is used by the AuthTokenRetriever app.  You can also use this in your own apps to retrieve auth tokens for new users.
 
-#### [Obtaining OAuth Tokens using Reddit.NET's AuthTokenRetriever utility](https://www.youtube.com/watch?v=xlWhLyVgN2s)
-
 ### Example
 
-A simple example .NET Core console application that demonstrates some of Reddit.NET's functionality. If you have Visual Studio 2017, you can run it using debug. You'll need to set your application ID and refresh token in the debug arguments. Only passive operations are demonstrated in this example app; nothing is created or modified in any way.
+A simple example .NET Core console application that demonstrates some of Reddit.NET's functionality. If you have Visual Studio 2017 or later, you can run it using debug. You'll need to set your application ID and refresh token in the debug arguments. Only passive operations are demonstrated in this example app; nothing is created or modified in any way.
 
 ### Reddit.NET
 
@@ -222,7 +222,7 @@ The main library. This is what the app dev includes in their project.
 
 ### Reddit.NETTests
 
-This project contains unit, workflow, and stress tests using MSTest. There are currently 337 tests, all passing. All of the supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
+This project contains unit, workflow, and stress tests using MSTest. There are currently 392 tests, all passing. All of the supported endpoints are included in the tests, except for vote and admin-reporting endpoints.
 
 ## Running the Tests
 
@@ -418,7 +418,17 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Recommended Subreddits](docs/examples/cs/Recommended%20Subreddits.md)
 
+#### [Use a Permalink to Retrieve a Reddit Post](docs/examples/cs/Get%20Post%20From%20Permalink.md)
+
+#### [Retrieve a LinkPost URL or SelfPost Body From a Reddit Post](docs/examples/cs/Get%20LinkPost%20URL%20%26%20SelfPost%20Body%20From%20Post.md)
+ 
 For more examples, check out the Example and Reddit.NETTests projects.
+
+## Reference Documentation
+
+All classes/methods/etc can be looked up from here.  Generated using [Doxygen](http://www.doxygen.nl/).
+
+### [View Reference Documentation](https://sirkris.github.io/Reddit.NET/reference/index.html)
 
 ## Contributing
 
