@@ -252,6 +252,136 @@
             Controller class for comment-related tasks.
             </summary>
         </member>
+        <member name="P:Reddit.Controllers.Comment.Subreddit">
+            <summary>
+            The subreddit in which this comment exists.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Author">
+            <summary>
+            The username of the comment author.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Id">
+            <summary>
+            The comment ID36.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Fullname">
+            <summary>
+            The comment fullname.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Permalink">
+            <summary>
+            The permalink URL of the comment.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Created">
+            <summary>
+            When the comment was created.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Edited">
+            <summary>
+            When the comment was last edited.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Score">
+            <summary>
+            The comment score.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.UpVotes">
+            <summary>
+            The number of upvotes received.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.DownVotes">
+            <summary>
+            The number of downvotes received.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Removed">
+            <summary>
+            Whether the comment has been removed.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Spam">
+            <summary>
+            Whether the comment has been marked as spam.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.More">
+            <summary>
+            A list of Things.More objects.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.ParentId">
+            <summary>
+            The parent ID36.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.ParentFullname">
+            <summary>
+            The parent fullname.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.CollapsedReason">
+            <summary>
+            The reason the comment was collapsed (if applicable).
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Collapsed">
+            <summary>
+            Whether the comment was collapsed.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.IsSubmitter">
+            <summary>
+            Whether the comment was authored by the authenticated user.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.ScoreHidden">
+            <summary>
+            Whether the comment score should be hidden.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Depth">
+            <summary>
+            The comment depth.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Awards">
+            <summary>
+            Any awards applied to the comment.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.IsUpvoted">
+            <summary>
+            Whether the comment has been upvoted by the authenticated user.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.IsDownvoted">
+            <summary>
+            Whether the comment has been downvoted by the authenticated user.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Replies">
+            <summary>
+            A list of comment replies.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.Body">
+            <summary>
+            The comment body.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Comment.BodyHTML">
+            <summary>
+            The comment body in HTML format.
+            </summary>
+        </member>
         <member name="P:Reddit.Controllers.Comment.Root">
             <summary>
             The parent post.
@@ -2558,6 +2688,96 @@
             Base controller for posts.
             </summary>
         </member>
+        <member name="P:Reddit.Controllers.Post.Subreddit">
+            <summary>
+            The subreddit in which the post exists.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Author">
+            <summary>
+            The username of the post author.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Id">
+            <summary>
+            The ID36 of the post.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Fullname">
+            <summary>
+            The fullname of the post.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Permalink">
+            <summary>
+            The permalink URL of the post.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Created">
+            <summary>
+            When the post was created.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Edited">
+            <summary>
+            When the post was last edited.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Removed">
+            <summary>
+            Whether the post was removed.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Spam">
+            <summary>
+            Whether the post was marked as spam.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.NSFW">
+            <summary>
+            Whether the post was marked as NSFW.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Score">
+            <summary>
+            The post score.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.UpVotes">
+            <summary>
+            The number of upvotes received.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.UpvoteRatio">
+            <summary>
+            The number of upvotes received divided by the total number of votes.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.IsUpvoted">
+            <summary>
+            Whether the post has been upvoted by the authenticated user.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.IsDownvoted">
+            <summary>
+            Whether the post has been downvoted by the authenticated user.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Awards">
+            <summary>
+            Any awards applied to the post.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.DownVotes">
+            <summary>
+            The number of downvotes received.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Post.Title">
+            <summary>
+            The title of the post.
+            </summary>
+        </member>
         <member name="P:Reddit.Controllers.Post.Listing">
             <summary>
             The full Listing object returned by the Reddit API;
@@ -2721,13 +2941,14 @@
             <summary>
             Sets the link flair.
             </summary>
-            <param name="flairText">The text to be displayed in the flair.</param>
+            <param name="flairText">The text to be displayed in the flair</param>
+            <param name="flairTemplateId">(optional) A flair template ID</param>
         </member>
         <member name="M:Reddit.Controllers.Post.SetFlair(Reddit.Inputs.Flair.FlairSelectFlairInput)">
             <summary>
             Sets the link flair.
             </summary>
-            <param name="flairSelectFlairInput">The text to be displayed in the flair.</param>
+            <param name="flairSelectFlairInput">The text to be displayed in the flair</param>
         </member>
         <member name="M:Reddit.Controllers.Post.Distinguish(System.String)">
             <summary>
@@ -3701,6 +3922,21 @@
         <member name="T:Reddit.Controllers.Subreddit">
             <summary>
             Controller class for subreddits.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.BannerImg">
+            <summary>
+            The banner image URL.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.BannerBackgroundColor">
+            <summary>
+            The banner background color.
+            </summary>
+        </member>
+        <member name="P:Reddit.Controllers.Subreddit.BannerBackgroundImage">
+            <summary>
+            The banner background image URL.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.Subreddit.SubredditData">
