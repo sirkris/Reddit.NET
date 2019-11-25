@@ -2,9 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.3.0+develop</Version>
-    <AssemblyVersion>1.3.0.1</AssemblyVersion>
-    <FileVersion>1.3.0.1</FileVersion>
+    <Version>1.3.1</Version>
+    <AssemblyVersion>1.3.1.0</AssemblyVersion>
+    <FileVersion>1.3.1.0</FileVersion>
     <PackageReleaseNotes>https://www.reddit.com/r/csharp/comments/e1eybd/announcing_the_release_of_redditnet_13/</PackageReleaseNotes>
     <Title>Reddit.NET</Title>
     <PackageId>Reddit</PackageId>
