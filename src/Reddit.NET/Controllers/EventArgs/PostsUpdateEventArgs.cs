@@ -4,9 +4,9 @@ namespace Reddit.Controllers.EventArgs
 {
     public class PostsUpdateEventArgs
     {
-        public List<Post> OldPosts { get; set; }
-        public List<Post> NewPosts { get; set; }
-        public List<Post> Added { get; set; }
-        public List<Post> Removed { get; set; }
+        public IList<Post> OldPosts { get; set; }
+        public IList<Post> NewPosts { get; set; }
+        public IList<Post> Added { get; set; }
+        public IList<Post> Removed { get; set; }
     }
 }

@@ -40,7 +40,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// A list of comments using "confidence" sort.
         /// </summary>
-        public List<Comment> Confidence
+        public IList<Comment> Confidence
         {
             get
             {
@@ -52,8 +52,9 @@ namespace Reddit.Controllers
                 confidence = value;
             }
         }
-        internal List<Comment> confidence;
+        internal IList<Comment> confidence;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Confidence) + " instead.")]
         /// <summary>
         /// A list interface of comments using "confidence" sort.
         /// </summary>
@@ -74,7 +75,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// A list of comments using "top" sort.
         /// </summary>
-        public List<Comment> Top
+        public IList<Comment> Top
         {
             get
             {
@@ -86,8 +87,9 @@ namespace Reddit.Controllers
                 top = value;
             }
         }
-        internal List<Comment> top;
+        internal IList<Comment> top;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Top) + " instead.")]
         /// <summary>
         /// A list interface of comments using "top" sort.
         /// </summary>
@@ -108,7 +110,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// A list of comments using "new" sort.
         /// </summary>
-        public List<Comment> New
+        public IList<Comment> New
         {
             get
             {
@@ -120,8 +122,9 @@ namespace Reddit.Controllers
                 newComments = value;
             }
         }
-        internal List<Comment> newComments;
+        internal IList<Comment> newComments;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(New) + " instead.")]
         /// <summary>
         /// A list interface of comments using "new" sort.
         /// </summary>
@@ -142,7 +145,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// A list of comments using "controversial" sort.
         /// </summary>
-        public List<Comment> Controversial
+        public IList<Comment> Controversial
         {
             get
             {
@@ -154,8 +157,9 @@ namespace Reddit.Controllers
                 controversial = value;
             }
         }
-        internal List<Comment> controversial;
+        internal IList<Comment> controversial;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Controversial) + " instead.")]
         /// <summary>
         /// A list interface of comments using "controversial" sort.
         /// </summary>
@@ -176,7 +180,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// A list of comments using "old" sort.
         /// </summary>
-        public List<Comment> Old
+        public IList<Comment> Old
         {
             get
             {
@@ -188,8 +192,9 @@ namespace Reddit.Controllers
                 old = value;
             }
         }
-        internal List<Comment> old;
+        internal IList<Comment> old;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Old) + " instead.")]
         /// <summary>
         /// A list interface of comments using "old" sort.
         /// </summary>
@@ -210,7 +215,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// A list of comments using "random" sort.
         /// </summary>
-        public List<Comment> Random
+        public IList<Comment> Random
         {
             get
             {
@@ -222,8 +227,9 @@ namespace Reddit.Controllers
                 random = value;
             }
         }
-        internal List<Comment> random;
+        internal IList<Comment> random;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Random) + " instead.")]
         /// <summary>
         /// A list interface of comments using "random" sort.
         /// </summary>
@@ -244,7 +250,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// A list of comments using "qa" sort.
         /// </summary>
-        public List<Comment> QA
+        public IList<Comment> QA
         {
             get
             {
@@ -256,8 +262,9 @@ namespace Reddit.Controllers
                 qa = value;
             }
         }
-        internal List<Comment> qa;
+        internal IList<Comment> qa;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(QA) + " instead.")]
         /// <summary>
         /// A list interface of comments using "qa" sort.
         /// </summary>
@@ -278,7 +285,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// A list of comments using "live" sort.
         /// </summary>
-        public List<Comment> Live
+        public IList<Comment> Live
         {
             get
             {
@@ -290,8 +297,9 @@ namespace Reddit.Controllers
                 live = value;
             }
         }
-        internal List<Comment> live;
+        internal IList<Comment> live;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Live) + " instead.")]
         /// <summary>
         /// A list interface of comments using "live" sort.
         /// </summary>
@@ -382,13 +390,13 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> GetComments(string sort = "new", int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+        public IList<Comment> GetComments(string sort = "new", int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            List<Comment> comments = Lists.GetComments(Dispatch.Listings.GetComments(PostId, new ListingsGetCommentsInput(context, showEdits, showMore, sort, threaded, truncate, Comment?.Id,
+            IList<Comment> comments = Lists.GetComments(Dispatch.Listings.GetComments(PostId, new ListingsGetCommentsInput(context, showEdits, showMore, sort, threaded, truncate, Comment?.Id,
                 depth, limit, srDetail), Subreddit), Dispatch);
 
-            List<Comment> replies = (Comment != null ? comments[0].Replies : comments);
+            IList<Comment> replies = (Comment != null ? comments[0].Replies : comments);
             switch (sort)
             {
                 case "confidence":
@@ -497,7 +505,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> GetConfidence(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+        public IList<Comment> GetConfidence(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             return GetComments("confidence", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
@@ -516,7 +524,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> GetTop(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+        public IList<Comment> GetTop(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             return GetComments("top", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
@@ -535,7 +543,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> GetNew(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+        public IList<Comment> GetNew(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             return GetComments("new", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
@@ -554,7 +562,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> GetControversial(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+        public IList<Comment> GetControversial(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             return GetComments("controversial", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
@@ -573,7 +581,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> GetOld(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+        public IList<Comment> GetOld(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             return GetComments("old", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
@@ -592,7 +600,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> GetRandom(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+        public IList<Comment> GetRandom(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             return GetComments("random", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
@@ -611,7 +619,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> GetQA(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+        public IList<Comment> GetQA(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             return GetComments("qa", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
@@ -630,7 +638,7 @@ namespace Reddit.Controllers
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of comments.</returns>
-        public List<Comment> GetLive(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+        public IList<Comment> GetLive(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
             bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             return GetComments("live", context, truncate, showEdits, showMore, threaded, depth, limit, srDetail, isInterface);
@@ -1039,8 +1047,8 @@ namespace Reddit.Controllers
                     break;
                 }
 
-                List<Comment> oldList;
-                List<Comment> newList;
+                IList<Comment> oldList;
+                IList<Comment> newList;
                 try
                 {
                     switch (type)
@@ -1081,7 +1089,7 @@ namespace Reddit.Controllers
                             break;
                     }
 
-                    if (Lists.ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
+                    if (Lists.ListDiff(oldList, newList, out IList<Comment> added, out IList<Comment> removed))
                     {
                         // Event handler to alert the calling app that the list has changed.  --Kris
                         CommentsUpdateEventArgs args = new CommentsUpdateEventArgs

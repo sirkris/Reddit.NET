@@ -809,19 +809,9 @@
             A list of comments using "confidence" sort.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.Comments.IConfidence">
-            <summary>
-            A list interface of comments using "confidence" sort.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.Comments.Top">
             <summary>
             A list of comments using "top" sort.
-            </summary>
-        </member>
-        <member name="P:Reddit.Controllers.Comments.ITop">
-            <summary>
-            A list interface of comments using "top" sort.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.Comments.New">
@@ -829,19 +819,9 @@
             A list of comments using "new" sort.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.Comments.INew">
-            <summary>
-            A list interface of comments using "new" sort.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.Comments.Controversial">
             <summary>
             A list of comments using "controversial" sort.
-            </summary>
-        </member>
-        <member name="P:Reddit.Controllers.Comments.IControversial">
-            <summary>
-            A list interface of comments using "controversial" sort.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.Comments.Old">
@@ -849,19 +829,9 @@
             A list of comments using "old" sort.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.Comments.IOld">
-            <summary>
-            A list interface of comments using "old" sort.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.Comments.Random">
             <summary>
             A list of comments using "random" sort.
-            </summary>
-        </member>
-        <member name="P:Reddit.Controllers.Comments.IRandom">
-            <summary>
-            A list interface of comments using "random" sort.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.Comments.QA">
@@ -869,19 +839,9 @@
             A list of comments using "qa" sort.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.Comments.IQA">
-            <summary>
-            A list interface of comments using "qa" sort.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.Comments.Live">
             <summary>
             A list of comments using "live" sort.
-            </summary>
-        </member>
-        <member name="P:Reddit.Controllers.Comments.ILive">
-            <summary>
-            A list interface of comments using "live" sort.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.Comments.Comment">
@@ -1692,6 +1652,17 @@
             Will not return flair if flair is disabled on the subreddit, the user cannot set their own flair, or they are not a moderator that can set flair.
             </summary>
             <returns>List of available user flairs.</returns>
+        </member>
+        <member name="M:Reddit.Controllers.Internal.Lists.ListDiff``1(System.Collections.Generic.IList{``0},System.Collections.Generic.IList{``0},System.Collections.Generic.IList{``0}@,System.Collections.Generic.IList{``0}@)">
+            <summary>
+            Scan two lists for any differences.  Sequence is ignored.
+            T must be a string or an object with a string Fullname.
+            </summary>
+            <param name="oldList">The original list being compared against</param>
+            <param name="newList">The new list</param>
+            <param name="added">Any entries that are present in the new list but not the old</param>
+            <param name="removed">Any entries that are present in the old list but not the new</param>
+            <returns>True if the lists differ, otherwise false.</returns>
         </member>
         <member name="M:Reddit.Controllers.Internal.Lists.ListDiff``1(System.Collections.Generic.List{``0},System.Collections.Generic.List{``0},System.Collections.Generic.List{``0}@,System.Collections.Generic.List{``0}@)">
             <summary>
@@ -5004,19 +4975,9 @@
             List of posts using "best" sort.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.IBest">
-            <summary>
-            IList of posts using "best" sort.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.SubredditPosts.Hot">
             <summary>
             List of posts using "hot" sort.
-            </summary>
-        </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.IHot">
-            <summary>
-            IList of posts using "hot" sort.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.SubredditPosts.New">
@@ -5024,19 +4985,9 @@
             List of posts using "new" sort.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.INew">
-            <summary>
-            IList of posts using "new" sort.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.SubredditPosts.Rising">
             <summary>
             List of posts using "rising" sort.
-            </summary>
-        </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.IRising">
-            <summary>
-            IList of posts using "rising" sort.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.SubredditPosts.Top">
@@ -5044,19 +4995,9 @@
             List of posts using "top" sort.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.ITop">
-            <summary>
-            IList of posts using "top" sort.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.SubredditPosts.Controversial">
             <summary>
             List of posts using "controversial" sort.
-            </summary>
-        </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.IControversial">
-            <summary>
-            IList of posts using "controversial" sort.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.SubredditPosts.ModQueue">
@@ -5064,19 +5005,9 @@
             List of posts in the mod queue.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.IModQueue">
-            <summary>
-            IList of posts in the mod queue.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.SubredditPosts.ModQueueReports">
             <summary>
             List of reported posts in the mod queue.
-            </summary>
-        </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.IModQueueReports">
-            <summary>
-            IList of reported posts in the mod queue.
             </summary>
         </member>
         <member name="P:Reddit.Controllers.SubredditPosts.ModQueueSpam">
@@ -5084,29 +5015,14 @@
             List of spammed posts in the mod queue.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.IModQueueSpam">
-            <summary>
-            IList of spammed posts in the mod queue.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.SubredditPosts.ModQueueUnmoderated">
             <summary>
             List of unmoderated posts in the mod queue.
             </summary>
         </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.IModQueueUnmoderated">
-            <summary>
-            IList of unmoderated posts in the mod queue.
-            </summary>
-        </member>
         <member name="P:Reddit.Controllers.SubredditPosts.ModQueueEdited">
             <summary>
             List of edited posts in the mod queue.
-            </summary>
-        </member>
-        <member name="P:Reddit.Controllers.SubredditPosts.IModQueueEdited">
-            <summary>
-            IList of edited posts in the mod queue.
             </summary>
         </member>
         <member name="M:Reddit.Controllers.SubredditPosts.#ctor(Reddit.Controllers.Dispatch,System.String,System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post},System.Collections.Generic.List{Reddit.Controllers.Post})">

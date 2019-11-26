@@ -105,24 +105,10 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
-        public void IConfidenceReplies()
-        {
-            Validate(Post.Comments.IConfidence);
-            Assert.IsTrue(Post.Comments.IConfidence.Count > 0);
-        }
-
-        [TestMethod]
         public void TopReplies()
         {
             Validate(Post.Comments.Top);
             Assert.IsTrue(Post.Comments.Top.Count > 0);
-        }
-
-        [TestMethod]
-        public void ITopReplies()
-        {
-            Validate(Post.Comments.ITop);
-            Assert.IsTrue(Post.Comments.ITop.Count > 0);
         }
 
         [TestMethod]
@@ -133,24 +119,10 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
-        public void INewReplies()
-        {
-            Validate(Post.Comments.INew);
-            Assert.IsTrue(Post.Comments.INew.Count > 0);
-        }
-
-        [TestMethod]
         public void ControversialReplies()
         {
             Validate(Post.Comments.Controversial);
             Assert.IsTrue(Post.Comments.Controversial.Count > 0);
-        }
-
-        [TestMethod]
-        public void IControversialReplies()
-        {
-            Validate(Post.Comments.IControversial);
-            Assert.IsTrue(Post.Comments.IControversial.Count > 0);
         }
 
         [TestMethod]
@@ -161,24 +133,10 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
-        public void IOldReplies()
-        {
-            Validate(Post.Comments.IOld);
-            Assert.IsTrue(Post.Comments.IOld.Count > 0);
-        }
-
-        [TestMethod]
         public void RandomReplies()
         {
             Validate(Post.Comments.Random);
             Assert.IsTrue(Post.Comments.Random.Count > 0);
-        }
-
-        [TestMethod]
-        public void IRandomReplies()
-        {
-            Validate(Post.Comments.IRandom);
-            Assert.IsTrue(Post.Comments.IRandom.Count > 0);
         }
 
         [TestMethod]
@@ -189,24 +147,10 @@ namespace RedditTests.ControllerTests
         }
 
         [TestMethod]
-        public void IQAReplies()
-        {
-            Validate(Post.Comments.IQA);
-            Assert.IsTrue(Post.Comments.IQA.Count > 0);
-        }
-
-        [TestMethod]
         public void LiveReplies()
         {
             Validate(Post.Comments.Live);
             Assert.IsTrue(Post.Comments.Live.Count > 0);
-        }
-
-        [TestMethod]
-        public void ILiveReplies()
-        {
-            Validate(Post.Comments.ILive);
-            Assert.IsTrue(Post.Comments.ILive.Count > 0);
         }
     }
 }

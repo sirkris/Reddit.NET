@@ -38,7 +38,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of posts using "best" sort.
         /// </summary>
-        public List<Post> Best
+        public IList<Post> Best
         {
             get
             {
@@ -50,8 +50,9 @@ namespace Reddit.Controllers
                 best = value;
             }
         }
-        internal List<Post> best;
+        internal IList<Post> best;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Best) + " instead.")]
         /// <summary>
         /// IList of posts using "best" sort.
         /// </summary>
@@ -72,7 +73,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of posts using "hot" sort.
         /// </summary>
-        public List<Post> Hot
+        public IList<Post> Hot
         {
             get
             {
@@ -84,8 +85,9 @@ namespace Reddit.Controllers
                 hot = value;
             }
         }
-        internal List<Post> hot;
+        internal IList<Post> hot;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Hot) + " instead.")]
         /// <summary>
         /// IList of posts using "hot" sort.
         /// </summary>
@@ -106,7 +108,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of posts using "new" sort.
         /// </summary>
-        public List<Post> New
+        public IList<Post> New
         {
             get
             {
@@ -118,8 +120,9 @@ namespace Reddit.Controllers
                 newPosts = value;
             }
         }
-        internal List<Post> newPosts;
+        internal IList<Post> newPosts;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(New) + " instead.")]
         /// <summary>
         /// IList of posts using "new" sort.
         /// </summary>
@@ -140,7 +143,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of posts using "rising" sort.
         /// </summary>
-        public List<Post> Rising
+        public IList<Post> Rising
         {
             get
             {
@@ -152,8 +155,9 @@ namespace Reddit.Controllers
                 rising = value;
             }
         }
-        internal List<Post> rising;
+        internal IList<Post> rising;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Rising) + " instead.")]
         /// <summary>
         /// IList of posts using "rising" sort.
         /// </summary>
@@ -174,7 +178,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of posts using "top" sort.
         /// </summary>
-        public List<Post> Top
+        public IList<Post> Top
         {
             get
             {
@@ -186,8 +190,9 @@ namespace Reddit.Controllers
                 top = value;
             }
         }
-        internal List<Post> top;
+        internal IList<Post> top;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Top) + " instead.")]
         /// <summary>
         /// IList of posts using "top" sort.
         /// </summary>
@@ -208,7 +213,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of posts using "controversial" sort.
         /// </summary>
-        public List<Post> Controversial
+        public IList<Post> Controversial
         {
             get
             {
@@ -220,8 +225,9 @@ namespace Reddit.Controllers
                 controversial = value;
             }
         }
-        internal List<Post> controversial;
+        internal IList<Post> controversial;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(Controversial) + " instead.")]
         /// <summary>
         /// IList of posts using "controversial" sort.
         /// </summary>
@@ -242,7 +248,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of posts in the mod queue.
         /// </summary>
-        public List<Post> ModQueue
+        public IList<Post> ModQueue
         {
             get
             {
@@ -254,8 +260,9 @@ namespace Reddit.Controllers
                 modQueue = value;
             }
         }
-        internal List<Post> modQueue;
+        internal IList<Post> modQueue;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(ModQueue) + " instead.")]
         /// <summary>
         /// IList of posts in the mod queue.
         /// </summary>
@@ -276,7 +283,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of reported posts in the mod queue.
         /// </summary>
-        public List<Post> ModQueueReports
+        public IList<Post> ModQueueReports
         {
             get
             {
@@ -288,8 +295,9 @@ namespace Reddit.Controllers
                 modQueueReports = value;
             }
         }
-        internal List<Post> modQueueReports;
+        internal IList<Post> modQueueReports;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(ModQueueReports) + " instead.")]
         /// <summary>
         /// IList of reported posts in the mod queue.
         /// </summary>
@@ -310,7 +318,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of spammed posts in the mod queue.
         /// </summary>
-        public List<Post> ModQueueSpam
+        public IList<Post> ModQueueSpam
         {
             get
             {
@@ -322,8 +330,9 @@ namespace Reddit.Controllers
                 modQueueSpam = value;
             }
         }
-        internal List<Post> modQueueSpam;
+        internal IList<Post> modQueueSpam;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(ModQueueSpam) + " instead.")]
         /// <summary>
         /// IList of spammed posts in the mod queue.
         /// </summary>
@@ -344,7 +353,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of unmoderated posts in the mod queue.
         /// </summary>
-        public List<Post> ModQueueUnmoderated
+        public IList<Post> ModQueueUnmoderated
         {
             get
             {
@@ -356,8 +365,9 @@ namespace Reddit.Controllers
                 modQueueUnmoderated = value;
             }
         }
-        internal List<Post> modQueueUnmoderated;
+        internal IList<Post> modQueueUnmoderated;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(ModQueueUnmoderated) + " instead.")]
         /// <summary>
         /// IList of unmoderated posts in the mod queue.
         /// </summary>
@@ -378,7 +388,7 @@ namespace Reddit.Controllers
         /// <summary>
         /// List of edited posts in the mod queue.
         /// </summary>
-        public List<Post> ModQueueEdited
+        public IList<Post> ModQueueEdited
         {
             get
             {
@@ -390,8 +400,9 @@ namespace Reddit.Controllers
                 modQueueEdited = value;
             }
         }
-        internal List<Post> modQueueEdited;
+        internal IList<Post> modQueueEdited;
 
+        [Obsolete("This property has been deprecated.  Please use " + nameof(ModQueueEdited) + " instead.")]
         /// <summary>
         /// IList of edited posts in the mod queue.
         /// </summary>
@@ -476,7 +487,7 @@ namespace Reddit.Controllers
         /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetBest(string after = "", string before = "", int limit = 100, bool isInterface = false)
+        public IList<Post> GetBest(string after = "", string before = "", int limit = 100, bool isInterface = false)
         {
             return GetBest(new CategorizedSrListingInput(after, before, limit: limit), isInterface);
         }
@@ -487,9 +498,9 @@ namespace Reddit.Controllers
         /// <param name="categorizedSrListingInput">A valid CategorizedSrListingInput instance</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetBest(CategorizedSrListingInput categorizedSrListingInput, bool isInterface = false)
+        public IList<Post> GetBest(CategorizedSrListingInput categorizedSrListingInput, bool isInterface = false)
         {
-            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Best(categorizedSrListingInput), Dispatch);
+            IList<Post> posts = Lists.GetPosts(Dispatch.Listings.Best(categorizedSrListingInput), Dispatch);
 
             BestLastUpdated = DateTime.Now;
 
@@ -512,7 +523,7 @@ namespace Reddit.Controllers
         /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetHot(string g = "", string after = "", string before = "", int limit = 100, bool isInterface = false)
+        public IList<Post> GetHot(string g = "", string after = "", string before = "", int limit = 100, bool isInterface = false)
         {
             return GetHot(new ListingsHotInput(g, after, before, limit: limit), isInterface);
         }
@@ -523,9 +534,9 @@ namespace Reddit.Controllers
         /// <param name="listingsHotInput">A valid ListingsHotInput instance</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetHot(ListingsHotInput listingsHotInput, bool isInterface = false)
+        public IList<Post> GetHot(ListingsHotInput listingsHotInput, bool isInterface = false)
         {
-            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Hot(listingsHotInput, Subreddit), Dispatch);
+            IList<Post> posts = Lists.GetPosts(Dispatch.Listings.Hot(listingsHotInput, Subreddit), Dispatch);
 
             HotLastUpdated = DateTime.Now;
 
@@ -548,7 +559,7 @@ namespace Reddit.Controllers
         /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetNew(string after = "", string before = "", int limit = 100, bool isInterface = false)
+        public IList<Post> GetNew(string after = "", string before = "", int limit = 100, bool isInterface = false)
         {
             return GetNew(new CategorizedSrListingInput(after, before, limit: limit), isInterface);
         }
@@ -559,9 +570,9 @@ namespace Reddit.Controllers
         /// <param name="categorizedSrListingInput">A valid CategorizedSrListingInput instance</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetNew(CategorizedSrListingInput categorizedSrListingInput, bool isInterface = false)
+        public IList<Post> GetNew(CategorizedSrListingInput categorizedSrListingInput, bool isInterface = false)
         {
-            List<Post> posts = Lists.GetPosts(Dispatch.Listings.New(categorizedSrListingInput, Subreddit), Dispatch);
+            IList<Post> posts = Lists.GetPosts(Dispatch.Listings.New(categorizedSrListingInput, Subreddit), Dispatch);
 
             NewLastUpdated = DateTime.Now;
 
@@ -584,7 +595,7 @@ namespace Reddit.Controllers
         /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetRising(string after = "", string before = "", int limit = 100, bool isInterface = false)
+        public IList<Post> GetRising(string after = "", string before = "", int limit = 100, bool isInterface = false)
         {
             return GetRising(new CategorizedSrListingInput(after, before, limit: limit), isInterface);
         }
@@ -595,9 +606,9 @@ namespace Reddit.Controllers
         /// <param name="categorizedSrListingInput">A valid CategorizedSrListingInput instance</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetRising(CategorizedSrListingInput categorizedSrListingInput, bool isInterface = false)
+        public IList<Post> GetRising(CategorizedSrListingInput categorizedSrListingInput, bool isInterface = false)
         {
-            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Rising(categorizedSrListingInput, Subreddit), Dispatch);
+            IList<Post> posts = Lists.GetPosts(Dispatch.Listings.Rising(categorizedSrListingInput, Subreddit), Dispatch);
 
             RisingLastUpdated = DateTime.Now;
 
@@ -621,7 +632,7 @@ namespace Reddit.Controllers
         /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetTop(string t = "all", string after = "", string before = "", int limit = 100, bool isInterface = false)
+        public IList<Post> GetTop(string t = "all", string after = "", string before = "", int limit = 100, bool isInterface = false)
         {
             return GetTop(new TimedCatSrListingInput(t, after, before, limit: limit), isInterface);
         }
@@ -632,9 +643,9 @@ namespace Reddit.Controllers
         /// <param name="timedCatSrListingInput">A valid TimedCatSrListingInput instance</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetTop(TimedCatSrListingInput timedCatSrListingInput, bool isInterface = false)
+        public IList<Post> GetTop(TimedCatSrListingInput timedCatSrListingInput, bool isInterface = false)
         {
-            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Top(timedCatSrListingInput, Subreddit), Dispatch);
+            IList<Post> posts = Lists.GetPosts(Dispatch.Listings.Top(timedCatSrListingInput, Subreddit), Dispatch);
 
             TopLastUpdated = DateTime.Now;
 
@@ -659,7 +670,7 @@ namespace Reddit.Controllers
         /// <param name="limit">The maximum number of results to be retrieved (default: 100)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetControversial(string t = "all", string after = "", string before = "", int limit = 100, bool isInterface = false)
+        public IList<Post> GetControversial(string t = "all", string after = "", string before = "", int limit = 100, bool isInterface = false)
         {
             return GetControversial(new TimedCatSrListingInput(t, after, before, limit: limit), isInterface);
         }
@@ -670,9 +681,9 @@ namespace Reddit.Controllers
         /// <param name="timedCatSrListingInput">A valid TimedCatSrListingInput instance</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetControversial(TimedCatSrListingInput timedCatSrListingInput, bool isInterface = false)
+        public IList<Post> GetControversial(TimedCatSrListingInput timedCatSrListingInput, bool isInterface = false)
         {
-            List<Post> posts = Lists.GetPosts(Dispatch.Listings.Controversial(timedCatSrListingInput, Subreddit), Dispatch);
+            IList<Post> posts = Lists.GetPosts(Dispatch.Listings.Controversial(timedCatSrListingInput, Subreddit), Dispatch);
 
             ControversialLastUpdated = DateTime.Now;
 
@@ -688,7 +699,7 @@ namespace Reddit.Controllers
             return posts;
         }
 
-        private List<Post> GetModQueuePosts(string location, string after = "", string before = "", int limit = 100, string show = "all",
+        private IList<Post> GetModQueuePosts(string location, string after = "", string before = "", int limit = 100, string show = "all",
             bool srDetail = false, int count = 0)
         {
             return Lists.GetPosts(Dispatch.Moderation.ModQueue(new ModerationModQueueInput("links", after, before, limit, count, srDetail, show), location, Subreddit), Dispatch);
@@ -705,9 +716,9 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetModQueue(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
+        public IList<Post> GetModQueue(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
         {
-            List<Post> posts = GetModQueuePosts("modqueue", after, before, limit, show, srDetail, count);
+            IList<Post> posts = GetModQueuePosts("modqueue", after, before, limit, show, srDetail, count);
 
             ModQueueLastUpdated = DateTime.Now;
 
@@ -733,9 +744,9 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetModQueueReports(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
+        public IList<Post> GetModQueueReports(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
         {
-            List<Post> posts = GetModQueuePosts("reports", after, before, limit, show, srDetail, count);
+            IList<Post> posts = GetModQueuePosts("reports", after, before, limit, show, srDetail, count);
 
             ModQueueReportsLastUpdated = DateTime.Now;
 
@@ -761,9 +772,9 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetModQueueSpam(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
+        public IList<Post> GetModQueueSpam(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
         {
-            List<Post> posts = GetModQueuePosts("spam", after, before, limit, show, srDetail, count);
+            IList<Post> posts = GetModQueuePosts("spam", after, before, limit, show, srDetail, count);
 
             ModQueueSpamLastUpdated = DateTime.Now;
 
@@ -789,9 +800,9 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetModQueueUnmoderated(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
+        public IList<Post> GetModQueueUnmoderated(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
         {
-            List<Post> posts = GetModQueuePosts("unmoderated", after, before, limit, show, srDetail, count);
+            IList<Post> posts = GetModQueuePosts("unmoderated", after, before, limit, show, srDetail, count);
 
             ModQueueUnmoderatedLastUpdated = DateTime.Now;
 
@@ -817,9 +828,9 @@ namespace Reddit.Controllers
         /// <param name="count">a positive integer (default: 0)</param>
         /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>A list of posts.</returns>
-        public List<Post> GetModQueueEdited(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
+        public IList<Post> GetModQueueEdited(string after = "", string before = "", int limit = 100, string show = "all", bool srDetail = false, int count = 0, bool isInterface = false)
         {
-            List<Post> posts = GetModQueuePosts("edited", after, before, limit, show, srDetail, count);
+            IList<Post> posts = GetModQueuePosts("edited", after, before, limit, show, srDetail, count);
 
             ModQueueEditedLastUpdated = DateTime.Now;
 
@@ -1462,8 +1473,8 @@ namespace Reddit.Controllers
                     break;
                 }
 
-                List<Post> oldList;
-                List<Post> newList;
+                IList<Post> oldList;
+                IList<Post> newList;
                 try
                 {
                     switch (type)
@@ -1516,7 +1527,7 @@ namespace Reddit.Controllers
                             break;
                     }
 
-                    if (Lists.ListDiff(oldList, newList, out List<Post> added, out List<Post> removed))
+                    if (Lists.ListDiff(oldList, newList, out IList<Post> added, out IList<Post> removed))
                     {
                         // Event handler to alert the calling app that the list has changed.  --Kris
                         PostsUpdateEventArgs args = new PostsUpdateEventArgs

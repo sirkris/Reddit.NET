@@ -4,9 +4,9 @@ namespace Reddit.Controllers.EventArgs
 {
     public class CommentsUpdateEventArgs
     {
-        public List<Comment> OldComments { get; set; }
-        public List<Comment> NewComments { get; set; }
-        public List<Comment> Added { get; set; }
-        public List<Comment> Removed { get; set; }
+        public IList<Comment> OldComments { get; set; }
+        public IList<Comment> NewComments { get; set; }
+        public IList<Comment> Added { get; set; }
+        public IList<Comment> Removed { get; set; }
     }
 }

@@ -60,7 +60,7 @@ namespace Example
                 //Subreddit newSub = reddit.Subreddit("RDNBotSub", "Test Subreddit", "Test sub created by Reddit.NET", "My sidebar.").Create();
 
                 // Get best posts.  Note that "Best" listings are subreddit-agnostic.  --Kris
-                List<Post> bestPosts = reddit.Subreddit().Posts.Best;
+                IList<Post> bestPosts = reddit.Subreddit().Posts.Best;
 
                 if (bestPosts.Count > 0)
                 {
@@ -76,7 +76,7 @@ namespace Example
                 Console.WriteLine("Subreddit Description: " + sub.Description);
 
                 // Get new posts from this subreddit.  --Kris
-                List<Post> newPosts = sub.Posts.New;
+                IList<Post> newPosts = sub.Posts.New;
 
                 Console.WriteLine("Retrieved " + newPosts.Count.ToString() + " new posts.");
 

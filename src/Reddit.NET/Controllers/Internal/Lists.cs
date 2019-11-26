@@ -22,6 +22,20 @@ namespace Reddit.Controllers.Internal
         /// <param name="added">Any entries that are present in the new list but not the old</param>
         /// <param name="removed">Any entries that are present in the old list but not the new</param>
         /// <returns>True if the lists differ, otherwise false.</returns>
+        public bool ListDiff<T>(IList<T> oldList, IList<T> newList, out IList<T> added, out IList<T> removed)
+        {
+            return ListDiff(oldList, newList, out added, out removed);
+        }
+
+        /// <summary>
+        /// Scan two lists for any differences.  Sequence is ignored.
+        /// T must be a string or an object with a string Fullname.
+        /// </summary>
+        /// <param name="oldList">The original list being compared against</param>
+        /// <param name="newList">The new list</param>
+        /// <param name="added">Any entries that are present in the new list but not the old</param>
+        /// <param name="removed">Any entries that are present in the old list but not the new</param>
+        /// <returns>True if the lists differ, otherwise false.</returns>
         public bool ListDiff<T>(List<T> oldList, List<T> newList, out List<T> added, out List<T> removed)
         {
             added = new List<T>();
