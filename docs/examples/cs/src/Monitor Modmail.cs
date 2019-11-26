@@ -11,7 +11,7 @@ namespace MonitorModmail
 
         static void Main(string[] args)
         {
-            var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+            var reddit = new RedditClient("YourRedditAppID", "YourBotUserRefreshToken");
 
             NewMessages = new List<ConversationMessage>();
 

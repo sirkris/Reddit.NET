@@ -12,7 +12,7 @@ namespace ELIZA
     class ELIZA
     {
         private readonly ELIZALib Eliza;
-        private readonly RedditAPI Reddit;
+        private readonly RedditClient Reddit;
         public Dictionary<string, DateTime> ActiveSessions;
 
         public bool Stop;
@@ -30,7 +30,7 @@ namespace ELIZA
             }
 
             Eliza = new ELIZALib(json);
-            Reddit = new RedditAPI("YourAppID", "YourRefreshToken");
+            Reddit = new RedditClient("YourAppID", "YourRefreshToken");
             ActiveSessions = new Dictionary<string, DateTime>();
         }
 

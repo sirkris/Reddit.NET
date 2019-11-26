@@ -57,7 +57,7 @@ using Reddit;
 
 ...
 
-var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+var reddit = new RedditClient("YourRedditAppID", "YourBotUserRefreshToken");
 ```
 
 If you're using a "script"-type app instead, you'll also need to pass your app secret:
@@ -68,7 +68,7 @@ using Reddit;
 ...
 
 // You can also pass them as named parameters.
-var reddit = new RedditAPI(appId: "YourRedditAppID", appSecret: "YourRedditAppSecret", refreshToken: "YourBotUserRefreshToken");
+var reddit = new RedditClient(appId: "YourRedditAppID", appSecret: "YourRedditAppSecret", refreshToken: "YourBotUserRefreshToken");
 ```
 
 See below for more detailed usage examples.
@@ -255,7 +255,7 @@ using System;
 ...
 
 // Create a new Reddit.NET instance.
-var r = new RedditAPI("MyAppID", "MyRefreshToken");
+var r = new RedditClient("MyAppID", "MyRefreshToken");
 
 // Display the name and cake day of the authenticated user.
 Console.WriteLine("Username: " + r.Account.Me.Name);
@@ -338,7 +338,7 @@ using System.Collections.Generic;
 ...
 
 // Create a new Reddit.NET instance.
-var r = new RedditAPI("MyAppID", "MyRefreshToken");
+var r = new RedditClient("MyAppID", "MyRefreshToken");
 
 // Display the name and cake day of the authenticated user.
 Console.WriteLine("Username: " + r.Models.Account.Me().Name);

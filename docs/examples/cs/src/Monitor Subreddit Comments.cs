@@ -11,7 +11,7 @@ namespace MonitorSubredditComments
 		
 		static void Main(string[] args)
 		{
-			var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+			var reddit = new RedditClient("YourRedditAppID", "YourBotUserRefreshToken");
 			
 			NewComments = new List<Comment>();
 

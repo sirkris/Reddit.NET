@@ -14,7 +14,7 @@ namespace Reddit
     /// <summary>
     /// The main Reddit API class.
     /// </summary>
-    public class RedditAPI
+    public class RedditClient
     {
         /// <summary>
         /// Endpoint wrapper classes/methods.
@@ -46,7 +46,7 @@ namespace Reddit
         /// <param name="appSecret">The OAuth application secret; this parameter is required for 'script' apps which use a secret to authenticate</param>
         /// <param name="accessToken">(optional) An OAuth access token; if not provided, one will be automatically obtained using the refresh token</param>
         /// <param name="userAgent">(optional) A custom string for the User-Agent header</param>
-        public RedditAPI(string appId = null, string refreshToken = null, string appSecret = null, string accessToken = null, string userAgent = null)
+        public RedditClient(string appId = null, string refreshToken = null, string appSecret = null, string accessToken = null, string userAgent = null)
         {
             /*
              * If refreshToken is supplied, the lib will automatically request a new access token when the current one expires (or if none was passed).
@@ -631,4 +631,10 @@ namespace Reddit
             return UserDataByAccountIds(fullnames);
         }
     }
+
+    /// <summary>
+    /// (deprecated) The old name for the main Reddit API class.
+    /// </summary>
+    [Obsolete("The main class has been renamed.  Please use " + nameof(RedditClient) + " instead.")]
+    public class RedditAPI : RedditClient { }
 }

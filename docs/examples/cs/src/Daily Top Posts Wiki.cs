@@ -9,7 +9,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+            var reddit = new RedditClient("YourRedditAppID", "YourBotUserRefreshToken");
 
             var subreddit = reddit.Subreddit("MySub");
             var today = DateTime.Today;
