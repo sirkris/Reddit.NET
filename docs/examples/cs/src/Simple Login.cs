@@ -7,7 +7,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+            var reddit = new RedditClient("YourRedditAppID", "YourBotUserRefreshToken");
 
             Console.WriteLine("Username: " + reddit.Account.Me.Name);
 

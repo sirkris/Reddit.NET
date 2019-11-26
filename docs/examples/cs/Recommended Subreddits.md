@@ -28,7 +28,7 @@ using Reddit.Inputs.Subreddits;
 
 ...
 
-var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+var reddit = new RedditClient("YourRedditAppID", "YourBotUserRefreshToken");
 
 var recommended = reddit.Models.Subreddits.Recommended("MySub", new SubredditsRecommendInput());
 ```

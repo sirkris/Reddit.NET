@@ -9,7 +9,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+            var reddit = new RedditClient("YourRedditAppID", "YourBotUserRefreshToken");
 
             List<Post> posts = reddit.Subreddit("MySub").Search(new SearchGetSearchInput("Bernie Sanders"));  // Search r/MySub
             if (posts.Count == 0)

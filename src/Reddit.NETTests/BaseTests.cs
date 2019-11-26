@@ -28,26 +28,26 @@ namespace RedditTests
         }
 
         protected readonly Dictionary<string, string> testData;
-        protected readonly RedditAPI reddit;
-        protected readonly RedditAPI reddit2;
-        protected readonly RedditAPI reddit3;
+        protected readonly RedditClient reddit;
+        protected readonly RedditClient reddit2;
+        protected readonly RedditClient reddit3;
 
         public BaseTests()
         {
             testData = GetData();
 
             // Primary test user's instance.  --Kris
-            reddit = new RedditAPI(testData["AppId"], testData["RefreshToken"], userAgent: "Reddit.NETTests");
+            reddit = new RedditClient(testData["AppId"], testData["RefreshToken"], userAgent: "Reddit.NETTests");
 
             try
             {
                 // Secondary test user's instance.  --Kris
-                reddit2 = new RedditAPI(testData["AppId"], testData["RefreshToken2"], userAgent: "Reddit.NETTests");
+                reddit2 = new RedditClient(testData["AppId"], testData["RefreshToken2"], userAgent: "Reddit.NETTests");
             }
             catch (Exception) { }
 
             // App-only instance.  --Kris
-            reddit3 = new RedditAPI(testData["AppId"], userAgent: "Reddit.NETTests");
+            reddit3 = new RedditClient(testData["AppId"], userAgent: "Reddit.NETTests");
         }
 
         public Dictionary<string, string> GetData()

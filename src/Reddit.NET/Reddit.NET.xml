@@ -11789,22 +11789,22 @@
             <param name="subreddit">The subreddit where the wiki lives</param>
             <returns>An object containing wiki page data.</returns>
         </member>
-        <member name="T:Reddit.RedditAPI">
+        <member name="T:Reddit.RedditClient">
             <summary>
             The main Reddit API class.
             </summary>
         </member>
-        <member name="F:Reddit.RedditAPI.Models">
+        <member name="F:Reddit.RedditClient.Models">
             <summary>
             Endpoint wrapper classes/methods.
             </summary>
         </member>
-        <member name="P:Reddit.RedditAPI.Account">
+        <member name="P:Reddit.RedditClient.Account">
             <summary>
             Data/methods pertaining to the authenticated user.
             </summary>
         </member>
-        <member name="M:Reddit.RedditAPI.#ctor(System.String,System.String,System.String,System.String,System.String)">
+        <member name="M:Reddit.RedditClient.#ctor(System.String,System.String,System.String,System.String,System.String)">
             <summary>
             Create a new instance of the Reddit.NET API library.
             This instance will be bound to a single Reddit user.
@@ -11815,61 +11815,61 @@
             <param name="accessToken">(optional) An OAuth access token; if not provided, one will be automatically obtained using the refresh token</param>
             <param name="userAgent">(optional) A custom string for the User-Agent header</param>
         </member>
-        <member name="M:Reddit.RedditAPI.GenerateDeviceId">
+        <member name="M:Reddit.RedditClient.GenerateDeviceId">
             <summary>
             Generates a unique Device ID required for app-only authentication.
             </summary>
             <returns>A random alphanumeric string of 30 characters.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.WaitForRequestQueue(System.Int32)">
+        <member name="M:Reddit.RedditClient.WaitForRequestQueue(System.Int32)">
             <summary>
             Wait until the requests queue is either empty or down to the specified number of remaining requests.
             </summary>
             <param name="waitUntilRequestsAt">The wait ends when the number of requests count goes down to less than or equal to this value</param>
         </member>
-        <member name="M:Reddit.RedditAPI.Comment(System.String)">
+        <member name="M:Reddit.RedditClient.Comment(System.String)">
             <summary>
             Create a new comment controller instance, populated only with its fullname.
             </summary>
             <param name="name">fullname of a thing</param>
             <returns>A new comment controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.LinkPost(System.String)">
+        <member name="M:Reddit.RedditClient.LinkPost(System.String)">
             <summary>
             Create a new link post controller instance, populated only with its fullname.
             </summary>
             <param name="name">fullname of a thing</param>
             <returns>A new link post controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.SelfPost(System.String)">
+        <member name="M:Reddit.RedditClient.SelfPost(System.String)">
             <summary>
             Create a new self post controller instance, populated only with its fullname.
             </summary>
             <param name="name">fullname of a thing</param>
             <returns>A new self post controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Post(System.String)">
+        <member name="M:Reddit.RedditClient.Post(System.String)">
             <summary>
             Create a new post controller instance, populated only with its fullname.
             </summary>
             <param name="name">fullname of a thing</param>
             <returns>A new post controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.LiveThread(Reddit.Things.LiveUpdateEvent)">
+        <member name="M:Reddit.RedditClient.LiveThread(Reddit.Things.LiveUpdateEvent)">
             <summary>
             Create a new live thread controller instance from API return data.
             </summary>
             <param name="liveUpdateEvent"></param>
             <returns>A new live thread controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.LiveThread(Reddit.Controllers.LiveThread)">
+        <member name="M:Reddit.RedditClient.LiveThread(Reddit.Controllers.LiveThread)">
             <summary>
             Create a copy of an existing live thread controller instance.
             </summary>
             <param name="liveThread">A valid live thread controller instance</param>
             <returns>A new live thread controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.LiveThread(System.String,System.String,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Int32,System.DateTime)">
+        <member name="M:Reddit.RedditClient.LiveThread(System.String,System.String,System.Boolean,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Int32,System.DateTime)">
             <summary>
             Create a new live thread controller instance, populated manually.
             </summary>
@@ -11888,28 +11888,28 @@
             <param name="created"></param>
             <returns>A new live thread controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.LiveThread(System.String)">
+        <member name="M:Reddit.RedditClient.LiveThread(System.String)">
             <summary>
             Create a new live thread controller instance, populated only with its ID.
             </summary>
             <param name="id">A valid live thread ID</param>
             <returns>A new live thread controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.User(Reddit.Things.User)">
+        <member name="M:Reddit.RedditClient.User(Reddit.Things.User)">
             <summary>
             Create a new user controller instance from API return data.
             </summary>
             <param name="user"></param>
             <returns>A new user controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.User(Reddit.Controllers.User)">
+        <member name="M:Reddit.RedditClient.User(Reddit.Controllers.User)">
             <summary>
             Create a copy of an existing user controller instance.
             </summary>
             <param name="user">A valid user controller instance.</param>
             <returns>A new user controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.User(System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.String,System.Boolean,System.Int32,System.Int32,System.Boolean,System.DateTime,System.Int32,System.Boolean)">
+        <member name="M:Reddit.RedditClient.User(System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Int32,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.String,System.Boolean,System.Int32,System.Int32,System.Boolean,System.DateTime,System.Int32,System.Boolean)">
             <summary>
             Create a new user controller instance, populated manually.
             </summary>
@@ -11936,34 +11936,34 @@
             <param name="hasSubscribed"></param>
             <returns>A new user controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.User">
+        <member name="M:Reddit.RedditClient.User">
             <summary>
             Create an empty user controller instance.
             </summary>
             <returns>A new user controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Subreddit(Reddit.Controllers.Subreddit)">
+        <member name="M:Reddit.RedditClient.Subreddit(Reddit.Controllers.Subreddit)">
             <summary>
             Create a copy of an existing subreddit controller instance.
             </summary>
             <param name="subreddit">A valid subreddit controller instance</param>
             <returns>A new subreddit controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Subreddit(Reddit.Things.Subreddit)">
+        <member name="M:Reddit.RedditClient.Subreddit(Reddit.Things.Subreddit)">
             <summary>
             Create a new subreddit instance from API return data.
             </summary>
             <param name="subreddit"></param>
             <returns>A new subreddit controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Subreddit(Reddit.Things.SubredditChild)">
+        <member name="M:Reddit.RedditClient.Subreddit(Reddit.Things.SubredditChild)">
             <summary>
             Create a new subreddit instance from API return data.
             </summary>
             <param name="subredditChild"></param>
             <returns>A new subreddit controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Subreddit(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.String,System.Int32,System.Byte[],System.Byte[],System.String,System.String,System.String)">
+        <member name="M:Reddit.RedditClient.Subreddit(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.Boolean,System.String,System.Int32,System.Byte[],System.Byte[],System.String,System.String,System.String)">
             <summary>
             Create a new subreddit controller instance, populated manually.
             </summary>
@@ -11995,27 +11995,27 @@
             <param name="fullname"></param>
             <returns>A new subreddit controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Subreddit">
+        <member name="M:Reddit.RedditClient.Subreddit">
             <summary>
             Create an empty subreddit controller instance.
             </summary>
             <returns>A new subreddit controller instance.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.GetPosts(System.Collections.Generic.List{System.String})">
+        <member name="M:Reddit.RedditClient.GetPosts(System.Collections.Generic.List{System.String})">
             <summary>
             Get a listing of posts by fullname.
             </summary>
             <param name="fullnames">A list of post fullnames</param>
             <returns>A list of populated posts.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.GetPosts(System.Collections.Generic.List{Reddit.Controllers.Post})">
+        <member name="M:Reddit.RedditClient.GetPosts(System.Collections.Generic.List{Reddit.Controllers.Post})">
             <summary>
             Get a listing of posts by fullname.
             </summary>
             <param name="posts">A list of post objects with valid Fullnames</param>
             <returns>A list of populated posts.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Scopes(System.String)">
+        <member name="M:Reddit.RedditClient.Scopes(System.String)">
             <summary>
             Retrieve descriptions of reddit's OAuth2 scopes.
             If no scopes are given, information on all scopes are returned.
@@ -12024,7 +12024,7 @@
             <param name="scopes">(optional) An OAuth2 scope string</param>
             <returns>A list of scopes.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.SearchRedditNames(System.String,System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:Reddit.RedditClient.SearchRedditNames(System.String,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             List subreddit names that begin with a query string.
             Subreddits whose names begin with query will be returned.
@@ -12038,7 +12038,7 @@
             <param name="includeUnadvertisable">boolean value</param>
             <returns>A list of subreddit names.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.SearchSubredditNames(System.String,System.Boolean,System.Boolean,System.Boolean)">
+        <member name="M:Reddit.RedditClient.SearchSubredditNames(System.String,System.Boolean,System.Boolean,System.Boolean)">
             <summary>
             List subreddits that begin with a query string.
             Subreddits whose names begin with query will be returned.
@@ -12052,7 +12052,7 @@
             <param name="includeUnadvertisable">boolean value</param>
             <returns>A list of subreddit listings.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.SearchSubreddits(System.String,System.Int32,System.Boolean,System.String,System.String,System.String,System.String,System.Boolean,System.Int32)">
+        <member name="M:Reddit.RedditClient.SearchSubreddits(System.String,System.Int32,System.Boolean,System.String,System.String,System.String,System.String,System.Boolean,System.Int32)">
             <summary>
             Search subreddits by title and description.
             </summary>
@@ -12067,7 +12067,7 @@
             <param name="count">a positive integer (default: 0)</param>
             <returns>A list of subreddit objects.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.SubredditAutocomplete(System.String,System.Boolean,System.Boolean)">
+        <member name="M:Reddit.RedditClient.SubredditAutocomplete(System.String,System.Boolean,System.Boolean)">
             <summary>
             Return a list of subreddits and data for subreddits whose names start with 'query'.
             Uses typeahead endpoint to recieve the list of subreddits names. 
@@ -12078,22 +12078,22 @@
             <param name="includeProfiles">boolean value</param>
             <returns>Matching subreddits.</returns>
         </member>
-        <!-- Badly formed XML comment ignored for member "M:Reddit.RedditAPI.SubredditAutocompleteV2(System.String,System.Boolean,System.Boolean,System.Boolean,System.Int32)" -->
-        <member name="M:Reddit.RedditAPI.SearchSubreddits(Reddit.Inputs.Search.SearchGetSearchInput)">
+        <!-- Badly formed XML comment ignored for member "M:Reddit.RedditClient.SubredditAutocompleteV2(System.String,System.Boolean,System.Boolean,System.Boolean,System.Int32)" -->
+        <member name="M:Reddit.RedditClient.SearchSubreddits(Reddit.Inputs.Search.SearchGetSearchInput)">
             <summary>
             Search Reddit for matching users.
             </summary>
             <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
             <returns>A list of users that match the search criteria.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.SearchUsers(Reddit.Inputs.Search.SearchGetSearchInput)">
+        <member name="M:Reddit.RedditClient.SearchUsers(Reddit.Inputs.Search.SearchGetSearchInput)">
             <summary>
             Search Reddit for matching users.
             </summary>
             <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
             <returns>A list of users that match the search criteria.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.MixedSearch(Reddit.Inputs.Search.SearchGetSearchInput)">
+        <member name="M:Reddit.RedditClient.MixedSearch(Reddit.Inputs.Search.SearchGetSearchInput)">
             <summary>
             Search Reddit for matching things.
             This method can return links, subreddits, and/or users.  To include all of them, set type to "link,sr,user".
@@ -12101,7 +12101,7 @@
             <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
             <returns>A list of things that match the search criteria.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Search(Reddit.Inputs.Search.SearchGetSearchInput)">
+        <member name="M:Reddit.RedditClient.Search(Reddit.Inputs.Search.SearchGetSearchInput)">
             <summary>
             Search all subreddits for posts.
             To search a specific subreddit for posts, use the Subreddit controller.
@@ -12109,7 +12109,7 @@
             <param name="searchGetSearchInput">A valid SearchGetSearchInput instance</param>
             <returns>A list of posts that match the search criteria.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Search(System.String,Reddit.Inputs.Search.SearchGetSearchInput)">
+        <member name="M:Reddit.RedditClient.Search(System.String,Reddit.Inputs.Search.SearchGetSearchInput)">
             <summary>
             Search all subreddits for posts.
             To search a specific subreddit for posts, use the Subreddit controller.
@@ -12118,7 +12118,7 @@
             <param name="searchGetSearchInput">A valid SearchGetSearchInput instance (optional)</param>
             <returns>A list of posts that match the search criteria.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.Search(System.String,System.String,System.String,System.Boolean,System.String,System.String,System.String,System.String,System.Boolean,System.Int32,System.Int32,System.String,System.Boolean)">
+        <member name="M:Reddit.RedditClient.Search(System.String,System.String,System.String,System.Boolean,System.String,System.String,System.String,System.String,System.Boolean,System.Int32,System.Int32,System.String,System.Boolean)">
             <summary>
             Search all subreddits for posts.
             To search a specific subreddit for posts, use the Subreddit controller.
@@ -12139,7 +12139,7 @@
             <param name="srDetail">boolean value</param>
             <returns>A list of posts that match the search criteria.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.GetSubreddits(System.String,System.Int32,System.String,System.String,System.Boolean,System.String,System.Boolean,System.Int32)">
+        <member name="M:Reddit.RedditClient.GetSubreddits(System.String,System.Int32,System.String,System.String,System.Boolean,System.String,System.Boolean,System.Int32)">
             <summary>
             Get all subreddits.
             The where parameter chooses the order in which the subreddits are displayed.
@@ -12156,7 +12156,7 @@
             <param name="count">a positive integer (default: 0)</param>
             <returns>List of subreddit objects.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.GetUserSubreddits(System.String,System.Int32,System.String,System.String,System.Boolean,System.String,System.Boolean,System.Int32)">
+        <member name="M:Reddit.RedditClient.GetUserSubreddits(System.String,System.Int32,System.String,System.String,System.Boolean,System.String,System.Boolean,System.Int32)">
             <summary>
             Get all subreddits.
             The where parameter chooses the order in which the subreddits are displayed.
@@ -12173,19 +12173,24 @@
             <param name="count">a positive integer (default: 0)</param>
             <returns>List of subreddit objects.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.UserDataByAccountIds(System.Collections.Generic.List{System.String})">
+        <member name="M:Reddit.RedditClient.UserDataByAccountIds(System.Collections.Generic.List{System.String})">
             <summary>
             Get user data by account IDs.
             </summary>
             <param name="fullnames">A list of account fullnames</param>
             <returns>A dictionary of user summary objects.</returns>
         </member>
-        <member name="M:Reddit.RedditAPI.UserDataByAccountIds(System.Collections.Generic.List{Reddit.Controllers.User})">
+        <member name="M:Reddit.RedditClient.UserDataByAccountIds(System.Collections.Generic.List{Reddit.Controllers.User})">
             <summary>
             Get user data by account IDs.
             </summary>
             <param name="users">A list of user objects with valid Fullnames</param>
             <returns>A dictionary of user summary objects.</returns>
+        </member>
+        <member name="T:Reddit.RedditAPI">
+            <summary>
+            (deprecated) The old name for the main Reddit API class.
+            </summary>
         </member>
         <member name="M:Reddit.Things.LabeledMultiSubmit.#ctor(System.String,System.String,System.String,System.String,System.Collections.Generic.List{Reddit.Things.SubredditName},System.String,System.String)">
             <summary>
