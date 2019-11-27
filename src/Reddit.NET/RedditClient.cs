@@ -636,5 +636,18 @@ namespace Reddit
     /// (deprecated) The old name for the main Reddit API class.
     /// </summary>
     [Obsolete("The main class has been renamed.  Please use " + nameof(RedditClient) + " instead.")]
-    public class RedditAPI : RedditClient { }
+    public class RedditAPI : RedditClient
+    {
+        /// <summary>
+        /// (deprecated) Create a new instance of the Reddit.NET API library.
+        /// This instance will be bound to a single Reddit user.
+        /// </summary>
+        /// <param name="appId">The OAuth application ID</param>
+        /// <param name="refreshToken">The OAuth refresh token for the user we wish to authenticate</param>
+        /// <param name="appSecret">The OAuth application secret; this parameter is required for 'script' apps which use a secret to authenticate</param>
+        /// <param name="accessToken">(optional) An OAuth access token; if not provided, one will be automatically obtained using the refresh token</param>
+        /// <param name="userAgent">(optional) A custom string for the User-Agent header</param>
+        public RedditAPI(string appId = null, string refreshToken = null, string appSecret = null, string accessToken = null, string userAgent = null)
+            : base(appId, refreshToken, appSecret, accessToken, userAgent) { }
+    }
 }
