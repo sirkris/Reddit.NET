@@ -35,7 +35,7 @@ namespace Example
                 string accessToken = (args.Length > 2 ? args[2] : null);
 
                 // Initialize the API library instance.  --Kris
-                RedditAPI reddit = new RedditAPI(appId: appId, refreshToken: refreshToken, accessToken: accessToken);
+                RedditClient reddit = new RedditClient(appId: appId, refreshToken: refreshToken, accessToken: accessToken);
 
                 // Get info on the Reddit user authenticated by the OAuth credentials.  --Kris
                 User me = reddit.Account.Me;

@@ -10,7 +10,7 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
-            var reddit = new RedditAPI("YourRedditAppID", "YourBotUserRefreshToken");
+            var reddit = new RedditClient("YourRedditAppID", "YourBotUserRefreshToken");
 
             // reddit.Subreddit("MySubreddit") loads an empty named subreddit instance, then About() queries Reddit and returns the data.  --Kris
             var subreddit = reddit.Subreddit("MySubreddit").About();

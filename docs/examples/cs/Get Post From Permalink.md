@@ -30,11 +30,11 @@ using System.Text.RegularExpressions;
 
 public class GetPost
 {
-	private RedditAPI Reddit { get; set; }
+	private RedditClient Reddit { get; set; }
 	
 	public GetPost(string appId, string refreshToken)
 	{
-		Reddit = new RedditAPI(appId, refreshToken);
+		Reddit = new RedditClient(appId, refreshToken);
 	}
 	
 	public Post FromPermalink(string permalink)
