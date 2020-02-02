@@ -162,6 +162,21 @@ namespace Reddit.Controllers
         public List<Comment> replies { get; private set; }
 
         /// <summary>
+        /// The number of direct comment replies.  
+        /// Unlike Replies, accessing this property does not require a separate API call.
+        /// </summary>
+        public int? NumReplies
+        {
+            get
+            {
+                return (More != null && !More.Count.Equals(0) && More[0] != null
+                    ? More[0].Count
+                    : (int?)null);
+            }
+            private set { }
+        }
+
+        /// <summary>
         /// The comment body.
         /// </summary>
         public string Body
