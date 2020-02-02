@@ -22,7 +22,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Subreddit;
+                return Listing?.Subreddit;
             }
             private set { }
         }
@@ -34,7 +34,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Author;
+                return Listing?.Author;
             }
             private set { }
         }
@@ -46,7 +46,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Id;
+                return Listing?.Id;
             }
             private set { }
         }
@@ -58,7 +58,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Name;
+                return Listing?.Name;
             }
             private set { }
         }
@@ -70,7 +70,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Permalink;
+                return Listing?.Permalink;
             }
             private set { }
         }
@@ -82,7 +82,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.CreatedUTC;
+                return (Listing != null ? Listing.CreatedUTC : DateTime.MinValue);
             }
             private set { }
         }
@@ -94,7 +94,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Edited;
+                return (Listing != null ? Listing.Edited : DateTime.MinValue);
             }
             private set { }
         }
@@ -106,7 +106,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Score;
+                return (Listing != null ? Listing.Score : 0);
             }
             private set { }
         }
@@ -118,7 +118,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Ups;
+                return (Listing != null ? Listing.Ups : 0);
             }
             private set { }
         }
@@ -130,7 +130,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Downs;
+                return (Listing != null ? Listing.Downs : 0);
             }
             private set { }
         }
@@ -142,7 +142,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Removed;
+                return (Listing != null ? Listing.Removed : false);
             }
             private set { }
         }
@@ -154,7 +154,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Spam;
+                return (Listing != null ? Listing.Spam : false);
             }
             private set { }
         }
@@ -171,7 +171,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return (!string.IsNullOrEmpty(Listing.ParentId) && Listing.ParentId.StartsWith("t3_") && Listing.ParentId.Length > 3
+                return (!string.IsNullOrEmpty(Listing?.ParentId) && Listing.ParentId.StartsWith("t3_") && Listing.ParentId.Length > 3
                     ? Listing.ParentId.Substring(3)
                     : null);
             }
@@ -185,7 +185,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.ParentId;
+                return (Listing?.ParentId);
             }
             private set { }
         }
@@ -197,7 +197,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.CollapsedReason;
+                return Listing?.CollapsedReason;
             }
             private set { }
         }
@@ -209,7 +209,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Collapsed;
+                return (Listing != null ? Listing.Collapsed : false);
             }
             private set { }
         }
@@ -221,7 +221,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.IsSubmitter;
+                return (Listing != null ? Listing.IsSubmitter : false);
             }
             private set { }
         }
@@ -233,7 +233,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.ScoreHidden;
+                return (Listing != null ? Listing.ScoreHidden : false);
             }
             private set { }
         }
@@ -245,7 +245,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return Listing.Depth;
+                return (Listing != null ? Listing.Depth : 0);
             }
             private set { }
         }
@@ -318,7 +318,7 @@ namespace Reddit.Controllers
             {
                 return (More != null && !More.Count.Equals(0) && More[0] != null
                     ? More[0].Count
-                    : (Listing.Replies.Comments != null
+                    : (Listing?.Replies.Comments != null
                         ? Listing.Replies.Comments.Count
                         : (int?)null));
             }
@@ -452,7 +452,7 @@ namespace Reddit.Controllers
         public Comment(Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
-            Fullname = fullname;
+            Listing = new Things.Comment { Name = fullname };
         }
 
         /// <summary>
