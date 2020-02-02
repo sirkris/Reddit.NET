@@ -185,7 +185,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return (Listing?.ParentId);
+                return (Listing != null ? "t3_" + Listing.ParentId : null);
             }
             private set { }
         }
@@ -332,11 +332,11 @@ namespace Reddit.Controllers
         {
             get
             {
-                return body;
+                return Parsing.HtmlDecode((!string.IsNullOrEmpty(body) ? body : Listing?.Body));
             }
             set
             {
-                body = Parsing.HtmlDecode(value);
+                body = value;
             }
         }
         private string body;
@@ -348,11 +348,11 @@ namespace Reddit.Controllers
         {
             get
             {
-                return bodyHtml;
+                return Parsing.HtmlDecode((!string.IsNullOrEmpty(bodyHtml) ? bodyHtml : Listing?.BodyHTML));
             }
             set
             {
-                bodyHtml = Parsing.HtmlDecode(value);
+                bodyHtml = value;
             }
         }
         private string bodyHtml;
