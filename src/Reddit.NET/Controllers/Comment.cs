@@ -185,7 +185,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return (Listing != null ? "t3_" + Listing.ParentId : null);
+                return Listing?.ParentId;
             }
             private set { }
         }
@@ -492,7 +492,7 @@ namespace Reddit.Controllers
                 Author = author,
                 Body = body,
                 BodyHTML = bodyHtml,
-                ParentId = (!string.IsNullOrEmpty(parentFullname) && (parentFullname.StartsWith("t3_") || parentFullname.StartsWith("t1_")) ? parentFullname.Substring(3) : null),
+                ParentId = parentFullname,
                 CollapsedReason = collapsedReason,
                 Collapsed = collapsed,
                 IsSubmitter = isSubmitter,
