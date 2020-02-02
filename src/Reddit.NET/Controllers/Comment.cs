@@ -171,7 +171,7 @@ namespace Reddit.Controllers
         {
             get
             {
-                return (!string.IsNullOrEmpty(Listing?.ParentId) && Listing.ParentId.StartsWith("t3_") && Listing.ParentId.Length > 3
+                return (!string.IsNullOrEmpty(Listing?.ParentId) && Listing.ParentId.Length > 3
                     ? Listing.ParentId.Substring(3)
                     : null);
             }
