@@ -207,11 +207,6 @@ namespace Reddit.Things
         [JsonProperty("link_id")]
         public string LinkId { get; set; }
 
-        public Comment(Controllers.Comment comment)
-        {
-            ImportFromComment(comment);
-        }
-
         public Comment() { }
 
         private void ImportFromComment(Controllers.Comment comment)
