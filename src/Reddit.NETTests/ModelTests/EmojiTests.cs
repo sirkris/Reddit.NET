@@ -15,7 +15,7 @@ namespace RedditTests.ModelTests
 
             Validate(snoomojiContainer);
 
-            Assert.IsTrue(snoomojiContainer.SubredditEmojis.ContainsKey("bulbasaur"));
+            Assert.IsTrue(snoomojiContainer.SubredditEmojis.ContainsKey("bs"));
         }
     }
 }
