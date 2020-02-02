@@ -41,12 +41,38 @@ namespace Reddit.Controllers
         /// <summary>
         /// The ID36 of the post.
         /// </summary>
-        public string Id { get; set; }
+        public string Id
+        {
+            get
+            {
+                return (string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(fullname)
+                    ? fullname.Substring(3)
+                    : id);
+            }
+            set
+            {
+                id = value;
+            }
+        }
+        private string id;
 
         /// <summary>
         /// The fullname of the post.
         /// </summary>
-        public string Fullname { get; set; }
+        public string Fullname
+        {
+            get
+            {
+                return (string.IsNullOrEmpty(fullname) && !string.IsNullOrEmpty(id)
+                    ? "t3_" + id
+                    : fullname);
+            }
+            set
+            {
+                fullname = value;
+            }
+        }
+        private string fullname;
 
         /// <summary>
         /// The permalink URL of the post.
