@@ -26,6 +26,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// The URL the LinkPost points to.
+        /// </summary>
         public string URL
         {
             get
