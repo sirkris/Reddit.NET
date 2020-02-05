@@ -20,7 +20,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.Preview;
             }
-            private set { }
+            set
+            {
+                Listing.Preview = value;
+            }
         }
 
         public string URL
@@ -29,7 +32,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.URL;
             }
-            private set { }
+            set
+            {
+                Listing.URL = value;
+            }
         }
 
         public string Thumbnail
@@ -38,7 +44,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.Thumbnail;
             }
-            private set { }
+            set
+            {
+                Listing.Thumbnail = value;
+            }
         }
 
         public int? ThumbnailHeight
@@ -47,7 +56,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.ThumbnailHeight;
             }
-            private set { }
+            set
+            {
+                Listing.ThumbnailHeight = value;
+            }
         }
 
         public int? ThumbnailWidth
@@ -56,7 +68,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.ThumbnailWidth;
             }
-            private set { }
+            set
+            {
+                Listing.ThumbnailWidth = value;
+            }
         }
 
         /// <summary>
