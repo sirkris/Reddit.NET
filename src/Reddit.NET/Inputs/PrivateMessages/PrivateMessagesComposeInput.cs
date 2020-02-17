@@ -21,7 +21,7 @@ namespace Reddit.Inputs.PrivateMessages
         public string text { get; set; }
 
         /// <summary>
-        /// the name of an existing user
+        /// the name of an existing user (or subreddit for modmail)
         /// </summary>
         public string to { get; set; }
 

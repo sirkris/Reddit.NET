@@ -2,7 +2,9 @@
 using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
+using Reddit.Inputs.LinksAndComments;
 using Reddit.Inputs.Modmail;
+using Reddit.Inputs.PrivateMessages;
 using Reddit.Things;
 using System;
 using System.Collections.Generic;
@@ -341,8 +343,16 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="modmailNewConversationInput">A valid ModmailNewConversationInput instance</param>
         /// <returns>An object containing the conversation data.</returns>
-        public ModmailConversationContainer NewConversation(ModmailNewConversationInput modmailNewConversationInput)
+        public ModmailConversationContainer NewConversation(ModmailNewConversationInput modmailNewConversationInput, string gRecaptchaResponse = "")
         {
+            PrivateMessagesComposeInput privateMessagesComposeInput = new PrivateMessagesComposeInput
+            {
+                subject = modmailNewConversationInput.subject,
+                text = modmailNewConversationInput.body,
+                to = "/r/" + modmailNewConversationInput.srName
+            };
+            GenericContainer res = Validate(Dispatch.PrivateMessages.Compose(privateMessagesComposeInput, gRecaptchaResponse));
+
             return Validate(Dispatch.Modmail.NewConversation(modmailNewConversationInput));
         }
 
@@ -400,7 +410,13 @@ namespace Reddit.Controllers
         /// <returns>An object containing the conversation data.</returns>
         public ModmailConversationContainer NewMessage(string conversationId, ModmailNewMessageInput modmailNewMessageInput)
         {
-            return Validate(Dispatch.Modmail.NewMessage(conversationId, modmailNewMessageInput));
+            LinksAndCommentsThingInput linksAndCommentsThingInput = new LinksAndCommentsThingInput
+            {
+                text = modmailNewMessageInput.body,
+                thing_id = "t4_" + conversationId
+            };
+            return Validate(Dispatch.LinksAndComments.Comment<ModmailConversationContainer>(linksAndCommentsThingInput));
+            //return Validate(Dispatch.Modmail.NewMessage(conversationId, modmailNewMessageInput));
         }
 
         /// <summary>
