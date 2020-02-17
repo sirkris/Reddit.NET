@@ -32,7 +32,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.Id;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(id: value);
+            }
         }
 
         public string Fullname
@@ -41,7 +44,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.Name;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(fullname: value);
+            }
         }
 
         public string Description
@@ -50,7 +56,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.Description;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(description: value);
+            }
         }
 
         public bool NSFW
@@ -59,7 +68,10 @@ namespace Reddit.Controllers
             {
                 return (EventData != null ? EventData.NSFW : false);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(nsfw: value);
+            }
         }
 
         public string Resources
@@ -68,7 +80,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.Resources;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(resources: value);
+            }
         }
 
         public string Title
@@ -77,7 +92,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.Title;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(title: value);
+            }
         }
 
 
@@ -87,7 +105,10 @@ namespace Reddit.Controllers
             {
                 return (EventData != null ? EventData.TotalViews : 0);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(totalViews: value);
+            }
         }
 
         public DateTime? Created
@@ -96,7 +117,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.CreatedUTC;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(created: value);
+            }
         }
 
         // TODO - Support for Websockets.  --Kris
@@ -106,7 +130,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.WebsocketURL;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(websocketUrl: value);
+            }
         }
 
         public bool IsAnnouncement
@@ -115,7 +142,10 @@ namespace Reddit.Controllers
             {
                 return (EventData != null ? EventData.IsAnnouncement : false);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(isAnnouncement: value);
+            }
         }
 
         public string AnnouncementURL
@@ -124,7 +154,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.AnnouncementURL;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(announcementUrl: value);
+            }
         }
 
         public string State
@@ -133,7 +166,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.State;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(state: value);
+            }
         }
 
         public int ViewerCount
@@ -142,7 +178,10 @@ namespace Reddit.Controllers
             {
                 return (EventData != null ? EventData.ViewerCount : 0);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(viewerCount: value);
+            }
         }
 
         public string Icon
@@ -151,7 +190,10 @@ namespace Reddit.Controllers
             {
                 return EventData?.Icon;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(icon: value);
+            }
         }
 
 
@@ -203,7 +245,7 @@ namespace Reddit.Controllers
         public LiveThread(Dispatch dispatch, LiveThread liveThread)
         {
             Dispatch = dispatch;
-            EventData = liveThread.EventData;
+            Import(liveThread.EventData);
         }
 
         /// <summary>
@@ -214,7 +256,7 @@ namespace Reddit.Controllers
         public LiveThread(Dispatch dispatch, LiveUpdateEvent liveUpdateEvent)
         {
             Dispatch = dispatch;
-            EventData = liveUpdateEvent;
+            Import(liveUpdateEvent);
         }
 
         /// <summary>
@@ -234,12 +276,13 @@ namespace Reddit.Controllers
         /// <param name="totalViews"></param>
         /// <param name="viewerCount"></param>
         /// <param name="created"></param>
+        /// <param name="isAnnouncement"></param>
         public LiveThread(Dispatch dispatch, string title = null, string description = null, bool nsfw = false, string resources = null,
             string id = null, string name = null, string websocketUrl = null, string announcementUrl = null, string state = null,
-            string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime))
+            string icon = null, int? totalViews = null, int viewerCount = 0, DateTime created = default(DateTime), bool isAnnouncement = false)
         {
             Dispatch = dispatch;
-            Import(id, description, nsfw, resources, title, totalViews, created, name, websocketUrl, announcementUrl, state, viewerCount, icon);
+            Import(id, description, nsfw, resources, title, totalViews, created, name, websocketUrl, announcementUrl, state, viewerCount, icon, isAnnouncement);
         }
 
         /// <summary>
@@ -250,12 +293,17 @@ namespace Reddit.Controllers
         public LiveThread(Dispatch dispatch, string id)
         {
             Dispatch = dispatch;
-            EventData = new LiveUpdateEvent { Id = id };
+            Import(new LiveUpdateEvent { Id = id });
+        }
+
+        private void Import(LiveUpdateEvent liveUpdateEvent)
+        {
+            EventData = liveUpdateEvent;
         }
 
         private void Import(string id, string description, bool nsfw, string resources, string title,
             int? totalViews, DateTime created, string fullname, string websocketUrl, string announcementUrl,
-            string state, int viewerCount, string icon)
+            string state, int viewerCount, string icon, bool isAnnouncement)
         {
             EventData = new LiveUpdateEvent
             {
@@ -271,8 +319,48 @@ namespace Reddit.Controllers
                 AnnouncementURL = announcementUrl,
                 State = state,
                 ViewerCount = viewerCount,
-                Icon = icon
+                Icon = icon, 
+                IsAnnouncement = isAnnouncement
             };
+        }
+
+        private void ImportToExisting(string id = null, string description = null, bool? nsfw = null, string resources = null, string title = null,
+            int? totalViews = null, DateTime? created = null, string fullname = null, string websocketUrl = null, string announcementUrl = null,
+            string state = null, int? viewerCount = null, string icon = null, bool? isAnnouncement = false)
+        {
+            if (EventData == null)
+            {
+                Import(
+                    id, 
+                    description, 
+                    nsfw ?? false, 
+                    resources, 
+                    title, 
+                    totalViews ?? 0, 
+                    created ?? default(DateTime), 
+                    fullname, websocketUrl, 
+                    announcementUrl, 
+                    state, 
+                    viewerCount ?? 0, 
+                    icon, 
+                    isAnnouncement ?? false);
+            }
+            else
+            {
+                EventData.Id = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.Description = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.NSFW = (nsfw ?? EventData.NSFW);
+                EventData.Resources = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.Title = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.TotalViews = (totalViews ?? EventData.TotalViews);
+                EventData.CreatedUTC = (created ?? EventData.CreatedUTC);
+                EventData.Name = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.WebsocketURL = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.AnnouncementURL = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.State = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.ViewerCount = (viewerCount ?? EventData.ViewerCount);
+                EventData.Icon = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+            }
         }
 
         /// <summary>
@@ -970,14 +1058,7 @@ namespace Reddit.Controllers
         /// <param name="e"></param>
         private void C_ApplyThreadUpdates(object sender, LiveThreadUpdateEventArgs e)
         {
-            if (!e.NewThread.Created.HasValue)
-            {
-                e.NewThread.Created = DateTime.MinValue;
-            }
-
-            Import(e.NewThread.Id, e.NewThread.Description, e.NewThread.NSFW, e.NewThread.Resources, e.NewThread.Title, e.NewThread.TotalViews,
-                e.NewThread.Created.Value, e.NewThread.Fullname, e.NewThread.WebsocketURL, e.NewThread.AnnouncementURL, e.NewThread.State, e.NewThread.ViewerCount,
-                e.NewThread.Icon);
+            Import(e.NewThread.EventData);
         }
 
         private void CheckContributors()
