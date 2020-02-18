@@ -24,7 +24,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.Subreddit;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(subreddit: value);
+            }
         }
 
         /// <summary>
@@ -36,7 +39,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.Author;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(author: value);
+            }
         }
 
         /// <summary>
@@ -48,7 +54,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.Id;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(id: value);
+            }
         }
 
         /// <summary>
@@ -60,7 +69,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.Name;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(fullname: value);
+            }
         }
 
         /// <summary>
@@ -72,7 +84,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.Permalink;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(permalink: value);
+            }
         }
 
         /// <summary>
@@ -82,9 +97,12 @@ namespace Reddit.Controllers
         {
             get
             {
-                return (Listing != null ? Listing.CreatedUTC : DateTime.MinValue);
+                return (Listing != null ? Listing.CreatedUTC : default(DateTime));
             }
-            private set { }
+            set
+            {
+                ImportToExisting(created: value);
+            }
         }
 
         /// <summary>
@@ -94,9 +112,12 @@ namespace Reddit.Controllers
         {
             get
             {
-                return (Listing != null ? Listing.Edited : DateTime.MinValue);
+                return (Listing != null ? Listing.Edited : default(DateTime));
             }
-            private set { }
+            set
+            {
+                ImportToExisting(edited: value);
+            }
         }
 
         /// <summary>
@@ -108,7 +129,10 @@ namespace Reddit.Controllers
             {
                 return (Listing != null ? Listing.Score : 0);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(score: value);
+            }
         }
 
         /// <summary>
@@ -120,7 +144,10 @@ namespace Reddit.Controllers
             {
                 return (Listing != null ? Listing.Ups : 0);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(upVotes: value);
+            }
         }
 
         /// <summary>
@@ -132,7 +159,10 @@ namespace Reddit.Controllers
             {
                 return (Listing != null ? Listing.Downs : 0);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(downVotes: value);
+            }
         }
 
         /// <summary>
@@ -144,7 +174,10 @@ namespace Reddit.Controllers
             {
                 return (Listing != null ? Listing.Removed : false);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(removed: value);
+            }
         }
 
         /// <summary>
@@ -156,7 +189,10 @@ namespace Reddit.Controllers
             {
                 return (Listing != null ? Listing.Spam : false);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(spam: value);
+            }
         }
 
         /// <summary>
@@ -187,7 +223,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.ParentId;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(parentFullname: value);
+            }
         }
 
         /// <summary>
@@ -199,7 +238,10 @@ namespace Reddit.Controllers
             {
                 return Listing?.CollapsedReason;
             }
-            private set { }
+            set
+            {
+                ImportToExisting(collapsedReason: value);
+            }
         }
 
         /// <summary>
@@ -211,7 +253,10 @@ namespace Reddit.Controllers
             {
                 return (Listing != null ? Listing.Collapsed : false);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(collapsed: value);
+            }
         }
 
         /// <summary>
@@ -223,7 +268,10 @@ namespace Reddit.Controllers
             {
                 return (Listing != null ? Listing.IsSubmitter : false);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(isSubmitter: value);
+            }
         }
 
         /// <summary>
@@ -235,7 +283,10 @@ namespace Reddit.Controllers
             {
                 return (Listing != null ? Listing.ScoreHidden : false);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(scoreHidden: value);
+            }
         }
 
         /// <summary>
@@ -247,7 +298,10 @@ namespace Reddit.Controllers
             {
                 return (Listing != null ? Listing.Depth : 0);
             }
-            private set { }
+            set
+            {
+                ImportToExisting(depth: value);
+            }
         }
 
         /// <summary>
@@ -512,8 +566,67 @@ namespace Reddit.Controllers
 
             More = (more == null && Listing.Replies != null ? Listing.Replies.MoreData : (more ?? new List<Things.More>()));
             Replies = (replies == null && Listing.Replies != null ? Lists.GetComments(Listing.Replies.Comments, Dispatch) : (replies ?? new List<Comment>()));
+        }
 
-            Awards = new Awards();
+        private void ImportToExisting(string subreddit = null, string author = null, string body = null, string bodyHtml = null,
+            string parentFullname = null, string collapsedReason = null, bool? collapsed = null, bool? isSubmitter = null,
+            List<Comment> replies = null, List<Things.More> more = null, bool? scoreHidden = null, int? depth = null, string id = null, string fullname = null,
+            string permalink = null, DateTime? created = null, DateTime? edited = null,
+            int? score = null, int? upVotes = null, int? downVotes = null, bool? removed = null, bool? spam = null)
+        {
+            if (Listing == null)
+            {
+                Import(
+                    subreddit,
+                    author,
+                    body,
+                    bodyHtml,
+                    parentFullname,
+                    collapsedReason,
+                    collapsed ?? false,
+                    isSubmitter ?? false,
+                    replies,
+                    more,
+                    scoreHidden ?? false,
+                    depth ?? 0,
+                    id,
+                    fullname,
+                    permalink,
+                    created ?? default(DateTime),
+                    edited ?? default(DateTime),
+                    score ?? 0,
+                    upVotes ?? 0,
+                    downVotes ?? 0,
+                    removed ?? false,
+                    spam ?? false
+                );
+            }
+            else
+            {
+                Listing.Subreddit = (!string.IsNullOrEmpty(subreddit) ? subreddit : Listing.Subreddit);
+                Listing.Author = (!string.IsNullOrEmpty(author) ? author : Listing.Author);
+                Listing.Body = (!string.IsNullOrEmpty(body) ? body : Listing.Body);
+                Listing.BodyHTML = (!string.IsNullOrEmpty(bodyHtml) ? bodyHtml : Listing.BodyHTML);
+                Listing.ParentId = (!string.IsNullOrEmpty(parentFullname) ? parentFullname : Listing.ParentId);
+                Listing.CollapsedReason = (!string.IsNullOrEmpty(collapsedReason) ? collapsedReason : Listing.CollapsedReason);
+                Listing.Collapsed = (collapsed ?? Listing.Collapsed);
+                Listing.IsSubmitter = (isSubmitter ?? Listing.IsSubmitter);
+                Listing.ScoreHidden = (scoreHidden ?? Listing.ScoreHidden);
+                Listing.Depth = (depth ?? Listing.Depth);
+                Listing.Id = (!string.IsNullOrEmpty(id) ? id : Listing.Id);
+                Listing.Name = (!string.IsNullOrEmpty(fullname) ? fullname : Listing.Name);
+                Listing.Permalink = (!string.IsNullOrEmpty(permalink) ? permalink : Listing.Permalink);
+                Listing.CreatedUTC = (created ?? Listing.CreatedUTC);
+                Listing.Edited = (edited ?? Listing.Edited);
+                Listing.Score = (score ?? Listing.Score);
+                Listing.Ups = (upVotes ?? Listing.Ups);
+                Listing.Downs = (downVotes ?? Listing.Downs);
+                Listing.Removed = (removed ?? Listing.Removed);
+                Listing.Spam = (spam ?? Listing.Spam);
+            }
+
+            More = (more == null && Listing.Replies != null ? Listing.Replies.MoreData : (more ?? new List<Things.More>()));
+            Replies = (replies == null && Listing.Replies != null ? Lists.GetComments(Listing.Replies.Comments, Dispatch) : (replies ?? new List<Comment>()));
         }
 
         /// <summary>

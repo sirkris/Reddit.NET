@@ -348,18 +348,18 @@ namespace Reddit.Controllers
             else
             {
                 EventData.Id = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
-                EventData.Description = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.Description = (!string.IsNullOrEmpty(description) ? description : EventData.Description);
                 EventData.NSFW = (nsfw ?? EventData.NSFW);
-                EventData.Resources = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
-                EventData.Title = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.Resources = (!string.IsNullOrEmpty(resources) ? resources : EventData.Resources);
+                EventData.Title = (!string.IsNullOrEmpty(title) ? title : EventData.Title);
                 EventData.TotalViews = (totalViews ?? EventData.TotalViews);
                 EventData.CreatedUTC = (created ?? EventData.CreatedUTC);
-                EventData.Name = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
-                EventData.WebsocketURL = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
-                EventData.AnnouncementURL = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
-                EventData.State = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.Name = (!string.IsNullOrEmpty(fullname) ? fullname : EventData.Name);
+                EventData.WebsocketURL = (!string.IsNullOrEmpty(websocketUrl) ? websocketUrl : EventData.WebsocketURL);
+                EventData.AnnouncementURL = (!string.IsNullOrEmpty(announcementUrl) ? announcementUrl : EventData.AnnouncementURL);
+                EventData.State = (!string.IsNullOrEmpty(state) ? state : EventData.State);
                 EventData.ViewerCount = (viewerCount ?? EventData.ViewerCount);
-                EventData.Icon = (!string.IsNullOrEmpty(id) ? id : EventData.Id);
+                EventData.Icon = (!string.IsNullOrEmpty(icon) ? icon : EventData.Icon);
             }
         }
 
