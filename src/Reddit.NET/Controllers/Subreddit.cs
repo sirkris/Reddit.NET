@@ -21,202 +21,602 @@ namespace Reddit.Controllers
         /// <summary>
         /// The banner image URL.
         /// </summary>
-        public string BannerImg { get; set; }
+        public string BannerImg
+        {
+            get
+            {
+                return SubredditData?.BannerImg;
+            }
+            set
+            {
+                ImportToExisting(bannerImg: value);
+            }
+        }
 
         /// <summary>
         /// The banner background color.
         /// </summary>
-        public string BannerBackgroundColor { get; set; }
+        public string BannerBackgroundColor
+        {
+            get
+            {
+                return SubredditData?.BannerBackgroundColor;
+            }
+            set
+            {
+                ImportToExisting(bannerBackgroundColor: value);
+            }
+        }
 
         /// <summary>
         /// The banner background image URL.
         /// </summary>
-        public string BannerBackgroundImage { get; set; }
+        public string BannerBackgroundImage
+        {
+            get
+            {
+                return SubredditData?.BannerBackgroundImage;
+            }
+            set
+            {
+                ImportToExisting(bannerBackgroundImage: value);
+            }
+        }
 
         /// <summary>
         /// The subreddit type (public, restricted, or private)
         /// </summary>
-        public string SubredditType { get; set; }
+        public string SubredditType
+        {
+            get
+            {
+                return SubredditData?.SubredditType;
+            }
+            set
+            {
+                ImportToExisting(subredditType: value);
+            }
+        }
 
         /// <summary>
         /// The community icon URL.
         /// </summary>
-        public string CommunityIcon { get; set; }
+        public string CommunityIcon
+        {
+            get
+            {
+                return SubredditData?.CommunityIcon;
+            }
+            set
+            {
+                ImportToExisting(communityIcon: value);
+            }
+        }
 
         /// <summary>
         /// The header title.
         /// </summary>
-        public string HeaderTitle { get; set; }
+        public string HeaderTitle
+        {
+            get
+            {
+                return SubredditData?.HeaderTitle;
+            }
+            set
+            {
+                ImportToExisting(headerTitle: value);
+            }
+        }
 
         /// <summary>
         /// Whether the wiki is enabled for this subreddit.
         /// </summary>
-        public bool WikiEnabled { get; set; }
+        public bool WikiEnabled
+        {
+            get
+            {
+                return (SubredditData != null && SubredditData.WikiEnabled.HasValue ? SubredditData.WikiEnabled.Value : false);
+            }
+            set
+            {
+                ImportToExisting(wikiEnabled: value);
+            }
+        }
 
         /// <summary>
         /// Whether you have to be over 18 to view this subreddit.
         /// </summary>
-        public bool? Over18 { get; set; }
+        public bool? Over18
+        {
+            get
+            {
+                return SubredditData?.Over18;
+            }
+            set
+            {
+                ImportToExisting(over18: value);
+            }
+        }
 
         /// <summary>
         /// The sidebar text.
         /// </summary>
-        public string Sidebar { get; set; }
+        public string Sidebar
+        {
+            get
+            {
+                return SubredditData?.Description;
+            }
+            set
+            {
+                ImportToExisting(sidebar: value);
+            }
+        }
 
         /// <summary>
         /// The subreddit name.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get
+            {
+                return SubredditData?.DisplayName;
+            }
+            set
+            {
+                ImportToExisting(name: value);
+            }
+        }
 
         /// <summary>
         /// The header image.
         /// </summary>
-        public object HeaderImg { get; set; }
+        public byte[] HeaderImg
+        {
+            get
+            {
+                return (byte[])SubredditData?.HeaderImg;
+            }
+            set
+            {
+                ImportToExisting(headerImage: value);
+            }
+        }
 
         /// <summary>
         /// The subreddit title.
         /// </summary>
-        public string Title { get; set; }
+        public string Title
+        {
+            get
+            {
+                return SubredditData?.Title;
+            }
+            set
+            {
+                ImportToExisting(title: value);
+            }
+        }
 
         /// <summary>
         /// Whether to collapse deleted comments.
         /// </summary>
-        public bool? CollapseDeletedComments { get; set; }
+        public bool? CollapseDeletedComments
+        {
+            get
+            {
+                return SubredditData?.CollapseDeletedComments;
+            }
+            set
+            {
+                ImportToExisting(collapseDeletedComments: value);
+            }
+        }
 
         /// <summary>
         /// The ID36 of this subreddit.
         /// </summary>
-        public string Id { get; set; }
+        public string Id
+        {
+            get
+            {
+                return SubredditData?.Id;
+            }
+            set
+            {
+                ImportToExisting(id: value);
+            }
+        }
 
         /// <summary>
         /// Whether emojis are enabled.
         /// </summary>
-        public bool EmojisEnabled { get; set; }
+        public bool EmojisEnabled
+        {
+            get
+            {
+                return (SubredditData != null ? SubredditData.EmojisEnabled : false);
+            }
+            set
+            {
+                ImportToExisting(emojisEnabled: value);
+            }
+        }
 
         /// <summary>
         /// Whether to show media.
         /// </summary>
-        public bool? ShowMedia { get; set; }
+        public bool? ShowMedia
+        {
+            get
+            {
+                return SubredditData?.ShowMedia;
+            }
+            set
+            {
+                ImportToExisting(showMedia: value);
+            }
+        }
 
         /// <summary>
         /// Whether to allow videos.
         /// </summary>
-        public bool AllowVideos { get; set; }
+        public bool AllowVideos
+        {
+            get
+            {
+                return (SubredditData != null ? SubredditData.AllowVideos : false);
+            }
+            set
+            {
+                ImportToExisting(allowVideos: value);
+            }
+        }
 
         /// <summary>
         /// Whether user flair can be assigned.
         /// </summary>
-        public bool CanAssignUserFlair { get; set; }
+        public bool CanAssignUserFlair
+        {
+            get
+            {
+                return (SubredditData != null ? SubredditData.CanAssignUserFlair : false);
+            }
+            set
+            {
+                ImportToExisting(canAssignUserFlair: value);
+            }
+        }
 
         /// <summary>
         /// Whether spoilers are enabled.
         /// </summary>
-        public bool? SpoilersEnabled { get; set; }
+        public bool? SpoilersEnabled
+        {
+            get
+            {
+                return SubredditData?.SpoilersEnabled;
+            }
+            set
+            {
+                ImportToExisting(allowSpoilers: value);
+            }
+        }
 
         /// <summary>
         /// The primary color.
         /// </summary>
-        public string PrimaryColor { get; set; }
+        public string PrimaryColor
+        {
+            get
+            {
+                return SubredditData?.PrimaryColor;
+            }
+            set
+            {
+                ImportToExisting(primaryColor: value);
+            }
+        }
 
         /// <summary>
         /// The suggested comment sort for this subreddit.
         /// </summary>
-        public string SuggestedCommentSort { get; set; }
+        public string SuggestedCommentSort
+        {
+            get
+            {
+                return SubredditData?.SuggestedCommentSort;
+            }
+            set
+            {
+                ImportToExisting(suggestedCommentSort: value);
+            }
+        }
 
         /// <summary>
         /// The active user count.
         /// </summary>
-        public int? ActiveUserCount { get; set; }
+        public int? ActiveUserCount
+        {
+            get
+            {
+                return SubredditData?.ActiveUserCount;
+            }
+            set
+            {
+                ImportToExisting(activeUserCount: value ?? 0);
+            }
+        }
 
         /// <summary>
         /// The icon image.
         /// </summary>
-        public object IconImg { get; set; }
+        public byte[] IconImg
+        {
+            get
+            {
+                return (byte[])SubredditData?.IconImg;
+            }
+            set
+            {
+                ImportToExisting(iconImage: value);
+            }
+        }
 
         /// <summary>
         /// Whether link flair can be assigned.
         /// </summary>
-        public bool CanAssignLinkFlair { get; set; }
+        public bool CanAssignLinkFlair
+        {
+            get
+            {
+                return (SubredditData != null ? SubredditData.CanAssignLinkFlair : false);
+            }
+            set
+            {
+                ImportToExisting(canAssignLinkFlair: value);
+            }
+        }
 
         /// <summary>
         /// Whether to allow video GIFs.
         /// </summary>
-        public bool AllowVideoGifs { get; set; }
+        public bool AllowVideoGifs
+        {
+            get
+            {
+                return (SubredditData != null ? SubredditData.AllowVideoGifs : false);
+            }
+            set
+            {
+                ImportToExisting(allowVideoGifs: value);
+            }
+        }
 
         /// <summary>
         /// The number of subscribers.
         /// </summary>
-        public int? Subscribers { get; set; }
+        public int? Subscribers
+        {
+            get
+            {
+                return SubredditData?.Subscribers;
+            }
+            set
+            {
+                ImportToExisting(subscribers: value);
+            }
+        }
 
         /// <summary>
         /// The submit text label.
         /// </summary>
-        public string SubmitTextLabel { get; set; }
+        public string SubmitTextLabel
+        {
+            get
+            {
+                return SubredditData?.SubmitLinkLabel;
+            }
+            set
+            {
+                ImportToExisting(submitLinkLabel: value);
+            }
+        }
 
         /// <summary>
         /// The key color.
         /// </summary>
-        public string KeyColor { get; set; }
+        public string KeyColor
+        {
+            get
+            {
+                return SubredditData?.KeyColor;
+            }
+            set
+            {
+                ImportToExisting(keyColor: value);
+            }
+        }
 
         /// <summary>
         /// The language.
         /// </summary>
-        public string Lang { get; set; }
+        public string Lang
+        {
+            get
+            {
+                return SubredditData?.Lang;
+            }
+            set
+            {
+                ImportToExisting(lang: value);
+            }
+        }
 
         /// <summary>
         /// The subreddit fullname.
         /// </summary>
-        public string Fullname { get; set; }
+        public string Fullname
+        {
+            get
+            {
+                return SubredditData?.Name;
+            }
+            set
+            {
+                ImportToExisting(fullname: value);
+            }
+        }
 
         /// <summary>
         /// When the subreddit was created.
         /// </summary>
-        public DateTime Created { get; set; }
+        public DateTime Created
+        {
+            get
+            {
+                return (SubredditData != null ? SubredditData.CreatedUTC : default(DateTime));
+            }
+            set
+            {
+                ImportToExisting(created: value);
+            }
+        }
 
         /// <summary>
         /// The URL.
         /// </summary>
-        public string URL { get; set; }
+        public string URL
+        {
+            get
+            {
+                return SubredditData?.URL;
+            }
+            set
+            {
+                ImportToExisting(url: value);
+            }
+        }
 
         /// <summary>
         /// The submit link label.
         /// </summary>
-        public string SubmitLinkLabel { get; set; }
+        public string SubmitLinkLabel
+        {
+            get
+            {
+                return SubredditData?.SubmitLinkLabel;
+            }
+            set
+            {
+                ImportToExisting(submitLinkLabel: value);
+            }
+        }
 
         /// <summary>
         /// Whether to allow discovery.
         /// </summary>
-        public bool? AllowDiscovery { get; set; }
+        public bool? AllowDiscovery
+        {
+            get
+            {
+                return SubredditData?.AllowDiscovery;
+            }
+            set
+            {
+                ImportToExisting(allowDiscovery: value);
+            }
+        }
 
         /// <summary>
         /// The subreddit description.
         /// </summary>
-        public string Description { get; set; }
+        public string Description
+        {
+            get
+            {
+                return SubredditData?.PublicDescription;
+            }
+            set
+            {
+                ImportToExisting(description: value);
+            }
+        }
 
         /// <summary>
         /// Whether link flair is enabled.
         /// </summary>
-        public bool? LinkFlairEnabled { get; set; }
+        public bool? LinkFlairEnabled
+        {
+            get
+            {
+                return SubredditData?.LinkFlairEnabled;
+            }
+            set
+            {
+                ImportToExisting(linkFlairEnabled: value);
+            }
+        }
 
         /// <summary>
         /// Whether to allow images.
         /// </summary>
-        public bool? AllowImages { get; set; }
+        public bool? AllowImages
+        {
+            get
+            {
+                return SubredditData?.AllowImages;
+            }
+            set
+            {
+                ImportToExisting(allowImages: value);
+            }
+        }
 
         /// <summary>
         /// How many minutes to hide comment scores.
         /// </summary>
-        public int? CommentScoreHideMins { get; set; }
+        public int? CommentScoreHideMins
+        {
+            get
+            {
+                return SubredditData?.CommentScoreHideMins;
+            }
+            set
+            {
+                ImportToExisting(commentScoreHideMins: value);
+            }
+        }
 
         /// <summary>
         /// Whether to show media previews.
         /// </summary>
-        public bool? ShowMediaPreview { get; set; }
+        public bool? ShowMediaPreview
+        {
+            get
+            {
+                return SubredditData?.ShowMediaPreview;
+            }
+            set
+            {
+                ImportToExisting(showMediaPreview: value);
+            }
+        }
 
         /// <summary>
         /// The submission type.
         /// </summary>
-        public string SubmissionType { get; set; }
+        public string SubmissionType
+        {
+            get
+            {
+                return SubredditData?.SubmissionType;
+            }
+            set
+            {
+                ImportToExisting(submissionType: value);
+            }
+        }
 
         /// <summary>
         /// Full subreddit data retrieved from the API.
@@ -230,22 +630,86 @@ namespace Reddit.Controllers
         /// <summary>
         /// Posts belonging to this subreddit.
         /// </summary>
-        public SubredditPosts Posts { get; set; }
+        public SubredditPosts Posts
+        {
+            get
+            {
+                if (posts == null)
+                {
+                    posts = new SubredditPosts(Dispatch, Name);
+                }
+
+                return posts;
+            }
+            set
+            {
+                posts = value;
+            }
+        }
+        private SubredditPosts posts;
 
         /// <summary>
         /// Comments belonging to this subreddit.
         /// </summary>
-        public Comments Comments { get; set; }
+        public Comments Comments
+        {
+            get
+            {
+                if (comments == null)
+                {
+                    comments = new Comments(Dispatch, subreddit: Name);
+                }
+
+                return comments;
+            }
+            set
+            {
+                comments = value;
+            }
+        }
+        private Comments comments;
 
         /// <summary>
         /// Flairs belonging to this subreddit.
         /// </summary>
-        public Flairs Flairs { get; set; }
+        public Flairs Flairs
+        {
+            get
+            {
+                if (flairs == null)
+                {
+                    flairs = new Flairs(Dispatch, Name);
+                }
+
+                return flairs;
+            }
+            set
+            {
+                flairs = value;
+            }
+        }
+        private Flairs flairs;
 
         /// <summary>
         /// The subreddit wiki controller.
         /// </summary>
-        public Wiki Wiki { get; set; }
+        public Wiki Wiki
+        {
+            get
+            {
+                if (wiki == null)
+                {
+                    wiki = new Wiki(Dispatch, Name);
+                }
+
+                return wiki;
+            }
+            set
+            {
+                wiki = value;
+            }
+        }
+        private Wiki wiki;
 
         internal Dispatch Dispatch;
 
@@ -300,10 +764,6 @@ namespace Reddit.Controllers
             ImportFromModel(subreddit);
 
             SubredditData = subreddit;
-            Posts = new SubredditPosts(Dispatch, Name);
-            Comments = new Comments(Dispatch, subreddit: Name);
-            Flairs = new Flairs(Dispatch, Name);
-            Wiki = new Wiki(Dispatch, Name);
         }
 
         /// <summary>
@@ -318,10 +778,6 @@ namespace Reddit.Controllers
             ImportFromModel(subredditChild.Data);
 
             SubredditData = subredditChild.Data;
-            Posts = new SubredditPosts(Dispatch, Name);
-            Comments = new Comments(Dispatch, subreddit: Name);
-            Flairs = new Flairs(Dispatch, Name);
-            Wiki = new Wiki(Dispatch, Name);
         }
 
         /// <summary>
@@ -382,12 +838,6 @@ namespace Reddit.Controllers
             SetValues(name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
                 wikiEnabled, over18, allowDiscovery, allowSpoilers, showMedia, showMediaPreview, allowImages, allowVideos, collapseDeletedComments,
                 suggestedCommentSort, commentScoreHideMins, headerImage, iconImage, primaryColor, keyColor, fullname);
-
-            UpdateSubredditData();
-            Posts = new SubredditPosts(Dispatch, Name);
-            Comments = new Comments(Dispatch, subreddit: Name);
-            Flairs = new Flairs(Dispatch, Name);
-            Wiki = new Wiki(Dispatch, Name);
         }
 
         /// <summary>
@@ -398,55 +848,11 @@ namespace Reddit.Controllers
             : base()
         {
             Dispatch = dispatch;
-            Posts = new SubredditPosts(Dispatch, Name);
-            Comments = new Comments(Dispatch, subreddit: Name);
-            Flairs = new Flairs(Dispatch, Name);
-            Wiki = new Wiki(Dispatch, Name);
         }
 
         private void ImportFromModel(Things.Subreddit subreddit)
         {
-            BannerImg = subreddit.BannerImg;
-            BannerBackgroundColor = subreddit.BannerBackgroundColor;
-            BannerBackgroundImage = subreddit.BannerBackgroundImage;
-            SubredditType = subreddit.SubredditType;
-            CommunityIcon = subreddit.CommunityIcon;
-            HeaderTitle = subreddit.HeaderTitle;
-            WikiEnabled = subreddit.WikiEnabled ?? false;
-            Over18 = subreddit.Over18;
-            Sidebar = subreddit.Description;
-            Name = subreddit.DisplayName;
-            HeaderImg = subreddit.HeaderImg;
-            Title = subreddit.Title;
-            CollapseDeletedComments = subreddit.CollapseDeletedComments;
-            Id = subreddit.Id;
-            EmojisEnabled = subreddit.EmojisEnabled;
-            ShowMedia = subreddit.ShowMedia;
-            AllowVideos = subreddit.AllowVideos;
-            CanAssignUserFlair = subreddit.CanAssignUserFlair;
-            SpoilersEnabled = subreddit.SpoilersEnabled;
-            PrimaryColor = subreddit.PrimaryColor;
-            SuggestedCommentSort = subreddit.SuggestedCommentSort;
-            ActiveUserCount = subreddit.ActiveUserCount;
-            IconImg = subreddit.IconImg;
-            CanAssignLinkFlair = subreddit.CanAssignLinkFlair;
-            SubmitText = new Things.SubredditSubmitText(subreddit.SubmitText);
-            AllowVideoGifs = subreddit.AllowVideoGifs;
-            Subscribers = subreddit.Subscribers;
-            SubmitTextLabel = subreddit.SubmitTextLabel;
-            KeyColor = subreddit.KeyColor;
-            Lang = subreddit.Lang;
-            Fullname = subreddit.Name;
-            Created = subreddit.CreatedUTC;
-            URL = subreddit.URL;
-            SubmitLinkLabel = subreddit.SubmitLinkLabel;
-            AllowDiscovery = subreddit.AllowDiscovery;
-            Description = subreddit.PublicDescription;
-            LinkFlairEnabled = subreddit.LinkFlairEnabled;
-            AllowImages = subreddit.AllowImages;
-            CommentScoreHideMins = subreddit.CommentScoreHideMins;
-            ShowMediaPreview = subreddit.ShowMediaPreview;
-            SubmissionType = subreddit.SubmissionType;
+            SubredditData = subreddit;
         }
 
         /// <summary>
@@ -473,45 +879,122 @@ namespace Reddit.Controllers
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
             int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null,
-            string fullname = null)
+            string fullname = null, string bannerImg = null, string bannerBackgroundColor = null, string bannerBackgroundImage = null, 
+            string communityIcon = null, bool emojisEnabled = true, string headerTitle = null, string id = null, bool canAssignUserFlair = false, 
+            bool canAssignLinkFlair = false, int activeUserCount = 0, bool allowVideoGifs = true, int subscribers = 0, DateTime created = default(DateTime), 
+            string url = null, bool linkFlairEnabled = false)
         {
-            Name = name;
-            Title = title;
-            Description = description;
-            Sidebar = sidebar;
-            SubmitText = new Things.SubredditSubmitText(submissionText);
-            Lang = lang;
-            SubredditType = subredditType;
-            SubmissionType = submissionType;
-            SubmitLinkLabel = submitLinkLabel;
-            SubmitTextLabel = submitTextLabel;
-            WikiEnabled = wikiEnabled;
-            Over18 = over18;
-            AllowDiscovery = allowDiscovery;
-            SpoilersEnabled = allowSpoilers;
-            ShowMedia = showMedia;
-            ShowMediaPreview = showMediaPreview;
-            AllowImages = allowImages;
-            AllowVideos = allowVideos;
-            CollapseDeletedComments = collapseDeletedComments;
-            SuggestedCommentSort = suggestedCommentSort;
-            CommentScoreHideMins = commentScoreHideMins;
-            HeaderImg = headerImage;
-            IconImg = iconImage;
-            PrimaryColor = primaryColor;
-            KeyColor = keyColor;
-            Fullname = fullname;
+            SubredditData = new Things.Subreddit
+            {
+                DisplayName = name,
+                Title = title,
+                PublicDescription = description,
+                Description = sidebar,
+                SubmitText = submissionText,
+                SubmitTextHTML = submissionText,
+                Lang = lang,
+                SubredditType = subredditType,
+                SubmissionType = submissionType,
+                SubmitLinkLabel = submitLinkLabel,
+                SubmitTextLabel = submitTextLabel,
+                WikiEnabled = wikiEnabled,
+                Over18 = over18,
+                AllowDiscovery = allowDiscovery,
+                SpoilersEnabled = allowSpoilers,
+                ShowMedia = showMedia,
+                ShowMediaPreview = showMediaPreview,
+                AllowImages = allowImages,
+                AllowVideos = allowVideos,
+                CollapseDeletedComments = collapseDeletedComments,
+                SuggestedCommentSort = suggestedCommentSort,
+                CommentScoreHideMins = commentScoreHideMins,
+                HeaderImg = headerImage,
+                IconImg = iconImage,
+                PrimaryColor = primaryColor,
+                KeyColor = keyColor,
+                Name = fullname,
+                BannerImg = bannerImg,
+                BannerBackgroundColor = bannerBackgroundColor,
+                BannerBackgroundImage = bannerBackgroundImage,
+                CommunityIcon = communityIcon,
+                EmojisEnabled = emojisEnabled,
+                HeaderTitle = headerTitle,
+                Id = id,
+                CanAssignUserFlair = canAssignUserFlair,
+                CanAssignLinkFlair = canAssignLinkFlair,
+                ActiveUserCount = activeUserCount,
+                AllowVideoGifs = allowVideoGifs,
+                Subscribers = subscribers,
+                CreatedUTC = created,
+                URL = url,
+                LinkFlairEnabled = linkFlairEnabled
+            };
         }
 
-        /// <summary>
-        /// Sync the subreddit model data to this and return the result.
-        /// </summary>
-        /// <returns>Updated subreddit model instance.</returns>
-        private Things.Subreddit UpdateSubredditData()
+        private void ImportToExisting(string name = null, string title = null, string description = null, string sidebar = null,
+            string submissionText = null, string lang = null, string subredditType = null, string submissionType = null,
+            string submitLinkLabel = null, string submitTextLabel = null, bool? wikiEnabled = null, bool? over18 = null,
+            bool? allowDiscovery = null, bool? allowSpoilers = null, bool? showMedia = null, bool? showMediaPreview = null,
+            bool? allowImages = null, bool? allowVideos = null, bool? collapseDeletedComments = null, string suggestedCommentSort = null,
+            int? commentScoreHideMins = null, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null,
+            string fullname = null, string bannerImg = null, string bannerBackgroundColor = null, string bannerBackgroundImage = null,
+            string communityIcon = null, bool? emojisEnabled = null, string headerTitle = null, string id = null, bool? canAssignUserFlair = null,
+            bool? canAssignLinkFlair = null, int? activeUserCount = null, bool? allowVideoGifs = null, int? subscribers = null, DateTime? created = null,
+            string url = null, bool? linkFlairEnabled = null)
         {
-            SubredditData = new Things.Subreddit(this);
-
-            return SubredditData;
+            if (SubredditData == null)
+            {
+                SetValues(name, title, description, sidebar, submissionText, lang, subredditType, subredditType, submitLinkLabel, submitTextLabel, wikiEnabled ?? false,
+                    over18 ?? false, allowDiscovery ?? true, allowSpoilers ?? true, showMedia ?? true, showMediaPreview ?? true, allowImages ?? true, allowVideos ?? true, 
+                    collapseDeletedComments ?? false, suggestedCommentSort, commentScoreHideMins ?? 0, headerImage, iconImage, primaryColor, keyColor, fullname, 
+                    bannerImg, bannerBackgroundColor, bannerBackgroundImage, communityIcon, emojisEnabled ?? true, headerTitle, id, canAssignUserFlair ?? false, 
+                    canAssignLinkFlair ?? false, activeUserCount ?? 0, allowVideoGifs ?? true, subscribers ?? 0, created ?? default(DateTime), url, linkFlairEnabled ?? false);
+            }
+            else
+            {
+                SubredditData.DisplayName = (!string.IsNullOrEmpty(name) ? name : SubredditData.DisplayName);
+                SubredditData.Title = (!string.IsNullOrEmpty(title) ? title : SubredditData.Title);
+                SubredditData.PublicDescription = (!string.IsNullOrEmpty(description) ? description : SubredditData.PublicDescription);
+                SubredditData.Description = (!string.IsNullOrEmpty(sidebar) ? sidebar : SubredditData.Description);
+                SubredditData.SubmitText = (!string.IsNullOrEmpty(submissionText) ? submissionText : SubredditData.SubmitText);
+                SubredditData.SubmitTextHTML = (!string.IsNullOrEmpty(submissionText) ? submissionText : SubredditData.SubmitTextHTML);
+                SubredditData.Lang = (!string.IsNullOrEmpty(lang) ? lang : SubredditData.Lang);
+                SubredditData.SubredditType = (!string.IsNullOrEmpty(subredditType) ? subredditType : SubredditData.SubredditType);
+                SubredditData.SubmissionType = (!string.IsNullOrEmpty(submissionType) ? submissionType : SubredditData.SubmissionType);
+                SubredditData.SubmitLinkLabel = (!string.IsNullOrEmpty(submitLinkLabel) ? submitLinkLabel : SubredditData.SubmitLinkLabel);
+                SubredditData.SubmitTextLabel = (!string.IsNullOrEmpty(submitTextLabel) ? submitTextLabel : SubredditData.SubmitTextLabel);
+                SubredditData.WikiEnabled = (wikiEnabled ?? SubredditData.WikiEnabled);
+                SubredditData.Over18 = (over18 ?? SubredditData.Over18);
+                SubredditData.AllowDiscovery = (allowDiscovery ?? SubredditData.AllowDiscovery);
+                SubredditData.SpoilersEnabled = (allowSpoilers ?? SubredditData.SpoilersEnabled);
+                SubredditData.ShowMedia = (showMedia ?? SubredditData.ShowMedia);
+                SubredditData.ShowMediaPreview = (showMediaPreview ?? SubredditData.ShowMediaPreview);
+                SubredditData.AllowImages = (allowImages ?? SubredditData.AllowImages);
+                SubredditData.AllowVideos = (allowVideos ?? SubredditData.AllowVideos);
+                SubredditData.CollapseDeletedComments = (collapseDeletedComments ?? SubredditData.CollapseDeletedComments);
+                SubredditData.SuggestedCommentSort = (suggestedCommentSort ?? SubredditData.SuggestedCommentSort);
+                SubredditData.CommentScoreHideMins = (commentScoreHideMins ?? SubredditData.CommentScoreHideMins);
+                SubredditData.HeaderImg = (headerImage ?? SubredditData.HeaderImg);
+                SubredditData.IconImg = (iconImage ?? SubredditData.IconImg);
+                SubredditData.PrimaryColor = (!string.IsNullOrEmpty(primaryColor) ? primaryColor : SubredditData.PrimaryColor);
+                SubredditData.KeyColor = (!string.IsNullOrEmpty(keyColor) ? keyColor : SubredditData.KeyColor);
+                SubredditData.Name = (!string.IsNullOrEmpty(name) ? name : SubredditData.Name);
+                SubredditData.BannerImg = (!string.IsNullOrEmpty(bannerImg) ? bannerImg : SubredditData.BannerImg);
+                SubredditData.BannerBackgroundColor = (!string.IsNullOrEmpty(bannerBackgroundColor) ? bannerBackgroundColor : SubredditData.BannerBackgroundColor);
+                SubredditData.BannerBackgroundImage = (!string.IsNullOrEmpty(bannerBackgroundImage) ? bannerBackgroundImage : SubredditData.BannerBackgroundImage);
+                SubredditData.CommunityIcon = (!string.IsNullOrEmpty(communityIcon) ? communityIcon : SubredditData.CommunityIcon);
+                SubredditData.EmojisEnabled = (emojisEnabled ?? SubredditData.EmojisEnabled);
+                SubredditData.HeaderTitle = (!string.IsNullOrEmpty(headerTitle) ? headerTitle : SubredditData.HeaderTitle);
+                SubredditData.Id = (!string.IsNullOrEmpty(id) ? id : SubredditData.Id);
+                SubredditData.CanAssignUserFlair = (canAssignUserFlair ?? SubredditData.CanAssignUserFlair);
+                SubredditData.CanAssignLinkFlair = (canAssignLinkFlair ?? SubredditData.CanAssignLinkFlair);
+                SubredditData.ActiveUserCount = (activeUserCount ?? SubredditData.ActiveUserCount);
+                SubredditData.AllowVideoGifs = (allowVideoGifs ?? SubredditData.AllowVideoGifs);
+                SubredditData.Subscribers = (subscribers ?? SubredditData.Subscribers);
+                SubredditData.CreatedUTC = (created ?? SubredditData.CreatedUTC);
+                SubredditData.URL = (!string.IsNullOrEmpty(url) ? url : SubredditData.URL);
+                SubredditData.LinkFlairEnabled = (linkFlairEnabled ?? SubredditData.LinkFlairEnabled);
+            }
         }
 
         /// <summary>
@@ -1607,7 +2090,7 @@ namespace Reddit.Controllers
             Things.GenericContainer res;
             if (!manualUpdate)
             {
-                res = Dispatch.Subreddits.SiteAdmin(UpdateSubredditData(), allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports,
+                res = Dispatch.Subreddits.SiteAdmin(SubredditData, allowPostCrossposts, allowTop, excludeBannedModqueue, freeFormReports,
                     gRecaptchaResponse, linkType, spamComments, spamLinks, spamSelfPosts, Fullname, themeSr, themeSrUpdate, wikiMode, wikiEditAge, wikiEditKarma);
             }
             else

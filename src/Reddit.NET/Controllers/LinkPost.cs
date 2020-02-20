@@ -22,6 +22,11 @@ namespace Reddit.Controllers
             }
             set
             {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
                 Listing.Preview = value;
             }
         }
@@ -37,6 +42,11 @@ namespace Reddit.Controllers
             }
             set
             {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
                 Listing.URL = value;
             }
         }
@@ -49,6 +59,11 @@ namespace Reddit.Controllers
             }
             set
             {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
                 Listing.Thumbnail = value;
             }
         }
@@ -61,6 +76,11 @@ namespace Reddit.Controllers
             }
             set
             {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
                 Listing.ThumbnailHeight = value;
             }
         }
@@ -73,6 +93,11 @@ namespace Reddit.Controllers
             }
             set
             {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
                 Listing.ThumbnailWidth = value;
             }
         }
