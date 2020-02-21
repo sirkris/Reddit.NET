@@ -14,25 +14,100 @@ namespace Reddit.Controllers
     /// </summary>
     public class LinkPost : Post
     {
-        public JObject Preview { get; set; }
-        public string URL { get; set; }
-        public string Thumbnail { get; set; }
-        public int? ThumbnailHeight { get; set; }
-        public int? ThumbnailWidth { get; set; }
+        public JObject Preview
+        {
+            get
+            {
+                return Listing?.Preview;
+            }
+            set
+            {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
+                Listing.Preview = value;
+            }
+        }
+
+        /// <summary>
+        /// The URL the LinkPost points to.
+        /// </summary>
+        public string URL
+        {
+            get
+            {
+                return Listing?.URL;
+            }
+            set
+            {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
+                Listing.URL = value;
+            }
+        }
+
+        public string Thumbnail
+        {
+            get
+            {
+                return Listing?.Thumbnail;
+            }
+            set
+            {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
+                Listing.Thumbnail = value;
+            }
+        }
+
+        public int? ThumbnailHeight
+        {
+            get
+            {
+                return Listing?.ThumbnailHeight;
+            }
+            set
+            {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
+                Listing.ThumbnailHeight = value;
+            }
+        }
+
+        public int? ThumbnailWidth
+        {
+            get
+            {
+                return Listing?.ThumbnailWidth;
+            }
+            set
+            {
+                if (Listing == null)
+                {
+                    Listing = new Things.Post(this);
+                }
+
+                Listing.ThumbnailWidth = value;
+            }
+        }
 
         /// <summary>
         /// Create a new link post controller instance from API return data.
         /// </summary>
         /// <param name="dispatch"></param>
         /// <param name="listing"></param>
-        public LinkPost(Dispatch dispatch, Things.Post listing) : base(dispatch, listing)
-        {
-            Preview = listing.Preview;
-            URL = listing.URL;
-            Thumbnail = listing.Thumbnail;
-            ThumbnailHeight = listing.ThumbnailHeight;
-            ThumbnailWidth = listing.ThumbnailWidth;
-        }
+        public LinkPost(Dispatch dispatch, Things.Post listing) : base(dispatch, listing) { }
 
         /// <summary>
         /// Create a new link post controller instance, populated manually.

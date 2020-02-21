@@ -6,32 +6,412 @@ namespace Reddit.Controllers
 {
     public class Dispatch
     {
-        public API.Account Account { get; set; }
-        public API.Emoji Emoji { get; set; }
-        public API.Flair Flair { get; set; }
-        public API.LinksAndComments LinksAndComments { get; set; }
-        public API.Listings Listings { get; set; }
-        public API.LiveThreads LiveThreads { get; set; }
-        public API.Misc Misc { get; set; }
-        public API.Moderation Moderation { get; set; }
-        public API.Modmail Modmail { get; set; }
-        public API.Multis Multis { get; set; }
-        public API.PrivateMessages PrivateMessages { get; set; }
-        public API.RedditGold RedditGold { get; set; }
-        public API.Search Search { get; set; }
-        public API.Subreddits Subreddits { get; set; }
-        public API.Users Users { get; set; }
-        public API.Widgets Widgets { get; set; }
-        public API.Wiki Wiki { get; set; }
+        public API.Account Account
+        {
+            get
+            {
+                if (account == null)
+                {
+                    account = new API.Account(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    account.TokenUpdated += C_TokenUpdated;
+                    account.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return account;
+            }
+            set
+            {
+                account = value;
+            }
+        }
+        private API.Account account;
+
+        public API.Emoji Emoji
+        {
+            get
+            {
+                if (emoji == null)
+                {
+                    emoji = new API.Emoji(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    emoji.TokenUpdated += C_TokenUpdated;
+                    emoji.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return emoji;
+            }
+            set
+            {
+                emoji = value;
+            }
+        }
+        private API.Emoji emoji;
+
+        public API.Flair Flair
+        {
+            get
+            {
+                if (flair == null)
+                {
+                    flair = new API.Flair(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    flair.TokenUpdated += C_TokenUpdated;
+                    flair.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return flair;
+            }
+            set
+            {
+                flair = value;
+            }
+        }
+        private API.Flair flair;
+
+        public API.LinksAndComments LinksAndComments
+        {
+            get
+            {
+                if (linksAndComments == null)
+                {
+                    linksAndComments = new API.LinksAndComments(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    linksAndComments.TokenUpdated += C_TokenUpdated;
+                    linksAndComments.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return linksAndComments;
+            }
+            set
+            {
+                linksAndComments = value;
+            }
+        }
+        private API.LinksAndComments linksAndComments;
+
+        public API.Listings Listings
+        {
+            get
+            {
+                if (listings == null)
+                {
+                    listings = new API.Listings(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    listings.TokenUpdated += C_TokenUpdated;
+                    listings.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return listings;
+            }
+            set
+            {
+                listings = value;
+            }
+        }
+        private API.Listings listings;
+
+        public API.LiveThreads LiveThreads
+        {
+            get
+            {
+                if (liveThreads == null)
+                {
+                    liveThreads = new API.LiveThreads(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    liveThreads.TokenUpdated += C_TokenUpdated;
+                    liveThreads.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return liveThreads;
+            }
+            set
+            {
+                liveThreads = value;
+            }
+        }
+        private API.LiveThreads liveThreads;
+
+        public API.Misc Misc
+        {
+            get
+            {
+                if (misc == null)
+                {
+                    misc = new API.Misc(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    misc.TokenUpdated += C_TokenUpdated;
+                    misc.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return misc;
+            }
+            set
+            {
+                misc = value;
+            }
+        }
+        private API.Misc misc;
+
+        public API.Moderation Moderation
+        {
+            get
+            {
+                if (moderation == null)
+                {
+                    moderation = new API.Moderation(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    moderation.TokenUpdated += C_TokenUpdated;
+                    moderation.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return moderation;
+            }
+            set
+            {
+                moderation = value;
+            }
+        }
+        private API.Moderation moderation;
+
+        public API.Modmail Modmail
+        {
+            get
+            {
+                if (modmail == null)
+                {
+                    modmail = new API.Modmail(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    modmail.TokenUpdated += C_TokenUpdated;
+                    modmail.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return modmail;
+            }
+            set
+            {
+                modmail = value;
+            }
+        }
+        private API.Modmail modmail;
+
+        public API.Multis Multis
+        {
+            get
+            {
+                if (multis == null)
+                {
+                    multis = new API.Multis(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    multis.TokenUpdated += C_TokenUpdated;
+                    multis.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return multis;
+            }
+            set
+            {
+                multis = value;
+            }
+        }
+        private API.Multis multis;
+
+        public API.PrivateMessages PrivateMessages
+        {
+            get
+            {
+                if (privateMessages == null)
+                {
+                    privateMessages = new API.PrivateMessages(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    privateMessages.TokenUpdated += C_TokenUpdated;
+                    privateMessages.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return privateMessages;
+            }
+            set
+            {
+                privateMessages = value;
+            }
+        }
+        private API.PrivateMessages privateMessages;
+
+        public API.RedditGold RedditGold
+        {
+            get
+            {
+                if (redditGold == null)
+                {
+                    redditGold = new API.RedditGold(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    redditGold.TokenUpdated += C_TokenUpdated;
+                    redditGold.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return redditGold;
+            }
+            set
+            {
+                redditGold = value;
+            }
+        }
+        private API.RedditGold redditGold;
+
+        public API.Search Search
+        {
+            get
+            {
+                if (search == null)
+                {
+                    search = new API.Search(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    search.TokenUpdated += C_TokenUpdated;
+                    search.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return search;
+            }
+            set
+            {
+                search = value;
+            }
+        }
+        private API.Search search;
+
+        public API.Subreddits Subreddits
+        {
+            get
+            {
+                if (subreddits == null)
+                {
+                    subreddits = new API.Subreddits(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    subreddits.TokenUpdated += C_TokenUpdated;
+                    subreddits.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return subreddits;
+            }
+            set
+            {
+                subreddits = value;
+            }
+        }
+        private API.Subreddits subreddits;
+
+        public API.Users Users
+        {
+            get
+            {
+                if (users == null)
+                {
+                    users = new API.Users(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    users.TokenUpdated += C_TokenUpdated;
+                    users.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return users;
+            }
+            set
+            {
+                users = value;
+            }
+        }
+        private API.Users users;
+
+        public API.Widgets Widgets
+        {
+            get
+            {
+                if (widgets == null)
+                {
+                    widgets = new API.Widgets(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    widgets.TokenUpdated += C_TokenUpdated;
+                    widgets.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return widgets;
+            }
+            set
+            {
+                widgets = value;
+            }
+        }
+        private API.Widgets widgets;
+
+        public API.Wiki Wiki
+        {
+            get
+            {
+                if (wiki == null)
+                {
+                    wiki = new API.Wiki(AppID, AppSecret, RefreshToken, AccessToken, ref RestClient, DeviceID, UserAgent);
+
+                    wiki.TokenUpdated += C_TokenUpdated;
+                    wiki.RequestsUpdated += C_RequestsUpdated;
+                }
+
+                return wiki;
+            }
+            set
+            {
+                wiki = value;
+            }
+        }
+        private API.Wiki wiki;
 
         /// <summary>
         /// Makes the Reddit OAuth credentials accessible to the calling app.
         /// Aside from populating these values for that reason, this class is not used by the library, itself.
         /// Each model class stores these credentials internally.
         /// </summary>
-        public API.OAuthCredentials OAuthCredentials { get; set; }
+        public API.OAuthCredentials OAuthCredentials
+        {
+            get
+            {
+                if (oAuthCredentials == null)
+                {
+                    oAuthCredentials = new API.OAuthCredentials(AppID, AppSecret, RefreshToken, AccessToken, DeviceID);
+                }
 
-        internal API.Internal.Monitor Monitor { get; set; }
+                return oAuthCredentials;
+            }
+            set
+            {
+                oAuthCredentials = value;
+            }
+        }
+        private API.OAuthCredentials oAuthCredentials;
+
+        internal API.Internal.Monitor Monitor
+        {
+            get
+            {
+                if (monitor == null)
+                {
+                    monitor = new API.Internal.Monitor();
+                    monitor.MonitoringUpdated += C_MonitoringUpdated;
+                }
+
+                return monitor;
+            }
+            set
+            {
+                monitor = value;
+            }
+        }
+        private API.Internal.Monitor monitor;
+
+        private string AppID { get; set; }
+        private string AppSecret { get; set; }
+        private string RefreshToken { get; set; }
+        private string AccessToken { get; set; }
+        private RestClient RestClient;
+        private string DeviceID { get; set; }
+        private string UserAgent { get; set; }
 
         /// <summary>
         /// Instantiate endpoint singletons.
@@ -45,66 +425,13 @@ namespace Reddit.Controllers
         /// <param name="userAgent">(optional) A custom string for the User-Agent header</param>
         public Dispatch(string appId, string appSecret, string refreshToken, string accessToken, RestClient restClient, string deviceId = null, string userAgent = null)
         {
-            Account = new API.Account(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Emoji = new API.Emoji(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Flair = new API.Flair(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            LinksAndComments = new API.LinksAndComments(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Listings = new API.Listings(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            LiveThreads = new API.LiveThreads(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Misc = new API.Misc(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Moderation = new API.Moderation(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Modmail = new API.Modmail(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Multis = new API.Multis(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            PrivateMessages = new API.PrivateMessages(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            RedditGold = new API.RedditGold(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Search = new API.Search(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Subreddits = new API.Subreddits(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Users = new API.Users(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Widgets = new API.Widgets(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-            Wiki = new API.Wiki(appId, appSecret, refreshToken, accessToken, ref restClient, deviceId, userAgent);
-
-            Monitor = new API.Internal.Monitor();
-
-            OAuthCredentials = new API.OAuthCredentials(appId, appSecret, refreshToken, accessToken, deviceId);
-
-            Account.TokenUpdated += C_TokenUpdated;
-            Emoji.TokenUpdated += C_TokenUpdated;
-            Flair.TokenUpdated += C_TokenUpdated;
-            LinksAndComments.TokenUpdated += C_TokenUpdated;
-            Listings.TokenUpdated += C_TokenUpdated;
-            LiveThreads.TokenUpdated += C_TokenUpdated;
-            Misc.TokenUpdated += C_TokenUpdated;
-            Moderation.TokenUpdated += C_TokenUpdated;
-            Modmail.TokenUpdated += C_TokenUpdated;
-            Multis.TokenUpdated += C_TokenUpdated;
-            OAuthCredentials.TokenUpdated += C_TokenUpdated;
-            PrivateMessages.TokenUpdated += C_TokenUpdated;
-            RedditGold.TokenUpdated += C_TokenUpdated;
-            Search.TokenUpdated += C_TokenUpdated;
-            Subreddits.TokenUpdated += C_TokenUpdated;
-            Users.TokenUpdated += C_TokenUpdated;
-            Widgets.TokenUpdated += C_TokenUpdated;
-            Wiki.TokenUpdated += C_TokenUpdated;
-
-            Account.RequestsUpdated += C_RequestsUpdated;
-            Emoji.RequestsUpdated += C_RequestsUpdated;
-            Flair.RequestsUpdated += C_RequestsUpdated;
-            LinksAndComments.RequestsUpdated += C_RequestsUpdated;
-            Listings.RequestsUpdated += C_RequestsUpdated;
-            LiveThreads.RequestsUpdated += C_RequestsUpdated;
-            Misc.RequestsUpdated += C_RequestsUpdated;
-            Moderation.RequestsUpdated += C_RequestsUpdated;
-            Modmail.RequestsUpdated += C_RequestsUpdated;
-            Multis.RequestsUpdated += C_RequestsUpdated;
-            PrivateMessages.RequestsUpdated += C_RequestsUpdated;
-            RedditGold.RequestsUpdated += C_RequestsUpdated;
-            Search.RequestsUpdated += C_RequestsUpdated;
-            Subreddits.RequestsUpdated += C_RequestsUpdated;
-            Users.RequestsUpdated += C_RequestsUpdated;
-            Widgets.RequestsUpdated += C_RequestsUpdated;
-            Wiki.RequestsUpdated += C_RequestsUpdated;
-
-            Monitor.MonitoringUpdated += C_MonitoringUpdated;
+            AppID = appId;
+            AppSecret = appSecret;
+            RefreshToken = refreshToken;
+            AccessToken = accessToken;
+            RestClient = restClient;
+            DeviceID = deviceId;
+            UserAgent = userAgent;
         }
 
         public void C_TokenUpdated(object sender, TokenUpdateEventArgs e)

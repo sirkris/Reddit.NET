@@ -78,7 +78,7 @@ namespace Reddit.Things
             Resources = liveThread.Resources;
             Title = liveThread.Title;
             TotalViews = liveThread.TotalViews;
-            CreatedUTC = liveThread.Created;
+            CreatedUTC = (liveThread.Created ?? default(DateTime));
             Name = liveThread.Fullname;
             WebsocketURL = liveThread.WebsocketURL;
             AnnouncementURL = liveThread.AnnouncementURL;
