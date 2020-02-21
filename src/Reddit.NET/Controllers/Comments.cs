@@ -365,7 +365,7 @@ namespace Reddit.Controllers
 
             Comment = comment;
 
-            SubKey = comment?.Fullname != null ? comment.Fullname : subreddit;
+            SubKey = comment?.Fullname != null ? comment.Fullname : (!string.IsNullOrEmpty(PostId) ? "t3_" + PostId : subreddit);
         }
 
         /// <summary>
