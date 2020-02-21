@@ -1,5 +1,15 @@
 var NAVTREEINDEX9 =
 {
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#a902b2968b343231ee55fc2ec258e1c85":[1,0,0,3,2,1,2],
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#a986de7b668c90a0614fa0ea23ef0f5bd":[1,0,0,3,2,1,12],
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#aaab5fc2376616a1d1129273d96adf8da":[1,0,0,3,2,1,16],
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#aab76f110a34d4ac3a4efc421b75bac34":[1,0,0,3,2,1,23],
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#aab7a5286e75c378e621ce90a948ecffc":[1,0,0,3,2,1,0],
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#ab24b49f841ede833d31ff2e04be1c107":[1,0,0,3,2,1,26],
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#ab545e4a69c29967fc95de6cb32710c71":[1,0,0,3,2,1,9],
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#ab913150c8f80bc0ca7037c7d3323f24b":[1,0,0,3,2,1,25],
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#aba2514589bce74c2ee8d961d87e23bda":[1,0,0,3,2,1,24],
+"class_reddit_1_1_models_1_1_internal_1_1_request.html#ada5b082c9957ee968dbc58034022652f":[1,0,0,3,2,1,4],
 "class_reddit_1_1_models_1_1_internal_1_1_request.html#ae10d6f72314c1b662cce3f002b8d6414":[1,0,0,3,2,1,13],
 "class_reddit_1_1_models_1_1_internal_1_1_request.html#ae17415f5cb8c9e25fb4086842db73fe4":[1,0,0,3,2,1,22],
 "class_reddit_1_1_models_1_1_internal_1_1_request.html#aeca53af761616c88426ce2958c2a6ff7":[1,0,0,3,2,1,1],
@@ -239,15 +249,5 @@ var NAVTREEINDEX9 =
 "class_reddit_1_1_models_1_1_reddit_gold.html#ab58f4caebf034d160aae839bfefffb5e":[1,0,0,3,16,3],
 "class_reddit_1_1_models_1_1_reddit_gold.html#accb421a1031ac3dd83444fad6edc4239":[1,0,0,3,16,2],
 "class_reddit_1_1_models_1_1_search.html":[1,0,0,3,17],
-"class_reddit_1_1_models_1_1_search.html#a24df37580e60fe0eef6521bbe67c6014":[1,0,0,3,17,0],
-"class_reddit_1_1_models_1_1_search.html#a2bee4b34bb7cd6843cf6c5001f2bdd8e":[1,0,0,3,17,3],
-"class_reddit_1_1_models_1_1_search.html#a2f7bf704e477dc8983c0bcc7a4a06a4c":[1,0,0,3,17,2],
-"class_reddit_1_1_models_1_1_search.html#a66e648dacb1766950bcc2fb208968cc8":[1,0,0,3,17,4],
-"class_reddit_1_1_models_1_1_search.html#a6e450230aea9e2f02808ad7b30283194":[1,0,0,3,17,6],
-"class_reddit_1_1_models_1_1_search.html#acaf85ba38ea784759d8206ef39e3de42":[1,0,0,3,17,5],
-"class_reddit_1_1_models_1_1_search.html#af1f328a5310d6e3a12a9923c6007c6fe":[1,0,0,3,17,1],
-"class_reddit_1_1_models_1_1_subreddits.html":[1,0,0,3,18],
-"class_reddit_1_1_models_1_1_subreddits.html#a00fa568e0fa6789bc5df46800d4e98e3":[1,0,0,3,18,1],
-"class_reddit_1_1_models_1_1_subreddits.html#a0b231af98d10c9a2ed2385adf88ef20c":[1,0,0,3,18,24],
-"class_reddit_1_1_models_1_1_subreddits.html#a17ec41fbc2580866a616253a58b4aaa7":[1,0,0,3,18,2]
+"class_reddit_1_1_models_1_1_search.html#a24df37580e60fe0eef6521bbe67c6014":[1,0,0,3,17,0]
 };

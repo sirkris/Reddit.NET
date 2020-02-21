@@ -1,0 +1,26 @@
+var namespace_reddit_1_1_exceptions =
+[
+    [ "RedditAlreadyModeratorException", "class_reddit_1_1_exceptions_1_1_reddit_already_moderator_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_already_moderator_exception" ],
+    [ "RedditAlreadySubmittedException", "class_reddit_1_1_exceptions_1_1_reddit_already_submitted_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_already_submitted_exception" ],
+    [ "RedditBadGatewayException", "class_reddit_1_1_exceptions_1_1_reddit_bad_gateway_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_bad_gateway_exception" ],
+    [ "RedditBadRequestException", "class_reddit_1_1_exceptions_1_1_reddit_bad_request_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_bad_request_exception" ],
+    [ "RedditConflictException", "class_reddit_1_1_exceptions_1_1_reddit_conflict_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_conflict_exception" ],
+    [ "RedditControllerException", "class_reddit_1_1_exceptions_1_1_reddit_controller_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_controller_exception" ],
+    [ "RedditException", "class_reddit_1_1_exceptions_1_1_reddit_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_exception" ],
+    [ "RedditForbiddenException", "class_reddit_1_1_exceptions_1_1_reddit_forbidden_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_forbidden_exception" ],
+    [ "RedditGatewayTimeoutException", "class_reddit_1_1_exceptions_1_1_reddit_gateway_timeout_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_gateway_timeout_exception" ],
+    [ "RedditInternalServerErrorException", "class_reddit_1_1_exceptions_1_1_reddit_internal_server_error_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_internal_server_error_exception" ],
+    [ "RedditInvalidOptionException", "class_reddit_1_1_exceptions_1_1_reddit_invalid_option_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_invalid_option_exception" ],
+    [ "RedditInvalidPermissionTypeException", "class_reddit_1_1_exceptions_1_1_reddit_invalid_permission_type_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_invalid_permission_type_exception" ],
+    [ "RedditMonitoringException", "class_reddit_1_1_exceptions_1_1_reddit_monitoring_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_monitoring_exception" ],
+    [ "RedditNoResponseException", "class_reddit_1_1_exceptions_1_1_reddit_no_response_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_no_response_exception" ],
+    [ "RedditNotFoundException", "class_reddit_1_1_exceptions_1_1_reddit_not_found_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_not_found_exception" ],
+    [ "RedditRateLimitException", "class_reddit_1_1_exceptions_1_1_reddit_rate_limit_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_rate_limit_exception" ],
+    [ "RedditServiceUnavailableException", "class_reddit_1_1_exceptions_1_1_reddit_service_unavailable_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_service_unavailable_exception" ],
+    [ "RedditSubredditExistsException", "class_reddit_1_1_exceptions_1_1_reddit_subreddit_exists_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_subreddit_exists_exception" ],
+    [ "RedditTooLongException", "class_reddit_1_1_exceptions_1_1_reddit_too_long_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_too_long_exception" ],
+    [ "RedditUnauthorizedException", "class_reddit_1_1_exceptions_1_1_reddit_unauthorized_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_unauthorized_exception" ],
+    [ "RedditUnprocessableEntityException", "class_reddit_1_1_exceptions_1_1_reddit_unprocessable_entity_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_unprocessable_entity_exception" ],
+    [ "RedditUserBlockedException", "class_reddit_1_1_exceptions_1_1_reddit_user_blocked_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_user_blocked_exception" ],
+    [ "RedditUserRequiredException", "class_reddit_1_1_exceptions_1_1_reddit_user_required_exception.html", "class_reddit_1_1_exceptions_1_1_reddit_user_required_exception" ]
+];
