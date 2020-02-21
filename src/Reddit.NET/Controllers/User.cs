@@ -507,8 +507,6 @@ namespace Reddit.Controllers
             Import(user.Name, user.Id, user.IsFriend, user.PrefNoProfanity, user.IsSuspended, user.HasGoldSubscription, user.NumFriends,
                 user.Verified, user.NewModmailExists, user.Over18, user.IsGold, user.IsMod, user.HasVerifiedEmail, user.IconImg, user.HasModMail,
                 user.LinkKarma, user.InboxCount, user.HasMail, user.CreatedUTC, user.CommentKarma, user.HasSubscribed);
-
-            UserData = user;
         }
 
         private void Import(User user)
@@ -516,8 +514,6 @@ namespace Reddit.Controllers
             Import(user.Name, user.Id, user.IsFriend, user.ProfanityFilter, user.IsSuspended, user.HasGoldSubscription, user.NumFriends,
                 user.IsVerified, user.HasNewModmail, user.Over18, user.IsGold, user.IsMod, user.HasVerifiedEmail, user.IconImg, user.HasModmail,
                 user.LinkKarma, user.InboxCount, user.HasMail, user.Created, user.CommentKarma, user.HasSubscribed);
-
-            UserData = user.UserData;
         }
 
         private void Import(string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
@@ -592,7 +588,7 @@ namespace Reddit.Controllers
         /// </summary>
         private void CheckFullname()
         {
-            if (Fullname == null)
+            if (string.IsNullOrEmpty(Fullname))
             {
                 if (string.IsNullOrWhiteSpace(Name))
                 {
