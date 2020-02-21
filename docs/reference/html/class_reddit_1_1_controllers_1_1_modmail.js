@@ -31,7 +31,7 @@ var class_reddit_1_1_controllers_1_1_modmail =
     [ "MonitorUser", "class_reddit_1_1_controllers_1_1_modmail.html#a73277211c45fb9534d1d44458a9f4085", null ],
     [ "Mute", "class_reddit_1_1_controllers_1_1_modmail.html#a881a841e7bb8f8c17e434f9a5e272dd2", null ],
     [ "MuteAsync", "class_reddit_1_1_controllers_1_1_modmail.html#ab52de2cb05c9ee3fbc46fe29bccfb934", null ],
-    [ "NewConversation", "class_reddit_1_1_controllers_1_1_modmail.html#ab714e825eacc144cf370f2c4b15e900b", null ],
+    [ "NewConversation", "class_reddit_1_1_controllers_1_1_modmail.html#acf08cbc858d60b503d2e72621b93bae4", null ],
     [ "NewConversation", "class_reddit_1_1_controllers_1_1_modmail.html#a54cdb3bcc4fab6be51c2b955a4a98285", null ],
     [ "NewConversationAsync", "class_reddit_1_1_controllers_1_1_modmail.html#a8fa07e6ce042a05d36824f6283b961d2", null ],
     [ "NewConversationAsync", "class_reddit_1_1_controllers_1_1_modmail.html#a90eb037fe11a11e784fbd9f3b2151cb0", null ],

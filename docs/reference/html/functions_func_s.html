@@ -31,7 +31,7 @@
   <td id="projectlogo"><img alt="Logo" src="Logo.gif"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">Reddit.NET
-   &#160;<span id="projectnumber">1.3.0</span>
+   &#160;<span id="projectnumber">1.4.0</span>
    </div>
    <div id="projectbrief">Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required.</div>
   </td>
@@ -118,13 +118,13 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 </li>
 <li>Scopes()
 : <a class="el" href="class_reddit_1_1_models_1_1_misc.html#a1c736e599ebd0030290285bf3cfa188f">Reddit.Models.Misc</a>
-, <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#a88f13a2867be9a60664fb6e0cb85a8b8">Reddit.RedditAPI</a>
+, <a class="el" href="class_reddit_1_1_reddit_client.html#a37014f6e9246b270286a55156aa18976">Reddit.RedditClient</a>
 </li>
 <li>Search()
 : <a class="el" href="class_reddit_1_1_controllers_1_1_subreddit.html#a6c6d77074a9a6ab60b7142e343b1f0f3">Reddit.Controllers.Subreddit</a>
 , <a class="el" href="class_reddit_1_1_models_1_1_search.html#a24df37580e60fe0eef6521bbe67c6014">Reddit.Models.Search</a>
 , <a class="el" href="class_reddit_1_1_models_1_1_subreddits.html#adf74d9c711d90c6437770caf87e27daf">Reddit.Models.Subreddits</a>
-, <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#a171cb8bc9b84c13327e47f800c1a4797">Reddit.RedditAPI</a>
+, <a class="el" href="class_reddit_1_1_reddit_client.html#ad17e126a4ec90d8e1c3d4134bac0d295">Reddit.RedditClient</a>
 </li>
 <li>Search&lt; T &gt;()
 : <a class="el" href="class_reddit_1_1_models_1_1_subreddits.html#a6074ae2c7dfa93b58098ae5665a221bd">Reddit.Models.Subreddits</a>
@@ -140,19 +140,19 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 </li>
 <li>SearchRedditNames()
 : <a class="el" href="class_reddit_1_1_models_1_1_subreddits.html#a1c8b555a1785959bd846754ce2ef816f">Reddit.Models.Subreddits</a>
-, <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#a98878992323ae6eee635e6dea59e9f10">Reddit.RedditAPI</a>
+, <a class="el" href="class_reddit_1_1_reddit_client.html#a24955e4b0d12ec9799a5ed87f4bd3b93">Reddit.RedditClient</a>
 </li>
 <li>SearchSubredditNames()
-: <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#af79f42c8bc3be53b9520b164d5593b17">Reddit.RedditAPI</a>
+: <a class="el" href="class_reddit_1_1_reddit_client.html#adc1bd4eeceaa3a1fc0462263464b5d98">Reddit.RedditClient</a>
 </li>
 <li>SearchSubreddits()
 : <a class="el" href="class_reddit_1_1_models_1_1_search.html#a66e648dacb1766950bcc2fb208968cc8">Reddit.Models.Search</a>
 , <a class="el" href="class_reddit_1_1_models_1_1_subreddits.html#a2f5f40e6844f785698f87f5a305fdd16">Reddit.Models.Subreddits</a>
-, <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#a1d5b3da52512d5696f3e7536ce32c0ac">Reddit.RedditAPI</a>
+, <a class="el" href="class_reddit_1_1_reddit_client.html#a408e888a8719471cd8afa183e7e81f5e">Reddit.RedditClient</a>
 </li>
 <li>SearchUsers()
 : <a class="el" href="class_reddit_1_1_models_1_1_search.html#acaf85ba38ea784759d8206ef39e3de42">Reddit.Models.Search</a>
-, <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#acb9142279a0c465796c38342b70bfe80">Reddit.RedditAPI</a>
+, <a class="el" href="class_reddit_1_1_reddit_client.html#a7b41453fea121d1b7a6f3186a048b884">Reddit.RedditClient</a>
 </li>
 <li>SelectFlair()
 : <a class="el" href="class_reddit_1_1_models_1_1_flair.html#a04655f2d9f87821892d002bc920b75cd">Reddit.Models.Flair</a>
@@ -163,7 +163,7 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 <li>SelfPost()
 : <a class="el" href="class_reddit_1_1_controllers_1_1_self_post.html#a2f12f25c0b987a2ab4b5909a9834fab6">Reddit.Controllers.SelfPost</a>
 , <a class="el" href="class_reddit_1_1_controllers_1_1_subreddit.html#ad7b5e440d078991a981e1986fad2e328">Reddit.Controllers.Subreddit</a>
-, <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#a94af5bbaa5689024a3955572ff7f4fc8">Reddit.RedditAPI</a>
+, <a class="el" href="class_reddit_1_1_reddit_client.html#a7c3381246d7c4d5e1fbf847a06d59006">Reddit.RedditClient</a>
 </li>
 <li>SendReplies()
 : <a class="el" href="class_reddit_1_1_models_1_1_links_and_comments.html#a6d4ab8f6913991f0188b7a7696c35dd3">Reddit.Models.LinksAndComments</a>
@@ -326,16 +326,16 @@ $(document).ready(function(){initNavTree('functions_func_s.html','');});
 </li>
 <li>Subreddit()
 : <a class="el" href="class_reddit_1_1_controllers_1_1_subreddit.html#a9f43c0fddd3d53ef5c6eaef81b28a23d">Reddit.Controllers.Subreddit</a>
-, <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#a5a7e156c42e9e39d0e3c9e453a6001ff">Reddit.RedditAPI</a>
+, <a class="el" href="class_reddit_1_1_reddit_client.html#aced65fb79dfee7fdcc2ddeec8fad24a9">Reddit.RedditClient</a>
 , <a class="el" href="class_reddit_1_1_things_1_1_subreddit.html#a1c335009dc9e12fc391c65f1a65a10ed">Reddit.Things.Subreddit</a>
 </li>
 <li>SubredditAutocomplete()
 : <a class="el" href="class_reddit_1_1_models_1_1_subreddits.html#aacdb8a9659da164c8223fd3c28902679">Reddit.Models.Subreddits</a>
-, <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#a091f325b69d22ad58cfef63cd4bd81cf">Reddit.RedditAPI</a>
+, <a class="el" href="class_reddit_1_1_reddit_client.html#af08d006642117cc513991306fcf4577f">Reddit.RedditClient</a>
 </li>
 <li>SubredditAutocompleteV2()
 : <a class="el" href="class_reddit_1_1_models_1_1_subreddits.html#ac540c88e52dd28de9fc2d8c9d63e8e43">Reddit.Models.Subreddits</a>
-, <a class="el" href="class_reddit_1_1_reddit_a_p_i.html#a034eb5d18c2df49334c782be6f63b64a">Reddit.RedditAPI</a>
+, <a class="el" href="class_reddit_1_1_reddit_client.html#a4b494631e6a63734b1cd106c9ddcd472">Reddit.RedditClient</a>
 </li>
 <li>SubredditName()
 : <a class="el" href="class_reddit_1_1_things_1_1_subreddit_name.html#a48e111c265a7bc3c932bf12d96d0acf5">Reddit.Things.SubredditName</a>

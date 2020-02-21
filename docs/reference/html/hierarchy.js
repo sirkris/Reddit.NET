@@ -297,7 +297,9 @@ var hierarchy =
     [ "Reddit.Things.PostResultShortData", "class_reddit_1_1_things_1_1_post_result_short_data.html", null ],
     [ "Reddit.Controllers.EventArgs.PostsUpdateEventArgs", "class_reddit_1_1_controllers_1_1_event_args_1_1_posts_update_event_args.html", null ],
     [ "Reddit.Controllers.EventArgs.PostUpdateEventArgs", "class_reddit_1_1_controllers_1_1_event_args_1_1_post_update_event_args.html", null ],
-    [ "Reddit.RedditAPI", "class_reddit_1_1_reddit_a_p_i.html", null ],
+    [ "Reddit.RedditClient", "class_reddit_1_1_reddit_client.html", [
+      [ "Reddit.RedditAPI", "class_reddit_1_1_reddit_a_p_i.html", null ]
+    ] ],
     [ "Reddit.Models.Internal.Request", "class_reddit_1_1_models_1_1_internal_1_1_request.html", [
       [ "Reddit.Models.BaseModel", "class_reddit_1_1_models_1_1_base_model.html", [
         [ "Reddit.Models.Account", "class_reddit_1_1_models_1_1_account.html", null ],
