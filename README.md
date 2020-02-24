@@ -421,6 +421,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 #### [Use a Permalink to Retrieve a Reddit Post](docs/examples/cs/Get%20Post%20From%20Permalink.md)
 
 #### [Retrieve a LinkPost URL or SelfPost Body From a Reddit Post](docs/examples/cs/Get%20LinkPost%20URL%20%26%20SelfPost%20Body%20From%20Post.md)
+
+#### [Get the Front Page](docs/examples/cs/Front%20Page%20Posts.md)
  
 For more examples, check out the Example and Reddit.NETTests projects.
 
