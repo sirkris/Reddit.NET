@@ -5,7 +5,7 @@
     <Version>1.4.0</Version>
     <AssemblyVersion>1.4.0.0</AssemblyVersion>
     <FileVersion>1.4.0.0</FileVersion>
-    <PackageReleaseNotes>https://www.reddit.com/r/csharp/comments/e1eybd/announcing_the_release_of_redditnet_13/</PackageReleaseNotes>
+    <PackageReleaseNotes>https://www.reddit.com/r/redditdev/comments/f8o240/announcing_the_release_of_redditnet_14/</PackageReleaseNotes>
     <Title>Reddit.NET</Title>
     <PackageId>Reddit</PackageId>
     <Authors>Kris Craig</Authors>
