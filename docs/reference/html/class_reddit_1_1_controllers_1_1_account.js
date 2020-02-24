@@ -30,6 +30,6 @@ var class_reddit_1_1_controllers_1_1_account =
     [ "Dispatch", "class_reddit_1_1_controllers_1_1_account.html#a78c5389f3b64f78f57b87480c2e611db", null ],
     [ "Me", "class_reddit_1_1_controllers_1_1_account.html#ad4218ffbb54f1df9a0e13ab2388d11b7", null ],
     [ "MeLastUpdated", "class_reddit_1_1_controllers_1_1_account.html#adc5a3fd3a9e4e038c1f3419d8215a66b", null ],
-    [ "Messages", "class_reddit_1_1_controllers_1_1_account.html#a634021185dd43a49b4df13aff84043dd", null ],
-    [ "Modmail", "class_reddit_1_1_controllers_1_1_account.html#afdb4d2d8a5794cde6f48e91e90f937c4", null ]
+    [ "Messages", "class_reddit_1_1_controllers_1_1_account.html#a4b46f480e6a4991eefca2e11aeb6ef57", null ],
+    [ "Modmail", "class_reddit_1_1_controllers_1_1_account.html#a67b56e7b6d86cae122f3ef0d7c696a25", null ]
 ];

@@ -5,5 +5,6 @@ var namespace_reddit =
     [ "Inputs", "namespace_reddit_1_1_inputs.html", "namespace_reddit_1_1_inputs" ],
     [ "Models", "namespace_reddit_1_1_models.html", "namespace_reddit_1_1_models" ],
     [ "Things", "namespace_reddit_1_1_things.html", "namespace_reddit_1_1_things" ],
-    [ "RedditAPI", "class_reddit_1_1_reddit_a_p_i.html", "class_reddit_1_1_reddit_a_p_i" ]
+    [ "RedditAPI", "class_reddit_1_1_reddit_a_p_i.html", "class_reddit_1_1_reddit_a_p_i" ],
+    [ "RedditClient", "class_reddit_1_1_reddit_client.html", "class_reddit_1_1_reddit_client" ]
 ];

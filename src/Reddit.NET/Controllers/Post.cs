@@ -31,67 +31,226 @@ namespace Reddit.Controllers
         /// <summary>
         /// The subreddit in which the post exists.
         /// </summary>
-        public string Subreddit { get; set; }
+        public string Subreddit
+        {
+            get
+            {
+                return Listing?.Subreddit;
+            }
+            set
+            {
+                ImportToExisting(subreddit: value);
+            }
+        }
 
         /// <summary>
         /// The username of the post author.
         /// </summary>
-        public string Author { get; set; }
+        public string Author
+        {
+            get
+            {
+                return Listing?.Author;
+            }
+            set
+            {
+                ImportToExisting(author: value);
+            }
+        }
+
 
         /// <summary>
         /// The ID36 of the post.
         /// </summary>
-        public string Id { get; set; }
+        public string Id
+        {
+            get
+            {
+                return (string.IsNullOrEmpty(id) && !string.IsNullOrEmpty(fullname)
+                    ? fullname.Substring(3)
+                    : id);
+            }
+            set
+            {
+                id = value;
+            }
+        }
+        private string id
+        {
+            get
+            {
+                return Listing?.Id;
+            }
+            set
+            {
+                ImportToExisting(id: value);
+            }
+        }
+
 
         /// <summary>
         /// The fullname of the post.
         /// </summary>
-        public string Fullname { get; set; }
+        public string Fullname
+        {
+            get
+            {
+                return (string.IsNullOrEmpty(fullname) && !string.IsNullOrEmpty(id)
+                    ? "t3_" + id
+                    : fullname);
+            }
+            set
+            {
+                fullname = value;
+            }
+        }
+        private string fullname
+        {
+            get
+            {
+                return Listing?.Name;
+            }
+            set
+            {
+                ImportToExisting(fullname: value);
+            }
+        }
+
 
         /// <summary>
         /// The permalink URL of the post.
         /// </summary>
-        public string Permalink { get; set; }
+        public string Permalink
+        {
+            get
+            {
+                return Listing?.Permalink;
+            }
+            set
+            {
+                ImportToExisting(permalink: value);
+            }
+        }
 
         /// <summary>
         /// When the post was created.
         /// </summary>
-        public DateTime Created { get; set; }
+        public DateTime Created
+        {
+            get
+            {
+                return (Listing != null ? Listing.CreatedUTC : default(DateTime));
+            }
+            set
+            {
+                ImportToExisting(created: value);
+            }
+        }
 
         /// <summary>
         /// When the post was last edited.
         /// </summary>
-        public DateTime Edited { get; set; }
+        public DateTime Edited
+        {
+            get
+            {
+                return (Listing != null ? Listing.Edited : default(DateTime));
+            }
+            set
+            {
+                ImportToExisting(edited: value);
+            }
+        }
 
         /// <summary>
         /// Whether the post was removed.
         /// </summary>
-        public bool Removed { get; set; }
+        public bool Removed
+        {
+            get
+            {
+                return (Listing != null ? Listing.Removed : false);
+            }
+            set
+            {
+                ImportToExisting(removed: value);
+            }
+        }
 
         /// <summary>
         /// Whether the post was marked as spam.
         /// </summary>
-        public bool Spam { get; set; }
+        public bool Spam
+        {
+            get
+            {
+                return (Listing != null ? Listing.Spam : false);
+            }
+            set
+            {
+                ImportToExisting(spam: value);
+            }
+        }
 
         /// <summary>
         /// Whether the post was marked as NSFW.
         /// </summary>
-        public bool NSFW { get; set; }
+        public bool NSFW
+        {
+            get
+            {
+                return (Listing != null ? Listing.Over18 : false);
+            }
+            set
+            {
+                ImportToExisting(nsfw: value);
+            }
+        }
 
         /// <summary>
         /// The post score.
         /// </summary>
-        public int Score { get; set; }
+        public int Score
+        {
+            get
+            {
+                return (Listing != null ? Listing.Score : 0);
+            }
+            set
+            {
+                ImportToExisting(score: value);
+            }
+        }
 
         /// <summary>
         /// The number of upvotes received.
         /// </summary>
-        public int UpVotes { get; set; }
+        public int UpVotes
+        {
+            get
+            {
+                return (Listing != null ? Listing.Ups : 0);
+            }
+            set
+            {
+                ImportToExisting(upVotes: value);
+            }
+        }
 
         /// <summary>
         /// The number of upvotes received divided by the total number of votes.
         /// </summary>
-        public double UpvoteRatio { get; set; }
+        public double UpvoteRatio
+        {
+            get
+            {
+                return (Listing != null ? Listing.UpvoteRatio : 0);
+            }
+            set
+            {
+                ImportToExisting(upvoteRatio: value);
+            }
+        }
 
 
         /// <summary>
@@ -121,7 +280,23 @@ namespace Reddit.Controllers
         /// <summary>
         /// Any awards applied to the post.
         /// </summary>
-        public Awards Awards { get; set; }
+        public Awards Awards
+        {
+            get
+            {
+                if (awards == null)
+                {
+                    awards = new Awards(Listing);
+                }
+
+                return awards;
+            }
+            set
+            {
+                awards = value;
+            }
+        }
+        private Awards awards;
 
         // API no longer returns a value for "downs", so let's just calculate it, instead.  --Kris
         /// <summary>
@@ -157,7 +332,17 @@ namespace Reddit.Controllers
                 title = Parsing.HtmlDecode(value);
             }
         }
-        private string title;
+        private string title
+        {
+            get
+            {
+                return Listing?.Title;
+            }
+            set
+            {
+                ImportToExisting(title: value);
+            }
+        }
 
         /// <summary>
         /// The full Listing object returned by the Reddit API;
@@ -260,48 +445,72 @@ namespace Reddit.Controllers
 
         internal void Import(Things.Post listing)
         {
-            Subreddit = listing.Subreddit;
-            Title = listing.Title;
-            Author = listing.Author;
-            Id = listing.Id;
-            Fullname = listing.Name;
-            Permalink = listing.Permalink;
-            Created = listing.CreatedUTC;
-            Edited = listing.Edited;
-            Score = listing.Score;
-            UpVotes = listing.Ups;
-            UpvoteRatio = listing.UpvoteRatio;
-            Removed = listing.Removed;
-            Spam = listing.Spam;
-            NSFW = listing.Over18;
-
-            Awards = new Awards(listing);
-
             Listing = listing;
         }
 
-        internal void Import(string subreddit, string title, string author, string id = null, string fullname = null, string permalink = null,
+        internal void Import(string subreddit, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
             DateTime created = default(DateTime), DateTime edited = default(DateTime), int score = 0, int upVotes = 0,
             double upvoteRatio = 0, bool removed = false, bool spam = false, bool nsfw = false)
         {
-            Subreddit = subreddit;
-            Title = title;
-            Author = author;
-            Id = id;
-            Fullname = fullname;
-            Permalink = permalink;
-            Created = created;
-            Edited = edited;
-            Score = score;
-            UpVotes = upVotes;
-            UpvoteRatio = upvoteRatio;
-            Removed = removed;
-            Spam = spam;
-            NSFW = nsfw;
+            Listing = new Things.Post
+            {
+                Subreddit = subreddit,
+                Title = title,
+                Author = author,
+                Id = id,
+                Name = fullname,
+                Permalink = permalink,
+                CreatedUTC = created,
+                Edited = edited,
+                Score = score,
+                Ups = upVotes,
+                UpvoteRatio = upvoteRatio,
+                Removed = removed,
+                Spam = spam,
+                Over18 = nsfw
+            };
+        }
 
-            Awards = new Awards();
-
-            Listing = new Things.Post(this);
+        internal void ImportToExisting(string subreddit = null, string title = null, string author = null, string id = null, string fullname = null, string permalink = null,
+            DateTime? created = null, DateTime? edited = null, int? score = null, int? upVotes = null,
+            double? upvoteRatio = null, bool? removed = null, bool? spam = null, bool? nsfw = null)
+        {
+            if (Listing == null)
+            {
+                Import(
+                    subreddit, 
+                    title, 
+                    author, 
+                    id, 
+                    fullname, 
+                    permalink, 
+                    created ?? default(DateTime), 
+                    edited ?? default(DateTime), 
+                    score ?? 0, 
+                    upVotes ?? 0, 
+                    upvoteRatio ?? 0, 
+                    removed ?? false, 
+                    spam ?? false, 
+                    nsfw ?? false
+                );
+            }
+            else
+            {
+                Listing.Subreddit = (!string.IsNullOrEmpty(subreddit) ? subreddit : Listing.Subreddit);
+                Listing.Title = (!string.IsNullOrEmpty(title) ? title : Listing.Title);
+                Listing.Author = (!string.IsNullOrEmpty(author) ? author : Listing.Author);
+                Listing.Id = (!string.IsNullOrEmpty(id) ? id : Listing.Id);
+                Listing.Name = (!string.IsNullOrEmpty(fullname) ? fullname : Listing.Name);
+                Listing.Permalink = (!string.IsNullOrEmpty(permalink) ? permalink : Listing.Permalink);
+                Listing.CreatedUTC = (created ?? Listing.CreatedUTC);
+                Listing.Edited = (edited ?? Listing.Edited);
+                Listing.Score = (score ?? Listing.Score);
+                Listing.Ups = (upVotes ?? Listing.Ups);
+                Listing.UpvoteRatio = (upvoteRatio ?? Listing.UpvoteRatio);
+                Listing.Removed = (removed ?? Listing.Removed);
+                Listing.Spam = (spam ?? Listing.Spam);
+                Listing.Over18 = (nsfw ?? Listing.Over18);
+            }
         }
 
         /// <summary>

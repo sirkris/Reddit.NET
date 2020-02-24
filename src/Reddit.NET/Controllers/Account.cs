@@ -30,8 +30,31 @@ namespace Reddit.Controllers
         private User me;
         private DateTime? MeLastUpdated { get; set; }
 
-        public PrivateMessages Messages { get; set; }
-        public Modmail Modmail { get; set; }
+        public PrivateMessages Messages
+        {
+            get
+            {
+                return messages ?? new PrivateMessages(Dispatch);
+            }
+            set
+            {
+                messages = value;
+            }
+        }
+        private PrivateMessages messages;
+
+        public Modmail Modmail
+        {
+            get
+            {
+                return modmail ?? new Modmail(Dispatch);
+            }
+            set
+            {
+                modmail = value;
+            }
+        }
+        private Modmail modmail;
 
         public Dispatch Dispatch;
 
@@ -42,8 +65,6 @@ namespace Reddit.Controllers
         public Account(Dispatch dispatch)
         {
             Dispatch = dispatch;
-            Messages = new PrivateMessages(Dispatch);
-            Modmail = new Modmail(Dispatch);
         }
 
         /// <summary>

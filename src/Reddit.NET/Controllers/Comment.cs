@@ -18,62 +18,182 @@ namespace Reddit.Controllers
         /// <summary>
         /// The subreddit in which this comment exists.
         /// </summary>
-        public string Subreddit { get; set; }
+        public string Subreddit
+        {
+            get
+            {
+                return Listing?.Subreddit;
+            }
+            set
+            {
+                ImportToExisting(subreddit: value);
+            }
+        }
 
         /// <summary>
         /// The username of the comment author.
         /// </summary>
-        public string Author { get; set; }
+        public string Author
+        {
+            get
+            {
+                return Listing?.Author;
+            }
+            set
+            {
+                ImportToExisting(author: value);
+            }
+        }
 
         /// <summary>
         /// The comment ID36.
         /// </summary>
-        public string Id { get; set; }
+        public string Id
+        {
+            get
+            {
+                return Listing?.Id;
+            }
+            set
+            {
+                ImportToExisting(id: value);
+            }
+        }
 
         /// <summary>
         /// The comment fullname.
         /// </summary>
-        public string Fullname { get; set; }
+        public string Fullname
+        {
+            get
+            {
+                return Listing?.Name;
+            }
+            set
+            {
+                ImportToExisting(fullname: value);
+            }
+        }
 
         /// <summary>
         /// The permalink URL of the comment.
         /// </summary>
-        public string Permalink { get; set; }
+        public string Permalink
+        {
+            get
+            {
+                return Listing?.Permalink;
+            }
+            set
+            {
+                ImportToExisting(permalink: value);
+            }
+        }
 
         /// <summary>
         /// When the comment was created.
         /// </summary>
-        public DateTime Created { get; set; }
+        public DateTime Created
+        {
+            get
+            {
+                return (Listing != null ? Listing.CreatedUTC : default(DateTime));
+            }
+            set
+            {
+                ImportToExisting(created: value);
+            }
+        }
 
         /// <summary>
         /// When the comment was last edited.
         /// </summary>
-        public DateTime Edited { get; set; }
+        public DateTime Edited
+        {
+            get
+            {
+                return (Listing != null ? Listing.Edited : default(DateTime));
+            }
+            set
+            {
+                ImportToExisting(edited: value);
+            }
+        }
 
         /// <summary>
         /// The comment score.
         /// </summary>
-        public int Score { get; set; }
+        public int Score
+        {
+            get
+            {
+                return (Listing != null ? Listing.Score : 0);
+            }
+            set
+            {
+                ImportToExisting(score: value);
+            }
+        }
 
         /// <summary>
         /// The number of upvotes received.
         /// </summary>
-        public int UpVotes { get; set; }
+        public int UpVotes
+        {
+            get
+            {
+                return (Listing != null ? Listing.Ups : 0);
+            }
+            set
+            {
+                ImportToExisting(upVotes: value);
+            }
+        }
 
         /// <summary>
         /// The number of downvotes received.
         /// </summary>
-        public int DownVotes { get; set; }
+        public int DownVotes
+        {
+            get
+            {
+                return (Listing != null ? Listing.Downs : 0);
+            }
+            set
+            {
+                ImportToExisting(downVotes: value);
+            }
+        }
 
         /// <summary>
         /// Whether the comment has been removed.
         /// </summary>
-        public bool Removed { get; set; }
+        public bool Removed
+        {
+            get
+            {
+                return (Listing != null ? Listing.Removed : false);
+            }
+            set
+            {
+                ImportToExisting(removed: value);
+            }
+        }
 
         /// <summary>
         /// Whether the comment has been marked as spam.
         /// </summary>
-        public bool Spam { get; set; }
+        public bool Spam
+        {
+            get
+            {
+                return (Listing != null ? Listing.Spam : false);
+            }
+            set
+            {
+                ImportToExisting(spam: value);
+            }
+        }
 
         /// <summary>
         /// A list of Things.More objects.
@@ -83,42 +203,123 @@ namespace Reddit.Controllers
         /// <summary>
         /// The parent ID36.
         /// </summary>
-        public string ParentId { get; set; }
+        public string ParentId
+        {
+            get
+            {
+                return (!string.IsNullOrEmpty(Listing?.ParentId) && Listing.ParentId.Length > 3
+                    ? Listing.ParentId.Substring(3)
+                    : null);
+            }
+            private set { }
+        }
 
         /// <summary>
         /// The parent fullname.
         /// </summary>
-        public string ParentFullname { get; set; }
+        public string ParentFullname
+        {
+            get
+            {
+                return Listing?.ParentId;
+            }
+            set
+            {
+                ImportToExisting(parentFullname: value);
+            }
+        }
 
         /// <summary>
         /// The reason the comment was collapsed (if applicable).
         /// </summary>
-        public string CollapsedReason { get; set; }
+        public string CollapsedReason
+        {
+            get
+            {
+                return Listing?.CollapsedReason;
+            }
+            set
+            {
+                ImportToExisting(collapsedReason: value);
+            }
+        }
 
         /// <summary>
         /// Whether the comment was collapsed.
         /// </summary>
-        public bool Collapsed { get; set; }
+        public bool Collapsed
+        {
+            get
+            {
+                return (Listing != null ? Listing.Collapsed : false);
+            }
+            set
+            {
+                ImportToExisting(collapsed: value);
+            }
+        }
 
         /// <summary>
         /// Whether the comment was authored by the authenticated user.
         /// </summary>
-        public bool IsSubmitter { get; set; }
+        public bool IsSubmitter
+        {
+            get
+            {
+                return (Listing != null ? Listing.IsSubmitter : false);
+            }
+            set
+            {
+                ImportToExisting(isSubmitter: value);
+            }
+        }
 
         /// <summary>
         /// Whether the comment score should be hidden.
         /// </summary>
-        public bool ScoreHidden { get; set; }
+        public bool ScoreHidden
+        {
+            get
+            {
+                return (Listing != null ? Listing.ScoreHidden : false);
+            }
+            set
+            {
+                ImportToExisting(scoreHidden: value);
+            }
+        }
 
         /// <summary>
         /// The comment depth.
         /// </summary>
-        public int Depth { get; set; }
+        public int Depth
+        {
+            get
+            {
+                return (Listing != null ? Listing.Depth : 0);
+            }
+            set
+            {
+                ImportToExisting(depth: value);
+            }
+        }
 
         /// <summary>
         /// Any awards applied to the comment.
         /// </summary>
-        public Awards Awards { get; set; }
+        public Awards Awards
+        {
+            get
+            {
+                awards = awards ?? new Awards(Listing);
+                return awards;
+            }
+            private set
+            {
+                awards = value;
+            }
+        }
+        private Awards awards;
 
         /// <summary>
         /// Whether the comment has been upvoted by the authenticated user.
@@ -162,17 +363,34 @@ namespace Reddit.Controllers
         public List<Comment> replies { get; private set; }
 
         /// <summary>
+        /// The number of direct comment replies.  
+        /// Unlike Replies, accessing this property does not require a separate API call.
+        /// </summary>
+        public int? NumReplies
+        {
+            get
+            {
+                return (More != null && !More.Count.Equals(0) && More[0] != null
+                    ? More[0].Count
+                    : (Listing?.Replies.Comments != null
+                        ? Listing.Replies.Comments.Count
+                        : (int?)null));
+            }
+            private set { }
+        }
+
+        /// <summary>
         /// The comment body.
         /// </summary>
         public string Body
         {
             get
             {
-                return body;
+                return Parsing.HtmlDecode((!string.IsNullOrEmpty(body) ? body : Listing?.Body));
             }
             set
             {
-                body = Parsing.HtmlDecode(value);
+                body = value;
             }
         }
         private string body;
@@ -184,11 +402,11 @@ namespace Reddit.Controllers
         {
             get
             {
-                return bodyHtml;
+                return Parsing.HtmlDecode((!string.IsNullOrEmpty(bodyHtml) ? bodyHtml : Listing?.BodyHTML));
             }
             set
             {
-                bodyHtml = Parsing.HtmlDecode(value);
+                bodyHtml = value;
             }
         }
         private string bodyHtml;
@@ -288,7 +506,7 @@ namespace Reddit.Controllers
         public Comment(Dispatch dispatch, string fullname)
         {
             Dispatch = dispatch;
-            Fullname = fullname;
+            Listing = new Things.Comment { Name = fullname };
         }
 
         /// <summary>
@@ -308,31 +526,10 @@ namespace Reddit.Controllers
 
         private void Import(Things.Comment listing)
         {
-            Subreddit = listing.Subreddit;
-            Author = listing.Author;
             Body = listing.Body;
             BodyHTML = listing.BodyHTML;
-            ParentFullname = listing.ParentId;
-            ParentId = (!string.IsNullOrEmpty(ParentFullname) && ParentFullname.StartsWith("t3_") ? ParentFullname.Substring(3) : null);
-            CollapsedReason = listing.CollapsedReason;
-            Collapsed = listing.Collapsed;
-            IsSubmitter = listing.IsSubmitter;
             Replies = (listing.Replies != null ? Lists.GetComments(listing.Replies.Comments, Dispatch) : new List<Comment>());
             More = (listing.Replies != null ? listing.Replies.MoreData : new List<Things.More>());
-            ScoreHidden = listing.ScoreHidden;
-            Depth = listing.Depth;
-            Id = listing.Id;
-            Fullname = listing.Name;
-            Permalink = listing.Permalink;
-            Created = listing.CreatedUTC;
-            Edited = listing.Edited;
-            Score = listing.Score;
-            UpVotes = listing.Ups;
-            DownVotes = listing.Downs;
-            Removed = listing.Removed;
-            Spam = listing.Spam;
-
-            Awards = new Awards(listing);
 
             Listing = listing;
         }
@@ -343,33 +540,93 @@ namespace Reddit.Controllers
             string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
-            Subreddit = subreddit;
-            Author = author;
-            Body = body;
-            BodyHTML = bodyHtml;
-            ParentFullname = parentFullname;
-            ParentId = (!string.IsNullOrEmpty(ParentFullname) && (ParentFullname.StartsWith("t3_") || ParentFullname.StartsWith("t1_")) ? ParentFullname.Substring(3) : null);
-            CollapsedReason = collapsedReason;
-            Collapsed = collapsed;
-            IsSubmitter = isSubmitter;
-            Replies = replies;
-            More = more;
-            ScoreHidden = scoreHidden;
-            Depth = depth;
-            Id = id;
-            Fullname = fullname;
-            Permalink = permalink;
-            Created = created;
-            Edited = edited;
-            Score = score;
-            UpVotes = upVotes;
-            DownVotes = downVotes;
-            Removed = removed;
-            Spam = spam;
+            Listing = new Things.Comment
+            {
+                Subreddit = subreddit,
+                Author = author,
+                Body = body,
+                BodyHTML = bodyHtml,
+                ParentId = parentFullname,
+                CollapsedReason = collapsedReason,
+                Collapsed = collapsed,
+                IsSubmitter = isSubmitter,
+                ScoreHidden = scoreHidden,
+                Depth = depth,
+                Id = id,
+                Name = fullname,
+                Permalink = permalink,
+                CreatedUTC = created,
+                Edited = edited,
+                Score = score,
+                Ups = upVotes,
+                Downs = downVotes,
+                Removed = removed,
+                Spam = spam
+            };
 
-            Awards = new Awards();
+            More = (more == null && Listing.Replies != null ? Listing.Replies.MoreData : (more ?? new List<Things.More>()));
+            Replies = (replies == null && Listing.Replies != null ? Lists.GetComments(Listing.Replies.Comments, Dispatch) : (replies ?? new List<Comment>()));
+        }
 
-            Listing = new Things.Comment(this);
+        private void ImportToExisting(string subreddit = null, string author = null, string body = null, string bodyHtml = null,
+            string parentFullname = null, string collapsedReason = null, bool? collapsed = null, bool? isSubmitter = null,
+            List<Comment> replies = null, List<Things.More> more = null, bool? scoreHidden = null, int? depth = null, string id = null, string fullname = null,
+            string permalink = null, DateTime? created = null, DateTime? edited = null,
+            int? score = null, int? upVotes = null, int? downVotes = null, bool? removed = null, bool? spam = null)
+        {
+            if (Listing == null)
+            {
+                Import(
+                    subreddit,
+                    author,
+                    body,
+                    bodyHtml,
+                    parentFullname,
+                    collapsedReason,
+                    collapsed ?? false,
+                    isSubmitter ?? false,
+                    replies,
+                    more,
+                    scoreHidden ?? false,
+                    depth ?? 0,
+                    id,
+                    fullname,
+                    permalink,
+                    created ?? default(DateTime),
+                    edited ?? default(DateTime),
+                    score ?? 0,
+                    upVotes ?? 0,
+                    downVotes ?? 0,
+                    removed ?? false,
+                    spam ?? false
+                );
+            }
+            else
+            {
+                Listing.Subreddit = (!string.IsNullOrEmpty(subreddit) ? subreddit : Listing.Subreddit);
+                Listing.Author = (!string.IsNullOrEmpty(author) ? author : Listing.Author);
+                Listing.Body = (!string.IsNullOrEmpty(body) ? body : Listing.Body);
+                Listing.BodyHTML = (!string.IsNullOrEmpty(bodyHtml) ? bodyHtml : Listing.BodyHTML);
+                Listing.ParentId = (!string.IsNullOrEmpty(parentFullname) ? parentFullname : Listing.ParentId);
+                Listing.CollapsedReason = (!string.IsNullOrEmpty(collapsedReason) ? collapsedReason : Listing.CollapsedReason);
+                Listing.Collapsed = (collapsed ?? Listing.Collapsed);
+                Listing.IsSubmitter = (isSubmitter ?? Listing.IsSubmitter);
+                Listing.ScoreHidden = (scoreHidden ?? Listing.ScoreHidden);
+                Listing.Depth = (depth ?? Listing.Depth);
+                Listing.Id = (!string.IsNullOrEmpty(id) ? id : Listing.Id);
+                Listing.Name = (!string.IsNullOrEmpty(fullname) ? fullname : Listing.Name);
+                Listing.Permalink = (!string.IsNullOrEmpty(permalink) ? permalink : Listing.Permalink);
+                Listing.CreatedUTC = (created ?? Listing.CreatedUTC);
+                Listing.Edited = (edited ?? Listing.Edited);
+                Listing.Score = (score ?? Listing.Score);
+                Listing.Ups = (upVotes ?? Listing.Ups);
+                Listing.Downs = (downVotes ?? Listing.Downs);
+                Listing.Removed = (removed ?? Listing.Removed);
+                Listing.Spam = (spam ?? Listing.Spam);
+            }
+
+            More = (more == null && Listing.Replies != null ? Listing.Replies.MoreData : (more ?? new List<Things.More>()));
+            Replies = (replies == null && Listing.Replies != null ? Lists.GetComments(Listing.Replies.Comments, Dispatch) : (replies ?? new List<Comment>()));
         }
 
         /// <summary>

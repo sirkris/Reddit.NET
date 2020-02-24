@@ -31,112 +31,330 @@ namespace Reddit.Controllers
         /// <summary>
         /// Whether this user is friends with the authenticated user.
         /// </summary>
-        public bool IsFriend { get; set; }
+        public bool IsFriend
+        {
+            get
+            {
+                return (UserData != null ? UserData.IsFriend : false);
+            }
+            set
+            {
+                ImportToExisting(isFriend: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user's profanity filter is enabled.
         /// </summary>
-        public bool ProfanityFilter { get; set; }
+        public bool ProfanityFilter
+        {
+            get
+            {
+                return (UserData != null ? UserData.PrefNoProfanity : false);
+            }
+            set
+            {
+                ImportToExisting(profanityFilter: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user account has been suspended.
         /// </summary>
-        public bool IsSuspended { get; set; }
+        public bool IsSuspended
+        {
+            get
+            {
+                return (UserData != null ? UserData.IsSuspended : false);
+            }
+            set
+            {
+                ImportToExisting(isSuspended: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user has a Reddit Gold subscription.
         /// </summary>
-        public bool HasGoldSubscription { get; set; }
+        public bool HasGoldSubscription
+        {
+            get
+            {
+                return (UserData != null ? UserData.HasGoldSubscription : false);
+            }
+            set
+            {
+                ImportToExisting(hasGoldSubscription: value);
+            }
+        }
 
         /// <summary>
         /// How many friends this user has.
         /// </summary>
-        public int NumFriends { get; set; }
+        public int NumFriends
+        {
+            get
+            {
+                return (UserData != null ? UserData.NumFriends : 0);
+            }
+            set
+            {
+                ImportToExisting(numFriends: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user account has been verified.
         /// </summary>
-        public bool IsVerified { get; set; }
+        public bool IsVerified
+        {
+            get
+            {
+                return (UserData != null ? UserData.Verified : false);
+            }
+            set
+            {
+                ImportToExisting(isVerified: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user has the new modmail.
         /// </summary>
-        public bool HasNewModmail { get; set; }
+        public bool HasNewModmail
+        {
+            get
+            {
+                return (UserData != null ? (UserData.NewModmailExists ?? false) : false);
+            }
+            set
+            {
+                ImportToExisting(hasNewModmail: value);
+            }
+        }
 
         /// <summary>
         /// The ID36 of this user.
         /// </summary>
-        public string Id { get; set; }
+        public string Id
+        {
+            get
+            {
+                return UserData?.Id;
+            }
+            set
+            {
+                ImportToExisting(id: value);
+            }
+        }
 
         /// <summary>
         /// The fullname of this user.
+        /// This value is generated from the Id property.
         /// </summary>
-        public string Fullname { get; set; }
+        public string Fullname
+        {
+            get
+            {
+                return (!string.IsNullOrEmpty(Id) ? "t2_" : "") + Id;
+            }
+            private set { }
+        }
 
         /// <summary>
         /// Whether this user is over 18 years of age.
         /// </summary>
-        public bool Over18 { get; set; }
+        public bool Over18
+        {
+            get
+            {
+                return (UserData != null ? UserData.Over18 : false);
+            }
+            set
+            {
+                ImportToExisting(over18: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user is gold.
         /// </summary>
-        public bool IsGold { get; set; }
+        public bool IsGold
+        {
+            get
+            {
+                return (UserData != null ? UserData.IsGold : false);
+            }
+            set
+            {
+                ImportToExisting(isGold: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user is a mod.
         /// </summary>
-        public bool IsMod { get; set; }
+        public bool IsMod
+        {
+            get
+            {
+                return (UserData != null ? UserData.IsMod : false);
+            }
+            set
+            {
+                ImportToExisting(isMod: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user has a verified email address.
         /// </summary>
-        public bool HasVerifiedEmail { get; set; }
+        public bool HasVerifiedEmail
+        {
+            get
+            {
+                return (UserData != null ? UserData.HasVerifiedEmail : false);
+            }
+            set
+            {
+                ImportToExisting(hasVerifiedEmail: value);
+            }
+        }
 
         /// <summary>
         /// This user's icon image URL.
         /// </summary>
-        public string IconImg { get; set; }
+        public string IconImg
+        {
+            get
+            {
+                return UserData?.IconImg;
+            }
+            set
+            {
+                ImportToExisting(iconImg: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user has modmail.
         /// </summary>
-        public bool HasModmail { get; set; }
+        public bool HasModmail
+        {
+            get
+            {
+                return (UserData != null ? UserData.HasModMail : false);
+            }
+            set
+            {
+                ImportToExisting(hasModmail: value);
+            }
+        }
 
         /// <summary>
         /// This user's total post karma.
         /// </summary>
-        public int LinkKarma { get; set; }
+        public int LinkKarma
+        {
+            get
+            {
+                return (UserData != null ? UserData.LinkKarma : 0);
+            }
+            set
+            {
+                ImportToExisting(linkKarma: value);
+            }
+        }
 
         /// <summary>
         /// The number of messages in this user's inbox.
         /// </summary>
-        public int InboxCount { get; set; }
+        public int InboxCount
+        {
+            get
+            {
+                return (UserData != null ? UserData.InboxCount : 0);
+            }
+            set
+            {
+                ImportToExisting(inboxCount: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user has mail.
         /// </summary>
-        public bool HasMail { get; set; }
+        public bool HasMail
+        {
+            get
+            {
+                return (UserData != null ? UserData.HasMail : false);
+            }
+            set
+            {
+                ImportToExisting(hasMail: value);
+            }
+        }
 
         /// <summary>
         /// This user's username.
         /// </summary>
-        public string Name { get; set; }
+        public string Name
+        {
+            get
+            {
+                return UserData?.Name;
+            }
+            set
+            {
+                ImportToExisting(name: value);
+            }
+        }
 
         /// <summary>
         /// When this user was created.
         /// </summary>
-        public DateTime Created { get; set; }
+        public DateTime Created
+        {
+            get
+            {
+                return (UserData != null ? UserData.CreatedUTC : default(DateTime));
+            }
+            set
+            {
+                ImportToExisting(created: value);
+            }
+        }
 
         /// <summary>
         /// This user's total comment karma.
         /// </summary>
-        public int CommentKarma { get; set; }
+        public int CommentKarma
+        {
+            get
+            {
+                return (UserData != null ? UserData.CommentKarma : 0);
+            }
+            set
+            {
+                ImportToExisting(commentKarma: value);
+            }
+        }
 
         /// <summary>
         /// Whether this user has subscribed.
         /// </summary>
-        public bool HasSubscribed { get; set; }
+        public bool HasSubscribed
+        {
+            get
+            {
+                return (UserData != null ? UserData.HasSubscribed : false);
+            }
+            set
+            {
+                ImportToExisting(hasSubscribed: value);
+            }
+        }
 
         /// <summary>
         /// This user's Overview (posts and comments).
@@ -289,8 +507,6 @@ namespace Reddit.Controllers
             Import(user.Name, user.Id, user.IsFriend, user.PrefNoProfanity, user.IsSuspended, user.HasGoldSubscription, user.NumFriends,
                 user.Verified, user.NewModmailExists, user.Over18, user.IsGold, user.IsMod, user.HasVerifiedEmail, user.IconImg, user.HasModMail,
                 user.LinkKarma, user.InboxCount, user.HasMail, user.CreatedUTC, user.CommentKarma, user.HasSubscribed);
-
-            UserData = user;
         }
 
         private void Import(User user)
@@ -298,39 +514,73 @@ namespace Reddit.Controllers
             Import(user.Name, user.Id, user.IsFriend, user.ProfanityFilter, user.IsSuspended, user.HasGoldSubscription, user.NumFriends,
                 user.IsVerified, user.HasNewModmail, user.Over18, user.IsGold, user.IsMod, user.HasVerifiedEmail, user.IconImg, user.HasModmail,
                 user.LinkKarma, user.InboxCount, user.HasMail, user.Created, user.CommentKarma, user.HasSubscribed);
-
-            UserData = user.UserData;
         }
 
         private void Import(string name, string id = null, bool isFriend = false, bool profanityFilter = false, bool isSuspended = false,
-            bool hasGoldSubscription = false, int numFriends = 0, bool IsVerified = false, bool? hasNewModmail = false, bool over18 = false,
+            bool hasGoldSubscription = false, int numFriends = 0, bool isVerified = false, bool? hasNewModmail = false, bool over18 = false,
             bool isGold = false, bool isMod = false, bool hasVerifiedEmail = false, string iconImg = null, bool hasModmail = false, int linkKarma = 0, int inboxCount = 0,
             bool hasMail = false, DateTime created = default(DateTime), int commentKarma = 0, bool hasSubscribed = false)
         {
-            IsFriend = isFriend;
-            ProfanityFilter = profanityFilter;
-            IsSuspended = isSuspended;
-            HasGoldSubscription = hasGoldSubscription;
-            NumFriends = numFriends;
-            this.IsVerified = IsVerified;
-            HasNewModmail = hasNewModmail ?? false;
-            Id = id;
-            Fullname = (!string.IsNullOrWhiteSpace(Id) ? "t2_" + Id : null);
-            Over18 = over18;
-            IsGold = isGold;
-            IsMod = isMod;
-            HasVerifiedEmail = hasVerifiedEmail;
-            IconImg = iconImg;
-            HasModmail = hasModmail;
-            LinkKarma = linkKarma;
-            InboxCount = inboxCount;
-            HasMail = hasMail;
-            Name = name;
-            Created = created;
-            CommentKarma = commentKarma;
-            HasSubscribed = hasSubscribed;
-
-            UserData = new Things.User(this);
+            UserData = new Things.User
+            {
+                IsFriend = isFriend,
+                PrefNoProfanity = profanityFilter,
+                IsSuspended = isSuspended,
+                HasGoldSubscription = hasGoldSubscription,
+                NumFriends = numFriends,
+                Verified = isVerified,
+                NewModmailExists = hasNewModmail ?? false,
+                Id = id,
+                Over18 = over18,
+                IsGold = isGold,
+                IsMod = isMod,
+                HasVerifiedEmail = hasVerifiedEmail,
+                IconImg = iconImg,
+                HasModMail = hasModmail,
+                LinkKarma = linkKarma,
+                InboxCount = inboxCount,
+                HasMail = hasMail,
+                Name = name,
+                CreatedUTC = created,
+                CommentKarma = commentKarma,
+                HasSubscribed = hasSubscribed
+            };
+        }
+        private void ImportToExisting(string name = null, string id = null, bool? isFriend = null, bool? profanityFilter = null, bool? isSuspended = null,
+            bool? hasGoldSubscription = null, int? numFriends = null, bool? isVerified = null, bool? hasNewModmail = null, bool? over18 = null,
+            bool? isGold = null, bool? isMod = null, bool? hasVerifiedEmail = null, string iconImg = null, bool? hasModmail = null, int? linkKarma = null, int? inboxCount = null,
+            bool? hasMail = null, DateTime? created = null, int? commentKarma = null, bool? hasSubscribed = null)
+        {
+            if (UserData == null)
+            {
+                Import(name, id, isFriend ?? false, profanityFilter ?? false, isSuspended ?? false, hasGoldSubscription ?? false, numFriends ?? 0, isVerified ?? false, hasNewModmail ?? false,
+                    over18 ?? false, isGold ?? false, isMod ?? false, hasVerifiedEmail ?? false, iconImg, hasModmail ?? false, linkKarma ?? 0, inboxCount ?? 0, hasMail ?? false, 
+                    created ?? default(DateTime), commentKarma ?? 0, hasSubscribed ?? false);
+            }
+            else
+            {
+                UserData.Name = (!string.IsNullOrEmpty(name) ? name : UserData.Name);
+                UserData.Id = (!string.IsNullOrEmpty(id) ? id : UserData.Id);
+                UserData.IsFriend = isFriend ?? UserData.IsFriend;
+                UserData.PrefNoProfanity = profanityFilter ?? UserData.PrefNoProfanity;
+                UserData.IsSuspended = isSuspended ?? UserData.IsSuspended;
+                UserData.HasGoldSubscription = hasGoldSubscription ?? UserData.HasGoldSubscription;
+                UserData.NumFriends = numFriends ?? UserData.NumFriends;
+                UserData.Verified = isVerified ?? UserData.Verified;
+                UserData.NewModmailExists = hasNewModmail ?? UserData.NewModmailExists;
+                UserData.Over18 = over18 ?? UserData.Over18;
+                UserData.IsGold = isGold ?? UserData.IsGold;
+                UserData.IsMod = isMod ?? UserData.IsMod;
+                UserData.HasVerifiedEmail = hasVerifiedEmail ?? UserData.HasVerifiedEmail;
+                UserData.IconImg = (!string.IsNullOrEmpty(iconImg) ? iconImg : UserData.IconImg);
+                UserData.HasModMail = hasModmail ?? UserData.HasModMail;
+                UserData.LinkKarma = linkKarma ?? UserData.LinkKarma;
+                UserData.InboxCount = inboxCount ?? UserData.InboxCount;
+                UserData.HasMail = hasMail ?? UserData.HasMail;
+                UserData.CreatedUTC = created ?? UserData.CreatedUTC;
+                UserData.CommentKarma = commentKarma ?? UserData.CommentKarma;
+                UserData.HasSubscribed = isFriend ?? UserData.HasSubscribed;
+            }
         }
 
         /// <summary>
@@ -338,7 +588,7 @@ namespace Reddit.Controllers
         /// </summary>
         private void CheckFullname()
         {
-            if (Fullname == null)
+            if (string.IsNullOrEmpty(Fullname))
             {
                 if (string.IsNullOrWhiteSpace(Name))
                 {

@@ -43,6 +43,10 @@ namespace RedditTests.ControllerTests.WorkflowTests
             Validate(modmailConversationContainer);
             Assert.AreEqual(1, modmailConversationContainer.Messages.Count);
 
+            // TODO - See:  https://www.reddit.com/r/redditdev/comments/exofpt/new_issue_api_now_returns_403_on_post/fgnu5n2/?context=4
+            // When compose is fixed to return an ID so we can identify the new message we just created, remove assert and update returns to accommodate the new JSON.  --Kris
+            Assert.Inconclusive("This test cannot proceed due to a bug in the Reddit API.  See:  https://www.reddit.com/r/redditdev/comments/exofpt/new_issue_api_now_returns_403_on_post/fgnu5n2/?context=4");
+
             Reddit.Things.ModmailConversationContainer modmailConversationContainer2 = reddit.Account.Modmail.GetConversation(modmailConversationContainer.Conversation.Id);
 
             Validate(modmailConversationContainer2);
@@ -92,10 +96,13 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
             Reddit.Things.ModmailConversationContainer conversation = reddit2.Account.Modmail.NewConversation("This is a new modmail conversation.", "Test Message", testData["Subreddit"]);
 
+            // TODO - See:  https://www.reddit.com/r/redditdev/comments/exofpt/new_issue_api_now_returns_403_on_post/fgnu5n2/?context=4
+            // When compose is fixed to return an ID so we can identify the new message we just created, remove assert and update returns to accommodate the new JSON.  --Kris
+            Assert.Inconclusive("This test cannot proceed due to a bug in the Reddit API.  See:  https://www.reddit.com/r/redditdev/comments/exofpt/new_issue_api_now_returns_403_on_post/fgnu5n2/?context=4");
+
             for (int i = 1; i <= 10; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                reddit2.Account.Modmail.NewMessageAsync(conversation.Conversation.Id, "Test message " + i.ToString());
+                reddit2.Account.Modmail.NewMessage(conversation.Conversation.Id, "Test message " + i.ToString());
             }
 
             reddit.Account.Modmail.MonitorUnread();

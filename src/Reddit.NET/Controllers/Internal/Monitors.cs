@@ -143,10 +143,13 @@ namespace Reddit.Controllers.Internal
 
         public void WaitOrDie(string key, int timeout = 60)
         {
-            Thread thread = Threads[key];
+            if (Threads.ContainsKey(key))
+            {
+                Thread thread = Threads[key];
 
-            KillThread(key);
-            WaitOrDie(thread, timeout);
+                KillThread(key);
+                WaitOrDie(thread, timeout);
+            }
         }
 
         public void WaitOrDie(Thread thread, int timeout = 60)

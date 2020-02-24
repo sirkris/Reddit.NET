@@ -34,7 +34,7 @@ Reddit.NET is FOSS (MIT license) and was written in C#. It can be found on Githu
 
 ### Contributors
 
-[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md), [JP Dillingham](docs/contributors/JP%20Dillingham.md), [origine999](docs/contributors/origine999.md), [Kevin Smith](docs/contributors/noiz.md), [jpsak09](docs/contributors/jpsak09.md), [Kostyantyn Sharovarsky](docs/contributors/kostya9.md), [Leland Olney](docs/contributors/Leland%20Olney.md), [Mingwei Samuel](docs/contributors/Mingwei%20Samuel.md), [John Kelly](docs/contributors/John%20Kelly.md), [Adam Gauthier](docs/contributors/Adam%20Gauthier.md), [Marek Toman](docs/contributors/Marek%20Toman.md), [John Styler](docs/contributors/John%20Styler.md), [Adam Woodhead](docs/contributors/Adam%20Woodhead.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
+[Kris Craig](docs/contributors/Kris%20Craig.md), [Andrew Hall](docs/contributors/Andrew%20Hall.md), [Ben Mitchell](docs/contributors/Ben%20Mitchell.md), [Daryl Harrison](docs/contributors/Daryl%20Harrison.md), [Emiel Dorsman](docs/contributors/Emiel%20Dorsman.md), [JP Dillingham](docs/contributors/JP%20Dillingham.md), [origine999](docs/contributors/origine999.md), [Kevin Smith](docs/contributors/noiz.md), [jpsak09](docs/contributors/jpsak09.md), [Kostyantyn Sharovarsky](docs/contributors/kostya9.md), [Leland Olney](docs/contributors/Leland%20Olney.md), [Mingwei Samuel](docs/contributors/Mingwei%20Samuel.md), [John Kelly](docs/contributors/John%20Kelly.md), [Adam Gauthier](docs/contributors/Adam%20Gauthier.md), [Marek Toman](docs/contributors/Marek%20Toman.md), [John Styler](docs/contributors/John%20Styler.md), [Adam Woodhead](docs/contributors/Adam%20Woodhead.md), [Marcel Croes](docs/contributors/Marcel%20Croes.md), [CPKreuz](docs/contributors/CPKreuz.md), and the knowledgeable people over at [r/csharp](https://www.reddit.com/r/csharp/) and [r/redditdev](https://www.reddit.com/r/redditdev/).
 
 ### Beta Testers
 
@@ -377,7 +377,7 @@ var askReddit = r.Models.Subreddits.About("AskReddit");
 var topPost = r.Models.Listings.Top(new TimedCatSrListingInput(), "AskReddit").JSON.Data.Things[0].Data;
 
 // Create a new self post.
-r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Self Post Title", text: "Self post text.", sr: "MyNewSubreddit"));
+r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Self Post Title", kind: "self", text: "Self post text.", sr: "MyNewSubreddit"));
 
 // Create a new link post.
 r.Models.LinksAndComments.Submit(new LinksAndCommentsSubmitInput(title: "Link Post Title", url: "http://www.google.com", sr: "MyNewSubreddit"));
@@ -421,6 +421,10 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 #### [Use a Permalink to Retrieve a Reddit Post](docs/examples/cs/Get%20Post%20From%20Permalink.md)
 
 #### [Retrieve a LinkPost URL or SelfPost Body From a Reddit Post](docs/examples/cs/Get%20LinkPost%20URL%20%26%20SelfPost%20Body%20From%20Post.md)
+
+#### [Get the Front Page](docs/examples/cs/Front%20Page%20Posts.md)
+
+#### [Comment Replies Count](docs/examples/cs/Comment%20Replies%20Count.md)
  
 For more examples, check out the Example and Reddit.NETTests projects.
 

@@ -1,6 +1,5 @@
 var class_reddit_1_1_things_1_1_comment =
 [
-    [ "Comment", "class_reddit_1_1_things_1_1_comment.html#aa765f4a4e5559e6c2d62e98558d5bc2d", null ],
     [ "Comment", "class_reddit_1_1_things_1_1_comment.html#a52d8ac5bc530f5a456bc0b44c65b6671", null ],
     [ "Approved", "class_reddit_1_1_things_1_1_comment.html#aa38e53e5aad47b1781a94a3424dd8d84", null ],
     [ "ApprovedAtUTC", "class_reddit_1_1_things_1_1_comment.html#ac6affdabac842cea936205e8f223f9c9", null ],
