@@ -26,7 +26,6 @@
   <ItemGroup>
     <PackageReference Include="NewtonSoft.JSON" Version="12.0.1" />
     <PackageReference Include="RestSharp" Version="106.6.9" />
-    <PackageReference Include="uHttpSharp" Version="0.1.6.22" />
   </ItemGroup>
 
   <ItemGroup>

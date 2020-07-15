@@ -7,15 +7,10 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
-using uhttpsharp;
-using uhttpsharp.Listeners;
-using uhttpsharp.RequestProviders;
 
 namespace Reddit.AuthTokenRetriever
 {
@@ -165,6 +160,7 @@ namespace Reddit.AuthTokenRetriever
         }
     }
 
+    [Obsolete("This class has been deprecated in favour of " + nameof(AuthTokenRetrieverServer) + ".")]
     public class AuthTokenRetrieverLib
     {
         /// <summary>
@@ -173,7 +169,6 @@ namespace Reddit.AuthTokenRetriever
         internal string AppId
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -182,7 +177,6 @@ namespace Reddit.AuthTokenRetriever
         internal string AppSecret
         {
             get;
-            private set;
         }
 
         /// <summary>
@@ -191,10 +185,9 @@ namespace Reddit.AuthTokenRetriever
         internal int Port
         {
             get;
-            private set;
         }
 
-        internal HttpServer HttpServer
+        internal AuthTokenRetrieverServer AuthServer
         {
             get;
             private set;
@@ -202,14 +195,18 @@ namespace Reddit.AuthTokenRetriever
 
         public string AccessToken
         {
-            get;
-            private set;
+            get
+            {
+                return AuthServer.Credentials.AccessToken;
+            }
         }
 
         public string RefreshToken
         {
-            get;
-            private set;
+            get
+            {
+                return AuthServer.Credentials.RefreshToken;
+            }
         }
 
         /// <summary>
@@ -228,93 +225,18 @@ namespace Reddit.AuthTokenRetriever
 
         public void AwaitCallback()
         {
-            using (HttpServer = new HttpServer(new HttpRequestProvider()))
-            {
-                HttpServer.Use(new TcpListenerAdapter(new TcpListener(IPAddress.Loopback, Port)));
-                HttpServer.Use((context, next) =>
-                {
-                    string code = null;
-                    string state = null;
-                    try
-                    {
-                        code = context.Request.QueryString.GetByName("code");
-                        state = context.Request.QueryString.GetByName("state");  // This app formats state as:  AppId + ":" [+ AppSecret]
-                    }
-                    catch (KeyNotFoundException)
-                    {
-                        context.Response = new uhttpsharp.HttpResponse(HttpResponseCode.Ok, Encoding.UTF8.GetBytes("<b>ERROR:  No code and/or state received!</b>"), false);
-                        throw new Exception("ERROR:  Request received without code and/or state!");
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(code)
-                        && !string.IsNullOrWhiteSpace(state))
-                    {
-                        // Send request with code and JSON-decode the return for token retrieval.  --Kris
-                        RestRequest restRequest = new RestRequest("/api/v1/access_token", Method.POST);
-
-                        restRequest.AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(state)));
-                        restRequest.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-
-                        restRequest.AddParameter("grant_type", "authorization_code");
-                        restRequest.AddParameter("code", code);
-                        restRequest.AddParameter("redirect_uri",
-                            "http://localhost:" + Port.ToString() + "/Reddit.NET/oauthRedirect");  // This must be an EXACT match in the app settings on Reddit!  --Kris
-
-                        OAuthToken oAuthToken = JsonConvert.DeserializeObject<OAuthToken>(ExecuteRequest(restRequest));
-
-                        AccessToken = oAuthToken.AccessToken;
-                        RefreshToken = oAuthToken.RefreshToken;
-
-                        string[] sArr = state.Split(':');
-                        if (sArr == null || sArr.Length == 0)
-                        {
-                            throw new Exception("State must consist of 'appId:appSecret'!");
-                        }
-
-                        string appId = sArr[0];
-                        string appSecret = (sArr.Length >= 2 ? sArr[1] : null);
-
-                        string fileExt = "." + appId + "." + (!string.IsNullOrWhiteSpace(appSecret) ? appSecret + "." : "") + "json";
-
-                        string tokenPath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar
-                            + "RDNOauthToken_" + DateTime.Now.ToString("yyyyMMddHHmmssffff") + fileExt;
-
-                        File.WriteAllText(tokenPath, JsonConvert.SerializeObject(oAuthToken));
-
-                        string html;
-                        using (Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("AuthTokenRetrieverLib.Templates.Success.html"))
-                        {
-                            using (StreamReader streamReader = new StreamReader(stream))
-                            {
-                                html = streamReader.ReadToEnd();
-                            }
-                        }
-
-                        html = html.Replace("REDDIT_OAUTH_ACCESS_TOKEN", oAuthToken.AccessToken);
-                        html = html.Replace("REDDIT_OAUTH_REFRESH_TOKEN", oAuthToken.RefreshToken);
-                        html = html.Replace("LOCAL_TOKEN_PATH", tokenPath);
-
-                        context.Response = new uhttpsharp.HttpResponse(HttpResponseCode.Ok, Encoding.UTF8.GetBytes(html), false);
-                    }
-
-                    return Task.Factory.GetCompleted();
-                });
-
-                HttpServer.Start();
-            }
+            AuthServer = new AuthTokenRetrieverServer(AppId, AppSecret, Port);
         }
 
         public void StopListening()
         {
-            HttpServer.Dispose();
+            AuthServer.Dispose();
         }
 
         public string AuthURL(string scope = "creddits%20modcontributors%20modmail%20modconfig%20subscribe%20structuredstyles%20vote%20wikiedit%20mysubreddits%20submit%20modlog%20modposts%20modflair%20save%20modothers%20read%20privatemessages%20report%20identity%20livemanage%20account%20modtraffic%20wikiread%20edit%20modwiki%20modself%20history%20flair")
         {
-            return "https://www.reddit.com/api/v1/authorize?client_id=" + AppId + "&response_type=code"
-                + "&state=" + AppId + ":" + AppSecret
-                + "&redirect_uri=http://localhost:" + Port.ToString() + "/Reddit.NET/oauthRedirect&duration=permanent"
-                + "&scope=" + scope;
+            AuthServer.Scope = scope;
+            return AuthServer.AuthorisationUrl;
         }
 
         public string ExecuteRequest(RestRequest restRequest)
