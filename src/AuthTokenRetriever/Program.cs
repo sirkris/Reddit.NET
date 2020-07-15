@@ -2,6 +2,7 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading;
 
 namespace AuthTokenRetriever
 {
@@ -51,23 +52,30 @@ namespace AuthTokenRetriever
                 Console.ReadKey();
             }
 
-            Action<OAuthToken> tokenCallback = (OAuthToken token) =>
+            using (var waitHandle = new AutoResetEvent(false))
             {
-                Console.Clear();
-                Console.WriteLine($"Access token: {token.AccessToken}");
-                Console.WriteLine($"Refresh token: {token.RefreshToken}");
-                Console.WriteLine("Press any key to exit...");
-            };
+                Action<OAuthToken> tokenCallback = (OAuthToken token) =>
+                {
+                    Console.Clear();
+                    Console.WriteLine($"Access token: {token.AccessToken}");
+                    Console.WriteLine($"Refresh token: {token.RefreshToken}");
+                    waitHandle.Set();
+                };
 
-            using (var tokenRetriever = new AuthTokenRetrieverServer(appId, appSecret, port, completedAuthCallback: tokenCallback))
-            {
-                // Open the browser to the Reddit authentication page. Once the user clicks "accept", Reddit will redirect the browser to localhost:8080, where the tokenCallback delegate will be called.
-                OpenBrowser(tokenRetriever.AuthorisationUrl);
-                Console.WriteLine("Please open the following URL in your browser if it doesn't automatically open:");
-                Console.WriteLine(tokenRetriever.AuthorisationUrl);
+                using (var tokenRetriever = new AuthTokenRetrieverServer(appId, appSecret, port, completedAuthCallback: tokenCallback))
+                {
+                    // Open the browser to the Reddit authentication page. Once the user clicks "accept", Reddit will redirect the browser to localhost:8080, where the tokenCallback delegate will be called.
+                    OpenBrowser(tokenRetriever.AuthorisationUrl);
+                    Console.WriteLine("Please open the following URL in your browser if it doesn't automatically open:");
+                    Console.WriteLine(tokenRetriever.AuthorisationUrl);
+                    waitHandle.WaitOne();
 
-                Console.ReadKey(true);  // Hit any key to exit.  --Kris
+                    Thread.Sleep(100); // Wait a bit for the server to respond with the HTML before it is disposed ¯\_(ツ)_/¯
+                }
             }
+
+            Console.WriteLine("Press any key to exit...");
+            Console.ReadKey(true);  // Hit any key to exit.  --Kris
 
             Console.WriteLine("Token retrieval utility terminated.");
         }
