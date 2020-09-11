@@ -180,6 +180,7 @@ Here's a list of things that can currently be monitored by Reddit.NET:
 
 * Monitor a post for new comment replies (any sort).
 * Monitor a comment for new comment replies (any sort).
+* Monitor a comment for meaningful changes to its score (net upvotes).
 * Monitor a live thread for new/removed updates.
 * Monitor a live thread for new/removed contributors.
 * Monitor a live thread for any configuration changes.
