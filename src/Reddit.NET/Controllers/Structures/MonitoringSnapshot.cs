@@ -39,6 +39,7 @@ namespace Reddit.Controllers.Structures
         public List<string> PostData;
         public List<string> PostScore;
         public List<string> PostHistory;
+        public List<string> CommentScore;
         public List<string> CommentHistory;
 
         public MonitoringSnapshot(List<string> bestPosts = null, List<string> hotPosts = null, List<string> newPosts = null, List<string> risingPosts = null, 
@@ -49,7 +50,7 @@ namespace Reddit.Controllers.Structures
             List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null, 
             List<string> wikiPages = null, List<string> wikiPage = null, List<string> modmailMessagesRecent = null, List<string> modmailMessagesMod = null, 
             List<string> modmailMessagesUser = null, List<string> modmailMessagesUnread = null, List<string> liveThread = null, List<string> liveThreadContributors = null, 
-            List<string> liveThreadUpdates = null, List<string> postData = null, List<string> postScore = null, List<string> postHistory = null, List<string> commentHistory = null)
+            List<string> liveThreadUpdates = null, List<string> postData = null, List<string> postScore = null, List<string> postHistory = null, List<string> commentScore = null, List<string> commentHistory = null)
         {
             BestPosts = bestPosts ?? new List<string>();
             HotPosts = hotPosts ?? new List<string>();
@@ -85,6 +86,7 @@ namespace Reddit.Controllers.Structures
             PostData = postData ?? new List<string>();
             PostScore = postScore ?? new List<string>();
             PostHistory = postHistory ?? new List<string>();
+            CommentScore = commentScore ?? new List<string>();
             CommentHistory = commentHistory ?? new List<string>();
         }
 
@@ -162,6 +164,8 @@ namespace Reddit.Controllers.Structures
                     return ref PostScore;
                 case "PostHistory":
                     return ref PostHistory;
+                case "CommentScore":
+                    return ref CommentScore;
                 case "CommentHistory":
                     return ref CommentHistory;
             }
@@ -205,6 +209,7 @@ namespace Reddit.Controllers.Structures
                 Add(monitoringSnapshot.PostData, ref PostData);
                 Add(monitoringSnapshot.PostScore, ref PostScore);
                 Add(monitoringSnapshot.PostHistory, ref PostHistory);
+                Add(monitoringSnapshot.CommentScore, ref CommentScore);
                 Add(monitoringSnapshot.CommentHistory, ref CommentHistory);
             }
         }
@@ -258,6 +263,7 @@ namespace Reddit.Controllers.Structures
                 Remove(monitoringSnapshot.PostData, ref PostData);
                 Remove(monitoringSnapshot.PostScore, ref PostScore);
                 Remove(monitoringSnapshot.PostHistory, ref PostHistory);
+                Remove(monitoringSnapshot.CommentScore, ref CommentScore);
                 Remove(monitoringSnapshot.CommentHistory, ref CommentHistory);
             }
         }
@@ -308,6 +314,7 @@ namespace Reddit.Controllers.Structures
                 + PostData.Count
                 + PostScore.Count
                 + PostHistory.Count
+                + CommentScore.Count
                 + CommentHistory.Count);
         }
     }
