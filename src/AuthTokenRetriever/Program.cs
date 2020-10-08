@@ -1,7 +1,6 @@
 ﻿using Reddit.AuthTokenRetriever;
 using Reddit.AuthTokenRetriever.EventArgs;
 using System;
-using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
