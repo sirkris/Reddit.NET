@@ -1,5 +1,6 @@
 ﻿using Reddit.AuthTokenRetriever;
 using System;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
@@ -70,27 +71,29 @@ namespace AuthTokenRetriever
 
         public static void OpenBrowser(string authUrl = "about:blank")
         {
-            try
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                ProcessStartInfo processStartInfo = new ProcessStartInfo(authUrl);
-                Process.Start(processStartInfo);
-            }
-            catch (System.ComponentModel.Win32Exception)
-            {
-                //For OSX run a separate command to open the web browser as found in https://brockallen.com/2016/09/24/process-start-for-urls-on-net-core/
-                if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                try
                 {
-                    Process.Start("open", authUrl);
+                    ProcessStartInfo processStartInfo = new ProcessStartInfo(authUrl);
+                    Process.Start(processStartInfo);
                 }
-                else
+                catch (System.ComponentModel.Win32Exception)
                 {
-                    // This typically occurs if the runtime doesn't know where your browser is.  Use BrowserPath for when this happens.  --Kris
                     ProcessStartInfo processStartInfo = new ProcessStartInfo(BROWSER_PATH)
                     {
                         Arguments = authUrl
                     };
                     Process.Start(processStartInfo);
                 }
+            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            {
+                //For OSX run a separate command to open the web browser as found in https://brockallen.com/2016/09/24/process-start-for-urls-on-net-core/
+                Process.Start("open", authUrl);
+            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            {
+                //Similar to OSX, Linux can (and usually does) use xdg for this task.
+                Process.Start("xdg-open", authUrl);
             }
         }
     }
