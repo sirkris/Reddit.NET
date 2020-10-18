@@ -171,7 +171,7 @@ namespace Reddit.Models
                         Comment comment = JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data));
                         if (loadReplies)
                         {
-                            CommentContainer commentContainer = Common.GetComments(comment.ParentId.Substring(3), new ListingsGetCommentsInput(comment: comment.Id), comment.Subreddit);
+                            CommentContainer commentContainer = Common.GetComments(comment.LinkId.Substring(3), new ListingsGetCommentsInput(comment: comment.Id), comment.Subreddit);
                             if (commentContainer != null
                                 && commentContainer.Data != null
                                 && commentContainer.Data.Children != null
