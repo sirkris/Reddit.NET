@@ -27,10 +27,12 @@
 
   <ItemGroup>
     <None Remove="Templates\Success.html" />
+    <None Remove="Templates\TokenSaved.html" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Templates\Success.html" />
+    <EmbeddedResource Include="Templates\TokenSaved.html" />
   </ItemGroup>
 
   <ItemGroup>
