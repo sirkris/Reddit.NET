@@ -38,6 +38,25 @@ namespace Reddit
         private Account account;
 
         /// <summary>
+        /// List of posts on the front page.
+        /// </summary>
+        public List<Post> FrontPage
+        {
+            get
+            {
+                
+                return (FrontPageaLastUpdated.HasValue
+                    && FrontPageaLastUpdated.Value.AddSeconds(15) > DateTime.Now ? frontPage : GetFrontPage());
+            }
+            private set
+            {
+                frontPage = value;
+            }
+        }
+        internal List<Post> frontPage;
+        private DateTime? FrontPageaLastUpdated { get; set; }
+
+        /// <summary>
         /// Create a new instance of the Reddit.NET API library.
         /// This instance will be bound to a single Reddit user.
         /// </summary>
@@ -90,6 +109,11 @@ namespace Reddit
         {
             Account = new Account(Models);
             return Account;
+        }
+
+        public List<Post> GetFrontPage(string after = "", string before = "", int limit = 100)
+        {
+            return Subreddit().Posts.GetBest(after: after, before: before, limit: limit);
         }
 
         /// <summary>
