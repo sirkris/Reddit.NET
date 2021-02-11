@@ -618,11 +618,11 @@ namespace Reddit.Controllers
         /// <param name="banMessage">raw markdown text</param>
         /// <param name="banReason">a string no longer than 100 characters</param>
         /// <param name="container"></param>
-        /// <param name="duration">an integer between 1 and 999</param>
+        /// <param name="duration">an integer between 1 and 999, or null to specify permanent duration</param>
         /// <param name="permissions"></param>
         /// <param name="type">one of (friend, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
         /// <param name="subreddit">A subreddit</param>
-        public void AddRelationship(string banContext, string banMessage, string banReason, string container, int duration,
+        public void AddRelationship(string banContext, string banMessage, string banReason, string container, int? duration,
             string permissions, string type, string subreddit = null)
         {
             AddRelationship(new UsersFriendInput(Name, type, duration, permissions, banContext, banMessage, banReason, container), subreddit);
@@ -647,11 +647,11 @@ namespace Reddit.Controllers
         /// <param name="banMessage">raw markdown text</param>
         /// <param name="banReason">a string no longer than 100 characters</param>
         /// <param name="container"></param>
-        /// <param name="duration">an integer between 1 and 999</param>
+        /// <param name="duration">an integer between 1 and 999, or null to specify permanent duration</param>
         /// <param name="permissions"></param>
         /// <param name="type">one of (friend, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
         /// <param name="subreddit">A subreddit</param>
-        public async Task AddRelationshipAsync(string banContext, string banMessage, string banReason, string container, int duration,
+        public async Task AddRelationshipAsync(string banContext, string banMessage, string banReason, string container, int? duration,
             string permissions, string type, string subreddit = null)
         {
             await AddRelationshipAsync(new UsersFriendInput(Name, type, duration, permissions, banContext, banMessage, banReason, container), subreddit);

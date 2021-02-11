@@ -21,9 +21,9 @@ namespace Reddit.Inputs.Users
         public string ban_reason { get; set; }
 
         /// <summary>
-        /// an integer between 1 and 999
+        /// an integer between 1 and 999, or null to specify permanent duration
         /// </summary>
-        public int duration { get; set; }
+        public int? duration { get; set; }
 
         /// <summary>
         /// A valid permissions string (e.g. "+mail")
@@ -60,13 +60,13 @@ namespace Reddit.Inputs.Users
         /// </summary>
         /// <param name="name">the name of an existing user</param>
         /// <param name="type">one of (friend, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
-        /// <param name="duration">an integer between 1 and 999</param>
+        /// <param name="duration">an integer between 1 and 999, or null to specify permanent duration</param>
         /// <param name="permissions">A valid permissions string (e.g. "+mail")</param>
         /// <param name="banContext">fullname of a thing</param>
         /// <param name="banMessage">raw markdown text</param>
         /// <param name="banReason">a string no longer than 100 characters</param>
         /// <param name="container"></param>
-        public UsersFriendInput(string name = "", string type = "friend", int duration = 999, string permissions = "", string banContext = "", string banMessage = "", 
+        public UsersFriendInput(string name = "", string type = "friend", int? duration = null, string permissions = "", string banContext = "", string banMessage = "", 
             string banReason = "", string container = "")
             : base()
         {
