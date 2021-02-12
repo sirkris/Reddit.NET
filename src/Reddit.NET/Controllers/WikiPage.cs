@@ -33,6 +33,7 @@ namespace Reddit.Controllers
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
         private Dispatch Dispatch;
 
@@ -60,6 +61,18 @@ namespace Reddit.Controllers
 
             Subreddit = subreddit;
             Name = name;
+
+            MonitoringCache = new Dictionary<string, HashSet<string>>
+            {
+                { "confidence", new HashSet<string>() },
+                { "top", new HashSet<string>() },
+                { "new", new HashSet<string>() },
+                { "controversial", new HashSet<string>() },
+                { "old", new HashSet<string>() },
+                { "random", new HashSet<string>() },
+                { "qa", new HashSet<string>() },
+                { "live", new HashSet<string>() }
+            };
         }
 
         /// <summary>
