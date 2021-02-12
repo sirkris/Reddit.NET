@@ -22,6 +22,7 @@ namespace Reddit.Controllers
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// List of pages on this wiki.
@@ -52,6 +53,12 @@ namespace Reddit.Controllers
         /// <param name="subreddit">The name of the subreddit to which this wiki belongs</param>
         public Wiki(Dispatch dispatch, string subreddit)
         {
+
+            MonitoringCache = new Dictionary<string, HashSet<string>>
+            {
+                { "pages", new HashSet<string>() }
+            };
+
             Dispatch = dispatch;
             Subreddit = subreddit;
         }
@@ -212,9 +219,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorPages(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -235,6 +243,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "pages");
 
             string key = "WikiPages";
             return Monitor(key, new Thread(() => MonitorPagesThread(key, monitoringDelayMs: monitoringDelayMs)), Subreddit);
@@ -298,8 +308,18 @@ namespace Reddit.Controllers
                 {
                     oldList = pages;
                     newList = GetPages();
-                    if (Lists.ListDiff(oldList, newList, out List<string> added, out List<string> removed))
+                    string type = "pages";
+                    if (Lists.ListDiff(oldList, newList, out List<string> added, out List<string> removed, (UseCache.Contains(type) ? MonitoringCache[type] : null)))
                     {
+                        // Add the new entries to the appropriate cache, if enabled.  --Kris
+                        if (UseCache.Contains(type))
+                        {
+                            foreach (string page in added)
+                            {
+                                MonitoringCache[type].Add(page);
+                            }
+                        }
+
                         // Event handler to alert the calling app that the list has changed.  --Kris
                         WikiPagesUpdateEventArgs args = new WikiPagesUpdateEventArgs
                         {
