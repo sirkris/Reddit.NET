@@ -855,7 +855,7 @@ namespace Reddit.Controllers
         }
 
         private bool Diff<T>(Dictionary<string, T> oldList, Dictionary<string, T> newList,
-            out Dictionary<string, T> added, out Dictionary<string, T> removed)
+            out Dictionary<string, T> added, out Dictionary<string, T> removed, HashSet<T> filters = null)
         {
             added = new Dictionary<string, T>();
             removed = new Dictionary<string, T>();
@@ -868,7 +868,10 @@ namespace Reddit.Controllers
 
             foreach (string key in addedKeys)
             {
-                added.Add(key, newList[key]);
+                if (filters == null || !filters.Contains(newList[key]))
+                {
+                    added.Add(key, newList[key]);
+                }
             }
             foreach (string key in removedKeys)
             {

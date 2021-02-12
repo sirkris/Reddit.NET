@@ -64,7 +64,7 @@ namespace Reddit.Controllers.Internal
             {
                 if (!oldByFullname.ContainsKey(pair.Key))
                 {
-                    if (filterIds != null && filterIds.Contains(pair.Key))
+                    if (filterIds == null && !filterIds.Contains(pair.Key))
                     {
                         added.Add(pair.Value);
                     }
