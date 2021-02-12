@@ -24,6 +24,7 @@ namespace Reddit.Controllers
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
         public event EventHandler<PostsUpdateEventArgs> PostHistoryUpdated;
         public event EventHandler<CommentsUpdateEventArgs> CommentHistoryUpdated;
@@ -443,6 +444,7 @@ namespace Reddit.Controllers
         public User(Dispatch dispatch, Things.User user)
         {
             Import(user);
+            MonitorInit();
             Dispatch = dispatch;
         }
 
@@ -454,6 +456,7 @@ namespace Reddit.Controllers
         public User(Dispatch dispatch, User user)
         {
             Import(user);
+            MonitorInit();
             Dispatch = dispatch;
         }
 
@@ -489,6 +492,7 @@ namespace Reddit.Controllers
         {
             Import(name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
                 hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
+            MonitorInit();
 
             Dispatch = dispatch;
         }
@@ -499,7 +503,18 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         public User(Dispatch dispatch)
         {
+            MonitorInit();
             Dispatch = dispatch;
+        }
+
+        private void MonitorInit()
+        {
+
+            MonitoringCache = new Dictionary<string, HashSet<string>>
+            {
+                { "posts", new HashSet<string>() },
+                { "comments", new HashSet<string>() }
+            };
         }
 
         private void Import(Things.User user)
@@ -1435,9 +1450,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorPostHistory(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -1458,6 +1474,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "posts");
 
             string key = "PostHistory";
             return Monitor(key, new Thread(() => MonitorPostHistoryThread(key, monitoringDelayMs)), Fullname);
@@ -1481,9 +1499,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorCommentHistory(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -1504,6 +1523,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "comments");
 
             string key = "CommentHistory";
             return Monitor(key, new Thread(() => MonitorCommentHistoryThread(key, monitoringDelayMs)), Fullname);
@@ -1569,8 +1590,18 @@ namespace Reddit.Controllers
                             oldPostsList = postHistory;
                             newPostsList = GetPostHistory();
 
-                            if (Lists.ListDiff(oldPostsList, newPostsList, out List<Post> addedPosts, out List<Post> removedPosts))
+                            if (Lists.ListDiff(oldPostsList, newPostsList, out List<Post> addedPosts, out List<Post> removedPosts, 
+                                (UseCache.Contains(type) ? MonitoringCache[type] : null)))
                             {
+                                // Add the new entries to the appropriate cache, if enabled.  --Kris
+                                if (UseCache.Contains(type))
+                                {
+                                    foreach (Post post in addedPosts)
+                                    {
+                                        MonitoringCache[type].Add(post.Id);
+                                    }
+                                }
+
                                 // Event handler to alert the calling app that the list has changed.  --Kris
                                 PostsUpdateEventArgs args = new PostsUpdateEventArgs
                                 {
@@ -1586,8 +1617,18 @@ namespace Reddit.Controllers
                             oldCommentsList = commentHistory;
                             newCommentsList = GetCommentHistory();
 
-                            if (Lists.ListDiff(oldCommentsList, newCommentsList, out List<Comment> addedComments, out List<Comment> removedComments))
+                            if (Lists.ListDiff(oldCommentsList, newCommentsList, out List<Comment> addedComments, out List<Comment> removedComments,
+                                (UseCache.Contains(type) ? MonitoringCache[type] : null)))
                             {
+                                // Add the new entries to the appropriate cache, if enabled.  --Kris
+                                if (UseCache.Contains(type))
+                                {
+                                    foreach (Comment comment in addedComments)
+                                    {
+                                        MonitoringCache[type].Add(comment.Id);
+                                    }
+                                }
+
                                 // Event handler to alert the calling app that the list has changed.  --Kris
                                 CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
                                 {
