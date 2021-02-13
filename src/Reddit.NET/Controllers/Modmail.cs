@@ -135,6 +135,7 @@ namespace Reddit.Controllers
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; }
 
         private Dispatch Dispatch;
 
@@ -145,6 +146,14 @@ namespace Reddit.Controllers
         public Modmail(Dispatch dispatch) : base()
         {
             Dispatch = dispatch;
+
+            MonitoringCache = new Dictionary<string, HashSet<string>>
+            {
+                { "recent", new HashSet<string>() },
+                { "mod", new HashSet<string>() },
+                { "user", new HashSet<string>() },
+                { "unread", new HashSet<string>() }
+            };
         }
 
         /// <summary>
@@ -584,9 +593,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorRecent(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -607,6 +617,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "recent");
 
             string key = "ModmailMessagesRecent";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
@@ -620,9 +632,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorMod(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -643,6 +656,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "mod");
 
             string key = "ModmailMessagesMod";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
@@ -656,9 +671,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUser(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -679,6 +695,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "user");
 
             string key = "ModmailMessagesUser";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
@@ -692,9 +710,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUnread(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -715,6 +734,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "unread");
 
             string key = "ModmailMessagesUnread";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
@@ -834,7 +855,7 @@ namespace Reddit.Controllers
         }
 
         private bool Diff<T>(Dictionary<string, T> oldList, Dictionary<string, T> newList,
-            out Dictionary<string, T> added, out Dictionary<string, T> removed)
+            out Dictionary<string, T> added, out Dictionary<string, T> removed, HashSet<T> filters = null)
         {
             added = new Dictionary<string, T>();
             removed = new Dictionary<string, T>();
@@ -847,7 +868,10 @@ namespace Reddit.Controllers
 
             foreach (string key in addedKeys)
             {
-                added.Add(key, newList[key]);
+                if (filters == null || !filters.Contains(newList[key]))
+                {
+                    added.Add(key, newList[key]);
+                }
             }
             foreach (string key in removedKeys)
             {

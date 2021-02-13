@@ -25,6 +25,7 @@ namespace Reddit.Controllers
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
         public string Id
         {
@@ -246,6 +247,7 @@ namespace Reddit.Controllers
         {
             Dispatch = dispatch;
             Import(liveThread.EventData);
+            MonitorInit();
         }
 
         /// <summary>
@@ -257,6 +259,7 @@ namespace Reddit.Controllers
         {
             Dispatch = dispatch;
             Import(liveUpdateEvent);
+            MonitorInit();
         }
 
         /// <summary>
@@ -283,6 +286,7 @@ namespace Reddit.Controllers
         {
             Dispatch = dispatch;
             Import(id, description, nsfw, resources, title, totalViews, created, name, websocketUrl, announcementUrl, state, viewerCount, icon, isAnnouncement);
+            MonitorInit();
         }
 
         /// <summary>
@@ -294,6 +298,17 @@ namespace Reddit.Controllers
         {
             Dispatch = dispatch;
             Import(new LiveUpdateEvent { Id = id });
+            MonitorInit();
+        }
+
+        private void MonitorInit()
+        {
+            MonitoringCache = new Dictionary<string, HashSet<string>>
+            {
+                { "contributors", new HashSet<string>() },
+                { "updates", new HashSet<string>() }
+            };
+
         }
 
         private void Import(LiveUpdateEvent liveUpdateEvent)
@@ -815,9 +830,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorThread(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -838,6 +854,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "thread");
 
             string key = "LiveThread";
             return Monitor(key, new Thread(() => MonitorThreadThread(key, monitoringDelayMs)), Id);
@@ -851,9 +869,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorContributors(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -874,6 +893,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "contributors");
 
             string key = "LiveThreadContributors";
             return Monitor(key, new Thread(() => MonitorContributorsThread(key, monitoringDelayMs)), Id);
@@ -887,9 +908,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUpdates(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -910,6 +932,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "updates");
 
             string key = "LiveThreadUpdates";
             return Monitor(key, new Thread(() => MonitorUpdatesThread(key, monitoringDelayMs)), Id);
@@ -1066,8 +1090,21 @@ namespace Reddit.Controllers
             List<UserListContainer> oldList = contributors;
             List<UserListContainer> newList = GetContributors();
 
-            if (UserListDiff(oldList, newList, out List<UserListContainer> added, out List<UserListContainer> removed))
+            if (UserListDiff(oldList, newList, out List<UserListContainer> added, out List<UserListContainer> removed, 
+                (UseCache.Contains("contributors") ? MonitoringCache["contributors"] : null)))
             {
+                // Add the new entries to the appropriate cache, if enabled.  --Kris
+                if (UseCache.Contains("contributors"))
+                {
+                    foreach (UserListContainer ulc in added)
+                    {
+                        foreach (UserListChild child in ulc.Data.Children)
+                        {
+                            MonitoringCache["contributors"].Add(child.Id);
+                        }
+                    }
+                }
+
                 // Event handler to alert the calling app that the list has changed.  --Kris
                 LiveThreadContributorsUpdateEventArgs args = new LiveThreadContributorsUpdateEventArgs
                 {
@@ -1081,7 +1118,7 @@ namespace Reddit.Controllers
         }
 
         private bool UserListDiff(List<UserListContainer> oldList, List<UserListContainer> newList, out List<UserListContainer> added,
-            out List<UserListContainer> removed)
+            out List<UserListContainer> removed, HashSet<string> filterIds = null)
         {
             added = new List<UserListContainer>();
             removed = new List<UserListContainer>();
@@ -1106,7 +1143,7 @@ namespace Reddit.Controllers
                 added.Add(new UserListContainer { Data = new UserListData { Children = new List<UserListChild>() } });
                 removed.Add(new UserListContainer { Data = new UserListData { Children = new List<UserListChild>() } });
 
-                if (Lists.ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<UserListChild> childrenAdded, out List<UserListChild> childrenRemoved))
+                if (Lists.ListDiff(oldList[i].Data.Children, newList[i].Data.Children, out List<UserListChild> childrenAdded, out List<UserListChild> childrenRemoved, filterIds))
                 {
                     added[i].Data.Children = childrenAdded;
                     removed[i].Data.Children = childrenRemoved;
@@ -1122,7 +1159,8 @@ namespace Reddit.Controllers
             List<LiveUpdate> oldList = updates;
             List<LiveUpdate> newList = GetUpdates();
 
-            if (Lists.ListDiff(oldList, newList, out List<LiveUpdate> added, out List<LiveUpdate> removed))
+            if (Lists.ListDiff(oldList, newList, out List<LiveUpdate> added, out List<LiveUpdate> removed,
+                (UseCache.Contains("updates") ? MonitoringCache["updates"] : null)))
             {
                 // Event handler to alert the calling app that the list has changed.  --Kris
                 LiveThreadUpdatesUpdateEventArgs args = new LiveThreadUpdatesUpdateEventArgs
