@@ -91,13 +91,15 @@ namespace AuthTokenRetriever
                     };
                     Process.Start(processStartInfo);
                 }
-            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
             {
-                //For OSX run a separate command to open the web browser as found in https://brockallen.com/2016/09/24/process-start-for-urls-on-net-core/
+                // For OSX run a separate command to open the web browser as found in https://brockallen.com/2016/09/24/process-start-for-urls-on-net-core/
                 Process.Start("open", authUrl);
-            } else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+            }
+            else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
             {
-                //Similar to OSX, Linux can (and usually does) use xdg for this task.
+                // Similar to OSX, Linux can (and usually does) use xdg for this task.
                 Process.Start("xdg-open", authUrl);
             }
         }
