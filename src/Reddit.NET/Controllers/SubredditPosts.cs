@@ -37,8 +37,9 @@ namespace Reddit.Controllers
         internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
         /// <summary>
-        /// List of posts using "best" sort.
+        /// (deprecated) List of posts using "best" sort.
         /// </summary>
+        [Obsolete("This property has been deprecated.  Please use the top-level RedditClient.FrontPage property instead.")]
         public List<Post> Best
         {
             get
@@ -54,8 +55,9 @@ namespace Reddit.Controllers
         internal List<Post> best;
 
         /// <summary>
-        /// IList of posts using "best" sort.
+        /// (deprecated) IList of posts using "best" sort.
         /// </summary>
+        [Obsolete("This property has been deprecated.  Please use the top-level RedditClient.FrontPage property instead.")]
         public IList<Post> IBest
         {
             get
