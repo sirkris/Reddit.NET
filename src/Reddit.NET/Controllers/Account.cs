@@ -34,7 +34,8 @@ namespace Reddit.Controllers
         {
             get
             {
-                return messages ?? new PrivateMessages(Dispatch);
+                messages = messages ?? new PrivateMessages(Dispatch);
+                return messages;
             }
             set
             {
