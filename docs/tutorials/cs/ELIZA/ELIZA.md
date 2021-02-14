@@ -131,7 +131,7 @@ ELIZA works by loading a script file that contains all the different triggers an
 
 You can find [DOCTOR.json](https://raw.githubusercontent.com/sirkris/ELIZA.NET/master/scripts/DOCTOR/DOCTOR.json) in the [ELIZA.NET](https://github.com/sirkris/ELIZA.NET) repo.  Once you have it, add it to your project as an existing item in Visual Studio and make it an Embedded Resource set to Copy Always.
 
-[!ELIZA Resource](https://raw.githubusercontent.com/sirkris/Reddit.NET/Kris_Issue123/docs/tutorials/cs/ELIZA/images/resource.png)
+![ELIZA Resource](images/resource.png)
 
 Now we're ready to load the DOCTOR.json resource, which will then be passed to our ELIZA instance as a string.  So let's start our Workflow constructor with this:
 
