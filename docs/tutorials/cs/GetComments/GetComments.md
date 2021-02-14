@@ -132,7 +132,7 @@ public void Run()
 }
 ```
 
-Fairly simple.  We start by displaying the post title and the number ofcomments (as reported in the post data sent by the Reddit API).  Then we call IterateComments, which will do the heavy lifting.  Then we end by displaying the counts.
+Fairly simple.  We start by displaying the post title and the number of comments (as reported in the post data sent by the Reddit API).  Then we call IterateComments, which will do the heavy lifting.  Then we end by displaying the counts.
 
 ## WARNING: Reddit Truncates Comment Results
 
