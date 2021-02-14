@@ -255,16 +255,19 @@ namespace Reddit.Models
             MultipleResponseContainer res = SendRequest<MultipleResponseContainer>("api/morechildren", linksAndCommentsMoreChildrenInput);
 
             MoreChildren moreChildren = new MoreChildren();
-            foreach (DynamicListingChild child in res.JSON.Data.Things)
+            if (res != null && res.JSON != null && res.JSON.Data != null)
             {
-                switch (child.Kind)
+                foreach (DynamicListingChild child in res.JSON.Data.Things)
                 {
-                    case "t1":
-                        moreChildren.Comments.Add(JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data)));
-                        break;
-                    case "more":
-                        moreChildren.MoreData.Add(JsonConvert.DeserializeObject<More>(JsonConvert.SerializeObject(child.Data)));
-                        break;
+                    switch (child.Kind)
+                    {
+                        case "t1":
+                            moreChildren.Comments.Add(JsonConvert.DeserializeObject<Comment>(JsonConvert.SerializeObject(child.Data)));
+                            break;
+                        case "more":
+                            moreChildren.MoreData.Add(JsonConvert.DeserializeObject<More>(JsonConvert.SerializeObject(child.Data)));
+                            break;
+                    }
                 }
             }
 
