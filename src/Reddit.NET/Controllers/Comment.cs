@@ -1118,7 +1118,7 @@ namespace Reddit.Controllers
         {
             linksAndCommentsMoreChildrenInput.link_id = ParentFullname;
 
-            return Validate(Dispatch.LinksAndComments.MoreChildren(linksAndCommentsMoreChildrenInput));
+            return Dispatch.LinksAndComments.MoreChildren(linksAndCommentsMoreChildrenInput);
         }
 
         /// <summary>

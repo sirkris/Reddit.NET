@@ -20,6 +20,7 @@ Created by Kris Craig.
 | [Code Examples](#code-examples)                                   |
 | [Code Examples Using Models](#code-examples-using-models)         |
 | [More Code Examples](#more-code-examples)                         |
+| [Tutorials](#tutorials)                                           |
 | [Reference Documentation](#reference-documentation)               |
 | [Contributing](#contributing)                                     |
 | [Currently Supported Endpoints](#currently-supported-endpoints)   |
@@ -428,6 +429,14 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 #### [Comment Replies Count](docs/examples/cs/Comment%20Replies%20Count.md)
  
 For more examples, check out the Example and Reddit.NETTests projects.
+
+## Tutorials
+
+### C#
+
+#### [ELIZA Chatbot](docs/tutorials/cs/ELIZA/ELIZA.md)
+
+#### [Retrieve Comments Tree](docs/tutorials/cs/GetComments/GetComments.md)
 
 ## Reference Documentation
 
