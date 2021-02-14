@@ -1,4 +1,4 @@
-# Tutorial: Retrieve Post Comments Tree
+# Tutorial: Retrieve Comments Tree
 
 ## Author
 

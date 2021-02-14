@@ -436,6 +436,8 @@ For more examples, check out the Example and Reddit.NETTests projects.
 
 #### [ELIZA Chatbot](docs/tutorials/cs/ELIZA/ELIZA.md)
 
+#### [Retrieve Comments Tree](docs/tutorials/cs/GetComments/GetComments.md)
+
 ## Reference Documentation
 
 All classes/methods/etc can be looked up from here.  Generated using [Doxygen](http://www.doxygen.nl/).
