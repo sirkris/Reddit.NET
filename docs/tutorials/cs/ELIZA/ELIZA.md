@@ -160,7 +160,7 @@ That's it for the constructor.
 
 ## Main Loop
 
-In the Workflow class, create a new method void method called Run with no arguments.  Let's take a look at the code, then I'll walk you through it:
+In the Workflow class, create a new void method called Run with no arguments.  Let's take a look at the code, then I'll walk you through it:
 
 ```c#
 public void Run()
