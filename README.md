@@ -428,7 +428,9 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 
 #### [Comment Replies Count](docs/examples/cs/Comment%20Replies%20Count.md)
 
-#### [Updating Client Prefs](docs/examples/cs/Updating%20Client%20Prefs.md)
+#### [Update Client Prefs](docs/examples/cs/Update%20Client%20Prefs.md)
+
+#### [Retrieve Posts From r/all](docs/examples/cs/Retrieve%20Posts%20From%20rall.md)
  
 For more examples, check out the Example and Reddit.NETTests projects.
 

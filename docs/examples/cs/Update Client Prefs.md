@@ -1,4 +1,4 @@
-# Updating Client Prefs
+# Update Client Prefs
 
 ## Author
 
@@ -39,4 +39,4 @@ reddit.Account.UpdatePrefs(new AccountPrefsSubmit(prefs, null, false, null));
 
 ## Source File
 
-[Updating Client Prefs.cs](src/Updating%20Client%20Prefs.cs)
+[Update Client Prefs.cs](src/Update%20Client%20Prefs.cs)
