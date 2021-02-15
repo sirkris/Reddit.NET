@@ -39,4 +39,4 @@ reddit.Account.UpdatePrefs(new AccountPrefsSubmit(prefs, null, false, null));
 
 ## Source File
 
-[Front Page Posts.cs](src/Front%20Page%20Posts.cs)
+[Updating Client Prefs.cs](src/Updating%20Client%20Prefs.cs)
