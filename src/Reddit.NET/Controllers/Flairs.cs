@@ -400,6 +400,7 @@ namespace Reddit.Controllers
         /// Return information about a user's or link's flair options.
         /// </summary>
         /// <param name="username">A valid Reddit username</param>
+        /// /// <param name="link">a fullname of a link</param>
         /// <returns>Flair results.</returns>
         public FlairSelectorResultContainer FlairSelector(string username = null, string link = null)
         {

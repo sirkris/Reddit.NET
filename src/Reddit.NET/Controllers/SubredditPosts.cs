@@ -16,17 +16,59 @@ namespace Reddit.Controllers
     /// </summary>
     public class SubredditPosts : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring best.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> BestUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring hot.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> HotUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring new.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> NewUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring rising.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> RisingUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring top.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> TopUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring controversial.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> ControversialUpdated;
 
+        /// <summary>
+        /// Event handler for monitoring modqueu.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> ModQueueUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modqueue reports.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> ModQueueReportsUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modqueue spam.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> ModQueueSpamUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modqueue unmoderated.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> ModQueueUnmoderatedUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modqueue edited.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> ModQueueEditedUpdated;
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
@@ -1391,61 +1433,113 @@ namespace Reddit.Controllers
             ModQueueEditedUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Whether best is being monitored.
+        /// </summary>
+        /// <returns>Whether best is being monitored.</returns>
         public bool BestPostsIsMonitored()
         {
             return IsMonitored("BestPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether hot is being monitored.
+        /// </summary>
+        /// <returns>Whether hot is being monitored.</returns>
         public bool HotPostsIsMonitored()
         {
             return IsMonitored("HotPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether new is being monitored.
+        /// </summary>
+        /// <returns>Whether new is being monitored.</returns>
         public bool NewPostsIsMonitored()
         {
             return IsMonitored("NewPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether rising is being monitored.
+        /// </summary>
+        /// <returns>Whether rising is being monitored.</returns>
         public bool RisingPostsIsMonitored()
         {
             return IsMonitored("RisingPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether top is being monitored.
+        /// </summary>
+        /// <returns>Whether top is being monitored.</returns>
         public bool TopPostsIsMonitored()
         {
             return IsMonitored("TopPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether controversial is being monitored.
+        /// </summary>
+        /// <returns>Whether controversial is being monitored.</returns>
         public bool ControversialPostsIsMonitored()
         {
             return IsMonitored("ControversialPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether modqueue is being monitored.
+        /// </summary>
+        /// <returns>Whether modqueue is being monitored.</returns>
         public bool ModQueuePostsIsMonitored()
         {
             return IsMonitored("ModQueuePosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether modqueue reports is being monitored.
+        /// </summary>
+        /// <returns>Whether modqueue reports is being monitored.</returns>
         public bool ModQueueReportsPostsIsMonitored()
         {
             return IsMonitored("ModQueueReportsPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether modqueue spam is being monitored.
+        /// </summary>
+        /// <returns>Whether modqueue spam is being monitored.</returns>
         public bool ModQueueSpamPostsIsMonitored()
         {
             return IsMonitored("ModQueueSpamPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether modqueue unmoderated is being monitored.
+        /// </summary>
+        /// <returns>Whether modqueue unmoderated is being monitored.</returns>
         public bool ModQueueUnmoderatedPostsIsMonitored()
         {
             return IsMonitored("ModQueueUnmoderatedPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Whether modqueue edited is being monitored.
+        /// </summary>
+        /// <returns>Whether modqueue edited is being monitored.</returns>
         public bool ModQueueEditedPostsIsMonitored()
         {
             return IsMonitored("ModQueueEditedPosts", Subreddit);
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

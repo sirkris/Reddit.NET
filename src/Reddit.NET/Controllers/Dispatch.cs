@@ -4,8 +4,14 @@ using RestSharp;
 
 namespace Reddit.Controllers
 {
+    /// <summary>
+    /// Dispatch Controller for direct access to Models.
+    /// </summary>
     public class Dispatch
     {
+        /// <summary>
+        /// Account model.
+        /// </summary>
         public API.Account Account
         {
             get
@@ -27,6 +33,9 @@ namespace Reddit.Controllers
         }
         private API.Account account;
 
+        /// <summary>
+        /// Emoji model.
+        /// </summary>
         public API.Emoji Emoji
         {
             get
@@ -48,6 +57,9 @@ namespace Reddit.Controllers
         }
         private API.Emoji emoji;
 
+        /// <summary>
+        /// Flair model.
+        /// </summary>
         public API.Flair Flair
         {
             get
@@ -69,6 +81,9 @@ namespace Reddit.Controllers
         }
         private API.Flair flair;
 
+        /// <summary>
+        /// LinksAndComments model.
+        /// </summary>
         public API.LinksAndComments LinksAndComments
         {
             get
@@ -90,6 +105,9 @@ namespace Reddit.Controllers
         }
         private API.LinksAndComments linksAndComments;
 
+        /// <summary>
+        /// Listings model.
+        /// </summary>
         public API.Listings Listings
         {
             get
@@ -111,6 +129,9 @@ namespace Reddit.Controllers
         }
         private API.Listings listings;
 
+        /// <summary>
+        /// LiveThreads model.
+        /// </summary>
         public API.LiveThreads LiveThreads
         {
             get
@@ -132,6 +153,9 @@ namespace Reddit.Controllers
         }
         private API.LiveThreads liveThreads;
 
+        /// <summary>
+        /// Misc model.
+        /// </summary>
         public API.Misc Misc
         {
             get
@@ -153,6 +177,9 @@ namespace Reddit.Controllers
         }
         private API.Misc misc;
 
+        /// <summary>
+        /// Moderation model.
+        /// </summary>
         public API.Moderation Moderation
         {
             get
@@ -174,6 +201,9 @@ namespace Reddit.Controllers
         }
         private API.Moderation moderation;
 
+        /// <summary>
+        /// Modmail model.
+        /// </summary>
         public API.Modmail Modmail
         {
             get
@@ -195,6 +225,9 @@ namespace Reddit.Controllers
         }
         private API.Modmail modmail;
 
+        /// <summary>
+        /// Multis model.
+        /// </summary>
         public API.Multis Multis
         {
             get
@@ -216,6 +249,9 @@ namespace Reddit.Controllers
         }
         private API.Multis multis;
 
+        /// <summary>
+        /// PrivateMessages model.
+        /// </summary>
         public API.PrivateMessages PrivateMessages
         {
             get
@@ -237,6 +273,9 @@ namespace Reddit.Controllers
         }
         private API.PrivateMessages privateMessages;
 
+        /// <summary>
+        /// RedditGold model.
+        /// </summary>
         public API.RedditGold RedditGold
         {
             get
@@ -258,6 +297,9 @@ namespace Reddit.Controllers
         }
         private API.RedditGold redditGold;
 
+        /// <summary>
+        /// Search model.
+        /// </summary>
         public API.Search Search
         {
             get
@@ -279,6 +321,9 @@ namespace Reddit.Controllers
         }
         private API.Search search;
 
+        /// <summary>
+        /// Subreddits model.
+        /// </summary>
         public API.Subreddits Subreddits
         {
             get
@@ -300,6 +345,9 @@ namespace Reddit.Controllers
         }
         private API.Subreddits subreddits;
 
+        /// <summary>
+        /// Users model.
+        /// </summary>
         public API.Users Users
         {
             get
@@ -321,6 +369,9 @@ namespace Reddit.Controllers
         }
         private API.Users users;
 
+        /// <summary>
+        /// Widgets model.
+        /// </summary>
         public API.Widgets Widgets
         {
             get
@@ -342,6 +393,9 @@ namespace Reddit.Controllers
         }
         private API.Widgets widgets;
 
+        /// <summary>
+        /// Wiki model.
+        /// </summary>
         public API.Wiki Wiki
         {
             get
@@ -434,6 +488,11 @@ namespace Reddit.Controllers
             UserAgent = userAgent;
         }
 
+        /// <summary>
+        /// Propagate token across all models.
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">A valid TokenUpdateEventArgs instance</param>
         public void C_TokenUpdated(object sender, TokenUpdateEventArgs e)
         {
             Account.UpdateAccessToken(e.AccessToken);
@@ -456,6 +515,11 @@ namespace Reddit.Controllers
             Wiki.UpdateAccessToken(e.AccessToken);
         }
 
+        /// <summary>
+        /// Keep track of requests across all models.
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">A valid RequestsUpdateEventArgs instance</param>
         public void C_RequestsUpdated(object sender, RequestsUpdateEventArgs e)
         {
             Account.UpdateRequests(e.Requests);
@@ -477,6 +541,11 @@ namespace Reddit.Controllers
             Wiki.UpdateRequests(e.Requests);
         }
 
+        /// <summary>
+        /// Update what's being monitored across all models.
+        /// </summary>
+        /// <param name="sender">The sender</param>
+        /// <param name="e">A valid MonitoringUpdateEventArgs instance</param>
         public void C_MonitoringUpdated(object sender, MonitoringUpdateEventArgs e)
         {
             Monitor.UpdateMonitoring(e);

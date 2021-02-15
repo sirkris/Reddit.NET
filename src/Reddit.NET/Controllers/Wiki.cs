@@ -15,6 +15,9 @@ namespace Reddit.Controllers
     /// </summary>
     public class Wiki : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring the list of wiki pages.
+        /// </summary>
         public event EventHandler<WikiPagesUpdateEventArgs> PagesUpdated;
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
@@ -250,11 +253,23 @@ namespace Reddit.Controllers
             return Monitor(key, new Thread(() => MonitorPagesThread(key, monitoringDelayMs: monitoringDelayMs)), Subreddit);
         }
 
+        /// <summary>
+        /// Whether the wiki pages list is being monitored.
+        /// </summary>
+        /// <returns>Whether the wiki pages list is being monitored.</returns>
         public bool WikiPagesIsMonitored()
         {
             return IsMonitored("WikiPages", Subreddit);
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

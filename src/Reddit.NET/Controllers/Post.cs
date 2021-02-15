@@ -19,7 +19,14 @@ namespace Reddit.Controllers
     /// </summary>
     public class Post : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring post data.
+        /// </summary>
         public event EventHandler<PostUpdateEventArgs> PostDataUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring post score.
+        /// </summary>
         public event EventHandler<PostUpdateEventArgs> PostScoreUpdated;
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
@@ -1247,11 +1254,19 @@ namespace Reddit.Controllers
             return Validate(Dispatch.Flair.FlairSelector(new FlairLinkInput(Fullname, username), Subreddit));
         }
 
+        /// <summary>
+        /// Invoke monitoring event for post data.
+        /// </summary>
+        /// <param name="e">A valid PostUpdateEventArgs instance</param>
         protected virtual void OnPostDataUpdated(PostUpdateEventArgs e)
         {
             PostDataUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for post score.
+        /// </summary>
+        /// <param name="e">A valid PostUpdateEventArgs instance</param>
         protected virtual void OnPostScoreUpdated(PostUpdateEventArgs e)
         {
             PostScoreUpdated?.Invoke(this, e);
@@ -1352,11 +1367,19 @@ namespace Reddit.Controllers
             return Monitor(key, new Thread(() => MonitorPostScoreThread(key, monitoringDelayMs)), Id);
         }
 
+        /// <summary>
+        /// Whether post data is being monitored.
+        /// </summary>
+        /// <returns>Whether post data is being monitored.</returns>
         public bool PostDataIsMonitored()
         {
             return IsMonitored("PostData", Id);
         }
 
+        /// <summary>
+        /// Whether post score is being monitored.
+        /// </summary>
+        /// <returns>Whether post score is being monitored.</returns>
         public bool PostScoreIsMonitored()
         {
             return IsMonitored("PostScore", Id);
@@ -1372,6 +1395,14 @@ namespace Reddit.Controllers
             MonitorPost(key, "score", Id, monitoringDelayMs: monitoringDelayMs);
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

@@ -12,6 +12,9 @@ namespace Reddit.Controllers
     /// </summary>
     public class SelfPost : Post
     {
+        /// <summary>
+        /// The body of the self post.
+        /// </summary>
         public string SelfText
         {
             get
@@ -25,6 +28,9 @@ namespace Reddit.Controllers
         }
         private string selfText;
 
+        /// <summary>
+        /// The body of the self post rendered as HTML.
+        /// </summary>
         public string SelfTextHTML
         {
             get

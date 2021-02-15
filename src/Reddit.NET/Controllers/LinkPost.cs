@@ -14,6 +14,9 @@ namespace Reddit.Controllers
     /// </summary>
     public class LinkPost : Post
     {
+        /// <summary>
+        /// Preview.
+        /// </summary>
         public JObject Preview
         {
             get
@@ -51,6 +54,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Thumbnail URL.
+        /// </summary>
         public string Thumbnail
         {
             get
@@ -68,6 +74,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Thumbnail height.
+        /// </summary>
         public int? ThumbnailHeight
         {
             get
@@ -85,6 +94,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Thumbnail width.
+        /// </summary>
         public int? ThumbnailWidth
         {
             get

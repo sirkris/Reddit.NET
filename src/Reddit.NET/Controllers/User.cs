@@ -26,7 +26,14 @@ namespace Reddit.Controllers
         internal override DateTime? MonitoringExpiration { get; set; }
         internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
+        /// <summary>
+        /// Event handler for monitoring post history.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> PostHistoryUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comment history.
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> CommentHistoryUpdated;
 
         /// <summary>
@@ -882,7 +889,6 @@ namespace Reddit.Controllers
         /// <summary>
         /// Check whether this instance's username is available for registration.
         /// </summary>
-        /// <param name="user">a valid, unused username</param>
         /// <returns>Boolean or null if error (i.e. invalid username).</returns>
         public bool? UsernameAvailable()
         {
@@ -1648,6 +1654,14 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

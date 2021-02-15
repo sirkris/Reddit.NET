@@ -1632,7 +1632,8 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="username">the name of an existing user</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
-        public void ModeratorInvite(string username, string permissions, int duration = 999)
+        /// <param name="duration">an integer between 1 and 999, or null to specify permanent duration</param>
+        public void ModeratorInvite(string username, string permissions, int? duration = null)
         {
             ModeratorInvite(new UsersFriendInput(username, "moderator_invite", duration, permissions));
         }
@@ -1642,7 +1643,8 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="username">the name of an existing user</param>
         /// <param name="permissions">A string representing the permissions being set (e.g. "+wiki")</param>
-        public async Task ModeratorInviteAsync(string username, string permissions, int duration = 999)
+        /// <param name="duration">an integer between 1 and 999, or null to specify permanent duration</param>
+        public async Task ModeratorInviteAsync(string username, string permissions, int? duration = null)
         {
             await ModeratorInviteAsync(new UsersFriendInput(username, "moderator_invite", duration, permissions));
         }
@@ -1864,6 +1866,8 @@ namespace Reddit.Controllers
         /// If the subreddit already exists, the parameters passed to this method will be ignored.
         /// </summary>
         /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle"></param>
         /// <returns>An instance of this class populated with the newly created or existing subreddit.</returns>
         public Subreddit CreateIfNotExists(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
         {
@@ -1882,6 +1886,8 @@ namespace Reddit.Controllers
         /// If the subreddit already exists, the parameters passed to this method will be ignored.
         /// </summary>
         /// <param name="subredditsSiteAdminInput">A valid SubredditsSiteAdminInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
+        /// <param name="headerTitle"></param>
         /// <returns>An instance of this class populated with the newly created or existing subreddit.</returns>
         public async Task<Subreddit> CreateIfNotExistsAsync(SubredditsSiteAdminInput subredditsSiteAdminInput, string gRecaptchaResponse = "", string headerTitle = "")
         {
