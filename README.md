@@ -427,6 +427,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 #### [Get the Front Page](docs/examples/cs/Front%20Page%20Posts.md)
 
 #### [Comment Replies Count](docs/examples/cs/Comment%20Replies%20Count.md)
+
+#### [Updating Client Prefs](docs/examples/cs/Updating%20Client%20Prefs.md)
  
 For more examples, check out the Example and Reddit.NETTests projects.
 
