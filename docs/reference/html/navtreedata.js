@@ -1,24 +1,26 @@
 /*
-@licstart  The following is the entire license notice for the
-JavaScript code in this file.
+ @licstart  The following is the entire license notice for the JavaScript code in this file.
 
-Copyright (C) 1997-2019 by Dimitri van Heesch
+ The MIT License (MIT)
 
-This program is free software; you can redistribute it and/or modify
-it under the terms of version 2 of the GNU General Public License as published by
-the Free Software Foundation
+ Copyright (C) 1997-2020 by Dimitri van Heesch
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-GNU General Public License for more details.
+ Permission is hereby granted, free of charge, to any person obtaining a copy of this software
+ and associated documentation files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, merge, publish, distribute,
+ sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
-You should have received a copy of the GNU General Public License along
-with this program; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ The above copyright notice and this permission notice shall be included in all copies or
+ substantial portions of the Software.
 
-@licend  The above is the entire license notice
-for the JavaScript code in this file
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING
+ BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+ DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+ @licend  The above is the entire license notice for the JavaScript code in this file
 */
 var NAVTREE =
 [
@@ -51,22 +53,25 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "_a_p_i_type_input_8cs.html",
-"_subreddit_data_8cs.html",
-"class_reddit_1_1_controllers_1_1_comments.html#a4eefe3e65711a35accefb521263c0f16",
-"class_reddit_1_1_controllers_1_1_internal_1_1_validators.html#a1ed4d0a4f977ac4233533eff9d2dda59",
-"class_reddit_1_1_controllers_1_1_post.html#a6745c7ca30f4e3217f43fd88c51d64b4",
-"class_reddit_1_1_controllers_1_1_subreddit.html#a38195e5ccd77cb9ffecf313a3a595278",
-"class_reddit_1_1_controllers_1_1_user.html#a7b1e60a5693b23bba39ba7fba08f7c67",
-"class_reddit_1_1_inputs_1_1_flair_1_1_flair_config_input.html#abf8b3f925f1ec581c241392ac939dc75",
-"class_reddit_1_1_inputs_1_1_subreddits_1_1_subreddits_query_input.html#a043a88d6026af92ec47b5437ae390ce3",
-"class_reddit_1_1_models_1_1_internal_1_1_request.html#a902b2968b343231ee55fc2ec258e1c85",
-"class_reddit_1_1_models_1_1_search.html#a2bee4b34bb7cd6843cf6c5001f2bdd8e",
-"class_reddit_1_1_things_1_1_award.html#a41d2a332102d64bcfbc4f148c869910c",
-"class_reddit_1_1_things_1_1_labeled_multi_container.html",
-"class_reddit_1_1_things_1_1_post.html#a11abe9f92d5132e38ea6f4eff6fd471a",
-"class_reddit_1_1_things_1_1_subreddit.html#afe450da757e8fc27806bcd21e65173af",
-"class_reddit_1_1_things_1_1_user_karma_container.html",
-"dir_429ddfd39a917bd3ab561b34c49b52d3.html"
+"_reddit_client_8cs.html",
+"class_reddit_1_1_controllers_1_1_comment.html#a198504a22be060823ad8c02e3d61b2c3",
+"class_reddit_1_1_controllers_1_1_flairs.html#a45e2fbfb67de2f177a5eadbe3a59fc8e",
+"class_reddit_1_1_controllers_1_1_live_thread.html#afd076b8c901225f0188112aaf1e997af",
+"class_reddit_1_1_controllers_1_1_self_post.html#a60103e6749ffcf67fc311bdd6cd9cd28",
+"class_reddit_1_1_controllers_1_1_subreddit_posts.html#a401a24b4e50037e6d9745b5dd718e591",
+"class_reddit_1_1_controllers_1_1_wiki_page.html#af9e4db6058c503d0288a5ddb9dc1fd27",
+"class_reddit_1_1_inputs_1_1_links_and_comments_1_1_links_and_comments_vote_input.html#a28269a5a49f4af3b2878fdcdcc62f354",
+"class_reddit_1_1_inputs_1_1_users_1_1_users_unfriend_input.html#a49584660b278d329275de1af1ee418ca",
+"class_reddit_1_1_models_1_1_live_threads.html#a9f60a806a582d4b64fc42604bd565194",
+"class_reddit_1_1_reddit_a_p_i.html",
+"class_reddit_1_1_things_1_1_conversation.html#a1df5719df8d1088435b34ad653df2406",
+"class_reddit_1_1_things_1_1_mod_action.html#a8515ae280b3dd379a0ab0c1a64df7ad1",
+"class_reddit_1_1_things_1_1_post_result_short_data.html",
+"class_reddit_1_1_things_1_1_user.html#a9b9a03589203856224252262d774585a",
+"class_reddit_1_1_things_1_1_widget_community_list.html",
+"class_reddit_tests_1_1_controller_tests_1_1_post_tests.html#a3ec1041e0b03f479b4c00223f794059c",
+"class_reddit_tests_1_1_model_tests_1_1_live_threads_tests.html",
+"functions_func_g.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

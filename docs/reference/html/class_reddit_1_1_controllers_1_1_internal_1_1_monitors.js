@@ -18,7 +18,9 @@ var class_reddit_1_1_controllers_1_1_internal_1_1_monitors =
     [ "Terminate", "class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#a4b569d3e02863d222043ab9a919672fd", null ],
     [ "BreakOnFailure", "class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#ac6d20498906b50c4765cacb9db0384ce", null ],
     [ "Monitoring", "class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#aa6ae5e3d1a41fedd75ff210d7b651be9", null ],
+    [ "MonitoringCache", "class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#aa9c4d41929da83e1ecbc14946ae89864", null ],
     [ "MonitoringExpiration", "class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#ab1b2503074b47421d6560af259c8764b", null ],
     [ "MonitoringSchedule", "class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#af83c81d432b54f8db33ced0ac3f668f7", null ],
-    [ "MonitorModel", "class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#a07f3b1bfe2ba175c2aa3b5ebbc8019c6", null ]
+    [ "MonitorModel", "class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#a07f3b1bfe2ba175c2aa3b5ebbc8019c6", null ],
+    [ "UseCache", "class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#a3aa4042a9d9624df1d0690c743037589", null ]
 ];

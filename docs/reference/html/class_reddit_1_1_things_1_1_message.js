@@ -1,6 +1,5 @@
 var class_reddit_1_1_things_1_1_message =
 [
-    [ "Fullname", "class_reddit_1_1_things_1_1_message.html#a14da10127064dbf6b357343559cae2bc", null ],
     [ "Author", "class_reddit_1_1_things_1_1_message.html#a355d0a50e0b3b11722d86dbe91ddf8a7", null ],
     [ "Body", "class_reddit_1_1_things_1_1_message.html#a7f3a00c43a50235b7c77d8f98afc73f4", null ],
     [ "BodyHTML", "class_reddit_1_1_things_1_1_message.html#a5f0b6aa72b058f726636b9469ed0db74", null ],
@@ -11,6 +10,7 @@ var class_reddit_1_1_things_1_1_message =
     [ "Distinguished", "class_reddit_1_1_things_1_1_message.html#a88e642d5da7aa4f7c651c27b57eb70f4", null ],
     [ "FirstMessage", "class_reddit_1_1_things_1_1_message.html#aeff555a96bf0b13d368dca5fccf4996e", null ],
     [ "FirstMessageName", "class_reddit_1_1_things_1_1_message.html#a97b3b86acb97e4c8ee48ea6b3b3d000c", null ],
+    [ "Fullname", "class_reddit_1_1_things_1_1_message.html#a14da10127064dbf6b357343559cae2bc", null ],
     [ "Id", "class_reddit_1_1_things_1_1_message.html#a1d8489550b00ffacf5cb4ea829d0c16f", null ],
     [ "Likes", "class_reddit_1_1_things_1_1_message.html#a75287280e46d9308569c9e001da6a1f0", null ],
     [ "Name", "class_reddit_1_1_things_1_1_message.html#a0e8902ebfc59d01353bd20dcc5022285", null ],

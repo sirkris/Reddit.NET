@@ -27,7 +27,8 @@ using Reddit;
 
 var reddit = new RedditClient("YourRedditAppID", "YourBotUserRefreshToken");
 
-var frontPagePosts = reddit.Subreddit().Posts.Best;
+var frontPagePosts = reddit.FrontPage;
+//var frontPagePosts = reddit.Subreddit().Posts.Best;  // Use this instead if you're using any version of Reddit.NET prior to 1.5.
 ```
 
 ## Source File

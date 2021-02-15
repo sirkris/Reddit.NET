@@ -19,9 +19,24 @@ namespace Reddit.Controllers
     /// </summary>
     public class Modmail : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring modmail (recent set).
+        /// </summary>
         public event EventHandler<ModmailConversationsEventArgs> RecentUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modmail (mod set).
+        /// </summary>
         public event EventHandler<ModmailConversationsEventArgs> ModUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modmail (user set).
+        /// </summary>
         public event EventHandler<ModmailConversationsEventArgs> UserUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modmail (unread set).
+        /// </summary>
         public event EventHandler<ModmailConversationsEventArgs> UnreadUpdated;
 
         private User Me
@@ -135,6 +150,7 @@ namespace Reddit.Controllers
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; }
 
         private Dispatch Dispatch;
 
@@ -145,6 +161,14 @@ namespace Reddit.Controllers
         public Modmail(Dispatch dispatch) : base()
         {
             Dispatch = dispatch;
+
+            MonitoringCache = new Dictionary<string, HashSet<string>>
+            {
+                { "recent", new HashSet<string>() },
+                { "mod", new HashSet<string>() },
+                { "user", new HashSet<string>() },
+                { "unread", new HashSet<string>() }
+            };
         }
 
         /// <summary>
@@ -342,6 +366,7 @@ namespace Reddit.Controllers
         /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
         /// </summary>
         /// <param name="modmailNewConversationInput">A valid ModmailNewConversationInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
         /// <returns>An object containing the conversation data.</returns>
         public ModmailConversationContainer NewConversation(ModmailNewConversationInput modmailNewConversationInput, string gRecaptchaResponse = "")
         {
@@ -584,9 +609,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorRecent(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -607,6 +633,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "recent");
 
             string key = "ModmailMessagesRecent";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
@@ -620,9 +648,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorMod(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -643,6 +672,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "mod");
 
             string key = "ModmailMessagesMod";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
@@ -656,9 +687,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUser(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -679,6 +711,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "user");
 
             string key = "ModmailMessagesUser";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
@@ -692,9 +726,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUnread(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -716,25 +751,43 @@ namespace Reddit.Controllers
                 MonitoringExpiration = monitoringExpiration;
             }
 
+            InitMonitoringCache(useCache, "unread");
+
             string key = "ModmailMessagesUnread";
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
 
+        /// <summary>
+        /// Invoke monitoring event for recent.
+        /// </summary>
+        /// <param name="e">A valid ModmailConversationsEventArgs instance</param>
         protected virtual void OnRecentUpdated(ModmailConversationsEventArgs e)
         {
             RecentUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for mod.
+        /// </summary>
+        /// <param name="e">A valid ModmailConversationsEventArgs instance</param>
         protected virtual void OnModUpdated(ModmailConversationsEventArgs e)
         {
             ModUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for user.
+        /// </summary>
+        /// <param name="e">A valid ModmailConversationsEventArgs instance</param>
         protected virtual void OnUserUpdated(ModmailConversationsEventArgs e)
         {
             UserUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for unread.
+        /// </summary>
+        /// <param name="e">A valid ModmailConversationsEventArgs instance</param>
         protected virtual void OnUnreadUpdated(ModmailConversationsEventArgs e)
         {
             UnreadUpdated?.Invoke(this, e);
@@ -834,7 +887,7 @@ namespace Reddit.Controllers
         }
 
         private bool Diff<T>(Dictionary<string, T> oldList, Dictionary<string, T> newList,
-            out Dictionary<string, T> added, out Dictionary<string, T> removed)
+            out Dictionary<string, T> added, out Dictionary<string, T> removed, HashSet<T> filters = null)
         {
             added = new Dictionary<string, T>();
             removed = new Dictionary<string, T>();
@@ -847,7 +900,10 @@ namespace Reddit.Controllers
 
             foreach (string key in addedKeys)
             {
-                added.Add(key, newList[key]);
+                if (filters == null || !filters.Contains(newList[key]))
+                {
+                    added.Add(key, newList[key]);
+                }
             }
             foreach (string key in removedKeys)
             {
@@ -869,6 +925,11 @@ namespace Reddit.Controllers
             return Diff<ConversationMessage>(oldList, newList, out added, out removed);
         }
 
+        /// <summary>
+        /// Invoke the appropriate event for the given type.
+        /// </summary>
+        /// <param name="args">A valid ModmailConversationsEventArgs instance</param>
+        /// <param name="type">One of: (recent, mod, user, unread)</param>
         protected void TriggerUpdate(ModmailConversationsEventArgs args, string type)
         {
             switch (type)
@@ -888,26 +949,50 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Whether recent is being monitored.
+        /// </summary>
+        /// <returns>Whether recent is being monitored.</returns>
         public bool ModmailMessagesRecentIsMonitored()
         {
             return IsMonitored("ModmailMessagesRecent", "ModmailMessages");
         }
 
+        /// <summary>
+        /// Whether mod is being monitored.
+        /// </summary>
+        /// <returns>Whether mod is being monitored.</returns>
         public bool ModmailMessagesModIsMonitored()
         {
             return IsMonitored("ModmailMessagesMod", "ModmailMessages");
         }
 
+        /// <summary>
+        /// Whether user is being monitored.
+        /// </summary>
+        /// <returns>Whether user is being monitored.</returns>
         public bool ModmailMessagesUserIsMonitored()
         {
             return IsMonitored("ModmailMessagesUser", "ModmailMessages");
         }
 
+        /// <summary>
+        /// Whether unread is being monitored.
+        /// </summary>
+        /// <returns>Whether unread is being monitored.</returns>
         public bool ModmailMessagesUnreadIsMonitored()
         {
             return IsMonitored("ModmailMessagesUnread", "ModmailMessages");
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

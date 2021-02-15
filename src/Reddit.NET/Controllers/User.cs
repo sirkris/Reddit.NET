@@ -24,8 +24,16 @@ namespace Reddit.Controllers
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
+        /// <summary>
+        /// Event handler for monitoring post history.
+        /// </summary>
         public event EventHandler<PostsUpdateEventArgs> PostHistoryUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comment history.
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> CommentHistoryUpdated;
 
         /// <summary>
@@ -443,6 +451,7 @@ namespace Reddit.Controllers
         public User(Dispatch dispatch, Things.User user)
         {
             Import(user);
+            MonitorInit();
             Dispatch = dispatch;
         }
 
@@ -454,6 +463,7 @@ namespace Reddit.Controllers
         public User(Dispatch dispatch, User user)
         {
             Import(user);
+            MonitorInit();
             Dispatch = dispatch;
         }
 
@@ -489,6 +499,7 @@ namespace Reddit.Controllers
         {
             Import(name, id, isFriend, profanityFilter, isSuspended, hasGoldSubscription, numFriends, IsVerified, hasNewModmail, over18, isGold, isMod,
                 hasVerifiedEmail, iconImg, hasModmail, linkKarma, inboxCount, hasMail, created, commentKarma, hasSubscribed);
+            MonitorInit();
 
             Dispatch = dispatch;
         }
@@ -499,7 +510,18 @@ namespace Reddit.Controllers
         /// <param name="dispatch"></param>
         public User(Dispatch dispatch)
         {
+            MonitorInit();
             Dispatch = dispatch;
+        }
+
+        private void MonitorInit()
+        {
+
+            MonitoringCache = new Dictionary<string, HashSet<string>>
+            {
+                { "posts", new HashSet<string>() },
+                { "comments", new HashSet<string>() }
+            };
         }
 
         private void Import(Things.User user)
@@ -618,11 +640,11 @@ namespace Reddit.Controllers
         /// <param name="banMessage">raw markdown text</param>
         /// <param name="banReason">a string no longer than 100 characters</param>
         /// <param name="container"></param>
-        /// <param name="duration">an integer between 1 and 999</param>
+        /// <param name="duration">an integer between 1 and 999, or null to specify permanent duration</param>
         /// <param name="permissions"></param>
         /// <param name="type">one of (friend, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
         /// <param name="subreddit">A subreddit</param>
-        public void AddRelationship(string banContext, string banMessage, string banReason, string container, int duration,
+        public void AddRelationship(string banContext, string banMessage, string banReason, string container, int? duration,
             string permissions, string type, string subreddit = null)
         {
             AddRelationship(new UsersFriendInput(Name, type, duration, permissions, banContext, banMessage, banReason, container), subreddit);
@@ -647,11 +669,11 @@ namespace Reddit.Controllers
         /// <param name="banMessage">raw markdown text</param>
         /// <param name="banReason">a string no longer than 100 characters</param>
         /// <param name="container"></param>
-        /// <param name="duration">an integer between 1 and 999</param>
+        /// <param name="duration">an integer between 1 and 999, or null to specify permanent duration</param>
         /// <param name="permissions"></param>
         /// <param name="type">one of (friend, moderator, moderator_invite, contributor, banned, muted, wikibanned, wikicontributor)</param>
         /// <param name="subreddit">A subreddit</param>
-        public async Task AddRelationshipAsync(string banContext, string banMessage, string banReason, string container, int duration,
+        public async Task AddRelationshipAsync(string banContext, string banMessage, string banReason, string container, int? duration,
             string permissions, string type, string subreddit = null)
         {
             await AddRelationshipAsync(new UsersFriendInput(Name, type, duration, permissions, banContext, banMessage, banReason, container), subreddit);
@@ -867,7 +889,6 @@ namespace Reddit.Controllers
         /// <summary>
         /// Check whether this instance's username is available for registration.
         /// </summary>
-        /// <param name="user">a valid, unused username</param>
         /// <returns>Boolean or null if error (i.e. invalid username).</returns>
         public bool? UsernameAvailable()
         {
@@ -1435,9 +1456,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorPostHistory(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -1458,6 +1480,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "posts");
 
             string key = "PostHistory";
             return Monitor(key, new Thread(() => MonitorPostHistoryThread(key, monitoringDelayMs)), Fullname);
@@ -1481,9 +1505,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorCommentHistory(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -1504,6 +1529,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "comments");
 
             string key = "CommentHistory";
             return Monitor(key, new Thread(() => MonitorCommentHistoryThread(key, monitoringDelayMs)), Fullname);
@@ -1569,8 +1596,18 @@ namespace Reddit.Controllers
                             oldPostsList = postHistory;
                             newPostsList = GetPostHistory();
 
-                            if (Lists.ListDiff(oldPostsList, newPostsList, out List<Post> addedPosts, out List<Post> removedPosts))
+                            if (Lists.ListDiff(oldPostsList, newPostsList, out List<Post> addedPosts, out List<Post> removedPosts, 
+                                (UseCache.Contains(type) ? MonitoringCache[type] : null)))
                             {
+                                // Add the new entries to the appropriate cache, if enabled.  --Kris
+                                if (UseCache.Contains(type))
+                                {
+                                    foreach (Post post in addedPosts)
+                                    {
+                                        MonitoringCache[type].Add(post.Id);
+                                    }
+                                }
+
                                 // Event handler to alert the calling app that the list has changed.  --Kris
                                 PostsUpdateEventArgs args = new PostsUpdateEventArgs
                                 {
@@ -1586,8 +1623,18 @@ namespace Reddit.Controllers
                             oldCommentsList = commentHistory;
                             newCommentsList = GetCommentHistory();
 
-                            if (Lists.ListDiff(oldCommentsList, newCommentsList, out List<Comment> addedComments, out List<Comment> removedComments))
+                            if (Lists.ListDiff(oldCommentsList, newCommentsList, out List<Comment> addedComments, out List<Comment> removedComments,
+                                (UseCache.Contains(type) ? MonitoringCache[type] : null)))
                             {
+                                // Add the new entries to the appropriate cache, if enabled.  --Kris
+                                if (UseCache.Contains(type))
+                                {
+                                    foreach (Comment comment in addedComments)
+                                    {
+                                        MonitoringCache[type].Add(comment.Id);
+                                    }
+                                }
+
                                 // Event handler to alert the calling app that the list has changed.  --Kris
                                 CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
                                 {
@@ -1607,6 +1654,14 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

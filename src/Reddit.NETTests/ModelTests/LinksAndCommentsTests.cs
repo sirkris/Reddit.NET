@@ -38,10 +38,12 @@ namespace RedditTests.ModelTests
         {
             string postName = "t3_9nhy54";
             string commentName = "t1_e7s0vb1";
+            string replyCommentName = "t1_csqg24d";
             string subName = "t5_2r5rp";
 
             Info infoLink = reddit.Models.LinksAndComments.Info(postName);
             Info infoComment = reddit.Models.LinksAndComments.Info(commentName);
+            Info infoReply = reddit.Models.LinksAndComments.Info(replyCommentName);
             Info infoLinkCommentSub = reddit.Models.LinksAndComments.Info(postName + "," + commentName + "," + subName);
 
             Assert.IsNotNull(infoLink);
@@ -57,6 +59,13 @@ namespace RedditTests.ModelTests
             Assert.IsTrue(infoComment.Comments.Count == 1);
             Assert.IsTrue(infoComment.Comments[0].Name.Equals(commentName));
             Assert.IsTrue(infoComment.Subreddits.Count == 0);
+
+            Assert.IsNotNull(infoReply);
+            Assert.IsTrue(infoReply.Posts.Count == 0);
+            Assert.IsNotNull(infoReply.Comments);
+            Assert.IsTrue(infoReply.Comments.Count == 1);
+            Assert.IsTrue(infoReply.Comments[0].Name.Equals(replyCommentName));
+            Assert.IsTrue(infoReply.Subreddits.Count == 0);
 
             Assert.IsNotNull(infoLinkCommentSub);
             Assert.IsNotNull(infoLinkCommentSub.Posts);

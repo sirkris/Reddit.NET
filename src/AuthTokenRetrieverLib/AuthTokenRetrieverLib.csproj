@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <AssemblyVersion>1.4.0.0</AssemblyVersion>
-    <FileVersion>1.4.0.0</FileVersion>
-    <Version>1.4.0</Version>
+    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <FileVersion>1.5.0.0</FileVersion>
+    <Version>1.5.0</Version>
     <Authors>Kris Craig</Authors>
     <Company>Kris Craig</Company>
     <Description>This simple library enables an app developer to grant a new refresh token to a given Reddit user.</Description>
-    <Copyright>Copyright (C) 2019 by Kris Craig</Copyright>
+    <Copyright>Copyright (C) 221 by Kris Craig</Copyright>
     <PackageLicenseUrl>https://github.com/sirkris/Reddit.NET/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
@@ -27,16 +27,18 @@
 
   <ItemGroup>
     <None Remove="Templates\Success.html" />
+    <None Remove="Templates\TokenSaved.html" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Templates\Success.html" />
+    <EmbeddedResource Include="Templates\TokenSaved.html" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     <PackageReference Include="RestSharp" Version="106.6.9" />
-    <PackageReference Include="uhttpsharp" Version="0.1.6.22" />
+    <PackageReference Include="uhttpsharp.Standard" Version="8.0.30703.1" />
   </ItemGroup>
 
 </Project>

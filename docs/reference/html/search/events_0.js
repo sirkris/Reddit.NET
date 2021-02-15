@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['bestupdated_4615',['BestUpdated',['../class_reddit_1_1_controllers_1_1_subreddit_posts.html#aa919324d084588ab012acf93fb64f5e3',1,'Reddit::Controllers::SubredditPosts']]]
+  ['authsuccess_5152',['AuthSuccess',['../class_reddit_1_1_auth_token_retriever_1_1_auth_token_retriever_lib.html#a29cbc48d8072126a18d6820a9bf132b3',1,'Reddit::AuthTokenRetriever::AuthTokenRetrieverLib']]]
 ];

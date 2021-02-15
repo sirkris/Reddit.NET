@@ -1,4 +1,5 @@
-﻿using Reddit.Controllers.Internal;
+﻿using Reddit.Controllers.EventArgs;
+using Reddit.Controllers.Internal;
 using Reddit.Controllers.Structures;
 using Reddit.Exceptions;
 using Reddit.Inputs.LinksAndComments;
@@ -6,6 +7,7 @@ using Reddit.Inputs.Listings;
 using Reddit.Inputs.Moderation;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Reddit.Controllers
@@ -13,8 +15,20 @@ namespace Reddit.Controllers
     /// <summary>
     /// Controller class for comment-related tasks.
     /// </summary>
-    public class Comment : BaseController
+    public class Comment : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring comment score.
+        /// </summary>
+        public event EventHandler<CommentUpdateEventArgs> CommentScoreUpdated;
+
+        internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
+        internal override ref MonitoringSnapshot Monitoring => ref MonitorModel.Monitoring;
+        internal override bool BreakOnFailure { get; set; }
+        internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
+        internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
+
         /// <summary>
         /// The subreddit in which this comment exists.
         /// </summary>
@@ -164,6 +178,13 @@ namespace Reddit.Controllers
                 ImportToExisting(downVotes: value);
             }
         }
+
+        // Monitoring event fires when score changes by either value, whichever is greater.  This is to account for "vote fuzzing".
+        private int MinScoreMonitoringThreshold { get; set; } = 4;
+        private int ScoreMonitoringPercentThreshold { get; set; } = 8;
+
+        private int? MonitoringCancellationThresholdMinutes { get; set; } = null;
+        private DateTime? LastMonitoringScoreUpdate { get; set; } = null;
 
         /// <summary>
         /// Whether the comment has been removed.
@@ -360,6 +381,10 @@ namespace Reddit.Controllers
                 replies = value;
             }
         }
+
+        /// <summary>
+        /// A list of comment replies that does *not* automatically query the API if null.
+        /// </summary>
         public List<Comment> replies { get; private set; }
 
         /// <summary>
@@ -1100,7 +1125,7 @@ namespace Reddit.Controllers
         {
             linksAndCommentsMoreChildrenInput.link_id = ParentFullname;
 
-            return Validate(Dispatch.LinksAndComments.MoreChildren(linksAndCommentsMoreChildrenInput));
+            return Dispatch.LinksAndComments.MoreChildren(linksAndCommentsMoreChildrenInput);
         }
 
         /// <summary>
@@ -1167,6 +1192,194 @@ namespace Reddit.Controllers
         public async Task UnvoteAsync()
         {
             await Dispatch.LinksAndComments.VoteAsync(new LinksAndCommentsVoteInput(Fullname, 0));
+        }
+
+        /// <summary>
+        /// Invocation for CommentScoreUpdated event.
+        /// </summary>
+        /// <param name="e"></param>
+        protected virtual void OnCommentScoreUpdated(CommentUpdateEventArgs e)
+        {
+            CommentScoreUpdated?.Invoke(this, e);
+        }
+
+        /// <summary>
+        /// Monitor this comment for any score changes.
+        /// In order for the event to fire, *both* minScoreMonitoringThreshold AND scoreMonitoringPercentThreshold must be met.
+        /// </summary>
+        /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
+        /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="minScoreMonitoringThreshold">The minimum change in score value between events (default: 4)</param>
+        /// <param name="scoreMonitoringPercentThreshold">The minimum score percent change between events (default: 8)</param>
+        /// <param name="cancellationThresholdMinutes">If not null, monitoring will automatically stop if more than this time elapses between score updates (default: null)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
+        /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
+        /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <returns>Whether monitoring was successfully initiated.</returns>
+        public bool MonitorCommentScore(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, int? minScoreMonitoringThreshold = null, int? scoreMonitoringPercentThreshold = null,
+            int? cancellationThresholdMinutes = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null, DateTime? monitoringExpiration = null)
+        {
+            if (minScoreMonitoringThreshold.HasValue)
+            {
+                MinScoreMonitoringThreshold = minScoreMonitoringThreshold.Value;
+            }
+
+            if (scoreMonitoringPercentThreshold.HasValue)
+            {
+                ScoreMonitoringPercentThreshold = scoreMonitoringPercentThreshold.Value;
+            }
+
+            if (cancellationThresholdMinutes.HasValue)
+            {
+                MonitoringCancellationThresholdMinutes = cancellationThresholdMinutes.Value;
+            }
+            else
+            {
+                MonitoringCancellationThresholdMinutes = null;
+            }
+
+            if (breakOnFailure.HasValue)
+            {
+                BreakOnFailure = breakOnFailure.Value;
+            }
+
+            if (schedule != null)
+            {
+                MonitoringSchedule = schedule;
+            }
+
+            if (monitoringBaseDelayMs.HasValue)
+            {
+                MonitoringWaitDelayMS = monitoringBaseDelayMs.Value;
+            }
+
+            if (monitoringExpiration.HasValue)
+            {
+                MonitoringExpiration = monitoringExpiration;
+            }
+
+            string key = "CommentScore";
+            return Monitor(key, new Thread(() => MonitorCommentScoreThread(key, monitoringDelayMs)), Id);
+        }
+
+        /// <summary>
+        /// Whether the comment score is currently being monitored.
+        /// </summary>
+        /// <returns>Whether the comment score is currently being monitored.</returns>
+        public bool CommentScoreIsMonitored()
+        {
+            return IsMonitored("CommentScore", Id);
+        }
+
+        private void MonitorCommentScoreThread(string key, int? monitoringDelayMs = null)
+        {
+            MonitorComment(key, "score", Id, monitoringDelayMs: monitoringDelayMs);
+        }
+
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        {
+            switch (key)
+            {
+                default:
+                    throw new RedditControllerException("Unrecognized key : " + key + ".");
+                  case "CommentScore":
+                    return new Thread(() => MonitorComment(key, "score", subKey, startDelayMs, monitoringDelayMs));
+            }
+        }
+
+        private void MonitorComment(string key, string type, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        {
+            if (startDelayMs > 0)
+            {
+                Thread.Sleep(startDelayMs);
+            }
+
+            monitoringDelayMs = (monitoringDelayMs.HasValue ? monitoringDelayMs : Monitoring.Count() * MonitoringWaitDelayMS);
+
+            while (!Terminate
+                && Monitoring.Get(key).Contains(Id))
+            {
+                if (MonitoringExpiration.HasValue
+                    && DateTime.Now > MonitoringExpiration.Value)
+                {
+                    MonitorModel.RemoveMonitoringKey(key, subKey, ref Monitoring);
+                    Threads.Remove(key);
+
+                    break;
+                }
+
+                while (!IsScheduled())
+                {
+                    if (Terminate)
+                    {
+                        break;
+                    }
+
+                    Thread.Sleep(15000);
+                }
+
+                if (Terminate)
+                {
+                    break;
+                }
+
+                Comment comment;
+                try
+                {
+                    switch (type)
+                    {
+                        default:
+                            throw new RedditControllerException("Unrecognized type '" + type + "'.");
+                        case "score":
+                            comment = About();
+                            if (comment != null)
+                            {
+                                int scoreDiff = Math.Abs(comment.Score - Score);
+                                double scoreDiffPercent = (Score > 0 ? (scoreDiff / Score) * 100 : scoreDiff * 100);
+                                if (scoreDiff >= MinScoreMonitoringThreshold
+                                    && scoreDiffPercent >= ScoreMonitoringPercentThreshold)
+                                {
+                                    TriggerUpdate(comment);
+
+                                    Score = comment.Score;  // Score is automatically updated when the event fires.
+
+                                    LastMonitoringScoreUpdate = DateTime.Now;
+                                }
+                                else if (MonitoringCancellationThresholdMinutes.HasValue
+                                    && LastMonitoringScoreUpdate.HasValue
+                                    && LastMonitoringScoreUpdate.Value.AddMinutes(MonitoringCancellationThresholdMinutes.Value) < DateTime.Now)
+                                {
+                                    // If the score hasn't changed by the required amount within the cancellation threshold (if set), stop monitoring automatically.
+                                    CommentScoreUpdated = null;
+                                    MonitorCommentScore();
+                                }
+                            }
+                            break;
+                    }
+                }
+                catch (Exception) when (!BreakOnFailure) { }
+
+                Wait(monitoringDelayMs.Value);
+            }
+        }
+
+        private void TriggerUpdate(Comment comment)
+        {
+            // Event handler to alert the calling app that the score has changed.
+            CommentUpdateEventArgs args = new CommentUpdateEventArgs
+            {
+                OldComment = this,
+                NewComment = comment
+            };
+            OnCommentScoreUpdated(args);
         }
     }
 }

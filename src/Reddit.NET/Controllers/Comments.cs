@@ -14,13 +14,44 @@ namespace Reddit.Controllers
     /// </summary>
     public class Comments : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring comments (confidence sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> ConfidenceUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (top sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> TopUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (new sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> NewUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (controversial sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> ControversialUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (old sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> OldUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (random sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> RandomUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (qa sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> QAUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (live sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> LiveUpdated;
 
         private DateTime? ConfidenceLastUpdated { get; set; }
@@ -36,6 +67,7 @@ namespace Reddit.Controllers
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// A list of comments using "confidence" sort.
@@ -318,7 +350,11 @@ namespace Reddit.Controllers
             private set;
         }
 
+        /// <summary>
+        /// Monitoring SubKey.
+        /// </summary>
         public string SubKey { get; set; }
+
         private Dispatch Dispatch;
 
         /// <summary>
@@ -366,6 +402,18 @@ namespace Reddit.Controllers
             Comment = comment;
 
             SubKey = comment?.Fullname != null ? comment.Fullname : (!string.IsNullOrEmpty(PostId) ? "t3_" + PostId : subreddit);
+
+            MonitoringCache = new Dictionary<string, HashSet<string>>
+            {
+                { "confidence", new HashSet<string>() },
+                { "top", new HashSet<string>() },
+                { "new", new HashSet<string>() },
+                { "controversial", new HashSet<string>() },
+                { "old", new HashSet<string>() },
+                { "random", new HashSet<string>() },
+                { "qa", new HashSet<string>() },
+                { "live", new HashSet<string>() }
+            };
         }
 
         /// <summary>
@@ -641,11 +689,13 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorConfidence(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null, 
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -666,6 +716,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "confidence");
 
             string key = "ConfidenceComments";
             return Monitor(key, new Thread(() => MonitorConfidenceThread(key, monitoringDelayMs)), SubKey);
@@ -689,9 +741,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorTop(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -713,13 +766,15 @@ namespace Reddit.Controllers
                 MonitoringExpiration = monitoringExpiration;
             }
 
+            InitMonitoringCache(useCache, "top");
+
             string key = "TopComments";
             return Monitor(key, new Thread(() => MonitorTopThread(key, monitoringDelayMs)), SubKey);
         }
 
         private void MonitorTopThread(string key, int? monitoringDelayMs = null)
         {
-            MonitorCommentsThread(Monitoring, key, "confidence", SubKey, monitoringDelayMs: monitoringDelayMs);
+            MonitorCommentsThread(Monitoring, key, "top", SubKey, monitoringDelayMs: monitoringDelayMs);
         }
 
         internal virtual void OnTopUpdated(CommentsUpdateEventArgs e)
@@ -735,9 +790,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorNew(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -758,6 +814,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "new");
 
             string key = "NewComments";
             return Monitor(key, new Thread(() => MonitorNewThread(key, monitoringDelayMs)), SubKey);
@@ -781,9 +839,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorControversial(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -804,6 +863,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "controversial");
 
             string key = "ControversialComments";
             return Monitor(key, new Thread(() => MonitorControversialThread(key, monitoringDelayMs)), SubKey);
@@ -827,9 +888,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorOld(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -850,6 +912,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "old");
 
             string key = "OldComments";
             return Monitor(key, new Thread(() => MonitorOldThread(key, monitoringDelayMs)), SubKey);
@@ -873,9 +937,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorRandom(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -896,6 +961,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "random");
 
             string key = "RandomComments";
             return Monitor(key, new Thread(() => MonitorRandomThread(key, monitoringDelayMs)), SubKey);
@@ -919,9 +986,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorQA(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -942,6 +1010,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "qa");
 
             string key = "QAComments";
             return Monitor(key, new Thread(() => MonitorQAThread(key, monitoringDelayMs)), SubKey);
@@ -965,9 +1035,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorLive(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -988,6 +1059,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "live");
 
             string key = "LiveComments";
             return Monitor(key, new Thread(() => MonitorLiveThread(key, monitoringDelayMs)), SubKey);
@@ -1081,8 +1154,17 @@ namespace Reddit.Controllers
                             break;
                     }
 
-                    if (Lists.ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed))
+                    if (Lists.ListDiff(oldList, newList, out List<Comment> added, out List<Comment> removed, (UseCache.Contains(type) ? MonitoringCache[type] : null)))
                     {
+                        // Add the new entries to the appropriate cache, if enabled.  --Kris
+                        if (UseCache.Contains(type))
+                        {
+                            foreach (Comment comment in added)
+                            {
+                                MonitoringCache[type].Add(comment.Id);
+                            }
+                        }
+
                         // Event handler to alert the calling app that the list has changed.  --Kris
                         CommentsUpdateEventArgs args = new CommentsUpdateEventArgs
                         {
@@ -1100,6 +1182,11 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Invoke the appropriate event for the given type.
+        /// </summary>
+        /// <param name="args">A valid CommentsUpdateEventArgs instance</param>
+        /// <param name="type">One of: (confidence, top, new, controversial, old, random, qa, live)</param>
         protected void TriggerUpdate(CommentsUpdateEventArgs args, string type)
         {
             switch (type)
@@ -1131,46 +1218,86 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Whether the confidence sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the confidence sort is being monitored.</returns>
         public bool ConfidenceCommentsIsMonitored()
         {
             return IsMonitored("ConfidenceComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the top sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the top sort is being monitored.</returns>
         public bool TopCommentsIsMonitored()
         {
             return IsMonitored("TopComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the new sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the new sort is being monitored.</returns>
         public bool NewCommentsIsMonitored()
         {
             return IsMonitored("NewComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the controversial sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the controversial sort is being monitored.</returns>
         public bool ControversialCommentsIsMonitored()
         {
             return IsMonitored("ControversialComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the old sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the old sort is being monitored.</returns>
         public bool OldCommentsIsMonitored()
         {
             return IsMonitored("OldComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the random sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the random sort is being monitored.</returns>
         public bool RandomCommentsIsMonitored()
         {
             return IsMonitored("RandomComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the qa sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the qa sort is being monitored.</returns>
         public bool QACommentsIsMonitored()
         {
             return IsMonitored("QAComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the live sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the live sort is being monitored.</returns>
         public bool LiveCommentsIsMonitored()
         {
             return IsMonitored("LiveComments", SubKey);
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

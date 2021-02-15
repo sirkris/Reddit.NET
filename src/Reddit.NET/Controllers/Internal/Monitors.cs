@@ -19,6 +19,13 @@ namespace Reddit.Controllers.Internal
         internal abstract bool BreakOnFailure { get; set; }
         internal abstract List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal abstract DateTime? MonitoringExpiration { get; set; }
+        internal abstract HashSet<string> UseCache { get; set; }
+
+        /// <summary>
+        /// An optional cache for preventing the same post from appearing multiple times during monitoring.
+        /// See: https://github.com/sirkris/Reddit.NET/issues/117#issuecomment-759501039
+        /// </summary>
+        public IDictionary<string, HashSet<string>> MonitoringCache { get; internal set; }
 
         public Monitors() : base()
         {
@@ -199,6 +206,27 @@ namespace Reddit.Controllers.Internal
             }
 
             ReviveThread();
+        }
+
+        /// <summary>
+        /// Initializes the monitoring cache properties.
+        /// </summary>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires</param>
+        /// <param name="type">Which monitoring sort's cache to initialize</param>
+        internal void InitMonitoringCache(bool useCache, string type)
+        {
+            if (useCache)
+            {
+                MonitoringCache[type] = new HashSet<string>();
+                if (!UseCache.Contains(type))
+                {
+                    UseCache.Add(type);
+                }
+            }
+            else if (UseCache.Contains(type))
+            {
+                UseCache.Remove(type);
+            }
         }
 
         protected abstract Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null);

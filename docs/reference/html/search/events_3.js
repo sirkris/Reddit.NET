@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['inboxupdated_4621',['InboxUpdated',['../class_reddit_1_1_controllers_1_1_private_messages.html#a7444c43b88e320d157e077d03cdb5fae',1,'Reddit::Controllers::PrivateMessages']]]
+  ['hotupdated_5159',['HotUpdated',['../class_reddit_1_1_controllers_1_1_subreddit_posts.html#a55821a1265a2dc3ac9d07b0b89554c2a',1,'Reddit::Controllers::SubredditPosts']]]
 ];

@@ -21,8 +21,9 @@ namespace Reddit.Controllers.Internal
         /// <param name="newList">The new list</param>
         /// <param name="added">Any entries that are present in the new list but not the old</param>
         /// <param name="removed">Any entries that are present in the old list but not the new</param>
+        /// <param name="filterIds">Any IDs that should be excluded from the added result</param>
         /// <returns>True if the lists differ, otherwise false.</returns>
-        public bool ListDiff<T>(List<T> oldList, List<T> newList, out List<T> added, out List<T> removed)
+        public bool ListDiff<T>(List<T> oldList, List<T> newList, out List<T> added, out List<T> removed, HashSet<string> filterIds = null)
         {
             added = new List<T>();
             removed = new List<T>();
@@ -63,7 +64,10 @@ namespace Reddit.Controllers.Internal
             {
                 if (!oldByFullname.ContainsKey(pair.Key))
                 {
-                    added.Add(pair.Value);
+                    if (filterIds == null || !filterIds.Contains(pair.Key))
+                    {
+                        added.Add(pair.Value);
+                    }
                 }
                 else
                 {

@@ -3,6 +3,7 @@ using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RedditTests.ControllerTests.WorkflowTests.StressTests
 {
@@ -19,13 +20,12 @@ namespace RedditTests.ControllerTests.WorkflowTests.StressTests
         private Dictionary<string, Comment> NewComments;
 
         [TestMethod]
-        public void Timing()
+        public async Task Timing()
         {
             DateTime start = DateTime.Now;
             for (int i = 1; i <= 60; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                SelfPost.ReplyAsync("Stress test comment #" + i.ToString());
+                await SelfPost.ReplyAsync("Stress test comment #" + i.ToString());
             }
             DateTime end = DateTime.Now;
 
@@ -46,8 +46,7 @@ namespace RedditTests.ControllerTests.WorkflowTests.StressTests
             // 60 requests are allowed per minute.  --Kris
             for (int i = 1; i <= 100; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                LinkPost.SubmitAsync(resubmit: true);
+                LinkPost.Submit(resubmit: true);
             }
 
             // Note - The best way to verify the speed limit is working is to debug this test and observe the events relative to the timing.  --Kris
@@ -64,7 +63,7 @@ namespace RedditTests.ControllerTests.WorkflowTests.StressTests
         }
 
         [TestMethod]
-        public void PoliceState()
+        public async Task PoliceState()
         {
             // Monitor all kinds of shit.  --Kris
             Subreddit.Posts.GetNew();
@@ -83,8 +82,7 @@ namespace RedditTests.ControllerTests.WorkflowTests.StressTests
 
                 for (int ii = 1; ii <= 10; ii++)
                 {
-                    // Despite what VS says, we don't want to use await here.  --Kris
-                    posts[i - 1].ReplyAsync("Stress test comment #" + i.ToString() + "-" + ii.ToString());
+                    await posts[i - 1].ReplyAsync("Stress test comment #" + i.ToString() + "-" + ii.ToString());
                 }
             }
 

@@ -30,11 +30,15 @@ namespace Reddit.Controllers
         private User me;
         private DateTime? MeLastUpdated { get; set; }
 
+        /// <summary>
+        /// The authenticated user's private messages.
+        /// </summary>
         public PrivateMessages Messages
         {
             get
             {
-                return messages ?? new PrivateMessages(Dispatch);
+                messages = messages ?? new PrivateMessages(Dispatch);
+                return messages;
             }
             set
             {
@@ -43,6 +47,9 @@ namespace Reddit.Controllers
         }
         private PrivateMessages messages;
 
+        /// <summary>
+        /// The authenticated user's modmail conversations.
+        /// </summary>
         public Modmail Modmail
         {
             get
@@ -56,6 +63,9 @@ namespace Reddit.Controllers
         }
         private Modmail modmail;
 
+        /// <summary>
+        /// Allows direct access to the Models.
+        /// </summary>
         public Dispatch Dispatch;
 
         /// <summary>

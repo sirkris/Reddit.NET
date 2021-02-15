@@ -59,13 +59,15 @@ namespace Example
                 // Create a new subreddit.  --Kris
                 //Subreddit newSub = reddit.Subreddit("RDNBotSub", "Test Subreddit", "Test sub created by Reddit.NET", "My sidebar.").Create();
 
-                // Get best posts.  Note that "Best" listings are subreddit-agnostic.  --Kris
-                List<Post> bestPosts = reddit.Subreddit().Posts.Best;
-
-                if (bestPosts.Count > 0)
+                // Get the Reddit front page.  --Kris
+                Console.WriteLine("Top 3 Posts on the Front Page:");
+                foreach (Post frontPost in reddit.GetFrontPage(limit: 3))
                 {
-                    Console.WriteLine("Current best post (by " + bestPosts[0].Author + "): [" + bestPosts[0].Subreddit + "] " + bestPosts[0].Title);
+                    Console.WriteLine("[r/" + frontPost.Subreddit + "] [u/" + frontPost.Author + "] " + frontPost.Title);
                 }
+
+                // If you've already recently called GetFrontPage(), you can access the cached results via the FrontPage property.  If null or expired, it automatically calls GetFrontPage().  --Kris
+                Console.WriteLine("Date of Best Post: " + reddit.FrontPage[0].Created.ToString("D"));
 
                 // Get info about a subreddit.  --Kris
                 Subreddit sub = reddit.Subreddit("AskReddit").About();

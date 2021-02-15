@@ -17,8 +17,19 @@ namespace Reddit.Controllers
     /// </summary>
     public class PrivateMessages : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring inbox.
+        /// </summary>
         public event EventHandler<MessagesUpdateEventArgs> InboxUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring unread.
+        /// </summary>
         public event EventHandler<MessagesUpdateEventArgs> UnreadUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring sent.
+        /// </summary>
         public event EventHandler<MessagesUpdateEventArgs> SentUpdated;
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
@@ -26,6 +37,7 @@ namespace Reddit.Controllers
         internal override bool BreakOnFailure { get; set; }
         internal override List<MonitoringSchedule> MonitoringSchedule { get; set; }
         internal override DateTime? MonitoringExpiration { get; set; }
+        internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
         /// <summary>
         /// List of inbox messages.
@@ -102,6 +114,13 @@ namespace Reddit.Controllers
             Threads = new Dictionary<string, Thread>();
 
             Dispatch = dispatch;
+
+            MonitoringCache = new Dictionary<string, HashSet<string>>
+            {
+                { "inbox", new HashSet<string>() },
+                { "unread", new HashSet<string>() },
+                { "sent", new HashSet<string>() }
+            };
         }
 
         /// <summary>
@@ -396,16 +415,28 @@ namespace Reddit.Controllers
             return Validate(await Dispatch.LinksAndComments.CommentAsync<MessageContainer>(linksAndCommentsThingInput));
         }
 
+        /// <summary>
+        /// Invoke monitoring event for inbox.
+        /// </summary>
+        /// <param name="e">A valid MessagesUpdateEventArgs instance</param>
         protected virtual void OnInboxUpdated(MessagesUpdateEventArgs e)
         {
             InboxUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for unread.
+        /// </summary>
+        /// <param name="e">A valid MessagesUpdateEventArgs instance</param>
         protected virtual void OnUnreadUpdated(MessagesUpdateEventArgs e)
         {
             UnreadUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for sent.
+        /// </summary>
+        /// <param name="e">A valid MessagesUpdateEventArgs instance</param>
         protected virtual void OnSentUpdated(MessagesUpdateEventArgs e)
         {
             SentUpdated?.Invoke(this, e);
@@ -419,9 +450,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorInbox(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -442,6 +474,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "inbox");
 
             string key = "PrivateMessagesInbox";
             return Monitor(key, new Thread(() => MonitorInboxThread(key, monitoringDelayMs)), "PrivateMessages");
@@ -460,9 +494,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorUnread(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -483,6 +518,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "unread");
 
             string key = "PrivateMessagesUnread";
             return Monitor(key, new Thread(() => MonitorUnreadThread(key, monitoringDelayMs)), "PrivateMessages");
@@ -501,9 +538,10 @@ namespace Reddit.Controllers
         /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
+        /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>Whether monitoring was successfully initiated.</returns>
         public bool MonitorSent(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null)
+            DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)
             {
@@ -524,6 +562,8 @@ namespace Reddit.Controllers
             {
                 MonitoringExpiration = monitoringExpiration;
             }
+
+            InitMonitoringCache(useCache, "sent");
 
             string key = "PrivateMessagesSent";
             return Monitor(key, new Thread(() => MonitorSentThread(key, monitoringDelayMs)), "PrivateMessages");
@@ -592,8 +632,17 @@ namespace Reddit.Controllers
                             break;
                     }
 
-                    if (Lists.ListDiff(oldList, newList, out List<Message> added, out List<Message> removed))
+                    if (Lists.ListDiff(oldList, newList, out List<Message> added, out List<Message> removed, (UseCache.Contains(type) ? MonitoringCache[type] : null)))
                     {
+                        // Add the new entries to the appropriate cache, if enabled.  --Kris
+                        if (UseCache.Contains(type))
+                        {
+                            foreach (Message message in added)
+                            {
+                                MonitoringCache[type].Add(message.Id);
+                            }
+                        }
+
                         // Event handler to alert the calling app that the list has changed.  --Kris
                         MessagesUpdateEventArgs args = new MessagesUpdateEventArgs
                         {
@@ -611,6 +660,11 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Invoke the appropriate event for the given type.
+        /// </summary>
+        /// <param name="args">A valid MessagesUpdateEventArgs instance</param>
+        /// <param name="type">One of: (inbox, unread, sent)</param>
         protected void TriggerUpdate(MessagesUpdateEventArgs args, string type)
         {
             switch (type)
@@ -627,21 +681,41 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Whether inbox is being monitored.
+        /// </summary>
+        /// <returns>Whether inbox is being monitored.</returns>
         public bool PrivateMessagesInboxIsMonitored()
         {
             return IsMonitored("PrivateMessagesInbox", "PrivateMessages");
         }
 
+        /// <summary>
+        /// Whether unread is being monitored.
+        /// </summary>
+        /// <returns>Whether unread is being monitored.</returns>
         public bool PrivateMessagesUnreadIsMonitored()
         {
             return IsMonitored("PrivateMessagesUnread", "PrivateMessages");
         }
 
+        /// <summary>
+        /// Whether sent is being monitored.
+        /// </summary>
+        /// <returns>Whether sent is being monitored.</returns>
         public bool PrivateMessagesSentIsMonitored()
         {
             return IsMonitored("PrivateMessagesSent", "PrivateMessages");
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)
