@@ -1,12 +1,13 @@
 var class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot =
 [
-    [ "MonitoringSnapshot", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a371b99b6e51de5b7b89fd03ccf522d3c", null ],
+    [ "MonitoringSnapshot", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#ac57faed2ed1ba04bbdb47c0950807c38", null ],
     [ "Add", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#acc724e5e21ce3c8f4c242b81bac426bb", null ],
     [ "Count", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a5a66f79d99ca7666cb30796da12af1af", null ],
     [ "Get", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a1541b844b16bd985bd507357de4092c1", null ],
     [ "Remove", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a3c68251ddc04a3dc79ed2b3565ee254c", null ],
     [ "BestPosts", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a59486b38d1580afcd7dd39375a17acd9", null ],
     [ "CommentHistory", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a816b7a197b75bc7780bc208c4e11590e", null ],
+    [ "CommentScore", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a675fc75066c5d688c144ea4fa43b62b9", null ],
     [ "ConfidenceComments", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#aa77c7599acd9307c2b16874c81ef93bb", null ],
     [ "ControversialComments", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#aa716190a496259aea828574594362b28", null ],
     [ "ControversialPosts", "class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a0518ca240dbeab848b85c01dfde3d922", null ],

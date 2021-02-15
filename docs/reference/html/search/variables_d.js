@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['randomcomments_3712',['RandomComments',['../class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a2e09cdbe309c510ea762adfd0d7990a6',1,'Reddit::Controllers::Structures::MonitoringSnapshot']]],
-  ['removed_3713',['Removed',['../class_reddit_1_1_models_1_1_event_args_1_1_monitoring_update_event_args.html#a2d670a853c012abe8b83f64b4ee4b494',1,'Reddit::Models::EventArgs::MonitoringUpdateEventArgs']]],
-  ['risingposts_3714',['RisingPosts',['../class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a7cb3fa1f18fd77321d13a8193fcc8440',1,'Reddit::Controllers::Structures::MonitoringSnapshot']]]
+  ['terminate_4200',['Terminate',['../class_reddit_1_1_controllers_1_1_internal_1_1_monitors.html#a4b569d3e02863d222043ab9a919672fd',1,'Reddit::Controllers::Internal::Monitors']]],
+  ['testdata_4201',['testData',['../class_reddit_tests_1_1_base_tests.html#aa321ba7e18d6cc3410457079ce2501ba',1,'RedditTests::BaseTests']]],
+  ['topcomments_4202',['TopComments',['../class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a2b68db29fa9353c3382c1838533b2369',1,'Reddit::Controllers::Structures::MonitoringSnapshot']]],
+  ['topposts_4203',['TopPosts',['../class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a01994bce248bcd6f0b372307a5f0288f',1,'Reddit::Controllers::Structures::MonitoringSnapshot']]]
 ];

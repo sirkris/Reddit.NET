@@ -91,9 +91,11 @@ var class_reddit_1_1_controllers_1_1_post =
     [ "LastMonitoringScoreUpdate", "class_reddit_1_1_controllers_1_1_post.html#a6b4b0fa03fb6a5675fed223024e77d8b", null ],
     [ "Listing", "class_reddit_1_1_controllers_1_1_post.html#a5bf5e1807adbfa7e32d624560cb5b576", null ],
     [ "MinScoreMonitoringThreshold", "class_reddit_1_1_controllers_1_1_post.html#a3fd962435e0524b245d497a587e48932", null ],
+    [ "Monitoring", "class_reddit_1_1_controllers_1_1_post.html#a00adc449a676e319c872e09470231eeb", null ],
     [ "MonitoringCancellationThresholdMinutes", "class_reddit_1_1_controllers_1_1_post.html#a07f6057f94386f7ee5ba52f66118ad4c", null ],
     [ "MonitoringExpiration", "class_reddit_1_1_controllers_1_1_post.html#a3486cad00150e0d18f71d2b0d98c3bbd", null ],
     [ "MonitoringSchedule", "class_reddit_1_1_controllers_1_1_post.html#ae8f989003baa4a5afa66e71532cd9364", null ],
+    [ "MonitorModel", "class_reddit_1_1_controllers_1_1_post.html#a66d5d9b32252a8cf242b26e4584b191a", null ],
     [ "NSFW", "class_reddit_1_1_controllers_1_1_post.html#a829fa07d53942738bad497506ba7cc31", null ],
     [ "Permalink", "class_reddit_1_1_controllers_1_1_post.html#af2a5b2ef41dcd5a755d929f479e956d1", null ],
     [ "Removed", "class_reddit_1_1_controllers_1_1_post.html#a543e4dbda6915ca7adc2ece4ec304f6c", null ],
@@ -105,6 +107,7 @@ var class_reddit_1_1_controllers_1_1_post =
     [ "title", "class_reddit_1_1_controllers_1_1_post.html#abdaaf231c1080ef31895f06b3c485fc2", null ],
     [ "UpvoteRatio", "class_reddit_1_1_controllers_1_1_post.html#a7abfae0dc5970ef4746af62ca008b5c0", null ],
     [ "UpVotes", "class_reddit_1_1_controllers_1_1_post.html#a8bb1c224dde2b0c1893ce9a37f918112", null ],
+    [ "UseCache", "class_reddit_1_1_controllers_1_1_post.html#a26c79721003be649cdae449f1e67cb49", null ],
     [ "PostDataUpdated", "class_reddit_1_1_controllers_1_1_post.html#ab047021cbb85aa18cb7f1438ae7b2f2f", null ],
     [ "PostScoreUpdated", "class_reddit_1_1_controllers_1_1_post.html#aefcfcfe5db35dde5813b88befcb3aa15", null ]
 ];
