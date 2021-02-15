@@ -16,8 +16,19 @@ namespace Reddit.Controllers
     /// </summary>
     public class LiveThread : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring changes to live thread for changes to its properties.
+        /// </summary>
         public event EventHandler<LiveThreadUpdateEventArgs> ThreadUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring changes to the contributors list.
+        /// </summary>
         public event EventHandler<LiveThreadContributorsUpdateEventArgs> ContributorsUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring live updates.
+        /// </summary>
         public event EventHandler<LiveThreadUpdatesUpdateEventArgs> UpdatesUpdated;
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
@@ -27,6 +38,9 @@ namespace Reddit.Controllers
         internal override DateTime? MonitoringExpiration { get; set; }
         internal override HashSet<string> UseCache { get; set; } = new HashSet<string>();
 
+        /// <summary>
+        /// The ID36 of the live thread.
+        /// </summary>
         public string Id
         {
             get
@@ -39,6 +53,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// The fullname of the live thread.
+        /// </summary>
         public string Fullname
         {
             get
@@ -51,6 +68,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// A description of the live thread.
+        /// </summary>
         public string Description
         {
             get
@@ -63,6 +83,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Whether the live thread is NSFW.
+        /// </summary>
         public bool NSFW
         {
             get
@@ -75,6 +98,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Live thread resources.
+        /// </summary>
         public string Resources
         {
             get
@@ -87,6 +113,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Title of the live thread.
+        /// </summary>
         public string Title
         {
             get
@@ -99,7 +128,9 @@ namespace Reddit.Controllers
             }
         }
 
-
+        /// <summary>
+        /// How many views the live thread has.
+        /// </summary>
         public int? TotalViews
         {
             get
@@ -112,6 +143,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// When the live thread was created.
+        /// </summary>
         public DateTime? Created
         {
             get
@@ -125,6 +159,9 @@ namespace Reddit.Controllers
         }
 
         // TODO - Support for Websockets.  --Kris
+        /// <summary>
+        /// Web socket URL (web sockets not yet supported by this library)
+        /// </summary>
         public string WebsocketURL
         {
             get
@@ -137,6 +174,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Whether the live thread is an announcement.
+        /// </summary>
         public bool IsAnnouncement
         {
             get
@@ -149,6 +189,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// The announcement URL.
+        /// </summary>
         public string AnnouncementURL
         {
             get
@@ -161,6 +204,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Live thread state.
+        /// </summary>
         public string State
         {
             get
@@ -173,6 +219,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// How many people are viewing the live thread right now.
+        /// </summary>
         public int ViewerCount
         {
             get
@@ -185,6 +234,9 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Icon URL for the live thread.
+        /// </summary>
         public string Icon
         {
             get
@@ -197,7 +249,9 @@ namespace Reddit.Controllers
             }
         }
 
-
+        /// <summary>
+        /// The full LiveUpdateEvent data retrieved from the API.
+        /// </summary>
         public LiveUpdateEvent EventData { get; set; }
 
         /// <summary>

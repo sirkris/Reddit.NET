@@ -14,13 +14,44 @@ namespace Reddit.Controllers
     /// </summary>
     public class Comments : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring comments (confidence sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> ConfidenceUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (top sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> TopUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (new sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> NewUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (controversial sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> ControversialUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (old sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> OldUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (random sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> RandomUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (qa sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> QAUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring comments (live sort)
+        /// </summary>
         public event EventHandler<CommentsUpdateEventArgs> LiveUpdated;
 
         private DateTime? ConfidenceLastUpdated { get; set; }
@@ -319,7 +350,11 @@ namespace Reddit.Controllers
             private set;
         }
 
+        /// <summary>
+        /// Monitoring SubKey.
+        /// </summary>
         public string SubKey { get; set; }
+
         private Dispatch Dispatch;
 
         /// <summary>
@@ -654,6 +689,7 @@ namespace Reddit.Controllers
         /// </summary>
         /// <param name="monitoringDelayMs">The number of milliseconds between each monitoring query; leave null to auto-manage</param>
         /// <param name="monitoringBaseDelayMs">The number of milliseconds between each monitoring query PER THREAD (default: 1500)</param>
+        /// <param name="schedule">A list of one or more timeframes during which monitoring of this object will occur (default: 24/7)</param>
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
@@ -1146,6 +1182,11 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Invoke the appropriate event for the given type.
+        /// </summary>
+        /// <param name="args">A valid CommentsUpdateEventArgs instance</param>
+        /// <param name="type">One of: (confidence, top, new, controversial, old, random, qa, live)</param>
         protected void TriggerUpdate(CommentsUpdateEventArgs args, string type)
         {
             switch (type)
@@ -1177,46 +1218,86 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Whether the confidence sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the confidence sort is being monitored.</returns>
         public bool ConfidenceCommentsIsMonitored()
         {
             return IsMonitored("ConfidenceComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the top sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the top sort is being monitored.</returns>
         public bool TopCommentsIsMonitored()
         {
             return IsMonitored("TopComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the new sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the new sort is being monitored.</returns>
         public bool NewCommentsIsMonitored()
         {
             return IsMonitored("NewComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the controversial sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the controversial sort is being monitored.</returns>
         public bool ControversialCommentsIsMonitored()
         {
             return IsMonitored("ControversialComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the old sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the old sort is being monitored.</returns>
         public bool OldCommentsIsMonitored()
         {
             return IsMonitored("OldComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the random sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the random sort is being monitored.</returns>
         public bool RandomCommentsIsMonitored()
         {
             return IsMonitored("RandomComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the qa sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the qa sort is being monitored.</returns>
         public bool QACommentsIsMonitored()
         {
             return IsMonitored("QAComments", SubKey);
         }
 
+        /// <summary>
+        /// Whether the live sort is being monitored.
+        /// </summary>
+        /// <returns>Whether the live sort is being monitored.</returns>
         public bool LiveCommentsIsMonitored()
         {
             return IsMonitored("LiveComments", SubKey);
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

@@ -17,15 +17,44 @@ namespace Reddit.Controllers
     /// </summary>
     public class WikiPage : Monitors
     {
+        /// <summary>
+        /// Whether the authenticated user can edit this page.
+        /// </summary>
         public bool MayRevise { get; set; }
+
+        /// <summary>
+        /// The current revision date.
+        /// </summary>
         public DateTime RevisionDate { get; set; }
+
+        /// <summary>
+        /// The page content rendered as HTML.
+        /// </summary>
         public string ContentHTML { get; set; }
+
+        /// <summary>
+        /// The user who authored the current revision.
+        /// </summary>
         public User RevisionBy { get; set; }
+
+        /// <summary>
+        /// The page content.
+        /// </summary>
         public string ContentMd { get; set; }
 
+        /// <summary>
+        /// The page name.
+        /// </summary>
         public string Name { get; set; }
+
+        /// <summary>
+        /// The name of the subreddit this wiki belongs to.
+        /// </summary>
         public string Subreddit { get; set; }
 
+        /// <summary>
+        /// Event handler for monitoring update to this wiki page.
+        /// </summary>
         public event EventHandler<WikiPageUpdateEventArgs> PageUpdated;
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
@@ -464,12 +493,24 @@ namespace Reddit.Controllers
             return Monitor(key, new Thread(() => MonitorPageThread(key, monitoringDelayMs: monitoringDelayMs)), Name);
         }
 
+        /// <summary>
+        /// Whether updates to this wiki page are being monitored.
+        /// </summary>
+        /// <returns>Whether updates to this wiki page are being monitored.</returns>
         public bool WikiPagesIsMonitored()
         {
             return IsMonitored("WikiPage", Name);
         }
 
-        protected override Thread CreateMonitoringThread(string key, string subkey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
+        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)
             {

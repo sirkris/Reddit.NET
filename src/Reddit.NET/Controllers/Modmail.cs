@@ -19,9 +19,24 @@ namespace Reddit.Controllers
     /// </summary>
     public class Modmail : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring modmail (recent set).
+        /// </summary>
         public event EventHandler<ModmailConversationsEventArgs> RecentUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modmail (mod set).
+        /// </summary>
         public event EventHandler<ModmailConversationsEventArgs> ModUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modmail (user set).
+        /// </summary>
         public event EventHandler<ModmailConversationsEventArgs> UserUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring modmail (unread set).
+        /// </summary>
         public event EventHandler<ModmailConversationsEventArgs> UnreadUpdated;
 
         private User Me
@@ -351,6 +366,7 @@ namespace Reddit.Controllers
         /// This endpoint will create a ModmailConversation object as well as the first ModmailMessage within the ModmailConversation object.
         /// </summary>
         /// <param name="modmailNewConversationInput">A valid ModmailNewConversationInput instance</param>
+        /// <param name="gRecaptchaResponse"></param>
         /// <returns>An object containing the conversation data.</returns>
         public ModmailConversationContainer NewConversation(ModmailNewConversationInput modmailNewConversationInput, string gRecaptchaResponse = "")
         {
@@ -741,21 +757,37 @@ namespace Reddit.Controllers
             return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
         }
 
+        /// <summary>
+        /// Invoke monitoring event for recent.
+        /// </summary>
+        /// <param name="e">A valid ModmailConversationsEventArgs instance</param>
         protected virtual void OnRecentUpdated(ModmailConversationsEventArgs e)
         {
             RecentUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for mod.
+        /// </summary>
+        /// <param name="e">A valid ModmailConversationsEventArgs instance</param>
         protected virtual void OnModUpdated(ModmailConversationsEventArgs e)
         {
             ModUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for user.
+        /// </summary>
+        /// <param name="e">A valid ModmailConversationsEventArgs instance</param>
         protected virtual void OnUserUpdated(ModmailConversationsEventArgs e)
         {
             UserUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for unread.
+        /// </summary>
+        /// <param name="e">A valid ModmailConversationsEventArgs instance</param>
         protected virtual void OnUnreadUpdated(ModmailConversationsEventArgs e)
         {
             UnreadUpdated?.Invoke(this, e);
@@ -893,6 +925,11 @@ namespace Reddit.Controllers
             return Diff<ConversationMessage>(oldList, newList, out added, out removed);
         }
 
+        /// <summary>
+        /// Invoke the appropriate event for the given type.
+        /// </summary>
+        /// <param name="args">A valid ModmailConversationsEventArgs instance</param>
+        /// <param name="type">One of: (recent, mod, user, unread)</param>
         protected void TriggerUpdate(ModmailConversationsEventArgs args, string type)
         {
             switch (type)
@@ -912,26 +949,50 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Whether recent is being monitored.
+        /// </summary>
+        /// <returns>Whether recent is being monitored.</returns>
         public bool ModmailMessagesRecentIsMonitored()
         {
             return IsMonitored("ModmailMessagesRecent", "ModmailMessages");
         }
 
+        /// <summary>
+        /// Whether mod is being monitored.
+        /// </summary>
+        /// <returns>Whether mod is being monitored.</returns>
         public bool ModmailMessagesModIsMonitored()
         {
             return IsMonitored("ModmailMessagesMod", "ModmailMessages");
         }
 
+        /// <summary>
+        /// Whether user is being monitored.
+        /// </summary>
+        /// <returns>Whether user is being monitored.</returns>
         public bool ModmailMessagesUserIsMonitored()
         {
             return IsMonitored("ModmailMessagesUser", "ModmailMessages");
         }
 
+        /// <summary>
+        /// Whether unread is being monitored.
+        /// </summary>
+        /// <returns>Whether unread is being monitored.</returns>
         public bool ModmailMessagesUnreadIsMonitored()
         {
             return IsMonitored("ModmailMessagesUnread", "ModmailMessages");
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

@@ -17,8 +17,19 @@ namespace Reddit.Controllers
     /// </summary>
     public class PrivateMessages : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring inbox.
+        /// </summary>
         public event EventHandler<MessagesUpdateEventArgs> InboxUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring unread.
+        /// </summary>
         public event EventHandler<MessagesUpdateEventArgs> UnreadUpdated;
+
+        /// <summary>
+        /// Event handler for monitoring sent.
+        /// </summary>
         public event EventHandler<MessagesUpdateEventArgs> SentUpdated;
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
@@ -404,16 +415,28 @@ namespace Reddit.Controllers
             return Validate(await Dispatch.LinksAndComments.CommentAsync<MessageContainer>(linksAndCommentsThingInput));
         }
 
+        /// <summary>
+        /// Invoke monitoring event for inbox.
+        /// </summary>
+        /// <param name="e">A valid MessagesUpdateEventArgs instance</param>
         protected virtual void OnInboxUpdated(MessagesUpdateEventArgs e)
         {
             InboxUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for unread.
+        /// </summary>
+        /// <param name="e">A valid MessagesUpdateEventArgs instance</param>
         protected virtual void OnUnreadUpdated(MessagesUpdateEventArgs e)
         {
             UnreadUpdated?.Invoke(this, e);
         }
 
+        /// <summary>
+        /// Invoke monitoring event for sent.
+        /// </summary>
+        /// <param name="e">A valid MessagesUpdateEventArgs instance</param>
         protected virtual void OnSentUpdated(MessagesUpdateEventArgs e)
         {
             SentUpdated?.Invoke(this, e);
@@ -637,6 +660,11 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Invoke the appropriate event for the given type.
+        /// </summary>
+        /// <param name="args">A valid MessagesUpdateEventArgs instance</param>
+        /// <param name="type">One of: (inbox, unread, sent)</param>
         protected void TriggerUpdate(MessagesUpdateEventArgs args, string type)
         {
             switch (type)
@@ -653,21 +681,41 @@ namespace Reddit.Controllers
             }
         }
 
+        /// <summary>
+        /// Whether inbox is being monitored.
+        /// </summary>
+        /// <returns>Whether inbox is being monitored.</returns>
         public bool PrivateMessagesInboxIsMonitored()
         {
             return IsMonitored("PrivateMessagesInbox", "PrivateMessages");
         }
 
+        /// <summary>
+        /// Whether unread is being monitored.
+        /// </summary>
+        /// <returns>Whether unread is being monitored.</returns>
         public bool PrivateMessagesUnreadIsMonitored()
         {
             return IsMonitored("PrivateMessagesUnread", "PrivateMessages");
         }
 
+        /// <summary>
+        /// Whether sent is being monitored.
+        /// </summary>
+        /// <returns>Whether sent is being monitored.</returns>
         public bool PrivateMessagesSentIsMonitored()
         {
             return IsMonitored("PrivateMessagesSent", "PrivateMessages");
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)

@@ -17,6 +17,9 @@ namespace Reddit.Controllers
     /// </summary>
     public class Comment : Monitors
     {
+        /// <summary>
+        /// Event handler for monitoring comment score.
+        /// </summary>
         public event EventHandler<CommentUpdateEventArgs> CommentScoreUpdated;
 
         internal override Models.Internal.Monitor MonitorModel => Dispatch.Monitor;
@@ -378,6 +381,10 @@ namespace Reddit.Controllers
                 replies = value;
             }
         }
+
+        /// <summary>
+        /// A list of comment replies that does *not* automatically query the API if null.
+        /// </summary>
         public List<Comment> replies { get; private set; }
 
         /// <summary>
@@ -1187,6 +1194,10 @@ namespace Reddit.Controllers
             await Dispatch.LinksAndComments.VoteAsync(new LinksAndCommentsVoteInput(Fullname, 0));
         }
 
+        /// <summary>
+        /// Invocation for CommentScoreUpdated event.
+        /// </summary>
+        /// <param name="e"></param>
         protected virtual void OnCommentScoreUpdated(CommentUpdateEventArgs e)
         {
             CommentScoreUpdated?.Invoke(this, e);
@@ -1251,6 +1262,10 @@ namespace Reddit.Controllers
             return Monitor(key, new Thread(() => MonitorCommentScoreThread(key, monitoringDelayMs)), Id);
         }
 
+        /// <summary>
+        /// Whether the comment score is currently being monitored.
+        /// </summary>
+        /// <returns>Whether the comment score is currently being monitored.</returns>
         public bool CommentScoreIsMonitored()
         {
             return IsMonitored("CommentScore", Id);
@@ -1261,6 +1276,14 @@ namespace Reddit.Controllers
             MonitorComment(key, "score", Id, monitoringDelayMs: monitoringDelayMs);
         }
 
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <returns>The newly-created monitoring thread.</returns>
         protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             switch (key)
