@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['hotposts_3684',['HotPosts',['../class_reddit_1_1_controllers_1_1_structures_1_1_monitoring_snapshot.html#a29e4d5538a680ad01573fa18b4d6f6d8',1,'Reddit::Controllers::Structures::MonitoringSnapshot']]]
+  ['include_5fcategories_4165',['include_categories',['../class_reddit_1_1_inputs_1_1_categorized_sr_listing_input.html#a8dbdd021426db7518d4f00f2fe504f8f',1,'Reddit::Inputs::CategorizedSrListingInput']]]
 ];

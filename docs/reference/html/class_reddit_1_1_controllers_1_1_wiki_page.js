@@ -10,7 +10,7 @@ var class_reddit_1_1_controllers_1_1_wiki_page =
     [ "Create", "class_reddit_1_1_controllers_1_1_wiki_page.html#a1ca6d63508f5936c071214d675f2879f", null ],
     [ "CreateAndReturn", "class_reddit_1_1_controllers_1_1_wiki_page.html#a3d23d7a08b50561c3b50e236b86b2ddc", null ],
     [ "CreateAsync", "class_reddit_1_1_controllers_1_1_wiki_page.html#a32516f6541a557bdef7d9d61ebe831dc", null ],
-    [ "CreateMonitoringThread", "class_reddit_1_1_controllers_1_1_wiki_page.html#a0ff244dedb071a6fc8ccd3f5b3aaa3a9", null ],
+    [ "CreateMonitoringThread", "class_reddit_1_1_controllers_1_1_wiki_page.html#aaeb9d59b1a634a210a4b49ad62dea696", null ],
     [ "DenyEditor", "class_reddit_1_1_controllers_1_1_wiki_page.html#aa2caf32ab700e96ad08f55af2af26c48", null ],
     [ "DenyEditorAsync", "class_reddit_1_1_controllers_1_1_wiki_page.html#a3b833c1b017fc5a012e811e05bf2e62a", null ],
     [ "Edit", "class_reddit_1_1_controllers_1_1_wiki_page.html#aa45ee77ab5860d19b9e71257d09ca4a3", null ],
@@ -41,11 +41,14 @@ var class_reddit_1_1_controllers_1_1_wiki_page =
     [ "ContentHTML", "class_reddit_1_1_controllers_1_1_wiki_page.html#a3807a84d2394101084e48012c34a7797", null ],
     [ "ContentMd", "class_reddit_1_1_controllers_1_1_wiki_page.html#a7e3778849d853dfbad668da89ec65ee1", null ],
     [ "MayRevise", "class_reddit_1_1_controllers_1_1_wiki_page.html#aa3bc1b5b3ea7c7ba295103c1fcf20c10", null ],
+    [ "Monitoring", "class_reddit_1_1_controllers_1_1_wiki_page.html#a6b997490e3f2547b0e65e0cead5e3b40", null ],
     [ "MonitoringExpiration", "class_reddit_1_1_controllers_1_1_wiki_page.html#a75e143070a936d4896819528f8190521", null ],
     [ "MonitoringSchedule", "class_reddit_1_1_controllers_1_1_wiki_page.html#affa8d99d0e40280560b11f3c95cda695", null ],
+    [ "MonitorModel", "class_reddit_1_1_controllers_1_1_wiki_page.html#ac436752a1c0215a84fbc66d280152ff2", null ],
     [ "Name", "class_reddit_1_1_controllers_1_1_wiki_page.html#aa1581e7011bd98264a6043da0fc7a397", null ],
     [ "RevisionBy", "class_reddit_1_1_controllers_1_1_wiki_page.html#a17a8445acd697df1dbb90262669ee50f", null ],
     [ "RevisionDate", "class_reddit_1_1_controllers_1_1_wiki_page.html#a0860e78cbbabf66767c966dcec6f9ed2", null ],
     [ "Subreddit", "class_reddit_1_1_controllers_1_1_wiki_page.html#aaca731093e0df36b4f469b75599d769a", null ],
+    [ "UseCache", "class_reddit_1_1_controllers_1_1_wiki_page.html#ab8bcf8ded0a11f639ed6c3d9a3899f07", null ],
     [ "PageUpdated", "class_reddit_1_1_controllers_1_1_wiki_page.html#aa99ee3fd7d95cb115313b4d04a27a312", null ]
 ];

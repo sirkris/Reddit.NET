@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['unreadupdated_4645',['UnreadUpdated',['../class_reddit_1_1_controllers_1_1_modmail.html#a7f07feddce28966e76a90f59cd9f0856',1,'Reddit.Controllers.Modmail.UnreadUpdated()'],['../class_reddit_1_1_controllers_1_1_private_messages.html#a09debab1982e7d3299eb0a14cc9ed5fe',1,'Reddit.Controllers.PrivateMessages.UnreadUpdated()']]],
-  ['updatesupdated_4646',['UpdatesUpdated',['../class_reddit_1_1_controllers_1_1_live_thread.html#a5f59d81be3b377f47e2a2b255c79de50',1,'Reddit::Controllers::LiveThread']]],
-  ['userupdated_4647',['UserUpdated',['../class_reddit_1_1_controllers_1_1_modmail.html#a934317318af02d67ba25692359f89d64',1,'Reddit::Controllers::Modmail']]]
+  ['threadupdated_5181',['ThreadUpdated',['../class_reddit_1_1_controllers_1_1_live_thread.html#a56cb7e9e08683df5597c2fc814860098',1,'Reddit::Controllers::LiveThread']]],
+  ['tokenupdated_5182',['TokenUpdated',['../class_reddit_1_1_models_1_1_internal_1_1_request.html#ab24b49f841ede833d31ff2e04be1c107',1,'Reddit.Models.Internal.Request.TokenUpdated()'],['../class_reddit_1_1_models_1_1_o_auth_credentials.html#a9c0ff1629b6304278aef17baa75af295',1,'Reddit.Models.OAuthCredentials.TokenUpdated()']]],
+  ['topupdated_5183',['TopUpdated',['../class_reddit_1_1_controllers_1_1_comments.html#a898be286ec7f914bf22f952dc12635cc',1,'Reddit.Controllers.Comments.TopUpdated()'],['../class_reddit_1_1_controllers_1_1_subreddit_posts.html#a2d2cbc123f9ddbc78cf20502651ccf8b',1,'Reddit.Controllers.SubredditPosts.TopUpdated()']]]
 ];

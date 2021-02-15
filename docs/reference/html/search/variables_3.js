@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dispatch_3682',['Dispatch',['../class_reddit_1_1_controllers_1_1_account.html#a78c5389f3b64f78f57b87480c2e611db',1,'Reddit::Controllers::Account']]]
+  ['dispatch_4163',['Dispatch',['../class_reddit_1_1_controllers_1_1_account.html#a78c5389f3b64f78f57b87480c2e611db',1,'Reddit::Controllers::Account']]]
 ];

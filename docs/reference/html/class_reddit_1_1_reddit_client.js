@@ -2,6 +2,7 @@ var class_reddit_1_1_reddit_client =
 [
     [ "RedditClient", "class_reddit_1_1_reddit_client.html#a9c966c850576ae77a97491014bcc6360", null ],
     [ "Comment", "class_reddit_1_1_reddit_client.html#ab9519c118aad57f348ad62abd872f6f7", null ],
+    [ "GetFrontPage", "class_reddit_1_1_reddit_client.html#a66d5d6c68b740d0f84c5ba179afe0478", null ],
     [ "GetPosts", "class_reddit_1_1_reddit_client.html#adf00765c837422cdb9e26bb1d71d1746", null ],
     [ "GetPosts", "class_reddit_1_1_reddit_client.html#a2e056d2e6757ede46803de734473c6de", null ],
     [ "GetSubreddits", "class_reddit_1_1_reddit_client.html#ab292c05983bb23cccd16736ad960d321", null ],
@@ -38,5 +39,7 @@ var class_reddit_1_1_reddit_client =
     [ "UserDataByAccountIds", "class_reddit_1_1_reddit_client.html#a808be3eb6781345359b0cb6cab0a2108", null ],
     [ "WaitForRequestQueue", "class_reddit_1_1_reddit_client.html#a9a65d3c481231a64d70edf2936b35ea2", null ],
     [ "Models", "class_reddit_1_1_reddit_client.html#afa55774d20dc69c8a006319b5eef97f9", null ],
-    [ "Account", "class_reddit_1_1_reddit_client.html#aed8b171b1261ad5df27dd87999c6a9d4", null ]
+    [ "Account", "class_reddit_1_1_reddit_client.html#aed8b171b1261ad5df27dd87999c6a9d4", null ],
+    [ "FrontPage", "class_reddit_1_1_reddit_client.html#a131a480fae96082a3a2245e4a582784e", null ],
+    [ "FrontPageaLastUpdated", "class_reddit_1_1_reddit_client.html#aaff2fe6a776b3955b5356b0034b41084", null ]
 ];
