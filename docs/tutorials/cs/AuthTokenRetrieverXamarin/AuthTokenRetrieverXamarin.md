@@ -122,7 +122,7 @@ To fix this, we need to edit Properties/AndroidManifest.xml in the AuthTokenRetr
 
 ## Create the Reddit Authorization Page
 
-In AuthTokenRetrieverXamarin (the Xamarin.Forms project), add new new ContentPage and call it RedditAuthPage.xaml.  The corresponding RedditAuthPage.xaml.cs will be automatically generated along with it if you're using Visual Studio.
+In AuthTokenRetrieverXamarin (the Xamarin.Forms project), add a new ContentPage and call it RedditAuthPage.xaml.  The corresponding RedditAuthPage.xaml.cs will be automatically generated along with it if you're using Visual Studio.
 
 ![Add Item](images/AddItem.png)
 
