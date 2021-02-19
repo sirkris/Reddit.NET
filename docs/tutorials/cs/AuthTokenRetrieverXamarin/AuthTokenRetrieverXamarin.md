@@ -13,8 +13,16 @@
 | Table of Contents                                                                      |
 |:---------------------------------------------------------------------------------------|
 | [Overview](#overview)                                                                  |
-| [Library Installation](#library-installation)                                          |
 | [Create the Solution](#create-the-solution)                                            |
+| [Library Installation](#library-installation)                                          |
+| [End-User Workflow](#end-user-workflow)                                                |
+| [Load MainPage as a NavigationPage](#load-mainpage-as-a-navigationpage)                |
+| [Tell Android to Allow Cleartext Traffic](#tell-android-to-allow-cleartext-traffic)    |
+| [Create the Reddit Authorization Page](#create-the-reddit-authorization-page)          |
+| [Modify the RedditAuthPage XAML](#modify-the-redditauthpage-xaml)                      |
+| [Modify the MainPage XAML](#modify-the-mainpage-xaml)                                  |
+| [Modify the MainPage CS](#modify-the-mainpage-cs)                                      |
+| [Modify the RedditAuthPage CS](#modify-the-redditauthpage-cs                           |
 | [The Finished Solution](#the-finished-solution)                                        |
 
 ## Overview
