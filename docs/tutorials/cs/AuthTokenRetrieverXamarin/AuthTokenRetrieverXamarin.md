@@ -401,7 +401,7 @@ We'll need to be able to access our MainPage instance from here, so we'll add th
 private MainPage MainPage { get; set; }
 ```
 
-### Disble the Back Button
+### Disable the Back Button
 
 We don't want the user accidentally closing the RedditAuthPage before we've completed the workflow, so we add this method:
 
