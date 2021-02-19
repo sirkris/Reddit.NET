@@ -13,6 +13,7 @@
 | Table of Contents                                                                      |
 |:---------------------------------------------------------------------------------------|
 | [Overview](#overview)                                                                  |
+| [Xamarin-Specific Warnings](#xamarin-specific-warnings)                                |
 | [Create the Solution](#create-the-solution)                                            |
 | [Library Installation](#library-installation)                                          |
 | [End-User Workflow](#end-user-workflow)                                                |
