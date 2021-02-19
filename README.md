@@ -442,6 +442,8 @@ For more examples, check out the Example and Reddit.NETTests projects.
 
 #### [Retrieve Comments Tree](docs/tutorials/cs/GetComments/GetComments.md)
 
+#### [Obtain New Refresh Token in Xamarin.Forms](docs/tutorials/cs/AuthTokenRetrieverXamarin/AuthTokenRetrieverXamarin.md)
+
 ## Reference Documentation
 
 All classes/methods/etc can be looked up from here.  Generated using [Doxygen](http://www.doxygen.nl/).
