@@ -22,7 +22,7 @@
 | [Modify the RedditAuthPage XAML](#modify-the-redditauthpage-xaml)                      |
 | [Modify the MainPage XAML](#modify-the-mainpage-xaml)                                  |
 | [Modify the MainPage CS](#modify-the-mainpage-cs)                                      |
-| [Modify the RedditAuthPage CS](#modify-the-redditauthpage-cs                           |
+| [Modify the RedditAuthPage CS](#modify-the-redditauthpage-cs)                          |
 | [The Finished Solution](#the-finished-solution)                                        |
 
 ## Overview
