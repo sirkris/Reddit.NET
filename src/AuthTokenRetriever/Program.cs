@@ -55,7 +55,8 @@ namespace AuthTokenRetriever
             }
 
             // Create a new instance of the auth token retrieval library.  --Kris
-            AuthTokenRetrieverLib authTokenRetrieverLib = new AuthTokenRetrieverLib(appId, appSecret, port);
+            AuthTokenRetrieverLib authTokenRetrieverLib = new AuthTokenRetrieverLib(appId, port, appSecret: appSecret);
+            //AuthTokenRetrieverLib authTokenRetrieverLib = new AuthTokenRetrieverLib(appId, appSecret, port); // Deprecated as of 5.0.1.  --Kris
 
             authTokenRetrieverLib.AuthSuccess += C_AuthSuccess;
 
