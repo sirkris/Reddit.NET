@@ -212,7 +212,6 @@ We need to replace the default crap with a named StackLayout.  We'll call it Sta
     <StackLayout x:Name="StackLayout_Main">
         <!-- Content is generated.  -->
     </StackLayout>
-
 </ContentPage>
 ```
 
