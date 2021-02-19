@@ -82,7 +82,7 @@ Once the callback is received, the auth page will automatically close and the ma
 
 ## Load MainPage as a NavigationPage
 
-This will enable us to navigate to the RedditAuthPage.  First, in AuthTokenRetriever.App, we'll be making two changes to the ctor:
+Now that you know what the end-result is supposed to look like, let's dive into the code!  Our first step is to change MainPage into a NavigationPage.  This will enable us to navigate to the RedditAuthPage.  In AuthTokenRetriever.App, we'll be making two changes to the ctor:
 
 1. Add ```MainPage mainPage``` as a parameter.
 
