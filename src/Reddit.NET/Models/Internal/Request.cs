@@ -206,10 +206,11 @@ namespace Reddit.Models.Internal
             // If we hit a ratelimit of less than a minute, wait the specified time then retry.  --Kris
             bool ratelimited = false;
             if (!string.IsNullOrWhiteSpace(res.Content)
-                && res.Content.Contains("you are doing that too much. try again in ")
+                && (res.Content.Contains("you are doing that too much. try again in ")
+                    || res.Content.Contains("Looks like you've been doing that a lot. Take a break for "))
                 && res.Content.Contains("\"errors\":")
                 && res.Content.Contains("\"ratelimit\":")
-                && (res.Content.Contains("seconds.") || res.Content.Contains("second.")))
+                && (res.Content.Contains("seconds") || res.Content.Contains("second")))
             {
                 // Confirm the errors JSON and extract the wait time.  --Kris
                 Thread.Sleep(GetRateLimit(res.Content));

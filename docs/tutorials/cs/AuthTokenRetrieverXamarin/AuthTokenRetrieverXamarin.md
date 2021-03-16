@@ -38,6 +38,8 @@ This tutorial details how to create a simple Xamarin.Forms mobile app that authe
 
 3. Some Android phones [reportedly](https://stackoverflow.com/a/14124606/1082604) will only allow an app to bind to an [ephemeral port](https://en.wikipedia.org/wiki/Ephemeral_port).  For this reason, this tutorial will have AuthTokenRetrieverLib listen on port 50080 instead of the default of 8080.
 
+4. Due to an [annoying issue](https://stackoverflow.com/questions/60539637/android-build-error-failed-to-create-javatypeinfo-for-class-xamarin) with Windows and Java's propensity for lengthy directory trees, you may receive the following error when you try to build your solution: "Failed to create JavaTypeInfo for class: Android.Support.V4.View.AsyncLayoutInflater/IOnInflateFinishedListenerImplementor due to MAX_PATH".  If you're getting this, it means the directory you've placed your solution in is too deep.  This can be easily (albeit inconveniently) resolved by moving your solution to a directory closer to root, then doing a clean/rebuild.  That should fix the error.  Alternatively, you could leave your solution where it is and create a directory junction to it at the root directory, then run the solution from there.
+
 ## Create the Solution
 
 Open Visual Studio and create a new Xamarin.Forms project.  Let's call it "AuthTokenRetrieverXamarin".
@@ -82,7 +84,7 @@ Once the callback is received, the auth page will automatically close and the ma
 
 ## Load MainPage as a NavigationPage
 
-Now that you know what the end-result is supposed to look like, let's dive into the code!  Our first step is to change MainPage into a NavigationPage.  This will enable us to navigate to the RedditAuthPage.  In AuthTokenRetriever.App, we'll be making two changes to the ctor:
+Now that you know what the end-result is supposed to look like, let's dive into the code!  Our first step is to change MainPage into a NavigationPage.  This will enable us to navigate to the RedditAuthPage.  In AuthTokenRetrieverXamarin.App, we'll be making two changes to the ctor:
 
 1. Add ```MainPage mainPage``` as a parameter.
 
