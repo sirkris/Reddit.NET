@@ -912,7 +912,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "thread");
 
             string key = "LiveThread";
-            return Monitor(key, new Thread(() => MonitorThreadThread(key, monitoringDelayMs)), Id);
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorThreadThread(key, monitoringDelayMs))), Id);
         }
 
         /// <summary>
@@ -951,7 +951,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "contributors");
 
             string key = "LiveThreadContributors";
-            return Monitor(key, new Thread(() => MonitorContributorsThread(key, monitoringDelayMs)), Id);
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorContributorsThread(key, monitoringDelayMs))), Id);
         }
 
         /// <summary>
@@ -990,7 +990,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "updates");
 
             string key = "LiveThreadUpdates";
-            return Monitor(key, new Thread(() => MonitorUpdatesThread(key, monitoringDelayMs)), Id);
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorUpdatesThread(key, monitoringDelayMs))), Id);
         }
 
         public bool LiveThreadIsMonitored()
@@ -1008,18 +1008,28 @@ namespace Reddit.Controllers
             return IsMonitored("LiveThreadUpdates", "updates");
         }
 
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <param name="options">The implementation-specific options</param>
+        /// <returns>The newly-created monitoring thread.</returns>
+        protected override ThreadWrapper CreateMonitoringThread(string key, string subKey, int startDelayMs = 0,
+            int? monitoringDelayMs = null, object options = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "LiveThread":
-                    return new Thread(() => MonitorLiveThread(key, "thread", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorLiveThread(key, "thread", subKey, startDelayMs, monitoringDelayMs)));
                 case "LiveThreadContributors":
-                    return new Thread(() => MonitorLiveThread(key, "contributors", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorLiveThread(key, "contributors", subKey, startDelayMs, monitoringDelayMs)));
                 case "LiveThreadUpdates":
-                    return new Thread(() => MonitorLiveThread(key, "updates", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorLiveThread(key, "updates", subKey, startDelayMs, monitoringDelayMs)));
             }
         }
 

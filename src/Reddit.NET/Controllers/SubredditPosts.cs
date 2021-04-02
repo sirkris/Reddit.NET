@@ -930,7 +930,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "best");
 
             string key = "BestPosts";
-            return Monitor(key, new Thread(() => MonitorBestThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorBestThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorBestThread(string key, int? monitoringDelayMs = null, bool? breakOnFailure = null)
@@ -979,7 +979,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "hot");
 
             string key = "HotPosts";
-            return Monitor(key, new Thread(() => MonitorHotThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorHotThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorHotThread(string key, int? monitoringDelayMs = null)
@@ -1028,7 +1028,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "new");
 
             string key = "NewPosts";
-            return Monitor(key, new Thread(() => MonitorNewThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorNewThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorNewThread(string key, int? monitoringDelayMs = null)
@@ -1077,7 +1077,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "rising");
 
             string key = "RisingPosts";
-            return Monitor(key, new Thread(() => MonitorRisingThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorRisingThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorRisingThread(string key, int? monitoringDelayMs = null)
@@ -1126,7 +1126,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "top");
 
             string key = "TopPosts";
-            return Monitor(key, new Thread(() => MonitorTopThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorTopThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorTopThread(string key, int? monitoringDelayMs = null)
@@ -1175,7 +1175,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "controversial");
 
             string key = "ControversialPosts";
-            return Monitor(key, new Thread(() => MonitorControversialThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorControversialThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorControversialThread(string key, int? monitoringDelayMs = null)
@@ -1224,7 +1224,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "modqueue");
 
             string key = "ModQueuePosts";
-            return Monitor(key, new Thread(() => MonitorModQueueThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorModQueueThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorModQueueThread(string key, int? monitoringDelayMs = null)
@@ -1273,7 +1273,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "modqueuereports");
 
             string key = "ModQueueReportsPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueReportsThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorModQueueReportsThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorModQueueReportsThread(string key, int? monitoringDelayMs = null)
@@ -1322,7 +1322,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "modqueuespam");
 
             string key = "ModQueueSpamPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueSpamThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorModQueueSpamThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorModQueueSpamThread(string key, int? monitoringDelayMs = null)
@@ -1371,7 +1371,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "modqueueunmoderated");
 
             string key = "ModQueueUnmoderatedPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueUnmoderatedThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key,  new ThreadWrapper(new Thread(() => MonitorModQueueUnmoderatedThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorModQueueUnmoderatedThread(string key, int? monitoringDelayMs = null)
@@ -1420,7 +1420,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "modqueueedited");
 
             string key = "ModQueueEditedPosts";
-            return Monitor(key, new Thread(() => MonitorModQueueEditedThread(key, monitoringDelayMs)), Subreddit);
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorModQueueEditedThread(key, monitoringDelayMs))), Subreddit);
         }
 
         private void MonitorModQueueEditedThread(string key, int? monitoringDelayMs = null)
@@ -1539,35 +1539,37 @@ namespace Reddit.Controllers
         /// <param name="subKey">Monitoring subKey</param>
         /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
         /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <param name="options">The implementation-specific options</param>
         /// <returns>The newly-created monitoring thread.</returns>
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        protected override ThreadWrapper CreateMonitoringThread(string key, string subKey, int startDelayMs = 0,
+            int? monitoringDelayMs = null, object options = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "BestPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "best", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "best", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "HotPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "hot", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "hot", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "NewPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "new", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "new", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "RisingPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "rising", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "rising", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "TopPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "top", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "top", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "ControversialPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "controversial", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "controversial", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "ModQueuePosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueue", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "modqueue", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "ModQueueReportsPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuereports", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuereports", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "ModQueueSpamPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuespam", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "modqueuespam", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "ModQueueUnmoderatedPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueunmoderated", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueunmoderated", subKey, startDelayMs, monitoringDelayMs)), options);
                 case "ModQueueEditedPosts":
-                    return new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueedited", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPostsThread(Monitoring, key, "modqueueedited", subKey, startDelayMs, monitoringDelayMs)), options);
             }
         }
 

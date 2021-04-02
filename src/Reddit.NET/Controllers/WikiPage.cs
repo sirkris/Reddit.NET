@@ -490,7 +490,7 @@ namespace Reddit.Controllers
             }
 
             string key = "WikiPage";
-            return Monitor(key, new Thread(() => MonitorPageThread(key, monitoringDelayMs: monitoringDelayMs)), Name);
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorPageThread(key, monitoringDelayMs: monitoringDelayMs))), Name);
         }
 
         /// <summary>
@@ -509,15 +509,17 @@ namespace Reddit.Controllers
         /// <param name="subKey">Monitoring subKey</param>
         /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
         /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <param name="options">The implementation-specific options</param>
         /// <returns>The newly-created monitoring thread.</returns>
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        protected override ThreadWrapper CreateMonitoringThread(string key, string subKey, int startDelayMs = 0,
+            int? monitoringDelayMs = null, object options = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "WikiPage":
-                    return new Thread(() => MonitorPageThread(key, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPageThread(key, startDelayMs, monitoringDelayMs)),options);
             }
         }
 

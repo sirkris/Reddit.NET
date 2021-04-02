@@ -111,7 +111,7 @@ namespace Reddit.Controllers
             Unread = unread ?? new List<Message>();
             Sent = sent ?? new List<Message>();
 
-            Threads = new Dictionary<string, Thread>();
+            Threads = new Dictionary<string, ThreadWrapper>();
 
             Dispatch = dispatch;
 
@@ -478,7 +478,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "inbox");
 
             string key = "PrivateMessagesInbox";
-            return Monitor(key, new Thread(() => MonitorInboxThread(key, monitoringDelayMs)), "PrivateMessages");
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorInboxThread(key, monitoringDelayMs))), "PrivateMessages");
         }
 
         private void MonitorInboxThread(string key, int? monitoringDelayMs = null)
@@ -522,7 +522,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "unread");
 
             string key = "PrivateMessagesUnread";
-            return Monitor(key, new Thread(() => MonitorUnreadThread(key, monitoringDelayMs)), "PrivateMessages");
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorUnreadThread(key, monitoringDelayMs))), "PrivateMessages");
         }
 
         private void MonitorUnreadThread(string key, int? monitoringDelayMs = null)
@@ -566,7 +566,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "sent");
 
             string key = "PrivateMessagesSent";
-            return Monitor(key, new Thread(() => MonitorSentThread(key, monitoringDelayMs)), "PrivateMessages");
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorSentThread(key, monitoringDelayMs))), "PrivateMessages");
         }
 
         private void MonitorSentThread(string key, int? monitoringDelayMs = null)
@@ -715,19 +715,21 @@ namespace Reddit.Controllers
         /// <param name="subKey">Monitoring subKey</param>
         /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
         /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <param name="options">The implementation-specific options</param>
         /// <returns>The newly-created monitoring thread.</returns>
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        protected override ThreadWrapper CreateMonitoringThread(string key, string subKey, int startDelayMs = 0,
+            int? monitoringDelayMs = null, object options = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "PrivateMessagesInbox":
-                    return new Thread(() => MonitorPrivateMessagesThread(key, "inbox", startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPrivateMessagesThread(key, "inbox", startDelayMs, monitoringDelayMs)), options);
                 case "PrivateMessagesUnread":
-                    return new Thread(() => MonitorPrivateMessagesThread(key, "unread", startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPrivateMessagesThread(key, "unread", startDelayMs, monitoringDelayMs)), options);
                 case "PrivateMessagesSent":
-                    return new Thread(() => MonitorPrivateMessagesThread(key, "sent", startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorPrivateMessagesThread(key, "sent", startDelayMs, monitoringDelayMs)),options);
             }
         }
     }

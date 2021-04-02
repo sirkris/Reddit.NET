@@ -637,7 +637,9 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "recent");
 
             string key = "ModmailMessagesRecent";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
+            return Monitor(key, new ThreadWrapper(
+                new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", monitoringDelayMs: monitoringDelayMs)))
+                , "ModmailMessages");
         }
 
         /// <summary>
@@ -676,7 +678,9 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "mod");
 
             string key = "ModmailMessagesMod";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
+            return Monitor(key, 
+                new ThreadWrapper(new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", monitoringDelayMs: monitoringDelayMs))), 
+                "ModmailMessages");
         }
 
         /// <summary>
@@ -715,7 +719,9 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "user");
 
             string key = "ModmailMessagesUser";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(user, key, "user", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
+            return Monitor(key, 
+                new ThreadWrapper(new Thread(() => MonitorModmailMessagesThread(user, key, "user", monitoringDelayMs: monitoringDelayMs))), 
+                "ModmailMessages");
         }
 
         /// <summary>
@@ -754,7 +760,9 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "unread");
 
             string key = "ModmailMessagesUnread";
-            return Monitor(key, new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", monitoringDelayMs: monitoringDelayMs)), "ModmailMessages");
+            return Monitor(key, 
+                new ThreadWrapper(new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", monitoringDelayMs: monitoringDelayMs))), 
+                "ModmailMessages");
         }
 
         /// <summary>
@@ -992,21 +1000,23 @@ namespace Reddit.Controllers
         /// <param name="subKey">Monitoring subKey</param>
         /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
         /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <param name="options">The implementation-specific options</param>
         /// <returns>The newly-created monitoring thread.</returns>
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        protected override ThreadWrapper CreateMonitoringThread(string key, string subKey, int startDelayMs = 0,
+            int? monitoringDelayMs = null, object options = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "ModmailMessagesRecent":
-                    return new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorModmailMessagesThread(recent, key, "recent", startDelayMs, monitoringDelayMs)),options);
                 case "ModmailMessagesMod":
-                    return new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorModmailMessagesThread(mod, key, "mod", startDelayMs, monitoringDelayMs)),options);
                 case "ModmailMessagesUser":
-                    return new Thread(() => MonitorModmailMessagesThread(user, key, "user", startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorModmailMessagesThread(user, key, "user", startDelayMs, monitoringDelayMs)),options);
                 case "ModmailMessagesUnread":
-                    return new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorModmailMessagesThread(unread, key, "unread", startDelayMs, monitoringDelayMs)),options);
             }
         }
     }

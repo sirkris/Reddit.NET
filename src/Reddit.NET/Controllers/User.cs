@@ -1484,7 +1484,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "posts");
 
             string key = "PostHistory";
-            return Monitor(key, new Thread(() => MonitorPostHistoryThread(key, monitoringDelayMs)), Fullname);
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorPostHistoryThread(key, monitoringDelayMs))), Fullname);
         }
 
         private void MonitorPostHistoryThread(string key, int? monitoringDelayMs = null, bool? breakOnFailure = null)
@@ -1533,7 +1533,7 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "comments");
 
             string key = "CommentHistory";
-            return Monitor(key, new Thread(() => MonitorCommentHistoryThread(key, monitoringDelayMs)), Fullname);
+            return Monitor(key, new ThreadWrapper(new Thread(() => MonitorCommentHistoryThread(key, monitoringDelayMs))), Fullname);
         }
 
         private void MonitorCommentHistoryThread(string key, int? monitoringDelayMs = null, bool? breakOnFailure = null)
@@ -1661,17 +1661,19 @@ namespace Reddit.Controllers
         /// <param name="subKey">Monitoring subKey</param>
         /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
         /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <param name="options">The implementation-specific options</param>
         /// <returns>The newly-created monitoring thread.</returns>
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        protected override ThreadWrapper CreateMonitoringThread(string key, string subKey, int startDelayMs = 0,
+            int? monitoringDelayMs = null, object options = null)
         {
             switch (key)
             {
                 default:
                     throw new RedditControllerException("Unrecognized key.");
                 case "PostHistory":
-                    return new Thread(() => MonitorHistoryThread(Monitoring, key, "posts", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorHistoryThread(Monitoring, key, "posts", subKey, startDelayMs, monitoringDelayMs)),options);
                 case "CommentHistory":
-                    return new Thread(() => MonitorHistoryThread(Monitoring, key, "comments", subKey, startDelayMs, monitoringDelayMs));
+                    return new ThreadWrapper(new Thread(() => MonitorHistoryThread(Monitoring, key, "comments", subKey, startDelayMs, monitoringDelayMs)),options);
             }
         }
     }
