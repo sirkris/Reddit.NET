@@ -736,7 +736,9 @@ namespace Reddit.Controllers
                 context, truncate, showEdits, showMore,
                 threaded, depth, limit, srDetail, isInterface);
             return Monitor(key, new ThreadWrapper(
-                    new Thread(() => MonitorConfidenceThread(key, monitoringDelayMs)), 
+                    new Thread(() => MonitorConfidenceThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
                     options), 
                 SubKey);
         }
@@ -823,7 +825,9 @@ namespace Reddit.Controllers
                 context, truncate, showEdits, showMore,
                 threaded, depth, limit, srDetail, isInterface);
             return Monitor(key, new ThreadWrapper(
-                new Thread(() => MonitorTopThread(key, monitoringDelayMs)),
+                new Thread(() => MonitorTopThread(key, monitoringDelayMs,
+                    context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                    threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)),
                 options), 
                 SubKey);
         }
@@ -893,7 +897,9 @@ namespace Reddit.Controllers
                 context, truncate, showEdits, showMore,
                 threaded, depth, limit, srDetail, isInterface);
             return Monitor(key, new ThreadWrapper(
-                new Thread(() => MonitorNewThread(key, monitoringDelayMs)),
+                new Thread(() => MonitorNewThread(key, monitoringDelayMs,
+                    context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                    threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)),
                 options), 
                 SubKey);
         }
@@ -963,7 +969,9 @@ namespace Reddit.Controllers
                 context, truncate, showEdits, showMore,
                 threaded, depth, limit, srDetail, isInterface);
             return Monitor(key, new ThreadWrapper(
-                new Thread(() => MonitorControversialThread(key, monitoringDelayMs)), 
+                new Thread(() => MonitorControversialThread(key, monitoringDelayMs,
+                    context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                    threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
                 options), 
                 SubKey);
         }
@@ -1033,7 +1041,9 @@ namespace Reddit.Controllers
                 context, truncate, showEdits, showMore,
                 threaded, depth, limit, srDetail, isInterface);
             return Monitor(key, new ThreadWrapper(
-                    new Thread(() => MonitorOldThread(key, monitoringDelayMs)), 
+                    new Thread(() => MonitorOldThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
                     options), 
                 SubKey);
         }
@@ -1103,7 +1113,9 @@ namespace Reddit.Controllers
                 context, truncate, showEdits, showMore,
                 threaded, depth, limit, srDetail, isInterface);
             return Monitor(key, new ThreadWrapper(
-                    new Thread(() => MonitorRandomThread(key, monitoringDelayMs)), 
+                    new Thread(() => MonitorRandomThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
                     options), 
                 SubKey);
         }
@@ -1173,7 +1185,9 @@ namespace Reddit.Controllers
                 context, truncate, showEdits, showMore,
                 threaded, depth, limit, srDetail, isInterface);
             return Monitor(key, new ThreadWrapper(
-                    new Thread(() => MonitorQAThread(key, monitoringDelayMs)), 
+                    new Thread(() => MonitorQAThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
                     options), 
                 SubKey);
         }
@@ -1243,7 +1257,9 @@ namespace Reddit.Controllers
                 context, truncate, showEdits, showMore,
                 threaded, depth, limit, srDetail, isInterface);
             return Monitor(key, new ThreadWrapper(
-                    new Thread(() => MonitorLiveThread(key, monitoringDelayMs)), 
+                    new Thread(() => MonitorLiveThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
                     options), 
                 SubKey);
         }
