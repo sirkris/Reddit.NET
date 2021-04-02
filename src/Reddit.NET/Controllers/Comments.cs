@@ -1498,51 +1498,30 @@ namespace Reddit.Controllers
         protected override ThreadWrapper CreateMonitoringThread(string key, string subKey, int startDelayMs = 0,
             int? monitoringDelayMs = null, object options = null)
         {
-            switch (key)
+            CommentOptions opts = CommentOptions.GetOptionsOrDefault(options);
+            
+            string keyTranslation = "";
+            Dictionary<string, string> lookups = new Dictionary<string, string>
             {
-                default:
-                    throw new RedditControllerException("Unrecognized key.");
-                case "ConfidenceComments":
-                    return new ThreadWrapper(
-                        new Thread(() =>
-                            MonitorCommentsThread(Monitoring, key, "confidence", SubKey, startDelayMs, monitoringDelayMs)),
-                        options);
-                case "TopComments":
-                    return new ThreadWrapper(
-                        new Thread(() =>
-                            MonitorCommentsThread(Monitoring, key, "top", SubKey, startDelayMs, monitoringDelayMs)),
-                        options);
-                case "NewComments":
-                    return new ThreadWrapper(
-                        new Thread(() =>
-                            MonitorCommentsThread(Monitoring, key, "new", SubKey, startDelayMs, monitoringDelayMs)),
-                        options);
-                case "ControversialComments":
-                    return new ThreadWrapper(
-                        new Thread(() =>
-                            MonitorCommentsThread(Monitoring, key, "controversial", SubKey, startDelayMs, monitoringDelayMs)),
-                        options);
-                case "OldComments":
-                    return new ThreadWrapper(
-                        new Thread(() =>
-                            MonitorCommentsThread(Monitoring, key, "old", SubKey, startDelayMs, monitoringDelayMs)),
-                        options);
-                case "RandomComments":
-                    return new ThreadWrapper(
-                        new Thread(() =>
-                            MonitorCommentsThread(Monitoring, key, "random", SubKey, startDelayMs, monitoringDelayMs)),
-                        options);
-                case "QAComments":
-                    return new ThreadWrapper(
-                        new Thread(() =>
-                            MonitorCommentsThread(Monitoring, key, "qa", SubKey, startDelayMs, monitoringDelayMs)),
-                        options);
-                case "LiveComments":
-                    return new ThreadWrapper(
-                        new Thread(() =>
-                            MonitorCommentsThread(Monitoring, key, "live", SubKey, startDelayMs, monitoringDelayMs)),
-                        options);
-            }
+                ["ConfidenceComments"] = "confidence",
+                ["TopComments"] = "top",
+                ["NewComments"] = "new",
+                ["ControversialComments"] = "controversial",
+                ["OldComments"] = "old",
+                ["RandomComments"] = "random",
+                ["QAComments"] = "qa",
+                ["LiveComments"] = "live"
+            };
+            
+            if (!lookups.ContainsKey(key)) 
+                throw new RedditControllerException("Unrecognized key.");
+
+            return new ThreadWrapper(
+                new Thread(() =>
+                    MonitorCommentsThread(Monitoring, key, keyTranslation, SubKey, startDelayMs, monitoringDelayMs,
+                        opts.Context, opts.Truncate, opts.ShowEdits, opts.ShowMore,
+                        opts.Threaded, opts.Depth, opts.Limit, opts.SrDetail, opts.IsInterface)),
+                options);
         }
 
         private class CommentOptions
@@ -1556,6 +1535,13 @@ namespace Reddit.Controllers
             public int? Limit { get; set; } = null;
             public bool SrDetail { get; set; } = false;
             public bool IsInterface { get; set; } = false;
+
+            public static CommentOptions GetOptionsOrDefault(object options)
+            {
+                CommentOptions castedOptions = options as CommentOptions;
+
+                return castedOptions ?? new CommentOptions();
+            }
         }
     }
 }
