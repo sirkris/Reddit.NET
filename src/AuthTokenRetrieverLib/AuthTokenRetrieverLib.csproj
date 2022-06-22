@@ -37,7 +37,7 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-    <PackageReference Include="RestSharp" Version="106.6.9" />
+    <PackageReference Include="RestSharp" Version="106.12.0" />
     <PackageReference Include="uhttpsharp.Standard" Version="8.0.30703.1" />
   </ItemGroup>
 
