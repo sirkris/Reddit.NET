@@ -5,11 +5,11 @@
 
     <IsPackable>false</IsPackable>
 
-    <Version>1.5.0</Version>
+    <Version>1.5.2</Version>
 
     <Authors>Kris Craig</Authors>
 
-    <Copyright>Copyright (C) 2021 by Kris Craig</Copyright>
+    <Copyright>Copyright (C) 2022 by Kris Craig</Copyright>
 
     <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
 
@@ -17,9 +17,9 @@
 
     <RepositoryType>Git</RepositoryType>
 
-    <AssemblyVersion>1.5.0.0</AssemblyVersion>
+    <AssemblyVersion>1.5.2.0</AssemblyVersion>
 
-    <FileVersion>1.5.0.0</FileVersion>
+    <FileVersion>1.5.2.0</FileVersion>
 
     <PackageReleaseNotes>https://github.com/sirkris/Reddit.NET/blob/master/README.md</PackageReleaseNotes>
 

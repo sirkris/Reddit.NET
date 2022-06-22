@@ -29,7 +29,7 @@ namespace Reddit.Things
         public string IconColor { get; set; }
 
         [JsonProperty("user_is_muted")]
-        public bool UserIsMuted { get; set; }
+        public bool? UserIsMuted { get; set; }
 
         [JsonProperty("display_name")]
         public string DisplayName { get; set; }

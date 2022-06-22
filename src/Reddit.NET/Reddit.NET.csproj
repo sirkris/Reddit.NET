@@ -2,16 +2,16 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <Version>1.5.0+develop</Version>
-    <AssemblyVersion>1.5.0.1</AssemblyVersion>
-    <FileVersion>1.5.0.1</FileVersion>
+    <Version>1.5.2</Version>
+    <AssemblyVersion>1.5.2.0</AssemblyVersion>
+    <FileVersion>1.5.2.0</FileVersion>
     <PackageReleaseNotes>https://www.reddit.com/r/redditdev/comments/lkmlw7/announcing_the_release_of_redditnet_15/</PackageReleaseNotes>
     <Title>Reddit.NET</Title>
     <PackageId>Reddit</PackageId>
     <Authors>Kris Craig</Authors>
     <Company>Kris Craig</Company>
     <Description>Reddit.NET is a .NET Standard library that provides easy access to the Reddit API with virtually no boilerplate code required.</Description>
-    <Copyright>Copyright (C) 2021 by Kris Craig</Copyright>
+    <Copyright>Copyright (C) 2022 by Kris Craig</Copyright>
     <PackageLicenseUrl>https://github.com/sirkris/Reddit.NET/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/sirkris/Reddit.NET</PackageProjectUrl>
     <RepositoryUrl>https://github.com/sirkris/Reddit.NET</RepositoryUrl>
