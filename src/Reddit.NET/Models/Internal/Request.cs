@@ -209,7 +209,7 @@ namespace Reddit.Models.Internal
                 && (res.Content.Contains("you are doing that too much. try again in ")
                     || res.Content.Contains("Looks like you've been doing that a lot. Take a break for "))
                 && res.Content.Contains("\"errors\":")
-                && res.Content.Contains("\"ratelimit\":")
+                && res.Content.Contains("\"ratelimit\"")
                 && (res.Content.Contains("seconds") || res.Content.Contains("second")))
             {
                 // Confirm the errors JSON and extract the wait time.  --Kris
