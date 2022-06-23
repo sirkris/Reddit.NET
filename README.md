@@ -431,6 +431,8 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 #### [Update Client Prefs](docs/examples/cs/Update%20Client%20Prefs.md)
 
 #### [Retrieve Posts From r/all](docs/examples/cs/Retrieve%20Posts%20From%20rall.md)
+
+#### [Post Link on Profile Page](docs/examples/cs/Profile%20Post.md)
  
 For more examples, check out the Example and Reddit.NETTests projects.
 
