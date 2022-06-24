@@ -2,6 +2,7 @@
 using Newtonsoft.Json.Linq;
 using Reddit.Controllers;
 using Reddit.Models.Converters;
+using Reddit.NET.Things.Post;
 using System;
 using System.Collections.Generic;
 
@@ -325,6 +326,15 @@ namespace Reddit.Things
 
         [JsonProperty("is_video")]
         public bool IsVideo { get; set; }
+
+        [JsonProperty("is_gallery")]
+        public bool? IsGallery { get; set; }
+
+        [JsonProperty("gallery_data")]
+        public GalleryData GalleryData { get; set; }
+
+        [JsonProperty("media_metadata")]
+        public Dictionary<string, MediaMetadataItem> MediaMetadata { get; set; }
 
         [JsonProperty("sr_detail")]
         public Subreddit SrDetail { get; set; }

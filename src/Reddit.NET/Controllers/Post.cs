@@ -352,6 +352,15 @@ namespace Reddit.Controllers
             }
         }
 
+        public bool IsGallery
+        {
+            get
+            {
+                return Listing != null && Listing.IsGallery.HasValue && Listing.IsGallery.Value;
+            }
+            private set { }
+        }
+
         /// <summary>
         /// The full Listing object returned by the Reddit API;
         /// </summary>
