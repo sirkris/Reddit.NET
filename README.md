@@ -433,7 +433,11 @@ r.Models.LinksAndComments.Comment(new LinksAndCommentsThingInput("This is my com
 #### [Retrieve Posts From r/all](docs/examples/cs/Retrieve%20Posts%20From%20rall.md)
 
 #### [Post Link on Profile Page](docs/examples/cs/Profile%20Post.md)
- 
+
+#### [Approve a Post](docs/examples/cs/Approve%20Post.md)
+
+#### [Mark a Post as Spam](docs/examples/cs/Mark%20as%20Spam.md)
+
 For more examples, check out the Example and Reddit.NETTests projects.
 
 ## Tutorials
