@@ -165,5 +165,15 @@ namespace RedditTests.ModelTests
             Assert.IsTrue(posts.Count > 0);
             Validate(posts[0]);
         }
+
+        [TestMethod]
+        public void HandleEntities()
+        {
+            PostContainer posts = reddit.Models.Listings.GetByNames("t3_ty368b");
+            Assert.AreEqual(@"Ocean Gray & Silver No. 2/65 Keycult", posts.Data.Children[0].Data.Title);
+
+            posts = reddit.Models.Listings.GetByNames("t3_tvrcgx");
+            Assert.AreEqual(@"https://twitter.com/TarjeiJS/status/1510724911001747459?t=WrUlz-PyXBv_apofabipww&s=19", posts.Data.Children[0].Data.URL);
+        }
     }
 }
