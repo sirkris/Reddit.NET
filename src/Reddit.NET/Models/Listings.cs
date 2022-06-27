@@ -48,7 +48,7 @@ namespace Reddit.Models
         /// <returns>A list of Reddit posts.</returns>
         public PostContainer GetByNames(string names)
         {
-            return JsonConvert.DeserializeObject<PostContainer>(ExecuteRequest("by_id/" + names));
+            return SendRequest<PostContainer>("by_id/" + names, new BaseInput());
         }
 
         /// <summary>
@@ -121,7 +121,7 @@ namespace Reddit.Models
         /// <returns>A random listing.</returns>
         public List<PostContainer> Random(string subreddit = null)
         {
-            return JsonConvert.DeserializeObject<List<PostContainer>>(ExecuteRequest(Sr(subreddit) + "random"));
+            return SendRequest<List<PostContainer>>(Sr(subreddit) + "random", new BaseInput());
         }
 
         /// <summary>
