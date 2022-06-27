@@ -38,9 +38,9 @@ namespace Reddit.Things
         [JsonProperty("title")]
         public string Title { get; set; }
 
-        // TODO - Only had an empty example so not sure if the structure is right.  --Kris
-        [JsonProperty("link_flair_richtext")]
-        public object PublicFlairRichtext { get; set; }
+        // Added Object 07/01/21 Jonathon C.
+        [JsonProperty("link_flair_richtext", NullValueHandling = NullValueHandling.Ignore)]
+        public PostLinkFlair PublicFlairRichtext { get; set; }
 
         [JsonProperty("subreddit_name_prefixed")]
         public string SubredditNamePrefixed { get; set; }
