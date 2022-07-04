@@ -13,7 +13,7 @@ namespace RedditTests.ModelTests.WorkflowTests
         [TestMethod]
         public void GetConversations()
         {
-            ConversationContainer conversationContainer = reddit.Models.Modmail.GetConversations(new ModmailGetConversationsInput(sort: "user"));
+            ConversationContainer conversationContainer = reddit.Models.Modmail.GetConversations(new ModmailGetConversationsInput(sort: "user", entity: testData["Subreddit"]));
 
             Validate(conversationContainer);
 
