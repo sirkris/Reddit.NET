@@ -43,15 +43,15 @@ Reddit.NET is FOSS (MIT license) and was written in C#. It can be found on Githu
 
 ## Usage
 
-Reddit.NET can be installed via NuGet.  You can find it at:  https://www.nuget.org/packages/Reddit
+Reddit.NET can be installed via NuGet. https://www.nuget.org/packages/Reddit
 
-To install via the Visual Studio NuGet Package Manager Console (in VS 2017, you'll find it under Tools->NuGet Package Manager->NuGet Package Manager Console):
+To create an app for use with the Reddit API, go here: https://www.reddit.com/prefs/apps
 
 ```nuget
 PM> Install-Package Reddit
 ```
 
-To create a new API instance bound to a specific user's refresh token in an installed app:
+To create a new API instance for a registered Reddit app:
 
 ```c#
 using Reddit;
