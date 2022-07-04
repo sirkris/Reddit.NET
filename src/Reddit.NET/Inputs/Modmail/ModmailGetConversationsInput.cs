@@ -24,7 +24,7 @@ namespace Reddit.Inputs.Modmail
         /// Get conversations for a logged in user or subreddits.
         /// </summary>
         /// <param name="after">base36 modmail conversation id</param>
-        /// <param name="entity">comma-delimited list of subreddit names</param>
+        /// <param name="entity">comma-delimited list of subreddit names (WARNING: As of 7/2022, this endpoint will return 504 if entity is not specified!)</param>
         /// <param name="sort">one of (recent, mod, user, unread)</param>
         /// <param name="state">one of (new, inprogress, mod, notifications, archived, highlighted, all)</param>
         /// <param name="limit">an integer (default: 25)</param>
