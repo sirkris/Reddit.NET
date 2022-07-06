@@ -3,6 +3,7 @@ using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RedditTests.ControllerTests.WorkflowTests
 {
@@ -91,7 +92,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
         }
 
         [TestMethod]
-        public void MonitorPages()
+        public async Task MonitorPages()
         {
             Subreddit.Wiki.GetPages();  // This call prevents any existing wiki pages from triggering the update event.  --Kris
             Subreddit.Wiki.MonitorPages();
@@ -99,8 +100,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
             for (int i = 1; i <= 10; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                Subreddit.Wiki.Page("Test Page " + DateTime.Now.ToString("yyyyMMddHHmmssfffff") + "-" + i.ToString()).CreateAsync("None of your business.", "This is a test.");
+                await Subreddit.Wiki.Page("Test Page " + DateTime.Now.ToString("yyyyMMddHHmmssfffff") + "-" + i.ToString()).CreateAsync("None of your business.", "This is a test.");
             }
 
             DateTime start = DateTime.Now;
@@ -114,7 +114,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
         }
 
         [TestMethod]
-        public void MonitorPage()
+        public async Task MonitorPage()
         {
             // Initialize so the page will be different.  --Kris
             Index.Edit("Initialization", "This page is about to be updated.", Index.Revisions()[0].Id);
@@ -122,8 +122,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             Index.MonitorPage();
             Index.PageUpdated += C_PageUpdated;
 
-            // Despite what VS says, we don't want to use await here.  --Kris
-            Index.EditAsync("You wouldn't understand.", "This page has been updated.", Index.Revisions()[0].Id);
+            await Index.EditAsync("You wouldn't understand.", "This page has been updated.", Index.Revisions()[0].Id);
 
             DateTime start = DateTime.Now;
             while (!PageUpdated

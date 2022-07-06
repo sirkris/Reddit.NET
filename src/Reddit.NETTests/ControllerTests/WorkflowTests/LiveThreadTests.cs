@@ -3,6 +3,7 @@ using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RedditTests.ControllerTests.WorkflowTests
 {
@@ -125,7 +126,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
         }
 
         [TestMethod]
-        public void Monitoring()
+        public async Task Monitoring()
         {
             User patsy = GetTargetUser();
 
@@ -151,15 +152,13 @@ namespace RedditTests.ControllerTests.WorkflowTests
             // Make changes to trigger all three monitors and validate the results.  --Kris
             patsy.AcceptLiveThreadInvite(LiveThread.Id);
 
-            // Despite what VS says, we don't want to use await here.  --Kris
-            LiveThread.EditAsync(LiveThread.Title, LiveThread.Description, !LiveThread.NSFW, LiveThread.Resources);
+            await LiveThread.EditAsync(LiveThread.Title, LiveThread.Description, !LiveThread.NSFW, LiveThread.Resources);
 
             LiveThreadUpdates = new List<Reddit.Things.LiveUpdate>();
             for (int i = 1; i <= 5; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                LiveThread.UpdateAsync("Primary user test update #" + i.ToString());
-                patsy.UpdateLiveThreadAsync(LiveThread.Id, "Secondary user test update #" + i.ToString());
+                await LiveThread.UpdateAsync("Primary user test update #" + i.ToString());
+                await patsy.UpdateLiveThreadAsync(LiveThread.Id, "Secondary user test update #" + i.ToString());
             }
 
             DateTime start = DateTime.Now;

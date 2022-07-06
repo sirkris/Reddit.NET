@@ -205,8 +205,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
             for (int i = 1; i <= 10; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                Comment.ReplyAsync("Comment #" + i.ToString());
+                Comment.Reply("Comment #" + i.ToString());
             }
 
             DateTime start = DateTime.Now;
@@ -216,7 +215,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             Comment.Comments.NewUpdated -= C_NewCommentsUpdated;
             Comment.Comments.MonitorNew();
 
-            Assert.IsTrue(NewComments.Count >= 7);
+            Assert.IsTrue(NewComments.Count >= 10);
         }
 
         private void CheckReplies(Comment comment, ref bool[] replies, int depth = 0)

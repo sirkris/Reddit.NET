@@ -3,6 +3,7 @@ using Reddit.Controllers;
 using Reddit.Controllers.EventArgs;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RedditTests.ControllerTests.WorkflowTests
 {
@@ -81,7 +82,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
         }
 
         [TestMethod]
-        public void MonitorNewPosts()
+        public async Task MonitorNewPosts()
         {
             Subreddit.Posts.GetNew();  // This call prevents any existing "new"-sorted posts from triggering the update event.  --Kris
             Subreddit.Posts.MonitorNew();
@@ -89,14 +90,12 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
             for (int i = 1; i <= 5; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                Subreddit.LinkPost("Test Link Post #" + i.ToString(), "https://github.com/sirkris/Reddit.NET").SubmitAsync(true);
+                await Subreddit.LinkPost("Test Link Post #" + i.ToString(), "https://github.com/sirkris/Reddit.NET").SubmitAsync(true);
             }
 
             for (int i = 1; i <= 5; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                Subreddit.SelfPost("Test Self Post #" + i.ToString(), "This is a test post created by [Reddit.NET](https://github.com/sirkris/Reddit.NET).").SubmitAsync();
+                await Subreddit.SelfPost("Test Self Post #" + i.ToString(), "This is a test post created by [Reddit.NET](https://github.com/sirkris/Reddit.NET).").SubmitAsync();
             }
 
             DateTime start = DateTime.Now;
@@ -131,8 +130,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             var post = Subreddit.SelfPost($"Post for monitoring {DateTime.UtcNow}", $"A post with bunch of comments for monitoring the subreddit at {DateTime.UtcNow}").Submit();
             for (int i = 1; i <= 10; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                post.ReplyAsync($"Some comment #{i}");
+                post.Reply($"Some comment #{i}");
             }
 
             DateTime start = DateTime.Now;
