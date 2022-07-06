@@ -131,8 +131,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
             var post = Subreddit.SelfPost($"Post for monitoring {DateTime.UtcNow}", $"A post with bunch of comments for monitoring the subreddit at {DateTime.UtcNow}").Submit();
             for (int i = 1; i <= 10; i++)
             {
-                // Despite what VS says, we don't want to use await here.  --Kris
-                post.ReplyAsync($"Some comment #{i}");
+                post.Reply($"Some comment #{i}");
             }
 
             DateTime start = DateTime.Now;
