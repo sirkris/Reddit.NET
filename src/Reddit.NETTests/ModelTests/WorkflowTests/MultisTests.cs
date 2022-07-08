@@ -2,6 +2,7 @@
 using Reddit.Exceptions;
 using Reddit.Inputs.Multis;
 using Reddit.Things;
+using System;
 using System.Collections.Generic;
 
 namespace RedditTests.ModelTests.WorkflowTests
@@ -77,16 +78,34 @@ namespace RedditTests.ModelTests.WorkflowTests
             }
         }
 
+        private void Destroy(string multiPath, string multiPathCopy, string multiSub, bool failSilently = false)
+        {
+            try { reddit.Models.Multis.DeleteMultiSub(multiPathCopy, multiSub); } catch (RedditNotFoundException ex) { if (!failSilently) { throw ex; } }
+
+            try { reddit.Models.Multis.Delete(multiPathCopy, false); } catch (RedditNotFoundException ex) { if (!failSilently) { throw ex; } }
+            try { reddit.Models.Multis.Delete(multiPath, false); } catch (RedditNotFoundException ex) { if (!failSilently) { throw ex; } }
+        }
+
         [TestMethod]
         public void CreateAndDestroy()
         {
             User me = reddit.Models.Account.Me();
-            string multiPath = "/user/" + me.Name + "/m/my_test_multi/";
-            string multiPathCopy = "/user/" + me.Name + "/m/my_test_multi_copy/";
+            string multiPath = "/user/" + me.Name + "/m/my_test_multi";
+            string multiPathCopy = "/user/" + me.Name + "/m/my_test_multi_copy";
             string multiDisplayName = "My Test Multi";
             string multiDescription = "Test multi created by [Reddit.NET](https://github.com/sirkris/Reddit.NET).";
 
-            LabeledMultiContainer labeledMultiContainer = Create(multiPath, multiDisplayName, multiDescription);
+            LabeledMultiContainer labeledMultiContainer;
+            try
+            {
+                labeledMultiContainer = Create(multiPath, multiDisplayName, multiDescription);
+            }
+            catch (RedditConflictException)
+            {
+                // If the test multi already exists, delete it then try again.  --Kris
+                Destroy(multiPath, multiPathCopy, "WayOfTheBern", true); 
+                labeledMultiContainer = Create(multiPath, multiDisplayName, multiDescription);
+            }
 
             Validate(labeledMultiContainer);
             Validate(labeledMultiContainer.Data);
@@ -117,10 +136,7 @@ namespace RedditTests.ModelTests.WorkflowTests
             Validate(namedObj);
             Assert.AreEqual("WayOfTheBern", namedObj.Name, true);
 
-            reddit.Models.Multis.DeleteMultiSub(multiPathCopy, "WayOfTheBern");
-
-            reddit.Models.Multis.Delete(multiPathCopy, false);
-            reddit.Models.Multis.Delete(multiPath, false);
+            Destroy(multiPath, multiPathCopy, "WayOfTheBern");
         }
     }
 }
