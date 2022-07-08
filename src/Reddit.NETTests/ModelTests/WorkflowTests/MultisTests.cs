@@ -90,8 +90,8 @@ namespace RedditTests.ModelTests.WorkflowTests
         public void CreateAndDestroy()
         {
             User me = reddit.Models.Account.Me();
-            string multiPath = "/user/" + me.Name + "/m/my_test_multi/";
-            string multiPathCopy = "/user/" + me.Name + "/m/my_test_multi_copy/";
+            string multiPath = "/user/" + me.Name + "/m/my_test_multi";
+            string multiPathCopy = "/user/" + me.Name + "/m/my_test_multi_copy";
             string multiDisplayName = "My Test Multi";
             string multiDescription = "Test multi created by [Reddit.NET](https://github.com/sirkris/Reddit.NET).";
 
