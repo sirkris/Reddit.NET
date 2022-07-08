@@ -155,7 +155,7 @@ namespace RedditTests
             BadRequest badRequest = null;
             try
             {
-                badRequest = JsonConvert.DeserializeObject<BadRequest>(((RestResponse)ex.Data["res"]).Content);
+                badRequest = JsonConvert.DeserializeObject<BadRequest>((string)ex.Data["Content"]);
             }
             catch (Exception) { }
 
