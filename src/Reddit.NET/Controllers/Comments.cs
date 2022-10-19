@@ -5,6 +5,7 @@ using Reddit.Exceptions;
 using Reddit.Inputs.Listings;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.SymbolStore;
 using System.Threading;
 
 namespace Reddit.Controllers
@@ -693,9 +694,20 @@ namespace Reddit.Controllers
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorConfidence(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null, 
-            DateTime? monitoringExpiration = null, bool useCache = true)
+            DateTime? monitoringExpiration = null, bool useCache = true,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             if (breakOnFailure.HasValue)
             {
@@ -720,12 +732,41 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "confidence");
 
             string key = "ConfidenceComments";
-            return Monitor(key, new Thread(() => MonitorConfidenceThread(key, monitoringDelayMs)), SubKey);
+            CommentOptions options = BuildOptions(
+                context, truncate, showEdits, showMore,
+                threaded, depth, limit, srDetail, isInterface);
+            return Monitor(key, new ThreadWrapper(
+                    new Thread(() => MonitorConfidenceThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
+                    options), 
+                SubKey);
         }
 
-        private void MonitorConfidenceThread(string key, int? monitoringDelayMs = null)
+        private CommentOptions BuildOptions(int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            MonitorCommentsThread(Monitoring, key, "confidence", SubKey, monitoringDelayMs: monitoringDelayMs);
+            return new CommentOptions
+            {
+                Context = context,
+                Truncate = truncate,
+                ShowEdits = showEdits,
+                ShowMore = showMore,
+                Threaded = threaded,
+                Depth = depth,
+                Limit = limit,
+                SrDetail = srDetail,
+                IsInterface = isInterface
+            };
+        }
+
+        private void MonitorConfidenceThread(string key, int? monitoringDelayMs = null,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
+        {
+            MonitorCommentsThread(Monitoring, key, "confidence", SubKey, monitoringDelayMs: monitoringDelayMs,
+                context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface);
         }
 
         internal virtual void OnConfidenceUpdated(CommentsUpdateEventArgs e)
@@ -742,9 +783,20 @@ namespace Reddit.Controllers
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorTop(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null, bool useCache = true)
+            DateTime? monitoringExpiration = null, bool useCache = true,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             if (breakOnFailure.HasValue)
             {
@@ -769,12 +821,24 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "top");
 
             string key = "TopComments";
-            return Monitor(key, new Thread(() => MonitorTopThread(key, monitoringDelayMs)), SubKey);
+            CommentOptions options = BuildOptions(
+                context, truncate, showEdits, showMore,
+                threaded, depth, limit, srDetail, isInterface);
+            return Monitor(key, new ThreadWrapper(
+                new Thread(() => MonitorTopThread(key, monitoringDelayMs,
+                    context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                    threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)),
+                options), 
+                SubKey);
         }
 
-        private void MonitorTopThread(string key, int? monitoringDelayMs = null)
+        private void MonitorTopThread(string key, int? monitoringDelayMs = null,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            MonitorCommentsThread(Monitoring, key, "top", SubKey, monitoringDelayMs: monitoringDelayMs);
+            MonitorCommentsThread(Monitoring, key, "top", SubKey, monitoringDelayMs: monitoringDelayMs,
+                context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface);
         }
 
         internal virtual void OnTopUpdated(CommentsUpdateEventArgs e)
@@ -791,9 +855,20 @@ namespace Reddit.Controllers
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorNew(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null, bool useCache = true)
+            DateTime? monitoringExpiration = null, bool useCache = true,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             if (breakOnFailure.HasValue)
             {
@@ -818,12 +893,24 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "new");
 
             string key = "NewComments";
-            return Monitor(key, new Thread(() => MonitorNewThread(key, monitoringDelayMs)), SubKey);
+            CommentOptions options = BuildOptions(
+                context, truncate, showEdits, showMore,
+                threaded, depth, limit, srDetail, isInterface);
+            return Monitor(key, new ThreadWrapper(
+                new Thread(() => MonitorNewThread(key, monitoringDelayMs,
+                    context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                    threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)),
+                options), 
+                SubKey);
         }
 
-        private void MonitorNewThread(string key, int? monitoringDelayMs = null)
+        private void MonitorNewThread(string key, int? monitoringDelayMs = null,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            MonitorCommentsThread(Monitoring, key, "new", SubKey, monitoringDelayMs: monitoringDelayMs);
+            MonitorCommentsThread(Monitoring, key, "new", SubKey, monitoringDelayMs: monitoringDelayMs,
+                context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface);
         }
 
         internal virtual void OnNewUpdated(CommentsUpdateEventArgs e)
@@ -840,9 +927,20 @@ namespace Reddit.Controllers
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorControversial(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null, bool useCache = true)
+            DateTime? monitoringExpiration = null, bool useCache = true,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             if (breakOnFailure.HasValue)
             {
@@ -867,12 +965,24 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "controversial");
 
             string key = "ControversialComments";
-            return Monitor(key, new Thread(() => MonitorControversialThread(key, monitoringDelayMs)), SubKey);
+            CommentOptions options = BuildOptions(
+                context, truncate, showEdits, showMore,
+                threaded, depth, limit, srDetail, isInterface);
+            return Monitor(key, new ThreadWrapper(
+                new Thread(() => MonitorControversialThread(key, monitoringDelayMs,
+                    context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                    threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
+                options), 
+                SubKey);
         }
 
-        private void MonitorControversialThread(string key, int? monitoringDelayMs = null)
+        private void MonitorControversialThread(string key, int? monitoringDelayMs = null,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            MonitorCommentsThread(Monitoring, key, "controversial", SubKey, monitoringDelayMs: monitoringDelayMs);
+            MonitorCommentsThread(Monitoring, key, "controversial", SubKey, monitoringDelayMs: monitoringDelayMs,
+                context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface);
         }
 
         internal virtual void OnControversialUpdated(CommentsUpdateEventArgs e)
@@ -889,9 +999,20 @@ namespace Reddit.Controllers
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorOld(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null, bool useCache = true)
+            DateTime? monitoringExpiration = null, bool useCache = true,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             if (breakOnFailure.HasValue)
             {
@@ -916,12 +1037,24 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "old");
 
             string key = "OldComments";
-            return Monitor(key, new Thread(() => MonitorOldThread(key, monitoringDelayMs)), SubKey);
+            CommentOptions options = BuildOptions(
+                context, truncate, showEdits, showMore,
+                threaded, depth, limit, srDetail, isInterface);
+            return Monitor(key, new ThreadWrapper(
+                    new Thread(() => MonitorOldThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
+                    options), 
+                SubKey);
         }
 
-        private void MonitorOldThread(string key, int? monitoringDelayMs = null)
+        private void MonitorOldThread(string key, int? monitoringDelayMs = null,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            MonitorCommentsThread(Monitoring, key, "old", SubKey, monitoringDelayMs: monitoringDelayMs);
+            MonitorCommentsThread(Monitoring, key, "old", SubKey, monitoringDelayMs: monitoringDelayMs,
+                context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface);
         }
 
         internal virtual void OnOldUpdated(CommentsUpdateEventArgs e)
@@ -938,9 +1071,20 @@ namespace Reddit.Controllers
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorRandom(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null, bool useCache = true)
+            DateTime? monitoringExpiration = null, bool useCache = true,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             if (breakOnFailure.HasValue)
             {
@@ -965,12 +1109,24 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "random");
 
             string key = "RandomComments";
-            return Monitor(key, new Thread(() => MonitorRandomThread(key, monitoringDelayMs)), SubKey);
+            CommentOptions options = BuildOptions(
+                context, truncate, showEdits, showMore,
+                threaded, depth, limit, srDetail, isInterface);
+            return Monitor(key, new ThreadWrapper(
+                    new Thread(() => MonitorRandomThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
+                    options), 
+                SubKey);
         }
 
-        private void MonitorRandomThread(string key, int? monitoringDelayMs = null)
+        private void MonitorRandomThread(string key, int? monitoringDelayMs = null,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            MonitorCommentsThread(Monitoring, key, "random", SubKey, monitoringDelayMs: monitoringDelayMs);
+            MonitorCommentsThread(Monitoring, key, "random", SubKey, monitoringDelayMs: monitoringDelayMs,
+                context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface);
         }
 
         internal virtual void OnRandomUpdated(CommentsUpdateEventArgs e)
@@ -987,9 +1143,20 @@ namespace Reddit.Controllers
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorQA(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null, bool useCache = true)
+            DateTime? monitoringExpiration = null, bool useCache = true,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             if (breakOnFailure.HasValue)
             {
@@ -1014,12 +1181,24 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "qa");
 
             string key = "QAComments";
-            return Monitor(key, new Thread(() => MonitorQAThread(key, monitoringDelayMs)), SubKey);
+            CommentOptions options = BuildOptions(
+                context, truncate, showEdits, showMore,
+                threaded, depth, limit, srDetail, isInterface);
+            return Monitor(key, new ThreadWrapper(
+                    new Thread(() => MonitorQAThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
+                    options), 
+                SubKey);
         }
 
-        private void MonitorQAThread(string key, int? monitoringDelayMs = null)
+        private void MonitorQAThread(string key, int? monitoringDelayMs = null,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            MonitorCommentsThread(Monitoring, key, "qa", SubKey, monitoringDelayMs: monitoringDelayMs);
+            MonitorCommentsThread(Monitoring, key, "qa", SubKey, monitoringDelayMs: monitoringDelayMs,
+                context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface);
         }
 
         internal virtual void OnQAUpdated(CommentsUpdateEventArgs e)
@@ -1036,9 +1215,20 @@ namespace Reddit.Controllers
         /// <param name="breakOnFailure">If true, an exception will be thrown when a monitoring query fails; leave null to keep current setting (default: false)</param>
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
+        /// <param name="context">an integer between 0 and 8</param>
+        /// <param name="truncate">an integer between 0 and 50</param>
+        /// <param name="showEdits">boolean value</param>
+        /// <param name="showMore">boolean value</param>
+        /// <param name="threaded">boolean value</param>
+        /// <param name="depth">(optional) an integer</param>
+        /// <param name="limit">(optional) an integer</param>
+        /// <param name="srDetail">(optional) expand subreddits</param>
+        /// <param name="isInterface">(optional) whether to store the result cache in the interface</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
         public bool MonitorLive(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
-            DateTime? monitoringExpiration = null, bool useCache = true)
+            DateTime? monitoringExpiration = null, bool useCache = true,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             if (breakOnFailure.HasValue)
             {
@@ -1063,12 +1253,24 @@ namespace Reddit.Controllers
             InitMonitoringCache(useCache, "live");
 
             string key = "LiveComments";
-            return Monitor(key, new Thread(() => MonitorLiveThread(key, monitoringDelayMs)), SubKey);
+            CommentOptions options = BuildOptions(
+                context, truncate, showEdits, showMore,
+                threaded, depth, limit, srDetail, isInterface);
+            return Monitor(key, new ThreadWrapper(
+                    new Thread(() => MonitorLiveThread(key, monitoringDelayMs,
+                        context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                        threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface)), 
+                    options), 
+                SubKey);
         }
 
-        private void MonitorLiveThread(string key, int? monitoringDelayMs = null)
+        private void MonitorLiveThread(string key, int? monitoringDelayMs = null,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
-            MonitorCommentsThread(Monitoring, key, "live", SubKey, monitoringDelayMs: monitoringDelayMs);
+            MonitorCommentsThread(Monitoring, key, "live", SubKey, monitoringDelayMs: monitoringDelayMs,
+                context: context, truncate: truncate, showEdits: showEdits, showMore:showMore,
+                threaded: threaded, depth: depth, limit: limit, srDetail: srDetail, isInterface: isInterface);
         }
 
         internal virtual void OnLiveUpdated(CommentsUpdateEventArgs e)
@@ -1076,7 +1278,9 @@ namespace Reddit.Controllers
             LiveUpdated?.Invoke(this, e);
         }
 
-        private void MonitorCommentsThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        private void MonitorCommentsThread(MonitoringSnapshot monitoring, string key, string type, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null,
+            int context = 3, int truncate = 0, bool showEdits = false, bool showMore = true,
+            bool threaded = true, int? depth = null, int? limit = null, bool srDetail = false, bool isInterface = false)
         {
             if (startDelayMs > 0)
             {
@@ -1122,35 +1326,43 @@ namespace Reddit.Controllers
                             throw new RedditControllerException("Unrecognized type '" + type + "'.");
                         case "confidence":
                             oldList = confidence;
-                            newList = GetConfidence();
+                            newList = GetConfidence(context, truncate, showEdits, showMore,
+                                threaded, depth, limit, srDetail, isInterface);
                             break;
                         case "top":
                             oldList = top;
-                            newList = GetTop();
+                            newList = GetTop(context, truncate, showEdits, showMore,
+                                threaded, depth, limit, srDetail, isInterface);
                             break;
                         case "new":
                             oldList = newComments;
-                            newList = GetNew();
+                            newList = GetNew(context, truncate, showEdits, showMore,
+                                threaded, depth, limit, srDetail, isInterface);
                             break;
                         case "controversial":
                             oldList = controversial;
-                            newList = GetControversial();
+                            newList = GetControversial(context, truncate, showEdits, showMore,
+                                threaded, depth, limit, srDetail, isInterface);
                             break;
                         case "old":
                             oldList = old;
-                            newList = GetOld();
+                            newList = GetOld(context, truncate, showEdits, showMore,
+                                threaded, depth, limit, srDetail, isInterface);
                             break;
                         case "random":
                             oldList = random;
-                            newList = GetRandom();
+                            newList = GetRandom(context, truncate, showEdits, showMore,
+                                threaded, depth, limit, srDetail, isInterface);
                             break;
                         case "qa":
                             oldList = qa;
-                            newList = GetQA();
+                            newList = GetQA(context, truncate, showEdits, showMore,
+                                threaded, depth, limit, srDetail, isInterface);
                             break;
                         case "live":
                             oldList = live;
-                            newList = GetLive();
+                            newList = GetLive(context, truncate, showEdits, showMore,
+                                threaded, depth, limit, srDetail, isInterface);
                             break;
                     }
 
@@ -1297,29 +1509,54 @@ namespace Reddit.Controllers
         /// <param name="subKey">Monitoring subKey</param>
         /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
         /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <param name="options">The implementation-specific options</param>
         /// <returns>The newly-created monitoring thread.</returns>
-        protected override Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null)
+        protected override ThreadWrapper CreateMonitoringThread(string key, string subKey, int startDelayMs = 0,
+            int? monitoringDelayMs = null, object options = null)
         {
-            switch (key)
+            CommentOptions opts = CommentOptions.GetOptionsOrDefault(options);
+            
+            string keyTranslation = "";
+            Dictionary<string, string> lookups = new Dictionary<string, string>
             {
-                default:
-                    throw new RedditControllerException("Unrecognized key.");
-                case "ConfidenceComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "confidence", SubKey, startDelayMs, monitoringDelayMs));
-                case "TopComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "top", SubKey, startDelayMs, monitoringDelayMs));
-                case "NewComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "new", SubKey, startDelayMs, monitoringDelayMs));
-                case "ControversialComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "controversial", SubKey, startDelayMs, monitoringDelayMs));
-                case "OldComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "old", SubKey, startDelayMs, monitoringDelayMs));
-                case "RandomComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "random", SubKey, startDelayMs, monitoringDelayMs));
-                case "QAComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "qa", SubKey, startDelayMs, monitoringDelayMs));
-                case "LiveComments":
-                    return new Thread(() => MonitorCommentsThread(Monitoring, key, "live", SubKey, startDelayMs, monitoringDelayMs));
+                ["ConfidenceComments"] = "confidence",
+                ["TopComments"] = "top",
+                ["NewComments"] = "new",
+                ["ControversialComments"] = "controversial",
+                ["OldComments"] = "old",
+                ["RandomComments"] = "random",
+                ["QAComments"] = "qa",
+                ["LiveComments"] = "live"
+            };
+            
+            if (!lookups.ContainsKey(key)) 
+                throw new RedditControllerException("Unrecognized key.");
+
+            return new ThreadWrapper(
+                new Thread(() =>
+                    MonitorCommentsThread(Monitoring, key, keyTranslation, SubKey, startDelayMs, monitoringDelayMs,
+                        opts.Context, opts.Truncate, opts.ShowEdits, opts.ShowMore,
+                        opts.Threaded, opts.Depth, opts.Limit, opts.SrDetail, opts.IsInterface)),
+                options);
+        }
+
+        private class CommentOptions
+        {
+            public int Context { get; set; } = 3;
+            public int Truncate { get; set; } = 0;
+            public bool ShowEdits { get; set; } = false;
+            public bool ShowMore { get; set; } = true;
+            public bool Threaded { get; set; } = true;
+            public int? Depth { get; set; } = null;
+            public int? Limit { get; set; } = null;
+            public bool SrDetail { get; set; } = false;
+            public bool IsInterface { get; set; } = false;
+
+            public static CommentOptions GetOptionsOrDefault(object options)
+            {
+                CommentOptions castedOptions = options as CommentOptions;
+
+                return castedOptions ?? new CommentOptions();
             }
         }
     }

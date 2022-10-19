@@ -2,6 +2,7 @@
 using Reddit.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace Reddit.Controllers.Internal
@@ -10,7 +11,7 @@ namespace Reddit.Controllers.Internal
     {
         public int MonitoringWaitDelayMS = 1500;
 
-        internal Dictionary<string, Thread> Threads;
+        internal Dictionary<string, ThreadWrapper> Threads;
 
         protected volatile bool Terminate = false;
 
@@ -29,14 +30,14 @@ namespace Reddit.Controllers.Internal
 
         public Monitors() : base()
         {
-            Threads = new Dictionary<string, Thread>();
+            Threads = new Dictionary<string, ThreadWrapper>();
             BreakOnFailure = false;
             MonitoringSchedule = new List<MonitoringSchedule> { null };  // Monitor 24/7 by default.  --Kris
         }
 
-        protected bool Monitor(string key, Thread thread, string subKey)
+        protected bool Monitor(string key, ThreadWrapper thread, string subKey)
         {
-            bool res = Monitor(key, thread, subKey, out Thread newThread);
+            bool res = Monitor(key, thread, subKey, out ThreadWrapper newThread);
 
             RebuildThreads(subKey);
             LaunchThreadIfNotNull(key, newThread);
@@ -44,7 +45,7 @@ namespace Reddit.Controllers.Internal
             return res;
         }
 
-        internal bool Monitor(string key, Thread thread, string subKey, out Thread newThread)
+        internal bool Monitor(string key, ThreadWrapper thread, string subKey, out ThreadWrapper newThread)
         {
             newThread = null;
             if (IsMonitored(key, subKey))
@@ -116,25 +117,31 @@ namespace Reddit.Controllers.Internal
         // TODO - Preserve custom thread monitoring delays when they're rebuilt (occurs whenever a new monitoring thread starts or an existing one stops).  --Kris
         protected void RebuildThreads(string subKey)
         {
-            List<string> oldThreads = new List<string>(Threads.Keys);
-            ResetThreads(oldThreads);
+            List<(string key, object options)> oldThreads =
+                Threads.Select(t => new {t.Key, t.Value.Options})
+                    .AsEnumerable()
+                    .Select(t => (t.Key, t.Options))
+                    .ToList();
+            List<string> oldThreadKeys = oldThreads.Select(o => o.key).ToList();
+            
+            ResetThreads(oldThreadKeys);
 
             int i = 0;
-            foreach (string key in oldThreads)
+            foreach ((string key, object options) in oldThreads)
             {
-                Threads.Add(key, CreateMonitoringThread(key, subKey, (i * MonitoringWaitDelayMS)));
-                Threads[key].Start();
+                Threads.Add(key, CreateMonitoringThread(key, subKey, (i * MonitoringWaitDelayMS), options: options));
+                Threads[key].Thread.Start();
                 i++;
             }
         }
 
-        protected void LaunchThreadIfNotNull(string key, Thread thread)
+        protected void LaunchThreadIfNotNull(string key, ThreadWrapper thread)
         {
             if (thread != null)
             {
                 Threads.Add(key, thread);
-                Threads[key].Start();
-                while (!Threads[key].IsAlive) { }
+                Threads[key].Thread.Start();
+                while (!Threads[key].Thread.IsAlive) { }
             }
         }
 
@@ -152,10 +159,10 @@ namespace Reddit.Controllers.Internal
         {
             if (Threads.ContainsKey(key))
             {
-                Thread thread = Threads[key];
+                ThreadWrapper thread = Threads[key];
 
                 KillThread(key);
-                WaitOrDie(thread, timeout);
+                WaitOrDie(thread.Thread, timeout);
             }
         }
 
@@ -183,14 +190,14 @@ namespace Reddit.Controllers.Internal
 
         protected void KillThread(string key)
         {
-            KillThread(Threads[key]);
+            KillThread(Threads[key].Thread);
 
             Threads.Remove(key);
         }
 
         public void KillAllMonitoringThreads()
         {
-            foreach (KeyValuePair<string, Thread> pair in Threads)
+            foreach (KeyValuePair<string, ThreadWrapper> pair in Threads)
             {
                 KillThread(pair.Key);
             }
@@ -229,6 +236,15 @@ namespace Reddit.Controllers.Internal
             }
         }
 
-        protected abstract Thread CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null);
+        /// <summary>
+        /// Creates a new monitoring thread.
+        /// </summary>
+        /// <param name="key">Monitoring key</param>
+        /// <param name="subKey">Monitoring subKey</param>
+        /// <param name="startDelayMs">How long to wait before starting the thread in milliseconds (default: 0)</param>
+        /// <param name="monitoringDelayMs">How long to wait between monitoring queries; pass null to leave it auto-managed (default: null)</param>
+        /// <param name="options">Implementation-specific options.</param>
+        /// <returns>The newly-created monitoring thread.</returns>
+        protected abstract ThreadWrapper CreateMonitoringThread(string key, string subKey, int startDelayMs = 0, int? monitoringDelayMs = null, object options = null);
     }
 }
