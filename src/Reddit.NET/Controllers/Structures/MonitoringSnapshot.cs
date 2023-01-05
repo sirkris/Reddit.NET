@@ -42,14 +42,14 @@ namespace Reddit.Controllers.Structures
         public List<string> CommentScore;
         public List<string> CommentHistory;
 
-        public MonitoringSnapshot(List<string> bestPosts = null, List<string> hotPosts = null, List<string> newPosts = null, List<string> risingPosts = null, 
-            List<string> topPosts = null, List<string> controversialPosts = null, List<string> modQueuePosts = null, List<string> modQueueReportsPosts = null, 
-            List<string> modQueueSpamPosts = null, List<string> modQueueUnmoderatedPosts = null, List<string> modQueueEditedPosts = null, 
-            List<string> privateMessagesInbox = null, List<string> privateMessagesUnread = null, List<string> privateMessagesSent = null, 
-            List<string> confidenceComments = null, List<string> topComments = null, List<string> newComments = null, List<string> controversialComments = null, 
-            List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null, 
-            List<string> wikiPages = null, List<string> wikiPage = null, List<string> modmailMessagesRecent = null, List<string> modmailMessagesMod = null, 
-            List<string> modmailMessagesUser = null, List<string> modmailMessagesUnread = null, List<string> liveThread = null, List<string> liveThreadContributors = null, 
+        public MonitoringSnapshot(List<string> bestPosts = null, List<string> hotPosts = null, List<string> newPosts = null, List<string> risingPosts = null,
+            List<string> topPosts = null, List<string> controversialPosts = null, List<string> modQueuePosts = null, List<string> modQueueReportsPosts = null,
+            List<string> modQueueSpamPosts = null, List<string> modQueueUnmoderatedPosts = null, List<string> modQueueEditedPosts = null,
+            List<string> privateMessagesInbox = null, List<string> privateMessagesUnread = null, List<string> privateMessagesSent = null,
+            List<string> confidenceComments = null, List<string> topComments = null, List<string> newComments = null, List<string> controversialComments = null,
+            List<string> oldComments = null, List<string> randomComments = null, List<string> qaComments = null, List<string> liveComments = null,
+            List<string> wikiPages = null, List<string> wikiPage = null, List<string> modmailMessagesRecent = null, List<string> modmailMessagesMod = null,
+            List<string> modmailMessagesUser = null, List<string> modmailMessagesUnread = null, List<string> liveThread = null, List<string> liveThreadContributors = null,
             List<string> liveThreadUpdates = null, List<string> postData = null, List<string> postScore = null, List<string> postHistory = null, List<string> commentScore = null, List<string> commentHistory = null)
         {
             BestPosts = bestPosts ?? new List<string>();
@@ -170,7 +170,7 @@ namespace Reddit.Controllers.Structures
                     return ref CommentHistory;
             }
         }
-        
+
         public void Add(MonitoringSnapshot monitoringSnapshot)
         {
             if (monitoringSnapshot != null)

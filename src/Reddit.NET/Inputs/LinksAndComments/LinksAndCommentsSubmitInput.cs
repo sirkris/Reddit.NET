@@ -110,7 +110,7 @@ namespace Reddit.Inputs.LinksAndComments
         /// <param name="title">title of the submission. up to 300 characters long</param>
         /// <param name="url">a valid URL</param>
         /// <param name="videoPosterUrl">a valid URL</param>
-        public LinksAndCommentsSubmitInput(bool ad = false, string app = "", string extension = "", string flairId = "", string flairText = "", 
+        public LinksAndCommentsSubmitInput(bool ad = false, string app = "", string extension = "", string flairId = "", string flairText = "",
             string kind = "", bool nsfw = false, bool resubmit = false, string richtextJson = "", bool sendReplies = true, bool spoiler = false, string sr = "", string text = "",
             string title = "", string url = "", string videoPosterUrl = "")
             : base()

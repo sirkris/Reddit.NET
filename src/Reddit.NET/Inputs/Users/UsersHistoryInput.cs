@@ -39,7 +39,7 @@ namespace Reddit.Inputs.Users
         /// <param name="show">(optional) the string all</param>
         /// <param name="srDetail">(optional) expand subreddits</param>
         /// <param name="includeCategories">boolean value</param>
-        public UsersHistoryInput(string type = "links", string t = "all", string sort = "new", int context = 3, string after = null, string before = null, int count = 0, int limit = 25, 
+        public UsersHistoryInput(string type = "links", string t = "all", string sort = "new", int context = 3, string after = null, string before = null, int count = 0, int limit = 25,
             string show = "all", bool srDetail = false, bool includeCategories = false)
             : base(after, before, count, limit, show, srDetail, includeCategories)
         {

@@ -44,7 +44,7 @@ namespace Reddit
         {
             get
             {
-                
+
                 return (FrontPageaLastUpdated.HasValue
                     && FrontPageaLastUpdated.Value.AddSeconds(15) > DateTime.Now ? frontPage : GetFrontPage());
             }
@@ -77,7 +77,7 @@ namespace Reddit
                 || !string.IsNullOrWhiteSpace(accessToken))
             {
                 // Passing "null" instead of null forces the Reddit API to return a non-200 status code on auth failure, freeing us from having to parse the content string.  --Kris
-                Models = new Dispatch(appId, appSecret, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"), 
+                Models = new Dispatch(appId, appSecret, refreshToken, (!string.IsNullOrWhiteSpace(accessToken) ? accessToken : "null"), new RestClient("https://oauth.reddit.com"),
                     userAgent: userAgent);
             }
             else
@@ -351,7 +351,7 @@ namespace Reddit
             string submitLinkLabel = null, string submitTextLabel = null, bool wikiEnabled = false, bool over18 = false,
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
-            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null, 
+            int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null,
             string fullname = null)
         {
             return new Subreddit(Models, name, title, description, sidebar, submissionText, lang, subredditType, submissionType, submitLinkLabel, submitTextLabel,
@@ -602,7 +602,7 @@ namespace Reddit
         public List<Subreddit> GetSubreddits(string where, int limit = 25, string after = "", string before = "", bool includeCategories = false,
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Account.Lists.GetSubreddits(Account.Validate(Models.Subreddits.Get(where, 
+            return Account.Lists.GetSubreddits(Account.Validate(Models.Subreddits.Get(where,
                 new CategorizedSrListingInput(after, before, count, limit, show, srDetail, includeCategories))), Models);
         }
 
@@ -625,7 +625,7 @@ namespace Reddit
         public List<Subreddit> GetUserSubreddits(string where, int limit = 25, string after = "", string before = "", bool includeCategories = false,
             string show = "all", bool srDetail = false, int count = 0)
         {
-            return Account.Lists.GetSubreddits(Account.Validate(Models.Subreddits.GetUserSubreddits(where, 
+            return Account.Lists.GetSubreddits(Account.Validate(Models.Subreddits.GetUserSubreddits(where,
                 new CategorizedSrListingInput(after, before, count, limit, show, srDetail, includeCategories))), Models);
         }
 

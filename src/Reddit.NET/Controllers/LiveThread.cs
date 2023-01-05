@@ -388,7 +388,7 @@ namespace Reddit.Controllers
                 AnnouncementURL = announcementUrl,
                 State = state,
                 ViewerCount = viewerCount,
-                Icon = icon, 
+                Icon = icon,
                 IsAnnouncement = isAnnouncement
             };
         }
@@ -400,18 +400,18 @@ namespace Reddit.Controllers
             if (EventData == null)
             {
                 Import(
-                    id, 
-                    description, 
-                    nsfw ?? false, 
-                    resources, 
-                    title, 
-                    totalViews ?? 0, 
-                    created ?? default(DateTime), 
-                    fullname, websocketUrl, 
-                    announcementUrl, 
-                    state, 
-                    viewerCount ?? 0, 
-                    icon, 
+                    id,
+                    description,
+                    nsfw ?? false,
+                    resources,
+                    title,
+                    totalViews ?? 0,
+                    created ?? default(DateTime),
+                    fullname, websocketUrl,
+                    announcementUrl,
+                    state,
+                    viewerCount ?? 0,
+                    icon,
                     isAnnouncement ?? false);
             }
             else
@@ -1144,7 +1144,7 @@ namespace Reddit.Controllers
             List<UserListContainer> oldList = contributors;
             List<UserListContainer> newList = GetContributors();
 
-            if (UserListDiff(oldList, newList, out List<UserListContainer> added, out List<UserListContainer> removed, 
+            if (UserListDiff(oldList, newList, out List<UserListContainer> added, out List<UserListContainer> removed,
                 (UseCache.Contains("contributors") ? MonitoringCache["contributors"] : null)))
             {
                 // Add the new entries to the appropriate cache, if enabled.  --Kris

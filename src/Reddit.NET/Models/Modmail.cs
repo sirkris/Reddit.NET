@@ -67,7 +67,7 @@ namespace Reddit.Models
             RestRequest restRequest = PrepareRequest("api/mod/conversations/" + conversationId);
 
             restRequest.AddParameter("markRead", markRead);
-            
+
             return JsonConvert.DeserializeObject<ModmailConversationContainer>(ExecuteRequest(restRequest));
         }
 

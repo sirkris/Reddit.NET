@@ -1,13 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Reddit;
-using Controllers = Reddit.Controllers;
 using Reddit.Inputs.LinksAndComments;
 using Reddit.Things;
 using RestSharp;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Controllers = Reddit.Controllers;
 
 namespace RedditTests
 {

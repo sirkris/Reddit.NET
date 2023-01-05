@@ -576,7 +576,7 @@ namespace Reddit.Controllers
             if (UserData == null)
             {
                 Import(name, id, isFriend ?? false, profanityFilter ?? false, isSuspended ?? false, hasGoldSubscription ?? false, numFriends ?? 0, isVerified ?? false, hasNewModmail ?? false,
-                    over18 ?? false, isGold ?? false, isMod ?? false, hasVerifiedEmail ?? false, iconImg, hasModmail ?? false, linkKarma ?? 0, inboxCount ?? 0, hasMail ?? false, 
+                    over18 ?? false, isGold ?? false, isMod ?? false, hasVerifiedEmail ?? false, iconImg, hasModmail ?? false, linkKarma ?? 0, inboxCount ?? 0, hasMail ?? false,
                     created ?? default(DateTime), commentKarma ?? 0, hasSubscribed ?? false);
             }
             else
@@ -994,7 +994,7 @@ namespace Reddit.Controllers
         {
             OverviewLastUpdated = DateTime.Now;
             overview = Lists.GetCommentsAndPosts(Validate(Dispatch.Users.Overview(Name, usersHistoryInput)), Dispatch);
-            
+
             return overview;
         }
 
@@ -1596,7 +1596,7 @@ namespace Reddit.Controllers
                             oldPostsList = postHistory;
                             newPostsList = GetPostHistory();
 
-                            if (Lists.ListDiff(oldPostsList, newPostsList, out List<Post> addedPosts, out List<Post> removedPosts, 
+                            if (Lists.ListDiff(oldPostsList, newPostsList, out List<Post> addedPosts, out List<Post> removedPosts,
                                 (UseCache.Contains(type) ? MonitoringCache[type] : null)))
                             {
                                 // Add the new entries to the appropriate cache, if enabled.  --Kris

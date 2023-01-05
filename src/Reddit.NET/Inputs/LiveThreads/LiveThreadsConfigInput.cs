@@ -33,7 +33,7 @@ namespace Reddit.Inputs.LiveThreads
         /// <param name="description">raw markdown text</param>
         /// <param name="nsfw">boolean value</param>
         /// <param name="resources">raw markdown text</param>
-        public LiveThreadsConfigInput(string title = "", string description = "", bool nsfw = false, string resources = "") 
+        public LiveThreadsConfigInput(string title = "", string description = "", bool nsfw = false, string resources = "")
             : base()
         {
             this.title = title;

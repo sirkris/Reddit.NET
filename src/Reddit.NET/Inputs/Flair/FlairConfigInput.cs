@@ -35,7 +35,7 @@ namespace Reddit.Inputs.Flair
         /// <param name="linkFlairPosition">one of (left, right)</param>
         /// <param name="subreddit">The subreddit with the flairs</param>
         public FlairConfigInput(bool flairEnabled = true, bool flairSelfAssignEnabled = true, string flairPosition = "right",
-            bool linkFlairSelfAssignEnabled = true, string linkFlairPosition = "left") 
+            bool linkFlairSelfAssignEnabled = true, string linkFlairPosition = "left")
             : base(flairEnabled)
         {
             flair_position = flairPosition;

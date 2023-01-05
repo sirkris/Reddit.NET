@@ -1,5 +1,5 @@
-﻿using Reddit.AuthTokenRetriever.EventArgs;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using Reddit.AuthTokenRetriever.EventArgs;
 using RestSharp;
 using System;
 using System.Collections.Generic;
@@ -119,7 +119,7 @@ namespace Reddit.AuthTokenRetriever
             {
                 HttpServer.Use(new TcpListenerAdapter(new TcpListener(IPAddress.Parse(Host.Equals("localhost")
                     ? IPAddress.Loopback.ToString() : Host), Port)));
-                
+
                 HttpServer.Use((context, next) =>
                 {
                     string code = null;
@@ -147,7 +147,7 @@ namespace Reddit.AuthTokenRetriever
                         restRequest.AddParameter("grant_type", "authorization_code");
                         restRequest.AddParameter("code", code);
                         restRequest.AddParameter("redirect_uri",
-                            "http://" + Host + ":" + Port.ToString() + "/Reddit.NET/oauthRedirect");  // This must be an EXACT match in the app settings on Reddit!  --Kris
+                            "http://127.0.0.1:8080/Reddit.NET/oauthRedirect");  // This must be an EXACT match in the app settings on Reddit!  --Kris
 
                         OAuthToken oAuthToken = JsonConvert.DeserializeObject<OAuthToken>(ExecuteRequest(restRequest));
 

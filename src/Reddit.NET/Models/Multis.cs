@@ -35,7 +35,7 @@ namespace Reddit.Models
             RestRequest restRequest = PrepareRequest("api/multi/mine");
 
             restRequest.AddParameter("expand_srs", expandSrs);
-            
+
             return JsonConvert.DeserializeObject<List<LabeledMultiContainer>>(ExecuteRequest(restRequest));
         }
 
@@ -64,7 +64,7 @@ namespace Reddit.Models
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath, Method.DELETE);
 
             restRequest.AddParameter("expand_srs", expandSrs);
-            
+
             ExecuteRequest(restRequest);
         }
 
@@ -146,7 +146,7 @@ namespace Reddit.Models
 
             restRequest.AddParameter("model", JsonConvert.SerializeObject(model));
             restRequest.AddParameter("expand_srs", expandSrs);
-            
+
             return JsonConvert.DeserializeObject<LabeledMultiContainer>(ExecuteRequest(restRequest));
         }
 
@@ -272,7 +272,7 @@ namespace Reddit.Models
             RestRequest restRequest = PrepareRequest("api/multi/" + multipath + "/description", Method.PUT);
 
             restRequest.AddParameter("model", "{\"body_md\": \"" + description + "\"}");
-            
+
             return JsonConvert.DeserializeObject<LabeledMultiDescriptionContainer>(ExecuteRequest(restRequest));
         }
 

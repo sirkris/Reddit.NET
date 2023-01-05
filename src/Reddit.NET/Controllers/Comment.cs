@@ -514,8 +514,8 @@ namespace Reddit.Controllers
         /// <param name="spam"></param>
         public Comment(Dispatch dispatch, string subreddit, string author, string body, string parentFullname, string bodyHtml = null,
             string collapsedReason = null, bool collapsed = false, bool isSubmitter = false,
-            List<Comment> replies = null, List<Things.More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null, 
-            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime), 
+            List<Comment> replies = null, List<Things.More> more = null, bool scoreHidden = false, int depth = 0, string id = null, string fullname = null,
+            string permalink = null, DateTime created = default(DateTime), DateTime edited = default(DateTime),
             int score = 0, int upVotes = 0, int downVotes = 0, bool removed = false, bool spam = false)
         {
             Dispatch = dispatch;
@@ -1290,7 +1290,7 @@ namespace Reddit.Controllers
             {
                 default:
                     throw new RedditControllerException("Unrecognized key : " + key + ".");
-                  case "CommentScore":
+                case "CommentScore":
                     return new Thread(() => MonitorComment(key, "score", subKey, startDelayMs, monitoringDelayMs));
             }
         }

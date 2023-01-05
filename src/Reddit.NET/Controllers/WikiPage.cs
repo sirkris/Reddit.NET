@@ -77,7 +77,7 @@ namespace Reddit.Controllers
         /// <param name="contentMd"></param>
         /// <param name="subreddit"></param>
         /// <param name="name"></param>
-        public WikiPage(Dispatch dispatch, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd, 
+        public WikiPage(Dispatch dispatch, bool mayRevise, DateTime revisionDate, string contentHtml, User revisionBy, string contentMd,
             string subreddit = null, string name = null)
         {
             Dispatch = dispatch;

@@ -37,7 +37,7 @@ namespace Reddit.Controllers
             get;
             private set;
         }
-        
+
         /// <summary>
         /// Fullname of the previous page of flair list results.
         /// </summary>

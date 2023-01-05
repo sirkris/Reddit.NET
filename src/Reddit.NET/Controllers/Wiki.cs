@@ -280,7 +280,7 @@ namespace Reddit.Controllers
                     return new Thread(() => MonitorPagesThread(key, startDelayMs, monitoringDelayMs));
             }
         }
-        
+
         private void MonitorPagesThread(string key, int startDelayMs = 0, int? monitoringDelayMs = null)
         {
             if (startDelayMs > 0)

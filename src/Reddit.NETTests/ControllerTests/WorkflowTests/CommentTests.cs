@@ -241,7 +241,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
                 int baseReplies = Random.Next(minBase, maxBase);
                 int j = 0;
                 Comment comment = comments.Last();
-                while (maxDepth > 0 && minDepth > 0 && maxDepth > minDepth 
+                while (maxDepth > 0 && minDepth > 0 && maxDepth > minDepth
                     && j < baseReplies)
                 {
                     j++;

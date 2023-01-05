@@ -218,15 +218,15 @@ namespace Reddit.Things
             autoplay);
         }
 
-        private void Import(bool threadedMessages, bool hideDowns, bool labelNsfw, bool activityRelevantAds, bool emailMessages, bool profileOptOut, bool videoAutoplay, 
-            string acceptPms, bool thirdPartySiteDataPersonalizedContent, bool showLinkFlair, bool credditAutoRenew, bool showTrending, bool privateFeeds, 
-            bool monitorMentions, bool research, bool ignoreSuggestedSort, bool emailDigests, string media, bool clickGadget, bool useGlobalDefaults, 
-            bool over18, bool showStylesheets, bool liveOrangeReds, bool enableDefaultThemes, bool domainDetails, bool collapseLeftBar, string lang, 
-            bool hideUps, bool thirdPartyDataPersonalizedAds, bool allowClickTracking, bool hideFromRobots, bool showTwitter, bool compress, bool storeVisits, bool threadedModmail, 
-            int minLinkScore, string mediaPreview, bool nightMode, bool highlightControversial, bool thirdPartySiteDataPersonalizedAds, bool? showPromote, 
-            int minCommentScore, bool publicVotes, bool noVideoAutoplay, bool organic, bool collapseReadMessages, bool showFlair, bool markMessagesRead, 
-            bool searchIncludeOver18, bool noProfanity, bool hideAds, bool beta, bool topKarmaSubreddits, bool newWindow, int numSites, bool legacySearch, 
-            int numComments, bool showGoldExpiration, bool highlightNewComments, bool emailUnsubscribeAll, string defaultCommentSort, bool hideLocationBar, 
+        private void Import(bool threadedMessages, bool hideDowns, bool labelNsfw, bool activityRelevantAds, bool emailMessages, bool profileOptOut, bool videoAutoplay,
+            string acceptPms, bool thirdPartySiteDataPersonalizedContent, bool showLinkFlair, bool credditAutoRenew, bool showTrending, bool privateFeeds,
+            bool monitorMentions, bool research, bool ignoreSuggestedSort, bool emailDigests, string media, bool clickGadget, bool useGlobalDefaults,
+            bool over18, bool showStylesheets, bool liveOrangeReds, bool enableDefaultThemes, bool domainDetails, bool collapseLeftBar, string lang,
+            bool hideUps, bool thirdPartyDataPersonalizedAds, bool allowClickTracking, bool hideFromRobots, bool showTwitter, bool compress, bool storeVisits, bool threadedModmail,
+            int minLinkScore, string mediaPreview, bool nightMode, bool highlightControversial, bool thirdPartySiteDataPersonalizedAds, bool? showPromote,
+            int minCommentScore, bool publicVotes, bool noVideoAutoplay, bool organic, bool collapseReadMessages, bool showFlair, bool markMessagesRead,
+            bool searchIncludeOver18, bool noProfanity, bool hideAds, bool beta, bool topKarmaSubreddits, bool newWindow, int numSites, bool legacySearch,
+            int numComments, bool showGoldExpiration, bool highlightNewComments, bool emailUnsubscribeAll, string defaultCommentSort, bool hideLocationBar,
             bool autoplay)
         {
             ThreadedMessages = threadedMessages;

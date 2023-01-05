@@ -9,7 +9,7 @@ namespace AuthTokenRetriever
     class Program
     {
         // Change this to the path to your local web browser.  --Kris
-        public const string BROWSER_PATH = @"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe";
+        public const string BROWSER_PATH = @"C:\Program Files\Google\Chrome\Application\chrome.exe";
 
         static void Main(string[] args)
         {

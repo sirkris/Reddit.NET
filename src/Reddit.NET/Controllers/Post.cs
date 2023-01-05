@@ -486,19 +486,19 @@ namespace Reddit.Controllers
             if (Listing == null)
             {
                 Import(
-                    subreddit, 
-                    title, 
-                    author, 
-                    id, 
-                    fullname, 
-                    permalink, 
-                    created ?? default(DateTime), 
-                    edited ?? default(DateTime), 
-                    score ?? 0, 
-                    upVotes ?? 0, 
-                    upvoteRatio ?? 0, 
-                    removed ?? false, 
-                    spam ?? false, 
+                    subreddit,
+                    title,
+                    author,
+                    id,
+                    fullname,
+                    permalink,
+                    created ?? default(DateTime),
+                    edited ?? default(DateTime),
+                    score ?? 0,
+                    upVotes ?? 0,
+                    upvoteRatio ?? 0,
+                    removed ?? false,
+                    spam ?? false,
                     nsfw ?? false
                 );
             }

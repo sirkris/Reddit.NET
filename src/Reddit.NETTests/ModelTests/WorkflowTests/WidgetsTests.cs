@@ -45,7 +45,7 @@ namespace RedditTests.ModelTests.WorkflowTests
 
             // Create CommunityList Widget.  --Kris
             WidgetCommunityListDetailed widgetCommunityList = reddit.Models.Widgets.Add(
-                    new WidgetCommunityList(new List<string> { testData["Subreddit"], "RedditDotNETBot" }, "Description goes here.", 
+                    new WidgetCommunityList(new List<string> { testData["Subreddit"], "RedditDotNETBot" }, "Description goes here.",
                     "Test CommunityList Widget", new WidgetStyles()), testData["Subreddit"]);
 
             Assert.IsNotNull(widgetTextArea);
@@ -100,7 +100,7 @@ namespace RedditTests.ModelTests.WorkflowTests
 
             // Modify the CommunityList Widget.  --Kris
             WidgetCommunityList widgetCommunityListUpdated = reddit.Models.Widgets.Update(widgetCommunityListId,
-                    new WidgetCommunityList(new List<string> { testData["Subreddit"], "RedditDotNETBot" }, "Description goes here.", 
+                    new WidgetCommunityList(new List<string> { testData["Subreddit"], "RedditDotNETBot" }, "Description goes here.",
                     "Test CommunityList Widget", new WidgetStyles()), testData["Subreddit"]);
 
             Assert.IsNotNull(widgetCommunityListUpdated);

@@ -11,7 +11,7 @@ namespace Reddit.Models
     public class Listings : BaseModel
     {
         internal override RestClient RestClient { get; set; }
-        
+
         private Common Common { get; set; }
 
         public Listings(string appId, string appSecret, string refreshToken, string accessToken, ref RestClient restClient, string deviceId = null, string userAgent = null)
@@ -25,7 +25,7 @@ namespace Reddit.Models
         /// Return a list of trending subreddits, link to the comment in r/trendingsubreddits, and the comment count of that link.
         /// </summary>
         /// <returns>(TODO - Untested)</returns>
-            public object TrendingSubreddits()
+        public object TrendingSubreddits()
         {
             return JsonConvert.DeserializeObject(ExecuteRequest("api/trending_subreddits"));
         }

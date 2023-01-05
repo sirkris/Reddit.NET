@@ -49,7 +49,7 @@ namespace RedditTests.ModelTests
 
             Assert.IsNull(available);
         }
-        
+
         [TestMethod]
         public void Trophies()
         {

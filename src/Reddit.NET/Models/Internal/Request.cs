@@ -95,7 +95,7 @@ namespace Reddit.Models.Internal
 
             return PrepareRequest(restRequest, contentType);
         }
-        
+
         public RestRequest PrepareRequest(string url, Method method, List<Parameter> parameters, List<FileParameter> files,
             string contentType = "application/x-www-form-urlencoded")
         {
@@ -133,7 +133,7 @@ namespace Reddit.Models.Internal
         public string GetVersion()
         {
             string res = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            return (string.IsNullOrWhiteSpace(res) || !res.Contains(".") ? res : res.Substring(0, res.LastIndexOf(".")) + 
+            return (string.IsNullOrWhiteSpace(res) || !res.Contains(".") ? res : res.Substring(0, res.LastIndexOf(".")) +
                 (res.EndsWith(".1") ? "+develop" : res.EndsWith(".2") ? "+beta" : ""));
         }
 

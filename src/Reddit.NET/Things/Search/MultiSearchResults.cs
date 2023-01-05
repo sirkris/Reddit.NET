@@ -13,7 +13,7 @@ namespace Reddit.Things
         public string First { get; set; }
         public string Last { get; set; }
 
-        public MultiSearchResults(List<Post> posts = null, List<Subreddit> subreddits = null, List<User> users = null, 
+        public MultiSearchResults(List<Post> posts = null, List<Subreddit> subreddits = null, List<User> users = null,
             string first = null, string last = null)
         {
             Posts = (posts != null ? posts : new List<Post>());

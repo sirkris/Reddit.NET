@@ -20,7 +20,7 @@ namespace Reddit.Inputs.LinksAndComments
         /// </summary>
         /// <param name="id">fullname of a thing</param>
         /// <param name="state">boolean value</param>
-        public LinksAndCommentsStateInput(string id = "", bool state = false) 
+        public LinksAndCommentsStateInput(string id = "", bool state = false)
             : base()
         {
             this.id = id;

@@ -22,7 +22,7 @@ namespace RedditTests.ModelTests
             DynamicShortListingContainer aboutContributors = reddit.Models.Subreddits.About("contributors", new SubredditsAboutInput(), "StillSandersForPres");
             DynamicShortListingContainer aboutWikiContributors = reddit.Models.Subreddits.About("wikicontributors", new SubredditsAboutInput(), "StillSandersForPres");
             DynamicShortListingContainer aboutModerators = reddit.Models.Subreddits.About("moderators", new SubredditsAboutInput(), "StillSandersForPres");
-            
+
             Assert.IsNotNull(about);
             Assert.IsTrue(about.Data.DisplayName.Equals("WayOfTheMueller"));
             Assert.IsNotNull(aboutBanned);

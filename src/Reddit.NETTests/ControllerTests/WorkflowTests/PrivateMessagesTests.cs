@@ -77,7 +77,7 @@ namespace RedditTests.ControllerTests.WorkflowTests
 
             DateTime start = DateTime.Now;
             bool res = false;
-            while (!res 
+            while (!res
                 && start.AddMilliseconds(timeoutMs) > DateTime.Now)
             {
                 if (E != null)

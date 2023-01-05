@@ -1,6 +1,6 @@
-﻿using API = Reddit.Models;
-using Reddit.Models.EventArgs;
+﻿using Reddit.Models.EventArgs;
 using RestSharp;
+using API = Reddit.Models;
 
 namespace Reddit.Controllers
 {

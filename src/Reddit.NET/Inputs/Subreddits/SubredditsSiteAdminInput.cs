@@ -236,10 +236,10 @@ namespace Reddit.Inputs.Subreddits
         /// <param name="wikiEditKarma">an integer between 0 and 1000000000 (default: 0)</param>
         public SubredditsSiteAdminInput(bool? allOriginalContent = null, bool? allowDiscovery = null, bool? allowImages = null, bool? allowPostCrossposts = null,
             bool? allowTop = null, bool? allowVideos = null, bool? collapseDeletedComments = null, string description = null, bool? excludeBannedModqueue = null,
-            bool? freeFormReports = null, bool? hideAds = null, string keyColor = null, string lang = null, string linkType = null, string name = null, 
-            bool? originalContentTagEnabled = null, bool? over18 = null, string publicDescription = null, bool? showMedia = null, bool? showMediaPreview = null, 
-            string spamComments = null, string spamLinks = null, string spamSelfPosts = null, bool? spoilersEnabled = null, string sr = null, string submitLinkLabel = null, 
-            string submitText = null, string submitTextLabel = null, string suggestedCommentSort = null, string themeSr = null, bool? themeSrUpdate = null, string title = null, 
+            bool? freeFormReports = null, bool? hideAds = null, string keyColor = null, string lang = null, string linkType = null, string name = null,
+            bool? originalContentTagEnabled = null, bool? over18 = null, string publicDescription = null, bool? showMedia = null, bool? showMediaPreview = null,
+            string spamComments = null, string spamLinks = null, string spamSelfPosts = null, bool? spoilersEnabled = null, string sr = null, string submitLinkLabel = null,
+            string submitText = null, string submitTextLabel = null, string suggestedCommentSort = null, string themeSr = null, bool? themeSrUpdate = null, string title = null,
             string type = null, string wikiMode = null, int? commentScoreHideMins = null, int? wikiEditAge = null, int? wikiEditKarma = null)
             : base()
         {

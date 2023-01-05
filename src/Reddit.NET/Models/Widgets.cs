@@ -24,7 +24,7 @@ namespace Reddit.Models
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/widget", Method.POST);
 
             restRequest.AddParameter("json", json);
-            
+
             return JsonConvert.DeserializeObject<T>(ExecuteRequest(restRequest));
         }
 
@@ -63,7 +63,7 @@ namespace Reddit.Models
         {
             return Add<WidgetCommunityListDetailed>(JsonConvert.SerializeObject(widgetCommunityList), subreddit);
         }
-        
+
         // TODO - Add support for other widget input types.  --Kris
 
         /// <summary>

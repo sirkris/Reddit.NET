@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Reddit.Controllers;
 using Reddit.Exceptions;
-using Things = Reddit.Things;
 using System;
+using Things = Reddit.Things;
 
 namespace RedditTests.ControllerTests
 {

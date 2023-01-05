@@ -198,7 +198,7 @@ namespace Reddit.Controllers
         /// <param name="downVotes"></param>
         /// <param name="removed"></param>
         /// <param name="spam"></param>
-        public LinkPost(Dispatch dispatch, string subreddit, string title = null, string url = null, string author = null, 
+        public LinkPost(Dispatch dispatch, string subreddit, string title = null, string url = null, string author = null,
             string thumbnail = null, int? thumbnailHeight = null, int? thumbnailWidth = null, JObject preview = null,
             string id = null, string fullname = null, string permalink = null, DateTime created = default(DateTime),
             DateTime edited = default(DateTime), int score = 0, int upVotes = 0, int downVotes = 0,

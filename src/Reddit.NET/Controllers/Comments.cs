@@ -382,8 +382,8 @@ namespace Reddit.Controllers
         /// <param name="random"></param>
         /// <param name="qa"></param>
         /// <param name="live"></param>
-        public Comments(Dispatch dispatch, string postId = null, string subreddit = null, Comment comment = null, List<Comment> confidence = null, List<Comment> top = null, 
-            List<Comment> newComments = null, List<Comment> controversial = null, List<Comment> old = null, List<Comment> random = null, List<Comment> qa = null, List<Comment> live = null) 
+        public Comments(Dispatch dispatch, string postId = null, string subreddit = null, Comment comment = null, List<Comment> confidence = null, List<Comment> top = null,
+            List<Comment> newComments = null, List<Comment> controversial = null, List<Comment> old = null, List<Comment> random = null, List<Comment> qa = null, List<Comment> live = null)
             : base()
         {
             Dispatch = dispatch;
@@ -694,7 +694,7 @@ namespace Reddit.Controllers
         /// <param name="monitoringExpiration">If set, monitoring will automatically stop after the specified DateTime is reached</param>
         /// <param name="useCache">Whether to cache the IDs of the monitoring results to prevent duplicate fires (default: true)</param>
         /// <returns>True if this action turned monitoring on, false if this action turned it off.</returns>
-        public bool MonitorConfidence(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null, 
+        public bool MonitorConfidence(int? monitoringDelayMs = null, int? monitoringBaseDelayMs = null, List<MonitoringSchedule> schedule = null, bool? breakOnFailure = null,
             DateTime? monitoringExpiration = null, bool useCache = true)
         {
             if (breakOnFailure.HasValue)

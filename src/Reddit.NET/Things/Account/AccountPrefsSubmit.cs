@@ -16,18 +16,18 @@ namespace Reddit.Things
         public string OtherTheme { get; set; }
 
         public AccountPrefsSubmit(AccountPrefs accountPrefs, string g, bool inRedesignBeta, string otherTheme)
-            : base(accountPrefs.ThreadedMessages, accountPrefs.HideDowns, accountPrefs.LabelNSFW, accountPrefs.ActivityRelevantAds, accountPrefs.EmailMessages, 
-                  accountPrefs.ProfileOptOut, accountPrefs.VideoAutoplay, accountPrefs.AcceptPms, accountPrefs.ThirdPartySiteDataPersonalizedContent, 
-                  accountPrefs.ShowLinkFlair, accountPrefs.CredditAutoRenew, accountPrefs.ShowTrending, accountPrefs.PrivateFeeds, accountPrefs.MonitorMentions, 
-                  accountPrefs.Research, accountPrefs.IgnoreSuggestedSort, accountPrefs.EmailDigests, accountPrefs.Media, accountPrefs.ClickGadget, 
-                  accountPrefs.UseGlobalDefaults, accountPrefs.Over18, accountPrefs.ShowStylesheets, accountPrefs.LiveOrangeReds, accountPrefs.EnableDefaultThemes, 
-                  accountPrefs.DomainDetails, accountPrefs.CollapseLeftBar, accountPrefs.Lang, accountPrefs.HideUps, accountPrefs.ThirdPartyDataPersonalizedAds, 
-                  accountPrefs.AllowClickTracking, accountPrefs.HideFromRobots, accountPrefs.ShowTwitter, accountPrefs.Compress, accountPrefs.StoreVisits, 
-                  accountPrefs.ThreadedModmail, accountPrefs.MinLinkScore, accountPrefs.MediaPreview, accountPrefs.NightMode, accountPrefs.HighlightControversial, 
-                  accountPrefs.ThirdPartySiteDataPersonalizedAds, accountPrefs.ShowPromote, accountPrefs.MinCommentScore, accountPrefs.PublicVotes, 
-                  accountPrefs.NoVideoAutoplay, accountPrefs.Organic, accountPrefs.CollapseReadMessages, accountPrefs.ShowFlair, accountPrefs.MarkMessagesRead, 
-                  accountPrefs.SearchIncludeOver18, accountPrefs.NoProfanity, accountPrefs.HideAds, accountPrefs.Beta, accountPrefs.TopKarmaSubreddits, 
-                  accountPrefs.NewWindow, accountPrefs.NumSites, accountPrefs.LegacySearch, accountPrefs.NumComments, accountPrefs.ShowGoldExpiration, 
+            : base(accountPrefs.ThreadedMessages, accountPrefs.HideDowns, accountPrefs.LabelNSFW, accountPrefs.ActivityRelevantAds, accountPrefs.EmailMessages,
+                  accountPrefs.ProfileOptOut, accountPrefs.VideoAutoplay, accountPrefs.AcceptPms, accountPrefs.ThirdPartySiteDataPersonalizedContent,
+                  accountPrefs.ShowLinkFlair, accountPrefs.CredditAutoRenew, accountPrefs.ShowTrending, accountPrefs.PrivateFeeds, accountPrefs.MonitorMentions,
+                  accountPrefs.Research, accountPrefs.IgnoreSuggestedSort, accountPrefs.EmailDigests, accountPrefs.Media, accountPrefs.ClickGadget,
+                  accountPrefs.UseGlobalDefaults, accountPrefs.Over18, accountPrefs.ShowStylesheets, accountPrefs.LiveOrangeReds, accountPrefs.EnableDefaultThemes,
+                  accountPrefs.DomainDetails, accountPrefs.CollapseLeftBar, accountPrefs.Lang, accountPrefs.HideUps, accountPrefs.ThirdPartyDataPersonalizedAds,
+                  accountPrefs.AllowClickTracking, accountPrefs.HideFromRobots, accountPrefs.ShowTwitter, accountPrefs.Compress, accountPrefs.StoreVisits,
+                  accountPrefs.ThreadedModmail, accountPrefs.MinLinkScore, accountPrefs.MediaPreview, accountPrefs.NightMode, accountPrefs.HighlightControversial,
+                  accountPrefs.ThirdPartySiteDataPersonalizedAds, accountPrefs.ShowPromote, accountPrefs.MinCommentScore, accountPrefs.PublicVotes,
+                  accountPrefs.NoVideoAutoplay, accountPrefs.Organic, accountPrefs.CollapseReadMessages, accountPrefs.ShowFlair, accountPrefs.MarkMessagesRead,
+                  accountPrefs.SearchIncludeOver18, accountPrefs.NoProfanity, accountPrefs.HideAds, accountPrefs.Beta, accountPrefs.TopKarmaSubreddits,
+                  accountPrefs.NewWindow, accountPrefs.NumSites, accountPrefs.LegacySearch, accountPrefs.NumComments, accountPrefs.ShowGoldExpiration,
                   accountPrefs.HighlightNewComments, accountPrefs.EmailUnsubscribeAll, accountPrefs.DefaultCommentSort, accountPrefs.HideLocationBar, accountPrefs.Autoplay)
         {
             Import(g, inRedesignBeta, otherTheme);

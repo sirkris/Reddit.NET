@@ -1,9 +1,8 @@
-﻿using System.Linq;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Reddit.Inputs.Search;
 using Reddit.Things;
 using RestSharp;
+using System.Linq;
 
 namespace Reddit.Models
 {

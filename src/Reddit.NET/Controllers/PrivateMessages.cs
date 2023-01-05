@@ -104,7 +104,7 @@ namespace Reddit.Controllers
         /// <param name="unread"></param>
         /// <param name="sent"></param>
         public PrivateMessages(Dispatch dispatch, List<Message> inbox = null, List<Message> unread = null,
-            List<Message> sent = null) 
+            List<Message> sent = null)
             : base()
         {
             Inbox = inbox ?? new List<Message>();

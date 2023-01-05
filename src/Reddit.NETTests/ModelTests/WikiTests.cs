@@ -51,7 +51,7 @@ namespace RedditTests.ModelTests
         {
             WikiPageContainer page = reddit.Models.Wiki.Page("index", new WikiPageContentInput(), "ShittyEmails");
             WikiPageContainer pageWithV = reddit.Models.Wiki.Page("index", new WikiPageContentInput("51c412fc-6b26-11e8-a963-0e7fba92da48"), "ShittyEmails");
-            WikiPageContainer pageWithV2 = reddit.Models.Wiki.Page("index", 
+            WikiPageContainer pageWithV2 = reddit.Models.Wiki.Page("index",
                 new WikiPageContentInput("51c412fc-6b26-11e8-a963-0e7fba92da48", "483f05ca-6b26-11e8-b04f-0e02e061d980"), "ShittyEmails");
 
             Validate(page);

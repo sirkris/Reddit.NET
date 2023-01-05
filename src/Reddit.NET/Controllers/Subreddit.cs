@@ -879,9 +879,9 @@ namespace Reddit.Controllers
             bool allowDiscovery = true, bool allowSpoilers = true, bool showMedia = true, bool showMediaPreview = true,
             bool allowImages = true, bool allowVideos = true, bool collapseDeletedComments = false, string suggestedCommentSort = null,
             int commentScoreHideMins = 0, byte[] headerImage = null, byte[] iconImage = null, string primaryColor = null, string keyColor = null,
-            string fullname = null, string bannerImg = null, string bannerBackgroundColor = null, string bannerBackgroundImage = null, 
-            string communityIcon = null, bool emojisEnabled = true, string headerTitle = null, string id = null, bool canAssignUserFlair = false, 
-            bool canAssignLinkFlair = false, int activeUserCount = 0, bool allowVideoGifs = true, int subscribers = 0, DateTime created = default(DateTime), 
+            string fullname = null, string bannerImg = null, string bannerBackgroundColor = null, string bannerBackgroundImage = null,
+            string communityIcon = null, bool emojisEnabled = true, string headerTitle = null, string id = null, bool canAssignUserFlair = false,
+            bool canAssignLinkFlair = false, int activeUserCount = 0, bool allowVideoGifs = true, int subscribers = 0, DateTime created = default(DateTime),
             string url = null, bool linkFlairEnabled = false)
         {
             SubredditData = new Things.Subreddit
@@ -945,9 +945,9 @@ namespace Reddit.Controllers
             if (SubredditData == null)
             {
                 SetValues(name, title, description, sidebar, submissionText, lang, subredditType, subredditType, submitLinkLabel, submitTextLabel, wikiEnabled ?? false,
-                    over18 ?? false, allowDiscovery ?? true, allowSpoilers ?? true, showMedia ?? true, showMediaPreview ?? true, allowImages ?? true, allowVideos ?? true, 
-                    collapseDeletedComments ?? false, suggestedCommentSort, commentScoreHideMins ?? 0, headerImage, iconImage, primaryColor, keyColor, fullname, 
-                    bannerImg, bannerBackgroundColor, bannerBackgroundImage, communityIcon, emojisEnabled ?? true, headerTitle, id, canAssignUserFlair ?? false, 
+                    over18 ?? false, allowDiscovery ?? true, allowSpoilers ?? true, showMedia ?? true, showMediaPreview ?? true, allowImages ?? true, allowVideos ?? true,
+                    collapseDeletedComments ?? false, suggestedCommentSort, commentScoreHideMins ?? 0, headerImage, iconImage, primaryColor, keyColor, fullname,
+                    bannerImg, bannerBackgroundColor, bannerBackgroundImage, communityIcon, emojisEnabled ?? true, headerTitle, id, canAssignUserFlair ?? false,
                     canAssignLinkFlair ?? false, activeUserCount ?? 0, allowVideoGifs ?? true, subscribers ?? 0, created ?? default(DateTime), url, linkFlairEnabled ?? false);
             }
             else

@@ -153,13 +153,13 @@ namespace Reddit.Models
             RestRequest restRequest = PrepareRequest(Sr(subreddit) + "api/info");
 
             restRequest.AddParameter("id", id);
-            
+
             DynamicListingContainer res = JsonConvert.DeserializeObject<DynamicListingContainer>(ExecuteRequest(restRequest));
 
             List<Post> posts = new List<Post>();
             List<Comment> comments = new List<Comment>();
             List<Subreddit> subreddits = new List<Subreddit>();
-            
+
             foreach (DynamicListingChild child in res.Data.Children)
             {
                 switch (child.Kind)
@@ -566,7 +566,7 @@ namespace Reddit.Models
         /// <param name="id">fullname of a thing</param>
         public async Task UnmarkNSFWAsync(string id)
         {
-           await ExecuteRequestAsync(PrepareIDRequest("api/unmarknsfw", id));
+            await ExecuteRequestAsync(PrepareIDRequest("api/unmarknsfw", id));
         }
 
         /// <summary>

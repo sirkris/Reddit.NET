@@ -189,7 +189,8 @@ namespace RedditTests.ControllerTests.WorkflowTests
             {
                 Assert.AreNotEqual(e.OldThread.NSFW, e.NewThread.NSFW);
                 LiveThreadUpdated = true;
-            } catch (AssertFailedException) { }
+            }
+            catch (AssertFailedException) { }
         }
 
         private void C_LiveThreadContributorsUpdated(object sender, LiveThreadContributorsUpdateEventArgs e)

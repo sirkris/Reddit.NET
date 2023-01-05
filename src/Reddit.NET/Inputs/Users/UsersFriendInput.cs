@@ -66,7 +66,7 @@ namespace Reddit.Inputs.Users
         /// <param name="banMessage">raw markdown text</param>
         /// <param name="banReason">a string no longer than 100 characters</param>
         /// <param name="container"></param>
-        public UsersFriendInput(string name = "", string type = "friend", int? duration = null, string permissions = "", string banContext = "", string banMessage = "", 
+        public UsersFriendInput(string name = "", string type = "friend", int? duration = null, string permissions = "", string banContext = "", string banMessage = "",
             string banReason = "", string container = "")
             : base()
         {
