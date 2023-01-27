@@ -313,6 +313,9 @@ namespace Reddit.Things
         [JsonProperty("url")]
         public string URL { get; set; }
 
+        [JsonProperty("url_overridden_by_dest")]
+        public string URLOverriddenByDest { get; set; }
+
         [JsonProperty("subreddit_subscribers")]
         public int SubredditSubscribers { get; set; }
 
