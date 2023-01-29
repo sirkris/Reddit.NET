@@ -1,0 +1,9 @@
+language: csharp
+mono: none
+dotnet: 2.1
+before_script:
+- cd src
+- dotnet restore
+script:
+- dotnet build --no-restore --no-incremental
+- dotnet test
